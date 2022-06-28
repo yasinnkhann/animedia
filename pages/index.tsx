@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
-import axios from 'axios';
 import { animeAPI } from '../utils/anime-api';
 import { IFetchedAPI } from '../models/IFetchedAPI';
 import AnimeList from '../components/AnimeList';
