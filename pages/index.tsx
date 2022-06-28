@@ -2,20 +2,25 @@ import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import axios from 'axios';
 import { animeAPI } from '../utils/anime-api';
+import { IFetchedAPI } from '../models/IFetchedAPI';
+import AnimeList from '../components/AnimeList';
+import UseFetch from '../hooks/useFetch';
 
 const Home: NextPage = () => {
-	const [animes, setAnimes] = useState([]);
+	const [fetchedAPI, loading, error] = UseFetch(animeAPI);
 
-	const fetchAnimes = async () => {
-		const { data } = await axios.get(animeAPI);
-		setAnimes(data);
-	};
+	if (loading as boolean) {
+		return <p>Loading...</p>;
+	}
 
-	useEffect(() => {
-		fetchAnimes();
-	}, []);
+	if (error as unknown | Error) {
+		console.error(error);
+		if (error instanceof Error) {
+			return <p>{error.message}</p>;
+		}
+	}
 
-	return <h1 className='text-red-500'>{JSON.stringify(animes)}</h1>;
+	return <div>{<AnimeList animes={(fetchedAPI as IFetchedAPI)?.data} />}</div>;
 };
 
 export default Home;
