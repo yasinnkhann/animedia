@@ -10,10 +10,11 @@ export default async function assetHandler(
 	switch (method) {
 		case 'POST':
 			try {
-				const { name } = req.body;
+				const { name, email } = req.body;
 				const user = await prisma.user.create({
 					data: {
 						name,
+						email,
 					},
 				});
 				res.status(201).json(user);
