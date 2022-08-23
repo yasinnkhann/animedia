@@ -13,7 +13,7 @@ export const getUsers = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.list.field('users', {
-			type: 'User',
+			type: nonNull('User'),
 			resolve: async (_parent, _args, ctx) => {
 				return ctx.prisma.user.findMany();
 			},
@@ -25,7 +25,7 @@ export const createUser = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.nonNull.field('createdUser', {
-			type: 'User',
+			type: nonNull('User'),
 			args: {
 				name: nonNull(stringArg()),
 				email: nonNull(stringArg()),
