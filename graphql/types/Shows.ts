@@ -1,6 +1,7 @@
 import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/base_url';
+import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 
 export const ShowResult = objectType({
 	name: 'ShowResult',
@@ -222,6 +223,24 @@ export const getShowDetails = extendType({
 				const { data } = await axios.get(
 					`${BASE_URL}/tv/${id}?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US`
 				);
+				return data;
+			},
+		});
+	},
+});
+
+export const getPopularAnimeShows = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('popularAnimeShows', {
+			type: 'ShowsRes',
+			resolve: async () => {
+				const keywordID = await GET_KEYWORD_ID('anime');
+
+				const { data } = await axios.get(
+					`${BASE_URL}/discover/tv?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
+				);
+
 				return data;
 			},
 		});

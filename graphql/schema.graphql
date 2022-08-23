@@ -31,6 +31,8 @@ type Mutation {
 }
 
 type Query {
+  popularAnimeMovies: MoviesRes!
+  popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
   popularShows: ShowsRes!
   searchedMovies(q: String!): MoviesRes!
