@@ -1,8 +1,8 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
+import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/base_url';
 
-export const ShowResults = objectType({
+export const ShowResult = objectType({
 	name: 'ShowResult',
 	definition(t) {
 		t.nonNull.string('backdrop_path');
@@ -21,7 +21,7 @@ export const ShowResults = objectType({
 	},
 });
 
-export const Show = objectType({
+export const Shows = objectType({
 	name: 'ShowsRes',
 	definition(t) {
 		t.nonNull.int('page');
@@ -63,6 +63,35 @@ export const getSearchedShows = extendType({
 					`${BASE_URL}/search/tv?api_key=${process.env.NEXT_PUBLIC_API_KEY}&query=${q}`
 				);
 
+				return data;
+			},
+		});
+	},
+});
+
+export const showDetails = objectType({
+	name: 'showDetailsRes',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.nonNull.string('backdrop_path');
+		t.nonNull.list.string('created_by');
+		t.nonNull.list.int('episode_run_time');
+		t.nonNull.string('first_air_date');
+	},
+});
+
+export const getShowDetails = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('showDetails', {
+			type: 'showDetailsRes',
+			args: {
+				id: nonNull(intArg()),
+			},
+			resolve: async (_parent, { id }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/tv/${id}?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US`
+				);
 				return data;
 			},
 		});
