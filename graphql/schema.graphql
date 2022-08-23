@@ -68,10 +68,100 @@ type User {
   name: String!
 }
 
+type showDetailsCountry {
+  iso_3166_1: String!
+  name: String!
+}
+
+type showDetailsCreatedBy {
+  credit_id: String!
+  gender: Int!
+  id: Int!
+  name: String!
+  profile_path: String!
+}
+
+type showDetailsGenre {
+  id: Int!
+  name: String!
+}
+
+type showDetailsLastEpToAir {
+  air_date: String!
+  episode_number: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  production_code: String!
+  runtime: Int!
+  season_number: Int!
+  show_id: Int!
+  still_path: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type showDetailsNetwork {
+  id: Int!
+  logo_path: String!
+  name: String!
+  origin_country: String!
+}
+
+type showDetailsProdCompany {
+  id: Int!
+  logo_path: String!
+  name: String!
+  origin_country: String!
+}
+
 type showDetailsRes {
   adult: Boolean!
   backdrop_path: String!
-  created_by: [String]!
+  created_by: [showDetailsCreatedBy]!
   episode_run_time: [Int]!
   first_air_date: String!
+  genres: [showDetailsGenre!]!
+  homepage: String!
+  id: Int!
+  in_production: Boolean!
+  languages: [String]!
+  last_air_date: String!
+  last_episode_to_air: showDetailsLastEpToAir!
+  name: String!
+  networks: [showDetailsNetwork!]!
+  next_episode_to_air: Int
+  number_of_episodes: Int!
+  number_of_seasons: Int!
+  origin_country: [String]!
+  original_language: String!
+  original_name: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String!
+  production_companies: [showDetailsProdCompany]!
+  production_countries: [showDetailsCountry]!
+  seasons: [showDetailsSeason]!
+  spoken_languages: [showDetailsSpokenLang]!
+  status: String!
+  tagline: String!
+  type: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type showDetailsSeason {
+  air_date: String!
+  episode_count: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  poster_path: String!
+  season_number: Int!
+}
+
+type showDetailsSpokenLang {
+  english_name: String!
+  iso_639_1: String!
+  name: String!
 }
