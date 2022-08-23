@@ -3,16 +3,16 @@ import { objectType, extendType, stringArg, nonNull } from 'nexus';
 export const User = objectType({
 	name: 'User',
 	definition(t) {
-		t.string('id');
-		t.string('name');
-		t.string('email');
+		t.nonNull.string('id');
+		t.nonNull.string('name');
+		t.nonNull.string('email');
 	},
 });
 
 export const getUsers = extendType({
 	type: 'Query',
 	definition(t) {
-		t.list.field('users', {
+		t.nonNull.list.field('users', {
 			type: 'User',
 			resolve: async (_parent, _args, ctx) => {
 				return ctx.prisma.user.findMany();
