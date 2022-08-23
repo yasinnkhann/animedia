@@ -1,4 +1,4 @@
-import { objectType, extendType, nonNull } from 'nexus';
+import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/base_url';
 
@@ -39,9 +39,29 @@ export const getMovies = extendType({
 	definition(t) {
 		t.nonNull.field('movies', {
 			type: 'MoviesRes',
-			resolve: async (_parent, _args, ctx) => {
+			resolve: async () => {
 				const { data } = await axios.get(
 					`${BASE_URL}/movie/popular?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US`
+				);
+
+				return data;
+			},
+		});
+	},
+});
+
+export const getSearchedMovies = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('searchedMovies', {
+			type: 'MoviesRes',
+			args: {
+				q: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { q }) => {
+				q = q.split(' ').join('+');
+				const { data } = await axios.get(
+					`${BASE_URL}/search/movie?api_key=${process.env.NEXT_PUBLIC_API_KEY}&query=${q}`
 				);
 
 				return data;
