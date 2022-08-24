@@ -1,33 +1,8 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
-import { gql, useQuery } from '@apollo/client';
-
-const QUERY_ALL_POPULAR_MOVIES = gql`
-	query getPopularMovies {
-		popularMovies {
-			page
-			total_pages
-			total_results
-			results {
-				original_title
-				overview
-				adult
-				backdrop_path
-				genre_ids
-				id
-				original_language
-				popularity
-				poster_path
-				release_date
-				title
-				video
-				vote_average
-				vote_count
-			}
-		}
-	}
-`;
+import { useQuery } from '@apollo/client';
+import { QUERY_ALL_POPULAR_MOVIES } from '../graphql/queries';
 
 const Home: NextPage = () => {
 	const {
