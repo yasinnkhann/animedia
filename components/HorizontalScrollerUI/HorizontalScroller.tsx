@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Card from './Card';
 import { LeftArrow, RightArrow } from './Arrows';
@@ -10,18 +10,19 @@ interface Props {
 	items: any[];
 }
 
-const HorizontalScroller = (props: Props) => {
+const HorizontalScroller = ({ items }: Props) => {
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
+
+	const [selected, setSelected] = useState<string>('');
+
 	const handleDrag =
 		({ scrollContainer }: scrollVisibilityApiType) =>
-		(ev: React.MouseEvent) =>
-			dragMove(ev, posDiff => {
+		(e: React.MouseEvent) =>
+			dragMove(e, posDiff => {
 				if (scrollContainer.current) {
 					scrollContainer.current.scrollLeft += posDiff;
 				}
 			});
-
-	const [selected, setSelected] = React.useState<string>('');
 
 	const handleItemClick = (itemId: string) => () => {
 		if (dragging) {
@@ -32,18 +33,18 @@ const HorizontalScroller = (props: Props) => {
 
 	const onWheel = (
 		apiObj: scrollVisibilityApiType,
-		ev: React.WheelEvent
+		e: React.WheelEvent
 	): void => {
-		const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+		const isTouchpad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
-		if (isThouchpad) {
-			ev.stopPropagation();
+		if (isTouchpad) {
+			e.stopPropagation();
 			return;
 		}
 
-		if (ev.deltaY < 0) {
+		if (e.deltaY < 0) {
 			apiObj.scrollNext();
-		} else if (ev.deltaY > 0) {
+		} else if (e.deltaY > 0) {
 			apiObj.scrollPrev();
 		}
 	};
@@ -56,7 +57,7 @@ const HorizontalScroller = (props: Props) => {
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
 		>
-			{props.items.map(({ id, title }) => (
+			{items.map(({ id, title }) => (
 				<Card
 					key={id}
 					id={id}
