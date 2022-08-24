@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 interface Props {
 	id: number;
 	title: string;
-	onClick: () => void;
+	handleItemClick: (id: string) => void;
 	selected: boolean;
 }
 
-const Card = (props: Props) => {
-	const visibility = React.useContext(VisibilityContext);
+const Card = ({ id, title, handleItemClick, selected }: Props) => {
+	const visibility = useContext(VisibilityContext);
 
-	const visible = visibility.isItemVisible(String(props.id));
+	const visible = visibility.isItemVisible(String(id));
 
 	return (
 		<div
-			onClick={() => props.onClick()}
+			onClick={() => handleItemClick(String(id))}
 			role='button'
 			style={{
 				border: '1px solid',
@@ -28,15 +28,15 @@ const Card = (props: Props) => {
 			className='card'
 		>
 			<div>
-				<div>{props.title}</div>
+				<div>{title}</div>
 				<div style={{ backgroundColor: visible ? 'transparent' : 'gray' }}>
 					visible: {JSON.stringify(visible)}
 				</div>
-				<div>selected: {JSON.stringify(!!props.selected)}</div>
+				<div>selected: {JSON.stringify(!!selected)}</div>
 			</div>
 			<div
 				style={{
-					backgroundColor: props.selected ? 'green' : 'bisque',
+					backgroundColor: selected ? 'green' : 'bisque',
 					height: '200px',
 				}}
 			/>

@@ -62,7 +62,7 @@ const HorizontalScroller = ({ items }: Props) => {
 					key={id}
 					id={id}
 					title={title}
-					onClick={handleItemClick(id)}
+					handleItemClick={handleItemClick(id)}
 					selected={id === selected}
 				/>
 			))}
