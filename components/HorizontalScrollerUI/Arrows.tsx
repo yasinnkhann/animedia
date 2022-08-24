@@ -4,24 +4,24 @@ import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 function Arrow({
 	children,
-	disabled,
-	onClick,
+	handleDisabled,
+	handleOnClick,
 }: {
 	children: React.ReactNode;
-	disabled: boolean;
-	onClick: VoidFunction;
+	handleDisabled: boolean;
+	handleOnClick: VoidFunction;
 }) {
 	return (
 		<button
-			disabled={disabled}
-			onClick={onClick}
+			disabled={handleDisabled}
+			onClick={handleOnClick}
 			style={{
 				cursor: 'pointer',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
 				right: '1%',
-				opacity: disabled ? '0' : '1',
+				opacity: handleDisabled ? '0' : '1',
 				userSelect: 'none',
 			}}
 		>
@@ -41,6 +41,7 @@ export function LeftArrow() {
 	const [disabled, setDisabled] = useState(
 		!initComplete || (initComplete && isFirstItemVisible)
 	);
+
 	useEffect(() => {
 		// NOTE: detect if whole component visible
 		if (visibleItemsWithoutSeparators.length) {
@@ -49,7 +50,7 @@ export function LeftArrow() {
 	}, [isFirstItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<Arrow disabled={disabled} onClick={() => scrollPrev()}>
+		<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
 			Left
 		</Arrow>
 	);
@@ -62,6 +63,7 @@ export function RightArrow() {
 	const [disabled, setDisabled] = useState(
 		!visibleItemsWithoutSeparators.length && isLastItemVisible
 	);
+
 	useEffect(() => {
 		if (visibleItemsWithoutSeparators.length) {
 			setDisabled(isLastItemVisible);
@@ -69,7 +71,7 @@ export function RightArrow() {
 	}, [isLastItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<Arrow disabled={disabled} onClick={() => scrollNext()}>
+		<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
 			Right
 		</Arrow>
 	);
