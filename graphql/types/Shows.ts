@@ -2,6 +2,7 @@ import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/base_url';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 
 export const ShowResult = objectType({
 	name: 'ShowResult',
@@ -242,6 +243,19 @@ export const getPopularAnimeShows = extendType({
 				);
 
 				return data;
+			},
+		});
+	},
+});
+
+export const getTrendingShows = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('trendingShows', {
+			type: 'ShowsRes',
+			resolve: async () => {
+				const trendingShows = await GET_TRENDING_MEDIA('tv', 'day');
+				return trendingShows;
 			},
 		});
 	},

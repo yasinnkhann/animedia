@@ -38,6 +38,8 @@ type Query {
   searchedMovies(q: String!): MoviesRes!
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): showDetailsRes!
+  trendingMovies: MoviesRes!
+  trendingShows: ShowsRes!
   users: [User!]!
 }
 
