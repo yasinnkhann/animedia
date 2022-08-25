@@ -24,6 +24,7 @@ const Home: NextPage = () => {
 			{popularMovies ? (
 				<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 					<SearchBar />
+					<h1>Popular Movies:</h1>
 					<HorizontalScroller items={popularMovies.results} />
 				</div>
 			) : (

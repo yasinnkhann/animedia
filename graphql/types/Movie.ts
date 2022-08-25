@@ -1,4 +1,4 @@
-import { objectType, extendType, nonNull, stringArg } from 'nexus';
+import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
@@ -74,6 +74,97 @@ export const getSearchedMovies = extendType({
 	},
 });
 
+export const movieDetailsGenre = objectType({
+	name: 'movieDetailsGenre',
+	definition(t) {
+		t.nonNull.int('id');
+		t.nonNull.string('name');
+	},
+});
+
+export const movieDetailsProdCompany = objectType({
+	name: 'movieDetailsProdCompany',
+	definition(t) {
+		t.nonNull.int('id');
+		t.string('logo_path');
+		t.nonNull.string('name');
+		t.nonNull.string('origin_country');
+	},
+});
+
+export const movieDetailsProdCountry = objectType({
+	name: 'movieDetailsProdCountry',
+	definition(t) {
+		t.nonNull.string('iso_3166_1');
+		t.nonNull.string('name');
+	},
+});
+
+export const movieDetailsSpokenLang = objectType({
+	name: 'movieDetailsSpokenLang',
+	definition(t) {
+		t.nonNull.string('english_name');
+		t.nonNull.string('iso_639_1');
+		t.nonNull.string('name');
+	},
+});
+
+export const movieDetails = objectType({
+	name: 'movieDetailsRes',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.nonNull.string('backdrop_path');
+		t.nonNull.list.field('genres', {
+			type: nonNull('movieDetailsGenre'),
+		});
+		t.nonNull.string('homepage');
+		t.nonNull.int('id');
+		t.nonNull.string('imdb_id');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_title');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.nonNull.string('poster_path');
+		t.nonNull.list.field('production_companies', {
+			type: 'movieDetailsProdCompany',
+		});
+		t.nonNull.list.field('production_countries', {
+			type: 'movieDetailsProdCountry',
+		});
+		t.nonNull.string('release_date');
+		t.nonNull.int('revenue');
+		t.nonNull.int('runtime');
+		t.nonNull.list.field('spoken_languages', {
+			type: 'movieDetailsSpokenLang',
+		});
+		t.nonNull.string('status');
+		t.nonNull.string('tagline');
+		t.nonNull.string('title');
+		t.nonNull.boolean('video');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+	},
+});
+
+export const getMovieDetails = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('movieDetails', {
+			type: 'movieDetailsRes',
+			args: {
+				id: nonNull(intArg()),
+			},
+			resolve: async (_parent, { id }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/${id}?api_key=${process.env
+						.API_KEY!}&language=en-US`
+				);
+				return data;
+			},
+		});
+	},
+});
+
 export const getPopularAnimeMovies = extendType({
 	type: 'Query',
 	definition(t) {
@@ -83,7 +174,8 @@ export const getPopularAnimeMovies = extendType({
 				const keywordID = await GET_KEYWORD_ID('anime');
 
 				const { data } = await axios.get(
-					`${BASE_URL}/discover/movie?api_key=${process.env.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
+					`${BASE_URL}/discover/movie?api_key=${process.env
+						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
 				);
 
 				return data;
@@ -100,6 +192,22 @@ export const getTrendingMovies = extendType({
 			resolve: async () => {
 				const trendingMovies = await GET_TRENDING_MEDIA('movie', 'day');
 				return trendingMovies;
+			},
+		});
+	},
+});
+
+export const getTopRatedMovies = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('topRatedMovies', {
+			type: 'MoviesRes',
+			resolve: async () => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/top_rated?api_key=${process.env
+						.API_KEY!}&language=en-US&page=1`
+				);
+				return data;
 			},
 		});
 	},

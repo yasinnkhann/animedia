@@ -1,3 +1,3 @@
 export * from './User';
 export * from './Movie';
-export * from './Shows';
+export * from './Show';

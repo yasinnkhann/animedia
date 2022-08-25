@@ -43,7 +43,8 @@ export const getPopularShows = extendType({
 			type: 'ShowsRes',
 			resolve: async () => {
 				const { data } = await axios.get(
-					`${BASE_URL}/tv/popular?api_key=${process.env.API_KEY!}&language=en-US`
+					`${BASE_URL}/tv/popular?api_key=${process.env
+						.API_KEY!}&language=en-US`
 				);
 
 				return data;
@@ -123,7 +124,7 @@ export const showDetailsProdCompany = objectType({
 	name: 'showDetailsProdCompany',
 	definition(t) {
 		t.nonNull.int('id');
-		t.nonNull.string('logo_path');
+		t.string('logo_path');
 		t.nonNull.string('name');
 		t.nonNull.string('origin_country');
 	},
@@ -240,7 +241,8 @@ export const getPopularAnimeShows = extendType({
 				const keywordID = await GET_KEYWORD_ID('anime');
 
 				const { data } = await axios.get(
-					`${BASE_URL}/discover/tv?api_key=${process.env.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
+					`${BASE_URL}/discover/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
 				);
 
 				return data;

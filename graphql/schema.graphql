@@ -31,6 +31,7 @@ type Mutation {
 }
 
 type Query {
+  movieDetails(id: Int!): movieDetailsRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
@@ -38,6 +39,7 @@ type Query {
   searchedMovies(q: String!): MoviesRes!
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): showDetailsRes!
+  topRatedMovies: MoviesRes!
   trendingMovies: MoviesRes!
   trendingShows: ShowsRes!
   users: [User!]!
@@ -69,6 +71,55 @@ type ShowsRes {
 type User {
   email: String!
   id: String!
+  name: String!
+}
+
+type movieDetailsGenre {
+  id: Int!
+  name: String!
+}
+
+type movieDetailsProdCompany {
+  id: Int!
+  logo_path: String
+  name: String!
+  origin_country: String!
+}
+
+type movieDetailsProdCountry {
+  iso_3166_1: String!
+  name: String!
+}
+
+type movieDetailsRes {
+  adult: Boolean!
+  backdrop_path: String!
+  genres: [movieDetailsGenre!]!
+  homepage: String!
+  id: Int!
+  imdb_id: String!
+  original_language: String!
+  original_title: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String!
+  production_companies: [movieDetailsProdCompany]!
+  production_countries: [movieDetailsProdCountry]!
+  release_date: String!
+  revenue: Int!
+  runtime: Int!
+  spoken_languages: [movieDetailsSpokenLang]!
+  status: String!
+  tagline: String!
+  title: String!
+  video: Boolean!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type movieDetailsSpokenLang {
+  english_name: String!
+  iso_639_1: String!
   name: String!
 }
 
@@ -114,7 +165,7 @@ type showDetailsNetwork {
 
 type showDetailsProdCompany {
   id: Int!
-  logo_path: String!
+  logo_path: String
   name: String!
   origin_country: String!
 }
