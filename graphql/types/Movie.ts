@@ -212,3 +212,79 @@ export const getTopRatedMovies = extendType({
 		});
 	},
 });
+
+export const getRecommendedMovies = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('recommendedMovies', {
+			type: 'MoviesRes',
+			args: {
+				id: nonNull(intArg()),
+			},
+			resolve: async (_parent, { id }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/${id}/recommendations?api_key=${process.env
+						.API_KEY!}&language=en-US&page=1`
+				);
+				return data;
+			},
+		});
+	},
+});
+
+export const moveReviewAuthorDetails = objectType({
+	name: 'authorDetails',
+	definition(t) {
+		t.nonNull.string('name');
+		t.nonNull.string('username');
+		t.string('avatar_path');
+		t.float('rating');
+	},
+});
+
+export const movieReviewResult = objectType({
+	name: 'movieReviewResult',
+	definition(t) {
+		t.nonNull.string('author');
+		t.nonNull.field('author_details', {
+			type: 'authorDetails',
+		});
+		t.nonNull.string('content');
+		t.nonNull.string('created_at');
+		t.nonNull.string('id');
+		t.nonNull.string('updated_at');
+		t.nonNull.string('url');
+	},
+});
+
+export const movieReview = objectType({
+	name: 'movieReviewRes',
+	definition(t) {
+		t.nonNull.int('id'),
+			t.nonNull.int('page'),
+			t.nonNull.int('total_pages'),
+			t.nonNull.int('total_results');
+		t.nonNull.list.field('results', {
+			type: 'movieReviewResult',
+		});
+	},
+});
+
+export const getMovieReviews = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('movieReviews', {
+			type: 'movieReviewRes',
+			args: {
+				id: nonNull(intArg()),
+			},
+			resolve: async (_parent, { id }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/${id}/reviews?api_key=${process.env
+						.API_KEY!}&language=en-US&page=1`
+				);
+				return data;
+			},
+		});
+	},
+});

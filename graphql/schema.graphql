@@ -32,10 +32,12 @@ type Mutation {
 
 type Query {
   movieDetails(id: Int!): movieDetailsRes!
+  movieReviews(id: Int!): movieReviewRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
   popularShows: ShowsRes!
+  recommendedMovies(id: Int!): MoviesRes!
   searchedMovies(q: String!): MoviesRes!
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): showDetailsRes!
@@ -72,6 +74,13 @@ type User {
   email: String!
   id: String!
   name: String!
+}
+
+type authorDetails {
+  avatar_path: String
+  name: String!
+  rating: Float
+  username: String!
 }
 
 type movieDetailsGenre {
@@ -121,6 +130,24 @@ type movieDetailsSpokenLang {
   english_name: String!
   iso_639_1: String!
   name: String!
+}
+
+type movieReviewRes {
+  id: Int!
+  page: Int!
+  results: [movieReviewResult]!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type movieReviewResult {
+  author: String!
+  author_details: authorDetails!
+  content: String!
+  created_at: String!
+  id: String!
+  updated_at: String!
+  url: String!
 }
 
 type showDetailsCountry {
