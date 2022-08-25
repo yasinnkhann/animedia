@@ -2,16 +2,19 @@ import React, { useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Image from 'next/image';
 import { BASE_IMG_URL } from '../../utils/URLs';
+import { NexusGenObjects } from 'nexus-typegen';
 
 interface Props {
-	id: number;
-	title: string;
-	poster_path: string;
+	item: NexusGenObjects['MoviesRes']['results'][0];
 	handleItemClick: (id: string) => void;
 	selected: boolean;
 }
 
-const Card = ({ id, title, handleItemClick, selected, poster_path }: Props) => {
+const Card = ({
+	item: { id, title, poster_path },
+	handleItemClick,
+	selected,
+}: Props) => {
 	const visibility = useContext(VisibilityContext);
 
 	const visible = visibility.isItemVisible(String(id));

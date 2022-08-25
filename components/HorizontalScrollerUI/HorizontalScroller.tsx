@@ -8,7 +8,7 @@ import { NexusGenObjects } from 'nexus-typegen';
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: any[];
+	items: NexusGenObjects['MoviesRes']['results'];
 }
 
 const HorizontalScroller = ({ items }: Props) => {
@@ -58,14 +58,12 @@ const HorizontalScroller = ({ items }: Props) => {
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
 		>
-			{items.map(({ id, title, poster_path }) => (
+			{items.map(item => (
 				<Card
-					key={id}
-					id={id}
-					title={title}
-					poster_path={poster_path}
-					handleItemClick={handleItemClick(id)}
-					selected={id === selected}
+					key={item.id}
+					item={item}
+					handleItemClick={handleItemClick(String(item.id))}
+					selected={String(item.id) === selected}
 				/>
 			))}
 		</ScrollMenu>
