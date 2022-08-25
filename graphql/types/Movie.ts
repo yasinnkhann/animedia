@@ -232,8 +232,8 @@ export const getRecommendedMovies = extendType({
 	},
 });
 
-export const moveReviewAuthorDetails = objectType({
-	name: 'authorDetails',
+export const movieReviewAuthorDetails = objectType({
+	name: 'movieReviewAuthorDetails',
 	definition(t) {
 		t.nonNull.string('name');
 		t.nonNull.string('username');
@@ -247,7 +247,7 @@ export const movieReviewResult = objectType({
 	definition(t) {
 		t.nonNull.string('author');
 		t.nonNull.field('author_details', {
-			type: 'authorDetails',
+			type: 'movieReviewAuthorDetails',
 		});
 		t.nonNull.string('content');
 		t.nonNull.string('created_at');

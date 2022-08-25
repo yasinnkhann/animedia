@@ -38,17 +38,20 @@ type Query {
   popularMovies: MoviesRes!
   popularShows: ShowsRes!
   recommendedMovies(id: Int!): MoviesRes!
+  recommendedShows(id: Int!): ShowsRes!
   searchedMovies(q: String!): MoviesRes!
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): showDetailsRes!
+  showReviews(id: Int!): showReviewRes!
   topRatedMovies: MoviesRes!
+  topRatedShows: ShowsRes!
   trendingMovies: MoviesRes!
   trendingShows: ShowsRes!
   users: [User!]!
 }
 
 type ShowResult {
-  backdrop_path: String!
+  backdrop_path: String
   first_air_date: String!
   genre_ids: [Int]!
   id: Int!
@@ -74,13 +77,6 @@ type User {
   email: String!
   id: String!
   name: String!
-}
-
-type authorDetails {
-  avatar_path: String
-  name: String!
-  rating: Float
-  username: String!
 }
 
 type movieDetailsGenre {
@@ -132,6 +128,13 @@ type movieDetailsSpokenLang {
   name: String!
 }
 
+type movieReviewAuthorDetails {
+  avatar_path: String
+  name: String!
+  rating: Float
+  username: String!
+}
+
 type movieReviewRes {
   id: Int!
   page: Int!
@@ -142,7 +145,7 @@ type movieReviewRes {
 
 type movieReviewResult {
   author: String!
-  author_details: authorDetails!
+  author_details: movieReviewAuthorDetails!
   content: String!
   created_at: String!
   id: String!
@@ -246,4 +249,29 @@ type showDetailsSpokenLang {
   english_name: String!
   iso_639_1: String!
   name: String!
+}
+
+type showReviewAuthorDetails {
+  avatar_path: String
+  name: String!
+  rating: Float
+  username: String!
+}
+
+type showReviewRes {
+  id: Int!
+  page: Int!
+  results: [showReviewResult]!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type showReviewResult {
+  author: String!
+  author_details: showReviewAuthorDetails!
+  content: String!
+  created_at: String!
+  id: String!
+  updated_at: String!
+  url: String!
 }
