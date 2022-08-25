@@ -33,6 +33,7 @@ type Mutation {
 type Query {
   movieDetails(id: Int!): movieDetailsRes!
   movieReviews(id: Int!): movieReviewRes!
+  moviesInTheatres: moviesInTheatresRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
@@ -151,6 +152,14 @@ type movieReviewResult {
   id: String!
   updated_at: String!
   url: String!
+}
+
+type moviesInTheatresRes {
+  dates: theatreDates!
+  page: String!
+  results: [MovieResult]!
+  total_pages: Int!
+  total_results: Int!
 }
 
 type showDetailsCountry {
@@ -274,4 +283,9 @@ type showReviewResult {
   id: String!
   updated_at: String!
   url: String!
+}
+
+type theatreDates {
+  maximum: String!
+  minimum: String!
 }

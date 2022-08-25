@@ -288,3 +288,42 @@ export const getMovieReviews = extendType({
 		});
 	},
 });
+
+export const theatreDates = objectType({
+	name: 'theatreDates',
+	definition(t) {
+		t.nonNull.string('maximum');
+		t.nonNull.string('minimum');
+	},
+});
+
+export const moviesInTheatres = objectType({
+	name: 'moviesInTheatresRes',
+	definition(t) {
+		t.nonNull.field('dates', {
+			type: 'theatreDates',
+		});
+		t.nonNull.string('page');
+		t.nonNull.int('total_pages');
+		t.nonNull.int('total_results');
+		t.nonNull.list.field('results', {
+			type: 'MovieResult',
+		});
+	},
+});
+
+export const getMoviesInTheatres = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('moviesInTheatres', {
+			type: 'moviesInTheatresRes',
+			resolve: async () => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/now_playing?api_key=${process.env
+						.API_KEY!}&language=en-US&page=1`
+				);
+				return data;
+			},
+		});
+	},
+});
