@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
+import 'dotenv/config';
 
 export const ShowResult = objectType({
 	name: 'ShowResult',
@@ -42,7 +43,7 @@ export const getPopularShows = extendType({
 			type: 'ShowsRes',
 			resolve: async () => {
 				const { data } = await axios.get(
-					`${BASE_URL}/tv/popular?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US`
+					`${BASE_URL}/tv/popular?api_key=${process.env.API_KEY!}&language=en-US`
 				);
 
 				return data;
@@ -62,7 +63,7 @@ export const getSearchedShows = extendType({
 			resolve: async (_parent, { q }) => {
 				q = q.split(' ').join('+');
 				const { data } = await axios.get(
-					`${BASE_URL}/search/tv?api_key=${process.env.NEXT_PUBLIC_API_KEY}&query=${q}`
+					`${BASE_URL}/search/tv?api_key=${process.env.API_KEY!}&query=${q}`
 				);
 
 				return data;
@@ -222,7 +223,7 @@ export const getShowDetails = extendType({
 			},
 			resolve: async (_parent, { id }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/tv/${id}?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US`
+					`${BASE_URL}/tv/${id}?api_key=${process.env.API_KEY!}&language=en-US`
 				);
 				return data;
 			},
@@ -239,7 +240,7 @@ export const getPopularAnimeShows = extendType({
 				const keywordID = await GET_KEYWORD_ID('anime');
 
 				const { data } = await axios.get(
-					`${BASE_URL}/discover/tv?api_key=${process.env.NEXT_PUBLIC_API_KEY}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
+					`${BASE_URL}/discover/tv?api_key=${process.env.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
 				);
 
 				return data;
