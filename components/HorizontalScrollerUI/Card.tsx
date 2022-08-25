@@ -1,45 +1,39 @@
 import React, { useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
+import Image from 'next/image';
+import { BASE_IMG_URL } from '../../utils/URLs';
 
 interface Props {
 	id: number;
 	title: string;
+	poster_path: string;
 	handleItemClick: (id: string) => void;
 	selected: boolean;
 }
 
-const Card = ({ id, title, handleItemClick, selected }: Props) => {
+const Card = ({ id, title, handleItemClick, selected, poster_path }: Props) => {
 	const visibility = useContext(VisibilityContext);
 
 	const visible = visibility.isItemVisible(String(id));
 
 	return (
 		<div
+			className='w-[10rem] h-[15rem] border-2 border-black select-none mx-4'
 			onClick={() => handleItemClick(String(id))}
 			role='button'
-			style={{
-				border: '1px solid',
-				display: 'inline-block',
-				margin: '0 10px',
-				width: '160px',
-				userSelect: 'none',
-			}}
 			tabIndex={0}
-			className='card'
 		>
 			<div>
-				<div>{title}</div>
-				<div style={{ backgroundColor: visible ? 'transparent' : 'gray' }}>
-					visible: {JSON.stringify(visible)}
-				</div>
-				<div>selected: {JSON.stringify(!!selected)}</div>
+				<p className='text-center'>{title}</p>
 			</div>
-			<div
-				style={{
-					backgroundColor: selected ? 'green' : 'bisque',
-					height: '200px',
-				}}
-			/>
+			<div>
+				<Image
+					src={BASE_IMG_URL + poster_path}
+					alt={title}
+					height='100%'
+					width='100%'
+				/>
+			</div>
 		</div>
 	);
 };

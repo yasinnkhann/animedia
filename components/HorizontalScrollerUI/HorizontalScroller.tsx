@@ -3,6 +3,7 @@ import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Card from './Card';
 import { LeftArrow, RightArrow } from './Arrows';
 import useDrag from './UseDrag';
+import { NexusGenObjects } from 'nexus-typegen';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -57,11 +58,12 @@ const HorizontalScroller = ({ items }: Props) => {
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
 		>
-			{items.map(({ id, title }) => (
+			{items.map(({ id, title, poster_path }) => (
 				<Card
 					key={id}
 					id={id}
 					title={title}
+					poster_path={poster_path}
 					handleItemClick={handleItemClick(id)}
 					selected={id === selected}
 				/>

@@ -3,6 +3,7 @@ import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
 import { useQuery } from '@apollo/client';
 import { QUERY_ALL_POPULAR_MOVIES } from '../graphql/queries';
+import { NexusGenObjects } from 'nexus-typegen';
 
 const Home: NextPage = () => {
 	const {
@@ -11,20 +12,22 @@ const Home: NextPage = () => {
 		refetch,
 	} = useQuery(QUERY_ALL_POPULAR_MOVIES);
 
+	const popularMovies: NexusGenObjects['MoviesRes'] =
+		popularMoviesData?.popularMovies;
+
 	if (loading) {
 		return <div>Data Loading...</div>;
 	}
 
-	console.log('DATA: ', popularMoviesData?.popularMovies);
 	return (
 		<>
-			{popularMoviesData ? (
+			{popularMovies ? (
 				<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 					<SearchBar />
-					<HorizontalScroller items={popularMoviesData.popularMovies.results} />
+					<HorizontalScroller items={popularMovies.results} />
 				</div>
 			) : (
-				<div></div>
+				<div>Movies Not loaded...</div>
 			)}
 		</>
 	);

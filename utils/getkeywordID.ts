@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../utils/base_url';
+import { BASE_URL } from './URLs';
 
 export const GET_KEYWORD_ID = async (q: string) => {
 	q = q.split(' ').join('+');

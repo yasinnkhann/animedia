@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../utils/base_url';
+import { BASE_URL } from './URLs';
 
 type TMediaType = 'all' | 'movie' | 'tv' | 'person';
 type TTimeWindow = 'day' | 'week';

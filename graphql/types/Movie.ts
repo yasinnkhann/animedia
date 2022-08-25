@@ -1,6 +1,6 @@
 import { objectType, extendType, nonNull, stringArg } from 'nexus';
 import axios from 'axios';
-import { BASE_URL } from '../../utils/base_url';
+import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 
