@@ -7,6 +7,8 @@ import Cors from 'micro-cors';
 const apolloServer = new ApolloServer({
 	context,
 	schema,
+	cache: 'bounded',
+	introspection: true,
 });
 
 const startServer = apolloServer.start();
