@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Image from 'next/image';
 import { BASE_IMG_URL } from '../../utils/URLs';
-import { NexusGenObjects } from 'nexus-typegen';
+// import { NexusGenObjects } from 'nexus-typegen';
+import { NexusGenObjects } from '../../node_modules/@types/nexus-typegen/index';
 
 interface Props {
 	item: NexusGenObjects['MoviesRes']['results'][0];

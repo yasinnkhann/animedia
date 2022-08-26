@@ -1,6 +1,7 @@
 import { BASE_URL } from './URLs';
 import axios from 'axios';
-import { NexusGenObjects } from 'nexus-typegen';
+// import { NexusGenObjects } from 'nexus-typegen';
+import { NexusGenObjects } from '../node_modules/@types/nexus-typegen/index';
 import 'dotenv/config';
 
 // MIGHT USE GENERICS ON THE FRONTEND SIDE

@@ -3,7 +3,8 @@ import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import Card from './Card';
 import { LeftArrow, RightArrow } from './Arrows';
 import useDrag from './UseDrag';
-import { NexusGenObjects } from 'nexus-typegen';
+// import { NexusGenObjects } from 'nexus-typegen';
+import { NexusGenObjects } from '../../node_modules/@types/nexus-typegen/index';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
