@@ -65,8 +65,8 @@ const apolloServer = new ApolloServer({
 const startServer = apolloServer.start();
 
 const cors = Cors({
-	// origin: 'https://animedia.vercel.app',
-	// allowCredentials: true,
+	origin: 'https://animedia.vercel.app',
+	allowCredentials: true,
 });
 
 export default cors(async function handler(req, res) {
@@ -79,7 +79,7 @@ export default cors(async function handler(req, res) {
 		'Access-Control-Allow-Headers',
 		'Origin, X-Requested-With, Content-Type, Accept'
 	);
-	// res.setHeader('Access-Control-Allow-Origin', 'https://animedia.vercel.app');
+	res.setHeader('Access-Control-Allow-Origin', 'https://animedia.vercel.app');
 
 	if (req.method === 'OPTIONS') {
 		res.end();
