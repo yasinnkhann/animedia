@@ -59,6 +59,7 @@ const apolloServer = new ApolloServer({
 	csrfPrevention: true,
 	cache: 'bounded',
 	plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
+	introspection: true,
 });
 
 const startServer = apolloServer.start();
