@@ -4,14 +4,14 @@
 
 type MovieResult {
   adult: Boolean!
-  backdrop_path: String!
+  backdrop_path: String
   genre_ids: [Int]!
   id: Int!
   original_language: String!
   original_title: String!
   overview: String!
   popularity: Float!
-  poster_path: String!
+  poster_path: String
   release_date: String!
   title: String!
   video: Boolean!
@@ -47,7 +47,9 @@ type Query {
   showDetails(id: Int!): showDetailsRes!
   showReviews(id: Int!): showReviewRes!
   topRatedMovies: MoviesRes!
+  topRatedMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
   topRatedShows: ShowsRes!
+  topRatedShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
   trendingMovies: MoviesRes!
   trendingShows: ShowsRes!
   users: [User!]!

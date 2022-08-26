@@ -10,14 +10,14 @@ export const MovieResults = objectType({
 	name: 'MovieResult',
 	definition(t) {
 		t.nonNull.boolean('adult');
-		t.nonNull.string('backdrop_path');
+		t.string('backdrop_path');
 		t.nonNull.list.int('genre_ids');
 		t.nonNull.int('id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
 		t.nonNull.float('popularity');
-		t.nonNull.string('poster_path');
+		t.string('poster_path');
 		t.nonNull.string('release_date');
 		t.nonNull.string('title');
 		t.nonNull.boolean('video');
@@ -343,6 +343,28 @@ export const getPopularMoviesByGenre = extendType({
 				const { data } = await axios.get(
 					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
 						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=popularity.desc`
+				);
+
+				return data;
+			},
+		});
+	},
+});
+
+export const getTopRatedMoviesByGenre = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('topRatedMoviesByGenre', {
+			type: 'MoviesRes',
+			args: {
+				genre: nonNull(stringArg()),
+				mediaType: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { genre, mediaType }) => {
+				const genreID = await GET_GENRE_ID(genre, mediaType);
+				const { data } = await axios.get(
+					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
+						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 				);
 
 				return data;
