@@ -4,7 +4,12 @@ import { onError } from '@apollo/client/link/error';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors) {
-		console.warn(`[GraphQL Errors]: ${graphQLErrors}`);
+		graphQLErrors.forEach(err => {
+			const { locations, message, path } = err;
+			console.warn(
+				`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+			);
+		});
 	}
 
 	if (networkError) {
@@ -21,7 +26,7 @@ const link = from([
 				: 'http://localhost:3000/api/graphql',
 		credentials: 'include',
 		headers: {
-			Origin: 'https://animedia.vercel.app', // <- Added this and now builds are no longer 500 erroring on vercel
+			Origin: 'https://animedia.vercel.app',
 		},
 	}),
 ]);
