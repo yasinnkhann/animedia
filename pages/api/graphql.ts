@@ -11,7 +11,10 @@ const apolloServer = new ApolloServer({
 
 const startServer = apolloServer.start();
 
-const cors = Cors();
+const cors = Cors({
+	origin: 'https://animedia.vercel.app',
+	allowCredentials: true,
+});
 
 export default cors(async function handler(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
