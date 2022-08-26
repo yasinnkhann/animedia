@@ -6,11 +6,9 @@ import { QUERY_ALL_POPULAR_MOVIES } from '../graphql/queries';
 import { NexusGenObjects } from 'nexus-typegen';
 
 const Home: NextPage = () => {
-	const {
-		data: popularMoviesData,
-		loading,
-		refetch,
-	} = useQuery(QUERY_ALL_POPULAR_MOVIES);
+	const { data: popularMoviesData, loading } = useQuery(
+		QUERY_ALL_POPULAR_MOVIES
+	);
 
 	const popularMovies: NexusGenObjects['MoviesRes'] =
 		popularMoviesData?.popularMovies;

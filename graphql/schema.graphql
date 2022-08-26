@@ -39,6 +39,7 @@ type Query {
   popularMovies: MoviesRes!
   popularMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
   popularShows: ShowsRes!
+  popularShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
   recommendedMovies(id: Int!): MoviesRes!
   recommendedShows(id: Int!): ShowsRes!
   searchedMovies(q: String!): MoviesRes!

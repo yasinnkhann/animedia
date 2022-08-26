@@ -2,6 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from './URLs';
 import 'dotenv/config';
 
+// types might be unnecessary after implementing front end side of things
 type TMediaType = 'all' | 'movie' | 'tv' | 'person';
 type TTimeWindow = 'day' | 'week';
 

@@ -4,6 +4,7 @@ import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import 'dotenv/config';
+import { GET_GENRE_ID } from '../../utils/getGenreID';
 
 export const ShowResult = objectType({
 	name: 'ShowResult',
@@ -299,7 +300,6 @@ export const getRecommendedShows = extendType({
 	},
 });
 
-//!
 export const showReviewAuthorDetails = objectType({
 	name: 'showReviewAuthorDetails',
 	definition(t) {
@@ -351,6 +351,28 @@ export const getShowReviews = extendType({
 					`${BASE_URL}/tv/${id}/reviews?api_key=${process.env
 						.API_KEY!}&language=en-US&page=1`
 				);
+				return data;
+			},
+		});
+	},
+});
+
+export const getPopularShowsByGenre = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('popularShowsByGenre', {
+			type: 'ShowsRes',
+			args: {
+				genre: nonNull(stringArg()),
+				mediaType: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { genre, mediaType }) => {
+				const genreID = await GET_GENRE_ID(genre, mediaType);
+				const { data } = await axios.get(
+					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
+						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=popularity.desc`
+				);
+
 				return data;
 			},
 		});
