@@ -28,11 +28,29 @@ export default cors(async function handler(req, res) {
 	// 	'Access-Control-Allow-Headers',
 	// 	'Origin, X-Requested-With, Content-Type, Accept'
 	// );
+	const allowedOrigins = [
+		'http://localhost:3000',
+		'https://animedia.vercel.app',
+		'https://studio.apollographql.com',
+		'https://cdn.cookielaw.org',
+		'https://www.googletagmanager.com',
+	];
+
+	const origin = req.headers.origin;
+
+	if (origin) {
+		if (allowedOrigins.includes(origin)) {
+			res.setHeader('Access-Control-Allow-Origin', origin);
+		}
+	}
+
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	res.setHeader(
-		'Access-Control-Allow-Origin',
-		'https://studio.apollographql.com'
-	);
+
+	// res.setHeader(
+	// 	'Access-Control-Allow-Origin',
+	// 	'https://studio.apollographql.com'
+	// );
+
 	res.setHeader(
 		'Access-Control-Allow-Methods',
 		'GET,OPTIONS,PATCH,DELETE,POST,PUT'
