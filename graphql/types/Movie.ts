@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
+import { GET_GENRE_ID } from '../../utils/getGenreID';
 import 'dotenv/config';
 
 export const MovieResults = objectType({
@@ -322,6 +323,28 @@ export const getMoviesInTheatres = extendType({
 					`${BASE_URL}/movie/now_playing?api_key=${process.env
 						.API_KEY!}&language=en-US&page=1`
 				);
+				return data;
+			},
+		});
+	},
+});
+
+export const getPopularMoviesByGenre = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('popularMoviesByGenre', {
+			type: 'MoviesRes',
+			args: {
+				genre: nonNull(stringArg()),
+				mediaType: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { genre, mediaType }) => {
+				const genreID = await GET_GENRE_ID(genre, mediaType);
+				const { data } = await axios.get(
+					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
+						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=popularity.desc`
+				);
+
 				return data;
 			},
 		});
