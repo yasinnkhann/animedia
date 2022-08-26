@@ -4,7 +4,7 @@ import Card from './Card';
 import { LeftArrow, RightArrow } from './Arrows';
 import useDrag from './UseDrag';
 // import { NexusGenObjects } from 'nexus-typegen';
-import { NexusGenObjects } from '../../node_modules/@types/nexus-typegen/index';
+import { NexusGenObjects } from '../../graphql/nexus-typegen/index';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
