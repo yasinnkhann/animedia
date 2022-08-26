@@ -13,53 +13,31 @@ const apolloServer = new ApolloServer({
 
 const startServer = apolloServer.start();
 
-const cors = Cors({
-	// origin: 'https://animedia.vercel.app',
-	// allowCredentials: true,
-});
+const cors = Cors();
 
 export default cors(async function handler(req, res) {
-	// res.setHeader('Access-Control-Allow-Credentials', 'true');
-	// res.setHeader(
-	// 	'Access-Control-Allow-Origin',
-	// 	'https://studio.apollographql.com'
-	// );
-	// res.setHeader(
-	// 	'Access-Control-Allow-Headers',
-	// 	'Origin, X-Requested-With, Content-Type, Accept'
-	// );
-	// const allowedOrigins = [
-	// 	'http://localhost:3000',
-	// 	'https://animedia.vercel.app',
-	// 	'https://studio.apollographql.com',
-	// 	'https://cdn.cookielaw.org',
-	// 	'https://www.googletagmanager.com',
-	// ];
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept'
+	);
 
-	// const origin = req.headers.origin;
+	const allowedOrigins = [
+		'http://localhost:3000',
+		'https://animedia.vercel.app',
+		'https://studio.apollographql.com',
+	];
 
-	// if (origin) {
-	// 	if (allowedOrigins.includes(origin)) {
-	// 		res.setHeader('Access-Control-Allow-Origin', origin);
-	// 	}
-	// }
+	const origin = req.headers.origin;
+
+	if (origin && allowedOrigins.includes(origin)) {
+		res.setHeader('Access-Control-Allow-Origin', origin);
+	}
 
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-	// res.setHeader(
-	// 	'Access-Control-Allow-Origin',
-	// 	'https://studio.apollographql.com'
-	// );
-
-	res.setHeader('Access-Control-Allow-Origin', '*');
 
 	res.setHeader(
 		'Access-Control-Allow-Methods',
 		'GET,OPTIONS,PATCH,DELETE,POST,PUT'
-	);
-	res.setHeader(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept'
 	);
 
 	if (req.method === 'OPTIONS') {
