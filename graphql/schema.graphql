@@ -206,6 +206,21 @@ type showDetailsNetwork {
   origin_country: String!
 }
 
+type showDetailsNextEpToAir {
+  air_date: String!
+  episode_number: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  production_code: String!
+  runtime: Int!
+  season_number: Int!
+  show_id: Int!
+  still_path: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
 type showDetailsProdCompany {
   id: Int!
   logo_path: String
@@ -228,7 +243,7 @@ type showDetailsRes {
   last_episode_to_air: showDetailsLastEpToAir!
   name: String!
   networks: [showDetailsNetwork!]!
-  next_episode_to_air: Int
+  next_episode_to_air: showDetailsNextEpToAir
   number_of_episodes: Int!
   number_of_seasons: Int!
   origin_country: [String]!

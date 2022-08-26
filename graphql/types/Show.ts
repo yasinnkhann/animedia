@@ -161,6 +161,24 @@ export const showDetailsSpokenLang = objectType({
 	},
 });
 
+export const showDetailsNextEpToAir = objectType({
+	name: 'showDetailsNextEpToAir',
+	definition(t) {
+		t.nonNull.string('air_date');
+		t.nonNull.int('episode_number');
+		t.nonNull.int('id');
+		t.nonNull.string('name');
+		t.nonNull.string('overview');
+		t.nonNull.string('production_code');
+		t.nonNull.int('runtime');
+		t.nonNull.int('season_number');
+		t.nonNull.int('show_id');
+		t.nonNull.string('still_path');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+	},
+});
+
 export const showDetails = objectType({
 	name: 'showDetailsRes',
 	definition(t) {
@@ -183,7 +201,9 @@ export const showDetails = objectType({
 			type: 'showDetailsLastEpToAir',
 		});
 		t.nonNull.string('name');
-		t.int('next_episode_to_air');
+		t.field('next_episode_to_air', {
+			type: 'showDetailsNextEpToAir',
+		});
 		t.nonNull.list.field('networks', {
 			type: nonNull('showDetailsNetwork'),
 		});
