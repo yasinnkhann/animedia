@@ -3,13 +3,13 @@ import { relayStylePagination } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-	if (graphQLErrors)
-		graphQLErrors.forEach(err => {
-			const { locations, message, path } = err;
-			console.warn(
-				`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-			);
-		});
+	if (graphQLErrors) {
+		console.warn(`[GraphQL Errors]: ${graphQLErrors}`);
+	}
+
+	if (networkError) {
+		console.warn(`[Network Error]: ${networkError}`);
+	}
 });
 
 const link = from([
@@ -27,7 +27,15 @@ const link = from([
 ]);
 
 export const client = new ApolloClient({
-	cache: new InMemoryCache(),
+	cache: new InMemoryCache({
+		typePolicies: {
+			Query: {
+				fields: {
+					links: relayStylePagination(),
+				},
+			},
+		},
+	}),
 	link: link,
 });
 
