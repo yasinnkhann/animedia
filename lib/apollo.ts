@@ -25,9 +25,9 @@ const link = from([
 				? 'https://animedia.vercel.app/api/graphql'
 				: 'http://localhost:3000/api/graphql',
 		credentials: 'include',
-		// headers: {
-		// 	Origin: 'https://animedia.vercel.app',
-		// },
+		headers: {
+			Origin: 'https://animedia.vercel.app',
+		},
 	}),
 ]);
 
@@ -41,20 +41,5 @@ export const client = new ApolloClient({
 			},
 		},
 	}),
-	link: link,
+	link,
 });
-
-// export const client = new ApolloClient({
-// 	uri: 'http://localhost:3000/api/graphql',
-// 	// uri: 'https://animedia.vercel.app/api/graphql',
-
-// 	cache: new InMemoryCache({
-// 		typePolicies: {
-// 			Query: {
-// 				fields: {
-// 					links: relayStylePagination(),
-// 				},
-// 			},
-// 		},
-// 	}),
-// });
