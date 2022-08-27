@@ -3,7 +3,6 @@ import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
 import { useQuery } from '@apollo/client';
 import { QUERY_ALL_POPULAR_MOVIES } from '../graphql/queries';
-// import { NexusGenObjects } from 'nexus-typegen';
 import { NexusGenObjects } from '../graphql/nexus-typegen/index';
 
 const Home: NextPage = () => {

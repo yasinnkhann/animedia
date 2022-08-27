@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 function Arrow({

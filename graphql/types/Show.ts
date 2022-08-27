@@ -3,8 +3,8 @@ import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
-import 'dotenv/config';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
+import 'dotenv/config';
 
 export const ShowResult = objectType({
 	name: 'ShowResult',

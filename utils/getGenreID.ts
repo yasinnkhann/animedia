@@ -1,6 +1,5 @@
 import { BASE_URL } from './URLs';
 import axios from 'axios';
-// import { NexusGenObjects } from 'nexus-typegen';
 import { NexusGenObjects } from '../graphql/nexus-typegen/index';
 import 'dotenv/config';
 
