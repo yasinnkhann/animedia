@@ -25,9 +25,6 @@ const link = from([
 				? 'https://animedia.vercel.app/api/graphql'
 				: 'http://localhost:3000/api/graphql',
 		credentials: 'include',
-		headers: {
-			Origin: 'https://animedia.vercel.app',
-		},
 	}),
 ]);
 
