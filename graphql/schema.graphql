@@ -46,6 +46,7 @@ type Query {
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): showDetailsRes!
   showReviews(id: Int!): showReviewRes!
+  testgql: String
   topRatedMovies: MoviesRes!
   topRatedMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
   topRatedShows: ShowsRes!

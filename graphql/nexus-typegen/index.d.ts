@@ -347,6 +347,7 @@ export interface NexusGenFieldTypes {
     searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     showDetails: NexusGenRootTypes['showDetailsRes']; // showDetailsRes!
     showReviews: NexusGenRootTypes['showReviewRes']; // showReviewRes!
+    testgql: string | null; // String
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -627,6 +628,7 @@ export interface NexusGenFieldTypeNames {
     searchedShows: 'ShowsRes'
     showDetails: 'showDetailsRes'
     showReviews: 'showReviewRes'
+    testgql: 'String'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'

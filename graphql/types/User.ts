@@ -41,3 +41,15 @@ export const createUser = extendType({
 		});
 	},
 });
+
+export const testgql = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('testgql', {
+			type: 'String',
+			resolve: () => {
+				return 'YOU QUERIED ME!';
+			},
+		});
+	},
+});
