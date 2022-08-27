@@ -24,7 +24,6 @@ const link = from([
 			process.env.NODE_ENV === 'production'
 				? 'https://animedia.vercel.app/api/graphql'
 				: 'http://localhost:3000/api/graphql',
-		credentials: 'include',
 	}),
 ]);
 
