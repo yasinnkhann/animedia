@@ -1,13 +1,10 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
-import { useQuery } from '@apollo/client';
-import { QUERY_POPULAR_MOVIES } from '../graphql/queries';
+import useGetQuery from '../hooks/UseGetQuery';
 
 const Home: NextPage = () => {
-	const { data: popularMoviesData, loading } = useQuery(QUERY_POPULAR_MOVIES);
-
-	const popularMovies = popularMoviesData?.popularMovies;
+	const { data: popularMovies, loading } = useGetQuery('popular movies');
 
 	if (loading) {
 		return <div>Data Loading...</div>;
