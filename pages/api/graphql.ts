@@ -23,8 +23,8 @@ export default cors(async function handler(req, res) {
 
 	const allowedOrigins = [
 		'http://localhost:3000',
-		// 'https://animedia.vercel.app',
-		// 'https://studio.apollographql.com',
+		'https://animedia.vercel.app',
+		'https://studio.apollographql.com',
 	];
 
 	const origin = req.headers.origin;
