@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Image from 'next/image';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { NexusGenObjects } from '../../graphql/nexus-typegen/index';
+import { NexusGenObjects } from '../../graphql/generated/nexus-typegen/index';
 import { BASE_IMG_URL } from '../../utils/URLs';
 
 interface Props {

@@ -17,6 +17,7 @@
 		"axios": "^0.27.2",
 		"dotenv": "^16.0.1",
 		"graphql": "^16.6.0",
+		"graphql-request": "^5.0.0",
 		"micro": "^9.4.1",
 		"micro-cors": "^0.1.1",
 		"next": "12.1.6",

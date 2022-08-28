@@ -6,8 +6,14 @@ export const schema = makeSchema({
 	types,
 	plugins: [connectionPlugin()],
 	outputs: {
-		typegen: join(process.cwd(), 'graphql', 'nexus-typegen', 'index.d.ts'),
-		schema: join(process.cwd(), 'graphql', 'schema.graphql'),
+		typegen: join(
+			process.cwd(),
+			'graphql',
+			'generated',
+			'nexus-typegen',
+			'index.d.ts'
+		),
+		schema: join(process.cwd(), 'graphql', 'generated', 'schema.graphql'),
 	},
 	contextType: {
 		export: 'Context',
