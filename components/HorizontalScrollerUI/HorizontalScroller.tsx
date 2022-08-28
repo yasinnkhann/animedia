@@ -9,6 +9,7 @@ type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
 	items: NexusGenObjects['MoviesRes']['results'];
+	// | NexusGenObjects['ShowsRes']['results'];
 }
 
 const HorizontalScroller = ({ items }: Props) => {

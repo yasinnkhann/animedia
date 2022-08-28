@@ -293,8 +293,9 @@ export const QUERY_POPULAR_SHOWS = gql`
 	query getPopularShows {
 		popularShows {
 			results {
+				id
 				name
-				overview
+				poster_path
 			}
 		}
 	}

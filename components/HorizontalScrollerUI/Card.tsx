@@ -6,6 +6,7 @@ import { BASE_IMG_URL } from '../../utils/URLs';
 
 interface Props {
 	item: NexusGenObjects['MoviesRes']['results'][0];
+	// | NexusGenObjects['ShowsRes']['results'][0];
 	handleItemClick: (id: string) => void;
 	selected: boolean;
 }
