@@ -75,7 +75,7 @@ export const getSearchedShows = extendType({
 });
 
 export const showDetailsCreatedBy = objectType({
-	name: 'showDetailsCreatedBy',
+	name: 'ShowDetailsCreatedBy',
 	definition(t) {
 		t.nonNull.int('id');
 		t.nonNull.string('credit_id');
@@ -86,7 +86,7 @@ export const showDetailsCreatedBy = objectType({
 });
 
 export const showDetailsGenre = objectType({
-	name: 'showDetailsGenre',
+	name: 'ShowDetailsGenre',
 	definition(t) {
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -94,7 +94,7 @@ export const showDetailsGenre = objectType({
 });
 
 export const showDetailsLastEpToAir = objectType({
-	name: 'showDetailsLastEpToAir',
+	name: 'ShowDetailsLastEpToAir',
 	definition(t) {
 		t.nonNull.string('air_date');
 		t.nonNull.int('episode_number');
@@ -112,7 +112,7 @@ export const showDetailsLastEpToAir = objectType({
 });
 
 export const showDetailsNetwork = objectType({
-	name: 'showDetailsNetwork',
+	name: 'ShowDetailsNetwork',
 	definition(t) {
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -122,7 +122,7 @@ export const showDetailsNetwork = objectType({
 });
 
 export const showDetailsProdCompany = objectType({
-	name: 'showDetailsProdCompany',
+	name: 'ShowDetailsProdCompany',
 	definition(t) {
 		t.nonNull.int('id');
 		t.string('logo_path');
@@ -132,7 +132,7 @@ export const showDetailsProdCompany = objectType({
 });
 
 export const showDetailsCountry = objectType({
-	name: 'showDetailsCountry',
+	name: 'ShowDetailsCountry',
 	definition(t) {
 		t.nonNull.string('iso_3166_1');
 		t.nonNull.string('name');
@@ -140,7 +140,7 @@ export const showDetailsCountry = objectType({
 });
 
 export const showDetailsSeason = objectType({
-	name: 'showDetailsSeason',
+	name: 'ShowDetailsSeason',
 	definition(t) {
 		t.nonNull.string('air_date');
 		t.nonNull.int('episode_count');
@@ -153,7 +153,7 @@ export const showDetailsSeason = objectType({
 });
 
 export const showDetailsSpokenLang = objectType({
-	name: 'showDetailsSpokenLang',
+	name: 'ShowDetailsSpokenLang',
 	definition(t) {
 		t.nonNull.string('english_name');
 		t.nonNull.string('iso_639_1');
@@ -162,7 +162,7 @@ export const showDetailsSpokenLang = objectType({
 });
 
 export const showDetailsNextEpToAir = objectType({
-	name: 'showDetailsNextEpToAir',
+	name: 'ShowDetailsNextEpToAir',
 	definition(t) {
 		t.nonNull.string('air_date');
 		t.nonNull.int('episode_number');
@@ -180,17 +180,17 @@ export const showDetailsNextEpToAir = objectType({
 });
 
 export const showDetails = objectType({
-	name: 'showDetailsRes',
+	name: 'ShowDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.nonNull.string('backdrop_path');
 		t.nonNull.list.field('created_by', {
-			type: 'showDetailsCreatedBy',
+			type: 'ShowDetailsCreatedBy',
 		});
 		t.nonNull.list.int('episode_run_time');
 		t.nonNull.string('first_air_date');
 		t.nonNull.list.field('genres', {
-			type: nonNull('showDetailsGenre'),
+			type: nonNull('ShowDetailsGenre'),
 		});
 		t.nonNull.string('homepage');
 		t.nonNull.int('id');
@@ -198,14 +198,14 @@ export const showDetails = objectType({
 		t.nonNull.list.string('languages');
 		t.nonNull.string('last_air_date');
 		t.nonNull.field('last_episode_to_air', {
-			type: 'showDetailsLastEpToAir',
+			type: 'ShowDetailsLastEpToAir',
 		});
 		t.nonNull.string('name');
 		t.field('next_episode_to_air', {
-			type: 'showDetailsNextEpToAir',
+			type: 'ShowDetailsNextEpToAir',
 		});
 		t.nonNull.list.field('networks', {
-			type: nonNull('showDetailsNetwork'),
+			type: nonNull('ShowDetailsNetwork'),
 		});
 		t.nonNull.int('number_of_episodes');
 		t.nonNull.int('number_of_seasons');
@@ -216,16 +216,16 @@ export const showDetails = objectType({
 		t.nonNull.float('popularity');
 		t.nonNull.string('poster_path');
 		t.nonNull.list.field('production_companies', {
-			type: 'showDetailsProdCompany',
+			type: 'ShowDetailsProdCompany',
 		});
 		t.nonNull.list.field('production_countries', {
-			type: 'showDetailsCountry',
+			type: 'ShowDetailsCountry',
 		});
 		t.nonNull.list.field('seasons', {
-			type: 'showDetailsSeason',
+			type: 'ShowDetailsSeason',
 		});
 		t.nonNull.list.field('spoken_languages', {
-			type: 'showDetailsSpokenLang',
+			type: 'ShowDetailsSpokenLang',
 		});
 		t.nonNull.string('status');
 		t.nonNull.string('tagline');
@@ -239,7 +239,7 @@ export const getShowDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('showDetails', {
-			type: 'showDetailsRes',
+			type: 'ShowDetailsRes',
 			args: {
 				id: nonNull(intArg()),
 			},
@@ -321,7 +321,7 @@ export const getRecommendedShows = extendType({
 });
 
 export const showReviewAuthorDetails = objectType({
-	name: 'showReviewAuthorDetails',
+	name: 'ShowReviewAuthorDetails',
 	definition(t) {
 		t.nonNull.string('name');
 		t.nonNull.string('username');
@@ -331,11 +331,11 @@ export const showReviewAuthorDetails = objectType({
 });
 
 export const showReviewResult = objectType({
-	name: 'showReviewResult',
+	name: 'ShowReviewResult',
 	definition(t) {
 		t.nonNull.string('author');
 		t.nonNull.field('author_details', {
-			type: 'showReviewAuthorDetails',
+			type: 'ShowReviewAuthorDetails',
 		});
 		t.nonNull.string('content');
 		t.nonNull.string('created_at');
@@ -346,14 +346,14 @@ export const showReviewResult = objectType({
 });
 
 export const showReview = objectType({
-	name: 'showReviewRes',
+	name: 'ShowReviewRes',
 	definition(t) {
 		t.nonNull.int('id'),
 			t.nonNull.int('page'),
 			t.nonNull.int('total_pages'),
 			t.nonNull.int('total_results');
 		t.nonNull.list.field('results', {
-			type: 'showReviewResult',
+			type: 'ShowReviewResult',
 		});
 	},
 });
@@ -362,7 +362,7 @@ export const getShowReviews = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('showReviews', {
-			type: 'showReviewRes',
+			type: 'ShowReviewRes',
 			args: {
 				id: nonNull(intArg()),
 			},

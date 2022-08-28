@@ -49,8 +49,8 @@ Western             37
 */
 
 type TGenreObj =
-	| NexusGenObjects['movieDetailsGenre']
-	| NexusGenObjects['showDetailsGenre'];
+	| NexusGenObjects['MovieDetailsGenre']
+	| NexusGenObjects['ShowDetailsGenre'];
 
 export const GET_GENRE_ID = async (
 	genreName: string,

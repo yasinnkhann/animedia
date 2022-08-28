@@ -2,6 +2,55 @@
 ### Do not make changes to this file directly
 
 
+type MovieDetailsGenre {
+  id: Int!
+  name: String!
+}
+
+type MovieDetailsProdCompany {
+  id: Int!
+  logo_path: String
+  name: String!
+  origin_country: String!
+}
+
+type MovieDetailsProdCountry {
+  iso_3166_1: String!
+  name: String!
+}
+
+type MovieDetailsRes {
+  adult: Boolean!
+  backdrop_path: String!
+  genres: [MovieDetailsGenre!]!
+  homepage: String!
+  id: Int!
+  imdb_id: String!
+  original_language: String!
+  original_title: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String!
+  production_companies: [MovieDetailsProdCompany]!
+  production_countries: [MovieDetailsProdCountry]!
+  release_date: String!
+  revenue: Int!
+  runtime: Int!
+  spoken_languages: [MovieDetailsSpokenLang]!
+  status: String!
+  tagline: String!
+  title: String!
+  video: Boolean!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type MovieDetailsSpokenLang {
+  english_name: String!
+  iso_639_1: String!
+  name: String!
+}
+
 type MovieResult {
   adult: Boolean!
   backdrop_path: String
@@ -19,6 +68,39 @@ type MovieResult {
   vote_count: Int!
 }
 
+type MovieReviewAuthorDetails {
+  avatar_path: String
+  name: String!
+  rating: Float
+  username: String!
+}
+
+type MovieReviewRes {
+  id: Int!
+  page: Int!
+  results: [MovieReviewResult]!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type MovieReviewResult {
+  author: String!
+  author_details: MovieReviewAuthorDetails!
+  content: String!
+  created_at: String!
+  id: String!
+  updated_at: String!
+  url: String!
+}
+
+type MoviesInTheatresRes {
+  dates: TheatreDates!
+  page: String!
+  results: [MovieResult]!
+  total_pages: Int!
+  total_results: Int!
+}
+
 type MoviesRes {
   page: Int!
   results: [MovieResult!]!
@@ -31,9 +113,9 @@ type Mutation {
 }
 
 type Query {
-  movieDetails(id: Int!): movieDetailsRes!
-  movieReviews(id: Int!): movieReviewRes!
-  moviesInTheatres: moviesInTheatresRes!
+  movieDetails(id: Int!): MovieDetailsRes!
+  movieReviews(id: Int!): MovieReviewRes!
+  moviesInTheatres: MoviesInTheatresRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
@@ -44,8 +126,8 @@ type Query {
   recommendedShows(id: Int!): ShowsRes!
   searchedMovies(q: String!): MoviesRes!
   searchedShows(q: String!): ShowsRes!
-  showDetails(id: Int!): showDetailsRes!
-  showReviews(id: Int!): showReviewRes!
+  showDetails(id: Int!): ShowDetailsRes!
+  showReviews(id: Int!): ShowReviewRes!
   testgql: String
   topRatedMovies: MoviesRes!
   topRatedMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
@@ -54,6 +136,119 @@ type Query {
   trendingMovies: MoviesRes!
   trendingShows: ShowsRes!
   users: [User!]!
+}
+
+type ShowDetailsCountry {
+  iso_3166_1: String!
+  name: String!
+}
+
+type ShowDetailsCreatedBy {
+  credit_id: String!
+  gender: Int!
+  id: Int!
+  name: String!
+  profile_path: String!
+}
+
+type ShowDetailsGenre {
+  id: Int!
+  name: String!
+}
+
+type ShowDetailsLastEpToAir {
+  air_date: String!
+  episode_number: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  production_code: String!
+  runtime: Int!
+  season_number: Int!
+  show_id: Int!
+  still_path: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type ShowDetailsNetwork {
+  id: Int!
+  logo_path: String!
+  name: String!
+  origin_country: String!
+}
+
+type ShowDetailsNextEpToAir {
+  air_date: String!
+  episode_number: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  production_code: String!
+  runtime: Int!
+  season_number: Int!
+  show_id: Int!
+  still_path: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type ShowDetailsProdCompany {
+  id: Int!
+  logo_path: String
+  name: String!
+  origin_country: String!
+}
+
+type ShowDetailsRes {
+  adult: Boolean!
+  backdrop_path: String!
+  created_by: [ShowDetailsCreatedBy]!
+  episode_run_time: [Int]!
+  first_air_date: String!
+  genres: [ShowDetailsGenre!]!
+  homepage: String!
+  id: Int!
+  in_production: Boolean!
+  languages: [String]!
+  last_air_date: String!
+  last_episode_to_air: ShowDetailsLastEpToAir!
+  name: String!
+  networks: [ShowDetailsNetwork!]!
+  next_episode_to_air: ShowDetailsNextEpToAir
+  number_of_episodes: Int!
+  number_of_seasons: Int!
+  origin_country: [String]!
+  original_language: String!
+  original_name: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String!
+  production_companies: [ShowDetailsProdCompany]!
+  production_countries: [ShowDetailsCountry]!
+  seasons: [ShowDetailsSeason]!
+  spoken_languages: [ShowDetailsSpokenLang]!
+  status: String!
+  tagline: String!
+  type: String!
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type ShowDetailsSeason {
+  air_date: String!
+  episode_count: Int!
+  id: Int!
+  name: String!
+  overview: String!
+  poster_path: String!
+  season_number: Int!
+}
+
+type ShowDetailsSpokenLang {
+  english_name: String!
+  iso_639_1: String!
+  name: String!
 }
 
 type ShowResult {
@@ -72,6 +267,31 @@ type ShowResult {
   vote_count: Int!
 }
 
+type ShowReviewAuthorDetails {
+  avatar_path: String
+  name: String!
+  rating: Float
+  username: String!
+}
+
+type ShowReviewRes {
+  id: Int!
+  page: Int!
+  results: [ShowReviewResult]!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type ShowReviewResult {
+  author: String!
+  author_details: ShowReviewAuthorDetails!
+  content: String!
+  created_at: String!
+  id: String!
+  updated_at: String!
+  url: String!
+}
+
 type ShowsRes {
   page: Int!
   results: [ShowResult!]!
@@ -79,233 +299,13 @@ type ShowsRes {
   total_results: Int!
 }
 
+type TheatreDates {
+  maximum: String!
+  minimum: String!
+}
+
 type User {
   email: String!
   id: String!
   name: String!
-}
-
-type movieDetailsGenre {
-  id: Int!
-  name: String!
-}
-
-type movieDetailsProdCompany {
-  id: Int!
-  logo_path: String
-  name: String!
-  origin_country: String!
-}
-
-type movieDetailsProdCountry {
-  iso_3166_1: String!
-  name: String!
-}
-
-type movieDetailsRes {
-  adult: Boolean!
-  backdrop_path: String!
-  genres: [movieDetailsGenre!]!
-  homepage: String!
-  id: Int!
-  imdb_id: String!
-  original_language: String!
-  original_title: String!
-  overview: String!
-  popularity: Float!
-  poster_path: String!
-  production_companies: [movieDetailsProdCompany]!
-  production_countries: [movieDetailsProdCountry]!
-  release_date: String!
-  revenue: Int!
-  runtime: Int!
-  spoken_languages: [movieDetailsSpokenLang]!
-  status: String!
-  tagline: String!
-  title: String!
-  video: Boolean!
-  vote_average: Float!
-  vote_count: Int!
-}
-
-type movieDetailsSpokenLang {
-  english_name: String!
-  iso_639_1: String!
-  name: String!
-}
-
-type movieReviewAuthorDetails {
-  avatar_path: String
-  name: String!
-  rating: Float
-  username: String!
-}
-
-type movieReviewRes {
-  id: Int!
-  page: Int!
-  results: [movieReviewResult]!
-  total_pages: Int!
-  total_results: Int!
-}
-
-type movieReviewResult {
-  author: String!
-  author_details: movieReviewAuthorDetails!
-  content: String!
-  created_at: String!
-  id: String!
-  updated_at: String!
-  url: String!
-}
-
-type moviesInTheatresRes {
-  dates: theatreDates!
-  page: String!
-  results: [MovieResult]!
-  total_pages: Int!
-  total_results: Int!
-}
-
-type showDetailsCountry {
-  iso_3166_1: String!
-  name: String!
-}
-
-type showDetailsCreatedBy {
-  credit_id: String!
-  gender: Int!
-  id: Int!
-  name: String!
-  profile_path: String!
-}
-
-type showDetailsGenre {
-  id: Int!
-  name: String!
-}
-
-type showDetailsLastEpToAir {
-  air_date: String!
-  episode_number: Int!
-  id: Int!
-  name: String!
-  overview: String!
-  production_code: String!
-  runtime: Int!
-  season_number: Int!
-  show_id: Int!
-  still_path: String!
-  vote_average: Float!
-  vote_count: Int!
-}
-
-type showDetailsNetwork {
-  id: Int!
-  logo_path: String!
-  name: String!
-  origin_country: String!
-}
-
-type showDetailsNextEpToAir {
-  air_date: String!
-  episode_number: Int!
-  id: Int!
-  name: String!
-  overview: String!
-  production_code: String!
-  runtime: Int!
-  season_number: Int!
-  show_id: Int!
-  still_path: String!
-  vote_average: Float!
-  vote_count: Int!
-}
-
-type showDetailsProdCompany {
-  id: Int!
-  logo_path: String
-  name: String!
-  origin_country: String!
-}
-
-type showDetailsRes {
-  adult: Boolean!
-  backdrop_path: String!
-  created_by: [showDetailsCreatedBy]!
-  episode_run_time: [Int]!
-  first_air_date: String!
-  genres: [showDetailsGenre!]!
-  homepage: String!
-  id: Int!
-  in_production: Boolean!
-  languages: [String]!
-  last_air_date: String!
-  last_episode_to_air: showDetailsLastEpToAir!
-  name: String!
-  networks: [showDetailsNetwork!]!
-  next_episode_to_air: showDetailsNextEpToAir
-  number_of_episodes: Int!
-  number_of_seasons: Int!
-  origin_country: [String]!
-  original_language: String!
-  original_name: String!
-  overview: String!
-  popularity: Float!
-  poster_path: String!
-  production_companies: [showDetailsProdCompany]!
-  production_countries: [showDetailsCountry]!
-  seasons: [showDetailsSeason]!
-  spoken_languages: [showDetailsSpokenLang]!
-  status: String!
-  tagline: String!
-  type: String!
-  vote_average: Float!
-  vote_count: Int!
-}
-
-type showDetailsSeason {
-  air_date: String!
-  episode_count: Int!
-  id: Int!
-  name: String!
-  overview: String!
-  poster_path: String!
-  season_number: Int!
-}
-
-type showDetailsSpokenLang {
-  english_name: String!
-  iso_639_1: String!
-  name: String!
-}
-
-type showReviewAuthorDetails {
-  avatar_path: String
-  name: String!
-  rating: Float
-  username: String!
-}
-
-type showReviewRes {
-  id: Int!
-  page: Int!
-  results: [showReviewResult]!
-  total_pages: Int!
-  total_results: Int!
-}
-
-type showReviewResult {
-  author: String!
-  author_details: showReviewAuthorDetails!
-  content: String!
-  created_at: String!
-  id: String!
-  updated_at: String!
-  url: String!
-}
-
-type theatreDates {
-  maximum: String!
-  minimum: String!
 }

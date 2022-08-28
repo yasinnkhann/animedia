@@ -76,7 +76,7 @@ export const getSearchedMovies = extendType({
 });
 
 export const movieDetailsGenre = objectType({
-	name: 'movieDetailsGenre',
+	name: 'MovieDetailsGenre',
 	definition(t) {
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -84,7 +84,7 @@ export const movieDetailsGenre = objectType({
 });
 
 export const movieDetailsProdCompany = objectType({
-	name: 'movieDetailsProdCompany',
+	name: 'MovieDetailsProdCompany',
 	definition(t) {
 		t.nonNull.int('id');
 		t.string('logo_path');
@@ -94,7 +94,7 @@ export const movieDetailsProdCompany = objectType({
 });
 
 export const movieDetailsProdCountry = objectType({
-	name: 'movieDetailsProdCountry',
+	name: 'MovieDetailsProdCountry',
 	definition(t) {
 		t.nonNull.string('iso_3166_1');
 		t.nonNull.string('name');
@@ -102,7 +102,7 @@ export const movieDetailsProdCountry = objectType({
 });
 
 export const movieDetailsSpokenLang = objectType({
-	name: 'movieDetailsSpokenLang',
+	name: 'MovieDetailsSpokenLang',
 	definition(t) {
 		t.nonNull.string('english_name');
 		t.nonNull.string('iso_639_1');
@@ -111,12 +111,12 @@ export const movieDetailsSpokenLang = objectType({
 });
 
 export const movieDetails = objectType({
-	name: 'movieDetailsRes',
+	name: 'MovieDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.nonNull.string('backdrop_path');
 		t.nonNull.list.field('genres', {
-			type: nonNull('movieDetailsGenre'),
+			type: nonNull('MovieDetailsGenre'),
 		});
 		t.nonNull.string('homepage');
 		t.nonNull.int('id');
@@ -127,16 +127,16 @@ export const movieDetails = objectType({
 		t.nonNull.float('popularity');
 		t.nonNull.string('poster_path');
 		t.nonNull.list.field('production_companies', {
-			type: 'movieDetailsProdCompany',
+			type: 'MovieDetailsProdCompany',
 		});
 		t.nonNull.list.field('production_countries', {
-			type: 'movieDetailsProdCountry',
+			type: 'MovieDetailsProdCountry',
 		});
 		t.nonNull.string('release_date');
 		t.nonNull.int('revenue');
 		t.nonNull.int('runtime');
 		t.nonNull.list.field('spoken_languages', {
-			type: 'movieDetailsSpokenLang',
+			type: 'MovieDetailsSpokenLang',
 		});
 		t.nonNull.string('status');
 		t.nonNull.string('tagline');
@@ -151,7 +151,7 @@ export const getMovieDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('movieDetails', {
-			type: 'movieDetailsRes',
+			type: 'MovieDetailsRes',
 			args: {
 				id: nonNull(intArg()),
 			},
@@ -234,7 +234,7 @@ export const getRecommendedMovies = extendType({
 });
 
 export const movieReviewAuthorDetails = objectType({
-	name: 'movieReviewAuthorDetails',
+	name: 'MovieReviewAuthorDetails',
 	definition(t) {
 		t.nonNull.string('name');
 		t.nonNull.string('username');
@@ -244,11 +244,11 @@ export const movieReviewAuthorDetails = objectType({
 });
 
 export const movieReviewResult = objectType({
-	name: 'movieReviewResult',
+	name: 'MovieReviewResult',
 	definition(t) {
 		t.nonNull.string('author');
 		t.nonNull.field('author_details', {
-			type: 'movieReviewAuthorDetails',
+			type: 'MovieReviewAuthorDetails',
 		});
 		t.nonNull.string('content');
 		t.nonNull.string('created_at');
@@ -259,14 +259,14 @@ export const movieReviewResult = objectType({
 });
 
 export const movieReview = objectType({
-	name: 'movieReviewRes',
+	name: 'MovieReviewRes',
 	definition(t) {
 		t.nonNull.int('id'),
 			t.nonNull.int('page'),
 			t.nonNull.int('total_pages'),
 			t.nonNull.int('total_results');
 		t.nonNull.list.field('results', {
-			type: 'movieReviewResult',
+			type: 'MovieReviewResult',
 		});
 	},
 });
@@ -275,7 +275,7 @@ export const getMovieReviews = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('movieReviews', {
-			type: 'movieReviewRes',
+			type: 'MovieReviewRes',
 			args: {
 				id: nonNull(intArg()),
 			},
@@ -291,7 +291,7 @@ export const getMovieReviews = extendType({
 });
 
 export const theatreDates = objectType({
-	name: 'theatreDates',
+	name: 'TheatreDates',
 	definition(t) {
 		t.nonNull.string('maximum');
 		t.nonNull.string('minimum');
@@ -299,10 +299,10 @@ export const theatreDates = objectType({
 });
 
 export const moviesInTheatres = objectType({
-	name: 'moviesInTheatresRes',
+	name: 'MoviesInTheatresRes',
 	definition(t) {
 		t.nonNull.field('dates', {
-			type: 'theatreDates',
+			type: 'TheatreDates',
 		});
 		t.nonNull.string('page');
 		t.nonNull.int('total_pages');
@@ -317,7 +317,7 @@ export const getMoviesInTheatres = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('moviesInTheatres', {
-			type: 'moviesInTheatresRes',
+			type: 'MoviesInTheatresRes',
 			resolve: async () => {
 				const { data } = await axios.get(
 					`${BASE_URL}/movie/now_playing?api_key=${process.env

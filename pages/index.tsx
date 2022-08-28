@@ -2,13 +2,11 @@ import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
 import { useQuery } from '@apollo/client';
-import { QUERY_ALL_POPULAR_MOVIES } from '../graphql/queries';
+import { QUERY_POPULAR_MOVIES } from '../graphql/queries';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen/index';
 
 const Home: NextPage = () => {
-	const { data: popularMoviesData, loading } = useQuery(
-		QUERY_ALL_POPULAR_MOVIES
-	);
+	const { data: popularMoviesData, loading } = useQuery(QUERY_POPULAR_MOVIES);
 
 	const popularMovies: NexusGenObjects['MoviesRes'] =
 		popularMoviesData?.popularMovies;
