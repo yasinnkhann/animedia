@@ -2,12 +2,23 @@ import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
 import useGetQuery from '../hooks/UseGetQuery';
+import * as Queries from '../graphql/queries';
 
 const Home: NextPage = () => {
-	const { data: popularMovies, loading } = useGetQuery('popular movies');
+	const {
+		data: popularMovies,
+		loading,
+		error,
+	} = useGetQuery(Queries.QUERY_TOP_RATED_MOVIES);
+
+	console.log(popularMovies);
 
 	if (loading) {
 		return <div>Data Loading...</div>;
+	}
+
+	if (error) {
+		return <div>Error: {error.message}</div>;
 	}
 
 	return (
