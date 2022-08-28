@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
-import useGetQuery from '../hooks/UseGetQuery';
+import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 
 const Home: NextPage = () => {
@@ -9,7 +9,7 @@ const Home: NextPage = () => {
 		data: popularMovies,
 		loading,
 		error,
-	} = useGetQuery(Queries.QUERY_TOP_RATED_MOVIES);
+	} = useGetQuery(Queries.QUERY_POPULAR_MOVIES);
 
 	console.log(popularMovies);
 
