@@ -17,9 +17,12 @@ const Home: NextPage = () => {
 
 	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 
-	const { data: trendingData } = useGetQuery(trendingQueryType, {
-		timeWindow: 'day',
-	});
+	const { data: trendingData, refetch: refetchTrendingData } = useGetQuery(
+		trendingQueryType,
+		{
+			timeWindow: 'day',
+		}
+	);
 
 	const handleChangePopularQueryType = (queryType: DocumentNode) => {
 		setWhatsPopularQueryType(queryType);
@@ -91,8 +94,24 @@ const Home: NextPage = () => {
 							</p>
 						</section>
 						<section className='flex'>
-							<p>Today</p>
-							<p>This Week</p>
+							<p
+								onClick={() =>
+									refetchTrendingData({
+										timeWindow: 'day',
+									})
+								}
+							>
+								Today
+							</p>
+							<p
+								onClick={() =>
+									refetchTrendingData({
+										timeWindow: 'week',
+									})
+								}
+							>
+								This Week
+							</p>
 						</section>
 					</ul>
 
