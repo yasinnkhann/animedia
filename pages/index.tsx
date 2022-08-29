@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
@@ -15,12 +15,13 @@ const Home: NextPage = () => {
 		Queries.QUERY_TRENDING_MOVIES
 	);
 
-	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
+	const [trendingTimeWindow, setTrendingTimeWindow] = useState('day');
 
+	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 	const { data: trendingData, refetch: refetchTrendingData } = useGetQuery(
 		trendingQueryType,
 		{
-			timeWindow: 'day',
+			timeWindow: trendingTimeWindow,
 		}
 	);
 
@@ -32,8 +33,29 @@ const Home: NextPage = () => {
 		setTrendingQueryType(queryType);
 	};
 
-	// const { fetchData } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
-	// const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+	// Pre populating the lazy functions but I don't like doing this
+	const { fetchData } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
+
+	const { fetchData: ___ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
+		timeWindow: 'day',
+	});
+	const { fetchData: ____ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
+		timeWindow: 'week',
+	});
+	const { fetchData: _____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+		timeWindow: 'day',
+	});
+	const { fetchData: ______ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+		timeWindow: 'week',
+	});
+
+	useEffect(() => {
+		refetchTrendingData({
+			timeWindow: trendingTimeWindow,
+		});
+	}, [refetchTrendingData, trendingTimeWindow]);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
@@ -94,24 +116,8 @@ const Home: NextPage = () => {
 							</p>
 						</section>
 						<section className='flex'>
-							<p
-								onClick={() =>
-									refetchTrendingData({
-										timeWindow: 'day',
-									})
-								}
-							>
-								Today
-							</p>
-							<p
-								onClick={() =>
-									refetchTrendingData({
-										timeWindow: 'week',
-									})
-								}
-							>
-								This Week
-							</p>
+							<p onClick={() => setTrendingTimeWindow('day')}>Today</p>
+							<p onClick={() => setTrendingTimeWindow('week')}>This Week</p>
 						</section>
 					</ul>
 
