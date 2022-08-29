@@ -7,30 +7,35 @@ import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 
 const Home: NextPage = () => {
-	const [queryType, setQueryType] = useState(Queries.QUERY_POPULAR_MOVIES);
+	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(
+		Queries.QUERY_POPULAR_MOVIES
+	);
 
-	const { data, loading, error } = useGetQuery(queryType);
+	const [trendingQueryType, setTrendingQueryType] = useState(
+		Queries.QUERY_TRENDING_MOVIES
+	);
 
-	const { fetchData } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
-	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 
-	if (loading) {
-		return <div>Data Loading...</div>;
-	}
+	const { data: trendingData } = useGetQuery(trendingQueryType, {
+		timeWindow: 'day',
+	});
 
-	if (error) {
-		return <div>Error: {error.message}</div>;
-	}
-
-	const handleChangeQueryType = (queryType: DocumentNode) => {
-		setQueryType(queryType);
+	const handleChangePopularQueryType = (queryType: DocumentNode) => {
+		setWhatsPopularQueryType(queryType);
 	};
 
+	const handleChangeTrendingQueryType = (queryType: DocumentNode) => {
+		setTrendingQueryType(queryType);
+	};
+
+	// const { fetchData } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
+	// const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+
 	return (
-		<>
-			{data ? (
-				<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-					<SearchBar />
+		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+			{whatsPopularData && (
+				<>
 					<ul className='flex items-center'>
 						<section className='mr-[3rem]'>
 							<h1>What&apos;s Popular</h1>
@@ -38,33 +43,63 @@ const Home: NextPage = () => {
 						<section className='flex'>
 							<p
 								onClick={() =>
-									handleChangeQueryType(Queries.QUERY_POPULAR_MOVIES)
+									handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 								}
 							>
 								Movies
 							</p>
 							<p
 								onClick={() =>
-									handleChangeQueryType(Queries.QUERY_POPULAR_SHOWS)
+									handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 								}
 							>
 								Shows
 							</p>
 							<p
 								onClick={() =>
-									handleChangeQueryType(Queries.QUERY_MOVIES_IN_THEATRES)
+									handleChangePopularQueryType(Queries.QUERY_MOVIES_IN_THEATRES)
 								}
 							>
 								In Theatres
 							</p>
 						</section>
 					</ul>
-					<HorizontalScroller items={data.results} />
-				</div>
-			) : (
-				<div>Movies Not loaded...</div>
+
+					<HorizontalScroller items={whatsPopularData.results} />
+				</>
 			)}
-		</>
+			{trendingData && (
+				<>
+					<ul className='flex items-center'>
+						<section className='mr-[3rem]'>
+							<h1>Trending</h1>
+						</section>
+						<section className='flex'>
+							<p
+								onClick={() =>
+									handleChangeTrendingQueryType(Queries.QUERY_TRENDING_MOVIES)
+								}
+							>
+								Movies
+							</p>
+							<p
+								onClick={() =>
+									handleChangeTrendingQueryType(Queries.QUERY_TRENDING_SHOWS)
+								}
+							>
+								Shows
+							</p>
+						</section>
+						<section className='flex'>
+							<p>Today</p>
+							<p>This Week</p>
+						</section>
+					</ul>
+
+					<HorizontalScroller items={trendingData.results} />
+				</>
+			)}
+		</div>
 	);
 };
 

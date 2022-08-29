@@ -133,8 +133,8 @@ type Query {
   topRatedMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
   topRatedShows: ShowsRes!
   topRatedShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
-  trendingMovies: MoviesRes!
-  trendingShows: ShowsRes!
+  trendingMovies(timeWindow: String!): MoviesRes!
+  trendingShows(timeWindow: String!): ShowsRes!
   users: [User!]!
 }
 

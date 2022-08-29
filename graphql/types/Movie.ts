@@ -190,8 +190,11 @@ export const getTrendingMovies = extendType({
 	definition(t) {
 		t.nonNull.field('trendingMovies', {
 			type: 'MoviesRes',
-			resolve: async () => {
-				const trendingMovies = await GET_TRENDING_MEDIA('movie', 'day');
+			args: {
+				timeWindow: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { timeWindow }) => {
+				const trendingMovies = await GET_TRENDING_MEDIA('movie', timeWindow);
 				return trendingMovies;
 			},
 		});

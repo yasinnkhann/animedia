@@ -10,7 +10,7 @@ const SearchBar = (props: Props) => {
 					type='text'
 					placeholder='Search for a movie, tv show, or person...'
 				/>
-				<button type='submit'>
+				<button type='button'>
 					<i className='fas fa-search'></i>
 				</button>
 			</form>

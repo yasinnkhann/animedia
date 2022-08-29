@@ -277,9 +277,12 @@ export const getTrendingShows = extendType({
 	definition(t) {
 		t.nonNull.field('trendingShows', {
 			type: 'ShowsRes',
-			resolve: async () => {
-				const trendingShows = await GET_TRENDING_MEDIA('tv', 'day');
-				return trendingShows;
+			args: {
+				timeWindow: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { timeWindow }) => {
+				const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow);
+				return trendingMovies;
 			},
 		});
 	},

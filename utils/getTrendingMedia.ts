@@ -3,12 +3,12 @@ import { BASE_URL } from './URLs';
 import 'dotenv/config';
 
 // types might be unnecessary after implementing front end side of things
-type TMediaType = 'all' | 'movie' | 'tv' | 'person';
-type TTimeWindow = 'day' | 'week';
+// type TMediaType = 'all' | 'movie' | 'tv' | 'person';
+// type TTimeWindow = 'day' | 'week';
 
 export const GET_TRENDING_MEDIA = async (
-	mediaType: TMediaType,
-	timeWindow: TTimeWindow
+	mediaType: string,
+	timeWindow: string
 ) => {
 	const { data } = await axios.get(
 		`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env

@@ -915,6 +915,12 @@ export interface NexusGenArgTypes {
       genre: string; // String!
       mediaType: string; // String!
     }
+    trendingMovies: { // args
+      timeWindow: string; // String!
+    }
+    trendingShows: { // args
+      timeWindow: string; // String!
+    }
   }
 }
 

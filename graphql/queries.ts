@@ -105,47 +105,13 @@ export const QUERY_POPULAR_ANIME_MOVIES = gql`
 `;
 
 export const QUERY_TRENDING_MOVIES = gql`
-	query getTrendingMovies {
-		trendingMovies {
+	query TrendingMovies($timeWindow: String!) {
+		trendingMovies(timeWindow: $timeWindow) {
 			results {
 				id
-				genre_ids
-				adult
-				backdrop_path
-				original_language
-				overview
-				popularity
-				poster_path
-				vote_average
-				vote_count
-				original_title
-				release_date
 				title
-				video
-			}
-			page
-			total_pages
-			total_results
-		}
-		trendingShows {
-			results {
-				backdrop_path
-				first_air_date
-				genre_ids
-				id
-				name
-				origin_country
-				original_language
-				original_name
-				overview
-				popularity
 				poster_path
-				vote_average
-				vote_count
 			}
-			page
-			total_pages
-			total_results
 		}
 	}
 `;
@@ -434,43 +400,13 @@ export const QUERY_POPULAR_ANIME_SHOWS = gql`
 `;
 
 export const QUERY_TRENDING_SHOWS = gql`
-	query getTrendingShows {
-		trendingShows {
-			page
-			total_pages
-			total_results
+	query getTrendingShows($timeWindow: String!) {
+		trendingShows(timeWindow: $timeWindow) {
 			results {
-				backdrop_path
-				first_air_date
-				genre_ids
 				id
 				name
-				origin_country
-				original_language
-				original_name
-				overview
-			}
-		}
-		trendingMovies {
-			results {
-				adult
-				backdrop_path
-				genre_ids
-				id
-				original_language
-				original_title
-				overview
-				popularity
 				poster_path
-				release_date
-				title
-				video
-				vote_average
-				vote_count
 			}
-			page
-			total_pages
-			total_results
 		}
 	}
 `;
