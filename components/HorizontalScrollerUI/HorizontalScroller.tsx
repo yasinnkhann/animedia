@@ -8,8 +8,9 @@ import { NexusGenObjects } from '../../graphql/generated/nexus-typegen/index';
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: NexusGenObjects['MoviesRes']['results'];
-	// | NexusGenObjects['ShowsRes']['results'];
+	items:
+		| NexusGenObjects['MoviesRes']['results']
+		| NexusGenObjects['ShowsRes']['results'];
 }
 
 const HorizontalScroller = ({ items }: Props) => {

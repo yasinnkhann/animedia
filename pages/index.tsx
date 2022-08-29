@@ -7,24 +7,12 @@ import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 
 const Home: NextPage = () => {
-	// const [queryName, setQueryName] = useState('QUERY_POPULAR_MOVIES');
-
-	// const { data, loading, error } = useGetQuery(
-	// 	Queries[queryName as keyof typeof Queries]
-	// ).getQuery();
-
 	const [queryType, setQueryType] = useState(Queries.QUERY_POPULAR_MOVIES);
 
-	const { data, loading, error, refetch } = useGetQuery(queryType).getQuery();
+	const { data, loading, error } = useGetQuery(queryType);
 
-	// const { fetchData, lazyData, lazyError } = useGetQuery(
-	// 	Queries.QUERY_MOVIES_IN_THEATRES
-	// ).getLazyQuery();
-	// const {
-	// 	fetchData: sho,
-	// 	lazyData: ds,
-	// 	lazyError: hhh,
-	// } = useGetQuery(Queries.QUERY_POPULAR_SHOWS).getLazyQuery();
+	const { fetchData } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
+	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 
 	if (loading) {
 		return <div>Data Loading...</div>;
