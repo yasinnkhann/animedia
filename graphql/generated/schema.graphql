@@ -253,7 +253,7 @@ type ShowDetailsSpokenLang {
 
 type ShowResult {
   backdrop_path: String
-  first_air_date: String!
+  first_air_date: String
   genre_ids: [Int]!
   id: Int!
   name: String!
@@ -262,7 +262,7 @@ type ShowResult {
   original_name: String!
   overview: String!
   popularity: Float!
-  poster_path: String!
+  poster_path: String
   vote_average: Float!
   vote_count: Int!
 }

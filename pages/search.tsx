@@ -7,6 +7,8 @@ import SearchBar from '../components/SearchBar';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { ApolloError } from '@apollo/client/errors';
 import { ApolloQueryResult } from '@apollo/client/core';
+import SearchResult from '../components/SearchResult';
+
 interface IUseGetQuery<T> {
 	data: T;
 	loading: boolean;
@@ -31,31 +33,50 @@ const Search: NextPage = () => {
 		}
 	);
 
-	console.log(searchedMovies?.results[0]);
+	const {
+		data: searchedShows,
+		loading: searchedShowsLoading,
+		error: searchedShowsError,
+		refetch: refetchSearchedShows,
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery(
+		Queries.QUERY_SEARCHED_SHOWS,
+		{
+			q: router.query.q ?? '',
+		}
+	);
+
+	console.log('movies: ', searchedMovies);
+	console.log('shows: ', searchedShows);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{searchedMovies && (
-				<div>
+			{searchedMovies && searchedShows && (
+				<>
 					<SearchBar />
 					<div className='border border-black'>
 						<div>
 							<h3>Search Results</h3>
 						</div>
 						<ul>
-							<li className='flex'>
+							<li className='flex items-center'>
 								<h4>Movies</h4>
-								<p>hi</p>
+								<p>{searchedMovies.total_results}</p>
 							</li>
-							<li>
+							<li className='flex items-center'>
 								<h4>Shows</h4>
+								<p>{searchedShows.total_results}</p>
 							</li>
-							<li>
+							<li className='flex items-center'>
 								<h4>People</h4>
 							</li>
 						</ul>
 					</div>
-				</div>
+					<div>
+						{searchedMovies.results.map(result => (
+							<SearchResult key={result.id} result={result} />
+						))}
+					</div>
+				</>
 			)}
 		</div>
 	);

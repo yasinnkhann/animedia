@@ -10,7 +10,7 @@ export const ShowResult = objectType({
 	name: 'ShowResult',
 	definition(t) {
 		t.string('backdrop_path');
-		t.nonNull.string('first_air_date');
+		t.string('first_air_date');
 		t.nonNull.list.int('genre_ids');
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -19,7 +19,7 @@ export const ShowResult = objectType({
 		t.nonNull.string('original_name');
 		t.nonNull.string('overview');
 		t.nonNull.float('popularity');
-		t.nonNull.string('poster_path');
+		t.string('poster_path');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
 	},

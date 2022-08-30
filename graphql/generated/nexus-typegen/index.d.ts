@@ -243,7 +243,7 @@ export interface NexusGenObjects {
   }
   ShowResult: { // root type
     backdrop_path?: string | null; // String
-    first_air_date: string; // String!
+    first_air_date?: string | null; // String
     genre_ids: Array<number | null>; // [Int]!
     id: number; // Int!
     name: string; // String!
@@ -252,7 +252,7 @@ export interface NexusGenObjects {
     original_name: string; // String!
     overview: string; // String!
     popularity: number; // Float!
-    poster_path: string; // String!
+    poster_path?: string | null; // String
     vote_average: number; // Float!
     vote_count: number; // Int!
   }
@@ -534,7 +534,7 @@ export interface NexusGenFieldTypes {
   }
   ShowResult: { // field return type
     backdrop_path: string | null; // String
-    first_air_date: string; // String!
+    first_air_date: string | null; // String
     genre_ids: Array<number | null>; // [Int]!
     id: number; // Int!
     name: string; // String!
@@ -543,7 +543,7 @@ export interface NexusGenFieldTypes {
     original_name: string; // String!
     overview: string; // String!
     popularity: number; // Float!
-    poster_path: string; // String!
+    poster_path: string | null; // String
     vote_average: number; // Float!
     vote_count: number; // Int!
   }
