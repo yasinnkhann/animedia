@@ -5,6 +5,13 @@ import HorizontalScroller from '../components/UI/HorizontalScrollerUI/Horizontal
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
+import { NexusGenObjects } from '../graphql/generated/nexus-typegen/index';
+
+type THorizontalScrollerData =
+	| NexusGenObjects['MoviesRes']['results']
+	| NexusGenObjects['ShowsRes']['results'];
+
+type THorizontalScrollerTimeWindow = 'day' | 'week';
 
 const Home: NextPage = () => {
 	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(
@@ -15,7 +22,8 @@ const Home: NextPage = () => {
 		Queries.QUERY_TRENDING_MOVIES
 	);
 
-	const [trendingTimeWindow, setTrendingTimeWindow] = useState('day');
+	const [trendingTimeWindow, setTrendingTimeWindow] =
+		useState<THorizontalScrollerTimeWindow>('day');
 
 	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 
@@ -89,7 +97,9 @@ const Home: NextPage = () => {
 							</p>
 						</section>
 					</ul>
-					<HorizontalScroller items={whatsPopularData.results} />
+					<HorizontalScroller
+						items={whatsPopularData.results as THorizontalScrollerData}
+					/>
 
 					<ul className='flex items-center'>
 						<section className='mr-[3rem]'>
@@ -116,7 +126,9 @@ const Home: NextPage = () => {
 							<p onClick={() => setTrendingTimeWindow('week')}>This Week</p>
 						</section>
 					</ul>
-					<HorizontalScroller items={trendingData.results} />
+					<HorizontalScroller
+						items={trendingData.results as THorizontalScrollerData}
+					/>
 				</div>
 			)}
 		</div>
