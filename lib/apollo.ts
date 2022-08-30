@@ -7,7 +7,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 		graphQLErrors.forEach(err => {
 			const { locations, message, path } = err;
 			console.warn(
-				`[GraphQL error]:\nMessage: ${message}, Locations: ${locations}, Path: ${path}`
+				`[GraphQL Error]:\nMessage: ${message}, Locations: ${locations}, Path: ${path}`
 			);
 		});
 	}
