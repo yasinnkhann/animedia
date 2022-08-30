@@ -1,6 +1,6 @@
 import { DocumentNode, useQuery, useLazyQuery } from '@apollo/client';
 
-export const useGetQuery = (gqlQueryName: DocumentNode, variables?: any) => {
+export function useGetQuery<T>(gqlQueryName: DocumentNode, variables?: T) {
 	const { data, loading, error, refetch } = useQuery(gqlQueryName, {
 		variables,
 	});
@@ -17,4 +17,4 @@ export const useGetQuery = (gqlQueryName: DocumentNode, variables?: any) => {
 		lazyData: lazyData?.[Object.keys(lazyData)[0]],
 		lazyError,
 	};
-};
+}

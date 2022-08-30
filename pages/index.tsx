@@ -47,13 +47,19 @@ const Home: NextPage = () => {
 	// Preparing the lazy functions
 	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
-	const { fetchData: ___ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
+	const { fetchData: ___ } = useGetQuery<{
+		timeWindow: THorizontalScrollerTimeWindow;
+	}>(Queries.QUERY_TRENDING_MOVIES, {
 		timeWindow: 'week',
 	});
-	const { fetchData: ____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: ____ } = useGetQuery<{
+		timeWindow: THorizontalScrollerTimeWindow;
+	}>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: 'day',
 	});
-	const { fetchData: _____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: _____ } = useGetQuery<{
+		timeWindow: THorizontalScrollerTimeWindow;
+	}>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: 'week',
 	});
 
