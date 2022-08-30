@@ -6,12 +6,10 @@ import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen/index';
-
-type THorizontalScrollerData =
-	| NexusGenObjects['MoviesRes']['results']
-	| NexusGenObjects['ShowsRes']['results'];
-
-type THorizontalScrollerTimeWindow = 'day' | 'week';
+import {
+	THorizontalScrollerData,
+	THorizontalScrollerTimeWindow,
+} from '../models/ts/types';
 
 const Home: NextPage = () => {
 	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(

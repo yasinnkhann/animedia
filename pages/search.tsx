@@ -5,18 +5,8 @@ import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import SearchBar from '../components/SearchBar';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
-import { ApolloError } from '@apollo/client/errors';
-import { ApolloQueryResult } from '@apollo/client/core';
 import SearchResult from '../components/SearchResult';
-
-interface IUseGetQuery<T> {
-	data: T;
-	loading: boolean;
-	error: ApolloError | undefined;
-	refetch: (
-		variables?: Partial<any> | undefined
-	) => Promise<ApolloQueryResult<any>>;
-}
+import { IUseGetQuery } from '../models/ts/interfaces';
 
 const Search: NextPage = () => {
 	const router = useRouter();
