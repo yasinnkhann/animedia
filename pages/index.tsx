@@ -5,7 +5,6 @@ import HorizontalScroller from '../components/UI/HorizontalScrollerUI/Horizontal
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
-import { NexusGenObjects } from '../graphql/generated/nexus-typegen/index';
 import {
 	THorizontalScrollerData,
 	THorizontalScrollerTimeWindow,

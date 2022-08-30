@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
@@ -8,8 +8,13 @@ import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import SearchResult from '../components/SearchResult';
 import { IUseGetQuery } from '../models/ts/interfaces';
 
+type TSearchResultsType = 'movies' | 'shows' | 'people';
+
 const Search: NextPage = () => {
 	const router = useRouter();
+
+	const [searchResultsType, setSearchResultsType] =
+		useState<TSearchResultsType>('movies');
 
 	const {
 		data: searchedMovies,
@@ -38,6 +43,16 @@ const Search: NextPage = () => {
 	console.log('movies: ', searchedMovies);
 	console.log('shows: ', searchedShows);
 
+	const getSearchedTypeData = () => {
+		if (searchResultsType === 'movies') {
+			return searchedMovies;
+		}
+
+		if (searchResultsType === 'shows') {
+			return searchedShows;
+		}
+	};
+
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{searchedMovies && searchedShows && (
@@ -49,20 +64,20 @@ const Search: NextPage = () => {
 						</div>
 						<ul>
 							<li className='flex items-center'>
-								<h4>Movies</h4>
+								<h4 onClick={() => setSearchResultsType('movies')}>Movies</h4>
 								<p>{searchedMovies.total_results}</p>
 							</li>
 							<li className='flex items-center'>
-								<h4>Shows</h4>
+								<h4 onClick={() => setSearchResultsType('shows')}>Shows</h4>
 								<p>{searchedShows.total_results}</p>
 							</li>
 							<li className='flex items-center'>
-								<h4>People</h4>
+								<h4 onClick={() => setSearchResultsType('people')}>People</h4>
 							</li>
 						</ul>
 					</div>
 					<div>
-						{searchedMovies.results.map(result => (
+						{getSearchedTypeData()?.results.map(result => (
 							<SearchResult key={result.id} result={result} />
 						))}
 					</div>
