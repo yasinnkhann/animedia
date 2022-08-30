@@ -18,12 +18,15 @@ const Home: NextPage = () => {
 	const [trendingTimeWindow, setTrendingTimeWindow] = useState('day');
 
 	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
+
 	const { data: trendingData, refetch: refetchTrendingData } = useGetQuery(
 		trendingQueryType,
 		{
 			timeWindow: trendingTimeWindow,
 		}
 	);
+
+	const allDataLoaded = whatsPopularData && trendingData;
 
 	const handleChangePopularQueryType = (queryType: DocumentNode) => {
 		setWhatsPopularQueryType(queryType);
@@ -33,7 +36,7 @@ const Home: NextPage = () => {
 		setTrendingQueryType(queryType);
 	};
 
-	// Pre populating the lazy functions
+	// Preparing the lazy functions
 	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
 	const { fetchData: ___ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
@@ -54,8 +57,10 @@ const Home: NextPage = () => {
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{whatsPopularData && (
-				<>
+			{allDataLoaded && (
+				<div>
+					<SearchBar />
+
 					<ul className='flex items-center'>
 						<section className='mr-[3rem]'>
 							<h1>What&apos;s Popular</h1>
@@ -84,12 +89,8 @@ const Home: NextPage = () => {
 							</p>
 						</section>
 					</ul>
-
 					<HorizontalScroller items={whatsPopularData.results} />
-				</>
-			)}
-			{trendingData && (
-				<>
+
 					<ul className='flex items-center'>
 						<section className='mr-[3rem]'>
 							<h1>Trending</h1>
@@ -115,9 +116,8 @@ const Home: NextPage = () => {
 							<p onClick={() => setTrendingTimeWindow('week')}>This Week</p>
 						</section>
 					</ul>
-
 					<HorizontalScroller items={trendingData.results} />
-				</>
+				</div>
 			)}
 		</div>
 	);
