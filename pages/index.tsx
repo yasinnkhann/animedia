@@ -33,21 +33,16 @@ const Home: NextPage = () => {
 		setTrendingQueryType(queryType);
 	};
 
-	// Pre populating the lazy functions but I don't like doing this
-	const { fetchData } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
+	// Pre populating the lazy functions
 	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
-
 	const { fetchData: ___ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
-		timeWindow: 'day',
-	});
-	const { fetchData: ____ } = useGetQuery(Queries.QUERY_TRENDING_MOVIES, {
 		timeWindow: 'week',
 	});
-	const { fetchData: _____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: ____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: 'day',
 	});
-	const { fetchData: ______ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: _____ } = useGetQuery(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: 'week',
 	});
 
