@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/SearchBar';
 import { useState, useEffect } from 'react';
-import HorizontalScroller from '../components/HorizontalScrollerUI/HorizontalScroller';
+import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';

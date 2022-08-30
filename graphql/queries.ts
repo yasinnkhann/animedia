@@ -25,12 +25,26 @@ export const QUERY_POPULAR_MOVIES = gql`
 `;
 
 export const QUERY_SEARCHED_MOVIES = gql`
-	query getSearchMovies($q: String!) {
+	query getSearchedMovies($q: String!) {
 		searchedMovies(q: $q) {
+			page
+			total_pages
+			total_results
 			results {
-				original_title
-				vote_average
+				adult
+				backdrop_path
+				genre_ids
 				id
+				original_language
+				original_title
+				overview
+				popularity
+				poster_path
+				release_date
+				title
+				video
+				vote_average
+				vote_count
 			}
 		}
 	}
@@ -270,6 +284,9 @@ export const QUERY_POPULAR_SHOWS = gql`
 export const QUERY_SEARCHED_SHOWS = gql`
 	query getSearchedShows($q: String!) {
 		searchedShows(q: $q) {
+			page
+			total_pages
+			total_results
 			results {
 				backdrop_path
 				first_air_date
