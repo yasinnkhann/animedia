@@ -43,11 +43,11 @@ const Search: NextPage = () => {
 	console.log('shows: ', searchedShows);
 
 	const getSearchedTypeData = () => {
-		if (searchResultsType === 'movies') {
+		if (searchResultsType === ESearchResultsType.MOVIES) {
 			return searchedMovies;
 		}
 
-		if (searchResultsType === 'shows') {
+		if (searchResultsType === ESearchResultsType.SHOWS) {
 			return searchedShows;
 		}
 	};
