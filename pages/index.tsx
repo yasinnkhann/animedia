@@ -5,10 +5,8 @@ import HorizontalScroller from '../components/UI/HorizontalScrollerUI/Horizontal
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
-import {
-	THorizontalScrollerData,
-	THorizontalScrollerTimeWindow,
-} from '../models/ts/types';
+import { THorizontalScrollerData } from '../models/ts/types';
+import { EHorizontalScrollerTimeWindow } from '../models/ts/enums';
 
 const Home: NextPage = () => {
 	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(
@@ -20,7 +18,7 @@ const Home: NextPage = () => {
 	);
 
 	const [trendingTimeWindow, setTrendingTimeWindow] =
-		useState<THorizontalScrollerTimeWindow>('day');
+		useState<EHorizontalScrollerTimeWindow>(EHorizontalScrollerTimeWindow.DAY);
 
 	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 
@@ -45,19 +43,19 @@ const Home: NextPage = () => {
 	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
 	const { fetchData: ___ } = useGetQuery<{
-		timeWindow: THorizontalScrollerTimeWindow;
+		timeWindow: EHorizontalScrollerTimeWindow;
 	}>(Queries.QUERY_TRENDING_MOVIES, {
-		timeWindow: 'week',
+		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
 	});
 	const { fetchData: ____ } = useGetQuery<{
-		timeWindow: THorizontalScrollerTimeWindow;
+		timeWindow: EHorizontalScrollerTimeWindow;
 	}>(Queries.QUERY_TRENDING_SHOWS, {
-		timeWindow: 'day',
+		timeWindow: EHorizontalScrollerTimeWindow.DAY,
 	});
 	const { fetchData: _____ } = useGetQuery<{
-		timeWindow: THorizontalScrollerTimeWindow;
+		timeWindow: EHorizontalScrollerTimeWindow;
 	}>(Queries.QUERY_TRENDING_SHOWS, {
-		timeWindow: 'week',
+		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
 	});
 
 	useEffect(() => {
@@ -125,8 +123,20 @@ const Home: NextPage = () => {
 							</p>
 						</section>
 						<section className='flex'>
-							<p onClick={() => setTrendingTimeWindow('day')}>Today</p>
-							<p onClick={() => setTrendingTimeWindow('week')}>This Week</p>
+							<p
+								onClick={() =>
+									setTrendingTimeWindow(EHorizontalScrollerTimeWindow.DAY)
+								}
+							>
+								Today
+							</p>
+							<p
+								onClick={() =>
+									setTrendingTimeWindow(EHorizontalScrollerTimeWindow.WEEK)
+								}
+							>
+								This Week
+							</p>
 						</section>
 					</ul>
 					<HorizontalScroller

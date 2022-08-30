@@ -7,14 +7,13 @@ import SearchBar from '../components/SearchBar';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import SearchResult from '../components/SearchResult';
 import { IUseGetQuery } from '../models/ts/interfaces';
-
-type TSearchResultsType = 'movies' | 'shows' | 'people';
+import { ESearchResultsType } from '../models/ts/enums';
 
 const Search: NextPage = () => {
 	const router = useRouter();
 
 	const [searchResultsType, setSearchResultsType] =
-		useState<TSearchResultsType>('movies');
+		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
 
 	const {
 		data: searchedMovies,
@@ -64,15 +63,31 @@ const Search: NextPage = () => {
 						</div>
 						<ul>
 							<li className='flex items-center'>
-								<h4 onClick={() => setSearchResultsType('movies')}>Movies</h4>
+								<h4
+									onClick={() =>
+										setSearchResultsType(ESearchResultsType.MOVIES)
+									}
+								>
+									Movies
+								</h4>
 								<p>{searchedMovies.total_results}</p>
 							</li>
 							<li className='flex items-center'>
-								<h4 onClick={() => setSearchResultsType('shows')}>Shows</h4>
+								<h4
+									onClick={() => setSearchResultsType(ESearchResultsType.SHOWS)}
+								>
+									Shows
+								</h4>
 								<p>{searchedShows.total_results}</p>
 							</li>
 							<li className='flex items-center'>
-								<h4 onClick={() => setSearchResultsType('people')}>People</h4>
+								<h4
+									onClick={() =>
+										setSearchResultsType(ESearchResultsType.PEOPLE)
+									}
+								>
+									People
+								</h4>
 							</li>
 						</ul>
 					</div>
