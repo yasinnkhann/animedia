@@ -1,6 +1,6 @@
 import React from 'react';
 import { request, gql } from 'graphql-request';
-// import * as Queries from '../../graphql/queries';
+import * as Queries from '../../graphql/queries';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { GetServerSideProps } from 'next';
 
@@ -68,8 +68,8 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		process.env.NODE_ENV === 'production'
 			? 'https://animedia.vercel.app/api/graphql'
 			: 'http://localhost:3000/api/graphql',
-		// Queries.QUERY_MOVIE_DETAILS,
-		query,
+		Queries.QUERY_MOVIE_DETAILS,
+		// query,
 		{
 			movieDetailsId: id,
 		}
