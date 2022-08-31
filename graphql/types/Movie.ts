@@ -125,7 +125,7 @@ export const movieDetails = objectType({
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
 		t.nonNull.float('popularity');
-		t.nonNull.string('poster_path');
+		t.string('poster_path');
 		t.nonNull.list.field('production_companies', {
 			type: 'MovieDetailsProdCompany',
 		});

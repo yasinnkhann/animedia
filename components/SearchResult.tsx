@@ -13,7 +13,14 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 
 	const directToDetailsPage = () => {
 		router.push(
-			`${searchedResultType}/${result.id}-${mediaTitle.split(' ').join('-')}`
+			`${searchedResultType}/${result.id}-${mediaTitle
+				.toLowerCase()
+				.replace(/[^a-z0-9 -]/gi, '')
+				.replace(/'  '/gi, ' ')
+				.trim()
+				.split(' ')
+				.join('-')
+				.replace(/-{2,}/gi, '-')}`
 		);
 	};
 	return (

@@ -147,7 +147,7 @@ export const showDetailsSeason = objectType({
 		t.nonNull.int('id');
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
-		t.nonNull.string('poster_path');
+		t.string('poster_path');
 		t.nonNull.int('season_number');
 	},
 });
@@ -214,7 +214,7 @@ export const showDetails = objectType({
 		t.nonNull.string('original_name');
 		t.nonNull.string('overview');
 		t.nonNull.float('popularity');
-		t.nonNull.string('poster_path');
+		t.string('poster_path');
 		t.nonNull.list.field('production_companies', {
 			type: 'ShowDetailsProdCompany',
 		});
