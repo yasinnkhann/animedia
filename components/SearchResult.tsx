@@ -15,8 +15,8 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 		router.push(
 			`${searchedResultType}/${result.id}-${mediaTitle
 				.toLowerCase()
-				.replace(/[^a-z0-9\/ -]/gi, '')
-				.replace(/[\/]/gi, ' ')
+				.replace(/[^a-z0-9\/☆ -]/gi, '')
+				.replace(/[\/☆]/gi, ' ')
 				.replace(/'  '/gi, ' ')
 				.trim()
 				.split(' ')

@@ -4,9 +4,9 @@ import * as Queries from '../../graphql/queries';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { GetServerSideProps } from 'next';
 
-type Props = {
+interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
-};
+}
 
 const MovieDetails = ({ movieDetails }: Props) => {
 	return (
