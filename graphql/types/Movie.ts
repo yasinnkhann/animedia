@@ -120,7 +120,7 @@ export const movieDetails = objectType({
 		});
 		t.nonNull.string('homepage');
 		t.nonNull.int('id');
-		t.nonNull.string('imdb_id');
+		t.string('imdb_id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');

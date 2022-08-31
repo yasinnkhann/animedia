@@ -25,12 +25,12 @@ type MovieDetailsRes {
   genres: [MovieDetailsGenre!]!
   homepage: String!
   id: Int!
-  imdb_id: String!
+  imdb_id: String
   original_language: String!
   original_title: String!
   overview: String!
   popularity: Float!
-  poster_path: String!
+  poster_path: String
   production_companies: [MovieDetailsProdCompany]!
   production_countries: [MovieDetailsProdCountry]!
   release_date: String!
@@ -223,7 +223,7 @@ type ShowDetailsRes {
   original_name: String!
   overview: String!
   popularity: Float!
-  poster_path: String!
+  poster_path: String
   production_companies: [ShowDetailsProdCompany]!
   production_countries: [ShowDetailsCountry]!
   seasons: [ShowDetailsSeason]!
@@ -241,7 +241,7 @@ type ShowDetailsSeason {
   id: Int!
   name: String!
   overview: String!
-  poster_path: String!
+  poster_path: String
   season_number: Int!
 }
 
