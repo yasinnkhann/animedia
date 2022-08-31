@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
@@ -51,6 +51,14 @@ const Search: NextPage = () => {
 			return searchedShows;
 		}
 	};
+
+	useEffect(() => {
+		if (searchedMovies && searchedShows) {
+			if (!searchedMovies.results.length && searchedShows.results.length) {
+				setSearchResultsType(ESearchResultsType.SHOWS);
+			}
+		}
+	}, [searchedMovies, searchedShows]);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
