@@ -15,6 +15,8 @@ const Card = ({ item, handleItemClick, selected }: Props) => {
 
 	const visible = visibility.isItemVisible(String(item.id));
 
+	const mediaTitle = 'title' in item ? item.title : item.name;
+
 	return (
 		<div
 			className='w-[10rem] h-[15rem] border-2 border-black select-none mx-4'
@@ -23,14 +25,12 @@ const Card = ({ item, handleItemClick, selected }: Props) => {
 			tabIndex={0}
 		>
 			<div>
-				<p className='text-center'>
-					{'title' in item ? item.title : item.name}
-				</p>
+				<p className='text-center'>{mediaTitle}</p>
 			</div>
 			<div>
 				<Image
 					src={BASE_IMG_URL + item.poster_path}
-					alt={'title' in item ? item.title : item.name}
+					alt={mediaTitle}
 					height='100%'
 					width='100%'
 				/>

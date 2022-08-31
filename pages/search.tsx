@@ -52,6 +52,16 @@ const Search: NextPage = () => {
 		}
 	};
 
+	const getSearchResultType = () => {
+		if (searchResultsType === ESearchResultsType.MOVIES) {
+			return 'movie';
+		} else if (searchResultsType === ESearchResultsType.SHOWS) {
+			return 'show';
+		} else {
+			return 'person';
+		}
+	};
+
 	useEffect(() => {
 		if (searchedMovies && searchedShows) {
 			if (!searchedMovies.results.length && searchedShows.results.length) {
@@ -100,9 +110,17 @@ const Search: NextPage = () => {
 						</ul>
 					</div>
 					<div>
-						{getSearchedTypeData()?.results.map(result => (
-							<SearchResult key={result.id} result={result} />
-						))}
+						{getSearchedTypeData()?.results.length ? (
+							getSearchedTypeData()?.results.map(result => (
+								<SearchResult
+									key={result.id}
+									result={result}
+									searchedResultType={getSearchResultType()}
+								/>
+							))
+						) : (
+							<div>No results</div>
+						)}
 					</div>
 				</>
 			)}

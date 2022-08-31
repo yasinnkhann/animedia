@@ -114,7 +114,7 @@ export const movieDetails = objectType({
 	name: 'MovieDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
-		t.nonNull.string('backdrop_path');
+		t.string('backdrop_path');
 		t.nonNull.list.field('genres', {
 			type: nonNull('MovieDetailsGenre'),
 		});

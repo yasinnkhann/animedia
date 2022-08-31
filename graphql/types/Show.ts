@@ -105,7 +105,7 @@ export const showDetailsLastEpToAir = objectType({
 		t.nonNull.int('runtime');
 		t.nonNull.int('season_number');
 		t.nonNull.int('show_id');
-		t.nonNull.string('still_path');
+		t.string('still_path');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
 	},
@@ -116,7 +116,7 @@ export const showDetailsNetwork = objectType({
 	definition(t) {
 		t.nonNull.int('id');
 		t.nonNull.string('name');
-		t.nonNull.string('logo_path');
+		t.string('logo_path');
 		t.nonNull.string('origin_country');
 	},
 });
@@ -173,7 +173,7 @@ export const showDetailsNextEpToAir = objectType({
 		t.nonNull.int('runtime');
 		t.nonNull.int('season_number');
 		t.nonNull.int('show_id');
-		t.nonNull.string('still_path');
+		t.string('still_path');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
 	},
@@ -183,7 +183,7 @@ export const showDetails = objectType({
 	name: 'ShowDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
-		t.nonNull.string('backdrop_path');
+		t.string('backdrop_path');
 		t.nonNull.list.field('created_by', {
 			type: 'ShowDetailsCreatedBy',
 		});

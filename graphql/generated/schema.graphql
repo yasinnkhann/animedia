@@ -21,7 +21,7 @@ type MovieDetailsProdCountry {
 
 type MovieDetailsRes {
   adult: Boolean!
-  backdrop_path: String!
+  backdrop_path: String
   genres: [MovieDetailsGenre!]!
   homepage: String!
   id: Int!
@@ -166,14 +166,14 @@ type ShowDetailsLastEpToAir {
   runtime: Int!
   season_number: Int!
   show_id: Int!
-  still_path: String!
+  still_path: String
   vote_average: Float!
   vote_count: Int!
 }
 
 type ShowDetailsNetwork {
   id: Int!
-  logo_path: String!
+  logo_path: String
   name: String!
   origin_country: String!
 }
@@ -188,7 +188,7 @@ type ShowDetailsNextEpToAir {
   runtime: Int!
   season_number: Int!
   show_id: Int!
-  still_path: String!
+  still_path: String
   vote_average: Float!
   vote_count: Int!
 }
@@ -202,7 +202,7 @@ type ShowDetailsProdCompany {
 
 type ShowDetailsRes {
   adult: Boolean!
-  backdrop_path: String!
+  backdrop_path: String
   created_by: [ShowDetailsCreatedBy]!
   episode_run_time: [Int]!
   first_air_date: String!
