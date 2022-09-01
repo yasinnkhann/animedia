@@ -1,26 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 
 interface Props {
 	item: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
-	handleItemClick: (id: string) => void;
-	selected: boolean;
+	handleItemClick: (id: number) => void;
 }
 
-const Card = ({ item, handleItemClick, selected }: Props) => {
-	const visibility = useContext(VisibilityContext);
-
-	const visible = visibility.isItemVisible(String(item.id));
-
+const Card = ({ item, handleItemClick }: Props) => {
 	const mediaTitle = 'title' in item ? item.title : item.name;
 
 	return (
 		<div
 			className='w-[10rem] h-[15rem] border-2 border-black select-none mx-4'
-			onClick={() => handleItemClick(String(item.id))}
+			onClick={() => handleItemClick(item.id)}
 			role='button'
 			tabIndex={0}
 		>

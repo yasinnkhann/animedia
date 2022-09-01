@@ -7,7 +7,9 @@ const SearchBar = () => {
 
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		router.push(`/search?q=${searchRef.current?.value.split(' ').join('+')}`);
+		router.push(
+			`/search?q=${searchRef.current?.value.trim().split(' ').join('+')}`
+		);
 	};
 
 	return (

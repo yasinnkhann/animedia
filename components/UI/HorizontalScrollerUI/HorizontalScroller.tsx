@@ -16,8 +16,6 @@ interface Props {
 const HorizontalScroller = ({ items }: Props) => {
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
-	const [selected, setSelected] = useState<string>('');
-
 	const handleDrag =
 		({ scrollContainer }: scrollVisibilityApiType) =>
 		(e: React.MouseEvent) =>
@@ -27,11 +25,12 @@ const HorizontalScroller = ({ items }: Props) => {
 				}
 			});
 
-	const handleItemClick = (itemId: string) => () => {
+	const handleItemClick = (itemId: number) => () => {
 		if (dragging) {
 			return false;
 		}
-		setSelected(selected !== itemId ? itemId : '');
+
+		console.log(itemId);
 	};
 
 	const onWheel = (
@@ -64,8 +63,7 @@ const HorizontalScroller = ({ items }: Props) => {
 				<Card
 					key={item.id}
 					item={item}
-					handleItemClick={handleItemClick(String(item.id))}
-					selected={String(item.id) === selected}
+					handleItemClick={handleItemClick(item.id)}
 				/>
 			))}
 		</ScrollMenu>

@@ -8,3 +8,8 @@ export enum EHorizontalScrollerTimeWindow {
 	DAY = 'day',
 	WEEK = 'week',
 }
+
+export enum EMediaType {
+	MOVIE = 'movie',
+	SHOW = 'show',
+}
