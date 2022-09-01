@@ -9,17 +9,17 @@ const Header = () => {
 				<section onClick={() => router.push('/')} className='cursor-pointer'>
 					<p>HOME</p>
 				</section>
-				<ul className='flex w-full justify-around'>
-					<section id='leftSection' className='flex w-[40%] justify-around'>
+				<section className='flex w-full justify-between ml-[4rem]'>
+					<ul id='left-section' className='flex justify-around w-[50%]'>
 						<li>Movies</li>
 						<li>TV Shows</li>
 						<li>People</li>
-					</section>
-					<section id='rightSection' className='flex justify-around w-[15%]'>
+					</ul>
+					<ul id='right-section' className='flex justify-around w-[15%]'>
 						<li>EN</li>
-						<li className=''>Login</li>
-					</section>
-				</ul>
+						<li>Login</li>
+					</ul>
+				</section>
 			</nav>
 		</header>
 	);
