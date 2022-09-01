@@ -39,9 +39,6 @@ const Search: NextPage = () => {
 		}
 	);
 
-	console.log('movies: ', searchedMovies);
-	console.log('shows: ', searchedShows);
-
 	const getSearchedTypeData = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {
 			return searchedMovies;
@@ -69,6 +66,12 @@ const Search: NextPage = () => {
 			}
 		}
 	}, [searchedMovies, searchedShows]);
+
+	useEffect(() => {
+		if (!router.query.q?.length) {
+			router.replace('/');
+		}
+	}, [router]);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
