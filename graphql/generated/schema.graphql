@@ -75,15 +75,15 @@ type MovieReviewAuthorDetails {
   username: String!
 }
 
-type MovieReviewRes {
+type MovieReviewsRes {
   id: Int!
   page: Int!
-  results: [MovieReviewResult]!
+  results: [MovieReviewsResult]!
   total_pages: Int!
   total_results: Int!
 }
 
-type MovieReviewResult {
+type MovieReviewsResult {
   author: String!
   author_details: MovieReviewAuthorDetails!
   content: String!
@@ -114,7 +114,7 @@ type Mutation {
 
 type Query {
   movieDetails(id: Int!): MovieDetailsRes!
-  movieReviews(id: Int!): MovieReviewRes!
+  movieReviews(id: Int!): MovieReviewsRes!
   moviesInTheatres: MoviesInTheatresRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!

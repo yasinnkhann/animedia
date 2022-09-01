@@ -246,8 +246,8 @@ export const movieReviewAuthorDetails = objectType({
 	},
 });
 
-export const movieReviewResult = objectType({
-	name: 'MovieReviewResult',
+export const movieReviewsResult = objectType({
+	name: 'MovieReviewsResult',
 	definition(t) {
 		t.nonNull.string('author');
 		t.nonNull.field('author_details', {
@@ -262,14 +262,14 @@ export const movieReviewResult = objectType({
 });
 
 export const movieReview = objectType({
-	name: 'MovieReviewRes',
+	name: 'MovieReviewsRes',
 	definition(t) {
 		t.nonNull.int('id'),
 			t.nonNull.int('page'),
 			t.nonNull.int('total_pages'),
 			t.nonNull.int('total_results');
 		t.nonNull.list.field('results', {
-			type: 'MovieReviewResult',
+			type: 'MovieReviewsResult',
 		});
 	},
 });
@@ -278,7 +278,7 @@ export const getMovieReviews = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('movieReviews', {
-			type: 'MovieReviewRes',
+			type: 'MovieReviewsRes',
 			args: {
 				id: nonNull(intArg()),
 			},

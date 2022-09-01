@@ -107,14 +107,14 @@ export interface NexusGenObjects {
     rating?: number | null; // Float
     username: string; // String!
   }
-  MovieReviewRes: { // root type
+  MovieReviewsRes: { // root type
     id: number; // Int!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewResult'] | null>; // [MovieReviewResult]!
+    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  MovieReviewResult: { // root type
+  MovieReviewsResult: { // root type
     author: string; // String!
     author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
     content: string; // String!
@@ -372,14 +372,14 @@ export interface NexusGenFieldTypes {
     rating: number | null; // Float
     username: string; // String!
   }
-  MovieReviewRes: { // field return type
+  MovieReviewsRes: { // field return type
     id: number; // Int!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewResult'] | null>; // [MovieReviewResult]!
+    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  MovieReviewResult: { // field return type
+  MovieReviewsResult: { // field return type
     author: string; // String!
     author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
     content: string; // String!
@@ -406,7 +406,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
-    movieReviews: NexusGenRootTypes['MovieReviewRes']; // MovieReviewRes!
+    movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
     popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -653,14 +653,14 @@ export interface NexusGenFieldTypeNames {
     rating: 'Float'
     username: 'String'
   }
-  MovieReviewRes: { // field return type name
+  MovieReviewsRes: { // field return type name
     id: 'Int'
     page: 'Int'
-    results: 'MovieReviewResult'
+    results: 'MovieReviewsResult'
     total_pages: 'Int'
     total_results: 'Int'
   }
-  MovieReviewResult: { // field return type name
+  MovieReviewsResult: { // field return type name
     author: 'String'
     author_details: 'MovieReviewAuthorDetails'
     content: 'String'
@@ -687,7 +687,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     movieDetails: 'MovieDetailsRes'
-    movieReviews: 'MovieReviewRes'
+    movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
     popularAnimeMovies: 'MoviesRes'
     popularAnimeShows: 'ShowsRes'
