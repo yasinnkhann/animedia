@@ -9,6 +9,7 @@ interface Props {
 }
 
 const ShowDetails = ({ showDetails }: Props) => {
+	console.log(showDetails);
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>{showDetails.name}</h1>

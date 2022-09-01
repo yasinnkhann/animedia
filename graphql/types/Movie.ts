@@ -6,7 +6,7 @@ import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
 import 'dotenv/config';
 
-export const MovieResults = objectType({
+export const movieResult = objectType({
 	name: 'MovieResult',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -26,7 +26,7 @@ export const MovieResults = objectType({
 	},
 });
 
-export const Movie = objectType({
+export const movie = objectType({
 	name: 'MoviesRes',
 	definition(t) {
 		t.nonNull.int('page');

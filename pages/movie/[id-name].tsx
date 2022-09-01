@@ -9,6 +9,7 @@ interface Props {
 }
 
 const MovieDetails = ({ movieDetails }: Props) => {
+	console.log(movieDetails);
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>{movieDetails.title}</h1>

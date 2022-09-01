@@ -212,7 +212,7 @@ type ShowDetailsRes {
   in_production: Boolean!
   languages: [String]!
   last_air_date: String
-  last_episode_to_air: ShowDetailsLastEpToAir!
+  last_episode_to_air: ShowDetailsLastEpToAir
   name: String!
   networks: [ShowDetailsNetwork!]!
   next_episode_to_air: ShowDetailsNextEpToAir

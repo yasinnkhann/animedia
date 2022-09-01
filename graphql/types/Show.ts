@@ -6,7 +6,7 @@ import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
 import 'dotenv/config';
 
-export const ShowResult = objectType({
+export const showResult = objectType({
 	name: 'ShowResult',
 	definition(t) {
 		t.string('backdrop_path');
@@ -25,7 +25,7 @@ export const ShowResult = objectType({
 	},
 });
 
-export const Shows = objectType({
+export const shows = objectType({
 	name: 'ShowsRes',
 	definition(t) {
 		t.nonNull.int('page');
@@ -197,7 +197,7 @@ export const showDetails = objectType({
 		t.nonNull.boolean('in_production');
 		t.nonNull.list.string('languages');
 		t.string('last_air_date');
-		t.nonNull.field('last_episode_to_air', {
+		t.field('last_episode_to_air', {
 			type: 'ShowDetailsLastEpToAir',
 		});
 		t.nonNull.string('name');
