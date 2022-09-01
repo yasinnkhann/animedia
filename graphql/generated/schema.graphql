@@ -157,7 +157,7 @@ type ShowDetailsGenre {
 }
 
 type ShowDetailsLastEpToAir {
-  air_date: String!
+  air_date: String
   episode_number: Int!
   id: Int!
   name: String!
@@ -179,7 +179,7 @@ type ShowDetailsNetwork {
 }
 
 type ShowDetailsNextEpToAir {
-  air_date: String!
+  air_date: String
   episode_number: Int!
   id: Int!
   name: String!
@@ -205,13 +205,13 @@ type ShowDetailsRes {
   backdrop_path: String
   created_by: [ShowDetailsCreatedBy]!
   episode_run_time: [Int]!
-  first_air_date: String!
+  first_air_date: String
   genres: [ShowDetailsGenre!]!
   homepage: String!
   id: Int!
   in_production: Boolean!
   languages: [String]!
-  last_air_date: String!
+  last_air_date: String
   last_episode_to_air: ShowDetailsLastEpToAir!
   name: String!
   networks: [ShowDetailsNetwork!]!
@@ -236,7 +236,7 @@ type ShowDetailsRes {
 }
 
 type ShowDetailsSeason {
-  air_date: String!
+  air_date: String
   episode_count: Int!
   id: Int!
   name: String!

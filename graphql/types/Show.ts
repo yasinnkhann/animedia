@@ -96,7 +96,7 @@ export const showDetailsGenre = objectType({
 export const showDetailsLastEpToAir = objectType({
 	name: 'ShowDetailsLastEpToAir',
 	definition(t) {
-		t.nonNull.string('air_date');
+		t.string('air_date');
 		t.nonNull.int('episode_number');
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -142,7 +142,7 @@ export const showDetailsCountry = objectType({
 export const showDetailsSeason = objectType({
 	name: 'ShowDetailsSeason',
 	definition(t) {
-		t.nonNull.string('air_date');
+		t.string('air_date');
 		t.nonNull.int('episode_count');
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -164,7 +164,7 @@ export const showDetailsSpokenLang = objectType({
 export const showDetailsNextEpToAir = objectType({
 	name: 'ShowDetailsNextEpToAir',
 	definition(t) {
-		t.nonNull.string('air_date');
+		t.string('air_date');
 		t.nonNull.int('episode_number');
 		t.nonNull.int('id');
 		t.nonNull.string('name');
@@ -188,7 +188,7 @@ export const showDetails = objectType({
 			type: 'ShowDetailsCreatedBy',
 		});
 		t.nonNull.list.int('episode_run_time');
-		t.nonNull.string('first_air_date');
+		t.string('first_air_date');
 		t.nonNull.list.field('genres', {
 			type: nonNull('ShowDetailsGenre'),
 		});
@@ -196,7 +196,7 @@ export const showDetails = objectType({
 		t.nonNull.int('id');
 		t.nonNull.boolean('in_production');
 		t.nonNull.list.string('languages');
-		t.nonNull.string('last_air_date');
+		t.string('last_air_date');
 		t.nonNull.field('last_episode_to_air', {
 			type: 'ShowDetailsLastEpToAir',
 		});
