@@ -7,13 +7,13 @@ import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
 import { EHorizontalScrollerTimeWindow } from '@ts/enums';
+import { NexusGenArgTypes } from '../graphql/generated/nexus-typegen';
 
 const Home: NextPage = () => {
-	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(
-		Queries.QUERY_POPULAR_MOVIES
-	);
+	const [whatsPopularQueryType, setWhatsPopularQueryType] =
+		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
 
-	const [trendingQueryType, setTrendingQueryType] = useState(
+	const [trendingQueryType, setTrendingQueryType] = useState<DocumentNode>(
 		Queries.QUERY_TRENDING_MOVIES
 	);
 
@@ -22,12 +22,11 @@ const Home: NextPage = () => {
 
 	const { data: whatsPopularData } = useGetQuery(whatsPopularQueryType);
 
-	const { data: trendingData, refetch: refetchTrendingData } = useGetQuery(
-		trendingQueryType,
-		{
-			timeWindow: trendingTimeWindow,
-		}
-	);
+	const { data: trendingData, refetch: refetchTrendingData } = useGetQuery<
+		NexusGenArgTypes['Query']['trendingMovies']
+	>(trendingQueryType, {
+		timeWindow: trendingTimeWindow,
+	});
 
 	const allDataLoaded = whatsPopularData && trendingData;
 
@@ -42,19 +41,19 @@ const Home: NextPage = () => {
 	// Preparing the lazy functions
 	const { fetchData: _ } = useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const { fetchData: __ } = useGetQuery(Queries.QUERY_MOVIES_IN_THEATRES);
-	const { fetchData: ___ } = useGetQuery<{
-		timeWindow: EHorizontalScrollerTimeWindow;
-	}>(Queries.QUERY_TRENDING_MOVIES, {
+	const { fetchData: ___ } = useGetQuery<
+		NexusGenArgTypes['Query']['trendingMovies']
+	>(Queries.QUERY_TRENDING_MOVIES, {
 		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
 	});
-	const { fetchData: ____ } = useGetQuery<{
-		timeWindow: EHorizontalScrollerTimeWindow;
-	}>(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: ____ } = useGetQuery<
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: EHorizontalScrollerTimeWindow.DAY,
 	});
-	const { fetchData: _____ } = useGetQuery<{
-		timeWindow: EHorizontalScrollerTimeWindow;
-	}>(Queries.QUERY_TRENDING_SHOWS, {
+	const { fetchData: _____ } = useGetQuery<
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
 	});
 
