@@ -2,8 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 import { BASE_IMG_URL } from '../../../utils/URLs';
-import { ESearchType } from '../../../models/ts/enums/index';
-import { IHorizontalScrollerItemClickInfo } from '../../../models/ts/interfaces/index';
+import { ESearchType } from '@ts/enums';
+import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 
 interface Props {
 	item: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];

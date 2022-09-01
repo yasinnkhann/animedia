@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
-import { ESearchType } from '../models/ts/enums/index';
+import { ESearchType } from '@ts/enums';
 
 interface Props {
 	result: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];

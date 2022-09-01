@@ -5,8 +5,8 @@ import HorizontalScroller from '../components/UI/HorizontalScrollerUI/Horizontal
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
-import { THorizontalScrollerData } from '../models/ts/types';
-import { EHorizontalScrollerTimeWindow } from '../models/ts/enums';
+import { THorizontalScrollerData } from '@ts/types';
+import { EHorizontalScrollerTimeWindow } from '@ts/enums';
 
 const Home: NextPage = () => {
 	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState(

@@ -6,8 +6,8 @@ import * as Queries from '../graphql/queries';
 import SearchBar from '../components/SearchBar';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import SearchResult from '../components/SearchResult';
-import { IUseGetQuery } from '../models/ts/interfaces';
-import { ESearchResultsType } from '../models/ts/enums';
+import { IUseGetQuery } from '@ts/interfaces';
+import { ESearchResultsType, ESearchType } from '@ts/enums';
 
 const Search: NextPage = () => {
 	const router = useRouter();
@@ -54,11 +54,11 @@ const Search: NextPage = () => {
 
 	const getSearchResultType = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {
-			return 'movie';
+			return ESearchType.MOVIE;
 		} else if (searchResultsType === ESearchResultsType.SHOWS) {
-			return 'show';
+			return ESearchType.SHOW;
 		} else {
-			return 'person';
+			return ESearchType.PERSON;
 		}
 	};
 

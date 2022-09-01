@@ -1,4 +1,4 @@
-import { ESearchType } from '../models/ts/enums';
+import { ESearchType } from '@ts/enums';
 
 export const getDetailsPageRoute = (
 	mediaType: ESearchType,

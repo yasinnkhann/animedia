@@ -6,7 +6,7 @@ import { LeftArrow, RightArrow } from './Arrows';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
-import { IHorizontalScrollerItemClickInfo } from '../../../models/ts/interfaces/index';
+import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
