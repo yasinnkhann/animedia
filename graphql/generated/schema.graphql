@@ -148,7 +148,7 @@ type ShowDetailsCreatedBy {
   gender: Int!
   id: Int!
   name: String!
-  profile_path: String!
+  profile_path: String
 }
 
 type ShowDetailsGenre {
@@ -163,7 +163,7 @@ type ShowDetailsLastEpToAir {
   name: String!
   overview: String!
   production_code: String!
-  runtime: Int!
+  runtime: Int
   season_number: Int!
   show_id: Int!
   still_path: String
@@ -185,7 +185,7 @@ type ShowDetailsNextEpToAir {
   name: String!
   overview: String!
   production_code: String!
-  runtime: Int!
+  runtime: Int
   season_number: Int!
   show_id: Int!
   still_path: String

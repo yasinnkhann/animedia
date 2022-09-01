@@ -81,7 +81,7 @@ export const showDetailsCreatedBy = objectType({
 		t.nonNull.string('credit_id');
 		t.nonNull.string('name');
 		t.nonNull.int('gender');
-		t.nonNull.string('profile_path');
+		t.string('profile_path');
 	},
 });
 
@@ -102,7 +102,7 @@ export const showDetailsLastEpToAir = objectType({
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
 		t.nonNull.string('production_code');
-		t.nonNull.int('runtime');
+		t.int('runtime');
 		t.nonNull.int('season_number');
 		t.nonNull.int('show_id');
 		t.string('still_path');
@@ -170,7 +170,7 @@ export const showDetailsNextEpToAir = objectType({
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
 		t.nonNull.string('production_code');
-		t.nonNull.int('runtime');
+		t.int('runtime');
 		t.nonNull.int('season_number');
 		t.nonNull.int('show_id');
 		t.string('still_path');

@@ -2,10 +2,14 @@ import React from 'react';
 import Image from 'next/image';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 import { BASE_IMG_URL } from '../../../utils/URLs';
+import { ESearchType } from '../../../models/ts/enums/index';
+import { IHorizontalScrollerItemClickInfo } from '../../../models/ts/interfaces/index';
 
 interface Props {
 	item: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
-	handleItemClick: (id: number) => void;
+	handleItemClick: (
+		itemClickInfo: IHorizontalScrollerItemClickInfo
+	) => false | void | undefined;
 }
 
 const Card = ({ item, handleItemClick }: Props) => {
@@ -14,7 +18,13 @@ const Card = ({ item, handleItemClick }: Props) => {
 	return (
 		<div
 			className='w-[10rem] h-[15rem] border-2 border-black select-none mx-4'
-			onClick={() => handleItemClick(item.id)}
+			onClick={() =>
+				handleItemClick({
+					mediaType: 'title' in item ? ESearchType.MOVIE : ESearchType.SHOW,
+					id: item.id,
+					title: mediaTitle,
+				})
+			}
 			role='button'
 			tabIndex={0}
 		>

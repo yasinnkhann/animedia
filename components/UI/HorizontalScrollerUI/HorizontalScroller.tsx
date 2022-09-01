@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from './Card';
 import useDrag from './UseDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
+import { useRouter } from 'next/router';
+import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { IHorizontalScrollerItemClickInfo } from '../../../models/ts/interfaces/index';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -14,6 +17,8 @@ interface Props {
 }
 
 const HorizontalScroller = ({ items }: Props) => {
+	const router = useRouter();
+
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -25,12 +30,14 @@ const HorizontalScroller = ({ items }: Props) => {
 				}
 			});
 
-	const handleItemClick = (itemId: number) => () => {
+	const handleItemClick = (itemInfo: IHorizontalScrollerItemClickInfo) => {
 		if (dragging) {
 			return false;
 		}
 
-		console.log(itemId);
+		router.push(
+			getDetailsPageRoute(itemInfo.mediaType, itemInfo.id, itemInfo.title)
+		);
 	};
 
 	const onWheel = (
@@ -60,11 +67,7 @@ const HorizontalScroller = ({ items }: Props) => {
 			onMouseMove={handleDrag}
 		>
 			{items.map(item => (
-				<Card
-					key={item.id}
-					item={item}
-					handleItemClick={handleItemClick(item.id)}
-				/>
+				<Card key={item.id} item={item} handleItemClick={handleItemClick} />
 			))}
 		</ScrollMenu>
 	);

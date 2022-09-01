@@ -147,7 +147,7 @@ export interface NexusGenObjects {
     gender: number; // Int!
     id: number; // Int!
     name: string; // String!
-    profile_path: string; // String!
+    profile_path?: string | null; // String
   }
   ShowDetailsGenre: { // root type
     id: number; // Int!
@@ -160,7 +160,7 @@ export interface NexusGenObjects {
     name: string; // String!
     overview: string; // String!
     production_code: string; // String!
-    runtime: number; // Int!
+    runtime?: number | null; // Int
     season_number: number; // Int!
     show_id: number; // Int!
     still_path?: string | null; // String
@@ -180,7 +180,7 @@ export interface NexusGenObjects {
     name: string; // String!
     overview: string; // String!
     production_code: string; // String!
-    runtime: number; // Int!
+    runtime?: number | null; // Int
     season_number: number; // Int!
     show_id: number; // Int!
     still_path?: string | null; // String
@@ -438,7 +438,7 @@ export interface NexusGenFieldTypes {
     gender: number; // Int!
     id: number; // Int!
     name: string; // String!
-    profile_path: string; // String!
+    profile_path: string | null; // String
   }
   ShowDetailsGenre: { // field return type
     id: number; // Int!
@@ -451,7 +451,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     overview: string; // String!
     production_code: string; // String!
-    runtime: number; // Int!
+    runtime: number | null; // Int
     season_number: number; // Int!
     show_id: number; // Int!
     still_path: string | null; // String
@@ -471,7 +471,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     overview: string; // String!
     production_code: string; // String!
-    runtime: number; // Int!
+    runtime: number | null; // Int
     season_number: number; // Int!
     show_id: number; // Int!
     still_path: string | null; // String

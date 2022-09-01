@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
+import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
+import { ESearchType } from '../models/ts/enums/index';
 
 interface Props {
 	result: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
-	searchedResultType: string;
+	searchedResultType: ESearchType;
 }
 
 const SearchResult = ({ result, searchedResultType }: Props) => {
@@ -12,18 +14,9 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 	const mediaTitle = 'title' in result ? result.title : result.name;
 
 	const directToDetailsPage = () => {
-		router.push(
-			`${searchedResultType}/${result.id}-${mediaTitle
-				.toLowerCase()
-				.replace(/[^a-z0-9\/☆ -]/gi, '')
-				.replace(/[\/☆]/gi, ' ')
-				.replace(/'  '/gi, ' ')
-				.trim()
-				.split(' ')
-				.join('-')
-				.replace(/-{2,}/gi, '-')}`
-		);
+		router.push(getDetailsPageRoute(searchedResultType, result.id, mediaTitle));
 	};
+
 	return (
 		<div>
 			<h1 onClick={directToDetailsPage}>{mediaTitle}</h1>

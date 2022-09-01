@@ -9,7 +9,8 @@ export enum EHorizontalScrollerTimeWindow {
 	WEEK = 'week',
 }
 
-export enum EMediaType {
+export enum ESearchType {
 	MOVIE = 'movie',
 	SHOW = 'show',
+	PERSON = 'person',
 }
