@@ -47,7 +47,7 @@ const Home: NextPage = () => {
 	};
 
 	// Preparing the lazy functions
-	const { fetchData: _ }: IUseGetQuery<NexusGenObjects['MoviesRes']> =
+	const { fetchData: _ }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
 		useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const {
 		fetchData: __,
@@ -87,76 +87,83 @@ const Home: NextPage = () => {
 			{allDataLoaded && (
 				<div>
 					<SearchBar />
-
-					<ul className='flex items-center'>
-						<section className='mr-[3rem]'>
+					<section className='flex w-full ml-[3rem] items-end'>
+						<div className='flex'>
 							<h1>What&apos;s Popular</h1>
-						</section>
-						<section className='flex'>
-							<p
+						</div>
+						<ul className='flex w-[25%] justify-around'>
+							<li
+								className='cursor-pointer'
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 								}
 							>
 								Movies
-							</p>
-							<p
+							</li>
+							<li
+								className='cursor-pointer'
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 								}
 							>
 								Shows
-							</p>
-							<p
+							</li>
+							<li
+								className='cursor-pointer'
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_MOVIES_IN_THEATRES)
 								}
 							>
 								In Theatres
-							</p>
-						</section>
-					</ul>
+							</li>
+						</ul>
+					</section>
 					<HorizontalScroller
 						items={whatsPopularData.results as THorizontalScrollerData}
 					/>
-
-					<ul className='flex items-center'>
-						<section className='mr-[3rem]'>
+					<section className='flex items-end ml-[3rem]'>
+						<div className=''>
 							<h1>Trending</h1>
+						</div>
+						<section className='flex w-full justify-around'>
+							<ul className='flex w-[20%] justify-around'>
+								<li
+									className='cursor-pointer'
+									onClick={() =>
+										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_MOVIES)
+									}
+								>
+									Movies
+								</li>
+								<li
+									className='cursor-pointer'
+									onClick={() =>
+										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_SHOWS)
+									}
+								>
+									Shows
+								</li>
+							</ul>
+							<ul className='flex w-[20%] justify-around'>
+								<li
+									className='cursor-pointer'
+									onClick={() =>
+										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.DAY)
+									}
+								>
+									Today
+								</li>
+								<li
+									className='cursor-pointer'
+									onClick={() =>
+										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.WEEK)
+									}
+								>
+									This Week
+								</li>
+							</ul>
 						</section>
-						<section className='flex'>
-							<p
-								onClick={() =>
-									handleChangeTrendingQueryType(Queries.QUERY_TRENDING_MOVIES)
-								}
-							>
-								Movies
-							</p>
-							<p
-								onClick={() =>
-									handleChangeTrendingQueryType(Queries.QUERY_TRENDING_SHOWS)
-								}
-							>
-								Shows
-							</p>
-						</section>
-						<section className='flex'>
-							<p
-								onClick={() =>
-									setTrendingTimeWindow(EHorizontalScrollerTimeWindow.DAY)
-								}
-							>
-								Today
-							</p>
-							<p
-								onClick={() =>
-									setTrendingTimeWindow(EHorizontalScrollerTimeWindow.WEEK)
-								}
-							>
-								This Week
-							</p>
-						</section>
-					</ul>
+					</section>
 					<HorizontalScroller
 						items={trendingData.results as THorizontalScrollerData}
 					/>
