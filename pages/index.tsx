@@ -47,34 +47,37 @@ const Home: NextPage = () => {
 	};
 
 	// Preparing the lazy functions
-	const { fetchData: _ }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery(Queries.QUERY_POPULAR_SHOWS);
 	const {
-		fetchData: __,
+		fetchData: fetchPopularShowsData,
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery(
+		Queries.QUERY_POPULAR_SHOWS
+	);
+	const {
+		fetchData: fetchMoviesInTheatresData,
 	}: IUseGetQuery<NexusGenObjects['MoviesInTheatresRes']> = useGetQuery(
 		Queries.QUERY_MOVIES_IN_THEATRES
 	);
-	const { fetchData: ___ }: IUseGetQuery<NexusGenObjects['MoviesRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['trendingMovies']>(
-			Queries.QUERY_TRENDING_MOVIES,
-			{
-				timeWindow: EHorizontalScrollerTimeWindow.WEEK,
-			}
-		);
-	const { fetchData: ____ }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['trendingShows']>(
-			Queries.QUERY_TRENDING_SHOWS,
-			{
-				timeWindow: EHorizontalScrollerTimeWindow.DAY,
-			}
-		);
-	const { fetchData: _____ }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['trendingShows']>(
-			Queries.QUERY_TRENDING_SHOWS,
-			{
-				timeWindow: EHorizontalScrollerTimeWindow.WEEK,
-			}
-		);
+	const {
+		fetchData: fetchWeeklyTrendingMoviesData,
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['trendingMovies']
+	>(Queries.QUERY_TRENDING_MOVIES, {
+		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
+	});
+	const {
+		fetchData: fetchDailyTrendingShowsData,
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		timeWindow: EHorizontalScrollerTimeWindow.DAY,
+	});
+	const {
+		fetchData: fetchWeeklyTrendingShowsData,
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
+	});
 
 	useEffect(() => {
 		refetchTrendingData({
@@ -94,6 +97,12 @@ const Home: NextPage = () => {
 						<ul className='flex w-[25%] justify-around'>
 							<li
 								className='cursor-pointer'
+								style={{
+									borderBottom:
+										whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
+											? '5px solid black'
+											: undefined,
+								}}
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 								}
@@ -102,6 +111,12 @@ const Home: NextPage = () => {
 							</li>
 							<li
 								className='cursor-pointer'
+								style={{
+									borderBottom:
+										whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
+											? '5px solid black'
+											: undefined,
+								}}
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 								}
@@ -110,6 +125,12 @@ const Home: NextPage = () => {
 							</li>
 							<li
 								className='cursor-pointer'
+								style={{
+									borderBottom:
+										whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
+											? '5px solid black'
+											: undefined,
+								}}
 								onClick={() =>
 									handleChangePopularQueryType(Queries.QUERY_MOVIES_IN_THEATRES)
 								}
@@ -129,6 +150,12 @@ const Home: NextPage = () => {
 							<ul className='flex w-[20%] justify-around'>
 								<li
 									className='cursor-pointer'
+									style={{
+										borderBottom:
+											trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+												? '5px solid black'
+												: undefined,
+									}}
 									onClick={() =>
 										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_MOVIES)
 									}
@@ -137,6 +164,12 @@ const Home: NextPage = () => {
 								</li>
 								<li
 									className='cursor-pointer'
+									style={{
+										borderBottom:
+											trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+												? '5px solid black'
+												: undefined,
+									}}
 									onClick={() =>
 										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_SHOWS)
 									}
@@ -147,6 +180,12 @@ const Home: NextPage = () => {
 							<ul className='flex w-[20%] justify-around'>
 								<li
 									className='cursor-pointer'
+									style={{
+										borderBottom:
+											trendingTimeWindow === EHorizontalScrollerTimeWindow.DAY
+												? '5px solid black'
+												: undefined,
+									}}
 									onClick={() =>
 										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.DAY)
 									}
@@ -155,6 +194,12 @@ const Home: NextPage = () => {
 								</li>
 								<li
 									className='cursor-pointer'
+									style={{
+										borderBottom:
+											trendingTimeWindow === EHorizontalScrollerTimeWindow.WEEK
+												? '5px solid black'
+												: undefined,
+									}}
 									onClick={() =>
 										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.WEEK)
 									}
