@@ -8,6 +8,8 @@ interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
 }
 const PersonDetails = ({ personDetails }: Props) => {
+	console.log(personDetails);
+
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>{personDetails.name}</h1>

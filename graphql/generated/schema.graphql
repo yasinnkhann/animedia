@@ -50,14 +50,14 @@ type MovieDetailsRes {
   poster_path: String
   production_companies: [MovieDetailsProdCompany]!
   production_countries: [MovieDetailsProdCountry]!
-  release_date: String!
-  revenue: Int!
-  runtime: Int!
+  release_date: String
+  revenue: Int
+  runtime: Int
   spoken_languages: [MovieDetailsSpokenLang]!
   status: String!
   tagline: String!
   title: String!
-  video: Boolean!
+  video: Boolean
   vote_average: Float!
   vote_count: Int!
 }
@@ -78,7 +78,7 @@ type MovieResult {
   overview: String!
   popularity: Float!
   poster_path: String
-  release_date: String!
+  release_date: String
   title: String!
   video: Boolean!
   vote_average: Float!

@@ -18,7 +18,7 @@ export const movieResult = objectType({
 		t.nonNull.string('overview');
 		t.nonNull.float('popularity');
 		t.string('poster_path');
-		t.nonNull.string('release_date');
+		t.string('release_date');
 		t.nonNull.string('title');
 		t.nonNull.boolean('video');
 		t.nonNull.float('vote_average');
@@ -132,16 +132,16 @@ export const movieDetails = objectType({
 		t.nonNull.list.field('production_countries', {
 			type: 'MovieDetailsProdCountry',
 		});
-		t.nonNull.string('release_date');
-		t.nonNull.int('revenue');
-		t.nonNull.int('runtime');
+		t.string('release_date');
+		t.int('revenue');
+		t.int('runtime');
 		t.nonNull.list.field('spoken_languages', {
 			type: 'MovieDetailsSpokenLang',
 		});
 		t.nonNull.string('status');
 		t.nonNull.string('tagline');
 		t.nonNull.string('title');
-		t.nonNull.boolean('video');
+		t.boolean('video');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
 	},

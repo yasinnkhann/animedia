@@ -85,14 +85,14 @@ export interface NexusGenObjects {
     poster_path?: string | null; // String
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
-    release_date: string; // String!
-    revenue: number; // Int!
-    runtime: number; // Int!
+    release_date?: string | null; // String
+    revenue?: number | null; // Int
+    runtime?: number | null; // Int
     spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
     status: string; // String!
     tagline: string; // String!
     title: string; // String!
-    video: boolean; // Boolean!
+    video?: boolean | null; // Boolean
     vote_average: number; // Float!
     vote_count: number; // Int!
   }
@@ -111,7 +111,7 @@ export interface NexusGenObjects {
     overview: string; // String!
     popularity: number; // Float!
     poster_path?: string | null; // String
-    release_date: string; // String!
+    release_date?: string | null; // String
     title: string; // String!
     video: boolean; // Boolean!
     vote_average: number; // Float!
@@ -398,14 +398,14 @@ export interface NexusGenFieldTypes {
     poster_path: string | null; // String
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
-    release_date: string; // String!
-    revenue: number; // Int!
-    runtime: number; // Int!
+    release_date: string | null; // String
+    revenue: number | null; // Int
+    runtime: number | null; // Int
     spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
     status: string; // String!
     tagline: string; // String!
     title: string; // String!
-    video: boolean; // Boolean!
+    video: boolean | null; // Boolean
     vote_average: number; // Float!
     vote_count: number; // Int!
   }
@@ -424,7 +424,7 @@ export interface NexusGenFieldTypes {
     overview: string; // String!
     popularity: number; // Float!
     poster_path: string | null; // String
-    release_date: string; // String!
+    release_date: string | null; // String
     title: string; // String!
     video: boolean; // Boolean!
     vote_average: number; // Float!
