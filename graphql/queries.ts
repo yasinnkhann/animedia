@@ -588,3 +588,59 @@ export const QUERY_POPULAR_PEOPLE = gql`
 		}
 	}
 `;
+
+export const QUERY_PERSON_DETAILS = gql`
+	query getPersonDetails($personDetailsId: Int!) {
+		personDetails(id: $personDetailsId) {
+			adult
+			also_known_as
+			biography
+			birthday
+			deathday
+			gender
+			homepage
+			id
+			imdb_id
+			known_for_department
+			name
+			place_of_birth
+			popularity
+			profile_path
+		}
+	}
+`;
+
+export const QUERY_SEARCHED_PEOPLE = gql`
+	query getSearchedPeople($q: String!) {
+		searchedPeople(q: $q) {
+			page
+			total_pages
+			total_results
+			results {
+				adult
+				gender
+				id
+				known_for {
+					adult
+					backdrop_path
+					genre_ids
+					id
+					media_type
+					original_language
+					original_title
+					overview
+					poster_path
+					release_date
+					title
+					video
+					vote_average
+					vote_count
+				}
+				known_for_department
+				name
+				popularity
+				profile_path
+			}
+		}
+	}
+`;

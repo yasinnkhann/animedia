@@ -1,4 +1,4 @@
-import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
+import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import 'dotenv/config';
@@ -100,6 +100,26 @@ export const getPersonDetails = extendType({
 				const { data } = await axios.get(
 					`${BASE_URL}/person/${id}?api_key=${process.env
 						.API_KEY!}&language=en-US&page=1`
+				);
+
+				return data;
+			},
+		});
+	},
+});
+
+export const getSearchedPeople = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('searchedPeople', {
+			type: 'PeopleRes',
+			args: {
+				q: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { q }) => {
+				q = q.split(' ').join('+');
+				const { data } = await axios.get(
+					`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&query=${q}`
 				);
 
 				return data;

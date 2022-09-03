@@ -5,7 +5,10 @@ import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 
 interface Props {
-	result: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
+	result:
+		| NexusGenObjects['MovieResult']
+		| NexusGenObjects['ShowResult']
+		| NexusGenObjects['PersonResult'];
 	searchedResultType: ESearchType;
 }
 

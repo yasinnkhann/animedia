@@ -179,6 +179,7 @@ type Query {
   recommendedMovies(id: Int!): MoviesRes!
   recommendedShows(id: Int!): ShowsRes!
   searchedMovies(q: String!): MoviesRes!
+  searchedPeople(q: String!): PeopleRes!
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): ShowDetailsRes!
   showReviews(id: Int!): ShowReviewRes!

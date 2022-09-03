@@ -4,7 +4,10 @@ import { useRouter } from 'next/router';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
 import SearchBar from '../components/SearchBar';
-import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../graphql/generated/nexus-typegen';
 import SearchResult from '../components/SearchResult';
 import { IUseGetQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
@@ -20,24 +23,33 @@ const Search: NextPage = () => {
 		loading: searchedMoviesLoading,
 		error: searchedMoviesError,
 		refetch: refetchSearchedMovies,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery(
-		Queries.QUERY_SEARCHED_MOVIES,
-		{
-			q: router.query.q ?? '',
-		}
-	);
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['searchedMovies']
+	>(Queries.QUERY_SEARCHED_MOVIES, {
+		q: (router.query.q as string) ?? '',
+	});
 
 	const {
 		data: searchedShows,
 		loading: searchedShowsLoading,
 		error: searchedShowsError,
 		refetch: refetchSearchedShows,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery(
-		Queries.QUERY_SEARCHED_SHOWS,
-		{
-			q: router.query.q ?? '',
-		}
-	);
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['searchedShows']
+	>(Queries.QUERY_SEARCHED_SHOWS, {
+		q: (router.query.q as string) ?? '',
+	});
+
+	const {
+		data: searchedPeople,
+		loading: searchedPeopleLoading,
+		error: searchedPeopleError,
+		refetch: refetchSearchedPeople,
+	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['searchedPeople']
+	>(Queries.QUERY_SEARCHED_PEOPLE, {
+		q: (router.query.q as string) ?? '',
+	});
 
 	const getSearchedTypeData = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {
@@ -46,6 +58,10 @@ const Search: NextPage = () => {
 
 		if (searchResultsType === ESearchResultsType.SHOWS) {
 			return searchedShows;
+		}
+
+		if (searchResultsType === ESearchResultsType.PEOPLE) {
+			return searchedPeople;
 		}
 	};
 
@@ -60,12 +76,18 @@ const Search: NextPage = () => {
 	};
 
 	useEffect(() => {
-		if (searchedMovies && searchedShows) {
+		if (searchedMovies && searchedShows && searchedPeople) {
 			if (!searchedMovies.results.length && searchedShows.results.length) {
 				setSearchResultsType(ESearchResultsType.SHOWS);
+			} else if (
+				!searchedMovies.results.length &&
+				!searchedShows.results.length &&
+				searchedPeople.results.length
+			) {
+				setSearchResultsType(ESearchResultsType.PEOPLE);
 			}
 		}
-	}, [searchedMovies, searchedShows]);
+	}, [searchedMovies, searchedShows, searchedPeople]);
 
 	useEffect(() => {
 		if (!router.query.q?.length) {
@@ -75,7 +97,7 @@ const Search: NextPage = () => {
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{searchedMovies && searchedShows && (
+			{searchedMovies && searchedShows && searchedPeople && (
 				<>
 					<SearchBar />
 					<div className='border border-black'>
@@ -109,6 +131,7 @@ const Search: NextPage = () => {
 								>
 									People
 								</h4>
+								<p>{searchedPeople.total_results}</p>
 							</li>
 						</ul>
 					</div>
