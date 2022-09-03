@@ -552,3 +552,39 @@ export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
 		}
 	}
 `;
+
+// PERSON
+export const QUERY_POPULAR_PEOPLE = gql`
+	query getPopularPeople {
+		popularPeople {
+			page
+			total_pages
+			total_results
+			results {
+				adult
+				gender
+				id
+				known_for {
+					adult
+					backdrop_path
+					genre_ids
+					id
+					media_type
+					original_language
+					original_title
+					overview
+					poster_path
+					release_date
+					title
+					video
+					vote_average
+					vote_count
+				}
+				known_for_department
+				name
+				popularity
+				profile_path
+			}
+		}
+	}
+`;

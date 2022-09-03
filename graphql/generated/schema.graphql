@@ -2,6 +2,23 @@
 ### Do not make changes to this file directly
 
 
+type KnownForResult {
+  adult: Boolean
+  backdrop_path: String
+  genre_ids: [Int]
+  id: Int
+  media_type: String
+  original_language: String
+  original_title: String
+  overview: String
+  poster_path: String
+  release_date: String
+  title: String
+  video: Boolean
+  vote_average: Float
+  vote_count: Int
+}
+
 type MovieDetailsGenre {
   id: Int!
   name: String!
@@ -112,14 +129,51 @@ type Mutation {
   createdUser(email: String!, name: String!): User!
 }
 
+type PeopleRes {
+  page: Int!
+  results: [PersonResult!]!
+  total_pages: Int!
+  total_results: Int!
+}
+
+type PersonDetailsRes {
+  adult: Boolean
+  also_known_as: [String]
+  biography: String
+  birthday: String
+  deathday: String
+  gender: Int
+  homepage: String
+  id: Int!
+  imdb_id: String
+  known_for_department: String
+  name: String
+  place_of_birth: String
+  popularity: Float
+  profile_path: String
+}
+
+type PersonResult {
+  adult: Boolean!
+  gender: Int!
+  id: Int!
+  known_for: [KnownForResult!]!
+  known_for_department: String!
+  name: String!
+  popularity: Float!
+  profile_path: String
+}
+
 type Query {
   movieDetails(id: Int!): MovieDetailsRes!
   movieReviews(id: Int!): MovieReviewsRes!
   moviesInTheatres: MoviesInTheatresRes!
+  personDetails(id: Int!): PersonDetailsRes!
   popularAnimeMovies: MoviesRes!
   popularAnimeShows: ShowsRes!
   popularMovies: MoviesRes!
   popularMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
+  popularPeople: PeopleRes!
   popularShows: ShowsRes!
   popularShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
   recommendedMovies(id: Int!): MoviesRes!
@@ -128,7 +182,6 @@ type Query {
   searchedShows(q: String!): ShowsRes!
   showDetails(id: Int!): ShowDetailsRes!
   showReviews(id: Int!): ShowReviewRes!
-  testgql: String
   topRatedMovies: MoviesRes!
   topRatedMoviesByGenre(genre: String!, mediaType: String!): MoviesRes!
   topRatedShows: ShowsRes!

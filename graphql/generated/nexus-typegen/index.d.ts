@@ -41,6 +41,22 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  KnownForResult: { // root type
+    adult?: boolean | null; // Boolean
+    backdrop_path?: string | null; // String
+    genre_ids?: Array<number | null> | null; // [Int]
+    id?: number | null; // Int
+    media_type?: string | null; // String
+    original_language?: string | null; // String
+    original_title?: string | null; // String
+    overview?: string | null; // String
+    poster_path?: string | null; // String
+    release_date?: string | null; // String
+    title?: string | null; // String
+    video?: boolean | null; // Boolean
+    vote_average?: number | null; // Float
+    vote_count?: number | null; // Int
+  }
   MovieDetailsGenre: { // root type
     id: number; // Int!
     name: string; // String!
@@ -137,6 +153,38 @@ export interface NexusGenObjects {
     total_results: number; // Int!
   }
   Mutation: {};
+  PeopleRes: { // root type
+    page: number; // Int!
+    results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
+    total_pages: number; // Int!
+    total_results: number; // Int!
+  }
+  PersonDetailsRes: { // root type
+    adult?: boolean | null; // Boolean
+    also_known_as?: Array<string | null> | null; // [String]
+    biography?: string | null; // String
+    birthday?: string | null; // String
+    deathday?: string | null; // String
+    gender?: number | null; // Int
+    homepage?: string | null; // String
+    id: number; // Int!
+    imdb_id?: string | null; // String
+    known_for_department?: string | null; // String
+    name?: string | null; // String
+    place_of_birth?: string | null; // String
+    popularity?: number | null; // Float
+    profile_path?: string | null; // String
+  }
+  PersonResult: { // root type
+    adult: boolean; // Boolean!
+    gender: number; // Int!
+    id: number; // Int!
+    known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
+    known_for_department: string; // String!
+    name: string; // String!
+    popularity: number; // Float!
+    profile_path?: string | null; // String
+  }
   Query: {};
   ShowDetailsCountry: { // root type
     iso_3166_1: string; // String!
@@ -306,6 +354,22 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  KnownForResult: { // field return type
+    adult: boolean | null; // Boolean
+    backdrop_path: string | null; // String
+    genre_ids: Array<number | null> | null; // [Int]
+    id: number | null; // Int
+    media_type: string | null; // String
+    original_language: string | null; // String
+    original_title: string | null; // String
+    overview: string | null; // String
+    poster_path: string | null; // String
+    release_date: string | null; // String
+    title: string | null; // String
+    video: boolean | null; // Boolean
+    vote_average: number | null; // Float
+    vote_count: number | null; // Int
+  }
   MovieDetailsGenre: { // field return type
     id: number; // Int!
     name: string; // String!
@@ -404,14 +468,48 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createdUser: NexusGenRootTypes['User']; // User!
   }
+  PeopleRes: { // field return type
+    page: number; // Int!
+    results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
+    total_pages: number; // Int!
+    total_results: number; // Int!
+  }
+  PersonDetailsRes: { // field return type
+    adult: boolean | null; // Boolean
+    also_known_as: Array<string | null> | null; // [String]
+    biography: string | null; // String
+    birthday: string | null; // String
+    deathday: string | null; // String
+    gender: number | null; // Int
+    homepage: string | null; // String
+    id: number; // Int!
+    imdb_id: string | null; // String
+    known_for_department: string | null; // String
+    name: string | null; // String
+    place_of_birth: string | null; // String
+    popularity: number | null; // Float
+    profile_path: string | null; // String
+  }
+  PersonResult: { // field return type
+    adult: boolean; // Boolean!
+    gender: number; // Int!
+    id: number; // Int!
+    known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
+    known_for_department: string; // String!
+    name: string; // String!
+    popularity: number; // Float!
+    profile_path: string | null; // String
+  }
   Query: { // field return type
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
+    personDetails: NexusGenRootTypes['PersonDetailsRes']; // PersonDetailsRes!
     popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+    popularPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
     popularShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
@@ -420,7 +518,6 @@ export interface NexusGenFieldTypes {
     searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
-    testgql: string | null; // String
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -587,6 +684,22 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  KnownForResult: { // field return type name
+    adult: 'Boolean'
+    backdrop_path: 'String'
+    genre_ids: 'Int'
+    id: 'Int'
+    media_type: 'String'
+    original_language: 'String'
+    original_title: 'String'
+    overview: 'String'
+    poster_path: 'String'
+    release_date: 'String'
+    title: 'String'
+    video: 'Boolean'
+    vote_average: 'Float'
+    vote_count: 'Int'
+  }
   MovieDetailsGenre: { // field return type name
     id: 'Int'
     name: 'String'
@@ -685,14 +798,48 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createdUser: 'User'
   }
+  PeopleRes: { // field return type name
+    page: 'Int'
+    results: 'PersonResult'
+    total_pages: 'Int'
+    total_results: 'Int'
+  }
+  PersonDetailsRes: { // field return type name
+    adult: 'Boolean'
+    also_known_as: 'String'
+    biography: 'String'
+    birthday: 'String'
+    deathday: 'String'
+    gender: 'Int'
+    homepage: 'String'
+    id: 'Int'
+    imdb_id: 'String'
+    known_for_department: 'String'
+    name: 'String'
+    place_of_birth: 'String'
+    popularity: 'Float'
+    profile_path: 'String'
+  }
+  PersonResult: { // field return type name
+    adult: 'Boolean'
+    gender: 'Int'
+    id: 'Int'
+    known_for: 'KnownForResult'
+    known_for_department: 'String'
+    name: 'String'
+    popularity: 'Float'
+    profile_path: 'String'
+  }
   Query: { // field return type name
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
+    personDetails: 'PersonDetailsRes'
     popularAnimeMovies: 'MoviesRes'
     popularAnimeShows: 'ShowsRes'
     popularMovies: 'MoviesRes'
     popularMoviesByGenre: 'MoviesRes'
+    popularPeople: 'PeopleRes'
     popularShows: 'ShowsRes'
     popularShowsByGenre: 'ShowsRes'
     recommendedMovies: 'MoviesRes'
@@ -701,7 +848,6 @@ export interface NexusGenFieldTypeNames {
     searchedShows: 'ShowsRes'
     showDetails: 'ShowDetailsRes'
     showReviews: 'ShowReviewRes'
-    testgql: 'String'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'
@@ -879,6 +1025,9 @@ export interface NexusGenArgTypes {
       id: number; // Int!
     }
     movieReviews: { // args
+      id: number; // Int!
+    }
+    personDetails: { // args
       id: number; // Int!
     }
     popularMoviesByGenre: { // args
