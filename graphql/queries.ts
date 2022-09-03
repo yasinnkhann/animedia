@@ -4,6 +4,9 @@ import { gql } from '@apollo/client';
 export const QUERY_POPULAR_MOVIES = gql`
 	query getPopularMovies {
 		popularMovies {
+			page
+			total_pages
+			total_results
 			results {
 				original_title
 				overview
