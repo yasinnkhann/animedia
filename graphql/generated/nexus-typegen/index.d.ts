@@ -1028,13 +1028,24 @@ export interface NexusGenArgTypes {
     }
     movieReviews: { // args
       id: number; // Int!
+      page?: number | null; // Int
+    }
+    moviesInTheatres: { // args
+      page?: number | null; // Int
     }
     personDetails: { // args
       id: number; // Int!
     }
+    popularAnimeMovies: { // args
+      page?: number | null; // Int
+    }
+    popularMovies: { // args
+      page?: number | null; // Int
+    }
     popularMoviesByGenre: { // args
       genre: string; // String!
       mediaType: string; // String!
+      page?: number | null; // Int
     }
     popularShowsByGenre: { // args
       genre: string; // String!
@@ -1042,11 +1053,13 @@ export interface NexusGenArgTypes {
     }
     recommendedMovies: { // args
       id: number; // Int!
+      page?: number | null; // Int
     }
     recommendedShows: { // args
       id: number; // Int!
     }
     searchedMovies: { // args
+      page?: number | null; // Int
       q: string; // String!
     }
     searchedPeople: { // args
@@ -1061,15 +1074,20 @@ export interface NexusGenArgTypes {
     showReviews: { // args
       id: number; // Int!
     }
+    topRatedMovies: { // args
+      page?: number | null; // Int
+    }
     topRatedMoviesByGenre: { // args
       genre: string; // String!
       mediaType: string; // String!
+      page?: number | null; // Int
     }
     topRatedShowsByGenre: { // args
       genre: string; // String!
       mediaType: string; // String!
     }
     trendingMovies: { // args
+      page?: number | null; // Int
       timeWindow: string; // String!
     }
     trendingShows: { // args

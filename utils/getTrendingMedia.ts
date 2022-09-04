@@ -8,11 +8,12 @@ import 'dotenv/config';
 
 export const GET_TRENDING_MEDIA = async (
 	mediaType: string,
-	timeWindow: string
+	timeWindow: string,
+	pageNum: number | null | undefined
 ) => {
 	const { data } = await axios.get(
 		`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env
-			.API_KEY!}`
+			.API_KEY!}&language=en-US&page=${pageNum ?? 1}`
 	);
 
 	return data;

@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IUseGetQuery } from '@ts/interfaces';
-import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../../graphql/generated/nexus-typegen';
 import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 
 const PopularMovies = () => {
+	const [pageNum, setPageNum] = useState(1);
 	const { data: whatsPopularData }: IUseGetQuery<NexusGenObjects['MoviesRes']> =
-		useGetQuery(Queries.QUERY_POPULAR_MOVIES);
+		useGetQuery<NexusGenArgTypes['Query']['popularMovies']>(
+			Queries.QUERY_POPULAR_MOVIES,
+			{
+				page: pageNum,
+			}
+		);
 
 	console.log(whatsPopularData);
 
 	return (
-		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			popular movies
-		</div>
+		</section>
 	);
 };
 

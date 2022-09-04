@@ -2,19 +2,19 @@ import { gql } from '@apollo/client';
 
 // MOVIE
 export const QUERY_POPULAR_MOVIES = gql`
-	query getPopularMovies {
-		popularMovies {
+	query PopularMovies($page: Int) {
+		popularMovies(page: $page) {
 			page
 			total_pages
 			total_results
 			results {
-				original_title
-				overview
 				adult
 				backdrop_path
 				genre_ids
 				id
 				original_language
+				original_title
+				overview
 				popularity
 				poster_path
 				release_date
@@ -28,8 +28,8 @@ export const QUERY_POPULAR_MOVIES = gql`
 `;
 
 export const QUERY_SEARCHED_MOVIES = gql`
-	query getSearchedMovies($q: String!) {
-		searchedMovies(q: $q) {
+	query SearchedMovies($q: String!, $page: Int) {
+		searchedMovies(q: $q, page: $page) {
 			page
 			total_pages
 			total_results
@@ -99,16 +99,19 @@ export const QUERY_MOVIE_DETAILS = gql`
 `;
 
 export const QUERY_POPULAR_ANIME_MOVIES = gql`
-	query getPopularAnimeMovies {
-		popularAnimeMovies {
+	query PopularAnimeMovies($page: Int) {
+		popularAnimeMovies(page: $page) {
+			page
+			total_pages
+			total_results
 			results {
-				original_title
-				overview
 				adult
 				backdrop_path
 				genre_ids
 				id
 				original_language
+				original_title
+				overview
 				popularity
 				poster_path
 				release_date
@@ -122,22 +125,11 @@ export const QUERY_POPULAR_ANIME_MOVIES = gql`
 `;
 
 export const QUERY_TRENDING_MOVIES = gql`
-	query TrendingMovies($timeWindow: String!) {
-		trendingMovies(timeWindow: $timeWindow) {
-			results {
-				id
-				title
-				poster_path
-			}
-		}
-	}
-`;
-
-export const QUERY_TOP_RATED_MOVIES = gql`
-	query getTopRatedMovies {
-		topRatedMovies {
+	query TrendingMovies($timeWindow: String!, $page: Int) {
+		trendingMovies(timeWindow: $timeWindow, page: $page) {
 			page
 			total_pages
+			total_results
 			results {
 				adult
 				backdrop_path
@@ -154,24 +146,65 @@ export const QUERY_TOP_RATED_MOVIES = gql`
 				vote_average
 				vote_count
 			}
+		}
+	}
+`;
+
+export const QUERY_TOP_RATED_MOVIES = gql`
+	query TopRatedMovies($page: Int) {
+		topRatedMovies(page: $page) {
+			page
+			total_pages
 			total_results
+			results {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				original_language
+				original_title
+				overview
+				popularity
+				poster_path
+				release_date
+				title
+				video
+				vote_average
+				vote_count
+			}
 		}
 	}
 `;
 
 export const QUERY_RECOMMENDED_MOVIES = gql`
-	query getRecommendedMovies($id: Int!) {
-		recommendedMovies(id: $id) {
+	query RecommendedMovies($recommendedMoviesId: Int!, $page: Int) {
+		recommendedMovies(id: $recommendedMoviesId, page: $page) {
+			page
+			total_pages
+			total_results
 			results {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				original_language
 				original_title
+				overview
+				popularity
+				poster_path
+				release_date
+				title
+				video
+				vote_average
+				vote_count
 			}
 		}
 	}
 `;
 
 export const QUERY_MOVIE_REVIEWS = gql`
-	query getMovieReviews($id: Int!) {
-		movieReviews(id: $id) {
+	query MovieReviews($movieReviewsId: Int!, $page: Int) {
+		movieReviews(id: $movieReviewsId, page: $page) {
 			id
 			page
 			total_pages
@@ -195,15 +228,15 @@ export const QUERY_MOVIE_REVIEWS = gql`
 `;
 
 export const QUERY_MOVIES_IN_THEATRES = gql`
-	query getMoviesInTheatres {
-		moviesInTheatres {
+	query MoviesInTheatres($page: Int) {
+		moviesInTheatres(page: $page) {
 			dates {
 				maximum
 				minimum
 			}
 			page
-			total_results
 			total_pages
+			total_results
 			results {
 				adult
 				backdrop_path
@@ -225,11 +258,10 @@ export const QUERY_MOVIES_IN_THEATRES = gql`
 `;
 
 export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
-	query getPopularMoviesByGenre($genre: String!, $mediaType: String!) {
-		popularMoviesByGenre(genre: $genre, mediaType: $mediaType) {
+	query PopularMoviesByGenre($genre: String!, $mediaType: String!, $page: Int) {
+		popularMoviesByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
 			page
 			total_pages
-
 			total_results
 			results {
 				adult
@@ -252,9 +284,19 @@ export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
 `;
 
 export const QUERY_TOP_RATED_MOVIES_BY_GENRE = gql`
-	query getTopRatedMoviesByGenre($genre: String!, $mediaType: String!) {
-		topRatedMoviesByGenre(genre: $genre, mediaType: $mediaType) {
+	query TopRatedMoviesByGenre(
+		$genre: String!
+		$mediaType: String!
+		$page: Int
+	) {
+		topRatedMoviesByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
+			page
+			total_pages
+			total_results
 			results {
+				adult
+				backdrop_path
+				genre_ids
 				id
 				original_language
 				original_title
