@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IUseGetQuery } from '@ts/interfaces';
 import {
 	NexusGenObjects,
@@ -7,23 +7,67 @@ import {
 import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
+import Pagination from 'components/Pagination';
 
 const PopularShows = () => {
-	const [pageNum, setPageNum] = useState(1);
+	const [_currMediaItems, setCurrMediaItems] = useState<
+		NexusGenObjects['ShowsRes']['results']
+	>([]);
+	const [currPage, setCurrPage] = useState(1);
+	const [mediaItemsPerPage] = useState(20);
+
 	const { data: popularShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
 		useGetQuery<NexusGenArgTypes['Query']['popularShows']>(
 			Queries.QUERY_POPULAR_SHOWS,
 			{
-				page: pageNum,
+				page: currPage,
 			}
 		);
+
+	useEffect(() => {
+		if (popularShowsData) {
+			const endIdx = currPage * mediaItemsPerPage;
+			const startIdx = endIdx - mediaItemsPerPage;
+			const mediaItemsCopy = [...popularShowsData.results];
+			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
+		}
+	}, [currPage, popularShowsData, mediaItemsPerPage]);
+
+	const goToNextPage = () => {
+		setCurrPage(currPage => currPage + 1);
+	};
+
+	const goToPrevPage = () => {
+		setCurrPage(currPage => currPage - 1);
+	};
+
+	const getPaginationGroup = () => {
+		let start =
+			Math.floor((currPage - 1) / mediaItemsPerPage) * mediaItemsPerPage;
+		return new Array(mediaItemsPerPage)
+			.fill(null)
+			.map((_, idx) => start + idx + 1);
+	};
 
 	console.log(popularShowsData);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			popular shows
-			{popularShowsData && <MediaList mediaData={popularShowsData} />}
+			{popularShowsData && (
+				<>
+					<MediaList mediaData={popularShowsData} />
+					<Pagination
+						itemsPerPage={mediaItemsPerPage}
+						totalItems={popularShowsData.total_results}
+						currPage={currPage}
+						pageNums={getPaginationGroup()}
+						paginate={pageNum => setCurrPage(pageNum)}
+						goToPrevPage={goToPrevPage}
+						goToNextPage={goToNextPage}
+					/>
+				</>
+			)}
 		</section>
 	);
 };

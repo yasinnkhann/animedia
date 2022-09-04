@@ -11,8 +11,7 @@ import Pagination from 'components/Pagination';
 
 const PopularMovies = () => {
 	const [_currMediaItems, setCurrMediaItems] = useState<
-		| NexusGenObjects['MoviesRes']['results']
-		| NexusGenObjects['ShowsRes']['results']
+		NexusGenObjects['MoviesRes']['results']
 	>([]);
 	const [currPage, setCurrPage] = useState(1);
 	const [mediaItemsPerPage] = useState(20);
