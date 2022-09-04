@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/UI/SearchUI/SearchBar';
 import { useState, useEffect } from 'react';
 import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
 import { useGetQuery } from '../hooks/useGetQuery';

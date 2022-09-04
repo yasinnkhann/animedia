@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useGetQuery } from '../hooks/useGetQuery';
 import * as Queries from '../graphql/queries';
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/UI/SearchUI/SearchBar';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../graphql/generated/nexus-typegen';
-import SearchResult from '../components/SearchResult';
+import SearchResult from '../components/UI/SearchUI/SearchResult';
 import { IUseGetQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
 
@@ -52,6 +52,7 @@ const Search: NextPage = () => {
 	});
 
 	const getSearchedTypeData = () => {
+		// return components here
 		if (searchResultsType === ESearchResultsType.MOVIES) {
 			return searchedMovies;
 		}
