@@ -54,12 +54,6 @@ const Header = () => {
 								>
 									Most Popular
 								</p>
-								<p
-									className='text-black p-3 m-0 no-underline block hover:bg-slate-500 rounded'
-									onClick={() => router.push('/people/top-rated')}
-								>
-									Top Rated
-								</p>
 							</div>
 						</li>
 					</ul>

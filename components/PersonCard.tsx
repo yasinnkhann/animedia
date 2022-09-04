@@ -1,9 +1,12 @@
 import React from 'react';
+import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 
-interface Props {}
+interface Props {
+	person: NexusGenObjects['PersonResult'];
+}
 
-const PersonCard = (props: Props) => {
-	return <div>personCard</div>;
+const PersonCard = ({ person }: Props) => {
+	return <div>{person.name}</div>;
 };
 
 export default PersonCard;

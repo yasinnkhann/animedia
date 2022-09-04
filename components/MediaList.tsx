@@ -2,13 +2,13 @@ import React from 'react';
 import MediaCard from './MediaCard';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 interface Props {
-	data: NexusGenObjects['MoviesRes'] | NexusGenObjects['ShowsRes'];
+	mediaData: NexusGenObjects['MoviesRes'] | NexusGenObjects['ShowsRes'];
 }
 
-const MediaList = ({ data }: Props) => {
+const MediaList = ({ mediaData }: Props) => {
 	return (
 		<div>
-			{data.results.map(media => (
+			{mediaData.results.map(media => (
 				<div key={media.id}>
 					<MediaCard media={media} />
 				</div>

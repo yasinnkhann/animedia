@@ -23,7 +23,7 @@ const TopRatedMovies = () => {
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			top rated movies
-			{topRatedMoviesData && <MediaList data={topRatedMoviesData} />}
+			{topRatedMoviesData && <MediaList mediaData={topRatedMoviesData} />}
 		</section>
 	);
 };

@@ -23,7 +23,7 @@ const PopularMovies = () => {
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			popular movies
-			{popularMoviesData && <MediaList data={popularMoviesData} />}
+			{popularMoviesData && <MediaList mediaData={popularMoviesData} />}
 		</section>
 	);
 };
