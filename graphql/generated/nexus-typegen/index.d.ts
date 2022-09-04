@@ -1039,6 +1039,9 @@ export interface NexusGenArgTypes {
     popularAnimeMovies: { // args
       page?: number | null; // Int
     }
+    popularAnimeShows: { // args
+      page?: number | null; // Int
+    }
     popularMovies: { // args
       page?: number | null; // Int
     }
@@ -1047,9 +1050,16 @@ export interface NexusGenArgTypes {
       mediaType: string; // String!
       page?: number | null; // Int
     }
+    popularPeople: { // args
+      page?: number | null; // Int
+    }
+    popularShows: { // args
+      page?: number | null; // Int
+    }
     popularShowsByGenre: { // args
       genre: string; // String!
       mediaType: string; // String!
+      page?: number | null; // Int
     }
     recommendedMovies: { // args
       id: number; // Int!
@@ -1057,15 +1067,18 @@ export interface NexusGenArgTypes {
     }
     recommendedShows: { // args
       id: number; // Int!
+      page?: number | null; // Int
     }
     searchedMovies: { // args
       page?: number | null; // Int
       q: string; // String!
     }
     searchedPeople: { // args
+      page?: number | null; // Int
       q: string; // String!
     }
     searchedShows: { // args
+      page?: number | null; // Int
       q: string; // String!
     }
     showDetails: { // args
@@ -1073,6 +1086,7 @@ export interface NexusGenArgTypes {
     }
     showReviews: { // args
       id: number; // Int!
+      page?: number | null; // Int
     }
     topRatedMovies: { // args
       page?: number | null; // Int
@@ -1082,15 +1096,20 @@ export interface NexusGenArgTypes {
       mediaType: string; // String!
       page?: number | null; // Int
     }
+    topRatedShows: { // args
+      page?: number | null; // Int
+    }
     topRatedShowsByGenre: { // args
       genre: string; // String!
       mediaType: string; // String!
+      page?: number | null; // Int
     }
     trendingMovies: { // args
       page?: number | null; // Int
       timeWindow: string; // String!
     }
     trendingShows: { // args
+      page?: number | null; // Int
       timeWindow: string; // String!
     }
   }

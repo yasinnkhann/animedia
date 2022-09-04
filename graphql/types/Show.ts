@@ -42,10 +42,13 @@ export const getPopularShows = extendType({
 	definition(t) {
 		t.nonNull.field('popularShows', {
 			type: 'ShowsRes',
-			resolve: async () => {
+			args: {
+				page: intArg(),
+			},
+			resolve: async (_parent, { page }) => {
 				const { data } = await axios.get(
 					`${BASE_URL}/tv/popular?api_key=${process.env
-						.API_KEY!}&language=en-US`
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 
 				return data;
@@ -61,11 +64,13 @@ export const getSearchedShows = extendType({
 			type: 'ShowsRes',
 			args: {
 				q: nonNull(stringArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { q }) => {
+			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
 				const { data } = await axios.get(
-					`${BASE_URL}/search/tv?api_key=${process.env.API_KEY!}&query=${q}`
+					`${BASE_URL}/search/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
 				);
 
 				return data;
@@ -258,12 +263,17 @@ export const getPopularAnimeShows = extendType({
 	definition(t) {
 		t.nonNull.field('popularAnimeShows', {
 			type: 'ShowsRes',
-			resolve: async () => {
+			args: {
+				page: intArg(),
+			},
+			resolve: async (_parent, { page }) => {
 				const keywordID = await GET_KEYWORD_ID('anime');
 
 				const { data } = await axios.get(
 					`${BASE_URL}/discover/tv?api_key=${process.env
-						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=1&with_keywords=${keywordID}`
+						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
+						page ?? 1
+					}&with_keywords=${keywordID}`
 				);
 
 				return data;
@@ -279,9 +289,10 @@ export const getTrendingShows = extendType({
 			type: 'ShowsRes',
 			args: {
 				timeWindow: nonNull(stringArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { timeWindow }) => {
-				const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow);
+			resolve: async (_parent, { timeWindow, page }) => {
+				const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow, page);
 				return trendingMovies;
 			},
 		});
@@ -293,10 +304,13 @@ export const getTopRatedShows = extendType({
 	definition(t) {
 		t.nonNull.field('topRatedShows', {
 			type: 'ShowsRes',
-			resolve: async () => {
+			args: {
+				page: intArg(),
+			},
+			resolve: async (_parent, { page }) => {
 				const { data } = await axios.get(
 					`${BASE_URL}/tv/top_rated?api_key=${process.env
-						.API_KEY!}&language=en-US&page=1`
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				return data;
 			},
@@ -311,11 +325,12 @@ export const getRecommendedShows = extendType({
 			type: 'ShowsRes',
 			args: {
 				id: nonNull(intArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { id }) => {
+			resolve: async (_parent, { id, page }) => {
 				const { data } = await axios.get(
 					`${BASE_URL}/tv/${id}/recommendations?api_key=${process.env
-						.API_KEY!}&language=en-US&page=1`
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				return data;
 			},
@@ -368,11 +383,12 @@ export const getShowReviews = extendType({
 			type: 'ShowReviewRes',
 			args: {
 				id: nonNull(intArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { id }) => {
+			resolve: async (_parent, { id, page }) => {
 				const { data } = await axios.get(
 					`${BASE_URL}/tv/${id}/reviews?api_key=${process.env
-						.API_KEY!}&language=en-US&page=1`
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				return data;
 			},
@@ -388,12 +404,15 @@ export const getPopularShowsByGenre = extendType({
 			args: {
 				genre: nonNull(stringArg()),
 				mediaType: nonNull(stringArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { genre, mediaType }) => {
+			resolve: async (_parent, { genre, mediaType, page }) => {
 				const genreID = await GET_GENRE_ID(genre, mediaType);
 				const { data } = await axios.get(
 					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
-						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=popularity.desc`
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=popularity.desc`
 				);
 
 				return data;
@@ -410,12 +429,15 @@ export const getTopRatedShowsByGenre = extendType({
 			args: {
 				genre: nonNull(stringArg()),
 				mediaType: nonNull(stringArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { genre, mediaType }) => {
+			resolve: async (_parent, { genre, mediaType, page }) => {
 				const genreID = await GET_GENRE_ID(genre, mediaType);
 				const { data } = await axios.get(
 					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
-						.API_KEY!}&language=en-US&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 				);
 
 				return data;

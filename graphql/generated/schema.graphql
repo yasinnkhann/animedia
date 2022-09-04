@@ -170,25 +170,25 @@ type Query {
   moviesInTheatres(page: Int): MoviesInTheatresRes!
   personDetails(id: Int!): PersonDetailsRes!
   popularAnimeMovies(page: Int): MoviesRes!
-  popularAnimeShows: ShowsRes!
+  popularAnimeShows(page: Int): ShowsRes!
   popularMovies(page: Int): MoviesRes!
   popularMoviesByGenre(genre: String!, mediaType: String!, page: Int): MoviesRes!
-  popularPeople: PeopleRes!
-  popularShows: ShowsRes!
-  popularShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
+  popularPeople(page: Int): PeopleRes!
+  popularShows(page: Int): ShowsRes!
+  popularShowsByGenre(genre: String!, mediaType: String!, page: Int): ShowsRes!
   recommendedMovies(id: Int!, page: Int): MoviesRes!
-  recommendedShows(id: Int!): ShowsRes!
+  recommendedShows(id: Int!, page: Int): ShowsRes!
   searchedMovies(page: Int, q: String!): MoviesRes!
-  searchedPeople(q: String!): PeopleRes!
-  searchedShows(q: String!): ShowsRes!
+  searchedPeople(page: Int, q: String!): PeopleRes!
+  searchedShows(page: Int, q: String!): ShowsRes!
   showDetails(id: Int!): ShowDetailsRes!
-  showReviews(id: Int!): ShowReviewRes!
+  showReviews(id: Int!, page: Int): ShowReviewRes!
   topRatedMovies(page: Int): MoviesRes!
   topRatedMoviesByGenre(genre: String!, mediaType: String!, page: Int): MoviesRes!
-  topRatedShows: ShowsRes!
-  topRatedShowsByGenre(genre: String!, mediaType: String!): ShowsRes!
+  topRatedShows(page: Int): ShowsRes!
+  topRatedShowsByGenre(genre: String!, mediaType: String!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
-  trendingShows(timeWindow: String!): ShowsRes!
+  trendingShows(page: Int, timeWindow: String!): ShowsRes!
   users: [User!]!
 }
 

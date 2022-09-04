@@ -315,20 +315,33 @@ export const QUERY_TOP_RATED_MOVIES_BY_GENRE = gql`
 
 // SHOW
 export const QUERY_POPULAR_SHOWS = gql`
-	query getPopularShows {
-		popularShows {
+	query PopularShows($page: Int) {
+		popularShows(page: $page) {
+			page
+			total_pages
+			total_results
 			results {
+				backdrop_path
+				first_air_date
+				genre_ids
 				id
 				name
+				origin_country
+				original_language
+				original_name
+				overview
+				popularity
 				poster_path
+				vote_average
+				vote_count
 			}
 		}
 	}
 `;
 
 export const QUERY_SEARCHED_SHOWS = gql`
-	query getSearchedShows($q: String!) {
-		searchedShows(q: $q) {
+	query SearchedShows($q: String!, $page: Int) {
+		searchedShows(q: $q, page: $page) {
 			page
 			total_pages
 			total_results
@@ -451,31 +464,58 @@ export const QUERY_SHOW_DETAILS = gql`
 `;
 
 export const QUERY_POPULAR_ANIME_SHOWS = gql`
-	query getPopularAnimeShows {
-		popularAnimeShows {
+	query PopularAnimeShows($page: Int) {
+		popularAnimeShows(page: $page) {
+			page
+			total_pages
+			total_results
 			results {
-				name
+				backdrop_path
+				first_air_date
+				genre_ids
 				id
+				name
+				origin_country
+				original_language
+				original_name
+				overview
+				popularity
+				poster_path
+				vote_average
+				vote_count
 			}
 		}
 	}
 `;
 
 export const QUERY_TRENDING_SHOWS = gql`
-	query getTrendingShows($timeWindow: String!) {
-		trendingShows(timeWindow: $timeWindow) {
+	query TrendingShows($timeWindow: String!, $page: Int) {
+		trendingShows(timeWindow: $timeWindow, page: $page) {
+			page
+			total_pages
+			total_results
 			results {
+				backdrop_path
+				first_air_date
+				genre_ids
 				id
 				name
+				origin_country
+				original_language
+				original_name
+				overview
+				popularity
 				poster_path
+				vote_average
+				vote_count
 			}
 		}
 	}
 `;
 
 export const QUERY_TOP_RATED_SHOWS = gql`
-	query getTopRatedShows {
-		topRatedShows {
+	query TopRatedShows($page: Int) {
+		topRatedShows(page: $page) {
 			page
 			total_pages
 			total_results
@@ -499,8 +539,8 @@ export const QUERY_TOP_RATED_SHOWS = gql`
 `;
 
 export const QUERY_RECOMMENDED_SHOWS = gql`
-	query getRecommendedShows($id: Int!) {
-		recommendedShows(id: $id) {
+	query RecommendedShows($recommendedShowsId: Int!, $page: Int) {
+		recommendedShows(id: $recommendedShowsId, page: $page) {
 			page
 			total_pages
 			total_results
@@ -524,8 +564,8 @@ export const QUERY_RECOMMENDED_SHOWS = gql`
 `;
 
 export const QUERY_SHOW_REVIEWS = gql`
-	query getShowReviews($id: Int!) {
-		showReviews(id: $id) {
+	query ShowReviews($showReviewsId: Int!, $page: Int) {
+		showReviews(id: $showReviewsId, page: $page) {
 			id
 			page
 			total_pages
@@ -549,8 +589,8 @@ export const QUERY_SHOW_REVIEWS = gql`
 `;
 
 export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
-	query getPopularShowsByGenre($genre: String!, $mediaType: String!) {
-		popularShowsByGenre(genre: $genre, mediaType: $mediaType) {
+	query PopularShowsByGenre($genre: String!, $mediaType: String!, $page: Int) {
+		popularShowsByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
 			page
 			total_pages
 			total_results
@@ -574,8 +614,8 @@ export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
 `;
 
 export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
-	query getTopRatedShowsByGenre($genre: String!, $mediaType: String!) {
-		topRatedShowsByGenre(genre: $genre, mediaType: $mediaType) {
+	query TopRatedShowsByGenre($genre: String!, $mediaType: String!, $page: Int) {
+		topRatedShowsByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
 			page
 			total_pages
 			total_results
@@ -600,8 +640,8 @@ export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
 
 // PERSON
 export const QUERY_POPULAR_PEOPLE = gql`
-	query getPopularPeople {
-		popularPeople {
+	query PopularPeople($page: Int) {
+		popularPeople(page: $page) {
 			page
 			total_pages
 			total_results
@@ -656,8 +696,8 @@ export const QUERY_PERSON_DETAILS = gql`
 `;
 
 export const QUERY_SEARCHED_PEOPLE = gql`
-	query getSearchedPeople($q: String!) {
-		searchedPeople(q: $q) {
+	query SearchedPeople($q: String!, $page: Int) {
+		searchedPeople(q: $q, page: $page) {
 			page
 			total_pages
 			total_results

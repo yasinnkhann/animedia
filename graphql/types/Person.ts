@@ -56,10 +56,13 @@ export const getPopularPeople = extendType({
 	definition(t) {
 		t.nonNull.field('popularPeople', {
 			type: 'PeopleRes',
-			resolve: async () => {
+			args: {
+				page: intArg(),
+			},
+			resolve: async (_parent, { page }) => {
 				const { data } = await axios.get(
 					`${BASE_URL}/person/popular?api_key=${process.env
-						.API_KEY!}&language=en-US&page=1`
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 
 				return data;
@@ -115,11 +118,14 @@ export const getSearchedPeople = extendType({
 			type: 'PeopleRes',
 			args: {
 				q: nonNull(stringArg()),
+				page: intArg(),
 			},
-			resolve: async (_parent, { q }) => {
+			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
 				const { data } = await axios.get(
-					`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&query=${q}`
+					`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
+						page ?? 1
+					}&query=${q}`
 				);
 
 				return data;
