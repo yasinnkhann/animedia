@@ -8,8 +8,11 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
+import { useRouter } from 'next/router';
 
 const PopularShows = () => {
+	const router = useRouter();
+
 	const [_currMediaItems, setCurrMediaItems] = useState<
 		NexusGenObjects['ShowsRes']['results']
 	>([]);
@@ -48,6 +51,15 @@ const PopularShows = () => {
 			.fill(null)
 			.map((_, idx) => start + idx + 1);
 	};
+
+	useEffect(() => {
+		console.log('effect');
+
+		router.push({
+			pathname: router.pathname,
+			query: { page: currPage },
+		});
+	}, [currPage]);
 
 	console.log(popularShowsData);
 
