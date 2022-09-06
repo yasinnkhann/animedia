@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 const Header = () => {
 	const router = useRouter();
+
 	return (
 		<header className='fixed top-0 flex items-center w-full h-[var(--header-height-mobile)] z-[999] font-[Rubik] bg-slate-300'>
 			<nav className='flex items-center w-full ml-[4rem]'>
