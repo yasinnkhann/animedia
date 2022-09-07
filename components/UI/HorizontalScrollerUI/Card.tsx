@@ -9,6 +9,7 @@ import RoundProgressBar from '../RoundProgressBar';
 
 interface Props {
 	item: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
+
 	handleItemClick: (
 		itemClickInfo: IHorizontalScrollerItemClickInfo
 	) => false | void | undefined;

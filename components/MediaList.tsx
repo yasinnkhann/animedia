@@ -8,9 +8,9 @@ interface Props {
 const MediaList = ({ mediaData }: Props) => {
 	return (
 		<section>
-			{mediaData.results.map(media => (
+			{mediaData.results.map((media, idx) => (
 				<div key={media.id}>
-					<MediaCard media={media} />
+					<MediaCard media={media} rank={idx + 1} />
 				</div>
 			))}
 		</section>

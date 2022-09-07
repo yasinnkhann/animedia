@@ -9,9 +9,10 @@ import { formatDate } from '../utils/formatDate';
 
 interface Props {
 	media: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
+	rank: number;
 }
 
-const MediaCard = ({ media }: Props) => {
+const MediaCard = ({ media, rank }: Props) => {
 	const router = useRouter();
 
 	const isMovie = 'title' in media;
@@ -50,6 +51,7 @@ const MediaCard = ({ media }: Props) => {
 			<div>
 				<p>Rating: {media.vote_average.toFixed(1)}</p>
 			</div>
+			<p>rank: {rank}</p>
 		</section>
 	);
 };
