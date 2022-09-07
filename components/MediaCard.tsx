@@ -19,13 +19,7 @@ const MediaCard = ({ media }: Props) => {
 
 		mediaType = 'title' in media ? ESearchType.MOVIE : ESearchType.SHOW;
 
-		router.replace(
-			`${CLIENT_BASE_URL}/${getDetailsPageRoute(
-				mediaType,
-				media.id,
-				mediaTitle
-			)}`
-		);
+		router.replace(getDetailsPageRoute(mediaType, media.id, mediaTitle));
 	};
 
 	return (

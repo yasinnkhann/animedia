@@ -35,7 +35,7 @@ const HorizontalScroller = ({ items }: Props) => {
 			return false;
 		}
 
-		router.push(
+		router.replace(
 			getDetailsPageRoute(itemInfo.mediaType, itemInfo.id, itemInfo.title)
 		);
 	};

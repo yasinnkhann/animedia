@@ -17,7 +17,9 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 	const mediaTitle = 'title' in result ? result.title : result.name;
 
 	const directToDetailsPage = () => {
-		router.push(getDetailsPageRoute(searchedResultType, result.id, mediaTitle));
+		router.replace(
+			getDetailsPageRoute(searchedResultType, result.id, mediaTitle)
+		);
 	};
 
 	return (
