@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
+import { SERVER_BASE_URL } from 'utils/URLs';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors) {
@@ -20,10 +21,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const link = from([
 	errorLink,
 	new HttpLink({
-		uri:
-			process.env.NODE_ENV === 'production'
-				? 'https://animedia.vercel.app/api/graphql'
-				: 'http://localhost:3000/api/graphql',
+		uri: SERVER_BASE_URL,
 	}),
 ]);
 
