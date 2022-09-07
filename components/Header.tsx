@@ -27,6 +27,12 @@ const Header = () => {
 								>
 									Top Rated
 								</p>
+								<p
+									className='text-black p-3 m-0 no-underline block hover:bg-slate-500 rounded'
+									onClick={() => router.push('/movies/popular-anime')}
+								>
+									Popular Anime Movies
+								</p>
 							</div>
 						</li>
 						<li className='group relative inline-block hover:block'>
@@ -43,6 +49,12 @@ const Header = () => {
 									onClick={() => router.push('/shows/top-rated')}
 								>
 									Top Rated
+								</p>
+								<p
+									className='text-black p-3 m-0 no-underline block hover:bg-slate-500 rounded'
+									onClick={() => router.push('/shows/popular-anime')}
+								>
+									Popular Anime Shows
 								</p>
 							</div>
 						</li>

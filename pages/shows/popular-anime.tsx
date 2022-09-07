@@ -8,33 +8,30 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
-// import { useRouter } from 'next/router';
 
-const PopularShows = () => {
-	// const router = useRouter();
-
+const PopularAnimeShows = () => {
 	const [_currMediaItems, setCurrMediaItems] = useState<
 		NexusGenObjects['ShowsRes']['results']
 	>([]);
 	const [currPage, setCurrPage] = useState(1);
 	const [mediaItemsPerPage] = useState(20);
 
-	const { data: popularShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['popularShows']>(
-			Queries.QUERY_POPULAR_SHOWS,
-			{
-				page: currPage,
-			}
-		);
+	const {
+		data: popularAnimeShowsData,
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['popularAnimeShows']
+	>(Queries.QUERY_POPULAR_ANIME_SHOWS, {
+		page: currPage,
+	});
 
 	useEffect(() => {
-		if (popularShowsData) {
+		if (popularAnimeShowsData) {
 			const endIdx = currPage * mediaItemsPerPage;
 			const startIdx = endIdx - mediaItemsPerPage;
-			const mediaItemsCopy = [...popularShowsData.results];
+			const mediaItemsCopy = [...popularAnimeShowsData.results];
 			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
 		}
-	}, [currPage, popularShowsData, mediaItemsPerPage]);
+	}, [currPage, popularAnimeShowsData, mediaItemsPerPage]);
 
 	const goToNextPage = () => {
 		setCurrPage(currPage => currPage + 1);
@@ -52,26 +49,17 @@ const PopularShows = () => {
 			.map((_, idx) => start + idx + 1);
 	};
 
-	// useEffect(() => {
-	// 	console.log('effect');
-
-	// 	router.push({
-	// 		pathname: router.pathname,
-	// 		query: { page: currPage },
-	// 	});
-	// }, [currPage]);
-
-	console.log(popularShowsData);
+	console.log(popularAnimeShowsData);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			popular shows
-			{popularShowsData && (
+			{popularAnimeShowsData && (
 				<>
-					<MediaList mediaData={popularShowsData} />
+					<MediaList mediaData={popularAnimeShowsData} />
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
-						totalItems={popularShowsData.total_results}
+						totalItems={popularAnimeShowsData.total_results}
 						currPage={currPage}
 						pageNums={getPaginationGroup()}
 						paginate={pageNum => setCurrPage(pageNum)}
@@ -84,4 +72,4 @@ const PopularShows = () => {
 	);
 };
 
-export default PopularShows;
+export default PopularAnimeShows;
