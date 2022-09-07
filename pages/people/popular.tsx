@@ -56,7 +56,7 @@ const PopularPeople = () => {
 			popular people
 			{popularPeopleData && (
 				<>
-					<PeopleList peopleData={popularPeopleData} />
+					<PeopleList peopleData={popularPeopleData} pageNum={currPage} />
 					<Pagination
 						itemsPerPage={peopleItemsPerPage}
 						totalItems={popularPeopleData.total_results}

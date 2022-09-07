@@ -56,7 +56,7 @@ const PopularMovies = () => {
 			popular movies
 			{popularMoviesData && (
 				<>
-					<MediaList mediaData={popularMoviesData} />
+					<MediaList mediaData={popularMoviesData} pageNum={currPage} />
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={popularMoviesData.total_results}

@@ -8,9 +8,10 @@ import Image from 'next/image';
 
 interface Props {
 	person: NexusGenObjects['PersonResult'];
+	rank: number;
 }
 
-const PersonCard = ({ person }: Props) => {
+const PersonCard = ({ person, rank }: Props) => {
 	const router = useRouter();
 
 	const handleGoToDetailsPage = () => {
@@ -31,6 +32,7 @@ const PersonCard = ({ person }: Props) => {
 					onClick={handleGoToDetailsPage}
 				/>
 			</div>
+			<p>rank: {rank}</p>
 		</section>
 	);
 };
