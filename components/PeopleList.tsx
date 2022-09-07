@@ -7,13 +7,13 @@ interface Props {
 
 const MediaList = ({ peopleData }: Props) => {
 	return (
-		<div>
+		<section>
 			{peopleData.results.map(person => (
 				<div key={person.id}>
 					<PersonCard person={person} />
 				</div>
 			))}
-		</div>
+		</section>
 	);
 };
 
