@@ -5,6 +5,7 @@ import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { BASE_IMG_URL } from '../utils/URLs';
 import Image from 'next/image';
+import { formatDate } from '../utils/formatDate';
 
 interface Props {
 	media: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
@@ -38,7 +39,13 @@ const MediaCard = ({ media }: Props) => {
 				/>
 			</div>
 			<div>
-				<p>{isMovie ? media.release_date : media.first_air_date}</p>
+				<p>
+					{formatDate(
+						isMovie
+							? (media.release_date as string)
+							: (media.first_air_date as string)
+					)}
+				</p>
 			</div>
 			<div>
 				<p>Rating: {media.vote_average}</p>
