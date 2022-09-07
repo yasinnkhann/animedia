@@ -6,6 +6,7 @@ import { ESearchType } from '@ts/enums';
 import { BASE_IMG_URL } from '../utils/URLs';
 import Image from 'next/image';
 import { formatDate } from '../utils/formatDate';
+import RoundProgressBar from '../components/UI/RoundProgressBar';
 
 interface Props {
 	media: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
@@ -49,6 +50,9 @@ const MediaCard = ({ media }: Props) => {
 			</div>
 			<div>
 				<p>Rating: {media.vote_average}</p>
+				<div className='h-[10rem] w-[10rem]'>
+					<RoundProgressBar percentageVal={media.vote_average * 10} />
+				</div>
 			</div>
 		</section>
 	);
