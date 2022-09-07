@@ -8,13 +8,14 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 import PeopleList from 'components/PeopleList';
 import Pagination from 'components/Pagination';
+import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 
 const PopularPeople = () => {
 	const [_currPeopleItems, setCurrPeopleItems] = useState<
 		NexusGenObjects['PeopleRes']['results']
 	>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [peopleItemsPerPage] = useState(20);
+	const [peopleItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const {
 		data: popularPeopleData,

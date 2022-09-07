@@ -8,6 +8,7 @@ import { useGetQuery } from '../../hooks/useGetQuery';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
+import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
 // import { useRouter } from 'next/router';
 
 const PopularShows = () => {
@@ -17,7 +18,7 @@ const PopularShows = () => {
 		NexusGenObjects['ShowsRes']['results']
 	>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [mediaItemsPerPage] = useState(20);
+	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const { data: popularShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
 		useGetQuery<NexusGenArgTypes['Query']['popularShows']>(
