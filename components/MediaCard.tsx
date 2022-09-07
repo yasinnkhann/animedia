@@ -13,7 +13,9 @@ interface Props {
 const MediaCard = ({ media }: Props) => {
 	const router = useRouter();
 
-	const mediaTitle = 'title' in media ? media.title : media.name;
+	const isMovie = 'title' in media;
+
+	const mediaTitle = isMovie ? media.title : media.name;
 
 	const handleGoToDetailsPage = () => {
 		let mediaType: ESearchType.MOVIE | ESearchType.SHOW;
@@ -34,6 +36,12 @@ const MediaCard = ({ media }: Props) => {
 					width='100%'
 					onClick={handleGoToDetailsPage}
 				/>
+			</div>
+			<div>
+				<p>{isMovie ? media.release_date : media.first_air_date}</p>
+			</div>
+			<div>
+				<p>Rating: {media.vote_average}</p>
 			</div>
 		</section>
 	);
