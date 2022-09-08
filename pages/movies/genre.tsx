@@ -1,23 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
+import { useGetQuery } from '../../hooks/useGetQuery';
+import * as Queries from 'graphql/queries';
+import {
+	NexusGenEnums,
+	NexusGenArgTypes,
+	NexusGenObjects,
+} from 'graphql/generated/nexus-typegen';
 import {
 	SORT_BY_OPTIONS,
 	MOVIE_GENRE_TYPE_OPTIONS,
 } from '../../models/dropDownOptions';
-
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import { DocumentNode } from '@apollo/client';
+import { IUseGetQuery } from '@ts/interfaces';
+import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
+import MediaList from 'components/MediaList';
+import Pagination from 'components/Pagination';
+import 'antd/dist/antd.css';
 
 const { Option } = Select;
 
-const handleSortByChange = (value: string) => {
-	console.log(`selected ${value}`);
-};
-
-const handleGenreTypeChange = (value: string | string[]) => {
-	console.log(`Selected: ${value}`);
-};
-
 const Genre = () => {
+	const [_currMediaItems, setCurrMediaItems] = useState<
+		NexusGenObjects['MoviesRes']['results']
+	>([]);
+	const [currPage, setCurrPage] = useState(1);
+	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
+
+	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
+		Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+	);
+
+	const [movieGenreType, setMovieGenreType] =
+		useState<NexusGenEnums['MovieGenreTypes']>('Action');
+
+	const {
+		data: genreOfMoviesData,
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+		NexusGenArgTypes['Query']['popularMoviesByGenre']
+	>(sortByQueryType, {
+		genre: movieGenreType,
+		page: currPage,
+	});
+
+	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
+		console.log(`selected ${value}`);
+		if (value === 'Popular') {
+			setSortByQueryType(Queries.QUERY_POPULAR_MOVIES_BY_GENRE);
+		} else {
+			setSortByQueryType(Queries.QUERY_TOP_RATED_MOVIES_BY_GENRE);
+		}
+	};
+
+	const handleGenreTypeChange = (value: NexusGenEnums['MovieGenreTypes']) => {
+		setMovieGenreType(value);
+	};
+
+	useEffect(() => {
+		if (genreOfMoviesData) {
+			const endIdx = currPage * mediaItemsPerPage;
+			const startIdx = endIdx - mediaItemsPerPage;
+			const mediaItemsCopy = [...genreOfMoviesData.results];
+			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
+		}
+	}, [currPage, genreOfMoviesData, mediaItemsPerPage]);
+
+	const goToNextPage = () => {
+		setCurrPage(currPage => currPage + 1);
+	};
+
+	const goToPrevPage = () => {
+		setCurrPage(currPage => currPage - 1);
+	};
+
+	const getPaginationGroup = () => {
+		let start =
+			Math.floor((currPage - 1) / mediaItemsPerPage) * mediaItemsPerPage;
+		return new Array(mediaItemsPerPage)
+			.fill(null)
+			.map((_, idx) => start + idx + 1);
+	};
+
+	console.log(genreOfMoviesData);
+
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			movie genre
@@ -64,6 +129,20 @@ const Genre = () => {
 				</Select>
 				<br />
 			</>
+			{genreOfMoviesData && (
+				<>
+					<MediaList mediaData={genreOfMoviesData} pageNum={currPage} />
+					<Pagination
+						itemsPerPage={mediaItemsPerPage}
+						totalItems={genreOfMoviesData.total_results}
+						currPage={currPage}
+						pageNums={getPaginationGroup()}
+						paginate={pageNum => setCurrPage(pageNum)}
+						goToPrevPage={goToPrevPage}
+						goToNextPage={goToNextPage}
+					/>
+				</>
+			)}
 		</section>
 	);
 };
