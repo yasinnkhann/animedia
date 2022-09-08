@@ -68,6 +68,28 @@ type MovieDetailsSpokenLang {
   name: String!
 }
 
+enum MovieGenreTypes {
+  Action
+  Adventure
+  Animation
+  Comedy
+  Crime
+  Documentary
+  Drama
+  Family
+  Fantasy
+  History
+  Horror
+  Music
+  Mystery
+  Romance
+  Science
+  TV
+  Thriller
+  War
+  Western
+}
+
 type MovieResult {
   adult: Boolean!
   backdrop_path: String
@@ -172,10 +194,10 @@ type Query {
   popularAnimeMovies(page: Int): MoviesRes!
   popularAnimeShows(page: Int): ShowsRes!
   popularMovies(page: Int): MoviesRes!
-  popularMoviesByGenre(genre: String!, mediaType: String!, page: Int): MoviesRes!
+  popularMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   popularPeople(page: Int): PeopleRes!
   popularShows(page: Int): ShowsRes!
-  popularShowsByGenre(genre: String!, mediaType: String!, page: Int): ShowsRes!
+  popularShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   recommendedMovies(id: Int!, page: Int): MoviesRes!
   recommendedShows(id: Int!, page: Int): ShowsRes!
   searchedMovies(page: Int, q: String!): MoviesRes!
@@ -184,9 +206,9 @@ type Query {
   showDetails(id: Int!): ShowDetailsRes!
   showReviews(id: Int!, page: Int): ShowReviewRes!
   topRatedMovies(page: Int): MoviesRes!
-  topRatedMoviesByGenre(genre: String!, mediaType: String!, page: Int): MoviesRes!
+  topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   topRatedShows(page: Int): ShowsRes!
-  topRatedShowsByGenre(genre: String!, mediaType: String!, page: Int): ShowsRes!
+  topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
   trendingShows(page: Int, timeWindow: String!): ShowsRes!
   users: [User!]!
@@ -303,6 +325,25 @@ type ShowDetailsSpokenLang {
   english_name: String!
   iso_639_1: String!
   name: String!
+}
+
+enum ShowGenreTypes {
+  Action_AMPERSAND_Adventure
+  Animation
+  Comedy
+  Crime
+  Documentary
+  Drama
+  Family
+  Kids
+  Mystery
+  News
+  Reality
+  SciDASHFi_AMPERSAND_Fantasy
+  Soap
+  Talk
+  War_AMPERSAND_Politics
+  Western
 }
 
 type ShowResult {

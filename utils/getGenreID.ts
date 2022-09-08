@@ -1,6 +1,9 @@
 import { BASE_URL } from './URLs';
 import axios from 'axios';
-import { NexusGenObjects } from '../graphql/generated/nexus-typegen/index';
+import {
+	NexusGenObjects,
+	NexusGenEnums,
+} from '../graphql/generated/nexus-typegen/index';
 import 'dotenv/config';
 
 // MIGHT USE GENERICS ON THE FRONTEND SIDE
@@ -53,9 +56,14 @@ type TGenreObj =
 	| NexusGenObjects['ShowDetailsGenre'];
 
 export const GET_GENRE_ID = async (
-	genreName: string,
-	mediaType: string
+	genreName: NexusGenEnums['MovieGenreTypes'] | NexusGenEnums['ShowGenreTypes'],
+	mediaType: 'movie' | 'tv'
 ): Promise<number> => {
+	const parsedGenreName = genreName
+		.replace(/_/gi, ' ')
+		.replace(/AMPERSAND/gi, '&')
+		.replace(/DASH/gi, '-');
+
 	const {
 		data: { genres },
 	} = await axios.get(
@@ -64,7 +72,7 @@ export const GET_GENRE_ID = async (
 	);
 
 	const genreObj = (genres as TGenreObj[]).find(
-		genreObj => genreObj.name === genreName
+		genreObj => genreObj.name === parsedGenreName
 	);
 
 	return genreObj!.id;

@@ -1,4 +1,12 @@
-import { objectType, extendType, nonNull, stringArg, intArg } from 'nexus';
+import {
+	objectType,
+	extendType,
+	nonNull,
+	stringArg,
+	intArg,
+	enumType,
+	arg,
+} from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
@@ -355,20 +363,46 @@ export const getMoviesInTheatres = extendType({
 	},
 });
 
+const movieGenreTypes = enumType({
+	name: 'MovieGenreTypes',
+	members: [
+		'Action',
+		'Adventure',
+		'Animation',
+		'Comedy',
+		'Crime',
+		'Documentary',
+		'Drama',
+		'Family',
+		'Fantasy',
+		'History',
+		'Horror',
+		'Music',
+		'Mystery',
+		'Romance',
+		'Science',
+		'TV',
+		'Thriller',
+		'War',
+		'Western',
+	],
+});
+
 export const getPopularMoviesByGenre = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
-				genre: nonNull(stringArg()),
-				mediaType: nonNull(stringArg()),
+				genre: arg({
+					type: nonNull(movieGenreTypes),
+				}),
 				page: intArg(),
 			},
-			resolve: async (_parent, { genre, mediaType, page }) => {
-				const genreID = await GET_GENRE_ID(genre, mediaType);
+			resolve: async (_parent, { genre, page }) => {
+				const genreID = await GET_GENRE_ID(genre, 'movie');
 				const { data } = await axios.get(
-					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
+					`${BASE_URL}/discover/movie?api_key=${process.env
 						.API_KEY!}&language=en-US&page=${
 						page ?? 1
 					}&with_genres=${genreID}&sort_by=popularity.desc`
@@ -386,14 +420,15 @@ export const getTopRatedMoviesByGenre = extendType({
 		t.nonNull.field('topRatedMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
-				genre: nonNull(stringArg()),
-				mediaType: nonNull(stringArg()),
+				genre: arg({
+					type: nonNull(movieGenreTypes),
+				}),
 				page: intArg(),
 			},
-			resolve: async (_parent, { genre, mediaType, page }) => {
-				const genreID = await GET_GENRE_ID(genre, mediaType);
+			resolve: async (_parent, { genre, page }) => {
+				const genreID = await GET_GENRE_ID(genre, 'movie');
 				const { data } = await axios.get(
-					`${BASE_URL}/discover/${mediaType}?api_key=${process.env
+					`${BASE_URL}/discover/movie?api_key=${process.env
 						.API_KEY!}&language=en-US&page=${
 						page ?? 1
 					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`

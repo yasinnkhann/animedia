@@ -30,6 +30,8 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  MovieGenreTypes: "Action" | "Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "History" | "Horror" | "Music" | "Mystery" | "Romance" | "Science" | "TV" | "Thriller" | "War" | "Western"
+  ShowGenreTypes: "Action_AMPERSAND_Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Kids" | "Mystery" | "News" | "Reality" | "SciDASHFi_AMPERSAND_Fantasy" | "Soap" | "Talk" | "War_AMPERSAND_Politics" | "Western"
 }
 
 export interface NexusGenScalars {
@@ -351,7 +353,7 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   KnownForResult: { // field return type
@@ -1046,8 +1048,7 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
     }
     popularMoviesByGenre: { // args
-      genre: string; // String!
-      mediaType: string; // String!
+      genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
       page?: number | null; // Int
     }
     popularPeople: { // args
@@ -1057,8 +1058,7 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
     }
     popularShowsByGenre: { // args
-      genre: string; // String!
-      mediaType: string; // String!
+      genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
       page?: number | null; // Int
     }
     recommendedMovies: { // args
@@ -1092,16 +1092,14 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
     }
     topRatedMoviesByGenre: { // args
-      genre: string; // String!
-      mediaType: string; // String!
+      genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
       page?: number | null; // Int
     }
     topRatedShows: { // args
       page?: number | null; // Int
     }
     topRatedShowsByGenre: { // args
-      genre: string; // String!
-      mediaType: string; // String!
+      genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
       page?: number | null; // Int
     }
     trendingMovies: { // args
@@ -1125,7 +1123,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 
