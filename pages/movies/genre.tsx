@@ -1,5 +1,9 @@
 import React from 'react';
 import { Select } from 'antd';
+import {
+	SORT_BY_OPTIONS,
+	MOVIE_GENRE_TYPE_OPTIONS,
+} from '../../models/dropDownOptions';
 
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 
@@ -9,12 +13,7 @@ const handleSortByChange = (value: string) => {
 	console.log(`selected ${value}`);
 };
 
-const children: React.ReactNode[] = [];
-for (let i = 10; i < 36; i++) {
-	children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
-
-const handleChange = (value: string | string[]) => {
+const handleGenreTypeChange = (value: string | string[]) => {
 	console.log(`Selected: ${value}`);
 };
 
@@ -30,12 +29,15 @@ const Genre = () => {
 				</label>
 				<Select
 					id='sort-by-dropdown'
-					defaultValue='popular'
+					defaultValue='Popular'
 					style={{ width: 120 }}
-					onChange={handleChange}
+					onChange={handleSortByChange}
 				>
-					<Option value='popular'>Popular</Option>
-					<Option value='trending'>Trending</Option>
+					{SORT_BY_OPTIONS.map(option => (
+						<Option key={option.value} value={option.value}>
+							{option.text}
+						</Option>
+					))}
 				</Select>
 			</div>
 			<>
@@ -50,11 +52,15 @@ const Genre = () => {
 				<Select
 					id='genre-type-dropdown'
 					size='middle'
-					defaultValue='a1'
-					onChange={handleChange}
+					defaultValue='Action'
+					onChange={handleGenreTypeChange}
 					style={{ width: 200 }}
 				>
-					{children}
+					{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
+						<Option key={option.value} value={option.value}>
+							{option.text}
+						</Option>
+					))}
 				</Select>
 				<br />
 			</>

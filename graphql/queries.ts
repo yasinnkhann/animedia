@@ -258,8 +258,8 @@ export const QUERY_MOVIES_IN_THEATRES = gql`
 `;
 
 export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
-	query PopularMoviesByGenre($genre: String!, $mediaType: String!, $page: Int) {
-		popularMoviesByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
+	query PopularMoviesByGenre($page: Int, $genre: MovieGenreTypes!) {
+		popularMoviesByGenre(page: $page, genre: $genre) {
 			page
 			total_pages
 			total_results
@@ -284,12 +284,8 @@ export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
 `;
 
 export const QUERY_TOP_RATED_MOVIES_BY_GENRE = gql`
-	query TopRatedMoviesByGenre(
-		$genre: String!
-		$mediaType: String!
-		$page: Int
-	) {
-		topRatedMoviesByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
+	query TopRatedMoviesByGenre($page: Int, $genre: MovieGenreTypes!) {
+		topRatedMoviesByGenre(page: $page, genre: $genre) {
 			page
 			total_pages
 			total_results
@@ -589,8 +585,8 @@ export const QUERY_SHOW_REVIEWS = gql`
 `;
 
 export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
-	query PopularShowsByGenre($genre: String!, $mediaType: String!, $page: Int) {
-		popularShowsByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
+	query PopularShowsByGenre($page: Int, $genre: ShowGenreTypes!) {
+		popularShowsByGenre(page: $page, genre: $genre) {
 			page
 			total_pages
 			total_results
@@ -614,8 +610,8 @@ export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
 `;
 
 export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
-	query TopRatedShowsByGenre($genre: String!, $mediaType: String!, $page: Int) {
-		topRatedShowsByGenre(genre: $genre, mediaType: $mediaType, page: $page) {
+	query TopRatedShowsByGenre($genre: ShowGenreTypes!, $page: Int) {
+		topRatedShowsByGenre(genre: $genre, page: $page) {
 			page
 			total_pages
 			total_results
