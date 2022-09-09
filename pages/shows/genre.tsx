@@ -85,7 +85,7 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			movie genre
+			show genre
 			<br />
 			<br />
 			<div>

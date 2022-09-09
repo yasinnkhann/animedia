@@ -54,7 +54,7 @@ const PopularAnimeShows = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			popular shows
+			popular anime shows
 			{popularAnimeShowsData && (
 				<>
 					<MediaList mediaData={popularAnimeShowsData} pageNum={currPage} />
