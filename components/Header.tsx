@@ -1,90 +1,55 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
 import DropDownItem from './UI/DropDownItem';
 import 'antd/dist/antd.css';
 
 const Header = () => {
 	const router = useRouter();
 
-	const [open, setOpen] = useState(false);
+	const moviesItems = [
+		{
+			label: 'Popular Movies',
+			key: 'popular',
+		},
+		{
+			label: 'Top Rated Movies',
+			key: 'top-rated',
+		},
+		{
+			label: 'Popular Anime Movies',
+			key: 'popular-anime',
+		},
+		{
+			label: 'Explore Movies by Genre',
+			key: 'genre',
+		},
+	];
 
-	const handleMenuClick: MenuProps['onClick'] = e => {
-		setOpen(false);
-		const { textContent } = e.domEvent.currentTarget;
-		let routeType;
+	const showsItems = [
+		{
+			label: 'Popular Shows',
+			key: 'popular',
+		},
+		{
+			label: 'Top Rated Shows',
+			key: 'top-rated',
+		},
+		{
+			label: 'Popular Anime Shows',
+			key: 'popular-anime',
+		},
+		{
+			label: 'Explore Shows by Genre',
+			key: 'genre',
+		},
+	];
 
-		if (textContent?.includes('Movies')) {
-			routeType = 'movies';
-		} else if (textContent?.includes('Shows')) {
-			routeType = 'shows';
-		} else if (textContent?.includes('People')) {
-			routeType = 'people';
-		}
-
-		router.push(`/${routeType}/${e.key}`);
-	};
-
-	const moviesMenu = (
-		<Menu
-			onClick={handleMenuClick}
-			items={[
-				{
-					label: 'Popular Movies',
-					key: 'popular',
-				},
-				{
-					label: 'Top Rated Movies',
-					key: 'top-rated',
-				},
-				{
-					label: 'Popular Anime Movies',
-					key: 'popular-anime',
-				},
-				{
-					label: 'Explore Movies by Genre',
-					key: 'genre',
-				},
-			]}
-		/>
-	);
-
-	const showsMenu = (
-		<Menu
-			onClick={handleMenuClick}
-			items={[
-				{
-					label: 'Popular Shows',
-					key: 'popular',
-				},
-				{
-					label: 'Top Rated Shows',
-					key: 'top-rated',
-				},
-				{
-					label: 'Popular Anime Shows',
-					key: 'popular-anime',
-				},
-				{
-					label: 'Explore Shows by Genre',
-					key: 'genre',
-				},
-			]}
-		/>
-	);
-
-	const peopleMenu = (
-		<Menu
-			onClick={handleMenuClick}
-			items={[
-				{
-					label: 'People People',
-					key: 'popular',
-				},
-			]}
-		/>
-	);
+	const peopleItems = [
+		{
+			label: 'People People',
+			key: 'popular',
+		},
+	];
 
 	return (
 		<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-slate-300 !text-base'>
@@ -95,13 +60,13 @@ const Header = () => {
 				<section className='!flex w-full justify-between ml-[4rem] !items-center'>
 					<ul id='left-section' className='!flex justify-around w-[50%] !mb-0'>
 						<li>
-							<DropDownItem menu={moviesMenu} name='Movies' />
+							<DropDownItem items={moviesItems} name='Movies' />
 						</li>
 						<li>
-							<DropDownItem menu={showsMenu} name='Shows' />
+							<DropDownItem items={showsItems} name='Shows' />
 						</li>
 						<li>
-							<DropDownItem menu={peopleMenu} name='People' />
+							<DropDownItem items={peopleItems} name='People' />
 						</li>
 					</ul>
 					<ul id='right-section' className='!flex justify-around w-[15%]'>

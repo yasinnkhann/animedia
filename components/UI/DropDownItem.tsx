@@ -1,17 +1,43 @@
 import React, { useState } from 'react';
 import { Dropdown, Space } from 'antd';
+import type { MenuProps } from 'antd';
+import { useRouter } from 'next/router';
+import { Menu } from 'antd';
 
 interface Props {
-	menu: JSX.Element;
+	items: {
+		label: string;
+		key: string;
+	}[];
 	name: string;
 }
 
-const DropDownItem = ({ menu, name }: Props) => {
+const DropDownItem = ({ items, name }: Props) => {
+	const router = useRouter();
+
 	const [open, setOpen] = useState(false);
 
 	const handleOpenChange = (flag: boolean) => {
 		setOpen(flag);
 	};
+
+	const handleMenuClick: MenuProps['onClick'] = e => {
+		setOpen(false);
+		const { textContent } = e.domEvent.currentTarget;
+		let routeType;
+
+		if (textContent?.includes('Movies')) {
+			routeType = 'movies';
+		} else if (textContent?.includes('Shows')) {
+			routeType = 'shows';
+		} else if (textContent?.includes('People')) {
+			routeType = 'people';
+		}
+
+		router.push(`/${routeType}/${e.key}`);
+	};
+
+	const menu = <Menu onClick={handleMenuClick} items={items} />;
 
 	return (
 		<Dropdown
