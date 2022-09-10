@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.6.9",
-		"@auth0/nextjs-auth0": "^1.9.1",
 		"@next-auth/prisma-adapter": "^1.0.4",
 		"@prisma/client": "^4.3.1",
 		"@types/micro-cors": "^0.1.2",
