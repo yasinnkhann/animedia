@@ -3,6 +3,9 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const TestAuth = () => {
 	const { data: session } = useSession();
 	if (session) {
+		{
+			console.log('SESSION: ', session);
+		}
 		return (
 			<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				Signed in as {session.user!.email} <br />
