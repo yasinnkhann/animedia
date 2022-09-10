@@ -22,9 +22,19 @@ export const authOptions: NextAuthOptions = {
 		signIn: '/signin',
 	},
 	callbacks: {
+		// jwt: ({ token, user }) => {
+		// 	if (user) {
+		// 		token.id = user.id;
+		// 	}
+
+		// 	return token;
+		// },
 		// Includes user.id on session, will be available on session.id but no intellisense
-		session({ session, user }) {
+		session: ({ session, user, token }) => {
 			session.id = user.id;
+			// if (token) {
+			// 	session.id = token.id;
+			// }
 			return Promise.resolve(session);
 		},
 	},

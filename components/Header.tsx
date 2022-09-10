@@ -1,10 +1,20 @@
 import React from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import DropDownItem from './UI/DropDownItem';
 import 'antd/dist/antd.css';
 
 const Header = () => {
+	const { data: session, status } = useSession();
 	const router = useRouter();
+
+	if (status === 'loading') {
+		return (
+			<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				Loading...
+			</div>
+		);
+	}
 
 	const moviesItems = [
 		{
@@ -70,8 +80,22 @@ const Header = () => {
 						</li>
 					</ul>
 					<ul id='right-section' className='!flex justify-around w-[15%]'>
-						<li>EN</li>
-						<li>Login</li>
+						<li>
+							{status === 'unauthenticated' && (
+								<a onClick={() => signIn()}>Login</a>
+							)}
+							{status === 'authenticated' && (
+								<DropDownItem
+									items={[
+										{
+											label: 'Log Out',
+											key: 'log-out',
+										},
+									]}
+									name={session.user?.name!}
+								/>
+							)}
+						</li>
 					</ul>
 				</section>
 			</nav>

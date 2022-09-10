@@ -3,6 +3,7 @@ import { Dropdown, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 import { Menu } from 'antd';
+import { signOut } from 'next-auth/react';
 
 interface Props {
 	items: {
@@ -32,6 +33,8 @@ const DropDownItem = ({ items, name }: Props) => {
 			routeType = 'shows';
 		} else if (textContent?.includes('People')) {
 			routeType = 'people';
+		} else {
+			return signOut();
 		}
 
 		router.push(`/${routeType}/${e.key}`);
