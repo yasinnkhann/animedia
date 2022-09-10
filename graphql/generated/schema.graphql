@@ -147,10 +147,6 @@ type MoviesRes {
   total_results: Int!
 }
 
-type Mutation {
-  createdUser(email: String!, name: String!): User!
-}
-
 type PeopleRes {
   page: Int!
   results: [PersonResult!]!
@@ -211,7 +207,6 @@ type Query {
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
   trendingShows(page: Int, timeWindow: String!): ShowsRes!
-  users: [User!]!
 }
 
 type ShowDetailsCountry {
@@ -397,10 +392,4 @@ type ShowsRes {
 type TheatreDates {
   maximum: String!
   minimum: String!
-}
-
-type User {
-  email: String!
-  id: String!
-  name: String!
 }

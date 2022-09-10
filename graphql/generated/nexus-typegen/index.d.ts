@@ -154,7 +154,6 @@ export interface NexusGenObjects {
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  Mutation: {};
   PeopleRes: { // root type
     page: number; // Int!
     results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
@@ -338,11 +337,6 @@ export interface NexusGenObjects {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // root type
-    email: string; // String!
-    id: string; // String!
-    name: string; // String!
-  }
 }
 
 export interface NexusGenInterfaces {
@@ -467,9 +461,6 @@ export interface NexusGenFieldTypes {
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  Mutation: { // field return type
-    createdUser: NexusGenRootTypes['User']; // User!
-  }
   PeopleRes: { // field return type
     page: number; // Int!
     results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
@@ -527,7 +518,6 @@ export interface NexusGenFieldTypes {
     topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    users: NexusGenRootTypes['User'][]; // [User!]!
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -679,11 +669,6 @@ export interface NexusGenFieldTypes {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // field return type
-    email: string; // String!
-    id: string; // String!
-    name: string; // String!
-  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -798,9 +783,6 @@ export interface NexusGenFieldTypeNames {
     total_pages: 'Int'
     total_results: 'Int'
   }
-  Mutation: { // field return type name
-    createdUser: 'User'
-  }
   PeopleRes: { // field return type name
     page: 'Int'
     results: 'PersonResult'
@@ -858,7 +840,6 @@ export interface NexusGenFieldTypeNames {
     topRatedShowsByGenre: 'ShowsRes'
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
-    users: 'User'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1010,20 +991,9 @@ export interface NexusGenFieldTypeNames {
     maximum: 'String'
     minimum: 'String'
   }
-  User: { // field return type name
-    email: 'String'
-    id: 'String'
-    name: 'String'
-  }
 }
 
 export interface NexusGenArgTypes {
-  Mutation: {
-    createdUser: { // args
-      email: string; // String!
-      name: string; // String!
-    }
-  }
   Query: {
     movieDetails: { // args
       id: number; // Int!
