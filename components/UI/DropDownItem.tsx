@@ -18,7 +18,7 @@ interface Props {
 }
 
 const DropDownItem = ({ items, isProfile, name }: Props) => {
-	const { data: session, status } = useSession();
+	const { data: session } = useSession();
 
 	const router = useRouter();
 
@@ -68,17 +68,7 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 
 	const renderAvatar = () => {
 		if (session?.user?.image) {
-			return (
-				<Avatar
-					src={session.user.image}
-					style={{
-						backgroundColor: color,
-						verticalAlign: 'middle',
-						fontSize: '1.3rem',
-					}}
-					size='large'
-				/>
-			);
+			return <Avatar src={session.user.image} size='large' />;
 		} else {
 			return (
 				<Avatar
