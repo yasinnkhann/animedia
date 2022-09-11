@@ -60,7 +60,7 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 		} else if (textContent?.includes('People')) {
 			routeType = 'people';
 		} else {
-			return signOut();
+			return signOut({ callbackUrl: '/' });
 		}
 
 		router.push(`/${routeType}/${e.key}`);

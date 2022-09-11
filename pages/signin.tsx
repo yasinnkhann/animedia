@@ -7,7 +7,7 @@ const SignIn = ({
 	providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	{
-		console.log(providers);
+		// console.log(providers);
 	}
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
