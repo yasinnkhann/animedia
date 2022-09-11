@@ -20,6 +20,8 @@ const MyList = () => {
 		);
 	}
 
+	console.log(session.user);
+
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{session?.user?.email}

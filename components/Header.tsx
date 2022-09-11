@@ -77,6 +77,9 @@ const Header = () => {
 					</ul>
 					<ul id='right-section' className='!flex justify-around w-[15%]'>
 						<li>
+							{status === 'authenticated' && (
+								<a onClick={() => router.push('/my-list')}>My List</a>
+							)}
 							{status === 'unauthenticated' && (
 								<a onClick={() => signIn()}>Login</a>
 							)}
