@@ -93,6 +93,7 @@ const Header = () => {
 										},
 									]}
 									name={session.user?.name!}
+									profile
 								/>
 							)}
 						</li>
