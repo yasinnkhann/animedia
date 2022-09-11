@@ -6,17 +6,20 @@ import { Menu } from 'antd';
 import { signOut } from 'next-auth/react';
 import { Avatar } from 'antd';
 import tinycolor from 'tinycolor2';
+import { useSession } from 'next-auth/react';
 
 interface Props {
 	items: {
 		label: string;
 		key: string;
 	}[];
-	name: string;
-	profile?: boolean;
+	name?: string;
+	isProfile?: boolean;
 }
 
-const DropDownItem = ({ items, name, profile }: Props) => {
+const DropDownItem = ({ items, isProfile, name }: Props) => {
+	const { data: session, status } = useSession();
+
 	const router = useRouter();
 
 	const [open, setOpen] = useState(false);
@@ -63,6 +66,35 @@ const DropDownItem = ({ items, name, profile }: Props) => {
 		router.push(`/${routeType}/${e.key}`);
 	};
 
+	const renderAvatar = () => {
+		if (session?.user?.image) {
+			return (
+				<Avatar
+					src={session.user.image}
+					style={{
+						backgroundColor: color,
+						verticalAlign: 'middle',
+						fontSize: '1.3rem',
+					}}
+					size='large'
+				/>
+			);
+		} else {
+			return (
+				<Avatar
+					style={{
+						backgroundColor: color,
+						verticalAlign: 'middle',
+						fontSize: '1.3rem',
+					}}
+					size='large'
+				>
+					{session?.user?.name![0].toUpperCase()}
+				</Avatar>
+			);
+		}
+	};
+
 	const menu = <Menu onClick={handleMenuClick} items={items} />;
 
 	return (
@@ -74,21 +106,7 @@ const DropDownItem = ({ items, name, profile }: Props) => {
 			open={open}
 		>
 			<a onClick={e => e.preventDefault()}>
-				{profile ? (
-					<Avatar
-						style={{
-							backgroundColor: color,
-							verticalAlign: 'middle',
-							fontSize: '1.3rem',
-							color: tinycolor(color).isLight() ? 'black' : 'white',
-						}}
-						size='large'
-					>
-						{name[0].toUpperCase()}
-					</Avatar>
-				) : (
-					<Space>{name}</Space>
-				)}
+				{isProfile ? renderAvatar() : <Space>{name}</Space>}
 			</a>
 		</Dropdown>
 	);

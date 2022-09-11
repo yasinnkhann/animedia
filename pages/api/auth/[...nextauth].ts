@@ -21,6 +21,7 @@ export const authOptions: NextAuthOptions = {
 	pages: {
 		signIn: '/signin',
 	},
+	debug: process.env.NODE_ENV === 'development',
 	callbacks: {
 		// jwt: ({ token, user }) => {
 		// 	if (user) {

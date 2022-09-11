@@ -9,11 +9,7 @@ const Header = () => {
 	const router = useRouter();
 
 	if (status === 'loading') {
-		return (
-			<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				Loading...
-			</div>
-		);
+		return <></>;
 	}
 
 	const moviesItems = [
@@ -92,8 +88,7 @@ const Header = () => {
 											key: 'log-out',
 										},
 									]}
-									name={session.user?.name!}
-									profile
+									isProfile={true}
 								/>
 							)}
 						</li>
