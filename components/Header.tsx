@@ -75,8 +75,11 @@ const Header = () => {
 							<DropDownItem items={peopleItems} name='People' />
 						</li>
 					</ul>
-					<ul id='right-section' className='!flex justify-around w-[15%]'>
-						<li>
+					<ul
+						id='right-section'
+						className='!flex !justify-around !w-[15%] !mr-4'
+					>
+						<li className='!flex !justify-around !items-center !w-full'>
 							{status === 'authenticated' && (
 								<a onClick={() => router.push('/my-list')}>My List</a>
 							)}
