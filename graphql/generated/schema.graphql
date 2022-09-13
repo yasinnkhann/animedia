@@ -147,10 +147,6 @@ type MoviesRes {
   total_results: Int!
 }
 
-type Mutation {
-  createUser(email: String!, name: String!): User!
-}
-
 type PeopleRes {
   page: Int!
   results: [PersonResult!]!
@@ -187,7 +183,6 @@ type PersonResult {
 }
 
 type Query {
-  getUsers: [User!]!
   movieDetails(id: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesInTheatres(page: Int): MoviesInTheatresRes!
@@ -397,11 +392,4 @@ type ShowsRes {
 type TheatreDates {
   maximum: String!
   minimum: String!
-}
-
-type User {
-  email: String!
-  id: String!
-  image: String
-  name: String!
 }

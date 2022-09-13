@@ -5,7 +5,7 @@ import { getServerAuthSession } from '../lib/nextAuth/get-server-auth-session';
 import type { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
 
-export type TContext = {
+export type Context = {
 	prisma: PrismaClient;
 	session: Session | null;
 	req: GetServerSidePropsContext['req'];
@@ -14,7 +14,7 @@ export type TContext = {
 
 export async function context(
 	ctxArg: GetServerSidePropsContext
-): Promise<TContext> {
+): Promise<Context> {
 	const { req, res } = ctxArg;
 	const session = await getServerAuthSession({ req, res });
 	// const session = await getSession({ req });

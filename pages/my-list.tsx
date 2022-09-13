@@ -6,6 +6,7 @@ import { getClientAuthSession } from '../lib/nextAuth/get-client-auth-session';
 
 const MyList: NextPage = () => {
 	const { data: session } = useSession();
+	console.log('SESSION: ', session);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>

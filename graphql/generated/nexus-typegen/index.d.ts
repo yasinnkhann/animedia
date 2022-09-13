@@ -154,7 +154,6 @@ export interface NexusGenObjects {
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  Mutation: {};
   PeopleRes: { // root type
     page: number; // Int!
     results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
@@ -338,12 +337,6 @@ export interface NexusGenObjects {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // root type
-    email: string; // String!
-    id: string; // String!
-    image?: string | null; // String
-    name: string; // String!
-  }
 }
 
 export interface NexusGenInterfaces {
@@ -468,9 +461,6 @@ export interface NexusGenFieldTypes {
     total_pages: number; // Int!
     total_results: number; // Int!
   }
-  Mutation: { // field return type
-    createUser: NexusGenRootTypes['User']; // User!
-  }
   PeopleRes: { // field return type
     page: number; // Int!
     results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
@@ -504,7 +494,6 @@ export interface NexusGenFieldTypes {
     profile_path: string | null; // String
   }
   Query: { // field return type
-    getUsers: NexusGenRootTypes['User'][]; // [User!]!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
@@ -680,12 +669,6 @@ export interface NexusGenFieldTypes {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // field return type
-    email: string; // String!
-    id: string; // String!
-    image: string | null; // String
-    name: string; // String!
-  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -800,9 +783,6 @@ export interface NexusGenFieldTypeNames {
     total_pages: 'Int'
     total_results: 'Int'
   }
-  Mutation: { // field return type name
-    createUser: 'User'
-  }
   PeopleRes: { // field return type name
     page: 'Int'
     results: 'PersonResult'
@@ -836,7 +816,6 @@ export interface NexusGenFieldTypeNames {
     profile_path: 'String'
   }
   Query: { // field return type name
-    getUsers: 'User'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
@@ -1012,21 +991,9 @@ export interface NexusGenFieldTypeNames {
     maximum: 'String'
     minimum: 'String'
   }
-  User: { // field return type name
-    email: 'String'
-    id: 'String'
-    image: 'String'
-    name: 'String'
-  }
 }
 
 export interface NexusGenArgTypes {
-  Mutation: {
-    createUser: { // args
-      email: string; // String!
-      name: string; // String!
-    }
-  }
   Query: {
     movieDetails: { // args
       id: number; // Int!
