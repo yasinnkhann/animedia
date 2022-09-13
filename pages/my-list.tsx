@@ -10,7 +10,7 @@ const MyList: NextPage = () => {
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<h1>{session?.user?.name!}</h1>
+			<h1>{session?.user?.email!}</h1>
 		</div>
 	);
 };

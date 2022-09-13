@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+type Example {
+  message: String
+}
+
 type KnownForResult {
   adult: Boolean
   backdrop_path: String
@@ -147,6 +151,10 @@ type MoviesRes {
   total_results: Int!
 }
 
+type Mutation {
+  createOneUser(email: String!, name: String): User
+}
+
 type PeopleRes {
   page: Int!
   results: [PersonResult!]!
@@ -183,6 +191,7 @@ type PersonResult {
 }
 
 type Query {
+  example: Example
   movieDetails(id: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesInTheatres(page: Int): MoviesInTheatresRes!
@@ -207,6 +216,7 @@ type Query {
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
   trendingShows(page: Int, timeWindow: String!): ShowsRes!
+  user(userId: String!): User!
 }
 
 type ShowDetailsCountry {
@@ -392,4 +402,11 @@ type ShowsRes {
 type TheatreDates {
   maximum: String!
   minimum: String!
+}
+
+type User {
+  email: String
+  id: String
+  image: String
+  name: String
 }
