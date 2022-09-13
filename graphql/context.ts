@@ -17,6 +17,7 @@ export async function context(
 ): Promise<TContext> {
 	const { req, res } = ctxArg;
 	const session = await getServerAuthSession({ req, res });
+	// const session = await getSession({ req });
 
 	return {
 		prisma,
