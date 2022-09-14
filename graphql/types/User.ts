@@ -1,4 +1,5 @@
 import { objectType, extendType, stringArg, nonNull } from 'nexus';
+import { getSession } from 'next-auth/react';
 
 export const user = objectType({
 	name: 'User',
@@ -12,7 +13,7 @@ export const user = objectType({
 
 export const userQueries = extendType({
 	type: 'Query',
-	definition: t => {
+	definition(t) {
 		t.field('user', {
 			type: 'User',
 			args: {
@@ -30,7 +31,7 @@ export const userQueries = extendType({
 
 export const userMutations = extendType({
 	type: 'Mutation',
-	definition: t => {
+	definition(t) {
 		t.field('createOneUser', {
 			type: 'User',
 			args: {
@@ -59,10 +60,12 @@ export const exampleQueryType = objectType({
 
 export const exampleQuery = extendType({
 	type: 'Query',
-	definition: t => {
+	definition(t) {
 		t.field('example', {
 			type: 'Example',
 			resolve: async (_parent, _args, ctx) => {
+				const req = ctx.req;
+				console.log('REQ: ', req);
 				console.log('SESH: ', ctx.session);
 				return {
 					message: 'Hello there!',

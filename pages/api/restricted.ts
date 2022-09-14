@@ -3,6 +3,7 @@ import { getServerAuthSession } from '../../lib/nextAuth/get-server-auth-session
 
 const restricted = async (req: NextApiRequest, res: NextApiResponse) => {
 	const session = await getServerAuthSession({ req, res });
+	console.log('REQ: ', req);
 	console.log('SESH: ', session);
 	if (session) {
 		res.send({
