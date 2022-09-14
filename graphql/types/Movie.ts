@@ -187,8 +187,7 @@ export const getPopularAnimeMovies = extendType({
 			args: {
 				page: intArg(),
 			},
-			resolve: async (_parent, { page }, ctx) => {
-				// console.log(ctx.prisma);
+			resolve: async (_parent, { page }) => {
 				const keywordID = await GET_KEYWORD_ID('anime');
 
 				const { data } = await axios.get(

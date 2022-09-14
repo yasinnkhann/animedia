@@ -1,9 +1,12 @@
-import { makeSchema, connectionPlugin } from 'nexus';
+import { makeSchema, connectionPlugin, asNexusMethod } from 'nexus';
 import { join } from 'path';
-import * as types from './types';
+import * as allTypes from './types';
+import { DateTimeResolver } from 'graphql-scalars';
+
+export const gqlDate = asNexusMethod(DateTimeResolver, 'date');
 
 export const schema = makeSchema({
-	types,
+	types: [allTypes, gqlDate],
 	plugins: [connectionPlugin()],
 	outputs: {
 		typegen: join(

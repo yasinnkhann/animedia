@@ -1,6 +1,6 @@
 import { objectType, extendType, stringArg, nonNull } from 'nexus';
 
-export const User = objectType({
+export const user = objectType({
 	name: 'User',
 	definition(t) {
 		t.string('id');
@@ -10,16 +10,17 @@ export const User = objectType({
 	},
 });
 
-export const UserQueries = extendType({
+export const userQueries = extendType({
 	type: 'Query',
 	definition: t => {
-		t.nonNull.field('user', {
+		t.field('user', {
 			type: 'User',
 			args: {
 				userId: nonNull(stringArg()),
 			},
-			resolve: (_, args, context) => {
-				return context.prisma.user.findUnique({
+			resolve: (_parent, args, ctx) => {
+				console.log('SESH: ', ctx?.session);
+				return ctx.prisma.user.findUnique({
 					where: { id: args.userId },
 				});
 			},
@@ -27,7 +28,7 @@ export const UserQueries = extendType({
 	},
 });
 
-export const UserMutations = extendType({
+export const userMutations = extendType({
 	type: 'Mutation',
 	definition: t => {
 		t.field('createOneUser', {
@@ -36,8 +37,8 @@ export const UserMutations = extendType({
 				name: stringArg(),
 				email: nonNull(stringArg()),
 			},
-			resolve: async (_, { name, email }, context) => {
-				return context.prisma.user.create({
+			resolve: async (_, { name, email }, ctx) => {
+				return ctx.prisma.user.create({
 					data: {
 						name,
 						email,
@@ -47,15 +48,16 @@ export const UserMutations = extendType({
 		});
 	},
 });
+
 //% EX
-export const ExampleQueryType = objectType({
+export const exampleQueryType = objectType({
 	name: 'Example',
 	definition(t) {
 		t.string('message');
 	},
 });
 
-export const Queries = extendType({
+export const exampleQuery = extendType({
 	type: 'Query',
 	definition: t => {
 		t.field('example', {
