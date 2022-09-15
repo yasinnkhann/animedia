@@ -55,9 +55,6 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Example: { // root type
-    message?: string | null; // String
-  }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
     backdrop_path?: string | null; // String
@@ -372,9 +369,6 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
-  Example: { // field return type
-    message: string | null; // String
-  }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
     backdrop_path: string | null; // String
@@ -487,7 +481,7 @@ export interface NexusGenFieldTypes {
     total_results: number; // Int!
   }
   Mutation: { // field return type
-    createOneUser: NexusGenRootTypes['User'] | null; // User
+    createUser: NexusGenRootTypes['User'] | null; // User
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -522,7 +516,8 @@ export interface NexusGenFieldTypes {
     profile_path: string | null; // String
   }
   Query: { // field return type
-    example: NexusGenRootTypes['Example'] | null; // Example
+    example: string | null; // String
+    getUser: NexusGenRootTypes['User'] | null; // User
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
@@ -547,7 +542,6 @@ export interface NexusGenFieldTypes {
     topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    user: NexusGenRootTypes['User'] | null; // User
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -708,9 +702,6 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
-  Example: { // field return type name
-    message: 'String'
-  }
   KnownForResult: { // field return type name
     adult: 'Boolean'
     backdrop_path: 'String'
@@ -823,7 +814,7 @@ export interface NexusGenFieldTypeNames {
     total_results: 'Int'
   }
   Mutation: { // field return type name
-    createOneUser: 'User'
+    createUser: 'User'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -858,7 +849,8 @@ export interface NexusGenFieldTypeNames {
     profile_path: 'String'
   }
   Query: { // field return type name
-    example: 'Example'
+    example: 'String'
+    getUser: 'User'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
@@ -883,7 +875,6 @@ export interface NexusGenFieldTypeNames {
     topRatedShowsByGenre: 'ShowsRes'
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
-    user: 'User'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1045,12 +1036,15 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createOneUser: { // args
+    createUser: { // args
       email: string; // String!
-      name?: string | null; // String
+      name: string; // String!
     }
   }
   Query: {
+    getUser: { // args
+      userId: string; // String!
+    }
     movieDetails: { // args
       id: number; // Int!
     }
@@ -1135,9 +1129,6 @@ export interface NexusGenArgTypes {
     trendingShows: { // args
       page?: number | null; // Int
       timeWindow: string; // String!
-    }
-    user: { // args
-      userId: string; // String!
     }
   }
 }

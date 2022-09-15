@@ -1,7 +1,7 @@
 import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
-import 'dotenv/config';
+// import 'dotenv/config';
 
 export const knownForResult = objectType({
 	name: 'KnownForResult',

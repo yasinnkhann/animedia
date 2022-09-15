@@ -11,10 +11,10 @@ export const user = objectType({
 	},
 });
 
-export const userQueries = extendType({
+export const getUser = extendType({
 	type: 'Query',
 	definition(t) {
-		t.field('user', {
+		t.field('getUser', {
 			type: 'User',
 			args: {
 				userId: nonNull(stringArg()),
@@ -29,13 +29,13 @@ export const userQueries = extendType({
 	},
 });
 
-export const userMutations = extendType({
+export const createUser = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('createOneUser', {
+		t.field('createUser', {
 			type: 'User',
 			args: {
-				name: stringArg(),
+				name: nonNull(stringArg()),
 				email: nonNull(stringArg()),
 			},
 			resolve: async (_, { name, email }, ctx) => {
@@ -51,25 +51,17 @@ export const userMutations = extendType({
 });
 
 //% EX
-export const exampleQueryType = objectType({
-	name: 'Example',
-	definition(t) {
-		t.string('message');
-	},
-});
 
 export const exampleQuery = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('example', {
-			type: 'Example',
+			type: 'String',
 			resolve: async (_parent, _args, ctx) => {
 				const req = ctx.req;
 				console.log('REQ: ', req);
 				console.log('SESH: ', ctx.session);
-				return {
-					message: 'Hello there!',
-				};
+				return 'Hello there!';
 			},
 		});
 	},

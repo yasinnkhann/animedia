@@ -7,10 +7,6 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type Example {
-  message: String
-}
-
 type KnownForResult {
   adult: Boolean
   backdrop_path: String
@@ -157,7 +153,7 @@ type MoviesRes {
 }
 
 type Mutation {
-  createOneUser(email: String!, name: String): User
+  createUser(email: String!, name: String!): User
 }
 
 type PeopleRes {
@@ -196,7 +192,8 @@ type PersonResult {
 }
 
 type Query {
-  example: Example
+  example: String
+  getUser(userId: String!): User
   movieDetails(id: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesInTheatres(page: Int): MoviesInTheatresRes!
@@ -221,7 +218,6 @@ type Query {
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
   trendingShows(page: Int, timeWindow: String!): ShowsRes!
-  user(userId: String!): User
 }
 
 type ShowDetailsCountry {
