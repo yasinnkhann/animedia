@@ -19,7 +19,7 @@ export const getUser = extendType({
 				userId: nonNull(stringArg()),
 			},
 			resolve: (_parent, args, ctx) => {
-				console.log('SESH: ', ctx?.session);
+				console.log('SESH IN USER RESOLVER: ', ctx.session);
 				return ctx.prisma.user.findUnique({
 					where: { id: args.userId },
 				});
@@ -59,7 +59,7 @@ export const exampleQuery = extendType({
 			resolve: async (_parent, _args, ctx) => {
 				const req = ctx.req;
 				// console.log('REQ IN RESOLVER: ', req);
-				console.log('SESH IN RESOLVER: ', ctx.session);
+				console.log('SESH IN EX RESOLVER: ', ctx.session);
 				return 'Hello there!';
 			},
 		});
