@@ -59,7 +59,7 @@ export const exampleQuery = extendType({
 			resolve: async (_parent, _args, ctx) => {
 				const req = ctx.req;
 				// console.log('REQ IN RESOLVER: ', req);
-				console.log('SESH IN EX RESOLVER: ', ctx.session);
+				console.log('SESH IN EXAMPLE RESOLVER: ', ctx.session);
 				return 'Hello there!';
 			},
 		});
