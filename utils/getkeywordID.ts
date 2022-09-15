@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { BASE_URL } from './URLs';
-// import 'dotenv/config';
 
 export const GET_KEYWORD_ID = async (q: string) => {
 	q = q.split(' ').join('+');

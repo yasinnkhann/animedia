@@ -4,7 +4,6 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen/index';
-// import 'dotenv/config';
 
 // MIGHT USE GENERICS ON THE FRONTEND SIDE
 
