@@ -4,7 +4,6 @@ import { Session } from 'next-auth';
 import { getServerAuthSession } from '../lib/nextAuth/get-server-auth-session';
 import type { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
-import nextAuthOptions from '../pages/api/auth/[...nextauth]';
 
 export type Context = {
 	prisma: PrismaClient;
