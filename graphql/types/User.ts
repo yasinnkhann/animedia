@@ -1,5 +1,4 @@
 import { objectType, extendType, stringArg, nonNull } from 'nexus';
-import { getSession } from 'next-auth/react';
 
 export const user = objectType({
 	name: 'User',
@@ -59,8 +58,8 @@ export const exampleQuery = extendType({
 			type: 'String',
 			resolve: async (_parent, _args, ctx) => {
 				const req = ctx.req;
-				console.log('REQ: ', req);
-				console.log('SESH: ', ctx.session);
+				// console.log('REQ IN RESOLVER: ', req);
+				console.log('SESH IN RESOLVER: ', ctx.session);
 				return 'Hello there!';
 			},
 		});
