@@ -13,15 +13,12 @@ export const user = objectType({
 export const getUser = extendType({
 	type: 'Query',
 	definition(t) {
-		t.field('getUser', {
+		t.field('user', {
 			type: 'User',
-			args: {
-				userId: nonNull(stringArg()),
-			},
-			resolve: (_parent, args, ctx) => {
-				console.log('SESH IN USER RESOLVER: ', ctx.session);
+
+			resolve: (_parent, _args, ctx) => {
 				return ctx.prisma.user.findUnique({
-					where: { id: args.userId },
+					where: { id: ctx.session!.user?.id },
 				});
 			},
 		});
@@ -31,7 +28,7 @@ export const getUser = extendType({
 export const createUser = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('createUser', {
+		t.field('createdUser', {
 			type: 'User',
 			args: {
 				name: nonNull(stringArg()),
@@ -44,23 +41,6 @@ export const createUser = extendType({
 						email,
 					},
 				});
-			},
-		});
-	},
-});
-
-//% EX
-
-export const exampleQuery = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('example', {
-			type: 'String',
-			resolve: async (_parent, _args, ctx) => {
-				const req = ctx.req;
-				// console.log('REQ IN RESOLVER: ', req);
-				console.log('SESH IN EXAMPLE RESOLVER: ', ctx.session);
-				return 'Hello there!';
 			},
 		});
 	},

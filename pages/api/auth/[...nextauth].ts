@@ -3,6 +3,21 @@ import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 
+const cookiesPolicy =
+	process.env.NODE_ENV === 'development'
+		? {
+				sessionToken: {
+					name: `_Secure_next-auth.session-token`,
+					options: {
+						httpOnly: true,
+						sameSite: 'None',
+						path: '/',
+						secure: true,
+					},
+				},
+		  }
+		: {};
+
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
 	providers: [
@@ -12,17 +27,29 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	debug: process.env.NODE_ENV === 'development',
+	cookies: cookiesPolicy,
 	callbacks: {
-		// Includes user.id on session, will be available on session.id but no intellisense
-		session: ({ session, user }) => {
+		jwt: ({ token, user }) => {
 			if (user) {
-				session.id = user.id;
+				token.id = user.id;
 			}
-			// console.log('SESSION CB: ', session);
-			return Promise.resolve(session);
+			// console.log('TOKEN in JWT CB: ', token);
+			return Promise.resolve(token);
+		},
+		session: async ({ session, user, token }) => {
+			if (token) {
+				console.log('TOKEN IN SESSION CB: ', token);
+			}
+			return Promise.resolve({
+				...session,
+				user: user,
+			});
 		},
 	},
 	secret: process.env.NEXTAUTH_SECRET,
+	jwt: {
+		secret: process.env.JWT_SECRET,
+	},
 	// pages: {
 	// 	signIn: '/signin',
 	// },

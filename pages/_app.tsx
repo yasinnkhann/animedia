@@ -3,11 +3,12 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from '../lib/apollo';
 import { SessionProvider } from 'next-auth/react';
 import Layout from '../components/Layout';
+import { Session } from 'next-auth';
 import '../styles/globals.css';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
 	return (
-		<SessionProvider session={session}>
+		<SessionProvider session={pageProps.session}>
 			<ApolloProvider client={client}>
 				<Layout>
 					<Component {...pageProps} />

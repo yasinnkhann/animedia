@@ -5,13 +5,17 @@
 
 
 import type { Context } from "./../../context"
-import type { core, connectionPluginCore } from "nexus"
+import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
     date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
+    /**
+     * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+     */
+    json<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "JSONObject";
   }
 }
 declare global {
@@ -21,14 +25,9 @@ declare global {
      */
     date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
     /**
-     * Adds a Relay-style connection to the type, with numerous options for configuration
-     *
-     * @see https://nexusjs.org/docs/plugins/connection
+     * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
      */
-    connectionField<FieldName extends string>(
-      fieldName: FieldName,
-      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>
-    ): void
+    json<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSONObject";
   }
 }
 
@@ -52,6 +51,7 @@ export interface NexusGenScalars {
   Boolean: boolean
   ID: string
   DateTime: any
+  JSONObject: any
 }
 
 export interface NexusGenObjects {
@@ -481,7 +481,7 @@ export interface NexusGenFieldTypes {
     total_results: number; // Int!
   }
   Mutation: { // field return type
-    createUser: NexusGenRootTypes['User'] | null; // User
+    createdUser: NexusGenRootTypes['User'] | null; // User
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -516,8 +516,6 @@ export interface NexusGenFieldTypes {
     profile_path: string | null; // String
   }
   Query: { // field return type
-    example: string | null; // String
-    getUser: NexusGenRootTypes['User'] | null; // User
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
@@ -542,6 +540,7 @@ export interface NexusGenFieldTypes {
     topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+    user: NexusGenRootTypes['User'] | null; // User
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -814,7 +813,7 @@ export interface NexusGenFieldTypeNames {
     total_results: 'Int'
   }
   Mutation: { // field return type name
-    createUser: 'User'
+    createdUser: 'User'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -849,8 +848,6 @@ export interface NexusGenFieldTypeNames {
     profile_path: 'String'
   }
   Query: { // field return type name
-    example: 'String'
-    getUser: 'User'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
@@ -875,6 +872,7 @@ export interface NexusGenFieldTypeNames {
     topRatedShowsByGenre: 'ShowsRes'
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
+    user: 'User'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1036,15 +1034,12 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createUser: { // args
+    createdUser: { // args
       email: string; // String!
       name: string; // String!
     }
   }
   Query: {
-    getUser: { // args
-      userId: string; // String!
-    }
     movieDetails: { // args
       id: number; // Int!
     }
@@ -1196,7 +1191,6 @@ declare global {
   interface NexusGenPluginInputTypeConfig<TypeName extends string> {
   }
   interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
-    
   }
   interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
   }

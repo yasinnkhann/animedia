@@ -16,9 +16,8 @@ export async function context(
 	ctxArg: GetServerSidePropsContext
 ): Promise<Context> {
 	const { req, res } = ctxArg;
-	const session = await getServerAuthSession({ req, res });
 	// const session = await getSession({ req });
-	console.log('SESSION IN CONTEXT: ', session);
+	const session = await getServerAuthSession({ req, res });
 
 	return {
 		prisma,

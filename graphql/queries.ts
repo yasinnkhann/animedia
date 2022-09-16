@@ -725,3 +725,15 @@ export const QUERY_SEARCHED_PEOPLE = gql`
 		}
 	}
 `;
+
+// USER
+export const QUERY_GET_USER = gql`
+	query User {
+		user {
+			id
+			name
+			email
+			image
+		}
+	}
+`;
