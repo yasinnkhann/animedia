@@ -4,7 +4,7 @@ import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { useGetQuery } from '../../hooks/useGetQuery';
+import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
@@ -18,7 +18,7 @@ const TopRatedShows = () => {
 	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const { data: topRatedShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['topRatedShows']>(
+		useGQLQuery<NexusGenArgTypes['Query']['topRatedShows']>(
 			Queries.QUERY_TOP_RATED_SHOWS,
 			{
 				page: currPage,

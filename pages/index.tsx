@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import { useState, useEffect } from 'react';
 import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
-import { useGetQuery } from '../hooks/useGetQuery';
+import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
@@ -25,12 +25,12 @@ const Home: NextPage = () => {
 		useState<EHorizontalScrollerTimeWindow>(EHorizontalScrollerTimeWindow.DAY);
 
 	const { data: whatsPopularData }: IUseGetQuery<NexusGenObjects['MoviesRes']> =
-		useGetQuery(whatsPopularQueryType);
+		useGQLQuery(whatsPopularQueryType);
 
 	const {
 		data: trendingData,
 		refetch: refetchTrendingData,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['trendingMovies']
 	>(trendingQueryType, {
 		timeWindow: trendingTimeWindow,
@@ -49,31 +49,31 @@ const Home: NextPage = () => {
 	// Preparing the lazy functions
 	const {
 		fetchData: fetchPopularShowsData,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery(
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery(
 		Queries.QUERY_POPULAR_SHOWS
 	);
 	const {
 		fetchData: fetchMoviesInTheatresData,
-	}: IUseGetQuery<NexusGenObjects['MoviesInTheatresRes']> = useGetQuery(
+	}: IUseGetQuery<NexusGenObjects['MoviesInTheatresRes']> = useGQLQuery(
 		Queries.QUERY_MOVIES_IN_THEATRES
 	);
 	const {
 		fetchData: fetchWeeklyTrendingMoviesData,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['trendingMovies']
 	>(Queries.QUERY_TRENDING_MOVIES, {
 		timeWindow: EHorizontalScrollerTimeWindow.WEEK,
 	});
 	const {
 		fetchData: fetchDailyTrendingShowsData,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['trendingShows']
 	>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: EHorizontalScrollerTimeWindow.DAY,
 	});
 	const {
 		fetchData: fetchWeeklyTrendingShowsData,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['trendingShows']
 	>(Queries.QUERY_TRENDING_SHOWS, {
 		timeWindow: EHorizontalScrollerTimeWindow.WEEK,

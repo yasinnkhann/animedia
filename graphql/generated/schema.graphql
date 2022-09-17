@@ -158,7 +158,7 @@ type MoviesRes {
 }
 
 type Mutation {
-  createdUser(email: String!, name: String!): User
+  addedMovie(movieId: ID!, movieName: String!): UserMovie
 }
 
 type PeopleRes {
@@ -411,7 +411,13 @@ type TheatreDates {
 
 type User {
   email: String
-  id: String
+  id: ID
   image: String
+  movies: [UserMovie]
+  name: String
+}
+
+type UserMovie {
+  id: ID
   name: String
 }

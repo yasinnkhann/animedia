@@ -1,12 +1,23 @@
-import { objectType, extendType, stringArg, nonNull } from 'nexus';
+import { objectType, extendType, stringArg, nonNull, idArg } from 'nexus';
+
+export const userMovie = objectType({
+	name: 'UserMovie',
+	definition(t) {
+		t.id('id');
+		t.string('name');
+	},
+});
 
 export const user = objectType({
 	name: 'User',
 	definition(t) {
-		t.string('id');
+		t.id('id');
 		t.string('name');
 		t.string('email');
 		t.string('image');
+		t.list.field('movies', {
+			type: 'UserMovie',
+		});
 	},
 });
 
@@ -19,26 +30,38 @@ export const getUser = extendType({
 			resolve: (_parent, _args, ctx) => {
 				return ctx.prisma.user.findUnique({
 					where: { id: ctx.session!.user?.id },
+					include: {
+						movies: true,
+						// shows: true,
+					},
 				});
 			},
 		});
 	},
 });
 
-export const createUser = extendType({
+export const addedMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('createdUser', {
-			type: 'User',
+		t.field('addedMovie', {
+			type: 'UserMovie',
 			args: {
-				name: nonNull(stringArg()),
-				email: nonNull(stringArg()),
+				movieId: nonNull(idArg()),
+				movieName: nonNull(stringArg()),
 			},
-			resolve: async (_, { name, email }, ctx) => {
-				return ctx.prisma.user.create({
+			resolve: (_parent, { movieId, movieName }, ctx) => {
+				return ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id },
 					data: {
-						name,
-						email,
+						movies: {
+							// connect: {
+							// 	id: movieId,
+							// },
+							create: {
+								id: movieId,
+								name: movieName,
+							},
+						},
 					},
 				});
 			},

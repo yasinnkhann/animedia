@@ -4,7 +4,7 @@ import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { useGetQuery } from '../../hooks/useGetQuery';
+import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import PeopleList from 'components/PeopleList';
 import Pagination from 'components/Pagination';
@@ -19,7 +19,7 @@ const PopularPeople = () => {
 
 	const {
 		data: popularPeopleData,
-	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['popularPeople']
 	>(Queries.QUERY_POPULAR_PEOPLE, {
 		page: currPage,

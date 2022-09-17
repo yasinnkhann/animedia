@@ -734,6 +734,10 @@ export const QUERY_GET_USER = gql`
 			name
 			email
 			image
+			movies {
+				id
+				name
+			}
 		}
 	}
 `;

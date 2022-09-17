@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useGetQuery } from '../hooks/useGetQuery';
+import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import {
@@ -23,7 +23,7 @@ const Search: NextPage = () => {
 		loading: searchedMoviesLoading,
 		error: searchedMoviesError,
 		refetch: refetchSearchedMovies,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['searchedMovies']
 	>(Queries.QUERY_SEARCHED_MOVIES, {
 		q: (router.query.q as string) ?? '',
@@ -34,7 +34,7 @@ const Search: NextPage = () => {
 		loading: searchedShowsLoading,
 		error: searchedShowsError,
 		refetch: refetchSearchedShows,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['searchedShows']
 	>(Queries.QUERY_SEARCHED_SHOWS, {
 		q: (router.query.q as string) ?? '',
@@ -45,7 +45,7 @@ const Search: NextPage = () => {
 		loading: searchedPeopleLoading,
 		error: searchedPeopleError,
 		refetch: refetchSearchedPeople,
-	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['searchedPeople']
 	>(Queries.QUERY_SEARCHED_PEOPLE, {
 		q: (router.query.q as string) ?? '',

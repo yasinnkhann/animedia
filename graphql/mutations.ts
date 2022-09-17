@@ -1,11 +1,10 @@
 import { gql } from '@apollo/client';
 
-// export const CREATE_USER = gql`
-// 	mutation createUser($name: String!, $email: String!) {
-// 		createdUser(name: $name, email: $email) {
-// 			id
-// 			name
-// 			email
-// 		}
-// 	}
-// `;
+export const MUTATION_ADD_MOVIE = gql`
+	mutation AddMovie($movieId: ID!, $movieName: String!) {
+		addedMovie(movieId: $movieId, movieName: $movieName) {
+			id
+			name
+		}
+	}
+`;

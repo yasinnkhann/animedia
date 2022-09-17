@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from 'antd';
-import { useGetQuery } from '../../hooks/useGetQuery';
+import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from 'graphql/queries';
 import {
 	NexusGenEnums,
@@ -36,7 +36,7 @@ const Genre = () => {
 	>('Action_AMPERSAND_Adventure');
 
 	const { data: genreOfShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGetQuery<NexusGenArgTypes['Query']['popularShowsByGenre']>(
+		useGQLQuery<NexusGenArgTypes['Query']['popularShowsByGenre']>(
 			sortByQueryType,
 			{
 				genre: showGenreType,

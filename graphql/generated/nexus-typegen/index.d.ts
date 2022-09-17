@@ -352,8 +352,13 @@ export interface NexusGenObjects {
   }
   User: { // root type
     email?: string | null; // String
-    id?: string | null; // String
+    id?: string | null; // ID
     image?: string | null; // String
+    movies?: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+    name?: string | null; // String
+  }
+  UserMovie: { // root type
+    id?: string | null; // ID
     name?: string | null; // String
   }
 }
@@ -481,7 +486,7 @@ export interface NexusGenFieldTypes {
     total_results: number; // Int!
   }
   Mutation: { // field return type
-    createdUser: NexusGenRootTypes['User'] | null; // User
+    addedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -694,8 +699,13 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     email: string | null; // String
-    id: string | null; // String
+    id: string | null; // ID
     image: string | null; // String
+    movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+    name: string | null; // String
+  }
+  UserMovie: { // field return type
+    id: string | null; // ID
     name: string | null; // String
   }
 }
@@ -813,7 +823,7 @@ export interface NexusGenFieldTypeNames {
     total_results: 'Int'
   }
   Mutation: { // field return type name
-    createdUser: 'User'
+    addedMovie: 'UserMovie'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1026,17 +1036,22 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     email: 'String'
-    id: 'String'
+    id: 'ID'
     image: 'String'
+    movies: 'UserMovie'
+    name: 'String'
+  }
+  UserMovie: { // field return type name
+    id: 'ID'
     name: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createdUser: { // args
-      email: string; // String!
-      name: string; // String!
+    addedMovie: { // args
+      movieId: string; // ID!
+      movieName: string; // String!
     }
   }
   Query: {

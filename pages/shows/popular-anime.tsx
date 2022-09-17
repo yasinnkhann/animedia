@@ -4,7 +4,7 @@ import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { useGetQuery } from '../../hooks/useGetQuery';
+import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
@@ -19,7 +19,7 @@ const PopularAnimeShows = () => {
 
 	const {
 		data: popularAnimeShowsData,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGetQuery<
+	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery<
 		NexusGenArgTypes['Query']['popularAnimeShows']
 	>(Queries.QUERY_POPULAR_ANIME_SHOWS, {
 		page: currPage,
