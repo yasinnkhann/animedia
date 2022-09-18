@@ -20,15 +20,13 @@ interface Props {
 const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
-	const { mutateFunction: addMovie, mutateData } = useGQLMutation<
+	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
 	>(Mutations.MUTATION_ADD_MOVIE, {
 		movieId: String(movieDetails.id),
 		movieName: movieDetails.title,
-		watchStatus: 'WATCHING!!!',
+		watchStatus: 'WATCHING',
 	});
-
-	// const [addMovie] = useMutation(Mutations.MUTATION_ADD_MOVIE);
 
 	const {
 		refetch: refetchUser,
@@ -37,15 +35,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_USER
 	);
 
-	// const {
-	// 	refetch: refetchUser,
-	// 	data: userData,
-	// 	error: userError,
-	// } = useQuery(Queries.QUERY_GET_USER);
-
 	console.log('USER DATA: ', userData);
-
-	// console.log(movieDetails);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
@@ -62,11 +52,10 @@ const MovieDetails = ({ movieDetails }: Props) => {
 								variables: {
 									movieId: String(movieDetails.id),
 									movieName: movieDetails.title,
-									watchStatus: 'WATCHING!!!',
+									watchStatus: 'WATCHING',
 								},
 							});
 							refetchUser();
-							// fix!
 						}}
 					>
 						Add to my list

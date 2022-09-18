@@ -17,10 +17,9 @@ export const userMovie = objectType({
 	definition(t) {
 		t.id('id');
 		t.string('name');
-		t.string('status');
-		// t.field('status', {
-		// 	type: 'WatchStatusTypes',
-		// });
+		t.field('status', {
+			type: 'WatchStatusTypes',
+		});
 	},
 });
 
@@ -64,8 +63,7 @@ export const addedMovie = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 				movieName: nonNull(stringArg()),
-				watchStatus: nonNull(stringArg()),
-				// watchStatus: nonNull(watchStatusTypes),
+				watchStatus: nonNull(watchStatusTypes),
 			},
 			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				return ctx.prisma.user.update({
@@ -75,7 +73,6 @@ export const addedMovie = extendType({
 							create: {
 								id: movieId,
 								name: movieName,
-								// status: 'WATCHING',
 								status: watchStatus,
 							},
 						},

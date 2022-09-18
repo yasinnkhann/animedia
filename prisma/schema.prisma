@@ -65,7 +65,7 @@ enum WatchStatus {
 model Movie {
   id     String      @id
   name   String
-  status String 
+  status WatchStatus 
   user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
@@ -73,7 +73,7 @@ model Movie {
 model Show {
   id     String      @id
   name   String
-  status String
+  status WatchStatus
   user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }

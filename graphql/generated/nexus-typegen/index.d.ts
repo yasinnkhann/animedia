@@ -361,7 +361,7 @@ export interface NexusGenObjects {
   UserMovie: { // root type
     id?: string | null; // ID
     name?: string | null; // String
-    status?: string | null; // String
+    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
 }
 
@@ -709,7 +709,7 @@ export interface NexusGenFieldTypes {
   UserMovie: { // field return type
     id: string | null; // ID
     name: string | null; // String
-    status: string | null; // String
+    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
 }
 
@@ -1047,7 +1047,7 @@ export interface NexusGenFieldTypeNames {
   UserMovie: { // field return type name
     id: 'ID'
     name: 'String'
-    status: 'String'
+    status: 'WatchStatusTypes'
   }
 }
 
@@ -1056,7 +1056,7 @@ export interface NexusGenArgTypes {
     addedMovie: { // args
       movieId: string; // ID!
       movieName: string; // String!
-      watchStatus: string; // String!
+      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
   }
   Query: {
