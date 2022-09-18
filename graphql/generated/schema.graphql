@@ -158,7 +158,7 @@ type MoviesRes {
 }
 
 type Mutation {
-  addedMovie(movieId: ID!, movieName: String!): UserMovie
+  addedMovie(movieId: ID!, movieName: String!, watchStatus: String!): UserMovie
 }
 
 type PeopleRes {
@@ -420,4 +420,12 @@ type User {
 type UserMovie {
   id: ID
   name: String
+  status: String
+}
+
+enum WatchStatusTypes {
+  COMPLETED
+  NOT_WATCHING
+  PLAN_TO_WATCH
+  WATCHING
 }

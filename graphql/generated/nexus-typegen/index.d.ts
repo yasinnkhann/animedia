@@ -42,6 +42,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   MovieGenreTypes: "Action" | "Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "History" | "Horror" | "Music" | "Mystery" | "Romance" | "Science" | "TV" | "Thriller" | "War" | "Western"
   ShowGenreTypes: "Action_AMPERSAND_Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Kids" | "Mystery" | "News" | "Reality" | "SciDASHFi_AMPERSAND_Fantasy" | "Soap" | "Talk" | "War_AMPERSAND_Politics" | "Western"
+  WatchStatusTypes: "COMPLETED" | "NOT_WATCHING" | "PLAN_TO_WATCH" | "WATCHING"
 }
 
 export interface NexusGenScalars {
@@ -360,6 +361,7 @@ export interface NexusGenObjects {
   UserMovie: { // root type
     id?: string | null; // ID
     name?: string | null; // String
+    status?: string | null; // String
   }
 }
 
@@ -707,6 +709,7 @@ export interface NexusGenFieldTypes {
   UserMovie: { // field return type
     id: string | null; // ID
     name: string | null; // String
+    status: string | null; // String
   }
 }
 
@@ -1044,6 +1047,7 @@ export interface NexusGenFieldTypeNames {
   UserMovie: { // field return type name
     id: 'ID'
     name: 'String'
+    status: 'String'
   }
 }
 
@@ -1052,6 +1056,7 @@ export interface NexusGenArgTypes {
     addedMovie: { // args
       movieId: string; // ID!
       movieName: string; // String!
+      watchStatus: string; // String!
     }
   }
   Query: {

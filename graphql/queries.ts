@@ -737,6 +737,7 @@ export const QUERY_GET_USER = gql`
 			movies {
 				id
 				name
+				status
 			}
 		}
 	}

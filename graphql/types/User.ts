@@ -1,10 +1,26 @@
-import { objectType, extendType, stringArg, nonNull, idArg } from 'nexus';
+import {
+	objectType,
+	extendType,
+	stringArg,
+	nonNull,
+	idArg,
+	enumType,
+} from 'nexus';
+
+export const watchStatusTypes = enumType({
+	name: 'WatchStatusTypes',
+	members: ['NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED'],
+});
 
 export const userMovie = objectType({
 	name: 'UserMovie',
 	definition(t) {
 		t.id('id');
 		t.string('name');
+		t.string('status');
+		// t.field('status', {
+		// 	type: 'WatchStatusTypes',
+		// });
 	},
 });
 
@@ -48,18 +64,19 @@ export const addedMovie = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 				movieName: nonNull(stringArg()),
+				watchStatus: nonNull(stringArg()),
+				// watchStatus: nonNull(watchStatusTypes),
 			},
-			resolve: (_parent, { movieId, movieName }, ctx) => {
+			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				return ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id },
 					data: {
 						movies: {
-							// connect: {
-							// 	id: movieId,
-							// },
 							create: {
 								id: movieId,
 								name: movieName,
+								// status: 'WATCHING',
+								status: watchStatus,
 							},
 						},
 					},

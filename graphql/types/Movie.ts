@@ -362,7 +362,7 @@ export const getMoviesInTheatres = extendType({
 	},
 });
 
-const movieGenreTypes = enumType({
+export const movieGenreTypes = enumType({
 	name: 'MovieGenreTypes',
 	members: [
 		'Action',

@@ -55,16 +55,25 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum WatchStatus {
+  NOT_WATCHING
+  WATCHING
+  PLAN_TO_WATCH
+  COMPLETED
+}
+
 model Movie {
-  id     String @id
+  id     String      @id
   name   String
-  user   User   @relation(fields: [userId], references: [id])
+  status String 
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
 
 model Show {
-  id     String @id
+  id     String      @id
   name   String
-  user   User   @relation(fields: [userId], references: [id])
+  status String
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }

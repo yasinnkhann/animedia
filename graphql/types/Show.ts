@@ -403,7 +403,7 @@ export const getShowReviews = extendType({
 	},
 });
 
-const showGenreTypes = enumType({
+export const showGenreTypes = enumType({
 	name: 'ShowGenreTypes',
 	members: [
 		'Action_AMPERSAND_Adventure',
