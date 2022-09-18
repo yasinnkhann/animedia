@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL } from '../../utils/URLs';
@@ -24,6 +24,11 @@ interface Props {
 const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
+	// const [watchStatus, setWatchStatus] =
+	// 	useState<NexusGenEnums['WatchStatusTypes']>();
+
+	// useEffect(() => {}, []);
+
 	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
 	>(Mutations.MUTATION_ADD_MOVIE, {
@@ -39,6 +44,16 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_USER
 	);
 
+	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
+		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
+			Queries.QUERY_GET_USERS_MOVIE,
+			{
+				movieId: String(movieDetails.id),
+			}
+		);
+
+	console.log('USER MOVIE: ', usersMovieData);
+
 	const handleChange = (value: NexusGenEnums['WatchStatusTypes']) => {
 		console.log(`selected ${value}`);
 		addMovie({
@@ -49,6 +64,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			},
 		});
 		refetchUser();
+		console.log('ADDED');
 	};
 
 	console.log('USER DATA: ', userData);

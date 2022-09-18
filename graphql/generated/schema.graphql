@@ -222,6 +222,7 @@ type Query {
   trendingMovies(page: Int, timeWindow: String!): MoviesRes!
   trendingShows(page: Int, timeWindow: String!): ShowsRes!
   user: User
+  usersMovie(movieId: String!): UserMovie
 }
 
 type ShowDetailsCountry {

@@ -742,3 +742,13 @@ export const QUERY_GET_USER = gql`
 		}
 	}
 `;
+
+export const QUERY_GET_USERS_MOVIE = gql`
+	query UsersMovie($movieId: String!) {
+		usersMovie(movieId: $movieId) {
+			id
+			name
+			status
+		}
+	}
+`;
