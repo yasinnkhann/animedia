@@ -27,8 +27,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	// const [watchStatus, setWatchStatus] =
 	// 	useState<NexusGenEnums['WatchStatusTypes']>();
 
-	// useEffect(() => {}, []);
-
 	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
 	>(Mutations.MUTATION_ADD_MOVIE, {
@@ -44,15 +42,10 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_USER
 	);
 
-	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
-		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
-			Queries.QUERY_GET_USERS_MOVIE,
-			{
-				movieId: String(movieDetails.id),
-			}
-		);
+	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie'][]> =
+		useGQLQuery(Queries.QUERY_GET_USERS_MOVIES);
 
-	console.log('USER MOVIE: ', usersMovieData);
+	console.log('USER MOVIES: ', usersMovieData);
 
 	const handleChange = (value: NexusGenEnums['WatchStatusTypes']) => {
 		console.log(`selected ${value}`);
@@ -67,6 +60,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		console.log('ADDED');
 	};
 
+	// useEffect(() => {}, []);
 	console.log('USER DATA: ', userData);
 
 	return (
@@ -78,7 +72,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			<div>
 				{status === 'authenticated' && session.user && (
 					<Select
-						defaultValue={'NOT_WATCHING'}
+						defaultValue={'' as any}
 						style={{ width: 120 }}
 						onChange={handleChange}
 					>
@@ -88,21 +82,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							</Option>
 						))}
 					</Select>
-					// <button
-					// 	className='bg-green-500'
-					// 	onClick={() => {
-					// 		addMovie({
-					// 			variables: {
-					// 				movieId: String(movieDetails.id),
-					// 				movieName: movieDetails.title,
-					// 				watchStatus: 'PLAN_TO_WATCH',
-					// 			},
-					// 		});
-					// 		refetchUser();
-					// 	}}
-					// >
-					// 	Add to my list
-					// </button>
 				)}
 			</div>
 		</div>

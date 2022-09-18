@@ -548,7 +548,7 @@ export interface NexusGenFieldTypes {
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     user: NexusGenRootTypes['User'] | null; // User
-    usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+    usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -887,7 +887,7 @@ export interface NexusGenFieldTypeNames {
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
     user: 'User'
-    usersMovie: 'UserMovie'
+    usersMovies: 'UserMovie'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1146,9 +1146,6 @@ export interface NexusGenArgTypes {
     trendingShows: { // args
       page?: number | null; // Int
       timeWindow: string; // String!
-    }
-    usersMovie: { // args
-      movieId: string; // String!
     }
   }
 }

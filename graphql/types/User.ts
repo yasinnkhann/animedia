@@ -90,22 +90,34 @@ export const addedMovie = extendType({
 	},
 });
 
-export const usersMovie = extendType({
+export const usersMovies = extendType({
 	type: 'Query',
 	definition(t) {
-		t.field('usersMovie', {
+		t.list.field('usersMovies', {
 			type: 'UserMovie',
-			args: {
-				movieId: nonNull(stringArg()),
-			},
-			resolve: (_parent, { movieId }, ctx) => {
-				return ctx.prisma.movie.findUnique({
+			resolve: (_parent, _args, ctx) => {
+				return ctx.prisma.movie.findMany({
 					where: {
 						userId: ctx.session!.user?.id,
-						id: movieId,
 					},
 				});
 			},
 		});
 	},
 });
+
+// export const usersMovie = extendType({
+// 	type: 'Query',
+// 	definition(t) {
+// 		t.field('usersMovie', {
+// 			type: 'UserMovie',
+// 			resolve: (_parent, _args, ctx) => {
+// 				return ctx.prisma.movie.findUnique({
+// 					where: {
+// 						userId: ctx.session!.user?.id,
+// 					},
+// 				});
+// 			},
+// 		});
+// 	},
+// });
