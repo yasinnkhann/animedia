@@ -9,7 +9,14 @@ import {
 
 export const watchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
-	members: ['NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED'],
+	members: [
+		'NOT_WATCHING',
+		'WATCHING',
+		'PLAN_TO_WATCH',
+		'COMPLETED',
+		'ON_HOLD',
+		'DROPPED',
+	],
 });
 
 export const userMovie = objectType({

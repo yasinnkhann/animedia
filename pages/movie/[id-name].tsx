@@ -6,12 +6,16 @@ import { useSession } from 'next-auth/react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { IUseGetQuery } from '@ts/interfaces';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
+	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { IUseGetQuery } from '@ts/interfaces';
-import { useMutation, useQuery } from '@apollo/client';
+import { Select } from 'antd';
+import { watchStatusOptions } from 'models/watchStatusOptions';
+
+const { Option } = Select;
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -25,7 +29,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	>(Mutations.MUTATION_ADD_MOVIE, {
 		movieId: String(movieDetails.id),
 		movieName: movieDetails.title,
-		watchStatus: 'WATCHING',
+		watchStatus: 'PLAN_TO_WATCH',
 	});
 
 	const {
@@ -34,6 +38,18 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	}: IUseGetQuery<NexusGenObjects['User']> = useGQLQuery(
 		Queries.QUERY_GET_USER
 	);
+
+	const handleChange = (value: NexusGenEnums['WatchStatusTypes']) => {
+		console.log(`selected ${value}`);
+		addMovie({
+			variables: {
+				movieId: String(movieDetails.id),
+				movieName: movieDetails.title,
+				watchStatus: value,
+			},
+		});
+		refetchUser();
+	};
 
 	console.log('USER DATA: ', userData);
 
@@ -45,21 +61,32 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</div>
 			<div>
 				{status === 'authenticated' && session.user && (
-					<button
-						className='bg-green-500'
-						onClick={() => {
-							addMovie({
-								variables: {
-									movieId: String(movieDetails.id),
-									movieName: movieDetails.title,
-									watchStatus: 'WATCHING',
-								},
-							});
-							refetchUser();
-						}}
+					<Select
+						defaultValue={'NOT_WATCHING'}
+						style={{ width: 120 }}
+						onChange={handleChange}
 					>
-						Add to my list
-					</button>
+						{watchStatusOptions.map(option => (
+							<Option key={option.value} value={option.value}>
+								{option.text}
+							</Option>
+						))}
+					</Select>
+					// <button
+					// 	className='bg-green-500'
+					// 	onClick={() => {
+					// 		addMovie({
+					// 			variables: {
+					// 				movieId: String(movieDetails.id),
+					// 				movieName: movieDetails.title,
+					// 				watchStatus: 'PLAN_TO_WATCH',
+					// 			},
+					// 		});
+					// 		refetchUser();
+					// 	}}
+					// >
+					// 	Add to my list
+					// </button>
 				)}
 			</div>
 		</div>

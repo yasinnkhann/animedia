@@ -425,7 +425,9 @@ type UserMovie {
 
 enum WatchStatusTypes {
   COMPLETED
+  DROPPED
   NOT_WATCHING
+  ON_HOLD
   PLAN_TO_WATCH
   WATCHING
 }
