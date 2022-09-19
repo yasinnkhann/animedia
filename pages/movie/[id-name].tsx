@@ -12,10 +12,7 @@ import {
 	NexusGenArgTypes,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { Select } from 'antd';
 import { watchStatusOptions } from 'models/watchStatusOptions';
-
-const { Option } = Select;
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -50,17 +47,20 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			}
 		);
 
-	const handleChange = (value: NexusGenEnums['WatchStatusTypes']) => {
-		console.log(`selected ${value}`);
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const { value } = e.target;
+
+		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
+
 		addMovie({
 			variables: {
 				movieId: String(movieDetails.id),
 				movieName: movieDetails.title,
-				watchStatus: value,
+				watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 			},
 		});
+
 		refetchUser();
-		console.log('ADDED');
 	};
 
 	useEffect(() => {
@@ -83,17 +83,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</div>
 			<div>
 				{status === 'authenticated' && session.user && (
-					<Select
-						defaultValue={watchStatus}
-						style={{ width: 120 }}
-						onChange={handleChange}
-					>
+					<select value={watchStatus} onChange={handleChange}>
 						{watchStatusOptions.map(option => (
-							<Option key={option.value} value={option.value}>
+							<option key={option.value} value={option.value}>
 								{option.text}
-							</Option>
+							</option>
 						))}
-					</Select>
+					</select>
 				)}
 			</div>
 		</div>
