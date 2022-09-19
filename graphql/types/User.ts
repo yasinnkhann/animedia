@@ -125,3 +125,25 @@ export const usersMovie = extendType({
 		});
 	},
 });
+
+// export const updateMovie = extendType({
+// 	type: 'Mutation',
+// 	definition(t) {
+// 		t.field('updatedMovie', {
+// 			type: 'UserMovie',
+// 			args: {
+// 				movieId: nonNull(idArg()),
+// 				watchStatus: nonNull(watchStatusTypes),
+// 			},
+// 			resolve: (_parent, { movieId, watchStatus }, ctx) => {
+// 				return ctx.prisma.movie.update({
+// 					where: { id: movieId, userId: ctx.session!.user?.id },
+// 					data: {
+// 						id: movieId,
+// 						status: watchStatus,
+// 					},
+// 				});
+// 			},
+// 		});
+// 	},
+// });

@@ -29,15 +29,11 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	>(Mutations.MUTATION_ADD_MOVIE, {
 		movieId: String(movieDetails.id),
 		movieName: movieDetails.title,
-		watchStatus: 'PLAN_TO_WATCH',
+		watchStatus,
 	});
 
-	const {
-		refetch: refetchUser,
-		data: userData,
-	}: IUseGetQuery<NexusGenObjects['User']> = useGQLQuery(
-		Queries.QUERY_GET_USER
-	);
+	const { refetch: refetchUser }: IUseGetQuery<NexusGenObjects['User']> =
+		useGQLQuery(Queries.QUERY_GET_USER);
 
 	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
 		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
@@ -49,6 +45,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
+		console.log(value);
 
 		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
 
@@ -68,12 +65,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			setWatchStatus(usersMovieData.status!);
 		}
 	}, [usersMovieData]);
-
-	console.log('USER DATA: ', userData);
-
-	console.log('USERS MOVIE: ', usersMovieData);
-
-	console.log('WATCH STATUS: ', watchStatus);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
