@@ -42,10 +42,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_USER
 	);
 
-	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_MOVIES);
-
-	console.log('USER MOVIES: ', usersMovieData);
+	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
+		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
+			Queries.QUERY_GET_USERS_MOVIE,
+			{
+				movieId: String(movieDetails.id),
+			}
+		);
 
 	const handleChange = (value: NexusGenEnums['WatchStatusTypes']) => {
 		console.log(`selected ${value}`);
@@ -62,6 +65,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	// useEffect(() => {}, []);
 	console.log('USER DATA: ', userData);
+
+	console.log('USERS MOVIE: ', usersMovieData);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>

@@ -106,18 +106,22 @@ export const usersMovies = extendType({
 	},
 });
 
-// export const usersMovie = extendType({
-// 	type: 'Query',
-// 	definition(t) {
-// 		t.field('usersMovie', {
-// 			type: 'UserMovie',
-// 			resolve: (_parent, _args, ctx) => {
-// 				return ctx.prisma.movie.findUnique({
-// 					where: {
-// 						userId: ctx.session!.user?.id,
-// 					},
-// 				});
-// 			},
-// 		});
-// 	},
-// });
+export const usersMovie = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('usersMovie', {
+			type: 'UserMovie',
+			args: {
+				movieId: nonNull(stringArg()),
+			},
+			resolve: (_parent, { movieId }, ctx) => {
+				return ctx.prisma.movie.findFirst({
+					where: {
+						id: movieId,
+						userId: ctx.session!.user?.id,
+					},
+				});
+			},
+		});
+	},
+});
