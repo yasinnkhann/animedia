@@ -51,7 +51,7 @@ export const getUser = extendType({
 
 			resolve: (_parent, _args, ctx) => {
 				return ctx.prisma.user.findUnique({
-					where: { id: ctx.session!.user?.id },
+					where: { id: ctx.session!.user?.id! },
 					include: {
 						movies: true,
 						// shows: true,
@@ -74,7 +74,7 @@ export const addedMovie = extendType({
 			},
 			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				return ctx.prisma.user.update({
-					where: { id: ctx.session!.user?.id },
+					where: { id: ctx.session!.user?.id! },
 					data: {
 						movies: {
 							create: {
@@ -98,7 +98,7 @@ export const usersMovies = extendType({
 			resolve: (_parent, _args, ctx) => {
 				return ctx.prisma.movie.findMany({
 					where: {
-						userId: ctx.session!.user?.id,
+						userId: ctx.session!.user?.id!,
 					},
 				});
 			},
@@ -118,7 +118,7 @@ export const usersMovie = extendType({
 				return ctx.prisma.movie.findFirst({
 					where: {
 						id: movieId,
-						userId: ctx.session!.user?.id,
+						userId: ctx.session!.user?.id!,
 					},
 				});
 			},
@@ -126,24 +126,23 @@ export const usersMovie = extendType({
 	},
 });
 
-// export const updateMovie = extendType({
-// 	type: 'Mutation',
-// 	definition(t) {
-// 		t.field('updatedMovie', {
-// 			type: 'UserMovie',
-// 			args: {
-// 				movieId: nonNull(idArg()),
-// 				watchStatus: nonNull(watchStatusTypes),
-// 			},
-// 			resolve: (_parent, { movieId, watchStatus }, ctx) => {
-// 				return ctx.prisma.movie.update({
-// 					where: { id: movieId, userId: ctx.session!.user?.id },
-// 					data: {
-// 						id: movieId,
-// 						status: watchStatus,
-// 					},
-// 				});
-// 			},
-// 		});
-// 	},
-// });
+export const updateMovie = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('updatedMovie', {
+			type: 'UserMovie',
+			args: {
+				movieId: nonNull(idArg()),
+				watchStatus: nonNull(watchStatusTypes),
+			},
+			resolve: (_parent, { movieId, watchStatus }, ctx) => {
+				return ctx.prisma.movie.update({
+					where: { id: movieId, userId: ctx.session!.user?.id! },
+					data: {
+						status: watchStatus,
+					},
+				});
+			},
+		});
+	},
+});

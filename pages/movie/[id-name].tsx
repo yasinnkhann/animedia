@@ -43,6 +43,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			}
 		);
 
+	console.log('USERS MOVIE: ', usersMovieData);
+
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		console.log(value);

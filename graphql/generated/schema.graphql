@@ -159,6 +159,7 @@ type MoviesRes {
 
 type Mutation {
   addedMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
+  updatedMovie(movieId: ID!, watchStatus: WatchStatusTypes!): UserMovie
 }
 
 type PeopleRes {
