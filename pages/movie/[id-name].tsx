@@ -24,8 +24,8 @@ interface Props {
 const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
-	// const [watchStatus, setWatchStatus] =
-	// 	useState<NexusGenEnums['WatchStatusTypes']>();
+	const [watchStatus, setWatchStatus] =
+		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
 	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
@@ -63,10 +63,17 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		console.log('ADDED');
 	};
 
-	// useEffect(() => {}, []);
+	useEffect(() => {
+		if (usersMovieData) {
+			setWatchStatus(usersMovieData.status!);
+		}
+	}, [usersMovieData]);
+
 	console.log('USER DATA: ', userData);
 
 	console.log('USERS MOVIE: ', usersMovieData);
+
+	console.log('WATCH STATUS: ', watchStatus);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
@@ -77,7 +84,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			<div>
 				{status === 'authenticated' && session.user && (
 					<Select
-						defaultValue={'' as any}
+						defaultValue={watchStatus}
 						style={{ width: 120 }}
 						onChange={handleChange}
 					>
