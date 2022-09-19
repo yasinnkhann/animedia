@@ -27,3 +27,13 @@ export const MUTATION_UPDATE_MOVIE = gql`
 		}
 	}
 `;
+
+export const MUTATION_DELETE_MOVIE = gql`
+	mutation DeletedMovie($movieId: ID!) {
+		deletedMovie(movieId: $movieId) {
+			id
+			name
+			status
+		}
+	}
+`;

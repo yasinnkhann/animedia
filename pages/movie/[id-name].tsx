@@ -50,6 +50,12 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		watchStatus,
 	});
 
+	const { mutateFunction: deleteMovie } = useGQLMutation<
+		NexusGenArgTypes['Mutation']['deletedMovie']
+	>(Mutations.MUTATION_DELETE_MOVIE, {
+		movieId: String(movieDetails.id),
+	});
+
 	console.log('USERS MOVIE: ', usersMovieData);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -59,12 +65,20 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
 
 		if (usersMovieData) {
-			updateMovie({
-				variables: {
-					movieId: String(movieDetails.id),
-					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-				},
-			});
+			if ((value as NexusGenEnums['WatchStatusTypes']) === 'NOT_WATCHING') {
+				deleteMovie({
+					variables: {
+						movieId: String(movieDetails.id),
+					},
+				});
+			} else {
+				updateMovie({
+					variables: {
+						movieId: String(movieDetails.id),
+						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+					},
+				});
+			}
 		} else {
 			addMovie({
 				variables: {

@@ -115,10 +115,12 @@ export const usersMovie = extendType({
 				movieId: nonNull(stringArg()),
 			},
 			resolve: (_parent, { movieId }, ctx) => {
-				return ctx.prisma.movie.findFirst({
+				return ctx.prisma.movie.findUnique({
 					where: {
-						id: movieId,
-						userId: ctx.session!.user?.id!,
+						id_userId: {
+							id: movieId,
+							userId: ctx.session!.user?.id!,
+						},
 					},
 				});
 			},
@@ -137,7 +139,6 @@ export const updateMovie = extendType({
 			},
 			resolve: (_parent, { movieId, watchStatus }, ctx) => {
 				return ctx.prisma.movie.update({
-					// where: { id: movieId, userId: ctx.session!.user?.id! },
 					where: {
 						id_userId: {
 							id: movieId,
@@ -146,6 +147,28 @@ export const updateMovie = extendType({
 					},
 					data: {
 						status: watchStatus,
+					},
+				});
+			},
+		});
+	},
+});
+
+export const deleteMovie = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('deletedMovie', {
+			type: 'UserMovie',
+			args: {
+				movieId: nonNull(idArg()),
+			},
+			resolve: (_parent, { movieId }, ctx) => {
+				return ctx.prisma.movie.delete({
+					where: {
+						id_userId: {
+							id: movieId,
+							userId: ctx.session!.user?.id!,
+						},
 					},
 				});
 			},

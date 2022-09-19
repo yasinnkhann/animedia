@@ -489,6 +489,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+    deletedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updatedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
   }
   PeopleRes: { // field return type
@@ -830,6 +831,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addedMovie: 'UserMovie'
+    deletedMovie: 'UserMovie'
     updatedMovie: 'UserMovie'
   }
   PeopleRes: { // field return type name
@@ -1063,6 +1065,9 @@ export interface NexusGenArgTypes {
       movieId: string; // ID!
       movieName: string; // String!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+    }
+    deletedMovie: { // args
+      movieId: string; // ID!
     }
     updatedMovie: { // args
       movieId: string; // ID!
