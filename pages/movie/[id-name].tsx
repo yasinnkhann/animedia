@@ -32,16 +32,14 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		watchStatus,
 	});
 
-	const { refetch: refetchUser }: IUseGetQuery<NexusGenObjects['User']> =
-		useGQLQuery(Queries.QUERY_GET_USER);
-
-	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
-		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
-			Queries.QUERY_GET_USERS_MOVIE,
-			{
-				movieId: String(movieDetails.id),
-			}
-		);
+	const {
+		data: usersMovieData,
+		refetch: refetchUsersMovie,
+	}: IUseGetQuery<NexusGenObjects['UserMovie']> = useGQLQuery<
+		NexusGenArgTypes['Query']['usersMovie']
+	>(Queries.QUERY_GET_USERS_MOVIE, {
+		movieId: String(movieDetails.id),
+	});
 
 	const { mutateFunction: updateMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['updatedMovie']
@@ -89,7 +87,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			});
 		}
 
-		refetchUser();
+		// refetchUsersMovie();
 	};
 
 	useEffect(() => {
