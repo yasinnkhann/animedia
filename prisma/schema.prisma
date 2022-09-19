@@ -65,11 +65,13 @@ enum WatchStatus {
 }
 
 model Movie {
-  id     String      @id
+  id     String
   name   String
   status WatchStatus
   user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+
+  @@id([id, userId])
 }
 
 model Show {

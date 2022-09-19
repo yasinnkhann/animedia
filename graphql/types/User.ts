@@ -137,7 +137,13 @@ export const updateMovie = extendType({
 			},
 			resolve: (_parent, { movieId, watchStatus }, ctx) => {
 				return ctx.prisma.movie.update({
-					where: { id: movieId, userId: ctx.session!.user?.id! },
+					// where: { id: movieId, userId: ctx.session!.user?.id! },
+					where: {
+						id_userId: {
+							id: movieId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
 					data: {
 						status: watchStatus,
 					},

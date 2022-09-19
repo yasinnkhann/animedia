@@ -17,3 +17,13 @@ export const MUTATION_ADD_MOVIE = gql`
 		}
 	}
 `;
+
+export const MUTATION_UPDATE_MOVIE = gql`
+	mutation UpdatedMovie($movieId: ID!, $watchStatus: WatchStatusTypes!) {
+		updatedMovie(movieId: $movieId, watchStatus: $watchStatus) {
+			id
+			name
+			status
+		}
+	}
+`;

@@ -43,6 +43,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			}
 		);
 
+	const { mutateFunction: updateMovie } = useGQLMutation<
+		NexusGenArgTypes['Mutation']['updatedMovie']
+	>(Mutations.MUTATION_UPDATE_MOVIE, {
+		movieId: String(movieDetails.id),
+		watchStatus,
+	});
+
 	console.log('USERS MOVIE: ', usersMovieData);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -51,13 +58,22 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
 
-		addMovie({
-			variables: {
-				movieId: String(movieDetails.id),
-				movieName: movieDetails.title,
-				watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-			},
-		});
+		if (usersMovieData) {
+			updateMovie({
+				variables: {
+					movieId: String(movieDetails.id),
+					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+				},
+			});
+		} else {
+			addMovie({
+				variables: {
+					movieId: String(movieDetails.id),
+					movieName: movieDetails.title,
+					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+				},
+			});
+		}
 
 		refetchUser();
 	};
