@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -24,21 +24,20 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
-	// const {
-	// 	data: userData,
-	// 	refetch: refetchUserData,
-	// }: IUseGetQuery<NexusGenObjects['User']> = useGQLQuery(
-	// 	Queries.QUERY_GET_USER
-	// );
-
 	const {
 		data: usersMovieData,
 		refetch: refetchUsersMovieData,
-	}: IUseGetQuery<NexusGenObjects['UserMovie']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
-	>(Queries.QUERY_GET_USERS_MOVIE, {
-		movieId: String(movieDetails.id),
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
+		Queries.QUERY_GET_USERS_MOVIE,
+		{
+			variables: {
+				movieId: String(movieDetails.id),
+			},
+		}
+	);
 
 	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
@@ -91,7 +90,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				},
 			});
 		}
-		// refetchUsersMovieData();
 	};
 
 	useEffect(() => {

@@ -9,7 +9,7 @@ import {
 	NexusGenArgTypes,
 } from '../graphql/generated/nexus-typegen';
 import SearchResult from '../components/UI/SearchUI/SearchResult';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
 
 const Search: NextPage = () => {
@@ -23,33 +23,51 @@ const Search: NextPage = () => {
 		loading: searchedMoviesLoading,
 		error: searchedMoviesError,
 		refetch: refetchSearchedMovies,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['searchedMovies']
-	>(Queries.QUERY_SEARCHED_MOVIES, {
-		q: (router.query.q as string) ?? '',
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['searchedMovies']>(
+		Queries.QUERY_SEARCHED_MOVIES,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+			},
+		}
+	);
 
 	const {
 		data: searchedShows,
 		loading: searchedShowsLoading,
 		error: searchedShowsError,
 		refetch: refetchSearchedShows,
-	}: IUseGetQuery<NexusGenObjects['ShowsRes']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['searchedShows']
-	>(Queries.QUERY_SEARCHED_SHOWS, {
-		q: (router.query.q as string) ?? '',
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['searchedShows']>(
+		Queries.QUERY_SEARCHED_SHOWS,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+			},
+		}
+	);
 
 	const {
 		data: searchedPeople,
 		loading: searchedPeopleLoading,
 		error: searchedPeopleError,
 		refetch: refetchSearchedPeople,
-	}: IUseGetQuery<NexusGenObjects['PeopleRes']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['PeopleRes'],
 		NexusGenArgTypes['Query']['searchedPeople']
-	>(Queries.QUERY_SEARCHED_PEOPLE, {
-		q: (router.query.q as string) ?? '',
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['searchedPeople']>(
+		Queries.QUERY_SEARCHED_PEOPLE,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+			},
+		}
+	);
 
 	const getSearchedTypeData = () => {
 		// return components here

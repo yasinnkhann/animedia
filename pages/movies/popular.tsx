@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -19,11 +19,17 @@ const PopularMovies = () => {
 
 	const {
 		data: popularMoviesData,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['popularMovies']
-	>(Queries.QUERY_POPULAR_MOVIES, {
-		page: currPage,
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['popularMovies']>(
+		Queries.QUERY_POPULAR_MOVIES,
+		{
+			variables: {
+				page: currPage,
+			},
+		}
+	);
 
 	useEffect(() => {
 		if (popularMoviesData) {

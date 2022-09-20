@@ -12,7 +12,7 @@ import {
 	MOVIE_GENRE_TYPE_OPTIONS,
 } from '../../models/dropDownOptions';
 import { DocumentNode } from '@apollo/client';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
@@ -36,12 +36,18 @@ const Genre = () => {
 
 	const {
 		data: genreOfMoviesData,
-	}: IUseGetQuery<NexusGenObjects['MoviesRes']> = useGQLQuery<
+	}: IUseGQLQuery<
+		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['popularMoviesByGenre']
-	>(sortByQueryType, {
-		genre: movieGenreType,
-		page: currPage,
-	});
+	> = useGQLQuery<NexusGenArgTypes['Query']['popularMoviesByGenre']>(
+		sortByQueryType,
+		{
+			variables: {
+				genre: movieGenreType,
+				page: currPage,
+			},
+		}
+	);
 
 	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
 		console.log(`selected ${value}`);

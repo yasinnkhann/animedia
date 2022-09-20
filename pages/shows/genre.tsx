@@ -12,7 +12,7 @@ import {
 	SHOW_GENRE_TYPE_OPTIONS,
 } from '../../models/dropDownOptions';
 import { DocumentNode } from '@apollo/client';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
@@ -35,14 +35,20 @@ const Genre = () => {
 		NexusGenEnums['ShowGenreTypes']
 	>('Action_AMPERSAND_Adventure');
 
-	const { data: genreOfShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGQLQuery<NexusGenArgTypes['Query']['popularShowsByGenre']>(
-			sortByQueryType,
-			{
+	const {
+		data: genreOfShowsData,
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowsRes'],
+		NexusGenArgTypes['Query']['popularShowsByGenre']
+	> = useGQLQuery<NexusGenArgTypes['Query']['popularShowsByGenre']>(
+		sortByQueryType,
+		{
+			variables: {
 				genre: showGenreType,
 				page: currPage,
-			}
-		);
+			},
+		}
+	);
 
 	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
 		if (value === 'Popular') {

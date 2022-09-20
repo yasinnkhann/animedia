@@ -3,15 +3,19 @@ import {
 	useQuery,
 	useLazyQuery,
 	useMutation,
+	QueryHookOptions,
 } from '@apollo/client';
 
-export function useGQLQuery<T>(gqlQueryName: DocumentNode, variables?: T) {
-	const { data, loading, error, refetch } = useQuery(gqlQueryName, {
-		variables,
-	});
+export function useGQLQuery<TVars>(
+	query: DocumentNode,
+	options?: QueryHookOptions<any, TVars>
+) {
+	const { data, loading, error, refetch } = useQuery(query, options);
 
-	const [fetchData, { data: lazyData, error: lazyError }] =
-		useLazyQuery(gqlQueryName);
+	const [
+		fetchData,
+		{ data: lazyData, loading: lazyLoading, error: lazyError },
+	] = useLazyQuery(query, options);
 
 	return {
 		data: data?.[Object.keys(data)[0]],
@@ -20,6 +24,7 @@ export function useGQLQuery<T>(gqlQueryName: DocumentNode, variables?: T) {
 		refetch,
 		fetchData,
 		lazyData: lazyData?.[Object.keys(lazyData)[0]],
+		lazyLoading,
 		lazyError,
 	};
 }

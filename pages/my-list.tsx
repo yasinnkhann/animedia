@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import type { NextPage } from 'next';
 import { getClientAuthSession } from '../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../hooks/useGQL';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import * as Queries from '../graphql/queries';
 
@@ -13,11 +13,11 @@ const MyList: NextPage = () => {
 
 	console.log('SESSION: ', session);
 
-	const { data: userData }: IUseGetQuery<NexusGenObjects['User']> = useGQLQuery(
+	const { data: userData }: IUseGQLQuery<NexusGenObjects['User']> = useGQLQuery(
 		Queries.QUERY_GET_USER
 	);
 
-	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie'][]> =
+	const { data: usersMovieData }: IUseGQLQuery<NexusGenObjects['UserMovie'][]> =
 		useGQLQuery(Queries.QUERY_GET_USERS_MOVIES);
 
 	console.log('USER MOVIES: ', usersMovieData);

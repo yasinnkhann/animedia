@@ -1,17 +1,18 @@
 import { ApolloError } from '@apollo/client/errors';
-import { ApolloQueryResult, OperationVariables } from '@apollo/client/core';
+import { ApolloQueryResult } from '@apollo/client/core';
 import { LazyQueryExecFunction } from '@apollo/client/react/types/types';
 import { ESearchType } from '../enums/index';
 
-export interface IUseGetQuery<T> {
-	data: T | undefined;
+export interface IUseGQLQuery<TData, TVars = undefined> {
+	data: TData | undefined;
 	loading: boolean;
 	error: ApolloError | undefined;
 	refetch: (
-		variables?: Partial<any> | undefined
+		variables?: Partial<TVars> | undefined
 	) => Promise<ApolloQueryResult<any>>;
-	fetchData: LazyQueryExecFunction<any, OperationVariables>;
-	lazyData: T | undefined;
+	fetchData: LazyQueryExecFunction<any, TVars>;
+	lazyData: TData | undefined;
+	lazyLoading: boolean;
 	lazyError: ApolloError | undefined;
 }
 

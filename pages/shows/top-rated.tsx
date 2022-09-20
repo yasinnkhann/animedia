@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IUseGetQuery } from '@ts/interfaces';
+import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -17,13 +17,19 @@ const TopRatedShows = () => {
 	const [currPage, setCurrPage] = useState(1);
 	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
 
-	const { data: topRatedShowsData }: IUseGetQuery<NexusGenObjects['ShowsRes']> =
-		useGQLQuery<NexusGenArgTypes['Query']['topRatedShows']>(
-			Queries.QUERY_TOP_RATED_SHOWS,
-			{
+	const {
+		data: topRatedShowsData,
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowsRes'],
+		NexusGenArgTypes['Query']['topRatedShows']
+	> = useGQLQuery<NexusGenArgTypes['Query']['topRatedShows']>(
+		Queries.QUERY_TOP_RATED_SHOWS,
+		{
+			variables: {
 				page: currPage,
-			}
-		);
+			},
+		}
+	);
 
 	useEffect(() => {
 		if (topRatedShowsData) {
