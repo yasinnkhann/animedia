@@ -24,21 +24,27 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
+	// const {
+	// 	data: userData,
+	// 	refetch: refetchUserData,
+	// }: IUseGetQuery<NexusGenObjects['User']> = useGQLQuery(
+	// 	Queries.QUERY_GET_USER
+	// );
+
+	const { data: usersMovieData }: IUseGetQuery<NexusGenObjects['UserMovie']> =
+		useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
+			Queries.QUERY_GET_USERS_MOVIE,
+			{
+				movieId: String(movieDetails.id),
+			}
+		);
+
 	const { mutateFunction: addMovie } = useGQLMutation<
 		NexusGenArgTypes['Mutation']['addedMovie']
 	>(Mutations.MUTATION_ADD_MOVIE, {
 		movieId: String(movieDetails.id),
 		movieName: movieDetails.title,
 		watchStatus,
-	});
-
-	const {
-		data: usersMovieData,
-		refetch: refetchUsersMovie,
-	}: IUseGetQuery<NexusGenObjects['UserMovie']> = useGQLQuery<
-		NexusGenArgTypes['Query']['usersMovie']
-	>(Queries.QUERY_GET_USERS_MOVIE, {
-		movieId: String(movieDetails.id),
 	});
 
 	const { mutateFunction: updateMovie } = useGQLMutation<
@@ -53,8 +59,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	>(Mutations.MUTATION_DELETE_MOVIE, {
 		movieId: String(movieDetails.id),
 	});
-
-	console.log('USERS MOVIE: ', usersMovieData);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
@@ -86,8 +90,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				},
 			});
 		}
-
-		// refetchUsersMovie();
+		// refetchUserData();
 	};
 
 	useEffect(() => {
@@ -95,6 +98,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			setWatchStatus(usersMovieData.status!);
 		}
 	}, [usersMovieData]);
+
+	console.log('USERS MOVIE: ', usersMovieData);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>

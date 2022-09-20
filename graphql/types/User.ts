@@ -62,34 +62,6 @@ export const getUser = extendType({
 	},
 });
 
-export const addedMovie = extendType({
-	type: 'Mutation',
-	definition(t) {
-		t.field('addedMovie', {
-			type: 'UserMovie',
-			args: {
-				movieId: nonNull(idArg()),
-				movieName: nonNull(stringArg()),
-				watchStatus: nonNull(watchStatusTypes),
-			},
-			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
-				return ctx.prisma.user.update({
-					where: { id: ctx.session!.user?.id! },
-					data: {
-						movies: {
-							create: {
-								id: movieId,
-								name: movieName,
-								status: watchStatus,
-							},
-						},
-					},
-				});
-			},
-		});
-	},
-});
-
 export const usersMovies = extendType({
 	type: 'Query',
 	definition(t) {
@@ -120,6 +92,34 @@ export const usersMovie = extendType({
 						id_userId: {
 							id: movieId,
 							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		});
+	},
+});
+
+export const addedMovie = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('addedMovie', {
+			type: 'UserMovie',
+			args: {
+				movieId: nonNull(idArg()),
+				movieName: nonNull(stringArg()),
+				watchStatus: nonNull(watchStatusTypes),
+			},
+			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
+				return ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id! },
+					data: {
+						movies: {
+							create: {
+								id: movieId,
+								name: movieName,
+								status: watchStatus,
+							},
 						},
 					},
 				});
