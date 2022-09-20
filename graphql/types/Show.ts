@@ -12,6 +12,7 @@ import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
+import { timeWindowTypes } from 'graphql/models/enums';
 
 export const showResult = objectType({
 	name: 'ShowResult',
@@ -295,7 +296,9 @@ export const getTrendingShows = extendType({
 		t.nonNull.field('trendingShows', {
 			type: 'ShowsRes',
 			args: {
-				timeWindow: nonNull(stringArg()),
+				timeWindow: arg({
+					type: nonNull(timeWindowTypes),
+				}),
 				page: intArg(),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {

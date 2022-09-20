@@ -6,8 +6,8 @@ import { BASE_URL } from './URLs';
 // type TTimeWindow = 'day' | 'week';
 
 export const GET_TRENDING_MEDIA = async (
-	mediaType: string,
-	timeWindow: string,
+	mediaType: 'all' | 'movie' | 'tv' | 'person',
+	timeWindow: 'day' | 'week',
 	pageNum: number | null | undefined
 ) => {
 	const { data } = await axios.get(

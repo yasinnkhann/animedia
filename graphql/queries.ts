@@ -125,7 +125,7 @@ export const QUERY_POPULAR_ANIME_MOVIES = gql`
 `;
 
 export const QUERY_TRENDING_MOVIES = gql`
-	query TrendingMovies($timeWindow: String!, $page: Int) {
+	query TrendingMovies($timeWindow: TimeWindowTypes!, $page: Int) {
 		trendingMovies(timeWindow: $timeWindow, page: $page) {
 			page
 			total_pages
@@ -485,7 +485,7 @@ export const QUERY_POPULAR_ANIME_SHOWS = gql`
 `;
 
 export const QUERY_TRENDING_SHOWS = gql`
-	query TrendingShows($timeWindow: String!, $page: Int) {
+	query TrendingShows($timeWindow: TimeWindowTypes!, $page: Int) {
 		trendingShows(timeWindow: $timeWindow, page: $page) {
 			page
 			total_pages

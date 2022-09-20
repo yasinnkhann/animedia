@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
 import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';

@@ -221,8 +221,8 @@ type Query {
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   topRatedShows(page: Int): ShowsRes!
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
-  trendingMovies(page: Int, timeWindow: String!): MoviesRes!
-  trendingShows(page: Int, timeWindow: String!): ShowsRes!
+  trendingMovies(page: Int, timeWindow: TimeWindowTypes!): MoviesRes!
+  trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
   user: User
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]
@@ -411,6 +411,11 @@ type ShowsRes {
 type TheatreDates {
   maximum: String!
   minimum: String!
+}
+
+enum TimeWindowTypes {
+  day
+  week
 }
 
 type User {

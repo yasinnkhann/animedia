@@ -12,6 +12,7 @@ import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
+import { timeWindowTypes } from '../models/enums';
 
 export const movieResult = objectType({
 	name: 'MovieResult',
@@ -208,7 +209,9 @@ export const getTrendingMovies = extendType({
 		t.nonNull.field('trendingMovies', {
 			type: 'MoviesRes',
 			args: {
-				timeWindow: nonNull(stringArg()),
+				timeWindow: arg({
+					type: nonNull(timeWindowTypes),
+				}),
 				page: intArg(),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
