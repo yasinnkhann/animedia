@@ -4,11 +4,6 @@ export enum ESearchResultsType {
 	PEOPLE = 'people',
 }
 
-export enum EHorizontalScrollerTimeWindow {
-	DAY = 'day',
-	WEEK = 'week',
-}
-
 export enum ESearchType {
 	MOVIE = 'movie',
 	SHOW = 'show',

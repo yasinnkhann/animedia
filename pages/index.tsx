@@ -6,11 +6,11 @@ import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
-import { EHorizontalScrollerTimeWindow } from '@ts/enums';
 import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
+	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
 
 const Home: NextPage = () => {
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
 	);
 
 	const [trendingTimeWindow, setTrendingTimeWindow] =
-		useState<EHorizontalScrollerTimeWindow>(EHorizontalScrollerTimeWindow.DAY);
+		useState<NexusGenEnums['TimeWindowTypes']>('day');
 
 	const { data: whatsPopularData }: IUseGQLQuery<NexusGenObjects['MoviesRes']> =
 		useGQLQuery(whatsPopularQueryType);
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
 		Queries.QUERY_TRENDING_MOVIES,
 		{
 			variables: {
-				timeWindow: EHorizontalScrollerTimeWindow.WEEK,
+				timeWindow: 'week',
 			},
 		}
 	);
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
 		Queries.QUERY_TRENDING_SHOWS,
 		{
 			variables: {
-				timeWindow: EHorizontalScrollerTimeWindow.DAY,
+				timeWindow: 'day',
 			},
 		}
 	);
@@ -98,7 +98,7 @@ const Home: NextPage = () => {
 		Queries.QUERY_TRENDING_SHOWS,
 		{
 			variables: {
-				timeWindow: EHorizontalScrollerTimeWindow.WEEK,
+				timeWindow: 'week',
 			},
 		}
 	);
@@ -200,13 +200,11 @@ const Home: NextPage = () => {
 									className='cursor-pointer'
 									style={{
 										borderBottom:
-											trendingTimeWindow === EHorizontalScrollerTimeWindow.DAY
+											trendingTimeWindow === 'day'
 												? '5px solid black'
 												: undefined,
 									}}
-									onClick={() =>
-										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.DAY)
-									}
+									onClick={() => setTrendingTimeWindow('day')}
 								>
 									Today
 								</li>
@@ -214,13 +212,11 @@ const Home: NextPage = () => {
 									className='cursor-pointer'
 									style={{
 										borderBottom:
-											trendingTimeWindow === EHorizontalScrollerTimeWindow.WEEK
+											trendingTimeWindow === 'week'
 												? '5px solid black'
 												: undefined,
 									}}
-									onClick={() =>
-										setTrendingTimeWindow(EHorizontalScrollerTimeWindow.WEEK)
-									}
+									onClick={() => setTrendingTimeWindow('week')}
 								>
 									This Week
 								</li>
