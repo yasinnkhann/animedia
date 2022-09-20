@@ -49,8 +49,8 @@ export const getUser = extendType({
 		t.field('user', {
 			type: 'User',
 
-			resolve: (_parent, _args, ctx) => {
-				return ctx.prisma.user.findUnique({
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.user.findUnique({
 					where: { id: ctx.session!.user?.id! },
 					include: {
 						movies: true,
@@ -67,8 +67,8 @@ export const usersMovies = extendType({
 	definition(t) {
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
-			resolve: (_parent, _args, ctx) => {
-				return ctx.prisma.movie.findMany({
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.movie.findMany({
 					where: {
 						userId: ctx.session!.user?.id!,
 					},
@@ -86,8 +86,8 @@ export const usersMovie = extendType({
 			args: {
 				movieId: nonNull(stringArg()),
 			},
-			resolve: (_parent, { movieId }, ctx) => {
-				return ctx.prisma.movie.findUnique({
+			resolve: async (_parent, { movieId }, ctx) => {
+				return await ctx.prisma.movie.findUnique({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -110,8 +110,8 @@ export const addedMovie = extendType({
 				movieName: nonNull(stringArg()),
 				watchStatus: nonNull(watchStatusTypes),
 			},
-			resolve: (_parent, { movieId, movieName, watchStatus }, ctx) => {
-				return ctx.prisma.user.update({
+			resolve: async (_parent, { movieId, movieName, watchStatus }, ctx) => {
+				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
 						movies: {
@@ -137,8 +137,8 @@ export const updateMovie = extendType({
 				movieId: nonNull(idArg()),
 				watchStatus: nonNull(watchStatusTypes),
 			},
-			resolve: (_parent, { movieId, watchStatus }, ctx) => {
-				return ctx.prisma.movie.update({
+			resolve: async (_parent, { movieId, watchStatus }, ctx) => {
+				return await ctx.prisma.movie.update({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -162,8 +162,8 @@ export const deleteMovie = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 			},
-			resolve: (_parent, { movieId }, ctx) => {
-				return ctx.prisma.movie.delete({
+			resolve: async (_parent, { movieId }, ctx) => {
+				return await ctx.prisma.movie.delete({
 					where: {
 						id_userId: {
 							id: movieId,
