@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
+import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -39,26 +39,50 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
-	const { mutateFunction: addMovie } = useGQLMutation<
+	const {
+		mutateFunction: addMovie,
+	}: IUseGQLMutation<
+		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['addedMovie']
-	>(Mutations.MUTATION_ADD_MOVIE, {
-		movieId: String(movieDetails.id),
-		movieName: movieDetails.title,
-		watchStatus,
-	});
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['addedMovie']>(
+		Mutations.MUTATION_ADD_MOVIE,
+		{
+			variables: {
+				movieId: String(movieDetails.id),
+				movieName: movieDetails.title,
+				watchStatus,
+			},
+		}
+	);
 
-	const { mutateFunction: updateMovie } = useGQLMutation<
+	const {
+		mutateFunction: updateMovie,
+	}: IUseGQLMutation<
+		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['updatedMovie']
-	>(Mutations.MUTATION_UPDATE_MOVIE, {
-		movieId: String(movieDetails.id),
-		watchStatus,
-	});
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['updatedMovie']>(
+		Mutations.MUTATION_UPDATE_MOVIE,
+		{
+			variables: {
+				movieId: String(movieDetails.id),
+				watchStatus,
+			},
+		}
+	);
 
-	const { mutateFunction: deleteMovie } = useGQLMutation<
+	const {
+		mutateFunction: deleteMovie,
+	}: IUseGQLMutation<
+		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['deletedMovie']
-	>(Mutations.MUTATION_DELETE_MOVIE, {
-		movieId: String(movieDetails.id),
-	});
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedMovie']>(
+		Mutations.MUTATION_DELETE_MOVIE,
+		{
+			variables: {
+				movieId: String(movieDetails.id),
+			},
+		}
+	);
 
 	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;

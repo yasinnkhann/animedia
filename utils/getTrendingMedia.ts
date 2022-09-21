@@ -1,10 +1,6 @@
 import axios from 'axios';
 import { BASE_URL } from './URLs';
 
-// types might be unnecessary after implementing front end side of things
-// type TMediaType = 'all' | 'movie' | 'tv' | 'person';
-// type TTimeWindow = 'day' | 'week';
-
 export const GET_TRENDING_MEDIA = async (
 	mediaType: 'all' | 'movie' | 'tv' | 'person',
 	timeWindow: 'day' | 'week',

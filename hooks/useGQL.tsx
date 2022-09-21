@@ -4,6 +4,8 @@ import {
 	useLazyQuery,
 	useMutation,
 	QueryHookOptions,
+	MutationHookOptions,
+	DefaultContext,
 } from '@apollo/client';
 
 export function useGQLQuery<TVars>(
@@ -29,17 +31,18 @@ export function useGQLQuery<TVars>(
 	};
 }
 
-export function useGQLMutation<T>(gqlQueryName: DocumentNode, variables?: T) {
+export function useGQLMutation<TVars>(
+	mutation: DocumentNode,
+	options?: MutationHookOptions<any, TVars>
+) {
 	const [
 		mutateFunction,
 		{ data: mutateData, loading: mutateLoading, error: mutateError },
-	] = useMutation(gqlQueryName, {
-		variables,
-	});
+	] = useMutation(mutation, options);
 
 	return {
 		mutateFunction,
-		mutateData,
+		mutateData: mutateData?.[Object.keys(mutateData)[0]],
 		mutateLoading,
 		mutateError,
 	};
