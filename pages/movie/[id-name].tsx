@@ -52,6 +52,15 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				movieName: movieDetails.title,
 				watchStatus,
 			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_MOVIE,
+					variables: {
+						movieId: String(movieDetails.id),
+					},
+				},
+				'UsersMovie',
+			],
 		}
 	);
 
@@ -81,6 +90,15 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			variables: {
 				movieId: String(movieDetails.id),
 			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_MOVIE,
+					variables: {
+						movieId: String(movieDetails.id),
+					},
+				},
+				'UsersMovie',
+			],
 		}
 	);
 
@@ -114,6 +132,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				},
 			});
 		}
+		refetchUsersMovieData();
 	};
 
 	useEffect(() => {

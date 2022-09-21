@@ -743,9 +743,9 @@ export const QUERY_GET_USER = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_MOVIES = gql`
-	query UsersMovies {
-		usersMovies {
+export const QUERY_GET_USERS_MOVIE = gql`
+	query UsersMovie($movieId: String!) {
+		usersMovie(movieId: $movieId) {
 			id
 			name
 			status
@@ -753,9 +753,9 @@ export const QUERY_GET_USERS_MOVIES = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_MOVIE = gql`
-	query UsersMovie($movieId: String!) {
-		usersMovie(movieId: $movieId) {
+export const QUERY_GET_USERS_MOVIES = gql`
+	query UsersMovies {
+		usersMovies {
 			id
 			name
 			status
