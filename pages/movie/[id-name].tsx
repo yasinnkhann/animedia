@@ -26,7 +26,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const {
 		data: usersMovieData,
-		refetch: refetchUsersMovieData,
 	}: IUseGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
@@ -132,7 +131,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				},
 			});
 		}
-		refetchUsersMovieData();
 	};
 
 	useEffect(() => {
