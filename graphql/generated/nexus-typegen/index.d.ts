@@ -358,10 +358,19 @@ export interface NexusGenObjects {
     image?: string | null; // String
     movies?: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
     name?: string | null; // String
+    shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
   UserMovie: { // root type
     id?: string | null; // ID
     name?: string | null; // String
+    rating?: number | null; // Int
+    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+  }
+  UserShow: { // root type
+    currentEpisode?: number | null; // Int
+    id?: string | null; // ID
+    name?: string | null; // String
+    rating?: number | null; // Int
     status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
 }
@@ -490,8 +499,11 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+    addedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     deletedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+    deletedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     updatedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+    updatedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -553,6 +565,8 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+    usersShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+    usersShows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -710,10 +724,19 @@ export interface NexusGenFieldTypes {
     image: string | null; // String
     movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
     name: string | null; // String
+    shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
   UserMovie: { // field return type
     id: string | null; // ID
     name: string | null; // String
+    rating: number | null; // Int
+    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+  }
+  UserShow: { // field return type
+    currentEpisode: number | null; // Int
+    id: string | null; // ID
+    name: string | null; // String
+    rating: number | null; // Int
     status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
 }
@@ -832,8 +855,11 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addedMovie: 'UserMovie'
+    addedShow: 'UserShow'
     deletedMovie: 'UserMovie'
+    deletedShow: 'UserShow'
     updatedMovie: 'UserMovie'
+    updatedShow: 'UserShow'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -895,6 +921,8 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     usersMovie: 'UserMovie'
     usersMovies: 'UserMovie'
+    usersShow: 'UserShow'
+    usersShows: 'UserShow'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1052,10 +1080,19 @@ export interface NexusGenFieldTypeNames {
     image: 'String'
     movies: 'UserMovie'
     name: 'String'
+    shows: 'UserShow'
   }
   UserMovie: { // field return type name
     id: 'ID'
     name: 'String'
+    rating: 'Int'
+    status: 'WatchStatusTypes'
+  }
+  UserShow: { // field return type name
+    currentEpisode: 'Int'
+    id: 'ID'
+    name: 'String'
+    rating: 'Int'
     status: 'WatchStatusTypes'
   }
 }
@@ -1067,11 +1104,23 @@ export interface NexusGenArgTypes {
       movieName: string; // String!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
+    addedShow: { // args
+      showId: string; // ID!
+      showName: string; // String!
+      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+    }
     deletedMovie: { // args
       movieId: string; // ID!
     }
+    deletedShow: { // args
+      showId: string; // ID!
+    }
     updatedMovie: { // args
       movieId: string; // ID!
+      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+    }
+    updatedShow: { // args
+      showId: string; // ID!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
   }
@@ -1163,6 +1212,9 @@ export interface NexusGenArgTypes {
     }
     usersMovie: { // args
       movieId: string; // String!
+    }
+    usersShow: { // args
+      showId: string; // String!
     }
   }
 }

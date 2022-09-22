@@ -17,11 +17,6 @@ const MyList: NextPage = () => {
 		Queries.QUERY_GET_USER
 	);
 
-	const { data: usersMovieData }: IUseGQLQuery<NexusGenObjects['UserMovie'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_MOVIES);
-
-	console.log('USER MOVIES: ', usersMovieData);
-
 	console.log('USER DATA: ', userData);
 
 	return (

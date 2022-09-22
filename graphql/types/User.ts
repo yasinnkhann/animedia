@@ -27,6 +27,20 @@ export const userMovie = objectType({
 		t.field('status', {
 			type: 'WatchStatusTypes',
 		});
+		t.int('rating');
+	},
+});
+
+export const userShow = objectType({
+	name: 'UserShow',
+	definition(t) {
+		t.id('id');
+		t.string('name');
+		t.field('status', {
+			type: 'WatchStatusTypes',
+		});
+		t.int('rating');
+		t.int('currentEpisode');
 	},
 });
 
@@ -40,6 +54,9 @@ export const user = objectType({
 		t.list.field('movies', {
 			type: 'UserMovie',
 		});
+		t.list.field('shows', {
+			type: 'UserShow',
+		});
 	},
 });
 
@@ -48,13 +65,12 @@ export const getUser = extendType({
 	definition(t) {
 		t.field('user', {
 			type: 'User',
-
 			resolve: async (_parent, _args, ctx) => {
 				return await ctx.prisma.user.findUnique({
 					where: { id: ctx.session!.user?.id! },
 					include: {
 						movies: true,
-						// shows: true,
+						shows: true,
 					},
 				});
 			},
@@ -78,6 +94,22 @@ export const usersMovies = extendType({
 	},
 });
 
+export const usersShows = extendType({
+	type: 'Query',
+	definition(t) {
+		t.list.field('usersShows', {
+			type: 'UserShow',
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.show.findMany({
+					where: {
+						userId: ctx.session!.user?.id!,
+					},
+				});
+			},
+		});
+	},
+});
+
 export const usersMovie = extendType({
 	type: 'Query',
 	definition(t) {
@@ -91,6 +123,28 @@ export const usersMovie = extendType({
 					where: {
 						id_userId: {
 							id: movieId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		});
+	},
+});
+
+export const usersShow = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('usersShow', {
+			type: 'UserShow',
+			args: {
+				showId: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { showId }, ctx) => {
+				return await ctx.prisma.show.findUnique({
+					where: {
+						id_userId: {
+							id: showId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
@@ -128,6 +182,34 @@ export const addedMovie = extendType({
 	},
 });
 
+export const addedShow = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('addedShow', {
+			type: 'UserShow',
+			args: {
+				showId: nonNull(idArg()),
+				showName: nonNull(stringArg()),
+				watchStatus: nonNull(watchStatusTypes),
+			},
+			resolve: async (_parent, { showId, showName, watchStatus }, ctx) => {
+				return await ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id! },
+					data: {
+						shows: {
+							create: {
+								id: showId,
+								name: showName,
+								status: watchStatus,
+							},
+						},
+					},
+				});
+			},
+		});
+	},
+});
+
 export const updateMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
@@ -154,6 +236,32 @@ export const updateMovie = extendType({
 	},
 });
 
+export const updateShow = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('updatedShow', {
+			type: 'UserShow',
+			args: {
+				showId: nonNull(idArg()),
+				watchStatus: nonNull(watchStatusTypes),
+			},
+			resolve: async (_parent, { showId, watchStatus }, ctx) => {
+				return await ctx.prisma.show.update({
+					where: {
+						id_userId: {
+							id: showId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+					data: {
+						status: watchStatus,
+					},
+				});
+			},
+		});
+	},
+});
+
 export const deleteMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
@@ -167,6 +275,28 @@ export const deleteMovie = extendType({
 					where: {
 						id_userId: {
 							id: movieId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		});
+	},
+});
+
+export const deleteShow = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('deletedShow', {
+			type: 'UserShow',
+			args: {
+				showId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { showId }, ctx) => {
+				return await ctx.prisma.show.delete({
+					where: {
+						id_userId: {
+							id: showId,
 							userId: ctx.session!.user?.id!,
 						},
 					},

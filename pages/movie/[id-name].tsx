@@ -13,6 +13,7 @@ import {
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
 import { watchStatusOptions } from 'models/watchStatusOptions';
+import { ratingOptions } from 'models/ratingOptions';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -23,6 +24,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
+	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
 
 	const {
 		data: usersMovieData,
@@ -101,7 +103,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
-	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		console.log(value);
 
@@ -133,6 +135,11 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	};
 
+	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const { value } = e.target;
+		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
+	};
+
 	useEffect(() => {
 		if (usersMovieData) {
 			setWatchStatus(usersMovieData.status!);
@@ -149,13 +156,23 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</div>
 			<div>
 				{status === 'authenticated' && session.user && (
-					<select value={watchStatus} onChange={handleChange}>
-						{watchStatusOptions.map(option => (
-							<option key={option.value} value={option.value}>
-								{option.text}
-							</option>
-						))}
-					</select>
+					<div>
+						<select value={watchStatus} onChange={handleChangeWatchStatus}>
+							{watchStatusOptions.map(option => (
+								<option key={option.value} value={option.value}>
+									{option.text}
+								</option>
+							))}
+						</select>
+
+						<select value={rating} onChange={handleChangeRating}>
+							{ratingOptions.map(option => (
+								<option key={option.value} value={option.value}>
+									{option.text}
+								</option>
+							))}
+						</select>
+					</div>
 				)}
 			</div>
 		</div>

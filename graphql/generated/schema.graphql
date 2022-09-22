@@ -159,8 +159,11 @@ type MoviesRes {
 
 type Mutation {
   addedMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
+  addedShow(showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
   deletedMovie(movieId: ID!): UserMovie
+  deletedShow(showId: ID!): UserShow
   updatedMovie(movieId: ID!, watchStatus: WatchStatusTypes!): UserMovie
+  updatedShow(showId: ID!, watchStatus: WatchStatusTypes!): UserShow
 }
 
 type PeopleRes {
@@ -226,6 +229,8 @@ type Query {
   user: User
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]
+  usersShow(showId: String!): UserShow
+  usersShows: [UserShow]
 }
 
 type ShowDetailsCountry {
@@ -424,11 +429,21 @@ type User {
   image: String
   movies: [UserMovie]
   name: String
+  shows: [UserShow]
 }
 
 type UserMovie {
   id: ID
   name: String
+  rating: Int
+  status: WatchStatusTypes
+}
+
+type UserShow {
+  currentEpisode: Int
+  id: ID
+  name: String
+  rating: Int
   status: WatchStatusTypes
 }
 
