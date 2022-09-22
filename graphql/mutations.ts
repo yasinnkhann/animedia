@@ -14,6 +14,7 @@ export const MUTATION_ADD_MOVIE = gql`
 			id
 			name
 			status
+			rating
 		}
 	}
 `;
@@ -24,6 +25,7 @@ export const MUTATION_UPDATE_MOVIE = gql`
 			id
 			name
 			status
+			rating
 		}
 	}
 `;
@@ -34,6 +36,7 @@ export const MUTATION_DELETE_MOVIE = gql`
 			id
 			name
 			status
+			rating
 		}
 	}
 `;

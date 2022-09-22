@@ -5,7 +5,6 @@ import {
 	useMutation,
 	QueryHookOptions,
 	MutationHookOptions,
-	DefaultContext,
 } from '@apollo/client';
 
 export function useGQLQuery<TVars>(

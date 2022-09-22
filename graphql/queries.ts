@@ -738,6 +738,7 @@ export const QUERY_GET_USER = gql`
 				id
 				name
 				status
+				rating
 			}
 		}
 	}
@@ -749,6 +750,7 @@ export const QUERY_GET_USERS_MOVIE = gql`
 			id
 			name
 			status
+			rating
 		}
 	}
 `;
@@ -759,6 +761,7 @@ export const QUERY_GET_USERS_MOVIES = gql`
 			id
 			name
 			status
+			rating
 		}
 	}
 `;

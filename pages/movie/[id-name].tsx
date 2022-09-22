@@ -143,6 +143,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	useEffect(() => {
 		if (usersMovieData) {
 			setWatchStatus(usersMovieData.status!);
+			setRating(usersMovieData?.rating ?? '');
 		}
 	}, [usersMovieData]);
 
