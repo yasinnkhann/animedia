@@ -740,6 +740,13 @@ export const QUERY_GET_USER = gql`
 				status
 				rating
 			}
+			shows {
+				id
+				name
+				status
+				rating
+				currentEpisode
+			}
 		}
 	}
 `;
@@ -762,6 +769,30 @@ export const QUERY_GET_USERS_MOVIES = gql`
 			name
 			status
 			rating
+		}
+	}
+`;
+
+export const QUERY_GET_USERS_SHOW = gql`
+	query UsersShow($showId: String!) {
+		usersShow(showId: $showId) {
+			id
+			name
+			status
+			rating
+			currentEpisode
+		}
+	}
+`;
+
+export const QUERY_GET_USERS_SHOWS = gql`
+	query UsersShows {
+		usersShows {
+			id
+			name
+			status
+			rating
+			currentEpisode
 		}
 	}
 `;

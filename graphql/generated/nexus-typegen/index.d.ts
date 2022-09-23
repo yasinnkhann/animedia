@@ -1121,7 +1121,9 @@ export interface NexusGenArgTypes {
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
     updatedShow: { // args
+      currentEpisode?: number | null; // Int
       showId: string; // ID!
+      showRating?: number | null; // Int
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
   }

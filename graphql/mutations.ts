@@ -48,3 +48,53 @@ export const MUTATION_DELETE_MOVIE = gql`
 		}
 	}
 `;
+
+export const MUTATION_ADD_SHOW = gql`
+	mutation AddedShow(
+		$showId: ID!
+		$showName: String!
+		$watchStatus: WatchStatusTypes!
+	) {
+		addedShow(showId: $showId, showName: $showName, watchStatus: $watchStatus) {
+			id
+			name
+			status
+			rating
+			currentEpisode
+		}
+	}
+`;
+
+export const MUTATION_UPDATE_SHOW = gql`
+	mutation UpdatedShow(
+		$showId: ID!
+		$watchStatus: WatchStatusTypes!
+		$showRating: Int
+		$currentEpisode: Int
+	) {
+		updatedShow(
+			showId: $showId
+			watchStatus: $watchStatus
+			showRating: $showRating
+			currentEpisode: $currentEpisode
+		) {
+			id
+			name
+			status
+			rating
+			currentEpisode
+		}
+	}
+`;
+
+export const MUTATION_DELETE_SHOW = gql`
+	mutation DeletedShow($showId: ID!) {
+		deletedShow(showId: $showId) {
+			id
+			name
+			status
+			rating
+			currentEpisode
+		}
+	}
+`;

@@ -163,7 +163,7 @@ type Mutation {
   deletedMovie(movieId: ID!): UserMovie
   deletedShow(showId: ID!): UserShow
   updatedMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
-  updatedShow(showId: ID!, watchStatus: WatchStatusTypes!): UserShow
+  updatedShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
 }
 
 type PeopleRes {

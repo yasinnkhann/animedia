@@ -79,38 +79,6 @@ export const getUser = extendType({
 	},
 });
 
-export const usersMovies = extendType({
-	type: 'Query',
-	definition(t) {
-		t.list.field('usersMovies', {
-			type: 'UserMovie',
-			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.movie.findMany({
-					where: {
-						userId: ctx.session!.user?.id!,
-					},
-				});
-			},
-		});
-	},
-});
-
-export const usersShows = extendType({
-	type: 'Query',
-	definition(t) {
-		t.list.field('usersShows', {
-			type: 'UserShow',
-			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.show.findMany({
-					where: {
-						userId: ctx.session!.user?.id!,
-					},
-				});
-			},
-		});
-	},
-});
-
 export const usersMovie = extendType({
 	type: 'Query',
 	definition(t) {
@@ -148,6 +116,38 @@ export const usersShow = extendType({
 							id: showId,
 							userId: ctx.session!.user?.id!,
 						},
+					},
+				});
+			},
+		});
+	},
+});
+
+export const usersMovies = extendType({
+	type: 'Query',
+	definition(t) {
+		t.list.field('usersMovies', {
+			type: 'UserMovie',
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.movie.findMany({
+					where: {
+						userId: ctx.session!.user?.id!,
+					},
+				});
+			},
+		});
+	},
+});
+
+export const usersShows = extendType({
+	type: 'Query',
+	definition(t) {
+		t.list.field('usersShows', {
+			type: 'UserShow',
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.show.findMany({
+					where: {
+						userId: ctx.session!.user?.id!,
 					},
 				});
 			},
@@ -247,8 +247,14 @@ export const updateShow = extendType({
 			args: {
 				showId: nonNull(idArg()),
 				watchStatus: nonNull(watchStatusTypes),
+				showRating: intArg(),
+				currentEpisode: intArg(),
 			},
-			resolve: async (_parent, { showId, watchStatus }, ctx) => {
+			resolve: async (
+				_parent,
+				{ showId, watchStatus, showRating, currentEpisode },
+				ctx
+			) => {
 				return await ctx.prisma.show.update({
 					where: {
 						id_userId: {
@@ -258,6 +264,8 @@ export const updateShow = extendType({
 					},
 					data: {
 						status: watchStatus,
+						rating: showRating ? showRating : null,
+						current_episode: currentEpisode ? currentEpisode : undefined,
 					},
 				});
 			},
