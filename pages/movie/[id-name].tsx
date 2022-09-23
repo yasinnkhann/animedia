@@ -139,6 +139,15 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
+
+		console.log('rating: ', rating);
+		updateMovie({
+			variables: {
+				movieId: String(movieDetails.id),
+				movieRating: isNaN(parseInt(value)) ? null : parseInt(value),
+				watchStatus,
+			},
+		});
 	};
 
 	useEffect(() => {
