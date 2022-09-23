@@ -193,6 +193,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 								</option>
 							))}
 						</select>
+
+						<div>
+							Episodes
+							<input type='text' />/
+							<span>{showDetails.number_of_episodes}</span>
+						</div>
 					</div>
 				)}
 			</div>
