@@ -76,6 +76,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			variables: {
 				movieId: String(movieDetails.id),
 				watchStatus,
+				movieRating: typeof rating === 'number' ? rating : null,
 			},
 		}
 	);

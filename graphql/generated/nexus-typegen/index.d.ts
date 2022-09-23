@@ -1117,6 +1117,7 @@ export interface NexusGenArgTypes {
     }
     updatedMovie: { // args
       movieId: string; // ID!
+      movieRating?: number | null; // Int
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
     updatedShow: { // args

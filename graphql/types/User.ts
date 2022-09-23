@@ -4,6 +4,7 @@ import {
 	stringArg,
 	nonNull,
 	idArg,
+	intArg,
 	enumType,
 } from 'nexus';
 
@@ -218,8 +219,9 @@ export const updateMovie = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 				watchStatus: nonNull(watchStatusTypes),
+				movieRating: intArg(),
 			},
-			resolve: async (_parent, { movieId, watchStatus }, ctx) => {
+			resolve: async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
 				return await ctx.prisma.movie.update({
 					where: {
 						id_userId: {
@@ -229,6 +231,7 @@ export const updateMovie = extendType({
 					},
 					data: {
 						status: watchStatus,
+						rating: movieRating ? movieRating : null,
 					},
 				});
 			},

@@ -162,7 +162,7 @@ type Mutation {
   addedShow(showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
   deletedMovie(movieId: ID!): UserMovie
   deletedShow(showId: ID!): UserShow
-  updatedMovie(movieId: ID!, watchStatus: WatchStatusTypes!): UserMovie
+  updatedMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updatedShow(showId: ID!, watchStatus: WatchStatusTypes!): UserShow
 }
 
