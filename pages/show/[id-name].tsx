@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL } from '../../utils/URLs';
@@ -25,6 +25,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
+
+	const [currEp, setCurrEp] = useState<string>('0');
+
+	const episodeRef = useRef<HTMLInputElement>(null);
 
 	const {
 		data: usersShowData,
@@ -150,6 +154,32 @@ const ShowDetails = ({ showDetails }: Props) => {
 		});
 	};
 
+	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (episodeRef.current?.value) {
+			if (/[\D]/gi.test(episodeRef.current.value)) {
+				episodeRef.current.value = '0';
+				setCurrEp(episodeRef.current.value);
+				return;
+			} else {
+				setCurrEp(episodeRef.current.value);
+			}
+		}
+	};
+
+	console.log('REF: ', episodeRef.current?.value);
+
+	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		updateShow({
+			variables: {
+				showId: String(showDetails.id),
+				showRating: typeof rating === 'string' ? null : rating,
+				watchStatus,
+				currentEpisode: Number(episodeRef.current?.value),
+			},
+		});
+	};
+
 	useEffect(() => {
 		if (usersShowData) {
 			setWatchStatus(usersShowData.status!);
@@ -173,7 +203,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</div>
 			<div>
 				{status === 'authenticated' && session.user && (
-					<div>
+					<div className='flex'>
 						<select value={watchStatus} onChange={handleChangeWatchStatus}>
 							{watchStatusOptions.map(option => (
 								<option key={option.value} value={option.value}>
@@ -183,6 +213,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</select>
 
 						<select
+							className='mx-4'
 							value={rating}
 							onChange={handleChangeRating}
 							disabled={watchStatus === 'NOT_WATCHING'}
@@ -194,11 +225,23 @@ const ShowDetails = ({ showDetails }: Props) => {
 							))}
 						</select>
 
-						<div>
-							Episodes
-							<input type='text' />/
+						<form
+							className='border border-gray-500'
+							onSubmit={handleEpisodeSubmit}
+						>
+							<span>Episodes:</span>
+							<input
+								type='text'
+								className='text-right w-12'
+								ref={episodeRef}
+								value={currEp}
+								onChange={handleEpisodeChange}
+								// onBlur={handleEpisodeSubmit}
+							/>
+							<span>/</span>
 							<span>{showDetails.number_of_episodes}</span>
-						</div>
+							<button className='mx-1 text-blue-500'>+</button>
+						</form>
 					</div>
 				)}
 			</div>

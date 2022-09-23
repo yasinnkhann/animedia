@@ -265,7 +265,7 @@ export const updateShow = extendType({
 					data: {
 						status: watchStatus,
 						rating: showRating ? showRating : null,
-						current_episode: currentEpisode ? currentEpisode : undefined,
+						current_episode: currentEpisode ?? undefined,
 					},
 				});
 			},
