@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL } from '../../utils/URLs';
@@ -14,6 +14,7 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
+import { userShow } from 'graphql/types';
 
 interface Props {
 	showDetails: NexusGenObjects['ShowDetailsRes'];
@@ -27,8 +28,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
 
 	const [currEp, setCurrEp] = useState<string>('0');
-
-	const episodeRef = useRef<HTMLInputElement>(null);
 
 	const {
 		data: usersShowData,
@@ -155,29 +154,45 @@ const ShowDetails = ({ showDetails }: Props) => {
 	};
 
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (episodeRef.current?.value) {
-			if (/[\D]/gi.test(episodeRef.current.value)) {
-				episodeRef.current.value = '0';
-				setCurrEp(episodeRef.current.value);
-				return;
-			} else {
-				setCurrEp(episodeRef.current.value);
-			}
+		if (/[\D]/gi.test(e.target.value)) {
+			setCurrEp('0');
+			e.target.selectionStart = 1;
+		} else {
+			setCurrEp(e.target.value);
 		}
+		console.log(currEp);
 	};
-
-	console.log('REF: ', episodeRef.current?.value);
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (currEp === '' || +currEp > showDetails.number_of_episodes) return;
+
+		if (+currEp === showDetails.number_of_episodes) {
+			setWatchStatus('COMPLETED');
+		}
+
 		updateShow({
 			variables: {
 				showId: String(showDetails.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
-				currentEpisode: Number(episodeRef.current?.value),
+				currentEpisode: Number(currEp),
 			},
 		});
+		console.log('UPDATED EP');
+	};
+
+	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		if (
+			(e.target.value === '' ||
+				+e.target.value > showDetails.number_of_episodes) &&
+			typeof usersShowData?.currentEpisode === 'number'
+		) {
+			setCurrEp(String(usersShowData.currentEpisode));
+		} else {
+			setCurrEp('0');
+		}
+		return;
 	};
 
 	useEffect(() => {
@@ -226,17 +241,20 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</select>
 
 						<form
-							className='border border-gray-500'
+							className='border border-gray-500 bg-white'
 							onSubmit={handleEpisodeSubmit}
 						>
 							<span>Episodes:</span>
 							<input
+								className='text-right w-12 focus:outline-none'
 								type='text'
-								className='text-right w-12'
-								ref={episodeRef}
 								value={currEp}
 								onChange={handleEpisodeChange}
-								// onBlur={handleEpisodeSubmit}
+								onFocus={e => (e.target.selectionStart = 1)}
+								disabled={
+									watchStatus === 'NOT_WATCHING' || watchStatus === 'ON_HOLD'
+								}
+								onBlur={handleEpisodeOnBlur}
 							/>
 							<span>/</span>
 							<span>{showDetails.number_of_episodes}</span>
