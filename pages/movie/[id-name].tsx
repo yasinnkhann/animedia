@@ -157,6 +157,12 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	}, [usersMovieData]);
 
+	useEffect(() => {
+		if (watchStatus === 'NOT_WATCHING') {
+			setRating('');
+		}
+	}, [watchStatus]);
+
 	console.log('USERS MOVIE: ', usersMovieData);
 
 	return (
@@ -176,7 +182,11 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							))}
 						</select>
 
-						<select value={rating} onChange={handleChangeRating}>
+						<select
+							value={rating}
+							onChange={handleChangeRating}
+							disabled={watchStatus === 'NOT_WATCHING'}
+						>
 							{ratingOptions.map(option => (
 								<option key={option.value} value={option.value}>
 									{option.text}
