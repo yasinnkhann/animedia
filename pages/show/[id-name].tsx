@@ -55,7 +55,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				showName: showDetails.name,
 				watchStatus,
-				current_episode: Number(currEp),
+				currentEpisode: Number(currEp),
 			},
 			refetchQueries: () => [
 				{
@@ -81,7 +81,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
-				current_episode: Number(currEp),
+				currentEpisode: Number(currEp),
 			},
 		}
 	);
@@ -126,7 +126,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					variables: {
 						showId: String(showDetails.id),
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-						current_episode: Number(currEp),
+						currentEpisode: Number(currEp),
 					},
 				});
 			}
@@ -136,7 +136,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showName: showDetails.name,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-					current_episode: Number(currEp),
+					currentEpisode: Number(currEp),
 				},
 			});
 		}
@@ -162,7 +162,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 		} else {
 			setCurrEp(e.target.value);
 		}
-		console.log(currEp);
 	};
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -178,7 +177,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
-				current_episode: Number(currEp),
+				currentEpisode: Number(currEp),
 			},
 		});
 	};
@@ -201,7 +200,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
-					current_episode: Number(currEp),
+					currentEpisode: Number(currEp),
 				},
 			});
 		}
@@ -220,7 +219,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showName: showDetails.name,
 					watchStatus: 'WATCHING',
-					current_episode: numifiedStr,
+					currentEpisode: numifiedStr,
 				},
 			});
 		} else {
@@ -229,7 +228,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
-					current_episode: numifiedStr,
+					currentEpisode: numifiedStr,
 				},
 			});
 		}
@@ -237,6 +236,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		if (usersShowData) {
+			console.log('EF', String(usersShowData.current_episode));
 			setWatchStatus(usersShowData.status!);
 			setRating(usersShowData?.rating ?? '');
 			setCurrEp(String(usersShowData.current_episode));
