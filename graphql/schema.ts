@@ -1,4 +1,4 @@
-import { makeSchema, asNexusMethod } from 'nexus';
+import { makeSchema, asNexusMethod, connectionPlugin } from 'nexus';
 import { DateTimeResolver, JSONObjectResolver } from 'graphql-scalars';
 import { join } from 'path';
 import { applyMiddleware } from 'graphql-middleware';
@@ -10,7 +10,7 @@ export const jsonScalar = asNexusMethod(JSONObjectResolver, 'json');
 
 export const baseSchema = makeSchema({
 	types: [allTypes, dateScalar, jsonScalar],
-	plugins: [],
+	plugins: [connectionPlugin()],
 	outputs: {
 		typegen: join(
 			process.cwd(),
@@ -35,9 +35,7 @@ export const baseSchema = makeSchema({
 	},
 });
 
-export const schema = baseSchema;
-
-// export const schema = applyMiddleware(
-// 	baseSchema,
-// 	permissions.generate(baseSchema)
-// );
+export const schema = applyMiddleware(
+	baseSchema,
+	permissions.generate(baseSchema)
+);

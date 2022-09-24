@@ -214,10 +214,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 		) {
 			if (typeof usersShowData?.current_episode === 'number') {
 				setCurrEp(String(usersShowData.current_episode));
-				return;
 			} else {
 				setCurrEp('0');
-				return;
 			}
 		} else {
 			updateShow({
