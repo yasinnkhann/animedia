@@ -121,15 +121,40 @@ const ShowDetails = ({ showDetails }: Props) => {
 						showId: String(showDetails.id),
 					},
 				});
-			} else {
+				return;
+			}
+
+			if ((value as NexusGenEnums['WatchStatusTypes']) === 'PLAN_TO_WATCH') {
+				setCurrEp('0');
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
-						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-						currentEpisode: Number(currEp),
+						watchStatus: 'PLAN_TO_WATCH',
+						currentEpisode: 0,
 					},
 				});
+				return;
 			}
+
+			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
+				setCurrEp(String(showDetails.number_of_episodes));
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						watchStatus: 'COMPLETED',
+						currentEpisode: showDetails.number_of_episodes,
+					},
+				});
+				return;
+			}
+
+			updateShow({
+				variables: {
+					showId: String(showDetails.id),
+					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+					currentEpisode: usersShowData.current_episode,
+				},
+			});
 		} else {
 			addShow({
 				variables: {
