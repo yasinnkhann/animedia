@@ -206,6 +206,23 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	};
 
+	const handleIncrementBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+		let numifiedStr = Number(currEp);
+		numifiedStr += 1;
+		setCurrEp(String(numifiedStr));
+
+		// FIX
+		console.log('CURR EP', currEp);
+		updateShow({
+			variables: {
+				showId: String(showDetails.id),
+				showRating: typeof rating === 'string' ? null : rating,
+				watchStatus,
+				currentEpisode: Number(currEp),
+			},
+		});
+	};
+
 	useEffect(() => {
 		if (usersShowData) {
 			setWatchStatus(usersShowData.status!);
@@ -229,6 +246,9 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (+currEp < showDetails.number_of_episodes) {
 			setWatchStatus('WATCHING');
+		}
+		if (+currEp === showDetails.number_of_episodes) {
+			setWatchStatus('COMPLETED');
 		}
 	}, [rating, currEp, showDetails.number_of_episodes]);
 
@@ -283,7 +303,14 @@ const ShowDetails = ({ showDetails }: Props) => {
 							/>
 							<span>/</span>
 							<span>{showDetails.number_of_episodes}</span>
-							<button className='mx-1 text-blue-500'>+</button>
+							<button
+								className='mx-1 text-blue-500'
+								onClick={handleIncrementBtn}
+								type='button'
+								disabled={+currEp >= showDetails.number_of_episodes}
+							>
+								+
+							</button>
 						</form>
 					</div>
 				)}
