@@ -212,31 +212,57 @@ const ShowDetails = ({ showDetails }: Props) => {
 		numifiedStr += 1;
 		setCurrEp(String(numifiedStr));
 
-		if (numifiedStr === 1 && !usersShowData) {
-			setWatchStatus('WATCHING');
-			addShow({
-				variables: {
-					showId: String(showDetails.id),
-					showName: showDetails.name,
-					watchStatus: 'WATCHING',
-					currentEpisode: numifiedStr,
-				},
-			});
-		} else {
+		if (numifiedStr === 1) {
+			if (!usersShowData) {
+				setWatchStatus('WATCHING');
+				addShow({
+					variables: {
+						showId: String(showDetails.id),
+						showName: showDetails.name,
+						watchStatus: 'WATCHING',
+						currentEpisode: numifiedStr,
+					},
+				});
+			} else {
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus: usersShowData.status!,
+						currentEpisode: numifiedStr,
+					},
+				});
+			}
+			return;
+		}
+
+		if (numifiedStr < showDetails.number_of_episodes && usersShowData) {
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
-					watchStatus,
+					watchStatus: usersShowData.status!,
 					currentEpisode: numifiedStr,
 				},
 			});
+			return;
+		}
+
+		if (numifiedStr === showDetails.number_of_episodes && usersShowData) {
+			updateShow({
+				variables: {
+					showId: String(showDetails.id),
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: 'COMPLETED',
+					currentEpisode: numifiedStr,
+				},
+			});
+			return;
 		}
 	};
 
 	useEffect(() => {
 		if (usersShowData) {
-			console.log('EF', String(usersShowData.current_episode));
 			setWatchStatus(usersShowData.status!);
 			setRating(usersShowData?.rating ?? '');
 			setCurrEp(String(usersShowData.current_episode));
