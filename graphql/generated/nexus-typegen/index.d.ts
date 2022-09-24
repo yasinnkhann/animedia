@@ -367,7 +367,7 @@ export interface NexusGenObjects {
     status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
   UserShow: { // root type
-    currentEpisode?: number | null; // Int
+    current_episode?: number | null; // Int
     id?: string | null; // ID
     name?: string | null; // String
     rating?: number | null; // Int
@@ -733,7 +733,7 @@ export interface NexusGenFieldTypes {
     status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
   UserShow: { // field return type
-    currentEpisode: number | null; // Int
+    current_episode: number | null; // Int
     id: string | null; // ID
     name: string | null; // String
     rating: number | null; // Int
@@ -1089,7 +1089,7 @@ export interface NexusGenFieldTypeNames {
     status: 'WatchStatusTypes'
   }
   UserShow: { // field return type name
-    currentEpisode: 'Int'
+    current_episode: 'Int'
     id: 'ID'
     name: 'String'
     rating: 'Int'
@@ -1105,7 +1105,7 @@ export interface NexusGenArgTypes {
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
     addedShow: { // args
-      currentEpisode?: number | null; // Int
+      current_episode?: number | null; // Int
       showId: string; // ID!
       showName: string; // String!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
@@ -1122,7 +1122,7 @@ export interface NexusGenArgTypes {
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
     updatedShow: { // args
-      currentEpisode?: number | null; // Int
+      current_episode?: number | null; // Int
       showId: string; // ID!
       showRating?: number | null; // Int
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!

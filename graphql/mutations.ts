@@ -54,19 +54,19 @@ export const MUTATION_ADD_SHOW = gql`
 		$showId: ID!
 		$showName: String!
 		$watchStatus: WatchStatusTypes!
-		$currentEpisode: Int
+		$current_episode: Int
 	) {
 		addedShow(
 			showId: $showId
 			showName: $showName
 			watchStatus: $watchStatus
-			currentEpisode: $currentEpisode
+			current_episode: $current_episode
 		) {
 			id
 			name
 			status
 			rating
-			currentEpisode
+			current_episode
 		}
 	}
 `;
@@ -76,19 +76,19 @@ export const MUTATION_UPDATE_SHOW = gql`
 		$showId: ID!
 		$watchStatus: WatchStatusTypes!
 		$showRating: Int
-		$currentEpisode: Int
+		$current_episode: Int
 	) {
 		updatedShow(
 			showId: $showId
 			watchStatus: $watchStatus
 			showRating: $showRating
-			currentEpisode: $currentEpisode
+			current_episode: $current_episode
 		) {
 			id
 			name
 			status
 			rating
-			currentEpisode
+			current_episode
 		}
 	}
 `;
@@ -100,7 +100,7 @@ export const MUTATION_DELETE_SHOW = gql`
 			name
 			status
 			rating
-			currentEpisode
+			current_episode
 		}
 	}
 `;

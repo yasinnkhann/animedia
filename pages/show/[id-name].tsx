@@ -55,7 +55,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				showName: showDetails.name,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				current_episode: Number(currEp),
 			},
 			refetchQueries: () => [
 				{
@@ -81,7 +81,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
-				currentEpisode: Number(currEp),
+				current_episode: Number(currEp),
 			},
 		}
 	);
@@ -126,7 +126,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					variables: {
 						showId: String(showDetails.id),
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-						currentEpisode: Number(currEp),
+						current_episode: Number(currEp),
 					},
 				});
 			}
@@ -136,7 +136,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showName: showDetails.name,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-					currentEpisode: Number(currEp),
+					current_episode: Number(currEp),
 				},
 			});
 		}
@@ -178,7 +178,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				current_episode: Number(currEp),
 			},
 		});
 	};
@@ -188,8 +188,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 			e.target.value === '' ||
 			+e.target.value > showDetails.number_of_episodes
 		) {
-			if (typeof usersShowData?.currentEpisode === 'number') {
-				setCurrEp(String(usersShowData.currentEpisode));
+			if (typeof usersShowData?.current_episode === 'number') {
+				setCurrEp(String(usersShowData.current_episode));
 				return;
 			} else {
 				setCurrEp('0');
@@ -201,7 +201,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
-					currentEpisode: Number(currEp),
+					current_episode: Number(currEp),
 				},
 			});
 		}
@@ -220,7 +220,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showName: showDetails.name,
 					watchStatus: 'WATCHING',
-					currentEpisode: numifiedStr,
+					current_episode: numifiedStr,
 				},
 			});
 		} else {
@@ -229,7 +229,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
-					currentEpisode: numifiedStr,
+					current_episode: numifiedStr,
 				},
 			});
 		}
@@ -239,6 +239,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		if (usersShowData) {
 			setWatchStatus(usersShowData.status!);
 			setRating(usersShowData?.rating ?? '');
+			setCurrEp(String(usersShowData.current_episode));
 		}
 	}, [usersShowData]);
 

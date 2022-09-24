@@ -745,7 +745,7 @@ export const QUERY_GET_USER = gql`
 				name
 				status
 				rating
-				currentEpisode
+				current_episode
 			}
 		}
 	}
@@ -780,7 +780,7 @@ export const QUERY_GET_USERS_SHOW = gql`
 			name
 			status
 			rating
-			currentEpisode
+			current_episode
 		}
 	}
 `;
@@ -792,7 +792,7 @@ export const QUERY_GET_USERS_SHOWS = gql`
 			name
 			status
 			rating
-			currentEpisode
+			current_episode
 		}
 	}
 `;

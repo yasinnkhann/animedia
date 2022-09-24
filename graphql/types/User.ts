@@ -41,7 +41,7 @@ export const userShow = objectType({
 			type: 'WatchStatusTypes',
 		});
 		t.int('rating');
-		t.int('currentEpisode');
+		t.int('current_episode');
 	},
 });
 
@@ -192,11 +192,11 @@ export const addedShow = extendType({
 				showId: nonNull(idArg()),
 				showName: nonNull(stringArg()),
 				watchStatus: nonNull(watchStatusTypes),
-				currentEpisode: intArg(),
+				current_episode: intArg(),
 			},
 			resolve: async (
 				_parent,
-				{ showId, showName, watchStatus, currentEpisode },
+				{ showId, showName, watchStatus, current_episode },
 				ctx
 			) => {
 				return await ctx.prisma.user.update({
@@ -207,7 +207,7 @@ export const addedShow = extendType({
 								id: showId,
 								name: showName,
 								status: watchStatus,
-								current_episode: currentEpisode ?? undefined,
+								current_episode: current_episode ?? undefined,
 							},
 						},
 					},
@@ -254,11 +254,11 @@ export const updateShow = extendType({
 				showId: nonNull(idArg()),
 				watchStatus: nonNull(watchStatusTypes),
 				showRating: intArg(),
-				currentEpisode: intArg(),
+				current_episode: intArg(),
 			},
 			resolve: async (
 				_parent,
-				{ showId, watchStatus, showRating, currentEpisode },
+				{ showId, watchStatus, showRating, current_episode },
 				ctx
 			) => {
 				return await ctx.prisma.show.update({
@@ -271,7 +271,7 @@ export const updateShow = extendType({
 					data: {
 						status: watchStatus,
 						rating: showRating ? showRating : null,
-						current_episode: currentEpisode ?? undefined,
+						current_episode: current_episode ?? undefined,
 					},
 				});
 			},
