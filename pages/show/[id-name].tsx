@@ -314,7 +314,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 							className='mx-4'
 							value={rating}
 							onChange={handleChangeRating}
-							disabled={watchStatus === 'NOT_WATCHING'}
+							disabled={
+								watchStatus === 'NOT_WATCHING' ||
+								watchStatus === 'PLAN_TO_WATCH'
+							}
 						>
 							{ratingOptions.map(option => (
 								<option key={option.value} value={option.value}>
