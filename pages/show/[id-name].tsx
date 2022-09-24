@@ -211,14 +211,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 		numifiedStr += 1;
 		setCurrEp(String(numifiedStr));
 
-		// FIX
-		console.log('CURR EP', currEp);
 		updateShow({
 			variables: {
 				showId: String(showDetails.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				currentEpisode: numifiedStr,
 			},
 		});
 	};
