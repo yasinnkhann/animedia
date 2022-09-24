@@ -14,7 +14,6 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
-import { userShow } from 'graphql/types';
 
 interface Props {
 	showDetails: NexusGenObjects['ShowDetailsRes'];
@@ -184,15 +183,27 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (
-			(e.target.value === '' ||
-				+e.target.value > showDetails.number_of_episodes) &&
-			typeof usersShowData?.currentEpisode === 'number'
+			e.target.value === '' ||
+			+e.target.value > showDetails.number_of_episodes
 		) {
-			setCurrEp(String(usersShowData.currentEpisode));
+			if (typeof usersShowData?.currentEpisode === 'number') {
+				setCurrEp(String(usersShowData.currentEpisode));
+				return;
+			} else {
+				setCurrEp('0');
+				return;
+			}
 		} else {
-			setCurrEp('0');
+			updateShow({
+				variables: {
+					showId: String(showDetails.id),
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus,
+					currentEpisode: Number(currEp),
+				},
+			});
+			console.log('UPDATED');
 		}
-		return;
 	};
 
 	useEffect(() => {
@@ -205,8 +216,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (watchStatus === 'NOT_WATCHING') {
 			setRating('');
+			setCurrEp('0');
 		}
-	}, [watchStatus]);
+		if (watchStatus === 'PLAN_TO_WATCH') {
+			setCurrEp('0');
+		}
+		if (watchStatus === 'COMPLETED') {
+			setCurrEp(String(showDetails.number_of_episodes));
+		}
+	}, [watchStatus, showDetails.number_of_episodes]);
+
+	useEffect(() => {
+		if (+currEp < showDetails.number_of_episodes) {
+			setWatchStatus('WATCHING');
+		}
+	}, [rating, currEp, showDetails.number_of_episodes]);
 
 	console.log('USERS SHOW: ', usersShowData);
 
@@ -252,7 +276,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 								onChange={handleEpisodeChange}
 								onFocus={e => (e.target.selectionStart = 1)}
 								disabled={
-									watchStatus === 'NOT_WATCHING' || watchStatus === 'ON_HOLD'
+									watchStatus === 'NOT_WATCHING' ||
+									watchStatus === 'PLAN_TO_WATCH'
 								}
 								onBlur={handleEpisodeOnBlur}
 							/>
