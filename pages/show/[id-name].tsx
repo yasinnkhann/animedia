@@ -111,7 +111,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		console.log(value);
 
 		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
 
@@ -147,7 +146,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 		const { value } = e.target;
 		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
 
-		console.log('rating: ', rating);
 		updateShow({
 			variables: {
 				showId: String(showDetails.id),
@@ -183,7 +181,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				currentEpisode: Number(currEp),
 			},
 		});
-		console.log('UPDATED EP');
 	};
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -210,13 +207,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	};
 
-	const handleIncrementBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleIncrementBtn = () => {
 		let numifiedStr = Number(currEp);
 
 		numifiedStr += 1;
 		setCurrEp(String(numifiedStr));
 
-		if (numifiedStr === 1) {
+		if (numifiedStr === 1 && !usersShowData) {
 			setWatchStatus('WATCHING');
 			addShow({
 				variables: {
