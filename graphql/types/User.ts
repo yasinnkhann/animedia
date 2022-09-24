@@ -192,8 +192,13 @@ export const addedShow = extendType({
 				showId: nonNull(idArg()),
 				showName: nonNull(stringArg()),
 				watchStatus: nonNull(watchStatusTypes),
+				currentEpisode: intArg(),
 			},
-			resolve: async (_parent, { showId, showName, watchStatus }, ctx) => {
+			resolve: async (
+				_parent,
+				{ showId, showName, watchStatus, currentEpisode },
+				ctx
+			) => {
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
@@ -202,6 +207,7 @@ export const addedShow = extendType({
 								id: showId,
 								name: showName,
 								status: watchStatus,
+								current_episode: currentEpisode ?? undefined,
 							},
 						},
 					},

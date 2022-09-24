@@ -54,8 +54,14 @@ export const MUTATION_ADD_SHOW = gql`
 		$showId: ID!
 		$showName: String!
 		$watchStatus: WatchStatusTypes!
+		$currentEpisode: Int
 	) {
-		addedShow(showId: $showId, showName: $showName, watchStatus: $watchStatus) {
+		addedShow(
+			showId: $showId
+			showName: $showName
+			watchStatus: $watchStatus
+			currentEpisode: $currentEpisode
+		) {
 			id
 			name
 			status

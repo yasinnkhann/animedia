@@ -24,6 +24,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
+
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
 
 	const [currEp, setCurrEp] = useState<string>('0');
@@ -54,6 +55,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				showName: showDetails.name,
 				watchStatus,
+				currentEpisode: Number(currEp),
 			},
 			refetchQueries: () => [
 				{
@@ -79,6 +81,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showId: String(showDetails.id),
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
+				currentEpisode: Number(currEp),
 			},
 		}
 	);
@@ -124,6 +127,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					variables: {
 						showId: String(showDetails.id),
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+						currentEpisode: Number(currEp),
 					},
 				});
 			}
@@ -133,6 +137,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					showId: String(showDetails.id),
 					showName: showDetails.name,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+					currentEpisode: Number(currEp),
 				},
 			});
 		}
@@ -202,23 +207,35 @@ const ShowDetails = ({ showDetails }: Props) => {
 					currentEpisode: Number(currEp),
 				},
 			});
-			console.log('UPDATED');
 		}
 	};
 
 	const handleIncrementBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
 		let numifiedStr = Number(currEp);
+
 		numifiedStr += 1;
 		setCurrEp(String(numifiedStr));
 
-		updateShow({
-			variables: {
-				showId: String(showDetails.id),
-				showRating: typeof rating === 'string' ? null : rating,
-				watchStatus,
-				currentEpisode: numifiedStr,
-			},
-		});
+		if (numifiedStr === 1) {
+			setWatchStatus('WATCHING');
+			addShow({
+				variables: {
+					showId: String(showDetails.id),
+					showName: showDetails.name,
+					watchStatus: 'WATCHING',
+					currentEpisode: numifiedStr,
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: String(showDetails.id),
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus,
+					currentEpisode: numifiedStr,
+				},
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -242,7 +259,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	}, [watchStatus, showDetails.number_of_episodes]);
 
 	useEffect(() => {
-		if (+currEp < showDetails.number_of_episodes) {
+		if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
 			setWatchStatus('WATCHING');
 		}
 		if (+currEp === showDetails.number_of_episodes) {
