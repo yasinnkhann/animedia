@@ -81,7 +81,10 @@ const Header = () => {
 					>
 						<li className='!flex !justify-around !items-center !w-full'>
 							{status === 'authenticated' && (
-								<a onClick={() => router.push('/my-list')}>My List</a>
+								<>
+									<a onClick={() => router.push('/my-shows')}>My Shows</a>
+									<a onClick={() => router.push('/my-movies')}>My Movies</a>
+								</>
 							)}
 							{status === 'unauthenticated' && (
 								<a onClick={() => signIn()}>Login</a>

@@ -133,6 +133,11 @@ export const usersMovies = extendType({
 					where: {
 						userId: ctx.session!.user?.id!,
 					},
+					orderBy: [
+						{
+							name: 'asc',
+						},
+					],
 				});
 			},
 		});
@@ -149,6 +154,11 @@ export const usersShows = extendType({
 					where: {
 						userId: ctx.session!.user?.id!,
 					},
+					orderBy: [
+						{
+							name: 'asc',
+						},
+					],
 				});
 			},
 		});
