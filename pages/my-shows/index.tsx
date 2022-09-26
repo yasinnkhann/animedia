@@ -11,75 +11,63 @@ import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-const MyMovies: NextPage = () => {
+const MyShows: NextPage = () => {
 	const router = useRouter();
 	const { data: session } = useSession();
 
 	const {
-		data: usersMoviesData,
+		data: usersShowsData,
 	}: IUseGQLQuery<
-		NexusGenObjects['UserMovie'][],
-		NexusGenArgTypes['Query']['usersMovies']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersMovies']>(
-		Queries.QUERY_GET_USERS_MOVIES,
+		NexusGenObjects['UserShow'][],
+		NexusGenArgTypes['Query']['usersShows']
+	> = useGQLQuery<NexusGenArgTypes['Query']['usersShows']>(
+		Queries.QUERY_GET_USERS_SHOWS,
 		{
 			variables: { userId: session?.user?.id as string },
 		}
 	);
 
-	console.log('USERS MOVIES DATA: ', usersMoviesData);
+	console.log('USERS SHOWS DATA: ', usersShowsData);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<h1>My Movies</h1>
+			<h1>My Shows</h1>
 			<section>
 				<div>
-					<a onClick={() => router.push('/my-movies/watching')}>Watching:</a>
+					<a onClick={() => router.push('/my-shows/watching')}>Watching:</a>
 					<span>
-						{
-							usersMoviesData?.filter(movie => movie.status === 'WATCHING')
-								.length
-						}
+						{usersShowsData?.filter(show => show.status === 'WATCHING').length}
 					</span>
 				</div>
 
 				<div>
-					<a onClick={() => router.push('/my-movies/completed')}>Completed:</a>
+					<a onClick={() => router.push('/my-shows/completed')}>Completed:</a>
 					<span>
-						{
-							usersMoviesData?.filter(movie => movie.status === 'COMPLETED')
-								.length
-						}
+						{usersShowsData?.filter(show => show.status === 'COMPLETED').length}
 					</span>
 				</div>
 
 				<div>
-					<a onClick={() => router.push('/my-movies/on-hold')}>On-Hold:</a>
+					<a onClick={() => router.push('/my-shows/on-hold')}>On-Hold:</a>
 					<span>
-						{
-							usersMoviesData?.filter(movie => movie.status === 'ON_HOLD')
-								.length
-						}
+						{usersShowsData?.filter(show => show.status === 'ON_HOLD').length}
 					</span>
 				</div>
 
 				<div>
-					<a onClick={() => router.push('/my-movies/dropped')}>Dropped:</a>
+					<a onClick={() => router.push('/my-shows/dropped')}>Dropped:</a>
 					<span>
-						{
-							usersMoviesData?.filter(movie => movie.status === 'DROPPED')
-								.length
-						}
+						{usersShowsData?.filter(show => show.status === 'DROPPED').length}
 					</span>
 				</div>
 
 				<div>
-					<a onClick={() => router.push('/my-movies/plan-to-watch')}>
+					<a onClick={() => router.push('/my-shows/plan-to-watch')}>
 						Plan to Watch:
 					</a>
 					<span>
 						{
-							usersMoviesData?.filter(movie => movie.status === 'PLAN_TO_WATCH')
+							usersShowsData?.filter(show => show.status === 'PLAN_TO_WATCH')
 								.length
 						}
 					</span>
@@ -89,7 +77,7 @@ const MyMovies: NextPage = () => {
 	);
 };
 
-export default MyMovies;
+export default MyShows;
 
 export const getServerSideProps = getClientAuthSession(async _ctx => {
 	return { props: {} };

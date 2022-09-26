@@ -1226,8 +1226,14 @@ export interface NexusGenArgTypes {
     usersMovie: { // args
       movieId: string; // String!
     }
+    usersMovies: { // args
+      userId: string; // String!
+    }
     usersShow: { // args
       showId: string; // String!
+    }
+    usersShows: { // args
+      userId: string; // String!
     }
   }
 }

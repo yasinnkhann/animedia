@@ -11,16 +11,16 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 
 interface Props {
-	movies: NexusGenObjects['UserMovie'][];
+	shows: NexusGenObjects['UserShow'][];
 }
 
-const Status = ({ movies }: Props) => {
+const Status = ({ shows }: Props) => {
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section>
-				{movies.map(movie => (
-					<div key={movie.id}>
-						<p>{movie.name}</p>
+				{shows.map(show => (
+					<div key={show.id}>
+						<p>{show.name}</p>
 					</div>
 				))}
 			</section>
@@ -54,13 +54,13 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		nextAuthOptions
 	);
 
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_GET_USERS_MOVIES, {
+	const data = await request(SERVER_BASE_URL, Queries.QUERY_GET_USERS_SHOWS, {
 		userId: session?.user?.id,
 	});
 
-	const movies = data.usersMovies.filter(
-		(movie: NexusGenObjects['UserMovie']) => movie.status === status
+	const shows = data.usersShows.filter(
+		(show: NexusGenObjects['UserShow']) => show.status === status
 	);
 
-	return { props: { movies } };
+	return { props: { shows } };
 };

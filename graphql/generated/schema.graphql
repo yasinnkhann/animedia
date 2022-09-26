@@ -228,9 +228,9 @@ type Query {
   trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
   user: User
   usersMovie(movieId: String!): UserMovie
-  usersMovies: [UserMovie]
+  usersMovies(userId: String!): [UserMovie]
   usersShow(showId: String!): UserShow
-  usersShows: [UserShow]
+  usersShows(userId: String!): [UserShow]
 }
 
 type ShowDetailsCountry {
