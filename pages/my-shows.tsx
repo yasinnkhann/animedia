@@ -16,11 +16,48 @@ const MyShows: NextPage = () => {
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>My Shows</h1>
 			<section>
-				{usersShowsData?.map(show => (
+				{/* {usersShowsData?.map(show => (
 					<div key={show.id}>
 						<p>{show.name}</p>
 					</div>
-				))}
+				))} */}
+				<div>
+					<a>Watching:</a>
+					<span>
+						{usersShowsData?.filter(show => show.status === 'WATCHING').length}
+					</span>
+				</div>
+
+				<div>
+					<a>Completed:</a>
+					<span>
+						{usersShowsData?.filter(show => show.status === 'COMPLETED').length}
+					</span>
+				</div>
+
+				<div>
+					<a>On-Hold:</a>
+					<span>
+						{usersShowsData?.filter(show => show.status === 'ON_HOLD').length}
+					</span>
+				</div>
+
+				<div>
+					<a>Dropped:</a>
+					<span>
+						{usersShowsData?.filter(show => show.status === 'DROPPED').length}
+					</span>
+				</div>
+
+				<div>
+					<a>Plan to Watch:</a>
+					<span>
+						{
+							usersShowsData?.filter(show => show.status === 'PLAN_TO_WATCH')
+								.length
+						}
+					</span>
+				</div>
 			</section>
 		</div>
 	);

@@ -129,6 +129,7 @@ export const usersMovies = extendType({
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
+				console.log('SESHH: ', ctx.session);
 				return await ctx.prisma.movie.findMany({
 					where: {
 						userId: ctx.session!.user?.id!,
