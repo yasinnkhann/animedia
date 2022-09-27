@@ -108,74 +108,22 @@ const Home: NextPage = () => {
 			{allDataLoaded && (
 				<div>
 					<SearchBar />
-					<section className='flex w-full ml-[3rem] items-end'>
-						<div className='flex'>
-							<h1>What&apos;s Popular</h1>
-						</div>
-						<ul className='flex w-[25%] justify-around'>
-							<li
-								className='cursor-pointer'
-								style={{
-									borderBottom:
-										whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
-											? '5px solid black'
-											: undefined,
-								}}
-								onClick={() =>
-									handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
-								}
-							>
-								Movies
-							</li>
-							<li
-								className='cursor-pointer'
-								style={{
-									borderBottom:
-										whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
-											? '5px solid black'
-											: undefined,
-								}}
-								onClick={() =>
-									handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
-								}
-							>
-								Shows
-							</li>
-							<li
-								className='cursor-pointer'
-								style={{
-									borderBottom:
-										whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
-											? '5px solid black'
-											: undefined,
-								}}
-								onClick={() =>
-									handleChangePopularQueryType(Queries.QUERY_MOVIES_IN_THEATRES)
-								}
-							>
-								In Theatres
-							</li>
-						</ul>
-					</section>
-					<HorizontalScroller
-						items={whatsPopularData.results as THorizontalScrollerData}
-					/>
-					<section className='flex items-end ml-[3rem]'>
-						<div className=''>
-							<h1>Trending</h1>
-						</div>
-						<section className='flex w-full justify-around'>
-							<ul className='flex w-[20%] justify-around'>
+					<section className='mt-4'>
+						<section className='flex w-full ml-[3rem] items-end'>
+							<div className='flex'>
+								<h1>What&apos;s Popular</h1>
+							</div>
+							<ul className='flex w-[25%] justify-around'>
 								<li
 									className='cursor-pointer'
 									style={{
 										borderBottom:
-											trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
 												? '5px solid black'
 												: undefined,
 									}}
 									onClick={() =>
-										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_MOVIES)
+										handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 									}
 								>
 									Movies
@@ -184,48 +132,115 @@ const Home: NextPage = () => {
 									className='cursor-pointer'
 									style={{
 										borderBottom:
-											trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+											whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
 												? '5px solid black'
 												: undefined,
 									}}
 									onClick={() =>
-										handleChangeTrendingQueryType(Queries.QUERY_TRENDING_SHOWS)
+										handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 									}
 								>
 									Shows
 								</li>
-							</ul>
-							<ul className='flex w-[20%] justify-around'>
 								<li
 									className='cursor-pointer'
 									style={{
 										borderBottom:
-											trendingTimeWindow === 'day'
+											whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
 												? '5px solid black'
 												: undefined,
 									}}
-									onClick={() => setTrendingTimeWindow('day')}
+									onClick={() =>
+										handleChangePopularQueryType(
+											Queries.QUERY_MOVIES_IN_THEATRES
+										)
+									}
 								>
-									Today
-								</li>
-								<li
-									className='cursor-pointer'
-									style={{
-										borderBottom:
-											trendingTimeWindow === 'week'
-												? '5px solid black'
-												: undefined,
-									}}
-									onClick={() => setTrendingTimeWindow('week')}
-								>
-									This Week
+									In Theatres
 								</li>
 							</ul>
 						</section>
+
+						<section className='mt-4'>
+							<HorizontalScroller
+								items={whatsPopularData.results as THorizontalScrollerData}
+							/>
+						</section>
+
+						<section className='flex items-end ml-[3rem] mt-4'>
+							<div className=''>
+								<h1>Trending</h1>
+							</div>
+							<section className='flex w-full justify-around'>
+								<ul className='flex w-[20%] justify-around'>
+									<li
+										className='cursor-pointer'
+										style={{
+											borderBottom:
+												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+													? '5px solid black'
+													: undefined,
+										}}
+										onClick={() =>
+											handleChangeTrendingQueryType(
+												Queries.QUERY_TRENDING_MOVIES
+											)
+										}
+									>
+										Movies
+									</li>
+									<li
+										className='cursor-pointer'
+										style={{
+											borderBottom:
+												trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+													? '5px solid black'
+													: undefined,
+										}}
+										onClick={() =>
+											handleChangeTrendingQueryType(
+												Queries.QUERY_TRENDING_SHOWS
+											)
+										}
+									>
+										Shows
+									</li>
+								</ul>
+								<ul className='flex w-[20%] justify-around'>
+									<li
+										className='cursor-pointer'
+										style={{
+											borderBottom:
+												trendingTimeWindow === 'day'
+													? '5px solid black'
+													: undefined,
+										}}
+										onClick={() => setTrendingTimeWindow('day')}
+									>
+										Today
+									</li>
+									<li
+										className='cursor-pointer'
+										style={{
+											borderBottom:
+												trendingTimeWindow === 'week'
+													? '5px solid black'
+													: undefined,
+										}}
+										onClick={() => setTrendingTimeWindow('week')}
+									>
+										This Week
+									</li>
+								</ul>
+							</section>
+						</section>
+
+						<section className='mt-4'>
+							<HorizontalScroller
+								items={trendingData.results as THorizontalScrollerData}
+							/>
+						</section>
 					</section>
-					<HorizontalScroller
-						items={trendingData.results as THorizontalScrollerData}
-					/>
 				</div>
 			)}
 		</div>

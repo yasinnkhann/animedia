@@ -77,7 +77,7 @@ const Header = () => {
 					</ul>
 					<ul
 						id='right-section'
-						className='!flex !justify-around !w-[15%] !mr-4'
+						className='!flex !justify-around !w-[20rem] !mr-4'
 					>
 						<li className='!flex !justify-around !items-center !w-full'>
 							{status === 'authenticated' && (
