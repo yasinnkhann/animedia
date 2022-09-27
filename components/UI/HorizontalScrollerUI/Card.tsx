@@ -22,7 +22,7 @@ const Card = ({ item, handleItemClick }: Props) => {
 
 	return (
 		<section
-			className='w-[10rem] h-[15rem] border-2 border-black select-none mx-4'
+			className='w-[10rem] h-[15rem] select-none mx-4'
 			onClick={() =>
 				handleItemClick({
 					mediaType: isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
@@ -33,16 +33,17 @@ const Card = ({ item, handleItemClick }: Props) => {
 			role='button'
 			tabIndex={0}
 		>
-			<div>
+			<div className='w-full h-full relative'>
 				<Image
+					className='rounded-lg'
 					src={BASE_IMG_URL + item.poster_path}
 					alt={mediaTitle}
-					height='100%'
-					width='100%'
+					layout='fill'
+					objectFit='contain'
 				/>
 			</div>
 
-			<div>
+			{/* <div>
 				<div>
 					<p className='text-center'>{mediaTitle}</p>
 				</div>
@@ -62,7 +63,7 @@ const Card = ({ item, handleItemClick }: Props) => {
 						percentageVal={Math.round(item.vote_average * 10)}
 					/>
 				</div>
-			</div>
+			</div> */}
 		</section>
 	);
 };
