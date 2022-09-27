@@ -9,18 +9,34 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
+import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
+import { useRouter } from 'next/router';
+import { ESearchType } from '@ts/enums';
 
 interface Props {
 	movies: NexusGenObjects['UserMovie'][];
 }
 
 const Status = ({ movies }: Props) => {
+	const router = useRouter();
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section>
 				{movies.map(movie => (
 					<div key={movie.id}>
-						<p>{movie.name}</p>
+						<a
+							onClick={() =>
+								router.push(
+									getDetailsPageRoute(
+										ESearchType.MOVIE,
+										String(movie.id),
+										movie.name
+									)
+								)
+							}
+						>
+							{movie.name}
+						</a>
 					</div>
 				))}
 			</section>
@@ -32,7 +48,6 @@ export default Status;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const statusParam = ctx.params?.status as string;
-	console.log('STATUS: ', statusParam);
 
 	let status: NexusGenEnums['WatchStatusTypes'];
 
