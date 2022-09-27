@@ -1,81 +1,118 @@
-import React from 'react';
-import { request } from 'graphql-request';
-import { GetServerSideProps } from 'next';
+import React, { useState, useEffect } from 'react';
 import * as Queries from '../../graphql/queries';
-import { SERVER_BASE_URL } from '../../utils/URLs';
-import { authOptions as nextAuthOptions } from '../../pages/api/auth/[...nextauth]';
-import { unstable_getServerSession } from 'next-auth';
+import * as Mutations from '../../graphql/mutations';
 import {
 	NexusGenObjects,
 	NexusGenEnums,
+	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
 import { useRouter } from 'next/router';
 import { ESearchType } from '@ts/enums';
+import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
+import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { useSession } from 'next-auth/react';
 
-interface Props {
-	movies: NexusGenObjects['UserMovie'][];
-}
-
-const Status = ({ movies }: Props) => {
+const Status = () => {
 	const router = useRouter();
+	const { data: session, status } = useSession();
+
+	if (!session && status === 'unauthenticated') {
+		router.push('/');
+	}
+
+	const {
+		data: usersMoviesData,
+	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
+		Queries.QUERY_GET_USERS_MOVIES
+	);
+
+	const [movies, setMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
+	const [movieId, setMovieId] = useState<string>('');
+
+	const {
+		mutateFunction: deleteMovie,
+	}: IUseGQLMutation<
+		NexusGenObjects['UserMovie'],
+		NexusGenArgTypes['Mutation']['deletedMovie']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedMovie']>(
+		Mutations.MUTATION_DELETE_MOVIE,
+		{
+			variables: {
+				movieId,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_MOVIES,
+				},
+				'UsersMovies',
+			],
+		}
+	);
+
+	useEffect(() => {
+		if (usersMoviesData) {
+			let statusParam = router.query.status;
+			let status: NexusGenEnums['WatchStatusTypes'];
+
+			if (statusParam === 'watching') {
+				status = 'WATCHING';
+			} else if (statusParam === 'completed') {
+				status = 'COMPLETED';
+			} else if (statusParam === 'on-hold') {
+				status = 'ON_HOLD';
+			} else if (statusParam === 'dropped') {
+				status = 'DROPPED';
+			} else if (statusParam === 'plan-to-watch') {
+				status = 'PLAN_TO_WATCH';
+			}
+
+			const moviesFiltered = usersMoviesData.filter(
+				(movie: NexusGenObjects['UserMovie']) => movie.status === status
+			);
+			setMovies(moviesFiltered);
+		}
+	}, [router.query.status, usersMoviesData]);
+
+	console.log('MOVIES: ', movies);
+
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section>
-				{movies.map(movie => (
-					<div key={movie.id}>
-						<a
-							onClick={() =>
-								router.push(
-									getDetailsPageRoute(
-										ESearchType.MOVIE,
-										String(movie.id),
-										movie.name
+				<section>
+					{movies.map(movie => (
+						<div key={movie.id}>
+							<a
+								onClick={() =>
+									router.push(
+										getDetailsPageRoute(
+											ESearchType.MOVIE,
+											Number(movie.id),
+											movie.name as string
+										)
 									)
-								)
-							}
-						>
-							{movie.name}
-						</a>
-					</div>
-				))}
+								}
+							>
+								{movie.name}
+							</a>
+							<button
+								onClick={() => {
+									setMovieId(movie.id as string);
+									deleteMovie({
+										variables: {
+											movieId: movie.id as string,
+										},
+									});
+								}}
+							>
+								Remove
+							</button>
+						</div>
+					))}
+				</section>
 			</section>
 		</section>
 	);
 };
 
 export default Status;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-	const statusParam = ctx.params?.status as string;
-
-	let status: NexusGenEnums['WatchStatusTypes'];
-
-	if (statusParam === 'watching') {
-		status = 'WATCHING';
-	} else if (statusParam === 'completed') {
-		status = 'COMPLETED';
-	} else if (statusParam === 'on-hold') {
-		status = 'ON_HOLD';
-	} else if (statusParam === 'dropped') {
-		status = 'DROPPED';
-	} else if (statusParam === 'plan-to-watch') {
-		status = 'PLAN_TO_WATCH';
-	}
-
-	const session = await unstable_getServerSession(
-		ctx.req,
-		ctx.res,
-		nextAuthOptions
-	);
-
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_GET_USERS_MOVIES, {
-		userId: session?.user?.id,
-	});
-
-	const movies = data.usersMovies.filter(
-		(movie: NexusGenObjects['UserMovie']) => movie.status === status
-	);
-
-	return { props: { movies } };
-};

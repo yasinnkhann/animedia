@@ -1,66 +1,115 @@
-import React from 'react';
-import { request } from 'graphql-request';
-import { GetServerSideProps } from 'next';
+import React, { useState, useEffect } from 'react';
 import * as Queries from '../../graphql/queries';
-import { SERVER_BASE_URL } from '../../utils/URLs';
-import { authOptions as nextAuthOptions } from '../../pages/api/auth/[...nextauth]';
-import { unstable_getServerSession } from 'next-auth';
+import * as Mutations from '../../graphql/mutations';
 import {
 	NexusGenObjects,
 	NexusGenEnums,
+	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
+import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
+import { useRouter } from 'next/router';
+import { ESearchType } from '@ts/enums';
+import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
+import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { useSession } from 'next-auth/react';
 
-interface Props {
-	shows: NexusGenObjects['UserShow'][];
-}
+const Status = () => {
+	const router = useRouter();
+	const { data: session, status } = useSession();
 
-const Status = ({ shows }: Props) => {
+	if (!session && status === 'unauthenticated') {
+		router.push('/');
+	}
+
+	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
+		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS);
+
+	const [shows, setShows] = useState<NexusGenObjects['UserShow'][]>([]);
+	const [showId, setShowId] = useState<string>('');
+
+	const {
+		mutateFunction: deleteShow,
+	}: IUseGQLMutation<
+		NexusGenObjects['UserShow'],
+		NexusGenArgTypes['Mutation']['deletedShow']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedShow']>(
+		Mutations.MUTATION_DELETE_SHOW,
+		{
+			variables: {
+				showId,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_SHOWS,
+				},
+				'UsersShows',
+			],
+		}
+	);
+
+	useEffect(() => {
+		if (usersShowsData) {
+			let statusParam = router.query.status;
+			let status: NexusGenEnums['WatchStatusTypes'];
+
+			if (statusParam === 'watching') {
+				status = 'WATCHING';
+			} else if (statusParam === 'completed') {
+				status = 'COMPLETED';
+			} else if (statusParam === 'on-hold') {
+				status = 'ON_HOLD';
+			} else if (statusParam === 'dropped') {
+				status = 'DROPPED';
+			} else if (statusParam === 'plan-to-watch') {
+				status = 'PLAN_TO_WATCH';
+			}
+
+			const showsFiltered = usersShowsData.filter(
+				(show: NexusGenObjects['UserShow']) => show.status === status
+			);
+			setShows(showsFiltered);
+		}
+	}, [router.query.status, usersShowsData]);
+
+	console.log('SHOWS: ', shows);
+
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section>
-				{shows.map(show => (
-					<div key={show.id}>
-						<p>{show.name}</p>
-					</div>
-				))}
+				<section>
+					{shows.map(show => (
+						<div key={show.id}>
+							<a
+								onClick={() =>
+									router.push(
+										getDetailsPageRoute(
+											ESearchType.SHOW,
+											Number(show.id),
+											show.name as string
+										)
+									)
+								}
+							>
+								{show.name}
+							</a>
+							<button
+								onClick={() => {
+									setShowId(show.id as string);
+									deleteShow({
+										variables: {
+											showId: show.id as string,
+										},
+									});
+								}}
+							>
+								Remove
+							</button>
+						</div>
+					))}
+				</section>
 			</section>
 		</section>
 	);
 };
 
 export default Status;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-	const statusParam = ctx.params?.status as string;
-	console.log('STATUS: ', statusParam);
-
-	let status: NexusGenEnums['WatchStatusTypes'];
-
-	if (statusParam === 'watching') {
-		status = 'WATCHING';
-	} else if (statusParam === 'completed') {
-		status = 'COMPLETED';
-	} else if (statusParam === 'on-hold') {
-		status = 'ON_HOLD';
-	} else if (statusParam === 'dropped') {
-		status = 'DROPPED';
-	} else if (statusParam === 'plan-to-watch') {
-		status = 'PLAN_TO_WATCH';
-	}
-
-	const session = await unstable_getServerSession(
-		ctx.req,
-		ctx.res,
-		nextAuthOptions
-	);
-
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_GET_USERS_SHOWS, {
-		userId: session?.user?.id,
-	});
-
-	const shows = data.usersShows.filter(
-		(show: NexusGenObjects['UserShow']) => show.status === status
-	);
-
-	return { props: { shows } };
-};

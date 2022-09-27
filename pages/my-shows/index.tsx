@@ -3,29 +3,15 @@ import type { NextPage } from 'next';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../graphql/generated/nexus-typegen';
+import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 
 const MyShows: NextPage = () => {
 	const router = useRouter();
-	const { data: session } = useSession();
 
-	const {
-		data: usersShowsData,
-	}: IUseGQLQuery<
-		NexusGenObjects['UserShow'][],
-		NexusGenArgTypes['Query']['usersShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersShows']>(
-		Queries.QUERY_GET_USERS_SHOWS,
-		{
-			variables: { userId: session?.user?.id as string },
-		}
-	);
+	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
+		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS);
 
 	console.log('USERS SHOWS DATA: ', usersShowsData);
 

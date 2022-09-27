@@ -128,13 +128,10 @@ export const usersMovies = extendType({
 	definition(t) {
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
-			args: {
-				userId: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { userId }, ctx) => {
+			resolve: async (_parent, _args, ctx) => {
 				return await ctx.prisma.movie.findMany({
 					where: {
-						userId,
+						userId: ctx.session?.user?.id!,
 					},
 					orderBy: [
 						{
@@ -152,13 +149,10 @@ export const usersShows = extendType({
 	definition(t) {
 		t.list.field('usersShows', {
 			type: 'UserShow',
-			args: {
-				userId: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { userId }, ctx) => {
+			resolve: async (_parent, _args, ctx) => {
 				return await ctx.prisma.show.findMany({
 					where: {
-						userId,
+						userId: ctx.session?.user?.id,
 					},
 					orderBy: [
 						{
@@ -308,7 +302,7 @@ export const deleteMovie = extendType({
 					where: {
 						id_userId: {
 							id: movieId,
-							userId: ctx.session!.user?.id!,
+							userId: ctx.session?.user?.id!,
 						},
 					},
 				});
