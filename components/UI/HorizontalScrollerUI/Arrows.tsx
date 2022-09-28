@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, Fragment } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 function Arrow({
@@ -49,9 +49,11 @@ export function LeftArrow() {
 	}, [isFirstItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
-			Left
-		</Arrow>
+		<section className='flex pl-10 relative'>
+			<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
+				<i className='fa-solid fa-arrow-left absolute left-3 top-[30%] text-xl'></i>
+			</Arrow>
+		</section>
 	);
 }
 
@@ -70,8 +72,10 @@ export function RightArrow() {
 	}, [isLastItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
-			Right
-		</Arrow>
+		<section className='flex pr-10 relative'>
+			<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
+				<i className='fa-solid fa-arrow-right absolute right-3 top-[30%] text-xl'></i>
+			</Arrow>
+		</section>
 	);
 }

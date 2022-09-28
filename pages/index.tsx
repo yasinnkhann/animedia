@@ -18,30 +18,25 @@ const Home: NextPage = () => {
 	const whatsPopularContainerRef = useRef<HTMLElement>(null);
 	const trendingContainerRef = useRef<HTMLElement>(null);
 
-	useEffect(
-		() => {
-			if (whatsPopularContainerRef.current && trendingContainerRef.current) {
-				const scrollerClass =
-					'.react-horizontal-scrolling-menu--scroll-container';
+	useEffect(() => {
+		if (whatsPopularContainerRef.current && trendingContainerRef.current) {
+			const scrollerClass =
+				'.react-horizontal-scrolling-menu--scroll-container';
 
-				const whatsPopularScroller =
-					whatsPopularContainerRef.current.querySelector(
-						scrollerClass
-					) as HTMLDivElement;
-
-				whatsPopularScroller.style.height = '25rem';
-
-				const trendingScroller = trendingContainerRef.current.querySelector(
+			const whatsPopularScroller =
+				whatsPopularContainerRef.current.querySelector(
 					scrollerClass
 				) as HTMLDivElement;
 
-				trendingScroller.style.height = '25rem';
-			}
-		}
+			whatsPopularScroller.style.height = '25rem';
 
-		// eslint-disable-next-line
-		// [whatsPopularContainerRef.current, trendingContainerRef.current]
-	);
+			const trendingScroller = trendingContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			trendingScroller.style.height = '25rem';
+		}
+	});
 
 	const [whatsPopularQueryType, setWhatsPopularQueryType] =
 		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
