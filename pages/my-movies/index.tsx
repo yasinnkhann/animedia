@@ -16,8 +16,6 @@ const MyMovies: NextPage = () => {
 		Queries.QUERY_GET_USERS_MOVIES
 	);
 
-	console.log('USERS MOVIES DATA: ', usersMoviesData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>My Movies</h1>

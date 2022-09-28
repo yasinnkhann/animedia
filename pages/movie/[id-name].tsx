@@ -40,6 +40,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
+	console.log('MOVIE INFO: ', usersMovieData);
+
 	const {
 		mutateFunction: addMovie,
 	}: IUseGQLMutation<
@@ -140,7 +142,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		const { value } = e.target;
 		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
 
-		console.log('rating: ', rating);
 		updateMovie({
 			variables: {
 				movieId: String(movieDetails.id),
@@ -162,8 +163,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			setRating('');
 		}
 	}, [watchStatus]);
-
-	console.log('USERS MOVIE: ', usersMovieData);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>

@@ -11,8 +11,6 @@ import * as Queries from '../graphql/queries';
 const MyList: NextPage = () => {
 	const { data: session } = useSession();
 
-	console.log('SESSION: ', session);
-
 	const { data: userData }: IUseGQLQuery<NexusGenObjects['User']> = useGQLQuery(
 		Queries.QUERY_GET_USER
 	);
