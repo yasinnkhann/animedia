@@ -16,6 +16,10 @@ declare global {
      * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
      */
     json<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "JSONObject";
+    /**
+     * The `BigInt` scalar type represents non-fractional signed whole numeric values.
+     */
+    bigint<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "BigInt";
   }
 }
 declare global {
@@ -28,6 +32,10 @@ declare global {
      * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
      */
     json<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSONObject";
+    /**
+     * The `BigInt` scalar type represents non-fractional signed whole numeric values.
+     */
+    bigint<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "BigInt";
     /**
      * Adds a Relay-style connection to the type, with numerous options for configuration
      *
@@ -61,6 +69,7 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  BigInt: any
   DateTime: any
   JSONObject: any
 }
@@ -111,7 +120,7 @@ export interface NexusGenObjects {
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
     release_date?: string | null; // String
-    revenue?: number | null; // Int
+    revenue?: NexusGenScalars['BigInt'] | null; // BigInt
     runtime?: number | null; // Int
     spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
     status: string; // String!
@@ -440,7 +449,7 @@ export interface NexusGenFieldTypes {
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
     release_date: string | null; // String
-    revenue: number | null; // Int
+    revenue: NexusGenScalars['BigInt'] | null; // BigInt
     runtime: number | null; // Int
     spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
     status: string; // String!
@@ -796,7 +805,7 @@ export interface NexusGenFieldTypeNames {
     production_companies: 'MovieDetailsProdCompany'
     production_countries: 'MovieDetailsProdCountry'
     release_date: 'String'
-    revenue: 'Int'
+    revenue: 'BigInt'
     runtime: 'Int'
     spoken_languages: 'MovieDetailsSpokenLang'
     status: 'String'

@@ -146,7 +146,7 @@ export const movieDetails = objectType({
 			type: 'MovieDetailsProdCountry',
 		});
 		t.string('release_date');
-		t.int('revenue');
+		t.bigint('revenue');
 		t.int('runtime');
 		t.nonNull.list.field('spoken_languages', {
 			type: 'MovieDetailsSpokenLang',

@@ -28,7 +28,7 @@ const MediaCard = ({ media, rank }: Props) => {
 	};
 
 	return (
-		<section>
+		<section className='border'>
 			<h1 onClick={handleGoToDetailsPage}>{mediaTitle}</h1>
 			<div>
 				<Image
