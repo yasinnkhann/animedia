@@ -12,20 +12,32 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
-import { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Home: NextPage = () => {
+	const whatsPopularContainerRef = useRef<HTMLElement>(null);
+	const trendingContainerRef = useRef<HTMLElement>(null);
+
 	useEffect(() => {
-		const scroller = document.body.querySelector(
-			'.react-horizontal-scrolling-menu--scroll-container'
-		) as HTMLDivElement;
+		if (whatsPopularContainerRef.current && trendingContainerRef.current) {
+			const scrollerClass =
+				'.react-horizontal-scrolling-menu--scroll-container';
 
-		if (scroller) {
-			scroller.style.height = '25rem';
+			const whatsPopularScroller =
+				whatsPopularContainerRef.current.querySelector(
+					scrollerClass
+				) as HTMLDivElement;
+
+			whatsPopularScroller.style.height = '25rem';
+
+			const trendingScroller = trendingContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			trendingScroller.style.height = '25rem';
 		}
-
-		console.log('SCROLLER: ', scroller);
-	});
+		// eslint-disable-next-line
+	}, [whatsPopularContainerRef.current, trendingContainerRef.current]);
 
 	const [whatsPopularQueryType, setWhatsPopularQueryType] =
 		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
@@ -174,7 +186,7 @@ const Home: NextPage = () => {
 							</ul>
 						</section>
 
-						<section className='mt-4'>
+						<section className='mt-4' ref={whatsPopularContainerRef}>
 							<HorizontalScroller
 								items={whatsPopularData.results as THorizontalScrollerData}
 							/>
@@ -248,7 +260,7 @@ const Home: NextPage = () => {
 							</section>
 						</section>
 
-						<section className='mt-4'>
+						<section className='mt-4' ref={trendingContainerRef}>
 							<HorizontalScroller
 								items={trendingData.results as THorizontalScrollerData}
 							/>
