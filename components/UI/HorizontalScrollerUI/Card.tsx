@@ -22,7 +22,7 @@ const Card = ({ item, handleItemClick }: Props) => {
 
 	return (
 		<section
-			className='w-[10rem] h-[15rem] select-none mx-4'
+			className='w-[10rem] h-[15rem] select-none mx-4 relative'
 			onClick={() =>
 				handleItemClick({
 					mediaType: isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
@@ -43,27 +43,25 @@ const Card = ({ item, handleItemClick }: Props) => {
 				/>
 			</div>
 
-			{/* <div>
-				<div>
-					<p className='text-center'>{mediaTitle}</p>
-				</div>
-
-				<div>
-					<p>
-						{formatDate(
-							isMovie
-								? (item.release_date as string)
-								: (item.first_air_date as string)
-						)}
-					</p>
-				</div>
-
+			<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
 				<div className='h-[4rem] w-[4rem]'>
 					<RoundProgressBar
 						percentageVal={Math.round(item.vote_average * 10)}
 					/>
 				</div>
-			</div> */}
+
+				<h2 className='text-base m-0 w-full break-words'>
+					<p className='font-bold'>{mediaTitle}</p>
+				</h2>
+
+				<p className='text-sm m-0 p-0'>
+					{formatDate(
+						isMovie
+							? (item.release_date as string)
+							: (item.first_air_date as string)
+					)}
+				</p>
+			</div>
 		</section>
 	);
 };
