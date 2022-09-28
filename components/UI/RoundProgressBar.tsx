@@ -47,7 +47,7 @@ const RoundProgressBar = ({ percentageVal }: Props) => {
 					// Text color
 					fill: 'white',
 					// Text size
-					fontSize: '16px',
+					fontSize: '1.5rem',
 				},
 				// Customize background - only used when the `background` prop is true
 				background: {

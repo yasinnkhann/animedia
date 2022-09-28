@@ -44,7 +44,7 @@ const Card = ({ item, handleItemClick }: Props) => {
 			</div>
 
 			<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
-				<div className='h-[4rem] w-[4rem]'>
+				<div className='h-[2.5rem] w-[2.5rem] relative bottom-[1rem] left-4'>
 					<RoundProgressBar
 						percentageVal={Math.round(item.vote_average * 10)}
 					/>

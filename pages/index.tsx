@@ -12,8 +12,21 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
+import { useEffect } from 'react';
 
 const Home: NextPage = () => {
+	useEffect(() => {
+		const scroller = document.body.querySelector(
+			'.react-horizontal-scrolling-menu--scroll-container'
+		) as HTMLDivElement;
+
+		if (scroller) {
+			scroller.style.height = '25rem';
+		}
+
+		console.log('SCROLLER: ', scroller);
+	});
+
 	const [whatsPopularQueryType, setWhatsPopularQueryType] =
 		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
 
