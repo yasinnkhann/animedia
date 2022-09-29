@@ -54,12 +54,13 @@ const MovieCard = ({ movie, rank }: Props) => {
 				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words border-x-4 border-blue-300'
 				onClick={handleGoToDetailsPage}
 			>
-				<div className='row-start-1 w-[5rem] h-[5rem]'>
+				<div className='row-start-1 w-[5rem] h-[7rem] relative'>
 					<Image
 						src={BASE_IMG_URL + movie.poster_path}
 						alt={movie.title}
-						height='100%'
-						width='100%'
+						layout='fill'
+						// height='100%'
+						// width='100%'
 						onClick={handleGoToDetailsPage}
 					/>
 				</div>
