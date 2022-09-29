@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import MediaCard from './MediaCard';
+import MovieCard from './MovieCard';
+import ShowCard from './ShowCard';
+
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { RESULTS_PER_PAGE } from '../utils/resultsPerPage';
 import { useSession } from 'next-auth/react';
@@ -29,14 +31,26 @@ const MediaList = ({ mediaData, pageNum }: Props) => {
 			</thead>
 
 			<tbody>
-				{mediaData.results.map((media, idx) => (
-					<Fragment key={media.id}>
-						<MediaCard
-							media={media}
-							rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
-						/>
-					</Fragment>
-				))}
+				{mediaData.results.map((media, idx) => {
+					let mediaComp: JSX.Element;
+
+					if ('title' in media) {
+						mediaComp = (
+							<MovieCard
+								movie={media}
+								rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
+							/>
+						);
+					} else {
+						mediaComp = (
+							<ShowCard
+								show={media}
+								rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
+							/>
+						);
+					}
+					return <Fragment key={media.id}>{mediaComp}</Fragment>;
+				})}
 			</tbody>
 		</table>
 	);
