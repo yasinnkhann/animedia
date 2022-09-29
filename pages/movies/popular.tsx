@@ -31,6 +31,14 @@ const PopularMovies = () => {
 		}
 	);
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	};
+
+	useEffect(() => {
+		scrollToTop();
+	}, [currPage]);
+
 	useEffect(() => {
 		if (popularMoviesData) {
 			const endIdx = currPage * mediaItemsPerPage;

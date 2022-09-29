@@ -62,6 +62,14 @@ const Genre = () => {
 		setMovieGenreType(value);
 	};
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	};
+
+	useEffect(() => {
+		scrollToTop();
+	}, [currPage]);
+
 	useEffect(() => {
 		if (genreOfMoviesData) {
 			const endIdx = currPage * mediaItemsPerPage;
