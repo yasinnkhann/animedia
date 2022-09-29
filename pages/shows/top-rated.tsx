@@ -31,6 +31,10 @@ const TopRatedShows = () => {
 		}
 	);
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	};
+
 	useEffect(() => {
 		if (topRatedShowsData) {
 			const endIdx = currPage * mediaItemsPerPage;
@@ -42,10 +46,12 @@ const TopRatedShows = () => {
 
 	const goToNextPage = () => {
 		setCurrPage(currPage => currPage + 1);
+		scrollToTop();
 	};
 
 	const goToPrevPage = () => {
 		setCurrPage(currPage => currPage - 1);
+		scrollToTop();
 	};
 
 	const getPaginationGroup = () => {

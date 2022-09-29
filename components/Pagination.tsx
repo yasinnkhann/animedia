@@ -21,6 +21,10 @@ export default function Pagination({
 }: Props) {
 	const numOfPages = Math.ceil(totalItems / itemsPerPage);
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	};
+
 	return (
 		<div className='flex justify-center p-4'>
 			<div className='flex items-center justify-center p-2 border border-solid border-gray-500 rounded cursor-pointer'>
@@ -37,7 +41,10 @@ export default function Pagination({
 				<div
 					key={num}
 					className='flex items-center justify-center p-2 border border-solid border-gray-500 rounded cursor-pointer'
-					onClick={() => paginate(num)}
+					onClick={() => {
+						paginate(num);
+						scrollToTop();
+					}}
 				>
 					<button
 						className='bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit text-blue-500'
