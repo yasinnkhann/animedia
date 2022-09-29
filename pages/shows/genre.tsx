@@ -17,6 +17,7 @@ import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
+import { unParseAmpersand } from '../../utils/unParseAmpersand';
 
 const { Option } = Select;
 
@@ -99,9 +100,6 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			show genre
-			<br />
-			<br />
 			<div>
 				<label className='block mb-1 text-blue-500' htmlFor='sort-by-dropdown'>
 					Sort By:
@@ -145,7 +143,15 @@ const Genre = () => {
 			</>
 			{genreOfShowsData && (
 				<>
-					<MediaList mediaData={genreOfShowsData} pageNum={currPage} />
+					<MediaList
+						mediaData={genreOfShowsData}
+						pageNum={currPage}
+						title={`${
+							sortByQueryType === Queries.QUERY_POPULAR_SHOWS_BY_GENRE
+								? 'Popular'
+								: 'Top-Rated'
+						} ${unParseAmpersand(showGenreType)} Shows`}
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={genreOfShowsData.total_results}

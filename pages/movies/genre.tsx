@@ -99,9 +99,6 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			movie genre
-			<br />
-			<br />
 			<div>
 				<label className='block mb-1 text-blue-500' htmlFor='sort-by-dropdown'>
 					Sort By:
@@ -145,7 +142,15 @@ const Genre = () => {
 			</>
 			{genreOfMoviesData && (
 				<>
-					<MediaList mediaData={genreOfMoviesData} pageNum={currPage} />
+					<MediaList
+						mediaData={genreOfMoviesData}
+						pageNum={currPage}
+						title={`${
+							sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+								? 'Popular'
+								: 'Top-Rated'
+						} ${movieGenreType} Movies`}
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={genreOfMoviesData.total_results}

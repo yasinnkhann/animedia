@@ -68,10 +68,13 @@ const PopularAnimeMovies = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			popular anime movies
 			{popularAnimeMoviesData && (
 				<>
-					<MediaList mediaData={popularAnimeMoviesData} pageNum={currPage} />
+					<MediaList
+						mediaData={popularAnimeMoviesData}
+						pageNum={currPage}
+						title='Popular Anime Movies'
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={popularAnimeMoviesData.total_results}

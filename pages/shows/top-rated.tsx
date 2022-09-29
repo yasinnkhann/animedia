@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { IUseGQLQuery } from '@ts/interfaces';
+import { useGQLQuery } from '../../hooks/useGQL';
+import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
+import * as Queries from '../../graphql/queries';
+import MediaList from 'components/MediaList';
+import Pagination from 'components/Pagination';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { useGQLQuery } from '../../hooks/useGQL';
-import * as Queries from '../../graphql/queries';
-import MediaList from 'components/MediaList';
-import Pagination from 'components/Pagination';
-import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
 
 const TopRatedShows = () => {
 	const [_currMediaItems, setCurrMediaItems] = useState<
@@ -68,10 +68,13 @@ const TopRatedShows = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			top rated shows
 			{topRatedShowsData && (
 				<>
-					<MediaList mediaData={topRatedShowsData} pageNum={currPage} />
+					<MediaList
+						mediaData={topRatedShowsData}
+						pageNum={currPage}
+						title='Top-Rated Shows'
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={topRatedShowsData.total_results}

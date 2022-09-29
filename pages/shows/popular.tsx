@@ -80,10 +80,13 @@ const PopularShows = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			popular shows
 			{popularShowsData && (
 				<>
-					<MediaList mediaData={popularShowsData} pageNum={currPage} />
+					<MediaList
+						mediaData={popularShowsData}
+						pageNum={currPage}
+						title='Popular Shows'
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={popularShowsData.total_results}

@@ -68,10 +68,13 @@ const TopRatedMovies = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			top rated movies
 			{topRatedMoviesData && (
 				<>
-					<MediaList mediaData={topRatedMoviesData} pageNum={currPage} />
+					<MediaList
+						mediaData={topRatedMoviesData}
+						pageNum={currPage}
+						title='Top-Rated Movies'
+					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={topRatedMoviesData.total_results}

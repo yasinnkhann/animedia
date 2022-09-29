@@ -9,13 +9,15 @@ import { useSession } from 'next-auth/react';
 interface Props {
 	mediaData: NexusGenObjects['MoviesRes'] | NexusGenObjects['ShowsRes'];
 	pageNum: number;
+	title: string;
 }
 
-const MediaList = ({ mediaData, pageNum }: Props) => {
+const MediaList = ({ mediaData, pageNum, title }: Props) => {
 	const { data: session } = useSession();
 
 	return (
 		<section className='px-44'>
+			<h3>{title}</h3>
 			<table className='w-full'>
 				<thead>
 					<tr className='border-4 border-blue-300'>
