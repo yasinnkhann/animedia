@@ -13,6 +13,7 @@ import {
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
 import React, { useEffect, useRef } from 'react';
+import { Circles } from 'react-loading-icons';
 
 const Home: NextPage = () => {
 	const whatsPopularContainerRef = useRef<HTMLElement>(null);
@@ -48,11 +49,16 @@ const Home: NextPage = () => {
 	const [trendingTimeWindow, setTrendingTimeWindow] =
 		useState<NexusGenEnums['TimeWindowTypes']>('day');
 
-	const { data: whatsPopularData }: IUseGQLQuery<NexusGenObjects['MoviesRes']> =
-		useGQLQuery(whatsPopularQueryType);
+	const {
+		data: whatsPopularData,
+		loading: whatsPopularLoading,
+	}: IUseGQLQuery<NexusGenObjects['MoviesRes']> = useGQLQuery(
+		whatsPopularQueryType
+	);
 
 	const {
 		data: trendingData,
+		loading: trendingLoading,
 	}: IUseGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['trendingMovies']
@@ -65,7 +71,11 @@ const Home: NextPage = () => {
 		}
 	);
 
-	const allDataLoaded = whatsPopularData && trendingData;
+	const allDataLoaded =
+		whatsPopularData &&
+		!whatsPopularLoading &&
+		trendingData &&
+		!trendingLoading;
 
 	const handleChangePopularQueryType = (queryType: DocumentNode) => {
 		setWhatsPopularQueryType(queryType);
@@ -126,6 +136,14 @@ const Home: NextPage = () => {
 			},
 		}
 	);
+
+	if (trendingLoading || whatsPopularLoading) {
+		return (
+			<div className='flex justify-center items-center h-screen'>
+				<Circles stroke='#00b3ff' style={{ height: 100, width: 100 }} />
+			</div>
+		);
+	}
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
