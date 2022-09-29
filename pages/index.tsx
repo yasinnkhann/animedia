@@ -1,6 +1,7 @@
+import React, { useEffect, useState, useRef } from 'react';
 import type { NextPage } from 'next';
+import { Circles } from 'react-loading-icons';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
-import { useState } from 'react';
 import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
 import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
@@ -12,8 +13,6 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
-import React, { useEffect, useRef } from 'react';
-import { Circles } from 'react-loading-icons';
 
 const Home: NextPage = () => {
 	const whatsPopularContainerRef = useRef<HTMLElement>(null);
@@ -140,7 +139,7 @@ const Home: NextPage = () => {
 	if (trendingLoading || whatsPopularLoading) {
 		return (
 			<div className='flex justify-center items-center h-screen'>
-				<Circles stroke='#00b3ff' style={{ height: 100, width: 100 }} />
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</div>
 		);
 	}

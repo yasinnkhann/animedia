@@ -10,7 +10,7 @@ const RoundProgressBar = ({ percentageVal }: Props) => {
 	return (
 		<CircularProgressbar
 			value={percentageVal}
-			text={`${percentageVal}%`}
+			text={percentageVal === 0 ? '0' : (percentageVal / 10).toFixed(1)}
 			background={true}
 			styles={{
 				// Customize the root svg element
