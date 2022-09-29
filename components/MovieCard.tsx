@@ -51,7 +51,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 			</td>
 
 			<td
-				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words border-x-4 border-blue-300'
+				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'
 				onClick={handleGoToDetailsPage}
 			>
 				<div className='row-start-1 w-[5rem] h-[7rem] relative'>
@@ -59,12 +59,10 @@ const MovieCard = ({ movie, rank }: Props) => {
 						src={BASE_IMG_URL + movie.poster_path}
 						alt={movie.title}
 						layout='fill'
-						// height='100%'
-						// width='100%'
 						onClick={handleGoToDetailsPage}
 					/>
 				</div>
-				<div className='col-start-2'>
+				<div className='col-start-2 pl-4'>
 					<h3>{movie.title}</h3>
 					<p className=''>{formatDate(movie.release_date as string)}</p>
 				</div>
