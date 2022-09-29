@@ -51,11 +51,10 @@ const MovieCard = ({ movie, rank }: Props) => {
 			</td>
 
 			<td
-				className='break-words border-x-4 border-blue-300'
+				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words border-x-4 border-blue-300'
 				onClick={handleGoToDetailsPage}
 			>
-				<h3>{movie.title}</h3>
-				<div className='w-[5rem] h-[5rem]'>
+				<div className='row-start-1 w-[5rem] h-[5rem]'>
 					<Image
 						src={BASE_IMG_URL + movie.poster_path}
 						alt={movie.title}
@@ -64,7 +63,10 @@ const MovieCard = ({ movie, rank }: Props) => {
 						onClick={handleGoToDetailsPage}
 					/>
 				</div>
-				<p>{formatDate(movie.release_date as string)}</p>
+				<div className='col-start-2'>
+					<h3>{movie.title}</h3>
+					<p className=''>{formatDate(movie.release_date as string)}</p>
+				</div>
 			</td>
 			<td className='align-middle text-center border-x-4 border-blue-300'>
 				<p className='text-base'>{movie.vote_average.toFixed(1)}</p>
