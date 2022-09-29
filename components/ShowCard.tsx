@@ -49,20 +49,21 @@ const ShowCard = ({ show, rank }: Props) => {
 			</td>
 
 			<td
-				className='break-words border-x-4 border-blue-300'
+				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'
 				onClick={handleGoToDetailsPage}
 			>
-				<h3>{show.name}</h3>
-				<div className='w-[5rem] h-[5rem]'>
+				<div className='row-start-1 w-[5rem] h-[7rem] relative'>
 					<Image
 						src={BASE_IMG_URL + show.poster_path}
 						alt={show.name}
-						height='100%'
-						width='100%'
+						layout='fill'
 						onClick={handleGoToDetailsPage}
 					/>
 				</div>
-				<p>{formatDate(show.first_air_date as string)}</p>
+				<div className='col-start-2 pl-4'>
+					<h3>{show.name}</h3>
+					<p>{formatDate(show.first_air_date as string)}</p>
+				</div>
 			</td>
 			<td className='align-middle text-center border-x-4 border-blue-300'>
 				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
