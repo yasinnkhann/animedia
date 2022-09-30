@@ -16,6 +16,8 @@ class MyDocument extends Document {
 		return initialProps;
 	}
 	render() {
+		const pageProps = this.props?.__NEXT_DATA__?.props?.pageProps;
+
 		return (
 			<Html>
 				<Head>
@@ -35,7 +37,7 @@ class MyDocument extends Document {
 						defer
 					></script>
 				</Head>
-				<body>
+				<body className={pageProps.hideScrollBar ? 'scrollbar-hide' : ''}>
 					<Main />
 					<NextScript />
 				</body>

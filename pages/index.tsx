@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import type { NextPage } from 'next';
+import type { NextPage, GetStaticProps } from 'next';
 import { Circles } from 'react-loading-icons';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
@@ -289,3 +289,7 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async _ctx => {
+	return { props: { hideScrollBar: true } };
+};
