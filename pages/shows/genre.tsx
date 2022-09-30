@@ -17,7 +17,7 @@ import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
-import { unParseAmpersand } from '../../utils/unParseAmpersand';
+import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
 
 const { Option } = Select;
 
@@ -150,7 +150,7 @@ const Genre = () => {
 							sortByQueryType === Queries.QUERY_POPULAR_SHOWS_BY_GENRE
 								? 'Popular'
 								: 'Top-Rated'
-						} ${unParseAmpersand(showGenreType)} Shows`}
+						} ${unParseSpecialChars(showGenreType)} Shows`}
 					/>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}

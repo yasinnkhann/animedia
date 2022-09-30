@@ -99,47 +99,51 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<div>
-				<label className='block mb-1 text-blue-500' htmlFor='sort-by-dropdown'>
-					Sort By:
-				</label>
-				<Select
-					id='sort-by-dropdown'
-					defaultValue='Popular'
-					style={{ width: 120 }}
-					onChange={handleSortByChange}
-				>
-					{SORT_BY_OPTIONS.map(option => (
-						<Option key={option.value} value={option.value}>
-							{option.text}
-						</Option>
-					))}
-				</Select>
-			</div>
-			<>
-				<br />
-				<br />
-				<label
-					className='block mb-1 text-blue-500'
-					htmlFor='genre-type-dropdown'
-				>
-					Genre Type:
-				</label>
-				<Select
-					id='genre-type-dropdown'
-					size='middle'
-					defaultValue='Action'
-					onChange={handleGenreTypeChange}
-					style={{ width: 200 }}
-				>
-					{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
-						<Option key={option.value} value={option.value}>
-							{option.text}
-						</Option>
-					))}
-				</Select>
-				<br />
-			</>
+			<section className='m-4'>
+				<div className='mb-2'>
+					<label
+						className='block mb-1 text-blue-500'
+						htmlFor='sort-by-dropdown'
+					>
+						Sort By:
+					</label>
+					<Select
+						className='!w-[9rem]'
+						id='sort-by-dropdown'
+						defaultValue='Popular'
+						onChange={handleSortByChange}
+					>
+						{SORT_BY_OPTIONS.map(option => (
+							<Option key={option.value} value={option.value}>
+								{option.text}
+							</Option>
+						))}
+					</Select>
+				</div>
+
+				<div>
+					<label
+						className='block mb-1 text-blue-500'
+						htmlFor='genre-type-dropdown'
+					>
+						Genre Type:
+					</label>
+					<Select
+						className='!w-[9rem]'
+						id='genre-type-dropdown'
+						size='middle'
+						defaultValue='Action'
+						onChange={handleGenreTypeChange}
+					>
+						{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
+							<Option key={option.value} value={option.value}>
+								{option.text}
+							</Option>
+						))}
+					</Select>
+				</div>
+			</section>
+
 			{genreOfMoviesData && (
 				<>
 					<MediaList

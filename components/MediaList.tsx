@@ -26,7 +26,7 @@ const MediaList = ({ mediaData, pageNum, title }: Props) => {
 						<th>Rating</th>
 						{session && (
 							<>
-								<th className='border-x-4 border-blue-300'>Your Rating</th>
+								<th className='border-x-4 border-blue-300'>My Rating</th>
 								<th>Status</th>
 							</>
 						)}
