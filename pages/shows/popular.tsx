@@ -9,6 +9,8 @@ import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
+import { Circles } from 'react-loading-icons';
+
 // import { useRouter } from 'next/router';
 
 const PopularShows = () => {
@@ -80,8 +82,8 @@ const PopularShows = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{popularShowsData && (
-				<>
+			{popularShowsData ? (
+				<section className='flex flex-col items-center'>
 					<MediaList
 						mediaData={popularShowsData}
 						pageNum={currPage}
@@ -96,7 +98,11 @@ const PopularShows = () => {
 						goToPrevPage={goToPrevPage}
 						goToNextPage={goToNextPage}
 					/>
-				</>
+				</section>
+			) : (
+				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+				</div>
 			)}
 		</section>
 	);

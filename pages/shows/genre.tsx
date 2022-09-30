@@ -18,6 +18,7 @@ import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
 import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
+import { Circles } from 'react-loading-icons';
 
 const { Option } = Select;
 
@@ -100,58 +101,65 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<div>
-				<label className='block mb-1 text-blue-500' htmlFor='sort-by-dropdown'>
-					Sort By:
-				</label>
-				<Select
-					id='sort-by-dropdown'
-					defaultValue='Popular'
-					style={{ width: 120 }}
-					onChange={handleSortByChange}
-				>
-					{SORT_BY_OPTIONS.map(option => (
-						<Option key={option.value} value={option.value}>
-							{option.text}
-						</Option>
-					))}
-				</Select>
-			</div>
-			<>
-				<br />
-				<br />
-				<label
-					className='block mb-1 text-blue-500'
-					htmlFor='genre-type-dropdown'
-				>
-					Genre Type:
-				</label>
-				<Select
-					id='genre-type-dropdown'
-					size='middle'
-					defaultValue='Action_AMPERSAND_Adventure'
-					onChange={handleGenreTypeChange}
-					style={{ width: 200 }}
-				>
-					{SHOW_GENRE_TYPE_OPTIONS.map(option => (
-						<Option key={option.value} value={option.value}>
-							{option.text}
-						</Option>
-					))}
-				</Select>
-				<br />
-			</>
-			{genreOfShowsData && (
+			{genreOfShowsData ? (
 				<>
-					<MediaList
-						mediaData={genreOfShowsData}
-						pageNum={currPage}
-						title={`${
-							sortByQueryType === Queries.QUERY_POPULAR_SHOWS_BY_GENRE
-								? 'Popular'
-								: 'Top-Rated'
-						} ${unParseSpecialChars(showGenreType)} Shows`}
-					/>
+					<section className='grid grid-cols-[1fr_3fr]'>
+						<section className='m-4 justify-self-center'>
+							<div className='mb-2'>
+								<label
+									className='block mb-1 text-blue-500'
+									htmlFor='sort-by-dropdown'
+								>
+									Sort By:
+								</label>
+								<Select
+									className='!w-[10rem]'
+									id='sort-by-dropdown'
+									defaultValue='Popular'
+									onChange={handleSortByChange}
+								>
+									{SORT_BY_OPTIONS.map(option => (
+										<Option key={option.value} value={option.value}>
+											{option.text}
+										</Option>
+									))}
+								</Select>
+							</div>
+
+							<div>
+								<label
+									className='block mb-1 text-blue-500'
+									htmlFor='genre-type-dropdown'
+								>
+									Genre Type:
+								</label>
+								<Select
+									className='!w-[10rem]'
+									id='genre-type-dropdown'
+									size='middle'
+									defaultValue='Action_AMPERSAND_Adventure'
+									onChange={handleGenreTypeChange}
+								>
+									{SHOW_GENRE_TYPE_OPTIONS.map(option => (
+										<Option key={option.value} value={option.value}>
+											{option.text}
+										</Option>
+									))}
+								</Select>
+							</div>
+						</section>
+
+						<MediaList
+							mediaData={genreOfShowsData}
+							pageNum={currPage}
+							title={`${
+								sortByQueryType === Queries.QUERY_POPULAR_SHOWS_BY_GENRE
+									? 'Popular'
+									: 'Top-Rated'
+							} ${unParseSpecialChars(showGenreType)} Shows`}
+						/>
+					</section>
+
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={genreOfShowsData.total_results}
@@ -162,6 +170,10 @@ const Genre = () => {
 						goToNextPage={goToNextPage}
 					/>
 				</>
+			) : (
+				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+				</div>
 			)}
 		</section>
 	);

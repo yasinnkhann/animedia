@@ -9,6 +9,7 @@ import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
+import { Circles } from 'react-loading-icons';
 
 const TopRatedShows = () => {
 	const [_currMediaItems, setCurrMediaItems] = useState<
@@ -68,8 +69,8 @@ const TopRatedShows = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{topRatedShowsData && (
-				<>
+			{topRatedShowsData ? (
+				<section className='flex flex-col items-center'>
 					<MediaList
 						mediaData={topRatedShowsData}
 						pageNum={currPage}
@@ -84,7 +85,11 @@ const TopRatedShows = () => {
 						goToPrevPage={goToPrevPage}
 						goToNextPage={goToNextPage}
 					/>
-				</>
+				</section>
+			) : (
+				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+				</div>
 			)}
 		</section>
 	);

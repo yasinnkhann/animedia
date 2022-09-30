@@ -112,7 +112,7 @@ const Genre = () => {
 									Sort By:
 								</label>
 								<Select
-									className='!w-[9rem]'
+									className='!w-[10rem]'
 									id='sort-by-dropdown'
 									defaultValue='Popular'
 									onChange={handleSortByChange}
@@ -133,7 +133,7 @@ const Genre = () => {
 									Genre Type:
 								</label>
 								<Select
-									className='!w-[9rem]'
+									className='!w-[10rem]'
 									id='genre-type-dropdown'
 									size='middle'
 									defaultValue='Action'
@@ -158,6 +158,7 @@ const Genre = () => {
 							} ${movieGenreType} Movies`}
 						/>
 					</section>
+
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={genreOfMoviesData.total_results}
