@@ -39,7 +39,6 @@ const Card = ({ item, handleItemClick }: Props) => {
 					src={BASE_IMG_URL + item.poster_path}
 					alt={mediaTitle}
 					layout='fill'
-					objectFit='contain'
 				/>
 			</div>
 
