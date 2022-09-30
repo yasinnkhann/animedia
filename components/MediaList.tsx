@@ -16,9 +16,9 @@ const MediaList = ({ mediaData, pageNum, title }: Props) => {
 	const { data: session } = useSession();
 
 	return (
-		<section className='px-44'>
-			<h3>{title}</h3>
-			<table className='w-full'>
+		<section className='justify-self-start'>
+			<h3 className='mb-2'>{title}</h3>
+			<table>
 				<thead>
 					<tr className='border-4 border-blue-300'>
 						<th className='border-r-4 border-blue-300'>Rank</th>

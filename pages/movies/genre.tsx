@@ -17,6 +17,7 @@ import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
+import { Circles } from 'react-loading-icons';
 
 const { Option } = Select;
 
@@ -99,62 +100,64 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<section className='m-4'>
-				<div className='mb-2'>
-					<label
-						className='block mb-1 text-blue-500'
-						htmlFor='sort-by-dropdown'
-					>
-						Sort By:
-					</label>
-					<Select
-						className='!w-[9rem]'
-						id='sort-by-dropdown'
-						defaultValue='Popular'
-						onChange={handleSortByChange}
-					>
-						{SORT_BY_OPTIONS.map(option => (
-							<Option key={option.value} value={option.value}>
-								{option.text}
-							</Option>
-						))}
-					</Select>
-				</div>
-
-				<div>
-					<label
-						className='block mb-1 text-blue-500'
-						htmlFor='genre-type-dropdown'
-					>
-						Genre Type:
-					</label>
-					<Select
-						className='!w-[9rem]'
-						id='genre-type-dropdown'
-						size='middle'
-						defaultValue='Action'
-						onChange={handleGenreTypeChange}
-					>
-						{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
-							<Option key={option.value} value={option.value}>
-								{option.text}
-							</Option>
-						))}
-					</Select>
-				</div>
-			</section>
-
-			{genreOfMoviesData && (
+			{genreOfMoviesData ? (
 				<>
-					<MediaList
-						mediaData={genreOfMoviesData}
-						pageNum={currPage}
-						title={`${
-							sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
-								? 'Popular'
-								: 'Top-Rated'
-						} ${movieGenreType} Movies`}
-					/>
+					<section className='grid grid-cols-[1fr_3fr]'>
+						<section className='m-4 justify-self-center'>
+							<div className='mb-2'>
+								<label
+									className='block mb-1 text-blue-500'
+									htmlFor='sort-by-dropdown'
+								>
+									Sort By:
+								</label>
+								<Select
+									className='!w-[9rem]'
+									id='sort-by-dropdown'
+									defaultValue='Popular'
+									onChange={handleSortByChange}
+								>
+									{SORT_BY_OPTIONS.map(option => (
+										<Option key={option.value} value={option.value}>
+											{option.text}
+										</Option>
+									))}
+								</Select>
+							</div>
+
+							<div>
+								<label
+									className='block mb-1 text-blue-500'
+									htmlFor='genre-type-dropdown'
+								>
+									Genre Type:
+								</label>
+								<Select
+									className='!w-[9rem]'
+									id='genre-type-dropdown'
+									size='middle'
+									defaultValue='Action'
+									onChange={handleGenreTypeChange}
+								>
+									{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
+										<Option key={option.value} value={option.value}>
+											{option.text}
+										</Option>
+									))}
+								</Select>
+							</div>
+						</section>
+
+						<MediaList
+							mediaData={genreOfMoviesData}
+							pageNum={currPage}
+							title={`${
+								sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+									? 'Popular'
+									: 'Top-Rated'
+							} ${movieGenreType} Movies`}
+						/>
+					</section>
 					<Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={genreOfMoviesData.total_results}
@@ -165,6 +168,10 @@ const Genre = () => {
 						goToNextPage={goToNextPage}
 					/>
 				</>
+			) : (
+				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+				</div>
 			)}
 		</section>
 	);
