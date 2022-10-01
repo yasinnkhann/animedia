@@ -10,7 +10,7 @@ interface Props {
 
 const MediaList = ({ peopleData, pageNum }: Props) => {
 	return (
-		<section className='grid grid-cols-4 place-items-center'>
+		<section className='grid grid-cols-4 gap-4'>
 			{peopleData.results.map((person, idx) => (
 				<section key={person.id}>
 					<PersonCard

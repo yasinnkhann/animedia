@@ -68,7 +68,7 @@ const PopularPeople = () => {
 	console.log(popularPeopleData);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-16'>
 			{popularPeopleData ? (
 				<>
 					<h3>Popular People</h3>

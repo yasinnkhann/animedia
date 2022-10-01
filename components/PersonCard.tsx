@@ -24,11 +24,8 @@ const PersonCard = ({ person, rank }: Props) => {
 
 	return (
 		<section>
-			<h1 className='cursor-pointer' onClick={handleGoToDetailsPage}>
-				{person.name}
-			</h1>
 			<div
-				className='w-[5rem] h-[7rem] relative cursor-pointer'
+				className='h-[15rem] relative cursor-pointer'
 				onClick={handleGoToDetailsPage}
 			>
 				<Image
@@ -38,7 +35,12 @@ const PersonCard = ({ person, rank }: Props) => {
 					layout='fill'
 				/>
 			</div>
-			<p>Known for: {person.known_for_department}</p>
+			<div>
+				<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
+					{person.name}
+				</h3>
+				<p>Known for: {person.known_for_department}</p>
+			</div>
 		</section>
 	);
 };
