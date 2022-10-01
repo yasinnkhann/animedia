@@ -100,7 +100,7 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<section className='grid grid-cols-[1fr_2fr_1fr]'>
+			<section className='grid grid-cols-[20%_60%_20%]'>
 				<section className='m-4 justify-self-center'>
 					<div className='mb-2'>
 						<label

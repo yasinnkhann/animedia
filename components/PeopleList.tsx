@@ -10,14 +10,14 @@ interface Props {
 
 const MediaList = ({ peopleData, pageNum }: Props) => {
 	return (
-		<section>
+		<section className='grid grid-cols-4 place-items-center'>
 			{peopleData.results.map((person, idx) => (
-				<div key={person.id}>
+				<section key={person.id}>
 					<PersonCard
 						person={person}
 						rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
 					/>
-				</div>
+				</section>
 			))}
 		</section>
 	);

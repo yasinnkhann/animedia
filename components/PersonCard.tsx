@@ -14,6 +14,8 @@ interface Props {
 const PersonCard = ({ person, rank }: Props) => {
 	const router = useRouter();
 
+	console.log(person);
+
 	const handleGoToDetailsPage = () => {
 		router.replace(
 			getDetailsPageRoute(ESearchType.PERSON, person.id, person.name)
@@ -22,17 +24,21 @@ const PersonCard = ({ person, rank }: Props) => {
 
 	return (
 		<section>
-			<h1 onClick={handleGoToDetailsPage}>{person.name}</h1>
-			<div>
+			<h1 className='cursor-pointer' onClick={handleGoToDetailsPage}>
+				{person.name}
+			</h1>
+			<div
+				className='w-[5rem] h-[7rem] relative cursor-pointer'
+				onClick={handleGoToDetailsPage}
+			>
 				<Image
+					className='rounded-lg'
 					src={BASE_IMG_URL + person.profile_path}
 					alt={person.name}
-					height='100%'
-					width='100%'
-					onClick={handleGoToDetailsPage}
+					layout='fill'
 				/>
 			</div>
-			<p>rank: {rank}</p>
+			<p>Known for: {person.known_for_department}</p>
 		</section>
 	);
 };
