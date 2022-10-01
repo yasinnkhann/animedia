@@ -23,7 +23,7 @@ export default function Pagination({
 
 	return (
 		<div className='flex justify-center p-4'>
-			<div className='flex items-center justify-center p-2 border border-solid border-gray-500 rounded cursor-pointer'>
+			<div className='flex items-center justify-center p-2 border border-solid border-gray-200 rounded cursor-pointer'>
 				<button
 					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
 						currPage === 1 ? '!text-gray-500' : '!text-green-700'
@@ -37,7 +37,7 @@ export default function Pagination({
 			{pageNums.map(num => (
 				<div
 					key={num}
-					className='flex items-center justify-center p-2 border border-solid border-gray-500 rounded cursor-pointer'
+					className='flex items-center justify-center p-2 border border-solid border-gray-200 rounded cursor-pointer'
 					onClick={() => paginate(num)}
 				>
 					<button
@@ -49,7 +49,7 @@ export default function Pagination({
 					</button>
 				</div>
 			))}
-			<div className='flex items-center justify-center p-2 border border-solid border-gray-500 rounded cursor-pointer'>
+			<div className='flex items-center justify-center p-2 border border-solid border-gray-200 rounded cursor-pointer'>
 				<button
 					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
 						currPage === numOfPages ? '!text-gray-500' : '!text-green-700'

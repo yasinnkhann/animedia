@@ -20,13 +20,13 @@ const MediaList = ({ mediaData, pageNum, title }: Props) => {
 			<h3 className='mb-2'>{title}</h3>
 			<table>
 				<thead>
-					<tr className='border-4 border-blue-300'>
-						<th className='border-r-4 border-blue-300 min-w-[5rem]'>Rank</th>
-						<th className='border-r-4 border-blue-300'>Title</th>
+					<tr className='border-2 border-gray-200'>
+						<th className='border-r-2 border-gray-200 min-w-[5rem]'>Rank</th>
+						<th className='border-r-2 border-gray-200'>Title</th>
 						<th className='min-w-[5rem]'>Rating</th>
 						{session && (
 							<>
-								<th className='border-x-4 border-blue-300 min-w-[5rem]'>
+								<th className='border-x-2 border-gray-200 min-w-[5rem]'>
 									My Rating
 								</th>
 								<th className='min-w-[5rem]'>Status</th>
@@ -35,7 +35,7 @@ const MediaList = ({ mediaData, pageNum, title }: Props) => {
 					</tr>
 				</thead>
 
-				<tbody className='border-b-4 border-blue-300'>
+				<tbody className='!border-b-2 !border-gray-200'>
 					{mediaData.results.map((media, idx) => {
 						let mediaComp: JSX.Element;
 

@@ -46,8 +46,8 @@ const MovieCard = ({ movie, rank }: Props) => {
 	};
 
 	return (
-		<tr className='border'>
-			<td className='align-middle text-center border-x-4 border-blue-300'>
+		<tr className='border-2'>
+			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{rank}</p>
 			</td>
 
@@ -68,15 +68,15 @@ const MovieCard = ({ movie, rank }: Props) => {
 					<p className=''>{formatDate(movie.release_date as string)}</p>
 				</div>
 			</td>
-			<td className='align-middle text-center border-x-4 border-blue-300'>
+			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-base'>{movie.vote_average.toFixed(1)}</p>
 			</td>
 			{session && (
 				<>
-					<td className='align-middle text-center border-x-4 border-blue-300'>
+					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersMovieData?.rating ? usersMovieData.rating : 'N/A'}</p>
 					</td>
-					<td className='align-middle text-center border-x-4 border-blue-300'>
+					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>
 							{usersMovieData?.status
 								? renderTableStatus(usersMovieData.status)

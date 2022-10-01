@@ -20,7 +20,7 @@ const SearchBar = () => {
 			onSubmit={handleSubmit}
 		>
 			<input
-				className='w-[98%] text-base py-4 pl-[3rem] pr-4 bg-gray-300 text-gray-700 rounded-md border-none transition duration-300 focus:border-0 focus:outline-none focus:shadow-[0_1px_12px_#5272a2]'
+				className='w-[calc(100%-2rem)] text-base py-4 pl-[3rem] pr-4 bg-gray-300 text-gray-700 rounded-md border-none transition duration-300 focus:border-0 focus:outline-none focus:shadow-[0_1px_12px_#5272a2]'
 				type='text'
 				placeholder='Search for a movie, tv show, or person...'
 				ref={searchRef}

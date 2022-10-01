@@ -350,7 +350,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</select>
 
 						<form
-							className='border border-gray-500 bg-white'
+							className='border border-gray-200 bg-white'
 							onSubmit={handleEpisodeSubmit}
 						>
 							<span>Episodes:</span>

@@ -44,7 +44,7 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	return (
 		<tr className='border'>
-			<td className='align-middle text-center border-x-4 border-blue-300'>
+			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{rank}</p>
 			</td>
 
@@ -65,15 +65,15 @@ const ShowCard = ({ show, rank }: Props) => {
 					<p>{formatDate(show.first_air_date as string)}</p>
 				</div>
 			</td>
-			<td className='align-middle text-center border-x-4 border-blue-300'>
+			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
 			</td>
 			{session && (
 				<>
-					<td className='align-middle text-center border-x-4 border-blue-300'>
+					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersShowData?.rating ? usersShowData.rating : 'N/A'}</p>
 					</td>
-					<td className='align-middle text-center border-x-4 border-blue-300'>
+					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersShowData?.status ? usersShowData.status : 'N/A'}</p>
 					</td>
 				</>
