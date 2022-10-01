@@ -1,9 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
 import * as Queries from '../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../hooks/useGQL';
@@ -13,6 +9,11 @@ import { BASE_IMG_URL } from '../utils/URLs';
 import Image from 'next/image';
 import { formatDate } from '../utils/formatDate';
 import { useSession } from 'next-auth/react';
+import { renderTableStatus } from '../utils/renderTableStatus';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../graphql/generated/nexus-typegen';
 
 interface Props {
 	show: NexusGenObjects['ShowResult'];
@@ -74,7 +75,11 @@ const ShowCard = ({ show, rank }: Props) => {
 						<p>{usersShowData?.rating ? usersShowData.rating : 'N/A'}</p>
 					</td>
 					<td className='align-middle text-center border-x-2 border-gray-200'>
-						<p>{usersShowData?.status ? usersShowData.status : 'N/A'}</p>
+						<p>
+							{usersShowData?.status
+								? renderTableStatus(usersShowData.status)
+								: 'N/A'}
+						</p>
 					</td>
 				</>
 			)}

@@ -1,9 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
 import * as Queries from '../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../hooks/useGQL';
@@ -14,6 +10,10 @@ import Image from 'next/image';
 import { formatDate } from '../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../utils/renderTableStatus';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../graphql/generated/nexus-typegen';
 
 interface Props {
 	movie: NexusGenObjects['MovieResult'];

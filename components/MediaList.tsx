@@ -16,20 +16,22 @@ const MediaList = ({ mediaData, pageNum, title }: Props) => {
 	const { data: session } = useSession();
 
 	return (
-		<section className='justify-self-start'>
+		<section>
 			<h3 className='mb-2'>{title}</h3>
 			<table>
 				<thead>
 					<tr className='border-2 border-gray-200'>
-						<th className='border-r-2 border-gray-200 min-w-[5rem]'>Rank</th>
-						<th className='border-r-2 border-gray-200'>Title</th>
-						<th className='min-w-[5rem]'>Rating</th>
+						<th className='border-r-2 border-gray-200 min-w-[5rem] p-4'>
+							Rank
+						</th>
+						<th className='border-r-2 border-gray-200 p-4'>Title</th>
+						<th className='min-w-[5rem] p-4'>Rating</th>
 						{session && (
 							<>
-								<th className='border-x-2 border-gray-200 min-w-[5rem]'>
+								<th className='border-x-2 border-gray-200 min-w-[7rem] p-4'>
 									My Rating
 								</th>
-								<th className='min-w-[5rem]'>Status</th>
+								<th className='min-w-[7rem] p-4'>Status</th>
 							</>
 						)}
 					</tr>
