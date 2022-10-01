@@ -25,7 +25,7 @@ const PersonCard = ({ person, rank }: Props) => {
 	return (
 		<section>
 			<div
-				className='h-[15rem] relative cursor-pointer'
+				className='h-[20rem] relative cursor-pointer'
 				onClick={handleGoToDetailsPage}
 			>
 				<Image

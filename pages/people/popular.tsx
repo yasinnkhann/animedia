@@ -71,7 +71,7 @@ const PopularPeople = () => {
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-16'>
 			{popularPeopleData ? (
 				<>
-					<h3>Popular People</h3>
+					<h3 className='mb-4'>Popular People</h3>
 					<PeopleList peopleData={popularPeopleData} pageNum={currPage} />
 					<Pagination
 						itemsPerPage={peopleItemsPerPage}

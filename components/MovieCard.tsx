@@ -57,6 +57,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 			>
 				<div className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
+						className='rounded-lg'
 						src={BASE_IMG_URL + movie.poster_path}
 						alt={movie.title}
 						layout='fill'

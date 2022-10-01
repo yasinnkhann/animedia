@@ -55,6 +55,7 @@ const ShowCard = ({ show, rank }: Props) => {
 			>
 				<div className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
+						className='rounded-lg'
 						src={BASE_IMG_URL + show.poster_path}
 						alt={show.name}
 						layout='fill'
