@@ -101,54 +101,54 @@ const Genre = () => {
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{genreOfShowsData ? (
-				<>
-					<section className='grid grid-cols-[1fr_3fr]'>
-						<section className='m-4 justify-self-center'>
-							<div className='mb-2'>
-								<label
-									className='block mb-1 text-blue-500'
-									htmlFor='sort-by-dropdown'
-								>
-									Sort By:
-								</label>
-								<Select
-									className='!w-[10rem]'
-									id='sort-by-dropdown'
-									defaultValue='Popular'
-									onChange={handleSortByChange}
-								>
-									{SORT_BY_OPTIONS.map(option => (
-										<Option key={option.value} value={option.value}>
-											{option.text}
-										</Option>
-									))}
-								</Select>
-							</div>
+			<section className='grid grid-cols-[1fr_2fr_1fr]'>
+				<section className='m-4 justify-self-center'>
+					<div className='mb-2'>
+						<label
+							className='block mb-1 text-blue-500'
+							htmlFor='sort-by-dropdown'
+						>
+							Sort By:
+						</label>
+						<Select
+							className='!w-[10rem]'
+							id='sort-by-dropdown'
+							defaultValue='Popular'
+							onChange={handleSortByChange}
+						>
+							{SORT_BY_OPTIONS.map(option => (
+								<Option key={option.value} value={option.value}>
+									{option.text}
+								</Option>
+							))}
+						</Select>
+					</div>
 
-							<div>
-								<label
-									className='block mb-1 text-blue-500'
-									htmlFor='genre-type-dropdown'
-								>
-									Genre Type:
-								</label>
-								<Select
-									className='!w-[10rem]'
-									id='genre-type-dropdown'
-									size='middle'
-									defaultValue='Action_AMPERSAND_Adventure'
-									onChange={handleGenreTypeChange}
-								>
-									{SHOW_GENRE_TYPE_OPTIONS.map(option => (
-										<Option key={option.value} value={option.value}>
-											{option.text}
-										</Option>
-									))}
-								</Select>
-							</div>
-						</section>
+					<div>
+						<label
+							className='block mb-1 text-blue-500'
+							htmlFor='genre-type-dropdown'
+						>
+							Genre Type:
+						</label>
+						<Select
+							className='!w-[10rem]'
+							id='genre-type-dropdown'
+							size='middle'
+							defaultValue='Action_AMPERSAND_Adventure'
+							onChange={handleGenreTypeChange}
+						>
+							{SHOW_GENRE_TYPE_OPTIONS.map(option => (
+								<Option key={option.value} value={option.value}>
+									{option.text}
+								</Option>
+							))}
+						</Select>
+					</div>
+				</section>
 
+				{genreOfShowsData ? (
+					<div>
 						<MediaList
 							mediaData={genreOfShowsData}
 							pageNum={currPage}
@@ -158,23 +158,22 @@ const Genre = () => {
 									: 'Top-Rated'
 							} ${unParseSpecialChars(showGenreType)} Shows`}
 						/>
-					</section>
-
-					<Pagination
-						itemsPerPage={mediaItemsPerPage}
-						totalItems={genreOfShowsData.total_results}
-						currPage={currPage}
-						pageNums={getPaginationGroup()}
-						paginate={pageNum => setCurrPage(pageNum)}
-						goToPrevPage={goToPrevPage}
-						goToNextPage={goToNextPage}
-					/>
-				</>
-			) : (
-				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
-					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-				</div>
-			)}
+						<Pagination
+							itemsPerPage={mediaItemsPerPage}
+							totalItems={genreOfShowsData.total_results}
+							currPage={currPage}
+							pageNums={getPaginationGroup()}
+							paginate={pageNum => setCurrPage(pageNum)}
+							goToPrevPage={goToPrevPage}
+							goToNextPage={goToNextPage}
+						/>
+					</div>
+				) : (
+					<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+						<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+					</div>
+				)}
+			</section>
 		</section>
 	);
 };
