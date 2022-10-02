@@ -41,7 +41,10 @@ const PersonDetails = ({
 		const mappedShowsCast: IKnownForMedia[] = [];
 
 		for (const castObj of personsKnownForShowRes.cast) {
-			if (!showsTracker.hasOwnProperty(castObj!.id)) {
+			if (
+				!showsTracker.hasOwnProperty(castObj!.id) &&
+				castObj!.episode_count! > 5
+			) {
 				showsTracker[String(castObj!.id)] = true;
 
 				mappedShowsCast.push({
