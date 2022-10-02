@@ -65,8 +65,6 @@ const PopularAnimeMovies = () => {
 			.map((_, idx) => start + idx + 1);
 	};
 
-	console.log(popularAnimeMoviesData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{popularAnimeMoviesData ? (

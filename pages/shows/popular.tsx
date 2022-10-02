@@ -78,8 +78,6 @@ const PopularShows = () => {
 	// 	});
 	// }, [currPage]);
 
-	console.log(popularShowsData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{popularShowsData ? (

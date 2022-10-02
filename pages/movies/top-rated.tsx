@@ -65,8 +65,6 @@ const TopRatedMovies = () => {
 			.map((_, idx) => start + idx + 1);
 	};
 
-	console.log(topRatedMoviesData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{topRatedMoviesData ? (

@@ -11,10 +11,8 @@ interface Props {
 	rank: number;
 }
 
-const PersonCard = ({ person, rank }: Props) => {
+const PersonCard = ({ person }: Props) => {
 	const router = useRouter();
-
-	console.log(person);
 
 	const handleGoToDetailsPage = () => {
 		router.replace(

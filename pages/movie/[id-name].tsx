@@ -14,6 +14,8 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
+import Image from 'next/image';
+import { BASE_IMG_URL } from '../../utils/URLs';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -40,7 +42,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
-	console.log('MOVIE INFO: ', usersMovieData);
+	console.log('MY MOVIE INFO: ', usersMovieData);
+	console.log('MOVIE DETAILS: ', movieDetails);
 
 	const {
 		mutateFunction: addMovie,
@@ -108,7 +111,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		console.log(value);
 
 		setWatchStatus(value as NexusGenEnums['WatchStatusTypes']);
 
@@ -165,12 +167,23 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	}, [watchStatus]);
 
 	return (
-		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
-			<div className='w-[75%]'>
-				<h1>{movieDetails.title}</h1>
-				<p>{movieDetails.overview}</p>
-			</div>
-			<div>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
+			<section>
+				<div className='w-[15rem] h-[20rem] relative'>
+					<Image
+						className='rounded-lg'
+						src={BASE_IMG_URL + movieDetails.poster_path}
+						alt={movieDetails.title}
+						layout='fill'
+					/>
+				</div>
+				<div className='w-[75%]'>
+					<h1>{movieDetails.title}</h1>
+					<p>{movieDetails.overview}</p>
+				</div>
+			</section>
+
+			<section>
 				{status === 'authenticated' && session.user && (
 					<div>
 						<select value={watchStatus} onChange={handleChangeWatchStatus}>
@@ -197,8 +210,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 						</select>
 					</div>
 				)}
-			</div>
-		</div>
+			</section>
+		</section>
 	);
 };
 

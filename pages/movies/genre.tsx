@@ -51,7 +51,6 @@ const Genre = () => {
 	);
 
 	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
-		console.log(`selected ${value}`);
 		if (value === 'Popular') {
 			setSortByQueryType(Queries.QUERY_POPULAR_MOVIES_BY_GENRE);
 		} else {
@@ -95,8 +94,6 @@ const Genre = () => {
 			.fill(null)
 			.map((_, idx) => start + idx + 1);
 	};
-
-	console.log(genreOfMoviesData);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
