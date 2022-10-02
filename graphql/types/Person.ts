@@ -211,3 +211,83 @@ export const getPersonsKnownForMovie = extendType({
 			});
 	},
 });
+//!
+export const personsKnownForShowCast = objectType({
+	name: 'PersonsKnownForShowCast',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.int('genre_ids');
+		t.nonNull.int('id');
+		t.nonNull.list.string('origin_country');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_name');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.string('first_air_date');
+		t.nonNull.string('name');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+		t.string('character');
+		t.id('credit_id');
+		t.int('episode_count');
+	},
+});
+
+export const personsKnownForShowCrew = objectType({
+	name: 'PersonsKnownForShowCrew',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.int('genre_ids');
+		t.nonNull.int('id');
+		t.nonNull.list.string('origin_country');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_name');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.string('first_air_date');
+		t.nonNull.string('name');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+		t.id('credit_id');
+		t.string('department');
+		t.int('episode_count');
+		t.string('job');
+	},
+});
+
+export const personsKnownForShowRes = objectType({
+	name: 'PersonsKnownForShowRes',
+	definition(t) {
+		t.int('id'),
+			t.nonNull.list.field('cast', {
+				type: 'PersonsKnownForShowCast',
+			});
+		t.nonNull.list.field('crew', {
+			type: 'PersonsKnownForShowCrew',
+		});
+	},
+});
+
+export const getPersonsKnownForShow = extendType({
+	type: 'Query',
+	definition(t) {
+		t.int('id'),
+			t.nonNull.field('personsKnownForShowRes', {
+				type: 'PersonsKnownForShowRes',
+				args: {
+					id: nonNull(intArg()),
+				},
+				resolve: async (_parent, { id }) => {
+					const { data } = await axios.get(
+						`${BASE_URL}/person/${id}/tv_credits?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					return data;
+				},
+			});
+	},
+});

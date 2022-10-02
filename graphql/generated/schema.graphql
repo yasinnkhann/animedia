@@ -252,6 +252,53 @@ type PersonsKnownForMovieRes {
   id: Int
 }
 
+type PersonsKnownForShowCast {
+  adult: Boolean!
+  backdrop_path: String
+  character: String
+  credit_id: ID
+  episode_count: Int
+  first_air_date: String
+  genre_ids: [Int]!
+  id: Int!
+  name: String!
+  origin_country: [String]!
+  original_language: String!
+  original_name: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type PersonsKnownForShowCrew {
+  adult: Boolean!
+  backdrop_path: String
+  credit_id: ID
+  department: String
+  episode_count: Int
+  first_air_date: String
+  genre_ids: [Int]!
+  id: Int!
+  job: String
+  name: String!
+  origin_country: [String]!
+  original_language: String!
+  original_name: String!
+  overview: String!
+  popularity: Float!
+  poster_path: String
+  vote_average: Float!
+  vote_count: Int!
+}
+
+type PersonsKnownForShowRes {
+  cast: [PersonsKnownForShowCast]!
+  crew: [PersonsKnownForShowCrew]!
+  id: Int
+}
+
 type Query {
   id: Int
   movieDetails(id: Int!): MovieDetailsRes!
@@ -259,6 +306,7 @@ type Query {
   moviesInTheatres(page: Int): MoviesInTheatresRes!
   personDetails(id: Int!): PersonDetailsRes!
   personsKnownForMovieRes(id: Int!): PersonsKnownForMovieRes!
+  personsKnownForShowRes(id: Int!): PersonsKnownForShowRes!
   popularAnimeMovies(page: Int): MoviesRes!
   popularAnimeShows(page: Int): ShowsRes!
   popularMovies(page: Int): MoviesRes!
