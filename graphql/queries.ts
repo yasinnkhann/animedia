@@ -796,3 +796,96 @@ export const QUERY_GET_USERS_SHOWS = gql`
 		}
 	}
 `;
+
+export const QUERY_GET_PERSONS_KNOWN_FOR_MOVIES = gql`
+	query PersonsKnownForMovieRes($personsKnownForMovieResId: Int!) {
+		personsKnownForMovieRes(id: $personsKnownForMovieResId) {
+			id
+			cast {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				original_language
+				original_title
+				overview
+				popularity
+				poster_path
+				release_date
+				title
+				video
+				vote_average
+				vote_count
+				character
+				credit_id
+				order
+			}
+			crew {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				original_language
+				original_title
+				overview
+				popularity
+				poster_path
+				release_date
+				title
+				video
+				vote_average
+				vote_count
+				credit_id
+				department
+				job
+			}
+		}
+	}
+`;
+
+export const QUERY_GET_PERSONS_KNOWN_FOR_SHOWS = gql`
+	query PersonsKnownForShowRes($personsKnownForShowResId: Int!) {
+		personsKnownForShowRes(id: $personsKnownForShowResId) {
+			id
+			cast {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				origin_country
+				original_language
+				original_name
+				overview
+				popularity
+				poster_path
+				first_air_date
+				name
+				vote_average
+				vote_count
+				character
+				credit_id
+				episode_count
+			}
+			crew {
+				adult
+				backdrop_path
+				genre_ids
+				id
+				origin_country
+				original_language
+				original_name
+				overview
+				popularity
+				poster_path
+				first_air_date
+				name
+				vote_average
+				vote_count
+				credit_id
+				department
+				episode_count
+				job
+			}
+		}
+	}
+`;
