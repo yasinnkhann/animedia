@@ -219,6 +219,49 @@ export interface NexusGenObjects {
     popularity: number; // Float!
     profile_path?: string | null; // String
   }
+  PersonsKnownForMovieCast: { // root type
+    adult: boolean; // Boolean!
+    backdrop_path?: string | null; // String
+    character?: string | null; // String
+    credit_id?: string | null; // ID
+    genre_ids: Array<number | null>; // [Int]!
+    id: number; // Int!
+    order?: number | null; // Int
+    original_language: string; // String!
+    original_title: string; // String!
+    overview: string; // String!
+    popularity: number; // Float!
+    poster_path?: string | null; // String
+    release_date?: string | null; // String
+    title: string; // String!
+    video: boolean; // Boolean!
+    vote_average: number; // Float!
+    vote_count: number; // Int!
+  }
+  PersonsKnownForMovieCrew: { // root type
+    adult: boolean; // Boolean!
+    backdrop_path?: string | null; // String
+    credit_id?: string | null; // ID
+    department?: string | null; // String
+    genre_ids: Array<number | null>; // [Int]!
+    id: number; // Int!
+    job?: string | null; // String
+    original_language: string; // String!
+    original_title: string; // String!
+    overview: string; // String!
+    popularity: number; // Float!
+    poster_path?: string | null; // String
+    release_date?: string | null; // String
+    title: string; // String!
+    video: boolean; // Boolean!
+    vote_average: number; // Float!
+    vote_count: number; // Int!
+  }
+  PersonsKnownForMovieRes: { // root type
+    cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
+    crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
+    id?: number | null; // Int
+  }
   Query: {};
   ShowDetailsCountry: { // root type
     iso_3166_1: string; // String!
@@ -555,11 +598,56 @@ export interface NexusGenFieldTypes {
     popularity: number; // Float!
     profile_path: string | null; // String
   }
+  PersonsKnownForMovieCast: { // field return type
+    adult: boolean; // Boolean!
+    backdrop_path: string | null; // String
+    character: string | null; // String
+    credit_id: string | null; // ID
+    genre_ids: Array<number | null>; // [Int]!
+    id: number; // Int!
+    order: number | null; // Int
+    original_language: string; // String!
+    original_title: string; // String!
+    overview: string; // String!
+    popularity: number; // Float!
+    poster_path: string | null; // String
+    release_date: string | null; // String
+    title: string; // String!
+    video: boolean; // Boolean!
+    vote_average: number; // Float!
+    vote_count: number; // Int!
+  }
+  PersonsKnownForMovieCrew: { // field return type
+    adult: boolean; // Boolean!
+    backdrop_path: string | null; // String
+    credit_id: string | null; // ID
+    department: string | null; // String
+    genre_ids: Array<number | null>; // [Int]!
+    id: number; // Int!
+    job: string | null; // String
+    original_language: string; // String!
+    original_title: string; // String!
+    overview: string; // String!
+    popularity: number; // Float!
+    poster_path: string | null; // String
+    release_date: string | null; // String
+    title: string; // String!
+    video: boolean; // Boolean!
+    vote_average: number; // Float!
+    vote_count: number; // Int!
+  }
+  PersonsKnownForMovieRes: { // field return type
+    cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
+    crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
+    id: number | null; // Int
+  }
   Query: { // field return type
+    id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
     personDetails: NexusGenRootTypes['PersonDetailsRes']; // PersonDetailsRes!
+    personsKnownForMovieRes: NexusGenRootTypes['PersonsKnownForMovieRes']; // PersonsKnownForMovieRes!
     popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
@@ -911,11 +999,56 @@ export interface NexusGenFieldTypeNames {
     popularity: 'Float'
     profile_path: 'String'
   }
+  PersonsKnownForMovieCast: { // field return type name
+    adult: 'Boolean'
+    backdrop_path: 'String'
+    character: 'String'
+    credit_id: 'ID'
+    genre_ids: 'Int'
+    id: 'Int'
+    order: 'Int'
+    original_language: 'String'
+    original_title: 'String'
+    overview: 'String'
+    popularity: 'Float'
+    poster_path: 'String'
+    release_date: 'String'
+    title: 'String'
+    video: 'Boolean'
+    vote_average: 'Float'
+    vote_count: 'Int'
+  }
+  PersonsKnownForMovieCrew: { // field return type name
+    adult: 'Boolean'
+    backdrop_path: 'String'
+    credit_id: 'ID'
+    department: 'String'
+    genre_ids: 'Int'
+    id: 'Int'
+    job: 'String'
+    original_language: 'String'
+    original_title: 'String'
+    overview: 'String'
+    popularity: 'Float'
+    poster_path: 'String'
+    release_date: 'String'
+    title: 'String'
+    video: 'Boolean'
+    vote_average: 'Float'
+    vote_count: 'Int'
+  }
+  PersonsKnownForMovieRes: { // field return type name
+    cast: 'PersonsKnownForMovieCast'
+    crew: 'PersonsKnownForMovieCrew'
+    id: 'Int'
+  }
   Query: { // field return type name
+    id: 'Int'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesInTheatres: 'MoviesInTheatresRes'
     personDetails: 'PersonDetailsRes'
+    personsKnownForMovieRes: 'PersonsKnownForMovieRes'
     popularAnimeMovies: 'MoviesRes'
     popularAnimeShows: 'ShowsRes'
     popularMovies: 'MoviesRes'
@@ -1158,6 +1291,9 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
     }
     personDetails: { // args
+      id: number; // Int!
+    }
+    personsKnownForMovieRes: { // args
       id: number; // Int!
     }
     popularAnimeMovies: { // args

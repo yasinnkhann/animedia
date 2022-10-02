@@ -132,3 +132,82 @@ export const getSearchedPeople = extendType({
 		});
 	},
 });
+
+export const personsKnownForMovieCast = objectType({
+	name: 'PersonsKnownForMovieCast',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.int('genre_ids');
+		t.nonNull.int('id');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_title');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.string('release_date');
+		t.nonNull.string('title');
+		t.nonNull.boolean('video');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+		t.string('character');
+		t.id('credit_id');
+		t.int('order');
+	},
+});
+
+export const personsKnownForMovieCrew = objectType({
+	name: 'PersonsKnownForMovieCrew',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.int('genre_ids');
+		t.nonNull.int('id');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_title');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.string('release_date');
+		t.nonNull.string('title');
+		t.nonNull.boolean('video');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+		t.id('credit_id');
+		t.string('department');
+		t.string('job');
+	},
+});
+
+export const personsKnownForMovieRes = objectType({
+	name: 'PersonsKnownForMovieRes',
+	definition(t) {
+		t.int('id'),
+			t.nonNull.list.field('cast', {
+				type: 'PersonsKnownForMovieCast',
+			});
+		t.nonNull.list.field('crew', {
+			type: 'PersonsKnownForMovieCrew',
+		});
+	},
+});
+
+export const getPersonsKnownForMovie = extendType({
+	type: 'Query',
+	definition(t) {
+		t.int('id'),
+			t.nonNull.field('personsKnownForMovieRes', {
+				type: 'PersonsKnownForMovieRes',
+				args: {
+					id: nonNull(intArg()),
+				},
+				resolve: async (_parent, { id }) => {
+					const { data } = await axios.get(
+						`${BASE_URL}/person/${id}/movie_credits?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					return data;
+				},
+			});
+	},
+});
