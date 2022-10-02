@@ -3,7 +3,7 @@ import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
 
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
-import { RESULTS_PER_PAGE } from '../utils/resultsPerPage';
+import { RESULTS_PER_PAGE } from '../utils/specificNums';
 import { useSession } from 'next-auth/react';
 
 interface Props {

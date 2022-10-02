@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
+import { RESULTS_PER_PAGE } from '../../utils/specificNums';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';

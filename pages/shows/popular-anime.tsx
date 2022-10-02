@@ -8,7 +8,7 @@ import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
-import { RESULTS_PER_PAGE } from '../../utils/resultsPerPage';
+import { RESULTS_PER_PAGE } from '../../utils/specificNums';
 import { Circles } from 'react-loading-icons';
 
 const PopularAnimeShows = () => {

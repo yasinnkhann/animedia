@@ -7,6 +7,10 @@ import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import Image from 'next/image';
 import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import { IKnownForMedia } from '@ts/interfaces';
+import {
+	KNOWN_FOR_MIN_EP_COUNT,
+	KNOWN_FOR_CARDS_LIMIT,
+} from '../../utils/specificNums';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
@@ -43,7 +47,7 @@ const PersonDetails = ({
 		for (const castObj of personsKnownForShowRes.cast) {
 			if (
 				!showsTracker.hasOwnProperty(castObj!.id) &&
-				castObj!.episode_count! > 5
+				castObj!.episode_count! > KNOWN_FOR_MIN_EP_COUNT
 			) {
 				showsTracker[String(castObj!.id)] = true;
 
@@ -59,7 +63,7 @@ const PersonDetails = ({
 		return mappedMoviesCast
 			.concat(mappedShowsCast)
 			.sort((a, b) => b.popularity! - a.popularity!)
-			.slice(0, 10);
+			.slice(0, KNOWN_FOR_CARDS_LIMIT);
 	}, [personsKnownForMovieRes, personsKnownForShowRes]);
 
 	console.log('PERSON DETAILS: ', personDetails);

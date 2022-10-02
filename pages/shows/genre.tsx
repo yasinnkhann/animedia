@@ -13,7 +13,7 @@ import {
 } from '../../models/dropDownOptions';
 import { DocumentNode } from '@apollo/client';
 import { IUseGQLQuery } from '@ts/interfaces';
-import { RESULTS_PER_PAGE } from 'utils/resultsPerPage';
+import { RESULTS_PER_PAGE } from 'utils/specificNums';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
