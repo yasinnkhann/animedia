@@ -35,7 +35,7 @@ const PersonCard = ({ person, rank }: Props) => {
 					layout='fill'
 				/>
 			</div>
-			<div>
+			<div className='ml-4 mt-2'>
 				<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
 					{person.name}
 				</h3>
