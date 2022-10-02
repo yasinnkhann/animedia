@@ -15,7 +15,7 @@ interface Props {
 	) => false | void | undefined;
 }
 
-const Card = ({ item, handleItemClick }: Props) => {
+const HomeCard = ({ item, handleItemClick }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? item.title : item.name;
@@ -65,4 +65,4 @@ const Card = ({ item, handleItemClick }: Props) => {
 	);
 };
 
-export default Card;
+export default HomeCard;

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import type { NextPage, GetStaticProps } from 'next';
 import { Circles } from 'react-loading-icons';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
-import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HorizontalScroller';
+import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
 import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';

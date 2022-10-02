@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from './Card';
+import KnownForCard from './KnownForCard';
 import useDrag from './UseDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
@@ -12,11 +12,11 @@ type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
 	items:
-		| NexusGenObjects['MoviesRes']['results']
-		| NexusGenObjects['ShowsRes']['results'];
+		| NexusGenObjects['PersonsKnownForMovieRes'][]
+		| NexusGenObjects['PersonsKnownForShowRes'][];
 }
 
-const HorizontalScroller = ({ items }: Props) => {
+const KnownForHorizontalScroller = ({ items }: Props) => {
 	const router = useRouter();
 
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
@@ -67,10 +67,14 @@ const HorizontalScroller = ({ items }: Props) => {
 			onMouseMove={handleDrag}
 		>
 			{items.map(item => (
-				<Card key={item.id} item={item} handleItemClick={handleItemClick} />
+				<KnownForCard
+					key={item.id}
+					item={item}
+					handleItemClick={handleItemClick}
+				/>
 			))}
 		</ScrollMenu>
 	);
 };
 
-export default HorizontalScroller;
+export default KnownForHorizontalScroller;

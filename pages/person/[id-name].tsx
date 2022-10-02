@@ -8,9 +8,19 @@ import Image from 'next/image';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
+	personsKnownForMovieRes: NexusGenObjects['PersonsKnownForMovieRes'];
+	personsKnownForShowRes: NexusGenObjects['PersonsKnownForShowRes'];
 }
-const PersonDetails = ({ personDetails }: Props) => {
-	console.log(personDetails);
+const PersonDetails = ({
+	personDetails,
+	personsKnownForMovieRes,
+	personsKnownForShowRes,
+}: Props) => {
+	console.log('PERSON DETAILS: ', personDetails);
+
+	console.log('KNOWN FOR MOVIES: ', personsKnownForMovieRes);
+
+	console.log('KNOWN FOR SHOWS: ', personsKnownForShowRes);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
@@ -35,15 +45,42 @@ export default PersonDetails;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_PERSON_DETAILS, {
-		personDetailsId: id,
-	});
 
-	const { personDetails } = data;
+	const personDetailsData = await request(
+		SERVER_BASE_URL,
+		Queries.QUERY_PERSON_DETAILS,
+		{
+			personDetailsId: id,
+		}
+	);
+
+	const { personDetails } = personDetailsData;
+
+	const knownForMoviesData = await request(
+		SERVER_BASE_URL,
+		Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES,
+		{
+			personsKnownForMovieResId: id,
+		}
+	);
+
+	const { personsKnownForMovieRes } = knownForMoviesData;
+
+	const knownForShowsData = await request(
+		SERVER_BASE_URL,
+		Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS,
+		{
+			personsKnownForShowResId: id,
+		}
+	);
+
+	const { personsKnownForShowRes } = knownForShowsData;
 
 	return {
 		props: {
 			personDetails,
+			personsKnownForMovieRes,
+			personsKnownForShowRes,
 		},
 	};
 };
