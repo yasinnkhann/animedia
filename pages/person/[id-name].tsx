@@ -19,24 +19,39 @@ const PersonDetails = ({
 	personsKnownForShowRes,
 }: Props) => {
 	const memoMappedMedia = useMemo(() => {
-		const mappedMoviesCast: IKnownForMedia[] =
-			personsKnownForMovieRes!.cast.map(castObj => ({
-				id: castObj?.id!,
-				image: castObj?.poster_path,
-				title: castObj?.title!,
-				popularity: castObj?.popularity!,
-			}));
-		console.log('movies cast: ', mappedMoviesCast);
+		const moviesTracker: { [id: string]: boolean } = {};
 
-		const mappedShowsCast: IKnownForMedia[] = personsKnownForShowRes!.cast.map(
-			castObj => ({
-				id: castObj?.id!,
-				image: castObj?.poster_path,
-				name: castObj?.name!,
-				popularity: castObj?.popularity!,
-			})
-		);
-		console.log('shows cast: ', mappedShowsCast);
+		const mappedMoviesCast: IKnownForMedia[] = [];
+
+		for (const castObj of personsKnownForMovieRes.cast) {
+			if (!moviesTracker.hasOwnProperty(castObj!.id)) {
+				moviesTracker[String(castObj!.id)] = true;
+
+				mappedMoviesCast.push({
+					id: castObj!.id,
+					image: castObj!.poster_path,
+					title: castObj!.title,
+					popularity: castObj!.popularity,
+				});
+			}
+		}
+
+		const showsTracker: { [id: string]: boolean } = {};
+
+		const mappedShowsCast: IKnownForMedia[] = [];
+
+		for (const castObj of personsKnownForShowRes.cast) {
+			if (!showsTracker.hasOwnProperty(castObj!.id)) {
+				showsTracker[String(castObj!.id)] = true;
+
+				mappedShowsCast.push({
+					id: castObj!.id,
+					image: castObj!.poster_path,
+					name: castObj!.name,
+					popularity: castObj!.popularity,
+				});
+			}
+		}
 
 		return mappedMoviesCast
 			.concat(mappedShowsCast)
