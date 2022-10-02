@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { request } from 'graphql-request';
 import * as Queries from '../../graphql/queries';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import Image from 'next/image';
+import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import { IKnownForMedia } from '@ts/interfaces';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
@@ -16,56 +18,35 @@ const PersonDetails = ({
 	personsKnownForMovieRes,
 	personsKnownForShowRes,
 }: Props) => {
-	const [mappedMovies, setMappedMovies] = useState<any[]>([]);
-	const [mappedShows, setMappedShows] = useState<any[]>([]);
-
-	useEffect(() => {
-		if (personsKnownForMovieRes) {
-			const mappedMoviesCast = personsKnownForMovieRes.cast.map(castObj => ({
-				id: castObj?.id,
+	const memoMappedMedia = useMemo(() => {
+		const mappedMoviesCast: IKnownForMedia[] =
+			personsKnownForMovieRes!.cast.map(castObj => ({
+				id: castObj?.id!,
 				image: castObj?.poster_path,
-				title: castObj?.title,
+				title: castObj?.title!,
+				popularity: castObj?.popularity!,
 			}));
-			console.log('movies cast: ', mappedMoviesCast);
+		console.log('movies cast: ', mappedMoviesCast);
 
-			const mappedMoviesCrew = personsKnownForMovieRes.crew.map(crewObj => ({
-				id: crewObj?.id,
-				image: crewObj?.poster_path,
-				title: crewObj?.title,
-			}));
-			console.log('movies crew: ', mappedMoviesCrew);
-
-			setMappedMovies(mappedMoviesCast.concat(mappedMoviesCrew));
-		}
-
-		if (personsKnownForShowRes) {
-			const mappedShowsCast = personsKnownForShowRes.cast.map(castObj => ({
-				id: castObj?.id,
+		const mappedShowsCast: IKnownForMedia[] = personsKnownForShowRes!.cast.map(
+			castObj => ({
+				id: castObj?.id!,
 				image: castObj?.poster_path,
-				name: castObj?.name,
-			}));
-			console.log('shows cast: ', mappedShowsCast);
+				name: castObj?.name!,
+				popularity: castObj?.popularity!,
+			})
+		);
+		console.log('shows cast: ', mappedShowsCast);
 
-			const mappedShowsCrew = personsKnownForShowRes.crew.map(crewObj => ({
-				id: crewObj?.id,
-				image: crewObj?.poster_path,
-				name: crewObj?.name,
-			}));
-			console.log('shows crew: ', mappedShowsCrew);
-
-			setMappedShows(mappedShowsCast.concat(mappedShowsCrew));
-		}
+		return mappedMoviesCast
+			.concat(mappedShowsCast)
+			.sort((a, b) => b.popularity! - a.popularity!)
+			.slice(0, 10);
 	}, [personsKnownForMovieRes, personsKnownForShowRes]);
 
 	console.log('PERSON DETAILS: ', personDetails);
 
-	console.log('KNOWN FOR MOVIES: ', personsKnownForMovieRes);
-
-	console.log('KNOWN FOR SHOWS: ', personsKnownForShowRes);
-
-	console.log('MAPPED MOVIES: ', mappedMovies);
-
-	console.log('MAPPED SHOWS: ', mappedShows);
+	console.log('MAPPED MEDIA: ', memoMappedMedia);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
@@ -81,6 +62,9 @@ const PersonDetails = ({
 				<h1>{personDetails.name}</h1>
 				<h3>Biography</h3>
 				<p>{personDetails.biography}</p>
+			</div>
+			<div>
+				<KnownForHorizontalScroller items={memoMappedMedia} />
 			</div>
 		</section>
 	);

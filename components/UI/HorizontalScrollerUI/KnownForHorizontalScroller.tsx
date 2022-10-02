@@ -7,13 +7,12 @@ import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index'
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
+import { IKnownForMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items:
-		| NexusGenObjects['PersonsKnownForMovieRes'][]
-		| NexusGenObjects['PersonsKnownForShowRes'][];
+	items: IKnownForMedia[];
 }
 
 const KnownForHorizontalScroller = ({ items }: Props) => {

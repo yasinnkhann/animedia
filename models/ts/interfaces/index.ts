@@ -39,3 +39,11 @@ export interface IHorizontalScrollerItemClickInfo {
 	id: number;
 	title: string;
 }
+
+export interface IKnownForMedia {
+	id: number;
+	image: string | undefined | null;
+	title?: string;
+	name?: string;
+	popularity: number;
+}
