@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import {
-	NexusGenObjects,
-	NexusGenEnums,
-	NexusGenArgTypes,
-} from '../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
 import { useRouter } from 'next/router';
 import { ESearchType } from '@ts/enums';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { useSession } from 'next-auth/react';
+import {
+	NexusGenObjects,
+	NexusGenEnums,
+	NexusGenArgTypes,
+} from '../../graphql/generated/nexus-typegen';
 
 const Status = () => {
 	const router = useRouter();
