@@ -58,7 +58,7 @@ const Header = () => {
 	];
 
 	return (
-		<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-slate-300 !text-base'>
+		<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-gray-100 !text-base'>
 			<nav className='!flex !items-center w-full ml-[4rem]'>
 				<section onClick={() => router.push('/')} className='cursor-pointer'>
 					<p className='!mb-0'>HOME</p>

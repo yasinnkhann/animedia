@@ -86,8 +86,8 @@ const PersonDetails = ({
 	console.log('MAPPED MEDIA: ', memoMappedMedia);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<section className='w-[15rem] h-[20rem] relative'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-2 grid-cols-[20vw_80vw]'>
+			<section className='relative'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + personDetails.profile_path}
@@ -98,10 +98,23 @@ const PersonDetails = ({
 			<section>
 				<h1>{personDetails.name}</h1>
 				<h3>Biography</h3>
-				<p>{personDetails.biography}</p>
+				<p>
+					{personDetails.biography!.length > 0
+						? personDetails.biography
+						: `We don't have a biography for ${personDetails.name}.
+
+`}
+				</p>
 			</section>
-			<section ref={knownForContainerRef}>
-				<h3 className='mb-2'>Known For</h3>
+			<section>
+				<h3>Personal Info</h3>
+				<h4>Known For</h4>
+				<p>{personDetails.known_for_department}</p>
+				<h4>Gender</h4>
+				<p>{personDetails.gender === 2 ? 'Male' : 'Female'}</p>
+			</section>
+			<section className='col-start-2' ref={knownForContainerRef}>
+				<h3 className='mb-4 ml-8'>Known For</h3>
 				<KnownForHorizontalScroller items={memoMappedMedia} />
 			</section>
 		</section>
