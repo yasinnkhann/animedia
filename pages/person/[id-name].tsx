@@ -11,6 +11,7 @@ import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/specificNums';
+import { formatDate } from '../../utils/formatDate';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
@@ -86,8 +87,8 @@ const PersonDetails = ({
 	console.log('MAPPED MEDIA: ', memoMappedMedia);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-2 grid-cols-[20vw_80vw]'>
-			<section className='relative'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-2 grid-cols-[25%_75%] px-16'>
+			<section className='relative m-4'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + personDetails.profile_path}
@@ -95,23 +96,37 @@ const PersonDetails = ({
 					layout='fill'
 				/>
 			</section>
-			<section>
+			<section className=''>
 				<h1>{personDetails.name}</h1>
-				<h3>Biography</h3>
+				<h3 className='my-4'>Biography</h3>
 				<p>
 					{personDetails.biography!.length > 0
 						? personDetails.biography
-						: `We don't have a biography for ${personDetails.name}.
-
-`}
+						: `We don't have a biography for ${personDetails.name}.`}
 				</p>
 			</section>
-			<section>
-				<h3>Personal Info</h3>
+			<section className='ml-4'>
+				<h3 className='mb-4'>Personal Info</h3>
 				<h4>Known For</h4>
 				<p>{personDetails.known_for_department}</p>
 				<h4>Gender</h4>
-				<p>{personDetails.gender === 2 ? 'Male' : 'Female'}</p>
+				<p>
+					{personDetails.gender === 1
+						? 'Female'
+						: personDetails.gender === 2
+						? 'Male'
+						: 'N/A'}
+				</p>
+				<h4>Date of Birth</h4>
+				<p>{formatDate(personDetails.birthday!)}</p>
+				<h4>Born In</h4>
+				<p>{personDetails.place_of_birth}</p>
+				{personDetails.deathday && (
+					<>
+						<h4>Date of Death</h4>
+						<p>{formatDate(personDetails.deathday)}</p>
+					</>
+				)}
 			</section>
 			<section className='col-start-2' ref={knownForContainerRef}>
 				<h3 className='mb-4 ml-8'>Known For</h3>
