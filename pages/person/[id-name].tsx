@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { request } from 'graphql-request';
 import * as Queries from '../../graphql/queries';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
@@ -22,6 +22,8 @@ const PersonDetails = ({
 	personsKnownForMovieRes,
 	personsKnownForShowRes,
 }: Props) => {
+	const knownForContainerRef = useRef<HTMLElement>(null);
+
 	const memoMappedMedia = useMemo(() => {
 		const moviesTracker: { [id: string]: boolean } = {};
 
@@ -66,28 +68,42 @@ const PersonDetails = ({
 			.slice(0, KNOWN_FOR_CARDS_LIMIT);
 	}, [personsKnownForMovieRes, personsKnownForShowRes]);
 
+	useEffect(() => {
+		if (knownForContainerRef.current) {
+			const scrollerClass =
+				'.react-horizontal-scrolling-menu--scroll-container';
+
+			const knownForScroller = knownForContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			knownForScroller.style.height = '23rem';
+		}
+	});
+
 	console.log('PERSON DETAILS: ', personDetails);
 
 	console.log('MAPPED MEDIA: ', memoMappedMedia);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<div className='w-[15rem] h-[20rem] relative'>
+			<section className='w-[15rem] h-[20rem] relative'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + personDetails.profile_path}
 					alt={personDetails.name ?? undefined}
 					layout='fill'
 				/>
-			</div>
-			<div>
+			</section>
+			<section>
 				<h1>{personDetails.name}</h1>
 				<h3>Biography</h3>
 				<p>{personDetails.biography}</p>
-			</div>
-			<div>
+			</section>
+			<section ref={knownForContainerRef}>
+				<h3 className='mb-2'>Known For</h3>
 				<KnownForHorizontalScroller items={memoMappedMedia} />
-			</div>
+			</section>
 		</section>
 	);
 };

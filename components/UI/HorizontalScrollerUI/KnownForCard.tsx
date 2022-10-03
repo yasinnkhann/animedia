@@ -43,7 +43,7 @@ const KnownForCard = ({ item, handleItemClick }: Props) => {
 			</div>
 
 			<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
-				<h2 className='text-base m-0 w-full break-words'>
+				<h2 className='text-base m-0 w-full break-words text-center'>
 					<p className='font-bold'>{mediaTitle}</p>
 				</h2>
 			</div>
