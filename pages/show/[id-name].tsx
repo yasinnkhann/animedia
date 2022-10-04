@@ -83,6 +83,15 @@ const ShowDetails = ({ showDetails }: Props) => {
 				showRating: typeof rating === 'number' ? rating : null,
 				currentEpisode: Number(currEp),
 			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_SHOW,
+					variables: {
+						showId: String(showDetails.id),
+					},
+				},
+				'UsersShow',
+			],
 		}
 	);
 
@@ -156,11 +165,18 @@ const ShowDetails = ({ showDetails }: Props) => {
 				},
 			});
 		} else {
-			// // FIX HERE
-			// if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
-			// 	setCurrEp(String(showDetails.number_of_episodes));
-			// 	console.log('currEP: ', currEp);
-			// }
+			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
+				setCurrEp(String(showDetails.number_of_episodes));
+				addShow({
+					variables: {
+						showId: String(showDetails.id),
+						showName: showDetails.name,
+						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
+						currentEpisode: showDetails.number_of_episodes,
+					},
+				});
+				return;
+			}
 			addShow({
 				variables: {
 					showId: String(showDetails.id),
