@@ -30,6 +30,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const {
 		data: usersMovieData,
+		loading: usersMovieLoading,
 	}: IUseGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
@@ -154,17 +155,16 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	};
 
 	useEffect(() => {
-		if (usersMovieData) {
-			setWatchStatus(usersMovieData.status!);
-			setRating(usersMovieData?.rating ?? '');
+		if (!usersMovieLoading) {
+			if (usersMovieData) {
+				setWatchStatus(usersMovieData.status!);
+				setRating(usersMovieData.rating ?? '');
+			} else {
+				setWatchStatus('NOT_WATCHING');
+				setRating('');
+			}
 		}
-	}, [usersMovieData]);
-
-	useEffect(() => {
-		if (watchStatus === 'NOT_WATCHING') {
-			setRating('');
-		}
-	}, [watchStatus]);
+	}, [usersMovieData, usersMovieLoading]);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
