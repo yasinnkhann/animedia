@@ -248,6 +248,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	};
 
 	const handleIncrementBtn = () => {
+		let prevEp = +currEp;
 		let numifiedStr = Number(currEp);
 
 		numifiedStr += 1;
@@ -265,6 +266,17 @@ const ShowDetails = ({ showDetails }: Props) => {
 					},
 				});
 			} else {
+				if (watchStatus === 'PLAN_TO_WATCH' && prevEp === 0) {
+					updateShow({
+						variables: {
+							showId: String(showDetails.id),
+							showRating: typeof rating === 'string' ? null : rating,
+							watchStatus: 'WATCHING',
+							currentEpisode: 1,
+						},
+					});
+					return;
+				}
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
@@ -319,6 +331,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
+			console.log('WS: ', watchStatus);
+
 			if (watchStatus === 'PLAN_TO_WATCH') {
 				setRating('');
 				setCurrEp('0');
