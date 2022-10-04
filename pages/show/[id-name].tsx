@@ -31,6 +31,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const {
 		data: usersShowData,
+		loading: usersShowLoading,
 	}: IUseGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
@@ -301,44 +302,50 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	};
 
-	// // Maybe
-	// useEffect(() => {
-	// 	if (watchStatus === 'COMPLETED' && !usersShowData) {
-	// 		console.log('here');
-	// 		setCurrEp(String(showDetails.number_of_episodes));
-	// 	}
-	// }, [watchStatus, usersShowData, showDetails.number_of_episodes]);
+	useEffect(() => {
+		if (!usersShowLoading) {
+			if (usersShowData) {
+				console.log('In 1st: ', String(usersShowData.current_episode));
+				setWatchStatus(usersShowData.status!);
+				setRating(usersShowData?.rating ?? '');
+				setCurrEp(String(usersShowData.current_episode!));
+			} else {
+				setWatchStatus('NOT_WATCHING');
+				setRating('');
+				setCurrEp('0');
+			}
+		}
+	}, [usersShowData, usersShowLoading]);
 
 	useEffect(() => {
-		if (usersShowData) {
-			console.log('In 1st: ', String(usersShowData.current_episode));
-			setWatchStatus(usersShowData.status!);
-			setRating(usersShowData?.rating ?? '');
-			setCurrEp(String(usersShowData.current_episode));
+		if (!usersShowLoading && usersShowData) {
+			if (watchStatus === 'PLAN_TO_WATCH') {
+				setRating('');
+				setCurrEp('0');
+			}
+
+			if (watchStatus === 'COMPLETED') {
+				setCurrEp(String(showDetails.number_of_episodes));
+			}
 		}
-	}, [usersShowData]);
+	}, [
+		watchStatus,
+		showDetails.number_of_episodes,
+		usersShowLoading,
+		usersShowData,
+	]);
 
 	useEffect(() => {
-		console.log('IN 2nd');
-		if (watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH') {
-			setRating('');
-			setCurrEp('0');
+		if (!usersShowLoading) {
+			console.log('IN 3rd');
+			if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
+				setWatchStatus('WATCHING');
+			}
+			if (+currEp === showDetails.number_of_episodes) {
+				setWatchStatus('COMPLETED');
+			}
 		}
-
-		if (watchStatus === 'COMPLETED') {
-			setCurrEp(String(showDetails.number_of_episodes));
-		}
-	}, [watchStatus, showDetails.number_of_episodes]);
-
-	useEffect(() => {
-		console.log('IN 3rd');
-		if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
-			setWatchStatus('WATCHING');
-		}
-		if (+currEp === showDetails.number_of_episodes) {
-			setWatchStatus('COMPLETED');
-		}
-	}, [rating, currEp, showDetails.number_of_episodes]);
+	}, [rating, currEp, showDetails.number_of_episodes, usersShowLoading]);
 
 	console.log('USERS SHOW: ', usersShowData);
 
