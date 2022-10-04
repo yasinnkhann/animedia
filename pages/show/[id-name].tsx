@@ -187,7 +187,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (/[\D]/gi.test(e.target.value)) {
-			setCurrEp('0');
+			setCurrEp(String(usersShowData?.current_episode) ?? '0');
 			e.target.selectionStart = 1;
 		} else {
 			setCurrEp(e.target.value);
@@ -217,11 +217,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			e.target.value === '' ||
 			+e.target.value > showDetails.number_of_episodes
 		) {
-			if (typeof usersShowData?.current_episode === 'number') {
-				setCurrEp(String(usersShowData.current_episode));
-			} else {
-				setCurrEp('0');
-			}
+			setCurrEp(String(usersShowData?.current_episode) ?? '0');
 		} else {
 			updateShow({
 				variables: {
