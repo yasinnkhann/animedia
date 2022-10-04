@@ -304,13 +304,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		console.log('IN 2nd');
-		if (watchStatus === 'NOT_WATCHING') {
+		if (watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH') {
 			setRating('');
 			setCurrEp('0');
 		}
-		if (watchStatus === 'PLAN_TO_WATCH') {
-			setCurrEp('0');
-		}
+
 		if (watchStatus === 'COMPLETED') {
 			setCurrEp(String(showDetails.number_of_episodes));
 		}
