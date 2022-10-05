@@ -119,6 +119,14 @@ const Search: NextPage = () => {
 			.map((_, idx) => start + idx + 1);
 	};
 
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	};
+
+	useEffect(() => {
+		scrollToTop();
+	}, [currPage]);
+
 	useEffect(() => {
 		if (searchedMovies && searchedShows && searchedPeople) {
 			if (!searchedMovies.results.length && searchedShows.results.length) {
@@ -132,12 +140,6 @@ const Search: NextPage = () => {
 			}
 		}
 	}, [searchedMovies, searchedShows, searchedPeople]);
-
-	useEffect(() => {
-		if (!router.query.q?.length) {
-			router.replace('/');
-		}
-	}, [router]);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
