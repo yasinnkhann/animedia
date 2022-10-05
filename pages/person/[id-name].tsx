@@ -87,7 +87,7 @@ const PersonDetails = ({
 	console.log('MAPPED MEDIA: ', memoMappedMedia);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-2 grid-cols-[25%_75%] px-16'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.3fr_1fr] grid-cols-[30%_70%] px-16'>
 			<section className='relative m-4'>
 				<Image
 					className='rounded-lg'
@@ -96,7 +96,7 @@ const PersonDetails = ({
 					layout='fill'
 				/>
 			</section>
-			<section className=''>
+			<section>
 				<h1>{personDetails.name}</h1>
 				<h3 className='my-4'>Biography</h3>
 				<p>
@@ -105,7 +105,7 @@ const PersonDetails = ({
 						: `We don't have a biography for ${personDetails.name}.`}
 				</p>
 			</section>
-			<section className='ml-4'>
+			<section className='ml-8'>
 				<h3 className='mb-4'>Personal Info</h3>
 				<h4>Known For</h4>
 				<p>{personDetails.known_for_department}</p>
@@ -115,12 +115,20 @@ const PersonDetails = ({
 						? 'Female'
 						: personDetails.gender === 2
 						? 'Male'
-						: 'N/A'}
+						: 'Unknown'}
 				</p>
 				<h4>Date of Birth</h4>
-				<p>{formatDate(personDetails.birthday!)}</p>
+				<p>
+					{personDetails.birthday
+						? formatDate(personDetails.birthday)
+						: 'Unknown'}
+				</p>
 				<h4>Born In</h4>
-				<p>{personDetails.place_of_birth}</p>
+				<p>
+					{personDetails.place_of_birth
+						? personDetails.place_of_birth
+						: 'Unknown'}
+				</p>
 				{personDetails.deathday && (
 					<>
 						<h4>Date of Death</h4>

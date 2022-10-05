@@ -37,7 +37,6 @@ const PersonCard = ({ person }: Props) => {
 				<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
 					{person.name}
 				</h3>
-				<p>Known for: {person.known_for_department}</p>
 			</div>
 		</section>
 	);

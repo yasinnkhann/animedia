@@ -317,7 +317,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading) {
 			if (usersShowData) {
-				console.log('In 1st: ', String(usersShowData.current_episode));
 				setWatchStatus(usersShowData.status!);
 				setRating(usersShowData?.rating ?? '');
 				setCurrEp(String(usersShowData.current_episode!));
@@ -331,8 +330,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
-			console.log('WS: ', watchStatus);
-
 			if (watchStatus === 'PLAN_TO_WATCH') {
 				setRating('');
 				setCurrEp('0');
@@ -351,7 +348,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		if (!usersShowLoading) {
-			console.log('IN 3rd');
 			if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
 				setWatchStatus('WATCHING');
 			}
