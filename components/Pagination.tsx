@@ -30,11 +30,11 @@ const Pagination = ({
 
 	console.log('Total Items: ', totalItems);
 
-	// useEffect(() => {
-	// 	if (currPage !== 1 && totalItems > 0) {
-	// 		paginate(1);
-	// 	}
-	// }, [currPage, totalItems, paginate]);
+	useEffect(() => {
+		if (currPage > lastPage) {
+			paginate(lastPage as number);
+		}
+	}, [currPage, paginate, lastPage]);
 
 	console.log('PR: ', paginationRange);
 
