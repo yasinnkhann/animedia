@@ -12,11 +12,7 @@ import { RESULTS_PER_PAGE } from 'utils/specificNums';
 import { Circles } from 'react-loading-icons';
 
 const PopularPeople = () => {
-	const [_currPeopleItems, setCurrPeopleItems] = useState<
-		NexusGenObjects['PeopleRes']['results']
-	>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [peopleItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const {
 		data: popularPeopleData,
@@ -40,31 +36,6 @@ const PopularPeople = () => {
 		scrollToTop();
 	}, [currPage]);
 
-	useEffect(() => {
-		if (popularPeopleData) {
-			const endIdx = currPage * peopleItemsPerPage;
-			const startIdx = endIdx - peopleItemsPerPage;
-			const peopleItemsCopy = [...popularPeopleData.results];
-			setCurrPeopleItems(peopleItemsCopy.slice(startIdx, endIdx));
-		}
-	}, [currPage, popularPeopleData, peopleItemsPerPage]);
-
-	const goToNextPage = () => {
-		setCurrPage(currPage => currPage + 1);
-	};
-
-	const goToPrevPage = () => {
-		setCurrPage(currPage => currPage - 1);
-	};
-
-	const getPaginationGroup = () => {
-		let start =
-			Math.floor((currPage - 1) / peopleItemsPerPage) * peopleItemsPerPage;
-		return new Array(peopleItemsPerPage)
-			.fill(null)
-			.map((_, idx) => start + idx + 1);
-	};
-
 	console.log(popularPeopleData);
 
 	return (
@@ -74,13 +45,12 @@ const PopularPeople = () => {
 					<h3 className='mb-4'>Popular People</h3>
 					<PeopleList peopleData={popularPeopleData} pageNum={currPage} />
 					<Pagination
-						itemsPerPage={peopleItemsPerPage}
-						totalItems={popularPeopleData.total_results}
 						currPage={currPage}
-						pageNums={getPaginationGroup()}
-						paginate={pageNum => setCurrPage(pageNum)}
-						goToPrevPage={goToPrevPage}
-						goToNextPage={goToNextPage}
+						totalItems={popularPeopleData.total_results}
+						itemsPerPage={RESULTS_PER_PAGE}
+						paginate={(pageNum: number) => setCurrPage(pageNum)}
+						siblingCount={1}
+						maxPageNum={500}
 					/>
 				</>
 			) : (

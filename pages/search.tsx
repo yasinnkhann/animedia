@@ -17,7 +17,6 @@ import { RESULTS_PER_PAGE } from '../utils/specificNums';
 const Search: NextPage = () => {
 	const router = useRouter();
 
-	const [_currSearchItems, setCurrSearchItems] = useState<any[]>([]);
 	const [currPage, setCurrPage] = useState(1);
 
 	const [searchResultsType, setSearchResultsType] =
@@ -78,7 +77,6 @@ const Search: NextPage = () => {
 	);
 
 	const getSearchedTypeData = () => {
-		// return components here
 		if (searchResultsType === ESearchResultsType.MOVIES) {
 			return searchedMovies;
 		}
@@ -100,14 +98,6 @@ const Search: NextPage = () => {
 		} else {
 			return ESearchType.PERSON;
 		}
-	};
-
-	const goToNextPage = () => {
-		setCurrPage(currPage => currPage + 1);
-	};
-
-	const goToPrevPage = () => {
-		setCurrPage(currPage => currPage - 1);
 	};
 
 	const scrollToTop = () => {
@@ -206,19 +196,7 @@ const Search: NextPage = () => {
 							<div>No results</div>
 						)}
 					</section>
-					{/* <Pagination
-						totalItems={
-							searchResultsType === ESearchResultsType.MOVIES
-								? searchedMovies.total_results
-								: searchResultsType === ESearchResultsType.SHOWS
-								? searchedShows.total_results
-								: searchedPeople.total_results
-						}
-						currPage={currPage}
-						paginate={pageNum => setCurrPage(pageNum)}
-						goToPrevPage={goToPrevPage}
-						goToNextPage={goToNextPage}
-					/> */}
+
 					<Pagination
 						currPage={currPage}
 						totalItems={

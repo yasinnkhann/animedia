@@ -23,11 +23,7 @@ import { Circles } from 'react-loading-icons';
 const { Option } = Select;
 
 const Genre = () => {
-	const [_currMediaItems, setCurrMediaItems] = useState<
-		NexusGenObjects['ShowsRes']['results']
-	>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
 		Queries.QUERY_POPULAR_SHOWS_BY_GENRE
@@ -71,31 +67,6 @@ const Genre = () => {
 	useEffect(() => {
 		scrollToTop();
 	}, [currPage]);
-
-	useEffect(() => {
-		if (genreOfShowsData) {
-			const endIdx = currPage * mediaItemsPerPage;
-			const startIdx = endIdx - mediaItemsPerPage;
-			const mediaItemsCopy = [...genreOfShowsData.results];
-			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
-		}
-	}, [currPage, genreOfShowsData, mediaItemsPerPage]);
-
-	const goToNextPage = () => {
-		setCurrPage(currPage => currPage + 1);
-	};
-
-	const goToPrevPage = () => {
-		setCurrPage(currPage => currPage - 1);
-	};
-
-	const getPaginationGroup = () => {
-		let start =
-			Math.floor((currPage - 1) / mediaItemsPerPage) * mediaItemsPerPage;
-		return new Array(mediaItemsPerPage)
-			.fill(null)
-			.map((_, idx) => start + idx + 1);
-	};
 
 	console.log(genreOfShowsData);
 
@@ -159,13 +130,12 @@ const Genre = () => {
 							} ${unParseSpecialChars(showGenreType)} Shows`}
 						/>
 						<Pagination
-							itemsPerPage={mediaItemsPerPage}
-							totalItems={genreOfShowsData.total_results}
 							currPage={currPage}
-							pageNums={getPaginationGroup()}
-							paginate={pageNum => setCurrPage(pageNum)}
-							goToPrevPage={goToPrevPage}
-							goToNextPage={goToNextPage}
+							totalItems={genreOfShowsData.total_results}
+							itemsPerPage={RESULTS_PER_PAGE}
+							paginate={(pageNum: number) => setCurrPage(pageNum)}
+							siblingCount={1}
+							maxPageNum={500}
 						/>
 					</div>
 				) : (

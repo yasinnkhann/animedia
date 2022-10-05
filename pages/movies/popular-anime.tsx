@@ -12,11 +12,7 @@ import { RESULTS_PER_PAGE } from 'utils/specificNums';
 import { Circles } from 'react-loading-icons';
 
 const PopularAnimeMovies = () => {
-	const [_currMediaItems, setCurrMediaItems] = useState<
-		NexusGenObjects['MoviesRes']['results']
-	>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [mediaItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const {
 		data: popularAnimeMoviesData,
@@ -40,31 +36,6 @@ const PopularAnimeMovies = () => {
 		scrollToTop();
 	}, [currPage]);
 
-	useEffect(() => {
-		if (popularAnimeMoviesData) {
-			const endIdx = currPage * mediaItemsPerPage;
-			const startIdx = endIdx - mediaItemsPerPage;
-			const mediaItemsCopy = [...popularAnimeMoviesData.results];
-			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
-		}
-	}, [currPage, popularAnimeMoviesData, mediaItemsPerPage]);
-
-	const goToNextPage = () => {
-		setCurrPage(currPage => currPage + 1);
-	};
-
-	const goToPrevPage = () => {
-		setCurrPage(currPage => currPage - 1);
-	};
-
-	const getPaginationGroup = () => {
-		let start =
-			Math.floor((currPage - 1) / mediaItemsPerPage) * mediaItemsPerPage;
-		return new Array(mediaItemsPerPage)
-			.fill(null)
-			.map((_, idx) => start + idx + 1);
-	};
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{popularAnimeMoviesData ? (
@@ -75,13 +46,12 @@ const PopularAnimeMovies = () => {
 						title='Popular Anime Movies'
 					/>
 					<Pagination
-						itemsPerPage={mediaItemsPerPage}
-						totalItems={popularAnimeMoviesData.total_results}
 						currPage={currPage}
-						pageNums={getPaginationGroup()}
-						paginate={pageNum => setCurrPage(pageNum)}
-						goToPrevPage={goToPrevPage}
-						goToNextPage={goToNextPage}
+						totalItems={popularAnimeMoviesData.total_results}
+						itemsPerPage={RESULTS_PER_PAGE}
+						paginate={(pageNum: number) => setCurrPage(pageNum)}
+						siblingCount={1}
+						maxPageNum={500}
 					/>
 				</section>
 			) : (
