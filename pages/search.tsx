@@ -114,6 +114,7 @@ const Search: NextPage = () => {
 	const getPaginationGroup = () => {
 		let start =
 			Math.floor((currPage - 1) / searchItemsPerPage) * searchItemsPerPage;
+		console.log('START: ', start);
 		return new Array(searchItemsPerPage)
 			.fill(null)
 			.map((_, idx) => start + idx + 1);

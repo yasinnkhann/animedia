@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { IUseGQLQuery } from '@ts/interfaces';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../graphql/generated/nexus-typegen';
 import { useGQLQuery } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import MediaList from 'components/MediaList';
 import Pagination from 'components/Pagination';
 import { RESULTS_PER_PAGE } from '../../utils/specificNums';
 import { Circles } from 'react-loading-icons';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../../graphql/generated/nexus-typegen';
 
 const PopularMovies = () => {
 	const [_currMediaItems, setCurrMediaItems] = useState<
@@ -45,6 +45,7 @@ const PopularMovies = () => {
 			const endIdx = currPage * mediaItemsPerPage;
 			const startIdx = endIdx - mediaItemsPerPage;
 			const mediaItemsCopy = [...popularMoviesData.results];
+
 			setCurrMediaItems(mediaItemsCopy.slice(startIdx, endIdx));
 		}
 	}, [currPage, popularMoviesData, mediaItemsPerPage]);
