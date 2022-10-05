@@ -11,9 +11,15 @@ import {
 import SearchResult from '../components/UI/SearchUI/SearchResult';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
+import Pagination from 'components/Pagination';
+import { RESULTS_PER_PAGE } from '../utils/specificNums';
 
 const Search: NextPage = () => {
 	const router = useRouter();
+
+	const [_currSearchItems, setCurrSearchItems] = useState<any[]>([]);
+	const [currPage, setCurrPage] = useState(1);
+	const [searchItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
@@ -31,6 +37,7 @@ const Search: NextPage = () => {
 		{
 			variables: {
 				q: (router.query.q as string) ?? '',
+				page: currPage,
 			},
 		}
 	);
@@ -48,6 +55,7 @@ const Search: NextPage = () => {
 		{
 			variables: {
 				q: (router.query.q as string) ?? '',
+				page: currPage,
 			},
 		}
 	);
@@ -65,6 +73,7 @@ const Search: NextPage = () => {
 		{
 			variables: {
 				q: (router.query.q as string) ?? '',
+				page: currPage,
 			},
 		}
 	);
@@ -92,6 +101,22 @@ const Search: NextPage = () => {
 		} else {
 			return ESearchType.PERSON;
 		}
+	};
+
+	const goToNextPage = () => {
+		setCurrPage(currPage => currPage + 1);
+	};
+
+	const goToPrevPage = () => {
+		setCurrPage(currPage => currPage - 1);
+	};
+
+	const getPaginationGroup = () => {
+		let start =
+			Math.floor((currPage - 1) / searchItemsPerPage) * searchItemsPerPage;
+		return new Array(searchItemsPerPage)
+			.fill(null)
+			.map((_, idx) => start + idx + 1);
 	};
 
 	useEffect(() => {
@@ -188,6 +213,21 @@ const Search: NextPage = () => {
 							<div>No results</div>
 						)}
 					</section>
+					<Pagination
+						itemsPerPage={searchItemsPerPage}
+						totalItems={
+							searchResultsType === ESearchResultsType.MOVIES
+								? searchedMovies.total_results
+								: searchResultsType === ESearchResultsType.SHOWS
+								? searchedShows.total_results
+								: searchedPeople.total_results
+						}
+						currPage={currPage}
+						pageNums={getPaginationGroup()}
+						paginate={pageNum => setCurrPage(pageNum)}
+						goToPrevPage={goToPrevPage}
+						goToNextPage={goToNextPage}
+					/>
 				</>
 			)}
 		</div>
