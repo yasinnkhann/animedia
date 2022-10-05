@@ -19,7 +19,6 @@ const Search: NextPage = () => {
 
 	const [_currSearchItems, setCurrSearchItems] = useState<any[]>([]);
 	const [currPage, setCurrPage] = useState(1);
-	const [searchItemsPerPage] = useState(RESULTS_PER_PAGE);
 
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
@@ -109,15 +108,6 @@ const Search: NextPage = () => {
 
 	const goToPrevPage = () => {
 		setCurrPage(currPage => currPage - 1);
-	};
-
-	const getPaginationGroup = () => {
-		let start =
-			Math.floor((currPage - 1) / searchItemsPerPage) * searchItemsPerPage;
-		console.log('START: ', start);
-		return new Array(searchItemsPerPage)
-			.fill(null)
-			.map((_, idx) => start + idx + 1);
 	};
 
 	const scrollToTop = () => {
@@ -216,8 +206,7 @@ const Search: NextPage = () => {
 							<div>No results</div>
 						)}
 					</section>
-					<Pagination
-						itemsPerPage={searchItemsPerPage}
+					{/* <Pagination
 						totalItems={
 							searchResultsType === ESearchResultsType.MOVIES
 								? searchedMovies.total_results
@@ -226,10 +215,23 @@ const Search: NextPage = () => {
 								: searchedPeople.total_results
 						}
 						currPage={currPage}
-						pageNums={getPaginationGroup()}
 						paginate={pageNum => setCurrPage(pageNum)}
 						goToPrevPage={goToPrevPage}
 						goToNextPage={goToNextPage}
+					/> */}
+					<Pagination
+						currPage={currPage}
+						totalItems={
+							searchResultsType === ESearchResultsType.MOVIES
+								? searchedMovies.total_results
+								: searchResultsType === ESearchResultsType.SHOWS
+								? searchedShows.total_results
+								: searchedPeople.total_results
+						}
+						itemsPerPage={RESULTS_PER_PAGE}
+						paginate={(pageNum: number) => setCurrPage(pageNum)}
+						siblingCount={1}
+						maxPageNum={500}
 					/>
 				</>
 			)}

@@ -75,7 +75,7 @@ const PopularMovies = () => {
 						pageNum={currPage}
 						title='Popular Movies'
 					/>
-					<Pagination
+					{/* <Pagination
 						itemsPerPage={mediaItemsPerPage}
 						totalItems={popularMoviesData.total_results}
 						currPage={currPage}
@@ -83,6 +83,14 @@ const PopularMovies = () => {
 						paginate={pageNum => setCurrPage(pageNum)}
 						goToPrevPage={goToPrevPage}
 						goToNextPage={goToNextPage}
+					/> */}
+					<Pagination
+						currPage={currPage}
+						totalItems={popularMoviesData.total_results}
+						itemsPerPage={RESULTS_PER_PAGE}
+						paginate={(pageNum: number) => setCurrPage(pageNum)}
+						siblingCount={1}
+						maxPageNum={500}
 					/>
 				</section>
 			) : (
