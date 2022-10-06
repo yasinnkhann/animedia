@@ -29,7 +29,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			searchResult = result as NexusGenObjects['MovieResult'];
 			return (
 				<>
-					<div className='relative w-[5rem] h-[7rem] cursor-pointer'>
+					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
 							src={BASE_IMG_URL + searchResult.poster_path}
@@ -37,8 +37,8 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 							layout='fill'
 						/>
 					</div>
-					<div className='m-4'>
-						<p className='cursor-pointer'>{searchResult.title}</p>
+					<div className='p-4'>
+						<h3 className='cursor-pointer'>{searchResult.title}</h3>
 						<p>{formatDate(searchResult.release_date as string)}</p>
 						<p>
 							{searchResult.overview.split(' ').length > 50
@@ -55,14 +55,43 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			searchResult = result as NexusGenObjects['ShowResult'];
 			return (
 				<>
-					<div>{searchResult.name}</div>
+					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
+						<Image
+							className='rounded-lg'
+							src={BASE_IMG_URL + searchResult.poster_path}
+							alt={searchResult.name}
+							layout='fill'
+						/>
+					</div>
+					<div className='p-4'>
+						<h3 className='cursor-pointer'>{searchResult.name}</h3>
+						<p>{formatDate(searchResult.first_air_date as string)}</p>
+						<p>
+							{searchResult.overview.split(' ').length > 50
+								? `${searchResult.overview
+										.split(' ')
+										.slice(0, 50)
+										.join(' ')}...`
+								: searchResult.overview}
+						</p>
+					</div>
 				</>
 			);
 		} else {
 			searchResult = result as NexusGenObjects['PersonResult'];
 			return (
 				<>
-					<div>{searchResult.name}</div>
+					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
+						<Image
+							className='rounded-lg'
+							src={BASE_IMG_URL + searchResult.profile_path}
+							alt={searchResult.name}
+							layout='fill'
+						/>
+					</div>
+					<div className='p-4'>
+						<h3 className='cursor-pointer'>{searchResult.name}</h3>
+					</div>
 				</>
 			);
 		}
@@ -73,7 +102,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 
 	return (
 		<section
-			className='flex border rounded-lg my-4 mr-16'
+			className='flex border rounded-lg my-4 mr-16 h-[8rem]'
 			onClick={directToDetailsPage}
 		>
 			{renderSearchResult()}
