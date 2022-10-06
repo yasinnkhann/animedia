@@ -198,55 +198,57 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	});
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
+			<section className='relative m-4'>
+				<Image
+					className='rounded-lg'
+					src={BASE_IMG_URL + movieDetails.poster_path}
+					alt={movieDetails.title ?? undefined}
+					layout='fill'
+				/>
+			</section>
+
 			<section>
-				<div className='w-[15rem] h-[20rem] relative'>
-					<Image
-						className='rounded-lg'
-						src={BASE_IMG_URL + movieDetails.poster_path}
-						alt={movieDetails.title}
-						layout='fill'
-					/>
+				<div>RATING and REVIEWS HERE</div>
+				<div className=''>
+					{status === 'authenticated' && session.user && (
+						<div>
+							<select value={watchStatus} onChange={handleChangeWatchStatus}>
+								{watchStatusOptions.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</select>
+
+							<select
+								value={rating}
+								onChange={handleChangeRating}
+								disabled={
+									watchStatus === 'NOT_WATCHING' ||
+									watchStatus === 'PLAN_TO_WATCH'
+								}
+							>
+								{ratingOptions.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</select>
+						</div>
+					)}
 				</div>
-				<div className='w-[75%]'>
+				<div>
 					<h1>{movieDetails.title}</h1>
 					<p>{movieDetails.overview}</p>
 				</div>
 			</section>
 
-			<section>
-				{status === 'authenticated' && session.user && (
-					<div>
-						<select value={watchStatus} onChange={handleChangeWatchStatus}>
-							{watchStatusOptions.map(option => (
-								<option key={option.value} value={option.value}>
-									{option.text}
-								</option>
-							))}
-						</select>
-
-						<select
-							value={rating}
-							onChange={handleChangeRating}
-							disabled={
-								watchStatus === 'NOT_WATCHING' ||
-								watchStatus === 'PLAN_TO_WATCH'
-							}
-						>
-							{ratingOptions.map(option => (
-								<option key={option.value} value={option.value}>
-									{option.text}
-								</option>
-							))}
-						</select>
-					</div>
-				)}
-			</section>
-			{!recMoviesLoading && recMoviesData && (
-				<section className='' ref={recMoviesContainerRef}>
+			{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
+				<section className='col-start-2' ref={recMoviesContainerRef}>
 					<h3>Recommended Movies</h3>
 					<RecommendedMoviesHorizontalScroller
-						items={recMoviesData.results.map(movie => ({
+						items={recMoviesData!.results.map(movie => ({
 							id: movie.id,
 							poster_path: movie.poster_path,
 							title: movie.title,

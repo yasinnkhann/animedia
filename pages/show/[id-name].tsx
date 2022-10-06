@@ -468,11 +468,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 					</div>
 				)}
 			</section>
-			{!recShowsLoading && recShowsData && (
+			{!recShowsLoading && recShowsData?.results?.length! > 0 && (
 				<section className='' ref={recShowsContainerRef}>
 					<h3>Recommended Shows</h3>
 					<RecommendedShowsHorizontalScroller
-						items={recShowsData.results.map(show => ({
+						items={recShowsData!.results.map(show => ({
 							id: show.id,
 							poster_path: show.poster_path,
 							name: show.name,
