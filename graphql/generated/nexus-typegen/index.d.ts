@@ -1461,8 +1461,8 @@ export interface NexusGenArgTypes {
       recommendedMoviesId: number; // Int!
     }
     recommendedShows: { // args
-      id: number; // Int!
       page?: number | null; // Int
+      recommendedShowsId: number; // Int!
     }
     searchedMovies: { // args
       page?: number | null; // Int

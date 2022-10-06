@@ -315,7 +315,7 @@ type Query {
   popularShows(page: Int): ShowsRes!
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   recommendedMovies(page: Int, recommendedMoviesId: Int!): MoviesRes!
-  recommendedShows(id: Int!, page: Int): ShowsRes!
+  recommendedShows(page: Int, recommendedShowsId: Int!): ShowsRes!
   searchedMovies(page: Int, q: String!): MoviesRes!
   searchedPeople(page: Int, q: String!): PeopleRes!
   searchedShows(page: Int, q: String!): ShowsRes!

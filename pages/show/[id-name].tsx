@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
-import { SERVER_BASE_URL } from '../../utils/URLs';
+import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
+import Image from 'next/image';
 import { ratingOptions } from 'models/ratingOptions';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
+import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 
 interface Props {
 	showDetails: NexusGenObjects['ShowDetailsRes'];
@@ -21,6 +23,8 @@ interface Props {
 
 const ShowDetails = ({ showDetails }: Props) => {
 	const { data: session, status } = useSession();
+
+	const recShowsContainerRef = useRef<HTMLElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -40,6 +44,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 		{
 			variables: {
 				showId: String(showDetails.id),
+			},
+		}
+	);
+
+	const {
+		data: recShowsData,
+		loading: recShowsLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowsRes'],
+		NexusGenArgTypes['Query']['recommendedShows']
+	> = useGQLQuery<NexusGenArgTypes['Query']['recommendedShows']>(
+		Queries.QUERY_RECOMMENDED_SHOWS,
+		{
+			variables: {
+				recommendedShowsId: showDetails.id,
 			},
 		}
 	);
@@ -357,14 +376,40 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	}, [rating, currEp, showDetails.number_of_episodes, usersShowLoading]);
 
-	console.log('USERS SHOW: ', usersShowData);
+	useEffect(() => {
+		if (recShowsContainerRef.current) {
+			const scrollerClass =
+				'.react-horizontal-scrolling-menu--scroll-container';
+
+			const recMoviesScroller = recShowsContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			recMoviesScroller.style.height = '23rem';
+		}
+	});
+
+	console.log('MY SHOW INFO: ', usersShowData);
+	console.log('SHOW DETAILS: ', showDetails);
+	console.log('REC SHOWS: ', recShowsData);
 
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
-			<section className='w-[75%]'>
-				<h1>{showDetails.name}</h1>
-				<p>{showDetails.overview}</p>
+			<section>
+				<div className='w-[15rem] h-[20rem] relative'>
+					<Image
+						className='rounded-lg'
+						src={BASE_IMG_URL + showDetails.poster_path}
+						alt={showDetails.name}
+						layout='fill'
+					/>
+				</div>
+				<div className='w-[75%]'>
+					<h1>{showDetails.name}</h1>
+					<p>{showDetails.overview}</p>
+				</div>
 			</section>
+
 			<section>
 				{status === 'authenticated' && session.user && (
 					<div className='flex'>
@@ -423,6 +468,19 @@ const ShowDetails = ({ showDetails }: Props) => {
 					</div>
 				)}
 			</section>
+			{!recShowsLoading && recShowsData && (
+				<section className='' ref={recShowsContainerRef}>
+					<h3>Recommended Shows</h3>
+					<RecommendedShowsHorizontalScroller
+						items={recShowsData.results.map(show => ({
+							id: show.id,
+							poster_path: show.poster_path,
+							name: show.name,
+							popularity: show.popularity,
+						}))}
+					/>
+				</section>
+			)}
 		</section>
 	);
 };

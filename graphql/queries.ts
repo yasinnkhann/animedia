@@ -536,7 +536,7 @@ export const QUERY_TOP_RATED_SHOWS = gql`
 
 export const QUERY_RECOMMENDED_SHOWS = gql`
 	query RecommendedShows($recommendedShowsId: Int!, $page: Int) {
-		recommendedShows(id: $recommendedShowsId, page: $page) {
+		recommendedShows(recommendedShowsId: $recommendedShowsId, page: $page) {
 			page
 			total_pages
 			total_results

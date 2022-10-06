@@ -334,13 +334,13 @@ export const getRecommendedShows = extendType({
 		t.nonNull.field('recommendedShows', {
 			type: 'ShowsRes',
 			args: {
-				id: nonNull(intArg()),
+				recommendedShowsId: nonNull(intArg()),
 				page: intArg(),
 			},
-			resolve: async (_parent, { id, page }) => {
+			resolve: async (_parent, { recommendedShowsId, page }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/tv/${id}/recommendations?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
+					`${BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process
+						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				return data;
 			},
