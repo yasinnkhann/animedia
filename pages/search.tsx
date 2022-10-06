@@ -128,14 +128,14 @@ const Search: NextPage = () => {
 				<>
 					<SearchBar />
 					<section className='grid grid-cols-[20%_80%]'>
-						<section className='m-4 justify-self-center'>
-							<div>
+						<section className='m-4 border rounded-lg flex flex-col items-center px-8'>
+							<div className='w-full mb-4'>
 								<h3>Search Results</h3>
 							</div>
-							<ul>
-								<li className='flex items-center w-[15%] justify-between'>
+							<ul className='w-full'>
+								<li className='flex items-center w-full justify-between'>
 									<h4
-										className='cursor-pointer'
+										className='cursor-pointer text-left'
 										onClick={() =>
 											setSearchResultsType(ESearchResultsType.MOVIES)
 										}
@@ -148,11 +148,11 @@ const Search: NextPage = () => {
 									>
 										Movies
 									</h4>
-									<p>{searchedMovies.total_results}</p>
+									<p className='text-right'>{searchedMovies.total_results}</p>
 								</li>
-								<li className='flex items-center w-[15%] justify-between'>
+								<li className='flex items-center w-full justify-between'>
 									<h4
-										className='cursor-pointer'
+										className='cursor-pointer text-left'
 										onClick={() =>
 											setSearchResultsType(ESearchResultsType.SHOWS)
 										}
@@ -165,11 +165,11 @@ const Search: NextPage = () => {
 									>
 										Shows
 									</h4>
-									<p>{searchedShows.total_results}</p>
+									<p className='text-right'>{searchedShows.total_results}</p>
 								</li>
-								<li className='flex items-center w-[15%] justify-between'>
+								<li className='flex items-center w-full justify-between'>
 									<h4
-										className='cursor-pointer'
+										className='cursor-pointer text-left'
 										onClick={() =>
 											setSearchResultsType(ESearchResultsType.PEOPLE)
 										}
@@ -182,7 +182,7 @@ const Search: NextPage = () => {
 									>
 										People
 									</h4>
-									<p>{searchedPeople.total_results}</p>
+									<p className='text-right'>{searchedPeople.total_results}</p>
 								</li>
 							</ul>
 						</section>
