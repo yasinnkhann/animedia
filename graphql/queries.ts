@@ -178,7 +178,7 @@ export const QUERY_TOP_RATED_MOVIES = gql`
 
 export const QUERY_RECOMMENDED_MOVIES = gql`
 	query RecommendedMovies($recommendedMoviesId: Int!, $page: Int) {
-		recommendedMovies(id: $recommendedMoviesId, page: $page) {
+		recommendedMovies(recommendedMoviesId: $recommendedMoviesId, page: $page) {
 			page
 			total_pages
 			total_results

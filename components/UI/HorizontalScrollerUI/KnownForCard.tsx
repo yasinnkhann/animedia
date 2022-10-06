@@ -36,7 +36,7 @@ const KnownForCard = ({ item, handleItemClick }: Props) => {
 			<div className='w-full h-full relative'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + item.image}
+					src={BASE_IMG_URL + item.poster_path}
 					alt={mediaTitle}
 					layout='fill'
 				/>

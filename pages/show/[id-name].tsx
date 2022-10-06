@@ -360,12 +360,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 	console.log('USERS SHOW: ', usersShowData);
 
 	return (
-		<div className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
-			<div className='w-[75%]'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
+			<section className='w-[75%]'>
 				<h1>{showDetails.name}</h1>
 				<p>{showDetails.overview}</p>
-			</div>
-			<div>
+			</section>
+			<section>
 				{status === 'authenticated' && session.user && (
 					<div className='flex'>
 						<select value={watchStatus} onChange={handleChangeWatchStatus}>
@@ -422,8 +422,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</form>
 					</div>
 				)}
-			</div>
-		</div>
+			</section>
+		</section>
 	);
 };
 export default ShowDetails;

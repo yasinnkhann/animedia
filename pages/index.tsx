@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import type { NextPage, GetStaticProps } from 'next';
 import { Circles } from 'react-loading-icons';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
-import HorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
+import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
 import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
 import { DocumentNode } from '@apollo/client';
@@ -203,7 +203,7 @@ const Home: NextPage = () => {
 						</section>
 
 						<section className='mt-4' ref={whatsPopularContainerRef}>
-							<HorizontalScroller
+							<HomeHorizontalScroller
 								items={whatsPopularData.results as THorizontalScrollerData}
 							/>
 						</section>
@@ -277,7 +277,7 @@ const Home: NextPage = () => {
 						</section>
 
 						<section className='mt-4' ref={trendingContainerRef}>
-							<HorizontalScroller
+							<HomeHorizontalScroller
 								items={trendingData.results as THorizontalScrollerData}
 							/>
 						</section>

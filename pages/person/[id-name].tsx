@@ -36,7 +36,7 @@ const PersonDetails = ({
 
 				mappedMoviesCast.push({
 					id: castObj!.id,
-					image: castObj!.poster_path,
+					poster_path: castObj!.poster_path,
 					title: castObj!.title,
 					popularity: castObj!.popularity,
 				});
@@ -56,7 +56,7 @@ const PersonDetails = ({
 
 				mappedShowsCast.push({
 					id: castObj!.id,
-					image: castObj!.poster_path,
+					poster_path: castObj!.poster_path,
 					name: castObj!.name,
 					popularity: castObj!.popularity,
 				});

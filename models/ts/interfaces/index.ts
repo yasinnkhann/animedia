@@ -42,7 +42,7 @@ export interface IHorizontalScrollerItemClickInfo {
 
 export interface IKnownForMedia {
 	id: number;
-	image: string | undefined | null;
+	poster_path: string | undefined | null;
 	title?: string;
 	name?: string;
 	popularity: number;

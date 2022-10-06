@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
-import { SERVER_BASE_URL } from '../../utils/URLs';
+import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import { watchStatusOptions } from 'models/watchStatusOptions';
+import { ratingOptions } from 'models/ratingOptions';
+import Image from 'next/image';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { watchStatusOptions } from 'models/watchStatusOptions';
-import { ratingOptions } from 'models/ratingOptions';
-import Image from 'next/image';
-import { BASE_IMG_URL } from '../../utils/URLs';
+import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -23,6 +23,8 @@ interface Props {
 
 const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
+
+	const recMoviesContainerRef = useRef<HTMLElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -43,8 +45,24 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
+	const {
+		data: recMoviesData,
+		loading: recMoviesLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['MoviesRes'],
+		NexusGenArgTypes['Query']['recommendedMovies']
+	> = useGQLQuery<NexusGenArgTypes['Query']['recommendedMovies']>(
+		Queries.QUERY_RECOMMENDED_MOVIES,
+		{
+			variables: {
+				recommendedMoviesId: movieDetails.id,
+			},
+		}
+	);
+
 	console.log('MY MOVIE INFO: ', usersMovieData);
 	console.log('MOVIE DETAILS: ', movieDetails);
+	console.log('REC MOVIES: ', recMoviesData);
 
 	const {
 		mutateFunction: addMovie,
@@ -166,6 +184,19 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	}, [usersMovieData, usersMovieLoading]);
 
+	useEffect(() => {
+		if (recMoviesContainerRef.current) {
+			const scrollerClass =
+				'.react-horizontal-scrolling-menu--scroll-container';
+
+			const recMoviesScroller = recMoviesContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			recMoviesScroller.style.height = '23rem';
+		}
+	});
+
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
 			<section>
@@ -211,6 +242,19 @@ const MovieDetails = ({ movieDetails }: Props) => {
 					</div>
 				)}
 			</section>
+			{!recMoviesLoading && recMoviesData && (
+				<section className='' ref={recMoviesContainerRef}>
+					<h3>Recommended Movies</h3>
+					<RecommendedMoviesHorizontalScroller
+						items={recMoviesData.results.map(movie => ({
+							id: movie.id,
+							poster_path: movie.poster_path,
+							title: movie.title,
+							popularity: movie.popularity,
+						}))}
+					/>
+				</section>
+			)}
 		</section>
 	);
 };

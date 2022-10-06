@@ -251,13 +251,13 @@ export const getRecommendedMovies = extendType({
 		t.nonNull.field('recommendedMovies', {
 			type: 'MoviesRes',
 			args: {
-				id: nonNull(intArg()),
+				recommendedMoviesId: nonNull(intArg()),
 				page: intArg(),
 			},
-			resolve: async (_parent, { id, page }) => {
+			resolve: async (_parent, { recommendedMoviesId, page }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/movie/${id}/recommendations?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
+					`${BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process
+						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				return data;
 			},
