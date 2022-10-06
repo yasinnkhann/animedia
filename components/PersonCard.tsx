@@ -15,7 +15,7 @@ const PersonCard = ({ person }: Props) => {
 	const router = useRouter();
 
 	const handleGoToDetailsPage = () => {
-		router.replace(
+		router.push(
 			getDetailsPageRoute(ESearchType.PERSON, person.id, person.name)
 		);
 	};

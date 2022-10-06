@@ -40,9 +40,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 	);
 
 	const handleGoToDetailsPage = () => {
-		router.replace(
-			getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title)
-		);
+		router.push(getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title));
 	};
 
 	return (

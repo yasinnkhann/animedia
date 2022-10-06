@@ -40,7 +40,7 @@ const ShowCard = ({ show, rank }: Props) => {
 	);
 
 	const handleGoToDetailsPage = () => {
-		router.replace(getDetailsPageRoute(ESearchType.SHOW, show.id, show.name));
+		router.push(getDetailsPageRoute(ESearchType.SHOW, show.id, show.name));
 	};
 
 	return (
