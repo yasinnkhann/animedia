@@ -52,7 +52,7 @@ const Header = () => {
 
 	const peopleItems = [
 		{
-			label: 'People People',
+			label: 'Popular People',
 			key: 'popular',
 		},
 	];
