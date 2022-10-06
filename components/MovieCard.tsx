@@ -64,7 +64,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 				</div>
 				<div className='col-start-2 pl-4'>
 					<h3 className='cursor-pointer'>{movie.title}</h3>
-					<p className=''>{formatDate(movie.release_date as string)}</p>
+					<p>{formatDate(movie.release_date as string)}</p>
 				</div>
 			</td>
 			<td className='align-middle text-center border-x-2 border-gray-200'>

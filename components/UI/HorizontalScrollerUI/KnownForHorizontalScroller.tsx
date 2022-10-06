@@ -3,7 +3,6 @@ import KnownForCard from './KnownForCard';
 import useDrag from './UseDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';

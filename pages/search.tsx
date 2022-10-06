@@ -127,74 +127,78 @@ const Search: NextPage = () => {
 			{searchedMovies && searchedShows && searchedPeople && (
 				<>
 					<SearchBar />
-					<section className='border border-black'>
-						<div>
-							<h3>Search Results</h3>
-						</div>
-						<ul>
-							<li className='flex items-center w-[15%] justify-between'>
-								<h4
-									className='cursor-pointer'
-									onClick={() =>
-										setSearchResultsType(ESearchResultsType.MOVIES)
-									}
-									style={{
-										borderBottom:
-											searchResultsType === ESearchResultsType.MOVIES
-												? '1px solid black'
-												: undefined,
-									}}
-								>
-									Movies
-								</h4>
-								<p>{searchedMovies.total_results}</p>
-							</li>
-							<li className='flex items-center w-[15%] justify-between'>
-								<h4
-									className='cursor-pointer'
-									onClick={() => setSearchResultsType(ESearchResultsType.SHOWS)}
-									style={{
-										borderBottom:
-											searchResultsType === ESearchResultsType.SHOWS
-												? '1px solid black'
-												: undefined,
-									}}
-								>
-									Shows
-								</h4>
-								<p>{searchedShows.total_results}</p>
-							</li>
-							<li className='flex items-center w-[15%] justify-between'>
-								<h4
-									className='cursor-pointer'
-									onClick={() =>
-										setSearchResultsType(ESearchResultsType.PEOPLE)
-									}
-									style={{
-										borderBottom:
-											searchResultsType === ESearchResultsType.PEOPLE
-												? '1px solid black'
-												: undefined,
-									}}
-								>
-									People
-								</h4>
-								<p>{searchedPeople.total_results}</p>
-							</li>
-						</ul>
-					</section>
-					<section>
-						{getSearchedTypeData()?.results.length ? (
-							getSearchedTypeData()?.results.map(result => (
-								<SearchResult
-									key={result.id}
-									result={result}
-									searchedResultType={getSearchResultType()}
-								/>
-							))
-						) : (
-							<div>No results</div>
-						)}
+					<section className='grid grid-cols-[20%_80%]'>
+						<section className='m-4 justify-self-center'>
+							<div>
+								<h3>Search Results</h3>
+							</div>
+							<ul>
+								<li className='flex items-center w-[15%] justify-between'>
+									<h4
+										className='cursor-pointer'
+										onClick={() =>
+											setSearchResultsType(ESearchResultsType.MOVIES)
+										}
+										style={{
+											borderBottom:
+												searchResultsType === ESearchResultsType.MOVIES
+													? '1px solid black'
+													: undefined,
+										}}
+									>
+										Movies
+									</h4>
+									<p>{searchedMovies.total_results}</p>
+								</li>
+								<li className='flex items-center w-[15%] justify-between'>
+									<h4
+										className='cursor-pointer'
+										onClick={() =>
+											setSearchResultsType(ESearchResultsType.SHOWS)
+										}
+										style={{
+											borderBottom:
+												searchResultsType === ESearchResultsType.SHOWS
+													? '1px solid black'
+													: undefined,
+										}}
+									>
+										Shows
+									</h4>
+									<p>{searchedShows.total_results}</p>
+								</li>
+								<li className='flex items-center w-[15%] justify-between'>
+									<h4
+										className='cursor-pointer'
+										onClick={() =>
+											setSearchResultsType(ESearchResultsType.PEOPLE)
+										}
+										style={{
+											borderBottom:
+												searchResultsType === ESearchResultsType.PEOPLE
+													? '1px solid black'
+													: undefined,
+										}}
+									>
+										People
+									</h4>
+									<p>{searchedPeople.total_results}</p>
+								</li>
+							</ul>
+						</section>
+						<section>
+							{getSearchedTypeData()?.results.length ? (
+								getSearchedTypeData()?.results.map(result => (
+									<SearchResult
+										key={result.id}
+										result={result}
+										searchedResultType={getSearchResultType()}
+									/>
+								))
+							) : (
+								<div>No results</div>
+							)}
+						</section>
 					</section>
 
 					<Pagination
