@@ -53,7 +53,7 @@ const Pagination = ({
 			<div className='px-2'>
 				<button
 					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
-						currPage === 1 ? '!text-gray-500' : '!text-green-700'
+						currPage === 1 ? '!text-gray-500 cursor-default' : '!text-green-700'
 					}`}
 					onClick={goToPrevPage}
 					disabled={currPage === 1}
@@ -94,7 +94,9 @@ const Pagination = ({
 			<div className='px-2'>
 				<button
 					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
-						currPage === lastPage ? '!text-gray-500' : '!text-green-700'
+						currPage === lastPage
+							? '!text-gray-500 cursor-default'
+							: '!text-green-700'
 					}`}
 					onClick={goToNextPage}
 					disabled={currPage === lastPage}

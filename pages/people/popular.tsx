@@ -39,7 +39,7 @@ const PopularPeople = () => {
 	console.log(popularPeopleData);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-32'>
+		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
 			{popularPeopleData ? (
 				<>
 					<h3 className='mb-4'>Popular People</h3>
