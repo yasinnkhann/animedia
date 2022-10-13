@@ -65,6 +65,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const {
 		mutateFunction: addShow,
+		mutateLoading: addShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['addedShow']
@@ -91,6 +92,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const {
 		mutateFunction: updateShow,
+		mutateLoading: updateShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['updatedShow']
@@ -117,6 +119,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const {
 		mutateFunction: deleteShow,
+		mutateLoading: deleteShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['deletedShow']
@@ -137,6 +140,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 			],
 		}
 	);
+
+	const isDBPending = addShowLoading || updateShowLoading || deleteShowLoading;
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
@@ -413,7 +418,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 			<section>
 				{status === 'authenticated' && session.user && (
 					<div className='flex'>
-						<select value={watchStatus} onChange={handleChangeWatchStatus}>
+						<select
+							value={watchStatus}
+							onChange={handleChangeWatchStatus}
+							disabled={isDBPending}
+						>
 							{watchStatusOptions.map(option => (
 								<option key={option.value} value={option.value}>
 									{option.text}
@@ -427,7 +436,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 							onChange={handleChangeRating}
 							disabled={
 								watchStatus === 'NOT_WATCHING' ||
-								watchStatus === 'PLAN_TO_WATCH'
+								watchStatus === 'PLAN_TO_WATCH' ||
+								isDBPending
 							}
 						>
 							{ratingOptions.map(option => (
@@ -460,7 +470,9 @@ const ShowDetails = ({ showDetails }: Props) => {
 								className='mx-1 text-blue-500'
 								onClick={handleIncrementBtn}
 								type='button'
-								disabled={+currEp >= showDetails.number_of_episodes}
+								disabled={
+									+currEp >= showDetails.number_of_episodes || isDBPending
+								}
 							>
 								+
 							</button>

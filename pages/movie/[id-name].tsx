@@ -68,6 +68,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const {
 		mutateFunction: addMovie,
+		mutateLoading: addMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['addedMovie']
@@ -93,6 +94,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const {
 		mutateFunction: updateMovie,
+		mutateLoading: updateMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['updatedMovie']
@@ -109,6 +111,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	const {
 		mutateFunction: deleteMovie,
+		mutateLoading: deleteMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['deletedMovie']
@@ -129,6 +132,9 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			],
 		}
 	);
+
+	const isDBPending =
+		addMovieLoading || updateMovieLoading || deleteMovieLoading;
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
@@ -217,13 +223,19 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
 						/>
 					</section>
-					<span>{commaNumber(movieDetails.vote_count)} voted users</span>
+					<span className='break-words w-[4.5rem] ml-4'>
+						{commaNumber(movieDetails.vote_count)} voted users
+					</span>
 				</section>
 
 				<section>
 					{status === 'authenticated' && session.user && (
 						<section>
-							<select value={watchStatus} onChange={handleChangeWatchStatus}>
+							<select
+								value={watchStatus}
+								onChange={handleChangeWatchStatus}
+								disabled={isDBPending}
+							>
 								{watchStatusOptions.map(option => (
 									<option key={option.value} value={option.value}>
 										{option.text}
@@ -236,7 +248,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 								onChange={handleChangeRating}
 								disabled={
 									watchStatus === 'NOT_WATCHING' ||
-									watchStatus === 'PLAN_TO_WATCH'
+									watchStatus === 'PLAN_TO_WATCH' ||
+									isDBPending
 								}
 							>
 								{ratingOptions.map(option => (
