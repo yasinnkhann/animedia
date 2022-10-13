@@ -19,6 +19,7 @@
 		"apollo-server-micro": "^3.10.2",
 		"axios": "^0.27.2",
 		"bcryptjs": "^2.4.3",
+		"comma-number": "^2.1.0",
 		"graphql": "^16.6.0",
 		"graphql-middleware": "^6.1.32",
 		"graphql-request": "^5.0.0",
@@ -41,6 +42,7 @@
 		"yarn": "^1.22.19"
 	},
 	"devDependencies": {
+		"@types/comma-number": "^2.1.0",
 		"@types/micro-cors": "^0.1.2",
 		"@types/node": "18.7.18",
 		"@types/nodemailer": "^6.4.6",

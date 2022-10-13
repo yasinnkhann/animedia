@@ -17,6 +17,7 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import RoundProgressBar from '../../components/UI/RoundProgressBar';
+import commaNumber from 'comma-number';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -216,7 +217,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
 						/>
 					</section>
-					<span>{movieDetails.vote_count} voted users</span>
+					<span>{commaNumber(movieDetails.vote_count)} voted users</span>
 				</section>
 
 				<section>
