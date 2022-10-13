@@ -460,7 +460,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 								onFocus={e => (e.target.selectionStart = 1)}
 								disabled={
 									watchStatus === 'NOT_WATCHING' ||
-									watchStatus === 'PLAN_TO_WATCH'
+									watchStatus === 'PLAN_TO_WATCH' ||
+									isDBPending
 								}
 								onBlur={handleEpisodeOnBlur}
 							/>

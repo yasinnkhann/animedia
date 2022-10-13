@@ -223,7 +223,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
 						/>
 					</section>
-					<span className='break-words w-[4.5rem] ml-4'>
+					<span className='break-words w-[4rem] ml-4'>
 						{commaNumber(movieDetails.vote_count)} voted users
 					</span>
 				</section>
