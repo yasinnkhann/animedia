@@ -27,6 +27,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
+	const overviewRef = useRef<HTMLParagraphElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -205,8 +206,25 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	});
 
+	console.log('overview REF: ', overviewRef.current?.clientHeight);
+
+	if (recMoviesLoading) {
+		return;
+	}
+
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
+		<main
+			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
+				recMoviesData?.results?.length! > 0
+					? 'grid-rows-[1.5fr_1fr]'
+					: `${
+							overviewRef.current?.clientHeight === undefined ||
+							overviewRef.current.clientHeight <= 609
+								? 'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]'
+								: 'grid-rows-[1fr]'
+					  }`
+			} grid-cols-[30%_70%] px-16`}
+		>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
@@ -264,11 +282,11 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 				<section>
 					<h1>{movieDetails.title}</h1>
-					<p>{movieDetails.overview}</p>
+					<p ref={overviewRef}>{movieDetails.overview}</p>
 				</section>
 			</section>
 
-			{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
+			{recMoviesData?.results?.length! > 0 && (
 				<section className='col-start-2' ref={recMoviesContainerRef}>
 					<h3>Recommended Movies</h3>
 					<RecommendedMoviesHorizontalScroller
