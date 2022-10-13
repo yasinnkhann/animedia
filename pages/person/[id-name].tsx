@@ -7,11 +7,11 @@ import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import Image from 'next/image';
 import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import { IKnownForMedia } from '@ts/interfaces';
+import { formatDate } from '../../utils/formatDate';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/specificNums';
-import { formatDate } from '../../utils/formatDate';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];
@@ -82,13 +82,9 @@ const PersonDetails = ({
 		}
 	});
 
-	console.log('PERSON DETAILS: ', personDetails);
-
-	console.log('MAPPED MEDIA: ', memoMappedMedia);
-
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
-			<section className='relative m-4'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
+			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + personDetails.profile_path}
@@ -107,7 +103,7 @@ const PersonDetails = ({
 				</p>
 			</section>
 
-			<section className='ml-8'>
+			<section className='ml-8 mt-4'>
 				<h3 className='mb-4'>Personal Info</h3>
 				<h4>Known For</h4>
 				<p>{personDetails.known_for_department}</p>
@@ -139,11 +135,11 @@ const PersonDetails = ({
 				)}
 			</section>
 
-			<section className='col-start-2' ref={knownForContainerRef}>
+			<section className='col-start-2 mt-4' ref={knownForContainerRef}>
 				<h3 className='mb-4 ml-8'>Known For</h3>
 				<KnownForHorizontalScroller items={memoMappedMedia} />
 			</section>
-		</section>
+		</main>
 	);
 };
 

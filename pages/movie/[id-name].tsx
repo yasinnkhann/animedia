@@ -16,6 +16,7 @@ import {
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import RoundProgressBar from '../../components/UI/RoundProgressBar';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -198,8 +199,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	});
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
-			<section className='relative m-4'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
+			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + movieDetails.poster_path}
@@ -208,11 +209,19 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				/>
 			</section>
 
-			<section>
-				<div>RATING and REVIEWS HERE</div>
-				<div className=''>
+			<section className='mt-4'>
+				<section className='flex items-center mb-4'>
+					<section className='h-[4rem] w-[4rem]'>
+						<RoundProgressBar
+							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
+						/>
+					</section>
+					<span>{movieDetails.vote_count} voted users</span>
+				</section>
+
+				<section>
 					{status === 'authenticated' && session.user && (
-						<div>
+						<section>
 							<select value={watchStatus} onChange={handleChangeWatchStatus}>
 								{watchStatusOptions.map(option => (
 									<option key={option.value} value={option.value}>
@@ -235,13 +244,14 @@ const MovieDetails = ({ movieDetails }: Props) => {
 									</option>
 								))}
 							</select>
-						</div>
+						</section>
 					)}
-				</div>
-				<div>
+				</section>
+
+				<section>
 					<h1>{movieDetails.title}</h1>
 					<p>{movieDetails.overview}</p>
-				</div>
+				</section>
 			</section>
 
 			{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
@@ -257,7 +267,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 					/>
 				</section>
 			)}
-		</section>
+		</main>
 	);
 };
 
