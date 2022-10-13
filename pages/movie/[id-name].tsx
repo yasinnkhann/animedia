@@ -206,8 +206,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	});
 
-	console.log('overview REF: ', overviewRef.current?.clientHeight);
-
 	if (recMoviesLoading) {
 		return;
 	}
@@ -235,50 +233,50 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</section>
 
 			<section className='mt-4'>
-				<section className='flex items-center mb-4'>
-					<section className='h-[4rem] w-[4rem]'>
+				<section className='flex items-center mb-8 mt-8'>
+					<section className='h-[5rem] w-[5rem]'>
 						<RoundProgressBar
 							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
 						/>
 					</section>
-					<span className='break-words w-[4rem] ml-4'>
+					<p className='ml-[.5rem]'>
 						{commaNumber(movieDetails.vote_count)} voted users
-					</span>
+					</p>
 				</section>
 
-				<section>
-					{status === 'authenticated' && session.user && (
-						<section>
-							<select
-								value={watchStatus}
-								onChange={handleChangeWatchStatus}
-								disabled={isDBPending}
-							>
-								{watchStatusOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
+				{status === 'authenticated' && session.user && (
+					<section className='my-4 h-[1.5rem]'>
+						<select
+							className='mr-4 h-full rounded outline-none'
+							value={watchStatus}
+							onChange={handleChangeWatchStatus}
+							disabled={isDBPending}
+						>
+							{watchStatusOptions.map(option => (
+								<option key={option.value} value={option.value}>
+									{option.text}
+								</option>
+							))}
+						</select>
 
-							<select
-								value={rating}
-								onChange={handleChangeRating}
-								disabled={
-									watchStatus === 'NOT_WATCHING' ||
-									watchStatus === 'PLAN_TO_WATCH' ||
-									isDBPending
-								}
-							>
-								{ratingOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
-						</section>
-					)}
-				</section>
+						<select
+							className='h-full rounded outline-none'
+							value={rating}
+							onChange={handleChangeRating}
+							disabled={
+								watchStatus === 'NOT_WATCHING' ||
+								watchStatus === 'PLAN_TO_WATCH' ||
+								isDBPending
+							}
+						>
+							{ratingOptions.map(option => (
+								<option key={option.value} value={option.value}>
+									{option.text}
+								</option>
+							))}
+						</select>
+					</section>
+				)}
 
 				<section>
 					<h1>{movieDetails.title}</h1>
@@ -286,9 +284,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				</section>
 			</section>
 
+			<section>
+				<h3>Details</h3>
+			</section>
+
 			{recMoviesData?.results?.length! > 0 && (
-				<section className='col-start-2' ref={recMoviesContainerRef}>
-					<h3>Recommended Movies</h3>
+				<section className='col-start-2 mt-4' ref={recMoviesContainerRef}>
+					<h3 className='mb-4'>Recommended Movies</h3>
 					<RecommendedMoviesHorizontalScroller
 						items={recMoviesData!.results.map(movie => ({
 							id: movie.id,
