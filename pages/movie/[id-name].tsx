@@ -307,17 +307,21 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				</div>
 				<h4 className='mt-4'>Original Language</h4>
 				<p>{getEnglishName(movieDetails.original_language)}</p>
-				<h4 className='mt-4'>Official Page</h4>
-				<Link href={movieDetails.homepage}>
-					<a className='underline' target='_blank'>
-						Learn More
-					</a>
-				</Link>
+				{movieDetails.homepage.length > 0 && (
+					<>
+						<h4 className='mt-4'>Official Page</h4>
+						<Link href={movieDetails.homepage}>
+							<a className='underline' target='_blank'>
+								Learn More
+							</a>
+						</Link>
+					</>
+				)}
 			</section>
 
 			{recMoviesData?.results?.length! > 0 && (
 				<section className='col-start-2 mt-4' ref={recMoviesContainerRef}>
-					<h3 className='mb-4'>Recommended Movies</h3>
+					<h3 className='mb-4 ml-8'>Recommended Movies</h3>
 					<RecommendedMoviesHorizontalScroller
 						items={recMoviesData!.results.map(movie => ({
 							id: movie.id,

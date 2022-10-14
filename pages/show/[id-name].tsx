@@ -16,6 +16,11 @@ import {
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
 import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import RoundProgressBar from '../../components/UI/RoundProgressBar';
+import commaNumber from 'comma-number';
+import Link from 'next/link';
+import { getEnglishName } from 'all-iso-language-codes';
+import { formatDate } from '../../utils/formatDate';
 
 interface Props {
 	showDetails: NexusGenObjects['ShowDetailsRes'];
@@ -396,10 +401,9 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	console.log('MY SHOW INFO: ', usersShowData);
 	console.log('SHOW DETAILS: ', showDetails);
-	console.log('REC SHOWS: ', recShowsData);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
 			<section>
 				<div className='w-[15rem] h-[20rem] relative'>
 					<Image
@@ -494,7 +498,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					/>
 				</section>
 			)}
-		</section>
+		</main>
 	);
 };
 export default ShowDetails;
