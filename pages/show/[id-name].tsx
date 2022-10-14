@@ -30,6 +30,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recShowsContainerRef = useRef<HTMLElement>(null);
+	const overviewRef = useRef<HTMLParagraphElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -403,26 +404,43 @@ const ShowDetails = ({ showDetails }: Props) => {
 	console.log('SHOW DETAILS: ', showDetails);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)] m-4'>
-			<section>
-				<div className='w-[15rem] h-[20rem] relative'>
-					<Image
-						className='rounded-lg'
-						src={BASE_IMG_URL + showDetails.poster_path}
-						alt={showDetails.name}
-						layout='fill'
-					/>
-				</div>
-				<div className='w-[75%]'>
-					<h1>{showDetails.name}</h1>
-					<p>{showDetails.overview}</p>
-				</div>
+		<main
+			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
+				recShowsData?.results?.length! > 0
+					? 'grid-rows-[1fr_1fr]'
+					: `${
+							overviewRef.current?.clientHeight === undefined ||
+							overviewRef.current.clientHeight <= 609
+								? 'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]'
+								: 'grid-rows-[1fr]'
+					  }`
+			} grid-cols-[30%_70%] px-16`}
+		>
+			<section className='relative mx-4 mt-4'>
+				<Image
+					className='rounded-lg'
+					src={BASE_IMG_URL + showDetails.poster_path}
+					alt={showDetails.name ?? undefined}
+					layout='fill'
+				/>
 			</section>
 
-			<section>
+			<section className='mt-4'>
+				<section className='flex items-center mb-8 mt-8'>
+					<section className='h-[5rem] w-[5rem]'>
+						<RoundProgressBar
+							percentageVal={+showDetails.vote_average.toFixed(1) * 10}
+						/>
+					</section>
+					<p className='ml-[.5rem]'>
+						{commaNumber(showDetails.vote_count)} voted users
+					</p>
+				</section>
+
 				{status === 'authenticated' && session.user && (
-					<div className='flex'>
+					<section className='my-4 h-[1.5rem] flex'>
 						<select
+							className='h-full rounded outline-none'
 							value={watchStatus}
 							onChange={handleChangeWatchStatus}
 							disabled={isDBPending}
@@ -482,9 +500,16 @@ const ShowDetails = ({ showDetails }: Props) => {
 								+
 							</button>
 						</form>
-					</div>
+					</section>
 				)}
 			</section>
+
+			<section>
+				<h1>{showDetails.name}</h1>
+				<h4 className='my-4'>{showDetails.tagline}</h4>
+				<p ref={overviewRef}>{showDetails.overview}</p>
+			</section>
+
 			{!recShowsLoading && recShowsData?.results?.length! > 0 && (
 				<section className='' ref={recShowsContainerRef}>
 					<h3>Recommended Shows</h3>
