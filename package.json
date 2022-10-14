@@ -15,6 +15,7 @@
 		"@next-auth/prisma-adapter": "^1.0.4",
 		"@prisma/client": "^4.3.1",
 		"add": "^2.0.6",
+		"all-iso-language-codes": "^1.0.9",
 		"antd": "^4.23.1",
 		"apollo-server-micro": "^3.10.2",
 		"axios": "^0.27.2",

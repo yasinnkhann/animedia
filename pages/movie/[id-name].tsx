@@ -18,6 +18,9 @@ import {
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import RoundProgressBar from '../../components/UI/RoundProgressBar';
 import commaNumber from 'comma-number';
+import Link from 'next/link';
+import { getEnglishName } from 'all-iso-language-codes';
+import { formatDate } from '../../utils/formatDate';
 
 interface Props {
 	movieDetails: NexusGenObjects['MovieDetailsRes'];
@@ -65,7 +68,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	console.log('MY MOVIE INFO: ', usersMovieData);
 	console.log('MOVIE DETAILS: ', movieDetails);
-	console.log('REC MOVIES: ', recMoviesData);
 
 	const {
 		mutateFunction: addMovie,
@@ -280,12 +282,37 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 				<section>
 					<h1>{movieDetails.title}</h1>
+					<h4 className='my-4'>{movieDetails.tagline}</h4>
 					<p ref={overviewRef}>{movieDetails.overview}</p>
 				</section>
 			</section>
 
-			<section>
-				<h3>Details</h3>
+			<section className='ml-8 my-4'>
+				<h3 className='mb-4'>Details</h3>
+				<h4>Runtime</h4>
+				<p>{movieDetails.runtime} minutes</p>
+				<h4 className='mt-4'>Status</h4>
+				<p>{movieDetails.status}</p>
+				<h4 className='mt-4'>Release Date</h4>
+				{movieDetails.release_date ? (
+					<p>{formatDate(movieDetails.release_date)}</p>
+				) : (
+					<p>N/A</p>
+				)}
+				<h4 className='mt-4'>Genre(s)</h4>
+				<div>
+					{movieDetails.genres.map((genre, idx) => (
+						<p key={idx}>{genre.name}</p>
+					))}
+				</div>
+				<h4 className='mt-4'>Original Language</h4>
+				<p>{getEnglishName(movieDetails.original_language)}</p>
+				<h4 className='mt-4'>Official Page</h4>
+				<Link href={movieDetails.homepage}>
+					<a className='underline' target='_blank'>
+						Learn More
+					</a>
+				</Link>
 			</section>
 
 			{recMoviesData?.results?.length! > 0 && (
