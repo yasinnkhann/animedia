@@ -400,6 +400,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	});
 
+	if (recShowsLoading) {
+		return;
+	}
+
 	console.log('MY SHOW INFO: ', usersShowData);
 	console.log('SHOW DETAILS: ', showDetails);
 
@@ -502,17 +506,49 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</form>
 					</section>
 				)}
+
+				<section>
+					<h1>{showDetails.name}</h1>
+					<h4 className='my-4'>{showDetails.tagline}</h4>
+					<p ref={overviewRef}>{showDetails.overview}</p>
+				</section>
 			</section>
 
-			<section>
-				<h1>{showDetails.name}</h1>
-				<h4 className='my-4'>{showDetails.tagline}</h4>
-				<p ref={overviewRef}>{showDetails.overview}</p>
+			<section className='ml-8 my-4'>
+				<h3 className='mb-4'>Details</h3>
+				<h4>Runtime</h4>
+				<p>{showDetails.runtime} minutes</p>
+				<h4 className='mt-4'>Status</h4>
+				<p>{showDetails.status}</p>
+				<h4 className='mt-4'>Release Date</h4>
+				{showDetails.release_date ? (
+					<p>{formatDate(showDetails.release_date)}</p>
+				) : (
+					<p>N/A</p>
+				)}
+				<h4 className='mt-4'>Genre(s)</h4>
+				<div>
+					{showDetails.genres.map((genre, idx) => (
+						<p key={idx}>{genre.name}</p>
+					))}
+				</div>
+				<h4 className='mt-4'>Original Language</h4>
+				<p>{getEnglishName(showDetails.original_language)}</p>
+				{showDetails.homepage.length > 0 && (
+					<>
+						<h4 className='mt-4'>Official Page</h4>
+						<Link href={showDetails.homepage}>
+							<a className='underline' target='_blank'>
+								Learn More
+							</a>
+						</Link>
+					</>
+				)}
 			</section>
 
-			{!recShowsLoading && recShowsData?.results?.length! > 0 && (
-				<section className='' ref={recShowsContainerRef}>
-					<h3>Recommended Shows</h3>
+			{recShowsData?.results?.length! > 0 && (
+				<section className='col-start-2 mt-4' ref={recShowsContainerRef}>
+					<h3 className='mb-4 ml-8'>Recommended Shows</h3>
 					<RecommendedShowsHorizontalScroller
 						items={recShowsData!.results.map(show => ({
 							id: show.id,
