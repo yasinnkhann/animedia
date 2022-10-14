@@ -216,7 +216,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		<main
 			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
 				recMoviesData?.results?.length! > 0
-					? 'grid-rows-[1.5fr_1fr]'
+					? 'grid-rows-[1fr_1fr]'
 					: `${
 							overviewRef.current?.clientHeight === undefined ||
 							overviewRef.current.clientHeight <= 609
