@@ -97,9 +97,6 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 		}
 	};
 
-	console.log('Result: ', result);
-	console.log('searchedResultType: ', searchedResultType);
-
 	return (
 		<section
 			className='flex border rounded-lg my-4 mr-16 h-[8rem]'

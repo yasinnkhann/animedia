@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useGQLQuery } from '../hooks/useGQL';
 import * as Queries from '../graphql/queries';
@@ -18,6 +18,8 @@ const Search: NextPage = () => {
 	const router = useRouter();
 
 	const [currPage, setCurrPage] = useState(1);
+
+	const searchBarRef = useRef<HTMLInputElement>(null);
 
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
@@ -119,14 +121,18 @@ const Search: NextPage = () => {
 			) {
 				setSearchResultsType(ESearchResultsType.PEOPLE);
 			}
+
+			if (searchBarRef.current) {
+				searchBarRef.current.value = router.query.q as string;
+			}
 		}
-	}, [searchedMovies, searchedShows, searchedPeople]);
+	}, [searchedMovies, searchedShows, searchedPeople, router.query.q]);
 
 	return (
-		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{searchedMovies && searchedShows && searchedPeople && (
 				<>
-					<SearchBar />
+					<SearchBar ref={searchBarRef} />
 					<section className='grid grid-cols-[20%_80%]'>
 						<section className='m-4 border rounded-lg flex flex-col items-center px-8'>
 							<div className='w-full mb-4'>
@@ -217,7 +223,7 @@ const Search: NextPage = () => {
 					/>
 				</>
 			)}
-		</div>
+		</main>
 	);
 };
 
