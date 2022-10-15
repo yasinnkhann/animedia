@@ -411,7 +411,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		<main
 			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
 				recShowsData?.results?.length! > 0
-					? 'grid-rows-[.9fr_1fr]'
+					? 'grid-rows-[1.3fr_2fr]'
 					: `${
 							overviewRef.current?.clientHeight === undefined ||
 							overviewRef.current.clientHeight <= 609

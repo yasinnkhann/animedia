@@ -17,7 +17,7 @@ const MyMovies: NextPage = () => {
 	);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<h1>My Movies</h1>
 			<section>
 				<div>
@@ -72,7 +72,7 @@ const MyMovies: NextPage = () => {
 					</span>
 				</div>
 			</section>
-		</section>
+		</main>
 	);
 };
 
