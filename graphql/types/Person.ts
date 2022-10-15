@@ -31,7 +31,7 @@ export const personResult = objectType({
 		t.nonNull.list.field('known_for', {
 			type: nonNull('KnownForResult'),
 		});
-		t.nonNull.string('known_for_department');
+		t.string('known_for_department');
 		t.nonNull.string('name');
 		t.nonNull.float('popularity');
 		t.string('profile_path');

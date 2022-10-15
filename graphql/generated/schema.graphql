@@ -200,7 +200,7 @@ type PersonResult {
   gender: Int!
   id: Int!
   known_for: [KnownForResult!]!
-  known_for_department: String!
+  known_for_department: String
   name: String!
   popularity: Float!
   profile_path: String

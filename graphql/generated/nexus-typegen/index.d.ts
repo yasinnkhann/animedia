@@ -214,7 +214,7 @@ export interface NexusGenObjects {
     gender: number; // Int!
     id: number; // Int!
     known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
-    known_for_department: string; // String!
+    known_for_department?: string | null; // String
     name: string; // String!
     popularity: number; // Float!
     profile_path?: string | null; // String
@@ -637,7 +637,7 @@ export interface NexusGenFieldTypes {
     gender: number; // Int!
     id: number; // Int!
     known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
-    known_for_department: string; // String!
+    known_for_department: string | null; // String
     name: string; // String!
     popularity: number; // Float!
     profile_path: string | null; // String

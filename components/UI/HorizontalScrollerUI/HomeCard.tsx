@@ -39,6 +39,7 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 					src={BASE_IMG_URL + item.poster_path}
 					alt={mediaTitle}
 					layout='fill'
+					priority
 				/>
 			</div>
 

@@ -35,6 +35,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 							src={BASE_IMG_URL + searchResult.poster_path}
 							alt={searchResult.title}
 							layout='fill'
+							priority
 						/>
 					</div>
 					<div className='p-4'>
@@ -61,6 +62,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 							src={BASE_IMG_URL + searchResult.poster_path}
 							alt={searchResult.name}
 							layout='fill'
+							priority
 						/>
 					</div>
 					<div className='p-4'>
@@ -87,6 +89,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 							src={BASE_IMG_URL + searchResult.profile_path}
 							alt={searchResult.name}
 							layout='fill'
+							priority
 						/>
 					</div>
 					<div className='p-4'>
