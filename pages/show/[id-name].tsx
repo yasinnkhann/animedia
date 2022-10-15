@@ -411,7 +411,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		<main
 			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
 				recShowsData?.results?.length! > 0
-					? 'grid-rows-[1fr_1fr]'
+					? 'grid-rows-[.9fr_1fr]'
 					: `${
 							overviewRef.current?.clientHeight === undefined ||
 							overviewRef.current.clientHeight <= 609
@@ -516,9 +516,39 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			<section className='ml-8 my-4'>
 				<h3 className='mb-4'>Details</h3>
+				<h4 className='mt-4'>No. of Seasons</h4>
+				<p>{showDetails.number_of_seasons}</p>
+				<h4 className='mt-4'>No. of Episodes</h4>
+				<p>{showDetails.number_of_episodes}</p>
 				<h4 className='mt-4'>First Air Date</h4>
 				{showDetails.first_air_date ? (
 					<p>{formatDate(showDetails.first_air_date)}</p>
+				) : (
+					<p>N/A</p>
+				)}
+				<h4 className='mt-4'>Last Episode to Air</h4>
+				{showDetails.last_episode_to_air ? (
+					<div>
+						<p>
+							Season {showDetails.last_episode_to_air.season_number} Episode{' '}
+							{showDetails.last_episode_to_air.episode_number}
+							<br />
+							{formatDate(showDetails.last_episode_to_air.air_date!)}
+						</p>
+					</div>
+				) : (
+					<p>N/A</p>
+				)}
+				<h4 className='mt-4'>Next Episode to Air</h4>
+				{showDetails.next_episode_to_air ? (
+					<div>
+						<p>
+							Season {showDetails.next_episode_to_air.season_number} Episode{' '}
+							{showDetails.next_episode_to_air.episode_number}
+							<br />
+							{formatDate(showDetails.next_episode_to_air.air_date!)}
+						</p>
+					</div>
 				) : (
 					<p>N/A</p>
 				)}
