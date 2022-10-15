@@ -68,8 +68,6 @@ const Genre = () => {
 		scrollToTop();
 	}, [currPage]);
 
-	console.log(genreOfShowsData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section className='grid grid-cols-[20%_60%_20%]'>

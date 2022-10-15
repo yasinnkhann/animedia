@@ -516,16 +516,16 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			<section className='ml-8 my-4'>
 				<h3 className='mb-4'>Details</h3>
-				<h4>Runtime</h4>
-				<p>{showDetails.runtime} minutes</p>
-				<h4 className='mt-4'>Status</h4>
-				<p>{showDetails.status}</p>
-				<h4 className='mt-4'>Release Date</h4>
-				{showDetails.release_date ? (
-					<p>{formatDate(showDetails.release_date)}</p>
+				<h4 className='mt-4'>First Air Date</h4>
+				{showDetails.first_air_date ? (
+					<p>{formatDate(showDetails.first_air_date)}</p>
 				) : (
 					<p>N/A</p>
 				)}
+				<h4 className='mt-4'>Status</h4>
+				<p>{showDetails.status}</p>
+				<h4 className='mt-4'>In Production</h4>
+				<p>{showDetails.in_production ? 'Yes' : 'No'}</p>
 				<h4 className='mt-4'>Genre(s)</h4>
 				<div>
 					{showDetails.genres.map((genre, idx) => (
