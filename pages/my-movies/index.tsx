@@ -18,84 +18,90 @@ const MyMovies: NextPage = () => {
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<h1>My Movies</h1>
-			<section className='flex justify-center items-center h-[35rem]'>
-				<section className='bg-gray-300 h-[70%] w-[30%] flex flex-col justify-center items-center rounded-lg'>
-					<div>
-						<a
-							className='no-underline'
-							onClick={() => router.push('/my-movies/watching')}
-						>
-							Watching:{' '}
-						</a>
-						<span>
-							{
-								usersMoviesData?.filter(movie => movie.status === 'WATCHING')
-									.length
-							}
-						</span>
-					</div>
+			<section className='flex justify-center'>
+				<section className='w-[30rem] h-[30rem] mt-36'>
+					<h1 className='text-center mb-4'>My Movies</h1>
+					<section className='flex justify-center items-center'>
+						<section className='bg-gray-200 flex flex-col justify-around items-center rounded-lg w-[25rem] h-[15rem]'>
+							<div className='pt-4'>
+								<a
+									className='no-underline'
+									onClick={() => router.push('/my-movies/watching')}
+								>
+									Watching:{' '}
+								</a>
+								<span>
+									{
+										usersMoviesData?.filter(
+											movie => movie.status === 'WATCHING'
+										).length
+									}
+								</span>
+							</div>
 
-					<div>
-						<a
-							className='no-underline'
-							onClick={() => router.push('/my-movies/completed')}
-						>
-							Completed:{' '}
-						</a>
-						<span>
-							{
-								usersMoviesData?.filter(movie => movie.status === 'COMPLETED')
-									.length
-							}
-						</span>
-					</div>
+							<div>
+								<a
+									className='no-underline'
+									onClick={() => router.push('/my-movies/completed')}
+								>
+									Completed:{' '}
+								</a>
+								<span>
+									{
+										usersMoviesData?.filter(
+											movie => movie.status === 'COMPLETED'
+										).length
+									}
+								</span>
+							</div>
 
-					<div>
-						<a
-							className='no-underline'
-							onClick={() => router.push('/my-movies/on-hold')}
-						>
-							On-Hold:{' '}
-						</a>
-						<span>
-							{
-								usersMoviesData?.filter(movie => movie.status === 'ON_HOLD')
-									.length
-							}
-						</span>
-					</div>
+							<div>
+								<a
+									className='no-underline'
+									onClick={() => router.push('/my-movies/on-hold')}
+								>
+									On-Hold:{' '}
+								</a>
+								<span>
+									{
+										usersMoviesData?.filter(movie => movie.status === 'ON_HOLD')
+											.length
+									}
+								</span>
+							</div>
 
-					<div>
-						<a
-							className='no-underline'
-							onClick={() => router.push('/my-movies/dropped')}
-						>
-							Dropped:{' '}
-						</a>
-						<span>
-							{
-								usersMoviesData?.filter(movie => movie.status === 'DROPPED')
-									.length
-							}
-						</span>
-					</div>
+							<div>
+								<a
+									className='no-underline'
+									onClick={() => router.push('/my-movies/dropped')}
+								>
+									Dropped:{' '}
+								</a>
+								<span>
+									{
+										usersMoviesData?.filter(movie => movie.status === 'DROPPED')
+											.length
+									}
+								</span>
+							</div>
 
-					<div>
-						<a
-							className='no-underline'
-							onClick={() => router.push('/my-movies/plan-to-watch')}
-						>
-							Plan to Watch:{' '}
-						</a>
-						<span>
-							{
-								usersMoviesData?.filter(
-									movie => movie.status === 'PLAN_TO_WATCH'
-								).length
-							}
-						</span>
-					</div>
+							<div className='pb-4'>
+								<a
+									className='no-underline'
+									onClick={() => router.push('/my-movies/plan-to-watch')}
+								>
+									Plan to Watch:{' '}
+								</a>
+								<span>
+									{
+										usersMoviesData?.filter(
+											movie => movie.status === 'PLAN_TO_WATCH'
+										).length
+									}
+								</span>
+							</div>
+						</section>
+					</section>
 				</section>
 			</section>
 		</main>
