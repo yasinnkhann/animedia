@@ -1,12 +1,12 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import Image from 'next/image';
 import * as Queries from '../graphql/queries';
+import { useRouter } from 'next/router';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../hooks/useGQL';
 import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { BASE_IMG_URL } from '../utils/URLs';
-import Image from 'next/image';
 import { formatDate } from '../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../utils/renderTableStatus';

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
 import { useRouter } from 'next/router';
-import { ESearchType } from '@ts/enums';
 import { TStatusParam } from '@ts/types';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
@@ -29,8 +27,8 @@ const Status = () => {
 		Queries.QUERY_GET_USERS_MOVIES
 	);
 
-	const [movies, setMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
-	const [movieId, setMovieId] = useState<string>('');
+	const [myMovies, setMyMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
+	const [movieId] = useState<string>('');
 
 	const {
 		mutateFunction: deleteMovie,
@@ -72,51 +70,18 @@ const Status = () => {
 			const moviesFiltered = usersMoviesData.filter(
 				(movie: NexusGenObjects['UserMovie']) => movie.status === status
 			);
-			setMovies(moviesFiltered);
+			setMyMovies(moviesFiltered);
 		}
 	}, [router.query.status, usersMoviesData]);
 
-	console.log('MOVIES: ', movies);
+	console.log('MOVIES: ', myMovies);
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<MyMoviesList
 				status={router.query.status as TStatusParam}
-				movies={movies}
+				myMovies={myMovies}
 			/>
-			{/* <section>
-				<section>
-					{movies.map(movie => (
-						<div key={movie.id}>
-							<a
-								onClick={() =>
-									router.push(
-										getDetailsPageRoute(
-											ESearchType.MOVIE,
-											Number(movie.id),
-											movie.name as string
-										)
-									)
-								}
-							>
-								{movie.name}
-							</a>
-							<button
-								onClick={() => {
-									setMovieId(movie.id as string);
-									deleteMovie({
-										variables: {
-											movieId: movie.id as string,
-										},
-									});
-								}}
-							>
-								Remove
-							</button>
-						</div>
-					))}
-				</section>
-			</section> */}
 		</main>
 	);
 };

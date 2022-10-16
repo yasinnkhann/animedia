@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
+import React from 'react';
+import Image from 'next/image';
 import * as Queries from '../graphql/queries';
 import * as Mutations from '../graphql/mutations';
 import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
@@ -11,19 +8,21 @@ import { ESearchType } from '@ts/enums';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../hooks/useGQL';
 import { BASE_IMG_URL } from '../utils/URLs';
-import Image from 'next/image';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../graphql/generated/nexus-typegen';
 
 interface Props {
-	movie: NexusGenObjects['UserMovie'];
+	myMovie: NexusGenObjects['UserMovie'];
 	count: number;
 }
 
-const MyMovieEntry = ({ movie, count }: Props) => {
+const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const router = useRouter();
 
 	const {
 		data: movieData,
-		loading: movieLoading,
 	}: IUseGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
@@ -31,7 +30,7 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 		Queries.QUERY_MOVIE_DETAILS,
 		{
 			variables: {
-				movieDetailsId: Number(movie.id),
+				movieDetailsId: Number(myMovie.id),
 			},
 		}
 	);
@@ -45,7 +44,7 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 		Mutations.MUTATION_DELETE_MOVIE,
 		{
 			variables: {
-				movieId: String(movie.id),
+				movieId: String(myMovie.id),
 			},
 			refetchQueries: () => [
 				{
@@ -58,8 +57,6 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 
 	console.log('MOVIE!!!: ', movieData);
 
-	// useEffect(() => {}, []);
-
 	return (
 		<tr className='border-2'>
 			<td className='align-middle text-center border-x-2 border-gray-200'>
@@ -70,14 +67,15 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieData?.poster_path}
+						priority
 						alt={movieData?.title}
 						layout='fill'
 						onClick={() =>
 							router.push(
 								getDetailsPageRoute(
 									ESearchType.MOVIE,
-									Number(movie.id),
-									movie.name as string
+									Number(myMovie.id),
+									myMovie.name as string
 								)
 							)
 						}
@@ -85,10 +83,10 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 				</div>
 			</td>
 			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<p className='text-lg'>{movie.name}</p>
+				<p className='text-lg'>{myMovie.name}</p>
 			</td>
 			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<p className='text-lg'>{movie.rating ?? 'N/A'}</p>
+				<p className='text-lg'>{myMovie.rating ?? 'N/A'}</p>
 			</td>
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<i
@@ -97,7 +95,7 @@ const MyMovieEntry = ({ movie, count }: Props) => {
 					onClick={() => {
 						deleteMovie({
 							variables: {
-								movieId: movie.id as string,
+								movieId: myMovie.id as string,
 							},
 						});
 					}}

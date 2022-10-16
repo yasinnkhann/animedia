@@ -5,10 +5,10 @@ import { TStatusParam } from '@ts/types';
 
 interface Props {
 	status: TStatusParam;
-	movies: NexusGenObjects['UserMovie'][];
+	myMovies: NexusGenObjects['UserMovie'][];
 }
 
-const MyMoviesList = ({ status, movies }: Props) => {
+const MyMoviesList = ({ status, myMovies }: Props) => {
 	const adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
 
 	return (
@@ -32,8 +32,8 @@ const MyMoviesList = ({ status, movies }: Props) => {
 				</thead>
 
 				<tbody className='!border-b-2 !border-gray-200'>
-					{movies.map((movie, idx) => (
-						<MyMovieEntry key={movie.id} movie={movie} count={idx + 1} />
+					{myMovies?.map((myMovie, idx) => (
+						<MyMovieEntry key={myMovie.id} myMovie={myMovie} count={idx + 1} />
 					))}
 				</tbody>
 			</table>

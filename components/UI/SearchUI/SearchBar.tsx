@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const SearchBar = forwardRef<HTMLInputElement>((props, ref) => {

@@ -1,10 +1,10 @@
 import React from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
+import { BASE_IMG_URL } from '../utils/URLs';
 import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../utils/URLs';
-import Image from 'next/image';
 
 interface Props {
 	person: NexusGenObjects['PersonResult'];

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import DropDownItem from './UI/DropDownItem';
 import 'antd/dist/antd.css';
 
 const Header = () => {
-	const { data: session, status } = useSession();
+	const { data: _session, status } = useSession();
 	const router = useRouter();
 
 	if (status === 'loading') {
