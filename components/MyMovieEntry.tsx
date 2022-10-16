@@ -63,7 +63,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<p className='text-lg'>{count}</p>
 			</td>
 			<td className='align-middle text-center border-x-2 border-gray-200 flex justify-center py-[.5rem]'>
-				<div className='row-start-1 w-[4.25rem] h-[4.25rem] relative cursor-pointer'>
+				<div className='row-start-1 w-[80%] h-[5rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieData?.poster_path}
