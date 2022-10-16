@@ -362,7 +362,7 @@ export const QUERY_SEARCHED_SHOWS = gql`
 
 export const QUERY_SHOW_DETAILS = gql`
 	query getShowDetails($showDetailsId: Int!) {
-		showDetails(id: $showDetailsId) {
+		showDetails(showDetailsId: $showDetailsId) {
 			adult
 			backdrop_path
 			created_by {

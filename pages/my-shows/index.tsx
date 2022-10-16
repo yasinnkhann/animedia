@@ -1,11 +1,11 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import * as Queries from '../../graphql/queries';
+import { useRouter } from 'next/router';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
-import * as Queries from '../../graphql/queries';
-import { useRouter } from 'next/router';
 
 const MyShows: NextPage = () => {
 	const router = useRouter();

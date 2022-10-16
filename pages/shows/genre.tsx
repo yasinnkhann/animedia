@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import Pagination from 'components/Pagination';
+import MediaList from 'components/MediaList';
+import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { useGQLQuery } from '../../hooks/useGQL';
-import * as Queries from 'graphql/queries';
+import { DocumentNode } from '@apollo/client';
+import { IUseGQLQuery } from '@ts/interfaces';
+import { RESULTS_PER_PAGE } from 'utils/specificNums';
+import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
+import { Circles } from 'react-loading-icons';
+import {
+	SORT_BY_OPTIONS,
+	SHOW_GENRE_TYPE_OPTIONS,
+} from '../../models/dropDownOptions';
 import {
 	NexusGenEnums,
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from 'graphql/generated/nexus-typegen';
-import {
-	SORT_BY_OPTIONS,
-	SHOW_GENRE_TYPE_OPTIONS,
-} from '../../models/dropDownOptions';
-import { DocumentNode } from '@apollo/client';
-import { IUseGQLQuery } from '@ts/interfaces';
-import { RESULTS_PER_PAGE } from 'utils/specificNums';
-import MediaList from 'components/MediaList';
-import Pagination from 'components/Pagination';
 import 'antd/dist/antd.css';
-import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
-import { Circles } from 'react-loading-icons';
 
 const { Option } = Select;
 

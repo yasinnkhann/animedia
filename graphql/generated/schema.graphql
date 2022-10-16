@@ -319,7 +319,7 @@ type Query {
   searchedMovies(page: Int, q: String!): MoviesRes!
   searchedPeople(page: Int, q: String!): PeopleRes!
   searchedShows(page: Int, q: String!): ShowsRes!
-  showDetails(id: Int!): ShowDetailsRes!
+  showDetails(showDetailsId: Int!): ShowDetailsRes!
   showReviews(id: Int!, page: Int): ShowReviewRes!
   topRatedMovies(page: Int): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!

@@ -1,24 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import RoundProgressBar from '../../components/UI/RoundProgressBar';
+import commaNumber from 'comma-number';
+import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
-import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
-import Image from 'next/image';
 import { ratingOptions } from 'models/ratingOptions';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
-import RoundProgressBar from '../../components/UI/RoundProgressBar';
-import commaNumber from 'comma-number';
-import Link from 'next/link';
 import { getEnglishName } from 'all-iso-language-codes';
 import { formatDate } from '../../utils/formatDate';
 

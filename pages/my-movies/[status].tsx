@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import MyMoviesList from 'components/MyMoviesList';
 import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
-import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
-import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { IUseGQLQuery } from '@ts/interfaces';
+import { useGQLQuery } from '../../hooks/useGQL';
 import { useSession } from 'next-auth/react';
-import MyMoviesList from 'components/MyMoviesList';
 import {
 	NexusGenObjects,
 	NexusGenEnums,
-	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
 
 const Status = () => {
@@ -28,27 +26,6 @@ const Status = () => {
 	);
 
 	const [myMovies, setMyMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
-	const [movieId] = useState<string>('');
-
-	const {
-		mutateFunction: deleteMovie,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['deletedMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedMovie']>(
-		Mutations.MUTATION_DELETE_MOVIE,
-		{
-			variables: {
-				movieId,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.QUERY_GET_USERS_MOVIES,
-				},
-				'UsersMovies',
-			],
-		}
-	);
 
 	useEffect(() => {
 		if (usersMoviesData) {

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { request } from 'graphql-request';
+import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
+import { request } from 'graphql-request';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
-import Image from 'next/image';
-import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import { IKnownForMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
+import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,

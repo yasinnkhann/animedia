@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import Pagination from 'components/Pagination';
+import MediaList from 'components/MediaList';
+import * as Queries from '../../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
+import { useGQLQuery } from '../../hooks/useGQL';
+import { RESULTS_PER_PAGE } from 'utils/specificNums';
+import { Circles } from 'react-loading-icons';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { useGQLQuery } from '../../hooks/useGQL';
-import * as Queries from '../../graphql/queries';
-import MediaList from 'components/MediaList';
-import Pagination from 'components/Pagination';
-import { RESULTS_PER_PAGE } from 'utils/specificNums';
-import { Circles } from 'react-loading-icons';
 
 const PopularAnimeMovies = () => {
 	const [currPage, setCurrPage] = useState(1);

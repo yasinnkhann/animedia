@@ -1477,7 +1477,7 @@ export interface NexusGenArgTypes {
       q: string; // String!
     }
     showDetails: { // args
-      id: number; // Int!
+      showDetailsId: number; // Int!
     }
     showReviews: { // args
       id: number; // Int!

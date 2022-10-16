@@ -1,12 +1,12 @@
 // HANDLED ON SERVER SIDE, (DOESN'T SHOW LOADER)
 import React from 'react';
-import { useSession } from 'next-auth/react';
 import type { NextPage } from 'next';
+import * as Queries from '../graphql/queries';
+import { useSession } from 'next-auth/react';
 import { getClientAuthSession } from '../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
-import * as Queries from '../graphql/queries';
 
 const MyList: NextPage = () => {
 	const { data: session } = useSession();

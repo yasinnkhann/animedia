@@ -254,11 +254,12 @@ export const getShowDetails = extendType({
 		t.nonNull.field('showDetails', {
 			type: 'ShowDetailsRes',
 			args: {
-				id: nonNull(intArg()),
+				showDetailsId: nonNull(intArg()),
 			},
-			resolve: async (_parent, { id }) => {
+			resolve: async (_parent, { showDetailsId }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/tv/${id}?api_key=${process.env.API_KEY!}&language=en-US`
+					`${BASE_URL}/tv/${showDetailsId}?api_key=${process.env
+						.API_KEY!}&language=en-US`
 				);
 				return data;
 			},

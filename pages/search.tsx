@@ -1,18 +1,18 @@
-import type { NextPage } from 'next';
 import React, { useState, useEffect, useRef } from 'react';
+import type { NextPage } from 'next';
+import Pagination from 'components/Pagination';
+import SearchBar from '../components/UI/SearchUI/SearchBar';
+import SearchResult from '../components/UI/SearchUI/SearchResult';
+import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
 import { useGQLQuery } from '../hooks/useGQL';
-import * as Queries from '../graphql/queries';
-import SearchBar from '../components/UI/SearchUI/SearchBar';
+import { IUseGQLQuery } from '@ts/interfaces';
+import { ESearchResultsType, ESearchType } from '@ts/enums';
+import { RESULTS_PER_PAGE } from '../utils/specificNums';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../graphql/generated/nexus-typegen';
-import SearchResult from '../components/UI/SearchUI/SearchResult';
-import { IUseGQLQuery } from '@ts/interfaces';
-import { ESearchResultsType, ESearchType } from '@ts/enums';
-import Pagination from 'components/Pagination';
-import { RESULTS_PER_PAGE } from '../utils/specificNums';
 
 const Search: NextPage = () => {
 	const router = useRouter();

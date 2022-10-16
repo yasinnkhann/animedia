@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
+import Layout from '../components/Layout';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '../lib/apollo';
 import { SessionProvider } from 'next-auth/react';
-import Layout from '../components/Layout';
 import { Session } from 'next-auth';
 import '../styles/globals.css';
 
