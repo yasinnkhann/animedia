@@ -69,7 +69,7 @@ const Genre = () => {
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section className='grid grid-cols-[20%_60%_20%]'>
-				<section className='m-4 justify-self-center'>
+				<section className='mt-4 justify-self-center'>
 					<div className='mb-2'>
 						<label
 							className='block mb-1 text-blue-500'
@@ -123,6 +123,7 @@ const Genre = () => {
 									? 'Popular'
 									: 'Top-Rated'
 							} ${movieGenreType} Movies`}
+							genrePage
 						/>
 
 						<Pagination

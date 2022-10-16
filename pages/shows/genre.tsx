@@ -126,6 +126,7 @@ const Genre = () => {
 									? 'Popular'
 									: 'Top-Rated'
 							} ${unParseSpecialChars(showGenreType)} Shows`}
+							genrePage
 						/>
 						<Pagination
 							currPage={currPage}
