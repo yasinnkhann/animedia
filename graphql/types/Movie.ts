@@ -166,11 +166,11 @@ export const getMovieDetails = extendType({
 		t.nonNull.field('movieDetails', {
 			type: 'MovieDetailsRes',
 			args: {
-				id: nonNull(intArg()),
+				movieDetailsId: nonNull(intArg()),
 			},
-			resolve: async (_parent, { id }) => {
+			resolve: async (_parent, { movieDetailsId }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/movie/${id}?api_key=${process.env
+					`${BASE_URL}/movie/${movieDetailsId}?api_key=${process.env
 						.API_KEY!}&language=en-US`
 				);
 				return data;

@@ -1415,7 +1415,7 @@ export interface NexusGenArgTypes {
   }
   Query: {
     movieDetails: { // args
-      id: number; // Int!
+      movieDetailsId: number; // Int!
     }
     movieReviews: { // args
       id: number; // Int!

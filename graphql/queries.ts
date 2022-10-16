@@ -55,7 +55,7 @@ export const QUERY_SEARCHED_MOVIES = gql`
 
 export const QUERY_MOVIE_DETAILS = gql`
 	query getMovieDetails($movieDetailsId: Int!) {
-		movieDetails(id: $movieDetailsId) {
+		movieDetails(movieDetailsId: $movieDetailsId) {
 			adult
 			backdrop_path
 			genres {

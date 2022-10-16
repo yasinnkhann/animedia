@@ -301,7 +301,7 @@ type PersonsKnownForShowRes {
 
 type Query {
   id: Int
-  movieDetails(id: Int!): MovieDetailsRes!
+  movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesInTheatres(page: Int): MoviesInTheatresRes!
   personDetails(id: Int!): PersonDetailsRes!

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
+import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
+import { useRouter } from 'next/router';
+import { ESearchType } from '@ts/enums';
+import { TStatusParam } from '@ts/types';
+import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
+import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { useSession } from 'next-auth/react';
+import MyMoviesList from 'components/MyMoviesList';
 import {
 	NexusGenObjects,
 	NexusGenEnums,
 	NexusGenArgTypes,
 } from '../../graphql/generated/nexus-typegen';
-import { getDetailsPageRoute } from '../../utils/getDetailsPageRoute';
-import { useRouter } from 'next/router';
-import { ESearchType } from '@ts/enums';
-import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
-import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { useSession } from 'next-auth/react';
 
 const Status = () => {
 	const router = useRouter();
@@ -52,7 +54,7 @@ const Status = () => {
 
 	useEffect(() => {
 		if (usersMoviesData) {
-			let statusParam = router.query.status;
+			let statusParam = router.query.status as TStatusParam;
 			let status: NexusGenEnums['WatchStatusTypes'];
 
 			if (statusParam === 'watching') {
@@ -77,8 +79,12 @@ const Status = () => {
 	console.log('MOVIES: ', movies);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<section>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+			<MyMoviesList
+				status={router.query.status as TStatusParam}
+				movies={movies}
+			/>
+			{/* <section>
 				<section>
 					{movies.map(movie => (
 						<div key={movie.id}>
@@ -110,8 +116,8 @@ const Status = () => {
 						</div>
 					))}
 				</section>
-			</section>
-		</section>
+			</section> */}
+		</main>
 	);
 };
 

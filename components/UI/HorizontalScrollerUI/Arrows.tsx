@@ -51,7 +51,10 @@ export function LeftArrow() {
 	return (
 		<section className='flex pl-10 relative'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
-				<i className='fa-solid fa-arrow-left absolute left-3 top-[30%] text-xl'></i>
+				<i
+					className='fa-solid fa-arrow-left absolute left-3 top-[30%] text-xl'
+					aria-hidden='true'
+				></i>
 			</Arrow>
 		</section>
 	);
@@ -74,7 +77,10 @@ export function RightArrow() {
 	return (
 		<section className='flex pr-10 relative'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
-				<i className='fa-solid fa-arrow-right absolute right-3 top-[30%] text-xl'></i>
+				<i
+					className='fa-solid fa-arrow-right absolute right-3 top-[30%] text-xl'
+					aria-hidden='true'
+				></i>
 			</Arrow>
 		</section>
 	);
