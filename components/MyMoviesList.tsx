@@ -14,17 +14,17 @@ const MyMoviesList = ({ status, myMovies }: Props) => {
 	return (
 		<section className='w-full px-40'>
 			<section className='flex flex-col'>
-				<div>{adjustedStatus}</div>
+				<div>{adjustedStatus} MOVIES</div>
 				<table>
 					<thead>
 						<tr className='border-2 border-gray-200'>
-							<th className='border-r-2 border-gray-200 min-w-[5rem] p-4'>#</th>
+							<th className='border-r-2 border-gray-200 w-[5rem] p-4'>#</th>
 							<th className='border-r-2 border-gray-200 w-[6rem] p-4'>Image</th>
 							<th className='border-r-2 border-gray-200 p-4'>Title</th>
-							<th className='border-x-2 border-gray-200 min-w-[7rem] p-4'>
+							<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 								My Rating
 							</th>
-							<th className='border-x-2 border-gray-200 min-w-[7rem] p-4'>
+							<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 								Remove
 							</th>
 						</tr>

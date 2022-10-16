@@ -62,8 +62,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{count}</p>
 			</td>
-			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<div className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
+			<td className='align-middle text-center border-x-2 border-gray-200 flex justify-center py-[.5rem]'>
+				<div className='row-start-1 w-full h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + showData?.poster_path}
