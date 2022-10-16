@@ -41,7 +41,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['deletedShow']
 	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedShow']>(
-		Mutations.MUTATION_DELETE_MOVIE,
+		Mutations.MUTATION_DELETE_SHOW,
 		{
 			variables: {
 				showId: String(myShow.id),
