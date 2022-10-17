@@ -14,7 +14,9 @@ const MyMoviesList = ({ status, myMovies }: Props) => {
 	return (
 		<section className='w-full px-40'>
 			<section className='flex flex-col'>
-				<div>{adjustedStatus} MOVIES</div>
+				<div className='bg-gray-200 flex justify-center items-center h-[2rem] mt-8'>
+					{adjustedStatus} MOVIES
+				</div>
 				<table>
 					<thead>
 						<tr className='border-2 border-gray-200'>
