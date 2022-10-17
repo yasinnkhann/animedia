@@ -85,9 +85,17 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{myShow.name}</p>
 			</td>
+
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{myShow.rating ?? 'N/A'}</p>
 			</td>
+
+			<td className='align-middle text-center border-x-2 border-gray-200'>
+				<p className='text-lg'>
+					{myShow.current_episode}/{showData?.number_of_episodes}
+				</p>
+			</td>
+
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<i
 					className='fa fa-trash cursor-pointer text-red-600'
@@ -99,7 +107,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 							},
 						});
 					}}
-				></i>
+				/>
 			</td>
 		</tr>
 	);

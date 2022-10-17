@@ -60,8 +60,12 @@ const Header = () => {
 	return (
 		<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-gray-100 !text-base'>
 			<nav className='!flex !items-center w-full ml-[4rem]'>
-				<section onClick={() => router.push('/')} className='cursor-pointer'>
-					<p className='!mb-0'>HOME</p>
+				<section>
+					<i
+						className='fa-solid fa-house !mb-0 cursor-pointer'
+						aria-hidden='true'
+						onClick={() => router.push('/')}
+					/>
 				</section>
 				<section className='!flex w-full justify-between ml-[4rem] !items-center'>
 					<ul id='left-section' className='!flex justify-around w-[50%] !mb-0'>

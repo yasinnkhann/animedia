@@ -75,7 +75,7 @@ const ShowCard = ({ show, rank }: Props) => {
 					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersShowData?.rating ? usersShowData.rating : 'N/A'}</p>
 					</td>
-					<td className='align-middle text-center border-x-2 border-gray-200'>
+					<td className='align-middle text-center border-x-2 border-gray-200 px-4'>
 						<p>
 							{usersShowData?.status
 								? renderTableStatus(usersShowData.status)

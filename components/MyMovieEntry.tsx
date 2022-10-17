@@ -99,7 +99,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 							},
 						});
 					}}
-				></i>
+				/>
 			</td>
 		</tr>
 	);

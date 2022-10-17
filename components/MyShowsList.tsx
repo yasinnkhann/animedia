@@ -24,6 +24,9 @@ const MyShowsList = ({ status, myShows }: Props) => {
 							<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 								My Rating
 							</th>
+							<th className='border-x-2 border-gray-200 w-[7.5rem] p-4'>
+								Current Ep.
+							</th>
 							<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 								Remove
 							</th>

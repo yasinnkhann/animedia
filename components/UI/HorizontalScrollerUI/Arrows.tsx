@@ -54,7 +54,7 @@ export function LeftArrow() {
 				<i
 					className='fa-solid fa-arrow-left absolute left-3 top-[30%] text-xl'
 					aria-hidden='true'
-				></i>
+				/>
 			</Arrow>
 		</section>
 	);
@@ -80,7 +80,7 @@ export function RightArrow() {
 				<i
 					className='fa-solid fa-arrow-right absolute right-3 top-[30%] text-xl'
 					aria-hidden='true'
-				></i>
+				/>
 			</Arrow>
 		</section>
 	);

@@ -53,7 +53,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'
 				onClick={handleGoToDetailsPage}
 			>
-				<div className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
+				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movie.poster_path}
@@ -61,21 +61,25 @@ const MovieCard = ({ movie, rank }: Props) => {
 						layout='fill'
 						onClick={handleGoToDetailsPage}
 					/>
-				</div>
-				<div className='col-start-2 pl-4'>
+				</section>
+
+				<section className='col-start-2 pl-4'>
 					<h3 className='cursor-pointer'>{movie.title}</h3>
 					<p>{formatDate(movie.release_date as string)}</p>
-				</div>
+				</section>
 			</td>
+
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-base'>{movie.vote_average.toFixed(1)}</p>
 			</td>
+
 			{session && (
 				<>
 					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersMovieData?.rating ? usersMovieData.rating : 'N/A'}</p>
 					</td>
-					<td className='align-middle text-center border-x-2 border-gray-200'>
+
+					<td className='align-middle text-center border-x-2 border-gray-200 px-4'>
 						<p>
 							{usersMovieData?.status
 								? renderTableStatus(usersMovieData.status)

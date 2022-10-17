@@ -30,7 +30,7 @@ const SearchBar = forwardRef<HTMLInputElement>((props, ref) => {
 				className='absolute bg-transparent text-[1.5rem] text-gray-700 z-10 border-none transition-all hover:cursor-pointer hover:text-black hover:scale-125 focus:text-black focus:outline-none left-[calc(100%-3rem)] top-2'
 				type='submit'
 			>
-				<i className='fas fa-search'></i>
+				<i className='fas fa-search' />
 			</button>
 		</form>
 	);
