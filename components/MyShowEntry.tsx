@@ -2,8 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../graphql/queries';
 import * as Mutations from '../graphql/mutations';
-import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
+import { formatDate } from '../utils/formatDate';
 import { useRouter } from 'next/router';
+import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../hooks/useGQL';
@@ -55,6 +56,16 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		}
 	);
 
+	const handleGoToDetailsPage = () => {
+		router.push(
+			getDetailsPageRoute(
+				ESearchType.SHOW,
+				Number(myShow.id),
+				myShow.name as string
+			)
+		);
+	};
+
 	console.log('SHOW!!!: ', showData);
 
 	return (
@@ -63,29 +74,25 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<p className='text-lg'>{count}</p>
 			</td>
 
-			<td className='align-middle text-center border-x-2 border-gray-200 flex justify-center py-[.5rem]'>
-				<div className='row-start-1 w-full h-[7rem] relative cursor-pointer'>
+			<td className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'>
+				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + showData?.poster_path}
 						priority
 						alt={showData?.name}
 						layout='fill'
-						onClick={() =>
-							router.push(
-								getDetailsPageRoute(
-									ESearchType.SHOW,
-									Number(myShow.id),
-									myShow.name as string
-								)
-							)
-						}
+						onClick={handleGoToDetailsPage}
 					/>
-				</div>
-			</td>
+				</section>
 
-			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<p className='text-lg'>{myShow.name}</p>
+				<section className='col-start-2 pl-4'>
+					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
+						{myShow.name}
+					</h3>
+
+					<p>{formatDate(showData?.first_air_date as string)}</p>
+				</section>
 			</td>
 
 			<td className='align-middle text-center border-x-2 border-gray-200'>

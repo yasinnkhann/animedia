@@ -49,10 +49,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 				<p className='text-lg'>{rank}</p>
 			</td>
 
-			<td
-				className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'
-				onClick={handleGoToDetailsPage}
-			>
+			<td className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'>
 				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
@@ -64,7 +61,10 @@ const MovieCard = ({ movie, rank }: Props) => {
 				</section>
 
 				<section className='col-start-2 pl-4'>
-					<h3 className='cursor-pointer'>{movie.title}</h3>
+					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
+						{movie.title}
+					</h3>
+
 					<p>{formatDate(movie.release_date as string)}</p>
 				</section>
 			</td>

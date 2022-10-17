@@ -2,8 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../graphql/queries';
 import * as Mutations from '../graphql/mutations';
-import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { useRouter } from 'next/router';
+import { formatDate } from '../utils/formatDate';
+import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../hooks/useGQL';
@@ -55,6 +56,16 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 		}
 	);
 
+	const handleGoToDetailsPage = () => {
+		router.push(
+			getDetailsPageRoute(
+				ESearchType.MOVIE,
+				Number(myMovie.id),
+				myMovie.name as string
+			)
+		);
+	};
+
 	console.log('MOVIE!!!: ', movieData);
 
 	return (
@@ -62,32 +73,32 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{count}</p>
 			</td>
-			<td className='align-middle text-center border-x-2 border-gray-200 flex justify-center py-[.5rem]'>
-				<div className='row-start-1 w-full h-[7rem] relative cursor-pointer'>
+
+			<td className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'>
+				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieData?.poster_path}
 						priority
 						alt={movieData?.title}
 						layout='fill'
-						onClick={() =>
-							router.push(
-								getDetailsPageRoute(
-									ESearchType.MOVIE,
-									Number(myMovie.id),
-									myMovie.name as string
-								)
-							)
-						}
+						onClick={handleGoToDetailsPage}
 					/>
-				</div>
+				</section>
+
+				<section className='col-start-2 pl-4'>
+					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
+						{myMovie.name}
+					</h3>
+
+					<p>{formatDate(movieData?.release_date as string)}</p>
+				</section>
 			</td>
-			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<p className='text-lg'>{myMovie.name}</p>
-			</td>
+
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>{myMovie.rating ?? 'N/A'}</p>
 			</td>
+
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<i
 					className='fa fa-trash cursor-pointer text-red-600'
