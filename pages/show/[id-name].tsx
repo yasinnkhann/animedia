@@ -14,13 +14,13 @@ import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
+import { getEnglishName } from 'all-iso-language-codes';
+import { formatDate } from '../../utils/formatDate';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { getEnglishName } from 'all-iso-language-codes';
-import { formatDate } from '../../utils/formatDate';
 
 interface Props {
 	showDetails: NexusGenObjects['ShowDetailsRes'];
@@ -347,10 +347,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading) {
 			if (usersShowData) {
+				console.log('1st TOP');
 				setWatchStatus(usersShowData.status!);
 				setRating(usersShowData?.rating ?? '');
 				setCurrEp(String(usersShowData.current_episode!));
 			} else {
+				console.log('1st BOTTOM');
 				setWatchStatus('NOT_WATCHING');
 				setRating('');
 				setCurrEp('0');
@@ -361,11 +363,15 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
 			if (watchStatus === 'PLAN_TO_WATCH') {
+				console.log('2nd TOP');
+
 				setRating('');
 				setCurrEp('0');
 			}
 
 			if (watchStatus === 'COMPLETED') {
+				console.log('2nd BOTTOM');
+
 				setCurrEp(String(showDetails.number_of_episodes));
 			}
 		}
@@ -377,15 +383,24 @@ const ShowDetails = ({ showDetails }: Props) => {
 	]);
 
 	useEffect(() => {
-		if (!usersShowLoading) {
+		if (!usersShowLoading && usersShowData) {
 			if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
+				console.log('3rd TOP');
 				setWatchStatus('WATCHING');
 			}
 			if (+currEp === showDetails.number_of_episodes) {
+				console.log('3rd BOTTOM');
+
 				setWatchStatus('COMPLETED');
 			}
 		}
-	}, [rating, currEp, showDetails.number_of_episodes, usersShowLoading]);
+	}, [
+		rating,
+		currEp,
+		showDetails.number_of_episodes,
+		usersShowLoading,
+		usersShowData,
+	]);
 
 	useEffect(() => {
 		if (recShowsContainerRef.current) {
