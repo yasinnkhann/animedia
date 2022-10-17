@@ -279,22 +279,18 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleIncrementBtn = () => {
 		let prevEp = +currEp;
-		let numifiedStr = Number(currEp);
 
-		numifiedStr += 1;
-		// setCurrEp(String(numifiedStr));
-
-		if (numifiedStr === 1) {
+		if (prevEp + 1 === 1) {
 			if (!usersShowData) {
-				setWatchStatus('WATCHING');
 				addShow({
 					variables: {
 						showId: String(showDetails.id),
 						showName: showDetails.name,
 						watchStatus: 'WATCHING',
-						currentEpisode: numifiedStr,
+						currentEpisode: 1,
 					},
 				});
+				setWatchStatus('WATCHING');
 			} else {
 				if (watchStatus === 'PLAN_TO_WATCH' && prevEp === 0) {
 					updateShow({
@@ -305,45 +301,54 @@ const ShowDetails = ({ showDetails }: Props) => {
 							currentEpisode: 1,
 						},
 					});
+
+					setWatchStatus('WATCHING');
+					setCurrEp('1');
 					return;
 				}
+
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: usersShowData.status!,
-						currentEpisode: numifiedStr,
+						currentEpisode: prevEp + 1,
 					},
 				});
+				setCurrEp(String(prevEp + 1));
 			}
+
 			return;
 		}
 
-		if (numifiedStr < showDetails.number_of_episodes && usersShowData) {
+		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: usersShowData.status!,
-					currentEpisode: numifiedStr,
+					currentEpisode: prevEp + 1,
 				},
 			});
+
+			setCurrEp(String(prevEp + 1));
 			return;
 		}
 
-		if (numifiedStr === showDetails.number_of_episodes && usersShowData) {
+		if (prevEp + 1 === showDetails.number_of_episodes && usersShowData) {
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: 'COMPLETED',
-					currentEpisode: numifiedStr,
+					currentEpisode: prevEp + 1,
 				},
 			});
+
+			setWatchStatus('COMPLETED');
+			setCurrEp(String(prevEp + 1));
 			return;
 		}
-		setCurrEp(String(numifiedStr));
-		// setCurrEp(currEp => String(Number(currEp) + 1));
 	};
 
 	useEffect(() => {
@@ -390,7 +395,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 				console.log('3rd TOP');
 				setWatchStatus('WATCHING');
 			}
-			if (+currEp === showDetails.number_of_episodes) {
+			if (
+				+currEp === showDetails.number_of_episodes &&
+				watchStatus === 'NOT_WATCHING'
+			) {
 				console.log('3rd BOTTOM');
 
 				setWatchStatus('COMPLETED');
@@ -402,6 +410,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		showDetails.number_of_episodes,
 		usersShowLoading,
 		usersShowData,
+		watchStatus,
 	]);
 
 	useEffect(() => {
