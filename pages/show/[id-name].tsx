@@ -282,7 +282,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		let numifiedStr = Number(currEp);
 
 		numifiedStr += 1;
-		setCurrEp(String(numifiedStr));
+		// setCurrEp(String(numifiedStr));
 
 		if (numifiedStr === 1) {
 			if (!usersShowData) {
@@ -342,6 +342,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 			});
 			return;
 		}
+		setCurrEp(String(numifiedStr));
+		// setCurrEp(currEp => String(Number(currEp) + 1));
 	};
 
 	useEffect(() => {
