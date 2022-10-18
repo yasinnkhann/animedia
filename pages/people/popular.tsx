@@ -36,8 +36,6 @@ const PopularPeople = () => {
 		scrollToTop();
 	}, [currPage]);
 
-	console.log(popularPeopleData);
-
 	return (
 		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
 			{popularPeopleData ? (

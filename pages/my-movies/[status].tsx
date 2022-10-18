@@ -51,8 +51,6 @@ const Status = () => {
 		}
 	}, [router.query.status, usersMoviesData]);
 
-	console.log('MOVIES: ', myMovies);
-
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<MyMoviesList

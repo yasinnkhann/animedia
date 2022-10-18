@@ -66,8 +66,6 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		);
 	};
 
-	console.log('SHOW!!!: ', showData);
-
 	return (
 		<tr className='border-2'>
 			<td className='align-middle text-center border-x-2 border-gray-200'>

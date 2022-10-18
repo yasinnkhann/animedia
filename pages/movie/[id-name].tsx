@@ -30,10 +30,12 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
+
 	const overviewRef = useRef<HTMLParagraphElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
+
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
 
 	const {
@@ -65,9 +67,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			},
 		}
 	);
-
-	console.log('MY MOVIE INFO: ', usersMovieData);
-	console.log('MOVIE DETAILS: ', movieDetails);
 
 	const {
 		mutateFunction: addMovie,
@@ -109,6 +108,15 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				watchStatus,
 				movieRating: typeof rating === 'number' ? rating : null,
 			},
+			refetchQueries: () => [
+				{
+					query: Queries.QUERY_GET_USERS_MOVIE,
+					variables: {
+						movieId: String(movieDetails.id),
+					},
+				},
+				'UsersMovie',
+			],
 		}
 	);
 

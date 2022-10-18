@@ -15,7 +15,6 @@ const MyList: NextPage = () => {
 		Queries.QUERY_GET_USER
 	);
 
-	console.log('USER DATA: ', userData);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>

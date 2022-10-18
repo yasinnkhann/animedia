@@ -66,8 +66,6 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 		);
 	};
 
-	console.log('MOVIE!!!: ', movieData);
-
 	return (
 		<tr className='border-2'>
 			<td className='align-middle text-center border-x-2 border-gray-200'>

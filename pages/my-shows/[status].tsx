@@ -48,8 +48,6 @@ const Status = () => {
 		}
 	}, [router.query.status, usersShowsData]);
 
-	console.log('SHOWS: ', myShows);
-
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<MyShowsList

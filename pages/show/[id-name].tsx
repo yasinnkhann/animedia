@@ -377,12 +377,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading) {
 			if (usersShowData) {
-				console.log('1st TOP');
 				setWatchStatus(usersShowData.status!);
 				setRating(usersShowData?.rating ?? '');
 				setCurrEp(String(usersShowData.current_episode!));
 			} else {
-				console.log('1st BOTTOM');
 				setWatchStatus('NOT_WATCHING');
 				setRating('');
 				setCurrEp('0');
@@ -393,15 +391,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
 			if (watchStatus === 'PLAN_TO_WATCH') {
-				console.log('2nd TOP');
-
 				setRating('');
 				setCurrEp('0');
 			}
 
 			if (watchStatus === 'COMPLETED') {
-				console.log('2nd BOTTOM');
-
 				setCurrEp(String(showDetails.number_of_episodes));
 			}
 		}
@@ -421,8 +415,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				watchStatus !== 'WATCHING' &&
 				watchStatus !== 'NOT_WATCHING'
 			) {
-				console.log('3rd BOTTOM');
-
 				setWatchStatus('COMPLETED');
 				return;
 			}
@@ -452,9 +444,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 	if (recShowsLoading) {
 		return;
 	}
-
-	console.log('MY SHOW INFO: ', usersShowData);
-	console.log('SHOW DETAILS: ', showDetails);
 
 	return (
 		<main
