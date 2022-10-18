@@ -341,16 +341,18 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 
 		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
-			setCurrEp(String(prevEp + 1));
+			setTimeout(() => {
+				setCurrEp(String(prevEp + 1));
 
-			updateShow({
-				variables: {
-					showId: String(showDetails.id),
-					showRating: typeof rating === 'string' ? null : rating,
-					watchStatus: usersShowData.status!,
-					currentEpisode: prevEp + 1,
-				},
-			});
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus: usersShowData.status!,
+						currentEpisode: prevEp + 1,
+					},
+				});
+			}, 200);
 
 			return;
 		}
