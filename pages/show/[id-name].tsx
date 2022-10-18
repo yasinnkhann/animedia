@@ -162,6 +162,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						showId: String(showDetails.id),
 					},
 				});
+
 				return;
 			}
 
@@ -175,6 +176,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: 0,
 					},
 				});
+
 				return;
 			}
 
@@ -188,6 +190,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: showDetails.number_of_episodes,
 					},
 				});
+
 				return;
 			}
 
@@ -210,6 +213,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: showDetails.number_of_episodes,
 					},
 				});
+
 				return;
 			}
 			addShow({
@@ -262,6 +266,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					currentEpisode: showDetails.number_of_episodes,
 				},
 			});
+
 			return;
 		}
 
@@ -434,10 +439,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				setRating('');
 				setCurrEp('0');
 			}
-
-			if (watchStatus === 'COMPLETED') {
-				setCurrEp(String(showDetails.number_of_episodes));
-			}
 		}
 	}, [
 		watchStatus,
@@ -455,6 +456,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				watchStatus !== 'WATCHING' &&
 				watchStatus !== 'NOT_WATCHING'
 			) {
+				console.log('2');
 				setWatchStatus('COMPLETED');
 
 				updateShow({
@@ -473,6 +475,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				usersShowData.current_episode! < showDetails.number_of_episodes &&
 				watchStatus === 'COMPLETED'
 			) {
+				console.log('3');
 				setWatchStatus('WATCHING');
 
 				updateShow({
@@ -483,6 +486,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: usersShowData.current_episode!,
 					},
 				});
+
 				return;
 			}
 		}
