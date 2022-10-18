@@ -330,7 +330,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 
 		if (prevEp + 1 === 1 && usersShowData) {
-			if (watchStatus === 'PLAN_TO_WATCH' && prevEp === 0) {
+			if (
+				(watchStatus === 'PLAN_TO_WATCH' ||
+					watchStatus === 'DROPPED' ||
+					watchStatus === 'ON_HOLD') &&
+				prevEp === 0
+			) {
 				setWatchStatus('WATCHING');
 				setCurrEp('1');
 
@@ -364,6 +369,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 			setTimeout(() => {
 				setCurrEp(String(prevEp + 1));
 
+				if (watchStatus === 'DROPPED' || watchStatus === 'ON_HOLD') {
+					setWatchStatus('WATCHING');
+
+					updateShow({
+						variables: {
+							showId: String(showDetails.id),
+							showRating: typeof rating === 'string' ? null : rating,
+							watchStatus: 'WATCHING',
+							currentEpisode: prevEp + 1,
+						},
+					});
+
+					return;
+				}
+
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
@@ -372,7 +392,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: prevEp + 1,
 					},
 				});
-			}, 300);
+			}, 500);
 
 			return;
 		}
@@ -435,7 +455,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				watchStatus !== 'WATCHING' &&
 				watchStatus !== 'NOT_WATCHING'
 			) {
-				console.log('effect 2');
 				setWatchStatus('COMPLETED');
 
 				updateShow({
@@ -454,7 +473,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				usersShowData.current_episode! < showDetails.number_of_episodes &&
 				watchStatus === 'COMPLETED'
 			) {
-				console.log('effect1');
 				setWatchStatus('WATCHING');
 
 				updateShow({
