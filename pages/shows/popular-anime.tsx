@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'components/Pagination';
-import MediaList from 'components/MediaList';
+import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from '../../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';

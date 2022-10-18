@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'components/Pagination';
-import PeopleList from 'components/PeopleList';
+import PeopleList from 'components/UI/MediaPersonUI/PeopleList';
 import * as Queries from '../../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';

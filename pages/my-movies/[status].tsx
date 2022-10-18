@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MyMoviesList from 'components/MyMoviesList';
+import MyMoviesList from 'components/UI/MyMediaUI/MyMoviesList';
 import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';

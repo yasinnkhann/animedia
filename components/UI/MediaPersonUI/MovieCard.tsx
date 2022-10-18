@@ -1,19 +1,19 @@
 import React from 'react';
 import Image from 'next/image';
-import * as Queries from '../graphql/queries';
+import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
 import { IUseGQLQuery } from '@ts/interfaces';
-import { useGQLQuery } from '../hooks/useGQL';
-import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
+import { useGQLQuery } from '../../../hooks/useGQL';
+import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../utils/URLs';
-import { formatDate } from '../utils/formatDate';
+import { BASE_IMG_URL } from '../../../utils/URLs';
+import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
-import { renderTableStatus } from '../utils/renderTableStatus';
+import { renderTableStatus } from '../../../utils/renderTableStatus';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
+} from '../../../graphql/generated/nexus-typegen';
 
 interface Props {
 	movie: NexusGenObjects['MovieResult'];

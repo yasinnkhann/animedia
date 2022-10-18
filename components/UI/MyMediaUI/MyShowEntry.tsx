@@ -1,18 +1,18 @@
 import React from 'react';
 import Image from 'next/image';
-import * as Queries from '../graphql/queries';
-import * as Mutations from '../graphql/mutations';
-import { formatDate } from '../utils/formatDate';
+import * as Queries from '../../../graphql/queries';
+import * as Mutations from '../../../graphql/mutations';
+import { formatDate } from '../../../utils/formatDate';
 import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../utils/getDetailsPageRoute';
+import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
-import { useGQLMutation, useGQLQuery } from '../hooks/useGQL';
-import { BASE_IMG_URL } from '../utils/URLs';
+import { useGQLMutation, useGQLQuery } from '../../../hooks/useGQL';
+import { BASE_IMG_URL } from '../../../utils/URLs';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
+} from '../../../graphql/generated/nexus-typegen';
 
 interface Props {
 	myShow: NexusGenObjects['UserShow'];

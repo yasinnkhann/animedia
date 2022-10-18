@@ -1,21 +1,21 @@
 import React from 'react';
-import MyMovieEntry from './MyMovieEntry';
-import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
+import MyShowEntry from './MyShowEntry';
+import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { TStatusParam } from '@ts/types';
 
 interface Props {
 	status: TStatusParam;
-	myMovies: NexusGenObjects['UserMovie'][];
+	myShows: NexusGenObjects['UserShow'][];
 }
 
-const MyMoviesList = ({ status, myMovies }: Props) => {
+const MyShowsList = ({ status, myShows }: Props) => {
 	const adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
 
 	return (
 		<section className='w-full px-40'>
 			<section className='flex flex-col'>
 				<div className='bg-gray-200 flex justify-center items-center h-[3rem] mt-8'>
-					<h4 className='text-blue-500'>{adjustedStatus} MOVIES</h4>
+					<h4 className='text-blue-500'>{adjustedStatus} SHOWS</h4>
 				</div>
 				<table>
 					<thead>
@@ -28,6 +28,10 @@ const MyMoviesList = ({ status, myMovies }: Props) => {
 								My Rating
 							</th>
 
+							<th className='border-x-2 border-gray-200 w-[7.5rem] p-4'>
+								Current Ep.
+							</th>
+
 							<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 								Remove
 							</th>
@@ -35,12 +39,8 @@ const MyMoviesList = ({ status, myMovies }: Props) => {
 					</thead>
 
 					<tbody className='!border-b-2 !border-gray-200'>
-						{myMovies?.map((myMovie, idx) => (
-							<MyMovieEntry
-								key={myMovie.id}
-								myMovie={myMovie}
-								count={idx + 1}
-							/>
+						{myShows?.map((myShow, idx) => (
+							<MyShowEntry key={myShow.id} myShow={myShow} count={idx + 1} />
 						))}
 					</tbody>
 				</table>
@@ -49,4 +49,4 @@ const MyMoviesList = ({ status, myMovies }: Props) => {
 	);
 };
 
-export default MyMoviesList;
+export default MyShowsList;
