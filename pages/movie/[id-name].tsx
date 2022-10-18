@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import RoundProgressBar from '../../components/UI/RoundProgressBar';
+import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import { request } from 'graphql-request';

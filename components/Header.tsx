@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import DropDownItem from './UI/DropDownItem';
+import DropDownItem from './DropDownItem';
 import 'antd/dist/antd.css';
 
 const Header = () => {

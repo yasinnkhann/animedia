@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import RoundProgressBar from '../../components/UI/RoundProgressBar';
+import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import * as Queries from '../../graphql/queries';
@@ -167,6 +167,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'PLAN_TO_WATCH') {
 				setCurrEp('0');
+
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
@@ -179,6 +180,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
 				setCurrEp(String(showDetails.number_of_episodes));
+
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
@@ -199,6 +201,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		} else {
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
 				setCurrEp(String(showDetails.number_of_episodes));
+
 				addShow({
 					variables: {
 						showId: String(showDetails.id),
@@ -237,6 +240,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (/[\D]/gi.test(e.target.value)) {
 			setCurrEp(String(usersShowData?.current_episode) ?? '0');
+
 			e.target.selectionStart = 1;
 		} else {
 			setCurrEp(e.target.value);
@@ -245,7 +249,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
 		if (currEp === '' || +currEp > showDetails.number_of_episodes) return;
 
 		if (+currEp === showDetails.number_of_episodes) {
@@ -279,6 +282,23 @@ const ShowDetails = ({ showDetails }: Props) => {
 		) {
 			setCurrEp(String(usersShowData?.current_episode) ?? '0');
 		} else {
+			if (
+				watchStatus === 'WATCHING' &&
+				+e.target.value === showDetails.number_of_episodes
+			) {
+				setWatchStatus('COMPLETED');
+
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus: 'COMPLETED',
+						currentEpisode: showDetails.number_of_episodes,
+					},
+				});
+
+				return;
+			}
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
@@ -352,7 +372,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						currentEpisode: prevEp + 1,
 					},
 				});
-			}, 200);
+			}, 300);
 
 			return;
 		}
@@ -415,7 +435,36 @@ const ShowDetails = ({ showDetails }: Props) => {
 				watchStatus !== 'WATCHING' &&
 				watchStatus !== 'NOT_WATCHING'
 			) {
+				console.log('effect 2');
 				setWatchStatus('COMPLETED');
+
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus: 'COMPLETED',
+						currentEpisode: showDetails.number_of_episodes,
+					},
+				});
+
+				return;
+			}
+
+			if (
+				usersShowData.current_episode! < showDetails.number_of_episodes &&
+				watchStatus === 'COMPLETED'
+			) {
+				console.log('effect1');
+				setWatchStatus('WATCHING');
+
+				updateShow({
+					variables: {
+						showId: String(showDetails.id),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus: 'WATCHING',
+						currentEpisode: usersShowData.current_episode!,
+					},
+				});
 				return;
 			}
 		}
@@ -426,6 +475,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 		usersShowLoading,
 		usersShowData,
 		watchStatus,
+		updateShow,
+		showDetails.id,
 	]);
 
 	useEffect(() => {
