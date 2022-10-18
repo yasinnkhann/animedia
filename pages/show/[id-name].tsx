@@ -332,6 +332,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
 			setCurrEp(String(prevEp + 1));
+			console.log('trial: ', currEp);
 
 			updateShow({
 				variables: {
@@ -405,14 +406,20 @@ const ShowDetails = ({ showDetails }: Props) => {
 			if (+currEp < showDetails.number_of_episodes && +currEp > 0) {
 				console.log('3rd TOP');
 				setWatchStatus('WATCHING');
+				return;
 			}
+
 			if (
 				+currEp === showDetails.number_of_episodes &&
-				watchStatus === 'NOT_WATCHING'
+				watchStatus !== 'DROPPED' &&
+				watchStatus !== 'ON_HOLD' &&
+				watchStatus !== 'WATCHING' &&
+				watchStatus !== 'NOT_WATCHING'
 			) {
 				console.log('3rd BOTTOM');
 
 				setWatchStatus('COMPLETED');
+				return;
 			}
 		}
 	}, [
