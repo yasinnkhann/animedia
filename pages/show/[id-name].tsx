@@ -30,6 +30,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recShowsContainerRef = useRef<HTMLElement>(null);
+
 	const overviewRef = useRef<HTMLParagraphElement>(null);
 
 	const [watchStatus, setWatchStatus] =
@@ -221,6 +222,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
+
 		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
 
 		updateShow({
@@ -243,6 +245,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
 		if (currEp === '' || +currEp > showDetails.number_of_episodes) return;
 
 		if (+currEp === showDetails.number_of_episodes) {
@@ -278,50 +281,43 @@ const ShowDetails = ({ showDetails }: Props) => {
 	};
 
 	const handleIncrementBtn = () => {
-		let prevEp = +currEp;
+		const prevEp = +currEp;
 
-		if (prevEp + 1 === 1) {
-			if (!usersShowData) {
-				addShow({
-					variables: {
-						showId: String(showDetails.id),
-						showName: showDetails.name,
-						watchStatus: 'WATCHING',
-						currentEpisode: 1,
-					},
-				});
+		if (prevEp + 1 === 1 && !usersShowData) {
+			setWatchStatus('WATCHING');
+			setCurrEp('1');
+
+			addShow({
+				variables: {
+					showId: String(showDetails.id),
+					showName: showDetails.name,
+					watchStatus: 'WATCHING',
+					currentEpisode: 1,
+				},
+			});
+
+			return;
+		}
+
+		if (prevEp + 1 === 1 && usersShowData) {
+			if (watchStatus === 'PLAN_TO_WATCH' && prevEp === 0) {
 				setWatchStatus('WATCHING');
-			} else {
-				if (watchStatus === 'PLAN_TO_WATCH' && prevEp === 0) {
-					updateShow({
-						variables: {
-							showId: String(showDetails.id),
-							showRating: typeof rating === 'string' ? null : rating,
-							watchStatus: 'WATCHING',
-							currentEpisode: 1,
-						},
-					});
-
-					setWatchStatus('WATCHING');
-					setCurrEp('1');
-					return;
-				}
+				setCurrEp('1');
 
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
 						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus: usersShowData.status!,
-						currentEpisode: prevEp + 1,
+						watchStatus: 'WATCHING',
+						currentEpisode: 1,
 					},
 				});
-				setCurrEp(String(prevEp + 1));
+
+				return;
 			}
 
-			return;
-		}
+			setCurrEp(String(prevEp + 1));
 
-		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
@@ -331,11 +327,28 @@ const ShowDetails = ({ showDetails }: Props) => {
 				},
 			});
 
+			return;
+		}
+
+		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
 			setCurrEp(String(prevEp + 1));
+
+			updateShow({
+				variables: {
+					showId: String(showDetails.id),
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: usersShowData.status!,
+					currentEpisode: prevEp + 1,
+				},
+			});
+
 			return;
 		}
 
 		if (prevEp + 1 === showDetails.number_of_episodes && usersShowData) {
+			setWatchStatus('COMPLETED');
+			setCurrEp(String(prevEp + 1));
+
 			updateShow({
 				variables: {
 					showId: String(showDetails.id),
@@ -345,8 +358,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				},
 			});
 
-			setWatchStatus('COMPLETED');
-			setCurrEp(String(prevEp + 1));
 			return;
 		}
 	};
