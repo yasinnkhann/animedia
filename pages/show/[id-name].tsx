@@ -168,12 +168,14 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'PLAN_TO_WATCH') {
 				setCurrEp('0');
+				setRating('');
 
 				updateShow({
 					variables: {
 						showId: String(showDetails.id),
 						watchStatus: 'PLAN_TO_WATCH',
 						currentEpisode: 0,
+						showRating: null,
 					},
 				});
 
@@ -216,6 +218,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				return;
 			}
+
 			addShow({
 				variables: {
 					showId: String(showDetails.id),
@@ -435,20 +438,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
-			if (watchStatus === 'PLAN_TO_WATCH') {
-				setRating('');
-				setCurrEp('0');
-			}
-		}
-	}, [
-		watchStatus,
-		showDetails.number_of_episodes,
-		usersShowLoading,
-		usersShowData,
-	]);
-
-	useEffect(() => {
-		if (!usersShowLoading && usersShowData) {
 			if (
 				+currEp === showDetails.number_of_episodes &&
 				watchStatus !== 'DROPPED' &&
@@ -456,7 +445,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				watchStatus !== 'WATCHING' &&
 				watchStatus !== 'NOT_WATCHING'
 			) {
-				console.log('2');
 				setWatchStatus('COMPLETED');
 
 				updateShow({
@@ -475,7 +463,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 				usersShowData.current_episode! < showDetails.number_of_episodes &&
 				watchStatus === 'COMPLETED'
 			) {
-				console.log('3');
 				setWatchStatus('WATCHING');
 
 				updateShow({
@@ -489,6 +476,14 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				return;
 			}
+		}
+
+		if (!usersShowLoading && !usersShowData) {
+			setWatchStatus('NOT_WATCHING');
+			setRating('');
+			setCurrEp('0');
+
+			return;
 		}
 	}, [
 		rating,
