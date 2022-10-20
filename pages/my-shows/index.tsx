@@ -11,7 +11,9 @@ const MyShows: NextPage = () => {
 	const router = useRouter();
 
 	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS);
+		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS, {
+			fetchPolicy: 'network-only',
+		});
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

@@ -13,7 +13,10 @@ const MyMovies: NextPage = () => {
 	const {
 		data: usersMoviesData,
 	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
-		Queries.QUERY_GET_USERS_MOVIES
+		Queries.QUERY_GET_USERS_MOVIES,
+		{
+			fetchPolicy: 'network-only',
+		}
 	);
 
 	return (

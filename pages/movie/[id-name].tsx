@@ -50,6 +50,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			variables: {
 				movieId: String(movieDetails.id),
 			},
+			fetchPolicy: 'network-only',
 		}
 	);
 

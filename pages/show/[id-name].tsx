@@ -52,6 +52,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			variables: {
 				showId: String(showDetails.id),
 			},
+			fetchPolicy: 'network-only',
 		}
 	);
 

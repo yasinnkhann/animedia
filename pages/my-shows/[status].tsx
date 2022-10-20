@@ -20,7 +20,9 @@ const Status = () => {
 	}
 
 	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS);
+		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS, {
+			fetchPolicy: 'network-only',
+		});
 
 	const [myShows, setMyShows] = useState<NexusGenObjects['UserShow'][]>([]);
 
