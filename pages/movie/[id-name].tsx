@@ -250,7 +250,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
 						/>
 					</section>
-					<p className='ml-[.5rem]'>
+					<p className='ml-[.5rem] font-medium text-base'>
 						{commaNumber(movieDetails.vote_count)} voted users
 					</p>
 				</section>

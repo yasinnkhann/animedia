@@ -23,7 +23,7 @@ const MyMovies: NextPage = () => {
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			<section className='flex justify-center'>
 				<section className='w-[30rem] h-[30rem] mt-36'>
-					<h1 className='text-center mb-4'>My Movies</h1>
+					<h1 className='text-center mb-4 !font-[Rubik]'>My Movies</h1>
 					<section className='flex justify-center items-center'>
 						<section className='bg-gray-200 flex flex-col justify-around items-center rounded-lg w-[25rem] h-[15rem]'>
 							<div className='pt-4'>
