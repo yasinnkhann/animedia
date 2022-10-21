@@ -91,10 +91,10 @@ export const getSearchedShows = extendType({
 export const showDetailsCreatedBy = objectType({
 	name: 'ShowDetailsCreatedBy',
 	definition(t) {
-		t.nonNull.int('id');
-		t.nonNull.string('credit_id');
-		t.nonNull.string('name');
-		t.nonNull.int('gender');
+		t.int('id');
+		t.string('credit_id');
+		t.string('name');
+		t.int('gender');
 		t.string('profile_path');
 	},
 });

@@ -394,10 +394,10 @@ type ShowDetailsCountry {
 }
 
 type ShowDetailsCreatedBy {
-  credit_id: String!
-  gender: Int!
-  id: Int!
-  name: String!
+  credit_id: String
+  gender: Int
+  id: Int
+  name: String
   profile_path: String
 }
 

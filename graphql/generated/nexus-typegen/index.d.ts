@@ -359,10 +359,10 @@ export interface NexusGenObjects {
     name: string; // String!
   }
   ShowDetailsCreatedBy: { // root type
-    credit_id: string; // String!
-    gender: number; // Int!
-    id: number; // Int!
-    name: string; // String!
+    credit_id?: string | null; // String
+    gender?: number | null; // Int
+    id?: number | null; // Int
+    name?: string | null; // String
     profile_path?: string | null; // String
   }
   ShowDetailsGenre: { // root type
@@ -896,10 +896,10 @@ export interface NexusGenFieldTypes {
     name: string; // String!
   }
   ShowDetailsCreatedBy: { // field return type
-    credit_id: string; // String!
-    gender: number; // Int!
-    id: number; // Int!
-    name: string; // String!
+    credit_id: string | null; // String
+    gender: number | null; // Int
+    id: number | null; // Int
+    name: string | null; // String
     profile_path: string | null; // String
   }
   ShowDetailsGenre: { // field return type
