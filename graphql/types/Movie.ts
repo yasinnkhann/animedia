@@ -441,3 +441,72 @@ export const getTopRatedMoviesByGenre = extendType({
 		});
 	},
 });
+
+//!
+export const moviesCastModel = objectType({
+	name: 'MoviesCastModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.nonNull.int('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.int('cast_id');
+		t.string('character');
+		t.string('credit_id');
+		t.int('order');
+	},
+});
+
+export const moviesCrewModel = objectType({
+	name: 'MoviesCrewModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.nonNull.int('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.string('credit_id');
+		t.string('department');
+		t.string('job');
+	},
+});
+
+export const moviesCastCrewRes = objectType({
+	name: 'MoviesCastCrewRes',
+	definition(t) {
+		t.nonNull.int('id');
+		t.nonNull.list.field('cast', {
+			type: 'MoviesCastModel',
+		});
+		t.nonNull.list.field('crew', {
+			type: 'MoviesCrewModel',
+		});
+	},
+});
+
+export const getMoviesCastCrew = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('moviesCastCrew', {
+			type: 'MoviesCastCrewRes',
+			args: {
+				movieId: nonNull(intArg()),
+			},
+			resolve: async (_parent, { movieId }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/movie/${movieId}/casts?api_key=${process.env
+						.API_KEY!}&language=en-US`
+				);
+
+				return data;
+			},
+		});
+	},
+});

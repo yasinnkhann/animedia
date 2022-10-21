@@ -6,6 +6,7 @@ import {
 	intArg,
 	enumType,
 	arg,
+	list,
 } from 'nexus';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
@@ -473,6 +474,73 @@ export const getTopRatedShowsByGenre = extendType({
 						.API_KEY!}&language=en-US&page=${
 						page ?? 1
 					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+				);
+
+				return data;
+			},
+		});
+	},
+});
+
+export const showsCastModel = objectType({
+	name: 'ShowsCastModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.nonNull.int('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.string('character');
+		t.string('credit_id');
+		t.int('order');
+	},
+});
+
+export const showsCrewModel = objectType({
+	name: 'ShowsCrewModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.nonNull.int('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.string('credit_id');
+		t.string('department');
+		t.string('job');
+	},
+});
+
+export const showsCastCrewRes = objectType({
+	name: 'ShowsCastCrewRes',
+	definition(t) {
+		t.nonNull.int('id');
+		t.nonNull.list.field('cast', {
+			type: 'ShowsCastModel',
+		});
+		t.nonNull.list.field('crew', {
+			type: 'ShowsCrewModel',
+		});
+	},
+});
+
+export const getShowsCastCrew = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('showsCastCrew', {
+			type: 'ShowsCastCrewRes',
+			args: {
+				showId: nonNull(intArg()),
+			},
+			resolve: async (_parent, { showId }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/tv/${showId}/credits?api_key=${process.env
+						.API_KEY!}&language=en-US`
 				);
 
 				return data;

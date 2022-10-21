@@ -889,3 +889,72 @@ export const QUERY_GET_PERSONS_KNOWN_FOR_SHOWS = gql`
 		}
 	}
 `;
+
+export const QUERY_GET_SHOWS_CAST_CREW = gql`
+	query ShowsCastCrew($showId: Int!) {
+		showsCastCrew(showId: $showId) {
+			id
+			cast {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				character
+				credit_id
+				order
+			}
+			crew {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				credit_id
+				department
+				job
+			}
+		}
+	}
+`;
+
+export const QUERY_GET_MOVIES_CAST_CREW = gql`
+	query MoviesCastCrew($movieId: Int!) {
+		moviesCastCrew(movieId: $movieId) {
+			id
+			cast {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				cast_id
+				character
+				credit_id
+				order
+			}
+			crew {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				credit_id
+				department
+				job
+			}
+		}
+	}
+`;

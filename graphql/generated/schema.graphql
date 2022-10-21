@@ -147,6 +147,41 @@ type MovieReviewsResult {
   url: String!
 }
 
+type MoviesCastCrewRes {
+  cast: [MoviesCastModel]!
+  crew: [MoviesCrewModel]!
+  id: Int!
+}
+
+type MoviesCastModel {
+  adult: Boolean
+  cast_id: Int
+  character: String
+  credit_id: String
+  gender: Int
+  id: Int!
+  known_for_department: String
+  name: String
+  order: Int
+  original_name: String
+  popularity: Float
+  profile_path: String
+}
+
+type MoviesCrewModel {
+  adult: Boolean
+  credit_id: String
+  department: String
+  gender: Int
+  id: Int!
+  job: String
+  known_for_department: String
+  name: String
+  original_name: String
+  popularity: Float
+  profile_path: String
+}
+
 type MoviesInTheatresRes {
   dates: TheatreDates!
   page: String!
@@ -303,6 +338,7 @@ type Query {
   id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
+  moviesCastCrew(movieId: Int!): MoviesCastCrewRes!
   moviesInTheatres(page: Int): MoviesInTheatresRes!
   personDetails(id: Int!): PersonDetailsRes!
   personsKnownForMovieRes(id: Int!): PersonsKnownForMovieRes!
@@ -321,6 +357,7 @@ type Query {
   searchedShows(page: Int, q: String!): ShowsRes!
   showDetails(showDetailsId: Int!): ShowDetailsRes!
   showReviews(id: Int!, page: Int): ShowReviewRes!
+  showsCastCrew(showId: Int!): ShowsCastCrewRes!
   topRatedMovies(page: Int): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   topRatedShows(page: Int): ShowsRes!
@@ -505,6 +542,40 @@ type ShowReviewResult {
   id: String!
   updated_at: String!
   url: String!
+}
+
+type ShowsCastCrewRes {
+  cast: [ShowsCastModel]!
+  crew: [ShowsCrewModel]!
+  id: Int!
+}
+
+type ShowsCastModel {
+  adult: Boolean
+  character: String
+  credit_id: String
+  gender: Int
+  id: Int!
+  known_for_department: String
+  name: String
+  order: Int
+  original_name: String
+  popularity: Float
+  profile_path: String
+}
+
+type ShowsCrewModel {
+  adult: Boolean
+  credit_id: String
+  department: String
+  gender: Int
+  id: Int!
+  job: String
+  known_for_department: String
+  name: String
+  original_name: String
+  popularity: Float
+  profile_path: String
 }
 
 type ShowsRes {
