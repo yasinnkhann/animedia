@@ -548,3 +548,49 @@ export const getShowsCastCrew = extendType({
 		});
 	},
 });
+
+//!
+export const episodeDetails = objectType({
+	name: 'EpisodeDetails',
+	definition(t) {
+		t.string('air_date');
+		t.nonNull.list.field('crew', {
+			type: 'ShowsCrewModel',
+		});
+		t.int('episode_number');
+		t.nonNull.list.field('guest_stars', {
+			type: 'ShowsCastModel',
+		});
+		t.string('name');
+		t.string('overview');
+		t.nonNull.int('id');
+		t.string('production_code');
+		t.int('runtime');
+		t.int('season_number');
+		t.string('still_path');
+		t.float('vote_average');
+		t.int('vote_count');
+	},
+});
+
+export const getEpisodeDetails = extendType({
+	type: 'Query',
+	definition(t) {
+		t.nonNull.field('episodeDetails', {
+			type: 'EpisodeDetails',
+			args: {
+				showId: nonNull(intArg()),
+				seasonNum: nonNull(intArg()),
+				episodeNum: nonNull(intArg()),
+			},
+			resolve: async (_parent, { showId, seasonNum, episodeNum }) => {
+				const { data } = await axios.get(
+					`${BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process
+						.env.API_KEY!}&language=en-US`
+				);
+
+				return data;
+			},
+		});
+	},
+});

@@ -22,3 +22,6 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 - Compare your lists with others given their id
 - Make a horizontal scroller of recent episodes, click on them and get the episode overview among other details
+- Render main actors on the movies/shows details page
+- Make Search Bar available on every page
+- Implement Native Login/Register

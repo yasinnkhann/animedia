@@ -958,3 +958,51 @@ export const QUERY_GET_MOVIES_CAST_CREW = gql`
 		}
 	}
 `;
+
+export const QUERY_GET_EPISODE_DETAILS = gql`
+	query EpisodeDetails($showId: Int!, $seasonNum: Int!, $episodeNum: Int!) {
+		episodeDetails(
+			showId: $showId
+			seasonNum: $seasonNum
+			episodeNum: $episodeNum
+		) {
+			air_date
+			crew {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				credit_id
+				department
+				job
+			}
+			episode_number
+			guest_stars {
+				adult
+				gender
+				id
+				known_for_department
+				name
+				original_name
+				popularity
+				profile_path
+				character
+				credit_id
+				order
+			}
+			name
+			overview
+			id
+			production_code
+			runtime
+			season_number
+			still_path
+			vote_average
+			vote_count
+		}
+	}
+`;

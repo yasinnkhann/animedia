@@ -75,6 +75,21 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  EpisodeDetails: { // root type
+    air_date?: string | null; // String
+    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
+    episode_number?: number | null; // Int
+    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
+    id: number; // Int!
+    name?: string | null; // String
+    overview?: string | null; // String
+    production_code?: string | null; // String
+    runtime?: number | null; // Int
+    season_number?: number | null; // Int
+    still_path?: string | null; // String
+    vote_average?: number | null; // Float
+    vote_count?: number | null; // Int
+  }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
     backdrop_path?: string | null; // String
@@ -554,6 +569,21 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  EpisodeDetails: { // field return type
+    air_date: string | null; // String
+    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
+    episode_number: number | null; // Int
+    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
+    id: number; // Int!
+    name: string | null; // String
+    overview: string | null; // String
+    production_code: string | null; // String
+    runtime: number | null; // Int
+    season_number: number | null; // Int
+    still_path: string | null; // String
+    vote_average: number | null; // Float
+    vote_count: number | null; // Int
+  }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
     backdrop_path: string | null; // String
@@ -825,6 +855,7 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
   }
   Query: { // field return type
+    episodeDetails: NexusGenRootTypes['EpisodeDetails']; // EpisodeDetails!
     id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
@@ -1065,6 +1096,21 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  EpisodeDetails: { // field return type name
+    air_date: 'String'
+    crew: 'ShowsCrewModel'
+    episode_number: 'Int'
+    guest_stars: 'ShowsCastModel'
+    id: 'Int'
+    name: 'String'
+    overview: 'String'
+    production_code: 'String'
+    runtime: 'Int'
+    season_number: 'Int'
+    still_path: 'String'
+    vote_average: 'Float'
+    vote_count: 'Int'
+  }
   KnownForResult: { // field return type name
     adult: 'Boolean'
     backdrop_path: 'String'
@@ -1336,6 +1382,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
   }
   Query: { // field return type name
+    episodeDetails: 'EpisodeDetails'
     id: 'Int'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
@@ -1607,6 +1654,11 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    episodeDetails: { // args
+      episodeNum: number; // Int!
+      seasonNum: number; // Int!
+      showId: number; // Int!
+    }
     movieDetails: { // args
       movieDetailsId: number; // Int!
     }

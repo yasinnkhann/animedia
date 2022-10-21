@@ -12,6 +12,22 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type EpisodeDetails {
+  air_date: String
+  crew: [ShowsCrewModel]!
+  episode_number: Int
+  guest_stars: [ShowsCastModel]!
+  id: Int!
+  name: String
+  overview: String
+  production_code: String
+  runtime: Int
+  season_number: Int
+  still_path: String
+  vote_average: Float
+  vote_count: Int
+}
+
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -335,6 +351,7 @@ type PersonsKnownForShowRes {
 }
 
 type Query {
+  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails!
   id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
