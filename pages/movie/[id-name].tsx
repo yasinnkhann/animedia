@@ -342,7 +342,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{moviesCastCrewData?.crew?.length! > 0 && (
+				{moviesCastCrewData?.cast?.length! > 0 && (
 					<section ref={movieCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
 						<MediaCastHorizontalScroller
@@ -382,6 +382,7 @@ export default MovieDetails;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
+
 	const data = await request(SERVER_BASE_URL, Queries.QUERY_MOVIE_DETAILS, {
 		movieDetailsId: id,
 	});
