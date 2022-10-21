@@ -442,7 +442,6 @@ export const getTopRatedMoviesByGenre = extendType({
 	},
 });
 
-//!
 export const moviesCastModel = objectType({
 	name: 'MoviesCastModel',
 	definition(t) {
