@@ -6,7 +6,7 @@ import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
-import MovieCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MovieCastHorizontalScroller';
+import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCastHorizontalScroller';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
@@ -354,7 +354,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				{moviesCastCrewData?.crew.length! > 0 && (
 					<section ref={movieCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
-						<MovieCastHorizontalScroller
+						<MediaCastHorizontalScroller
 							items={
 								moviesCastCrewData?.cast
 									.map(cast => ({

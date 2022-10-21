@@ -12,7 +12,7 @@ interface Props {
 	) => false | void | undefined;
 }
 
-const MovieCastCard = ({ item, handleItemClick }: Props) => {
+const MediaCastCard = ({ item, handleItemClick }: Props) => {
 	return (
 		<section
 			className='w-[10rem] h-[15rem] select-none mx-4 relative'
@@ -45,4 +45,4 @@ const MovieCastCard = ({ item, handleItemClick }: Props) => {
 	);
 };
 
-export default MovieCastCard;
+export default MediaCastCard;

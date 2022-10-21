@@ -4,6 +4,7 @@ import Link from 'next/link';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCastHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
@@ -11,7 +12,7 @@ import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
 import { getEnglishName } from 'all-iso-language-codes';
@@ -30,6 +31,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recShowsContainerRef = useRef<HTMLElement>(null);
+	const showCastContainerRef = useRef<HTMLElement>(null);
 
 	const overviewRef = useRef<HTMLParagraphElement>(null);
 
@@ -515,33 +517,36 @@ const ShowDetails = ({ showDetails }: Props) => {
 	]);
 
 	useEffect(() => {
-		if (recShowsContainerRef.current) {
-			const scrollerClass =
-				'.react-horizontal-scrolling-menu--scroll-container';
+		const scrollerClass = '.react-horizontal-scrolling-menu--scroll-container';
 
+		if (recShowsContainerRef.current) {
 			const recMoviesScroller = recShowsContainerRef.current.querySelector(
 				scrollerClass
 			) as HTMLDivElement;
 
 			recMoviesScroller.style.height = '23rem';
 		}
+
+		if (showCastContainerRef.current) {
+			const showCastScroller = showCastContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			showCastScroller.style.height = '23rem';
+		}
 	});
 
-	if (recShowsLoading) {
+	if (recShowsLoading || showsCastCrewLoading) {
 		return;
 	}
 
 	return (
 		<main
-			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
-				recShowsData?.results?.length! > 0
-					? 'grid-rows-[1.3fr_2fr]'
-					: `${
-							overviewRef.current?.clientHeight === undefined ||
-							overviewRef.current.clientHeight <= 609
-								? 'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]'
-								: 'grid-rows-[1fr]'
-					  }`
+			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1fr] ${
+				(recShowsData?.results?.length! > 0 &&
+					overviewRef.current?.clientHeight === undefined) ||
+				(overviewRef?.current?.clientHeight! <= 609 &&
+					'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]')
 			} grid-cols-[30%_70%] px-16`}
 		>
 			<section className='relative mx-4 mt-4'>
@@ -631,7 +636,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					</section>
 				)}
 
-				<section>
+				<section className='pb-32'>
 					<h1>{showDetails.name}</h1>
 					<h4 className='my-4'>{showDetails.tagline}</h4>
 					<p ref={overviewRef}>{showDetails.overview}</p>
@@ -700,19 +705,38 @@ const ShowDetails = ({ showDetails }: Props) => {
 				)}
 			</section>
 
-			{recShowsData?.results?.length! > 0 && (
-				<section className='col-start-2 mt-4' ref={recShowsContainerRef}>
-					<h3 className='mb-4 ml-8'>Recommended Shows</h3>
-					<RecommendedShowsHorizontalScroller
-						items={recShowsData!.results.map(show => ({
-							id: show.id,
-							poster_path: show.poster_path,
-							name: show.name,
-							popularity: show.popularity,
-						}))}
-					/>
-				</section>
-			)}
+			<section className='col-start-2 mt-4'>
+				{showsCastCrewData?.crew.length! > 0 && (
+					<section ref={showCastContainerRef}>
+						<h3 className='mb-4 ml-8'>Cast</h3>
+						<MediaCastHorizontalScroller
+							items={
+								showsCastCrewData?.cast
+									.map(cast => ({
+										id: cast!.id,
+										name: cast!.name,
+										character: cast!.character,
+										profile_path: cast!.profile_path,
+									}))
+									.slice(0, 20) as ICast[]
+							}
+						/>
+					</section>
+				)}
+				{recShowsData?.results?.length! > 0 && (
+					<section ref={recShowsContainerRef}>
+						<h3 className='mb-4 ml-8'>Recommended Shows</h3>
+						<RecommendedShowsHorizontalScroller
+							items={recShowsData!.results.map(show => ({
+								id: show.id,
+								poster_path: show.poster_path,
+								name: show.name,
+								popularity: show.popularity,
+							}))}
+						/>
+					</section>
+				)}
+			</section>
 		</main>
 	);
 };
