@@ -77,10 +77,10 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   EpisodeDetails: { // root type
     air_date?: string | null; // String
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
+    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
     episode_number?: number | null; // Int
-    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
-    id: number; // Int!
+    guest_stars?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    id?: number | null; // Int
     name?: string | null; // String
     overview?: string | null; // String
     production_code?: string | null; // String
@@ -189,9 +189,9 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   MoviesCastCrewRes: { // root type
-    cast: Array<NexusGenRootTypes['MoviesCastModel'] | null>; // [MoviesCastModel]!
-    crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null>; // [MoviesCrewModel]!
-    id: number; // Int!
+    cast?: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
+    crew?: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+    id?: number | null; // Int
   }
   MoviesCastModel: { // root type
     adult?: boolean | null; // Boolean
@@ -199,7 +199,7 @@ export interface NexusGenObjects {
     character?: string | null; // String
     credit_id?: string | null; // String
     gender?: number | null; // Int
-    id: number; // Int!
+    id?: number | null; // Int
     known_for_department?: string | null; // String
     name?: string | null; // String
     order?: number | null; // Int
@@ -212,7 +212,7 @@ export interface NexusGenObjects {
     credit_id?: string | null; // String
     department?: string | null; // String
     gender?: number | null; // Int
-    id: number; // Int!
+    id?: number | null; // Int
     job?: string | null; // String
     known_for_department?: string | null; // String
     name?: string | null; // String
@@ -495,16 +495,16 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   ShowsCastCrewRes: { // root type
-    cast: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
-    id: number; // Int!
+    cast?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    id?: number | null; // Int
   }
   ShowsCastModel: { // root type
     adult?: boolean | null; // Boolean
     character?: string | null; // String
     credit_id?: string | null; // String
     gender?: number | null; // Int
-    id: number; // Int!
+    id?: number | null; // Int
     known_for_department?: string | null; // String
     name?: string | null; // String
     order?: number | null; // Int
@@ -517,7 +517,7 @@ export interface NexusGenObjects {
     credit_id?: string | null; // String
     department?: string | null; // String
     gender?: number | null; // Int
-    id: number; // Int!
+    id?: number | null; // Int
     job?: string | null; // String
     known_for_department?: string | null; // String
     name?: string | null; // String
@@ -571,10 +571,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   EpisodeDetails: { // field return type
     air_date: string | null; // String
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
+    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
     episode_number: number | null; // Int
-    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
-    id: number; // Int!
+    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    id: number | null; // Int
     name: string | null; // String
     overview: string | null; // String
     production_code: string | null; // String
@@ -683,9 +683,9 @@ export interface NexusGenFieldTypes {
     url: string; // String!
   }
   MoviesCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['MoviesCastModel'] | null>; // [MoviesCastModel]!
-    crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null>; // [MoviesCrewModel]!
-    id: number; // Int!
+    cast: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
+    crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+    id: number | null; // Int
   }
   MoviesCastModel: { // field return type
     adult: boolean | null; // Boolean
@@ -693,7 +693,7 @@ export interface NexusGenFieldTypes {
     character: string | null; // String
     credit_id: string | null; // String
     gender: number | null; // Int
-    id: number; // Int!
+    id: number | null; // Int
     known_for_department: string | null; // String
     name: string | null; // String
     order: number | null; // Int
@@ -706,7 +706,7 @@ export interface NexusGenFieldTypes {
     credit_id: string | null; // String
     department: string | null; // String
     gender: number | null; // Int
-    id: number; // Int!
+    id: number | null; // Int
     job: string | null; // String
     known_for_department: string | null; // String
     name: string | null; // String
@@ -855,11 +855,11 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
   }
   Query: { // field return type
-    episodeDetails: NexusGenRootTypes['EpisodeDetails']; // EpisodeDetails!
+    episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
     id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
-    moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes']; // MoviesCastCrewRes!
+    moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
     moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
     personDetails: NexusGenRootTypes['PersonDetailsRes']; // PersonDetailsRes!
     personsKnownForMovieRes: NexusGenRootTypes['PersonsKnownForMovieRes']; // PersonsKnownForMovieRes!
@@ -878,7 +878,7 @@ export interface NexusGenFieldTypes {
     searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
-    showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes']; // ShowsCastCrewRes!
+    showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1032,16 +1032,16 @@ export interface NexusGenFieldTypes {
     url: string; // String!
   }
   ShowsCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['ShowsCastModel'] | null>; // [ShowsCastModel]!
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null>; // [ShowsCrewModel]!
-    id: number; // Int!
+    cast: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    id: number | null; // Int
   }
   ShowsCastModel: { // field return type
     adult: boolean | null; // Boolean
     character: string | null; // String
     credit_id: string | null; // String
     gender: number | null; // Int
-    id: number; // Int!
+    id: number | null; // Int
     known_for_department: string | null; // String
     name: string | null; // String
     order: number | null; // Int
@@ -1054,7 +1054,7 @@ export interface NexusGenFieldTypes {
     credit_id: string | null; // String
     department: string | null; // String
     gender: number | null; // Int
-    id: number; // Int!
+    id: number | null; // Int
     job: string | null; // String
     known_for_department: string | null; // String
     name: string | null; // String

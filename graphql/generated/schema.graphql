@@ -14,10 +14,10 @@ scalar DateTime
 
 type EpisodeDetails {
   air_date: String
-  crew: [ShowsCrewModel]!
+  crew: [ShowsCrewModel]
   episode_number: Int
-  guest_stars: [ShowsCastModel]!
-  id: Int!
+  guest_stars: [ShowsCastModel]
+  id: Int
   name: String
   overview: String
   production_code: String
@@ -164,9 +164,9 @@ type MovieReviewsResult {
 }
 
 type MoviesCastCrewRes {
-  cast: [MoviesCastModel]!
-  crew: [MoviesCrewModel]!
-  id: Int!
+  cast: [MoviesCastModel]
+  crew: [MoviesCrewModel]
+  id: Int
 }
 
 type MoviesCastModel {
@@ -175,7 +175,7 @@ type MoviesCastModel {
   character: String
   credit_id: String
   gender: Int
-  id: Int!
+  id: Int
   known_for_department: String
   name: String
   order: Int
@@ -189,7 +189,7 @@ type MoviesCrewModel {
   credit_id: String
   department: String
   gender: Int
-  id: Int!
+  id: Int
   job: String
   known_for_department: String
   name: String
@@ -351,11 +351,11 @@ type PersonsKnownForShowRes {
 }
 
 type Query {
-  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails!
+  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails
   id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
-  moviesCastCrew(movieId: Int!): MoviesCastCrewRes!
+  moviesCastCrew(movieId: Int!): MoviesCastCrewRes
   moviesInTheatres(page: Int): MoviesInTheatresRes!
   personDetails(id: Int!): PersonDetailsRes!
   personsKnownForMovieRes(id: Int!): PersonsKnownForMovieRes!
@@ -374,7 +374,7 @@ type Query {
   searchedShows(page: Int, q: String!): ShowsRes!
   showDetails(showDetailsId: Int!): ShowDetailsRes!
   showReviews(id: Int!, page: Int): ShowReviewRes!
-  showsCastCrew(showId: Int!): ShowsCastCrewRes!
+  showsCastCrew(showId: Int!): ShowsCastCrewRes
   topRatedMovies(page: Int): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   topRatedShows(page: Int): ShowsRes!
@@ -562,9 +562,9 @@ type ShowReviewResult {
 }
 
 type ShowsCastCrewRes {
-  cast: [ShowsCastModel]!
-  crew: [ShowsCrewModel]!
-  id: Int!
+  cast: [ShowsCastModel]
+  crew: [ShowsCrewModel]
+  id: Int
 }
 
 type ShowsCastModel {
@@ -572,7 +572,7 @@ type ShowsCastModel {
   character: String
   credit_id: String
   gender: Int
-  id: Int!
+  id: Int
   known_for_department: String
   name: String
   order: Int
@@ -586,7 +586,7 @@ type ShowsCrewModel {
   credit_id: String
   department: String
   gender: Int
-  id: Int!
+  id: Int
   job: String
   known_for_department: String
   name: String

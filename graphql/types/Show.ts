@@ -487,7 +487,7 @@ export const showsCastModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.nonNull.int('id');
+		t.int('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
@@ -504,7 +504,7 @@ export const showsCrewModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.nonNull.int('id');
+		t.int('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
@@ -519,11 +519,11 @@ export const showsCrewModel = objectType({
 export const showsCastCrewRes = objectType({
 	name: 'ShowsCastCrewRes',
 	definition(t) {
-		t.nonNull.int('id');
-		t.nonNull.list.field('cast', {
+		t.int('id');
+		t.list.field('cast', {
 			type: 'ShowsCastModel',
 		});
-		t.nonNull.list.field('crew', {
+		t.list.field('crew', {
 			type: 'ShowsCrewModel',
 		});
 	},
@@ -532,7 +532,7 @@ export const showsCastCrewRes = objectType({
 export const getShowsCastCrew = extendType({
 	type: 'Query',
 	definition(t) {
-		t.nonNull.field('showsCastCrew', {
+		t.field('showsCastCrew', {
 			type: 'ShowsCastCrewRes',
 			args: {
 				showId: nonNull(intArg()),
@@ -553,16 +553,16 @@ export const episodeDetails = objectType({
 	name: 'EpisodeDetails',
 	definition(t) {
 		t.string('air_date');
-		t.nonNull.list.field('crew', {
+		t.list.field('crew', {
 			type: 'ShowsCrewModel',
 		});
 		t.int('episode_number');
-		t.nonNull.list.field('guest_stars', {
+		t.list.field('guest_stars', {
 			type: 'ShowsCastModel',
 		});
 		t.string('name');
 		t.string('overview');
-		t.nonNull.int('id');
+		t.int('id');
 		t.string('production_code');
 		t.int('runtime');
 		t.int('season_number');
@@ -575,7 +575,7 @@ export const episodeDetails = objectType({
 export const getEpisodeDetails = extendType({
 	type: 'Query',
 	definition(t) {
-		t.nonNull.field('episodeDetails', {
+		t.field('episodeDetails', {
 			type: 'EpisodeDetails',
 			args: {
 				showId: nonNull(intArg()),

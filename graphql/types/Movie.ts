@@ -447,7 +447,7 @@ export const moviesCastModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.nonNull.int('id');
+		t.int('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
@@ -465,7 +465,7 @@ export const moviesCrewModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.nonNull.int('id');
+		t.int('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
@@ -480,11 +480,11 @@ export const moviesCrewModel = objectType({
 export const moviesCastCrewRes = objectType({
 	name: 'MoviesCastCrewRes',
 	definition(t) {
-		t.nonNull.int('id');
-		t.nonNull.list.field('cast', {
+		t.int('id');
+		t.list.field('cast', {
 			type: 'MoviesCastModel',
 		});
-		t.nonNull.list.field('crew', {
+		t.list.field('crew', {
 			type: 'MoviesCrewModel',
 		});
 	},
@@ -493,7 +493,7 @@ export const moviesCastCrewRes = objectType({
 export const getMoviesCastCrew = extendType({
 	type: 'Query',
 	definition(t) {
-		t.nonNull.field('moviesCastCrew', {
+		t.field('moviesCastCrew', {
 			type: 'MoviesCastCrewRes',
 			args: {
 				movieId: nonNull(intArg()),
