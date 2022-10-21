@@ -82,6 +82,17 @@ const PersonDetails = ({
 		}
 	});
 
+	const getAge = (dateStr: string) => {
+		const today = new Date();
+		const birthDate = new Date(dateStr);
+		let age = today.getFullYear() - birthDate.getFullYear();
+		const m = today.getMonth() - birthDate.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+			age--;
+		}
+		return age;
+	};
+
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
@@ -118,7 +129,11 @@ const PersonDetails = ({
 				<h4 className='mt-4'>Date of Birth</h4>
 				<p>
 					{personDetails.birthday
-						? formatDate(personDetails.birthday)
+						? `${formatDate(personDetails.birthday)}${
+								!personDetails.deathday
+									? ` (${getAge(personDetails.birthday)} years old)`
+									: ''
+						  }`
 						: 'Unknown'}
 				</p>
 				<h4 className='mt-4'>Born In</h4>
@@ -130,7 +145,12 @@ const PersonDetails = ({
 				{personDetails.deathday && (
 					<>
 						<h4 className='mt-4'>Date of Death</h4>
-						<p>{formatDate(personDetails.deathday)}</p>
+						<p>{`${formatDate(personDetails.deathday)}${
+							personDetails.birthday &&
+							` (${
+								getAge(personDetails.birthday) - getAge(personDetails.deathday)
+							}`
+						} years old)`}</p>
 					</>
 				)}
 			</section>
