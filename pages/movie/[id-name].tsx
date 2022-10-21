@@ -246,9 +246,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	}
 
 	return (
-		<main
-			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16`}
-		>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'

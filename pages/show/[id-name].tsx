@@ -33,8 +33,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const recShowsContainerRef = useRef<HTMLElement>(null);
 	const showCastContainerRef = useRef<HTMLElement>(null);
 
-	const overviewRef = useRef<HTMLParagraphElement>(null);
-
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
@@ -541,14 +539,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	}
 
 	return (
-		<main
-			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1fr] ${
-				(recShowsData?.results?.length! > 0 &&
-					overviewRef.current?.clientHeight === undefined) ||
-				(overviewRef?.current?.clientHeight! <= 609 &&
-					'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]')
-			} grid-cols-[30%_70%] px-16`}
-		>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
@@ -639,7 +630,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				<section className='pb-32'>
 					<h1>{showDetails.name}</h1>
 					<h4 className='my-4'>{showDetails.tagline}</h4>
-					<p ref={overviewRef}>{showDetails.overview}</p>
+					<p>{showDetails.overview}</p>
 				</section>
 			</section>
 
