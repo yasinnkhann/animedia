@@ -697,13 +697,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{showsCastCrewData?.crew.length! > 0 && (
+				{showsCastCrewData?.crew?.length! > 0 && (
 					<section ref={showCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
 						<MediaCastHorizontalScroller
 							items={
 								showsCastCrewData?.cast
-									.map(cast => ({
+									?.map(cast => ({
 										id: cast!.id,
 										name: cast!.name,
 										character: cast!.character,

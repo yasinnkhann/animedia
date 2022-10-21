@@ -342,13 +342,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{moviesCastCrewData?.crew.length! > 0 && (
+				{moviesCastCrewData?.crew?.length! > 0 && (
 					<section ref={movieCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
 						<MediaCastHorizontalScroller
 							items={
 								moviesCastCrewData?.cast
-									.map(cast => ({
+									?.map(cast => ({
 										id: cast!.id,
 										name: cast!.name,
 										character: cast!.character,
@@ -359,6 +359,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 						/>
 					</section>
 				)}
+
 				{recMoviesData?.results?.length! > 0 && (
 					<section ref={recMoviesContainerRef}>
 						<h3 className='mb-4 ml-8'>Recommended Movies</h3>
