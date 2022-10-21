@@ -35,7 +35,7 @@ export interface IUseGQLMutation<TData, TVars = undefined> {
 }
 
 export interface IHorizontalScrollerItemClickInfo {
-	mediaType: ESearchType.MOVIE | ESearchType.SHOW;
+	mediaType: ESearchType.MOVIE | ESearchType.SHOW | ESearchType.PERSON;
 	id: number;
 	title: string;
 }
@@ -46,4 +46,11 @@ export interface IKnownForMedia {
 	title?: string;
 	name?: string;
 	popularity: number;
+}
+
+export interface ICast {
+	id: number;
+	name: string;
+	character: string;
+	profile_path: string | null;
 }

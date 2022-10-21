@@ -6,12 +6,13 @@ import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import MovieCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MovieCastHorizontalScroller';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
 import { getEnglishName } from 'all-iso-language-codes';
@@ -30,6 +31,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
+	const movieCastContainerRef = useRef<HTMLElement>(null);
 
 	const overviewRef = useRef<HTMLParagraphElement>(null);
 
@@ -68,6 +70,23 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			},
 		}
 	);
+
+	const {
+		data: moviesCastCrewData,
+		loading: moviesCastCrewLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['MoviesCastCrewRes'],
+		NexusGenArgTypes['Query']['moviesCastCrew']
+	> = useGQLQuery<NexusGenArgTypes['Query']['moviesCastCrew']>(
+		Queries.QUERY_GET_MOVIES_CAST_CREW,
+		{
+			variables: {
+				movieId: movieDetails.id,
+			},
+		}
+	);
+
+	console.log('moviesCastCrewData: ', moviesCastCrewData);
 
 	const {
 		mutateFunction: addMovie,
@@ -205,33 +224,36 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	}, [usersMovieData, usersMovieLoading]);
 
 	useEffect(() => {
-		if (recMoviesContainerRef.current) {
-			const scrollerClass =
-				'.react-horizontal-scrolling-menu--scroll-container';
+		const scrollerClass = '.react-horizontal-scrolling-menu--scroll-container';
 
+		if (recMoviesContainerRef.current) {
 			const recMoviesScroller = recMoviesContainerRef.current.querySelector(
 				scrollerClass
 			) as HTMLDivElement;
 
 			recMoviesScroller.style.height = '23rem';
 		}
+
+		if (movieCastContainerRef.current) {
+			const movieCastScroller = movieCastContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			movieCastScroller.style.height = '23rem';
+		}
 	});
 
-	if (recMoviesLoading) {
+	if (recMoviesLoading || moviesCastCrewLoading) {
 		return;
 	}
 
 	return (
 		<main
-			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid ${
-				recMoviesData?.results?.length! > 0
-					? 'grid-rows-[1fr_1fr]'
-					: `${
-							overviewRef.current?.clientHeight === undefined ||
-							overviewRef.current.clientHeight <= 609
-								? 'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]'
-								: 'grid-rows-[1fr]'
-					  }`
+			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1fr] ${
+				(recMoviesData?.results?.length! > 0 &&
+					overviewRef.current?.clientHeight === undefined) ||
+				(overviewRef?.current?.clientHeight! <= 609 &&
+					'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]')
 			} grid-cols-[30%_70%] px-16`}
 		>
 			<section className='relative mx-4 mt-4'>
@@ -289,7 +311,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 					</section>
 				)}
 
-				<section>
+				<section className='pb-32'>
 					<h1>{movieDetails.title}</h1>
 					<h4 className='my-4'>{movieDetails.tagline}</h4>
 					<p ref={overviewRef}>{movieDetails.overview}</p>
@@ -328,19 +350,38 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				)}
 			</section>
 
-			{recMoviesData?.results?.length! > 0 && (
-				<section className='col-start-2 mt-4' ref={recMoviesContainerRef}>
-					<h3 className='mb-4 ml-8'>Recommended Movies</h3>
-					<RecommendedMoviesHorizontalScroller
-						items={recMoviesData!.results.map(movie => ({
-							id: movie.id,
-							poster_path: movie.poster_path,
-							title: movie.title,
-							popularity: movie.popularity,
-						}))}
-					/>
-				</section>
-			)}
+			<section className='col-start-2 mt-4'>
+				{moviesCastCrewData?.crew.length! > 0 && (
+					<section ref={movieCastContainerRef}>
+						<h3 className='mb-4 ml-8'>Cast</h3>
+						<MovieCastHorizontalScroller
+							items={
+								moviesCastCrewData?.cast
+									.map(cast => ({
+										id: cast!.id,
+										name: cast!.name,
+										character: cast!.character,
+										profile_path: cast!.profile_path,
+									}))
+									.slice(0, 20) as ICast[]
+							}
+						/>
+					</section>
+				)}
+				{recMoviesData?.results?.length! > 0 && (
+					<section ref={recMoviesContainerRef}>
+						<h3 className='mb-4 ml-8'>Recommended Movies</h3>
+						<RecommendedMoviesHorizontalScroller
+							items={recMoviesData!.results.map(movie => ({
+								id: movie.id,
+								poster_path: movie.poster_path,
+								title: movie.title,
+								popularity: movie.popularity,
+							}))}
+						/>
+					</section>
+				)}
+			</section>
 		</main>
 	);
 };

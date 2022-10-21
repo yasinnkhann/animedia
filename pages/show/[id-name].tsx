@@ -72,6 +72,23 @@ const ShowDetails = ({ showDetails }: Props) => {
 	);
 
 	const {
+		data: showsCastCrewData,
+		loading: showsCastCrewLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowsCastCrewRes'],
+		NexusGenArgTypes['Query']['showsCastCrew']
+	> = useGQLQuery<NexusGenArgTypes['Query']['showsCastCrew']>(
+		Queries.QUERY_GET_SHOWS_CAST_CREW,
+		{
+			variables: {
+				showId: showDetails.id,
+			},
+		}
+	);
+
+	console.log('showsCastCrewData: ', showsCastCrewData);
+
+	const {
 		mutateFunction: addShow,
 		mutateLoading: addShowLoading,
 	}: IUseGQLMutation<
@@ -703,6 +720,7 @@ export default ShowDetails;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
+
 	const data = await request(SERVER_BASE_URL, Queries.QUERY_SHOW_DETAILS, {
 		showDetailsId: id,
 	});
