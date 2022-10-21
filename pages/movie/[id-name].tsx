@@ -33,8 +33,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
 	const movieCastContainerRef = useRef<HTMLElement>(null);
 
-	const overviewRef = useRef<HTMLParagraphElement>(null);
-
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
@@ -249,12 +247,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 	return (
 		<main
-			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1fr] ${
-				(recMoviesData?.results?.length! > 0 &&
-					overviewRef.current?.clientHeight === undefined) ||
-				(overviewRef?.current?.clientHeight! <= 609 &&
-					'grid-rows-[calc(100vh-var(--header-height-mobile)-2rem)]')
-			} grid-cols-[30%_70%] px-16`}
+			className={`mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16`}
 		>
 			<section className='relative mx-4 mt-4'>
 				<Image
@@ -314,7 +307,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				<section className='pb-32'>
 					<h1>{movieDetails.title}</h1>
 					<h4 className='my-4'>{movieDetails.tagline}</h4>
-					<p ref={overviewRef}>{movieDetails.overview}</p>
+					<p>{movieDetails.overview}</p>
 				</section>
 			</section>
 
