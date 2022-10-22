@@ -31,8 +31,6 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 		}
 	);
 
-	console.log('epDetailsCardData: ', epDetailsCardData?.still_path);
-
 	return (
 		<section
 			className='w-[15rem] h-[7rem] select-none mx-4 relative'

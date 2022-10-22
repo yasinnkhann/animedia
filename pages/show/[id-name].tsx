@@ -544,10 +544,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	});
 
-	if (recShowsLoading || showsCastCrewLoading) {
-		return;
-	}
-
 	console.log('SHOW DETAILS: ', showDetails);
 
 	return (
@@ -721,7 +717,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					</section>
 				)}
 
-				{showsCastCrewData?.cast?.length! > 0 && (
+				{!showsCastCrewLoading && showsCastCrewData?.cast?.length! > 0 && (
 					<section ref={showCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
 						<MediaCastHorizontalScroller
@@ -738,7 +734,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 						/>
 					</section>
 				)}
-				{recShowsData?.results?.length! > 0 && (
+				{!recShowsLoading && recShowsData?.results?.length! > 0 && (
 					<section ref={recShowsContainerRef}>
 						<h3 className='mb-4 ml-8'>Recommended Shows</h3>
 						<RecommendedShowsHorizontalScroller

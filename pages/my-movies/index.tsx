@@ -114,5 +114,5 @@ const MyMovies: NextPage = () => {
 export default MyMovies;
 
 export const getServerSideProps = getClientAuthSession(async _ctx => {
-	return { props: {} };
+	return { props: { hideScrollBar: true } };
 });

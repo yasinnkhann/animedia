@@ -108,5 +108,5 @@ const MyShows: NextPage = () => {
 export default MyShows;
 
 export const getServerSideProps = getClientAuthSession(async _ctx => {
-	return { props: {} };
+	return { props: { hideScrollBar: true } };
 });

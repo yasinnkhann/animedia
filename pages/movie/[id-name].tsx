@@ -241,10 +241,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	});
 
-	if (recMoviesLoading || moviesCastCrewLoading) {
-		return;
-	}
-
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
@@ -342,7 +338,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{moviesCastCrewData?.cast?.length! > 0 && (
+				{!moviesCastCrewLoading && moviesCastCrewData?.cast?.length! > 0 && (
 					<section ref={movieCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
 						<MediaCastHorizontalScroller
@@ -360,7 +356,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 					</section>
 				)}
 
-				{recMoviesData?.results?.length! > 0 && (
+				{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
 					<section ref={recMoviesContainerRef}>
 						<h3 className='mb-4 ml-8'>Recommended Movies</h3>
 						<RecommendedMoviesHorizontalScroller

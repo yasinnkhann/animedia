@@ -13,7 +13,7 @@ const MyShowsList = ({ status, myShows }: Props) => {
 
 	return (
 		<section className='w-full px-40'>
-			<section className='flex flex-col'>
+			<section className='flex flex-col pb-4'>
 				<div className='bg-gray-200 flex justify-center items-center h-[3rem] mt-8'>
 					<h4 className='text-blue-500'>{adjustedStatus} SHOWS</h4>
 				</div>
