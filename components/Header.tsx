@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import DropDownItem from './DropDownItem';
@@ -61,11 +62,14 @@ const Header = () => {
 		<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-gray-100 !text-base'>
 			<nav className='!flex !items-center w-full ml-[4rem]'>
 				<section>
-					<i
-						className='fa-solid fa-house !mb-0 cursor-pointer'
-						aria-hidden='true'
-						onClick={() => router.push('/')}
-					/>
+					<Link href='/'>
+						<a className='text-black hover:text-black'>
+							<i
+								className='fa-solid fa-house !mb-0 cursor-pointer'
+								aria-hidden='true'
+							/>
+						</a>
+					</Link>
 				</section>
 				<section className='!flex w-full justify-between ml-[4rem] !items-center'>
 					<ul id='left-section' className='!flex justify-around w-[50%] !mb-0'>
@@ -86,8 +90,13 @@ const Header = () => {
 						<li className='!flex !justify-around !items-center !w-full'>
 							{status === 'authenticated' && (
 								<>
-									<a onClick={() => router.push('/my-shows')}>My Shows</a>
-									<a onClick={() => router.push('/my-movies')}>My Movies</a>
+									<Link href='/my-shows'>
+										<a>My Shows</a>
+									</Link>
+
+									<Link href='/my-movies'>
+										<a>My Movies</a>
+									</Link>
 								</>
 							)}
 							{status === 'unauthenticated' && (

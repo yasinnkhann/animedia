@@ -54,3 +54,12 @@ export interface ICast {
 	character: string;
 	profile_path: string | null;
 }
+
+export interface IEPDetailsCard {
+	id: number;
+	showId: number;
+	seasonNumber: number;
+	episodeNumber: number;
+	stillPath: string;
+	name: string;
+}

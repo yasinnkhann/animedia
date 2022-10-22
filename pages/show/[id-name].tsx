@@ -5,6 +5,7 @@ import RoundProgressBar from '../../components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCastHorizontalScroller';
+import EpisodeDetailsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
@@ -32,6 +33,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const recShowsContainerRef = useRef<HTMLElement>(null);
 	const showCastContainerRef = useRef<HTMLElement>(null);
+	const episodesContainerRef = useRef<HTMLElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -532,11 +534,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			showCastScroller.style.height = '23rem';
 		}
+
+		if (episodesContainerRef.current) {
+			const episodesScroller = episodesContainerRef.current.querySelector(
+				scrollerClass
+			) as HTMLDivElement;
+
+			episodesScroller.style.height = '12rem';
+		}
 	});
 
 	if (recShowsLoading || showsCastCrewLoading) {
 		return;
 	}
+
+	console.log('SHOW DETAILS: ', showDetails);
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
@@ -697,6 +709,18 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
+				{showDetails.seasons.length > 0 && (
+					<section ref={episodesContainerRef}>
+						<h3 className='mb-4 ml-8'>Episodes</h3>
+						<EpisodeDetailsHorizontalScroller
+							seasons={showDetails.seasons.filter(
+								season => season?.season_number! > 0
+							)}
+							showId={showDetails.id}
+						/>
+					</section>
+				)}
+
 				{showsCastCrewData?.cast?.length! > 0 && (
 					<section ref={showCastContainerRef}>
 						<h3 className='mb-4 ml-8'>Cast</h3>
