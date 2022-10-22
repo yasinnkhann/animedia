@@ -540,7 +540,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				scrollerClass
 			) as HTMLDivElement;
 
-			episodesScroller.style.height = '12rem';
+			episodesScroller.style.height = '14rem';
 		}
 	});
 

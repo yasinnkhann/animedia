@@ -51,7 +51,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 			new Array(seasons[idx]?.episode_count).fill(0)
 		).map((season, seasonNum) =>
 			season.map((_, idx) =>
-				groupedArr.push({ season: seasonNum + 1, episode: idx + 1, showId })
+				groupedArr.unshift({ season: seasonNum + 1, episode: idx + 1, showId })
 			)
 		);
 

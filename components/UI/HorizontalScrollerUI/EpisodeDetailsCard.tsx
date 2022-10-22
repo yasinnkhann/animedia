@@ -35,7 +35,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 
 	return (
 		<section
-			className='w-[10rem] h-[5rem] select-none mx-4 relative'
+			className='w-[15rem] h-[7rem] select-none mx-4 relative'
 			role='button'
 			tabIndex={0}
 		>
