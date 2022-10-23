@@ -84,8 +84,6 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	);
 
-	console.log('moviesCastCrewData: ', moviesCastCrewData);
-
 	const {
 		mutateFunction: addMovie,
 		mutateLoading: addMovieLoading,

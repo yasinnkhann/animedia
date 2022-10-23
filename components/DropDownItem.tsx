@@ -67,8 +67,13 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 	};
 
 	const renderAvatar = () => {
-		if (session?.user?.image) {
-			return <Avatar src={session.user.image} size='large' />;
+		if (session?.user?.image || (session?.token as any)?.picture) {
+			return (
+				<Avatar
+					src={session?.user?.image || (session?.token as any)?.picture}
+					size='large'
+				/>
+			);
 		} else {
 			return (
 				<Avatar
@@ -79,7 +84,8 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 					}}
 					size='large'
 				>
-					{session?.user?.name![0].toUpperCase()}
+					{session?.user?.name![0].toUpperCase() ||
+						(session?.token as any)?.name![0].toUpperCase()}
 				</Avatar>
 			);
 		}

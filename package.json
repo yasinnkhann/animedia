@@ -21,6 +21,8 @@
 		"axios": "^0.27.2",
 		"bcryptjs": "^2.4.3",
 		"comma-number": "^2.1.0",
+		"cuid": "^2.1.8",
+		"formik": "^2.2.9",
 		"graphql": "^16.6.0",
 		"graphql-middleware": "^6.1.32",
 		"graphql-request": "^5.0.0",
@@ -38,11 +40,13 @@
 		"react-circular-progressbar": "^2.1.0",
 		"react-dom": "18.2.0",
 		"react-horizontal-scrolling-menu": "^3.2.0",
+		"react-icons": "^4.6.0",
 		"react-loading-icons": "^1.1.0",
 		"tinycolor2": "^1.4.2",
 		"yarn": "^1.22.19"
 	},
 	"devDependencies": {
+		"@types/bcryptjs": "^2.4.2",
 		"@types/comma-number": "^2.1.0",
 		"@types/micro-cors": "^0.1.2",
 		"@types/node": "18.7.18",
