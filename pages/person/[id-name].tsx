@@ -94,7 +94,7 @@ const PersonDetails = ({
 	};
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-rows-[1.5fr_1fr] grid-cols-[30%_70%] px-16'>
+		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
@@ -104,7 +104,7 @@ const PersonDetails = ({
 				/>
 			</section>
 
-			<section>
+			<section className='pb-48'>
 				<h1>{personDetails.name}</h1>
 				<h3 className='my-4'>Biography</h3>
 				<p>
@@ -115,11 +115,11 @@ const PersonDetails = ({
 			</section>
 
 			<section className='ml-8 mt-4'>
-				<h3 className='mb-4'>Personal Info</h3>
+				<h3 className='mb-4 underline underline-offset-4'>Personal Info</h3>
 				<h4>Known For</h4>
-				<p>{personDetails.known_for_department}</p>
+				<p className='ml-1'>{personDetails.known_for_department}</p>
 				<h4 className='mt-4'>Gender</h4>
-				<p>
+				<p className='ml-1'>
 					{personDetails.gender === 1
 						? 'Female'
 						: personDetails.gender === 2
@@ -127,7 +127,7 @@ const PersonDetails = ({
 						: 'Unknown'}
 				</p>
 				<h4 className='mt-4'>Date of Birth</h4>
-				<p>
+				<p className='ml-1'>
 					{personDetails.birthday
 						? `${formatDate(personDetails.birthday)}${
 								!personDetails.deathday
@@ -137,7 +137,7 @@ const PersonDetails = ({
 						: 'Unknown'}
 				</p>
 				<h4 className='mt-4'>Born In</h4>
-				<p>
+				<p className='ml-1'>
 					{personDetails.place_of_birth
 						? personDetails.place_of_birth
 						: 'Unknown'}
@@ -145,7 +145,7 @@ const PersonDetails = ({
 				{personDetails.deathday && (
 					<>
 						<h4 className='mt-4'>Date of Death</h4>
-						<p>{`${formatDate(personDetails.deathday)}${
+						<p className='ml-1'>{`${formatDate(personDetails.deathday)}${
 							personDetails.birthday &&
 							` (${
 								getAge(personDetails.birthday) - getAge(personDetails.deathday)

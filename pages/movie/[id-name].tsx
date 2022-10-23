@@ -306,30 +306,30 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			</section>
 
 			<section className='ml-8 my-4'>
-				<h3 className='mb-4'>Details</h3>
+				<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 				<h4>Runtime</h4>
-				<p>{movieDetails.runtime} minutes</p>
+				<p className='ml-1'>{movieDetails.runtime} minutes</p>
 				<h4 className='mt-4'>Status</h4>
-				<p>{movieDetails.status}</p>
+				<p className='ml-1'>{movieDetails.status}</p>
 				<h4 className='mt-4'>Release Date</h4>
 				{movieDetails.release_date ? (
-					<p>{formatDate(movieDetails.release_date)}</p>
+					<p className='ml-1'>{formatDate(movieDetails.release_date)}</p>
 				) : (
-					<p>N/A</p>
+					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Genre(s)</h4>
-				<div>
+				<div className='ml-1'>
 					{movieDetails.genres.map((genre, idx) => (
 						<p key={idx}>{genre.name}</p>
 					))}
 				</div>
 				<h4 className='mt-4'>Original Language</h4>
-				<p>{getEnglishName(movieDetails.original_language)}</p>
+				<p className='ml-1'>{getEnglishName(movieDetails.original_language)}</p>
 				{movieDetails.homepage.length > 0 && (
 					<>
 						<h4 className='mt-4'>Official Page</h4>
 						<Link href={movieDetails.homepage}>
-							<a className='underline' target='_blank'>
+							<a className='underline ml-1' target='_blank'>
 								Learn More
 							</a>
 						</Link>

@@ -643,20 +643,20 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</section>
 
 			<section className='ml-8 my-4'>
-				<h3 className='mb-4'>Details</h3>
+				<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 				<h4 className='mt-4'>No. of Seasons</h4>
-				<p>{showDetails.number_of_seasons}</p>
+				<p className='ml-1'>{showDetails.number_of_seasons}</p>
 				<h4 className='mt-4'>No. of Episodes</h4>
-				<p>{showDetails.number_of_episodes}</p>
+				<p className='ml-1'>{showDetails.number_of_episodes}</p>
 				<h4 className='mt-4'>First Air Date</h4>
 				{showDetails.first_air_date ? (
-					<p>{formatDate(showDetails.first_air_date)}</p>
+					<p className='ml-1'>{formatDate(showDetails.first_air_date)}</p>
 				) : (
-					<p>N/A</p>
+					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Last Episode to Air</h4>
 				{showDetails.last_episode_to_air ? (
-					<div>
+					<div className='ml-1'>
 						<p>
 							Season {showDetails.last_episode_to_air.season_number} Episode{' '}
 							{showDetails.last_episode_to_air.episode_number}
@@ -665,11 +665,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</p>
 					</div>
 				) : (
-					<p>N/A</p>
+					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Next Episode to Air</h4>
 				{showDetails.next_episode_to_air ? (
-					<div>
+					<div className='ml-1'>
 						<p>
 							Season {showDetails.next_episode_to_air.season_number} Episode{' '}
 							{showDetails.next_episode_to_air.episode_number}
@@ -678,25 +678,25 @@ const ShowDetails = ({ showDetails }: Props) => {
 						</p>
 					</div>
 				) : (
-					<p>N/A</p>
+					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Status</h4>
-				<p>{showDetails.status}</p>
+				<p className='ml-1'>{showDetails.status}</p>
 				<h4 className='mt-4'>In Production</h4>
-				<p>{showDetails.in_production ? 'Yes' : 'No'}</p>
+				<p className='ml-1'>{showDetails.in_production ? 'Yes' : 'No'}</p>
 				<h4 className='mt-4'>Genre(s)</h4>
-				<div>
+				<div className='ml-1'>
 					{showDetails.genres.map((genre, idx) => (
 						<p key={idx}>{genre.name}</p>
 					))}
 				</div>
 				<h4 className='mt-4'>Original Language</h4>
-				<p>{getEnglishName(showDetails.original_language)}</p>
+				<p className='ml-1'>{getEnglishName(showDetails.original_language)}</p>
 				{showDetails.homepage.length > 0 && (
 					<>
 						<h4 className='mt-4'>Official Page</h4>
 						<Link href={showDetails.homepage}>
-							<a className='underline' target='_blank'>
+							<a className='underline ml-1' target='_blank'>
 								Learn More
 							</a>
 						</Link>
