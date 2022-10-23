@@ -13,7 +13,7 @@ export default async function handler(req: any, res: any) {
 		console.log('BODY: ', name, email, password);
 
 		// check duplicate users
-		const checkExisting = await prisma.registeredUser.findUnique({
+		const checkExisting = await prisma.user.findUnique({
 			where: { email },
 		});
 
@@ -23,7 +23,7 @@ export default async function handler(req: any, res: any) {
 
 		// hash password
 		try {
-			const newUser = await prisma.registeredUser.create({
+			const newUser = await prisma.user.create({
 				data: { name, email, password: await hash(password, 12) },
 			});
 			res.status(201).json({ status: true, user: newUser });
