@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
 			if (user) {
 				token.id = user.id;
 			}
-			// console.log('TOKEN in JWT CB: ', token);
+			console.log('TOKEN in JWT CB: ', token);
 			return Promise.resolve(token);
 		},
 		session: async ({ session, user, token }) => {
@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
 		secret: process.env.JWT_SECRET,
 	},
 	// pages: {
-	// 	signIn: '/signin',
+	// 	signIn: '/login',
 	// },
 };
 

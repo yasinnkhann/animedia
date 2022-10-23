@@ -705,17 +705,18 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{showDetails.seasons.length > 0 && (
-					<section ref={episodesContainerRef}>
-						<h3 className='mb-4 ml-8'>Episodes</h3>
-						<EpisodeDetailsHorizontalScroller
-							seasons={showDetails.seasons.filter(
-								season => season?.season_number! > 0
-							)}
-							showId={showDetails.id}
-						/>
-					</section>
-				)}
+				{showDetails.seasons.length > 0 &&
+					showDetails.number_of_episodes <= 500 && (
+						<section ref={episodesContainerRef}>
+							<h3 className='mb-4 ml-8'>Episodes</h3>
+							<EpisodeDetailsHorizontalScroller
+								seasons={showDetails.seasons.filter(
+									season => season?.season_number! > 0
+								)}
+								showId={showDetails.id}
+							/>
+						</section>
+					)}
 
 				{!showsCastCrewLoading && showsCastCrewData?.cast?.length! > 0 && (
 					<section ref={showCastContainerRef}>

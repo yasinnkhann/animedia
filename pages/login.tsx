@@ -3,11 +3,11 @@ import { getProviders, signIn } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 
-const SignIn = ({
+const Login = ({
 	providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	{
-		// console.log(providers);
+		console.log(providers);
 	}
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
@@ -25,7 +25,7 @@ const SignIn = ({
 	);
 };
 
-export default SignIn;
+export default Login;
 
 export const getServerSideProps: GetServerSideProps = async () => {
 	const providers = await getProviders();
