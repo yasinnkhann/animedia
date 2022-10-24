@@ -42,8 +42,6 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 		}
 	};
 
-	console.log('SEASONS: ', seasons);
-
 	const groupSeasonsAndEps = () => {
 		const groupedArr: any[] = [];
 
@@ -57,8 +55,6 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 
 		return groupedArr;
 	};
-
-	console.log(groupSeasonsAndEps());
 
 	return (
 		<ScrollMenu

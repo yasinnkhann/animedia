@@ -88,7 +88,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	);
 
-	console.log('showsCastCrewData: ', showsCastCrewData);
 
 	const {
 		mutateFunction: addShow,

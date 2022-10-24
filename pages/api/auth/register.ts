@@ -1,16 +1,20 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from 'lib/prisma';
 import { hash } from 'bcryptjs';
 
-export default async function handler(req: any, res: any) {
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse
+) {
 	// only post method is accepted
 	if (req.method === 'POST') {
-		if (!req.body)
-			return res.status(404).json({ error: "Don't have form data...!" });
+		if (!req.body) {
+			return res
+				.status(404)
+				.json({ status: 404, error: "Don't have form data...!" });
+		}
 
 		const { name, email, password } = req.body;
-		console.log('BODY: ', req.body);
-
-		console.log('BODY: ', name, email, password);
 
 		// check duplicate users
 		const checkExisting = await prisma.user.findUnique({
@@ -18,7 +22,9 @@ export default async function handler(req: any, res: any) {
 		});
 
 		if (checkExisting) {
-			return res.status(422).json({ message: 'User Already Exists...!' });
+			return res
+				.status(422)
+				.json({ status: 422, message: 'User Already Exists...!' });
 		}
 
 		// hash password
@@ -26,7 +32,7 @@ export default async function handler(req: any, res: any) {
 			const newUser = await prisma.user.create({
 				data: { name, email, password: await hash(password, 12) },
 			});
-			res.status(201).json({ status: true, user: newUser });
+			res.status(201).json({ status: 201, user: newUser });
 		} catch (err) {
 			return res.status(404).json({ err });
 		}

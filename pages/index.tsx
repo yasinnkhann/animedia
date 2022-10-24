@@ -13,8 +13,11 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
+import { useSession } from 'next-auth/react';
 
 const Home: NextPage = () => {
+	const { data: session } = useSession();
+
 	const whatsPopularContainerRef = useRef<HTMLElement>(null);
 	const trendingContainerRef = useRef<HTMLElement>(null);
 
@@ -143,6 +146,8 @@ const Home: NextPage = () => {
 			</div>
 		);
 	}
+
+	console.log('SESH: ', session);
 
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 
 export default function Register() {
 	const [show, setShow] = useState({ password: false, cpassword: false });
@@ -26,12 +27,26 @@ export default function Register() {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(values),
 		};
+		try {
+			const res = await fetch(
+				'http://localhost:3000/api/auth/register',
+				options
+			);
+			const data = await res.json();
+			if (data.status === 201 && data.user) {
+				console.log('DATA FROM ON SUBMIT: ', data);
+				const status = await signIn('credentials', {
+					redirect: false,
+					email: values.email,
+					password: values.password,
+					callbackUrl: '/',
+				});
 
-		await fetch('http://localhost:3000/api/auth/register', options)
-			.then(res => res.json())
-			.then(data => {
-				if (data) router.push('http://localhost:3000');
-			});
+				if (status?.ok) router.push(status.url as any);
+			}
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	return (
@@ -55,8 +70,8 @@ export default function Register() {
 						<input
 							{...formik.getFieldProps('name')}
 							type='text'
-							name='Name'
 							placeholder='Name'
+							name='name'
 						/>
 						<span className='icon flex items-center px-4'>
 							<HiOutlineUser size={25} />

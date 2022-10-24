@@ -1,11 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi';
 import { useState } from 'react';
-import { signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useFormik } from 'formik';
-import login_validate from '../lib/nextAuth/account-validate';
+import loginValidate from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 
 export default function Login() {
@@ -17,7 +16,7 @@ export default function Login() {
 			email: '',
 			password: '',
 		},
-		validate: login_validate,
+		validate: loginValidate,
 		onSubmit,
 	});
 
@@ -39,7 +38,7 @@ export default function Login() {
 
 	// Google Handler function
 	async function handleGoogleSignin() {
-		signIn('google', { callbackUrl: 'http://localhost:3000' });
+		signIn('google', { callbackUrl: '/' });
 	}
 
 	return (
@@ -94,13 +93,7 @@ export default function Login() {
 					</div>
 					<div className='input-button'>
 						<button type='button' onClick={handleGoogleSignin}>
-							Sign In with Google{' '}
-							<Image
-								src={'/assets/google.svg'}
-								alt='google'
-								width='20'
-								height={20}
-							></Image>
+							Sign In with Google
 						</button>
 					</div>
 				</form>
