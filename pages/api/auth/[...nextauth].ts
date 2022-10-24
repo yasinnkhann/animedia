@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
+import { isValidEmail } from '../../../utils/isValidEmail';
 
 const cookiesPolicy =
 	process.env.NODE_ENV === 'development'
@@ -38,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 				password: { label: 'Password', type: 'password' },
 			},
 			authorize: async (credentials, _req: any) => {
-				if (!credentials?.email || !credentials.password) {
+				if (!isValidEmail(credentials?.email) || !credentials?.password) {
 					return;
 				}
 				// check user existence
@@ -47,7 +48,8 @@ export const authOptions: NextAuthOptions = {
 				});
 
 				if (!result) {
-					throw new Error('No user found with email. Please sign up!');
+					return;
+					// throw new Error('No user found with email. Please sign up!');
 				}
 
 				// compare()
@@ -58,7 +60,8 @@ export const authOptions: NextAuthOptions = {
 
 				// incorrect password
 				if (!checkPassword || result.email !== credentials.email) {
-					throw new Error("Name or Password doesn't match");
+					return;
+					// throw new Error("Name or Password doesn't match");
 				}
 
 				return result;
