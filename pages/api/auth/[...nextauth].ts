@@ -49,7 +49,6 @@ export const authOptions: NextAuthOptions = {
 
 				if (!result) {
 					return;
-					// throw new Error('No user found with email. Please sign up!');
 				}
 
 				// compare()
@@ -61,7 +60,6 @@ export const authOptions: NextAuthOptions = {
 				// incorrect password
 				if (!checkPassword || result.email !== credentials.email) {
 					return;
-					// throw new Error("Name or Password doesn't match");
 				}
 
 				return result;
@@ -75,9 +73,9 @@ export const authOptions: NextAuthOptions = {
 	jwt: {
 		secret: process.env.JWT_SECRET,
 	},
-	// pages: {
-	// 	signIn: '/login',
-	// },
+	pages: {
+		signIn: '/login',
+	},
 	callbacks: {
 		signIn: async ({ user, account, profile, email, credentials }) => {
 			return true;
@@ -115,10 +113,22 @@ export const authOptions: NextAuthOptions = {
 			return Promise.resolve(token);
 		},
 		session: async ({ session, token }) => {
+			if ((token.user as any).id && !(token.user as any).emailVerified) {
+				const isEmailVerifiedUpdatedInDB = await prisma.user.findUnique({
+					where: { id: (token.user as any).id },
+					select: { emailVerified: true },
+				});
+
+				if (isEmailVerifiedUpdatedInDB?.emailVerified) {
+					(token.user as any).emailVerified =
+						isEmailVerifiedUpdatedInDB?.emailVerified;
+				}
+			}
+
 			session.jwt = token.jwt;
 			(session as any).user = token.user;
-			console.log('SESSION IN SESSION CB: ', session);
 			console.log('TOKEN IN SESSION CB: ', token);
+			console.log('SESSION IN SESSION CB: ', session);
 
 			return Promise.resolve(session);
 		},
