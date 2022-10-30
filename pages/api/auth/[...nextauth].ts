@@ -11,6 +11,8 @@ const cookiesPolicy =
 		? {
 				sessionToken: {
 					name: `_Secure_next-auth.session-token`,
+					// next-auth.session-token
+					// next-auth.csrf-token
 					options: {
 						httpOnly: true,
 						sameSite: 'None',
@@ -67,7 +69,7 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	debug: process.env.NODE_ENV === 'development',
-	cookies: cookiesPolicy,
+	// cookies: cookiesPolicy,
 	secret: process.env.NEXTAUTH_SECRET,
 
 	jwt: {

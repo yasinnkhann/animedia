@@ -8,14 +8,16 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 
 export default function Register() {
-	const [show, setShow] = useState({ password: false, cpassword: false });
+	const [show, setShow] = useState({ password: false, confirmPassword: false });
+
 	const router = useRouter();
+
 	const formik = useFormik({
 		initialValues: {
 			name: '',
 			email: '',
 			password: '',
-			cpassword: '',
+			confirmPassword: '',
 		},
 		validate: registerValidate,
 		onSubmit,
@@ -35,6 +37,7 @@ export default function Register() {
 			const data = await res.json();
 			if (data.status === 201 && data.user) {
 				console.log('DATA FROM ON SUBMIT: ', data);
+				// route to verification sent page
 				const status = await signIn('credentials', {
 					redirect: false,
 					email: values.email,
@@ -104,19 +107,21 @@ export default function Register() {
 
 					<div>
 						<input
-							{...formik.getFieldProps('cpassword')}
-							type={`${show.cpassword ? 'text' : 'password'}`}
-							name='cpassword'
+							{...formik.getFieldProps('confirmPassword')}
+							type={`${show.confirmPassword ? 'text' : 'password'}`}
+							name='confirmPassword'
 							placeholder='Confirm Password'
 						/>
 						<span
 							className='icon flex items-center px-4'
-							onClick={() => setShow({ ...show, cpassword: !show.cpassword })}
+							onClick={() =>
+								setShow({ ...show, confirmPassword: !show.confirmPassword })
+							}
 						>
 							<HiFingerPrint size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.cpassword && formik.touched.cpassword ? <span className='text-rose-500'>{formik.errors.cpassword}</span> : <></>} */}
+					{/* {formik.errors.confirmPassword && formik.touched.confirmPassword ? <span className='text-rose-500'>{formik.errors.confirmPassword}</span> : <></>} */}
 
 					{/* login buttons */}
 					<div className='input-button'>
