@@ -101,7 +101,6 @@ export default function Login() {
 						<a className='text-blue-700'>Sign Up</a>
 					</Link>
 				</p>
-				{/* <button onClick={() => sendVerificationEmail()}>SEND EMAIL</button> */}
 			</main>
 		</>
 	);

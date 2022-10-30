@@ -85,11 +85,10 @@ export const authOptions: NextAuthOptions = {
 			console.log('PROFILE IN JWT: ', profile);
 			console.log('account IN JWT: ', account);
 			console.log('IS NEW USER IN JWT CB: ', !!isNewUser);
-			const isSigningIn = user ? true : false;
-			console.log('IS SIGNING IN JWT CB: ', !!isSigningIn);
-			if (isSigningIn) {
+			if (user) {
 				token.jwt = user?.access_token;
 				token.user = user;
+				(token.user as any).provider = account?.provider;
 				console.log('USER IN JWT CB: ', user);
 				console.log('TOKEN IN JWT CB: ', token);
 
