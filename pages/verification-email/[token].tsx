@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Props {}
 
-const VerificationEmailSent = (props: Props) => {
+const VerificationEmail = (props: Props) => {
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			verification-email-sent
@@ -10,4 +10,4 @@ const VerificationEmailSent = (props: Props) => {
 	);
 };
 
-export default VerificationEmailSent;
+export default VerificationEmail;
