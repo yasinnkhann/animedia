@@ -560,6 +560,7 @@ export interface NexusGenObjects {
     error?: string | null; // String
     successMsg?: string | null; // String
     token?: string | null; // String
+    userId?: string | null; // String
   }
 }
 
@@ -861,6 +862,7 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
   }
   Query: { // field return type
+    checkEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
     episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
     id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
@@ -1103,6 +1105,7 @@ export interface NexusGenFieldTypes {
     error: string | null; // String
     successMsg: string | null; // String
     token: string | null; // String
+    userId: string | null; // String
   }
 }
 
@@ -1394,6 +1397,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
   }
   Query: { // field return type name
+    checkEmailVerificationToken: 'redisRes'
     episodeDetails: 'EpisodeDetails'
     id: 'Int'
     movieDetails: 'MovieDetailsRes'
@@ -1636,6 +1640,7 @@ export interface NexusGenFieldTypeNames {
     error: 'String'
     successMsg: 'String'
     token: 'String'
+    userId: 'String'
   }
 }
 
@@ -1674,6 +1679,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    checkEmailVerificationToken: { // args
+      token: string; // String!
+    }
     episodeDetails: { // args
       episodeNum: number; // Int!
       seasonNum: number; // Int!

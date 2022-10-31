@@ -111,6 +111,7 @@ export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 			error
 			successMsg
 			token
+			userId
 		}
 	}
 `;

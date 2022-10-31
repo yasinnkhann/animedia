@@ -1006,3 +1006,14 @@ export const QUERY_GET_EPISODE_DETAILS = gql`
 		}
 	}
 `;
+
+export const QUERY_CHECK_EMAIL_VERIFICATION_TOKEN = gql`
+	query CheckEmailVerificationToken($token: String!) {
+		checkEmailVerificationToken(token: $token) {
+			error
+			successMsg
+			token
+			userId
+		}
+	}
+`;

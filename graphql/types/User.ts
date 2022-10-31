@@ -347,6 +347,9 @@ export const redisRes = objectType({
 		t.field('token', {
 			type: 'String',
 		});
+		t.field('userId', {
+			type: 'String',
+		});
 	},
 });
 
@@ -369,6 +372,7 @@ export const writeEmailVerificationToken = extendType({
 						error: 'User not found.',
 						successMsg: null,
 						token: null,
+						userId: null,
 					};
 				}
 
@@ -385,6 +389,40 @@ export const writeEmailVerificationToken = extendType({
 					error: null,
 					successMsg: 'Email Verification Token Added',
 					token,
+					userId: user.id,
+				};
+			},
+		});
+	},
+});
+
+export const checkEmailVerificationToken = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('checkEmailVerificationToken', {
+			type: 'redisRes',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) {
+					return {
+						error: 'Email Verification Not Found.',
+						successMsg: null,
+						token: null,
+						userId: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Valid EMAIL VERIFICATION.',
+					token,
+					userId,
 				};
 			},
 		});
