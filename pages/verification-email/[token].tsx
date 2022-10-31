@@ -8,7 +8,6 @@ import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from '../../graphql/generated/nexus-typegen';
-import { signIn } from 'next-auth/react';
 
 const VerificationEmail = () => {
 	const router = useRouter();
