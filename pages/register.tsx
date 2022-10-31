@@ -99,7 +99,7 @@ export default function Register() {
 
 					const nodeMailerData = await nodeMailerRes.json();
 					console.log('NODEMAILER DATA: ', nodeMailerData);
-					// push to verification has been sent page
+					router.push('/verification-email-sent');
 				}
 				//!
 				// const status = await signIn('credentials', {
