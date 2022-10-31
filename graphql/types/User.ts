@@ -428,3 +428,60 @@ export const checkEmailVerificationToken = extendType({
 		});
 	},
 });
+
+export const deleteEmailVerificationToken = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('deleteEmailVerificationToken', {
+			type: 'redisRes',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const deletedEmailVerification = await ctx.redis.del(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!deletedEmailVerification) {
+					return {
+						error: 'Unable to delete email verification.',
+						successMsg: null,
+						token: null,
+						userId: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Successfully deleted email verification.',
+					token: null,
+					userId: null,
+				};
+			},
+		});
+	},
+});
+
+export const verifyUserEmail = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('verifyUserEmail', {
+			type: 'Int',
+			args: {
+				userId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { userId }, ctx) => {
+				const verifiedUserEmail = await ctx.prisma.user.update({
+					where: { id: userId },
+					data: {
+						emailVerified: new Date(),
+					},
+				});
+
+				if (!verifiedUserEmail) return 404;
+
+				return 200;
+			},
+		});
+	},
+});

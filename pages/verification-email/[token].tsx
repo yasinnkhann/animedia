@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
@@ -15,6 +15,8 @@ const VerificationEmail = (props: Props) => {
 
 	const {
 		data: verificationEmailData,
+		loading: verificationEmailLoading,
+		error: verificationEmailError,
 	}: IUseGQLQuery<
 		NexusGenObjects['redisRes'],
 		NexusGenArgTypes['Query']['checkEmailVerificationToken']
@@ -27,7 +29,11 @@ const VerificationEmail = (props: Props) => {
 		}
 	);
 
-	console.log(verificationEmailData);
+	useEffect(() => {
+		if (verificationEmailData) {
+			console.log('IN EFF: ', verificationEmailData);
+		}
+	}, [verificationEmailData]);
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			verification-email-sent

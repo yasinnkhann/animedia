@@ -115,3 +115,20 @@ export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 		}
 	}
 `;
+
+export const MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN = gql`
+	mutation DeleteEmailVerificationToken($token: String!) {
+		deleteEmailVerificationToken(token: $token) {
+			error
+			successMsg
+			token
+			userId
+		}
+	}
+`;
+
+export const MUTATION_VERIFY_USER_EMAIL = gql`
+	mutation VerifyUserEmail($userId: ID!) {
+		verifyUserEmail(userId: $userId)
+	}
+`;
