@@ -64,8 +64,11 @@ export default function Register() {
 						email: formik.values.email,
 					},
 				});
+				const redisData: typeof writeEmailVerificationTokenData =
+					redisRes.data?.[Object.keys(redisRes.data)[0]];
 				console.log('REDIS RES :', redisRes);
 				console.log('DATA: ', writeEmailVerificationTokenData);
+				console.log('REDIS DATA: ', redisData);
 				//!
 				// const status = await signIn('credentials', {
 				// 	redirect: false,
