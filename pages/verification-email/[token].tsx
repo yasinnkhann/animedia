@@ -8,9 +8,11 @@ import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from '../../graphql/generated/nexus-typegen';
+import { signIn } from 'next-auth/react';
 
 const VerificationEmail = () => {
 	const router = useRouter();
+	const [verified, setVerified] = useState<boolean>(false);
 
 	const {
 		data: verificationEmailData,
@@ -90,7 +92,9 @@ const VerificationEmail = () => {
 						const deleteData: typeof deleteEmailVerificationTokenData =
 							deleteRes.data?.[Object.keys(deleteRes.data)[0]];
 
-						console.log('DELETE DATA: ', deleteData);
+						if (deleteData?.successMsg) {
+							setVerified(true);
+						}
 					}
 				} catch (err) {
 					console.error(err);
@@ -112,9 +116,17 @@ const VerificationEmail = () => {
 		verifyUserEmail,
 		deleteEmailVerificationToken,
 	]);
+
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			verification-email-sent
+			{verificationEmailLoading && <div>Loading...</div>}
+
+			{verified && (
+				<div>
+					You have been successfully verified! Go ahead and login to enjoy the
+					full benefits of animedia!
+				</div>
+			)}
 		</main>
 	);
 };

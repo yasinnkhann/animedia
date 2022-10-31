@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react';
 import { useGQLMutation } from '../hooks/useGQL';
 import { IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
 import {
@@ -66,7 +65,6 @@ export default function Register() {
 
 			if (registerData.status === 201 && registerData.user) {
 				console.log('DATA FROM ON SUBMIT: ', registerData);
-				// route to verification sent page
 				const redisRes = await writeEmailVerificationToken({
 					variables: {
 						email: formik.values.email,
@@ -78,7 +76,6 @@ export default function Register() {
 
 				console.log('REDIS DATA: ', redisData);
 				if (!redisData?.error && redisData?.token) {
-					// nodemailer
 					const nodeMailerInfo: INodeMailerInfo = {
 						recipientEmail: email,
 						subject: 'Email Verification Link',
@@ -101,15 +98,6 @@ export default function Register() {
 					console.log('NODEMAILER DATA: ', nodeMailerData);
 					router.push('/verification-email-sent');
 				}
-				//!
-				// const status = await signIn('credentials', {
-				// 	redirect: false,
-				// 	email: values.email,
-				// 	password: values.password,
-				// 	callbackUrl: '/',
-				// });
-
-				// if (status?.ok) router.push(status.url as any);
 			}
 		} catch (err) {
 			console.error(err);
