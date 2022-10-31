@@ -63,3 +63,10 @@ export interface IEPDetailsCard {
 	stillPath: string;
 	name: string;
 }
+
+export interface INodeMailerInfo {
+	recipientEmail: string;
+	subject: string;
+	text: string;
+	html: string;
+}

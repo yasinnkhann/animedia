@@ -344,6 +344,9 @@ export const redisRes = objectType({
 		t.field('successMsg', {
 			type: 'String',
 		});
+		t.field('token', {
+			type: 'String',
+		});
 	},
 });
 
@@ -365,6 +368,7 @@ export const writeEmailVerificationToken = extendType({
 					return {
 						error: 'User not found.',
 						successMsg: null,
+						token: null,
 					};
 				}
 
@@ -380,6 +384,7 @@ export const writeEmailVerificationToken = extendType({
 				return {
 					error: null,
 					successMsg: 'Email Verification Token Added',
+					token,
 				};
 			},
 		});

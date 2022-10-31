@@ -110,6 +110,7 @@ export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 		writeEmailVerificationToken(email: $email) {
 			error
 			successMsg
+			token
 		}
 	}
 `;

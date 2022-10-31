@@ -10,7 +10,9 @@ const sendVerificationEmail = async (
 		res.end('Only POST method is allowed.');
 	}
 
-	if (!isValidEmail(req.body.email)) {
+	const { recipientEmail, subject, text, html } = req.body;
+
+	if (!isValidEmail(recipientEmail)) {
 		res.end('Please provide a valid email address');
 	}
 
@@ -27,15 +29,15 @@ const sendVerificationEmail = async (
 	try {
 		const info = await transporter.sendMail({
 			from: process.env.EMAIL_FROM, // verified sender email
-			to: req.body.email, // recipient email
-			subject: 'Email Verification Link', // Subject line
-			text: 'Hello world!', // plain text body
-			html: '<b>Hello world!</b>', // html body
+			to: recipientEmail, // recipient email
+			subject, // Subject line
+			text, // plain text body
+			html, // html body
 		});
 
 		console.log('INFO: ', info);
 		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-		res.send('EMAIL VERIFICATION SENT!');
+		res.json('EMAIL VERIFICATION SENT!');
 	} catch (err) {
 		console.error(err);
 		res.end(`ERROR ${err}`);

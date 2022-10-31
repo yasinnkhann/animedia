@@ -6,23 +6,6 @@ import { prisma } from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
 import { isValidEmail } from '../../../utils/isValidEmail';
 
-const cookiesPolicy =
-	process.env.NODE_ENV === 'development'
-		? {
-				sessionToken: {
-					name: `_Secure_next-auth.session-token`,
-					// next-auth.session-token
-					// next-auth.csrf-token
-					options: {
-						httpOnly: true,
-						sameSite: 'None',
-						path: '/',
-						secure: true,
-					},
-				},
-		  }
-		: {};
-
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
 	providers: [
@@ -69,7 +52,6 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	debug: process.env.NODE_ENV === 'development',
-	// cookies: cookiesPolicy,
 	secret: process.env.NEXTAUTH_SECRET,
 
 	jwt: {

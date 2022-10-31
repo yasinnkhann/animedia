@@ -559,6 +559,7 @@ export interface NexusGenObjects {
   redisRes: { // root type
     error?: string | null; // String
     successMsg?: string | null; // String
+    token?: string | null; // String
   }
 }
 
@@ -1101,6 +1102,7 @@ export interface NexusGenFieldTypes {
   redisRes: { // field return type
     error: string | null; // String
     successMsg: string | null; // String
+    token: string | null; // String
   }
 }
 
@@ -1633,6 +1635,7 @@ export interface NexusGenFieldTypeNames {
   redisRes: { // field return type name
     error: 'String'
     successMsg: 'String'
+    token: 'String'
   }
 }
 

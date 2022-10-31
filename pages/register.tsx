@@ -7,7 +7,7 @@ import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { useGQLQuery, useGQLMutation } from '../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import { IUseGQLQuery, IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -45,30 +45,61 @@ export default function Register() {
 	});
 
 	async function onSubmit() {
-		const options = {
+		const { name, email, password } = formik.values;
+		const registerOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(formik.values),
+			body: JSON.stringify({
+				name,
+				email,
+				password,
+			}),
 		};
 		try {
-			const res = await fetch(
+			const registerRes = await fetch(
 				'http://localhost:3000/api/auth/register',
-				options
+				registerOptions
 			);
-			const data = await res.json();
-			if (data.status === 201 && data.user) {
-				console.log('DATA FROM ON SUBMIT: ', data);
+
+			const registerData = await registerRes.json();
+
+			if (registerData.status === 201 && registerData.user) {
+				console.log('DATA FROM ON SUBMIT: ', registerData);
 				// route to verification sent page
 				const redisRes = await writeEmailVerificationToken({
 					variables: {
 						email: formik.values.email,
 					},
 				});
+
 				const redisData: typeof writeEmailVerificationTokenData =
 					redisRes.data?.[Object.keys(redisRes.data)[0]];
-				console.log('REDIS RES :', redisRes);
-				console.log('DATA: ', writeEmailVerificationTokenData);
+
 				console.log('REDIS DATA: ', redisData);
+				if (!redisData?.error && redisData?.token) {
+					// nodemailer
+					const nodeMailerInfo: INodeMailerInfo = {
+						recipientEmail: email,
+						subject: 'Email Verification Link',
+						text: 'Hello world!',
+						html: '<b>Hello world!</b>',
+					};
+
+					const nodeMailerOptions = {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(nodeMailerInfo),
+					};
+
+					const nodeMailerRes = await fetch(
+						'http://localhost:3000/api/auth/send-verification-email',
+						nodeMailerOptions
+					);
+
+					const nodeMailerData = await nodeMailerRes.json();
+					console.log('NODEMAILER DATA: ', nodeMailerData);
+					// push to verification has been sent page
+				}
 				//!
 				// const status = await signIn('credentials', {
 				// 	redirect: false,
