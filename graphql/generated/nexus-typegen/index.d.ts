@@ -556,6 +556,10 @@ export interface NexusGenObjects {
     rating?: number | null; // Int
     status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
+  redisRes: { // root type
+    error?: string | null; // String
+    successMsg?: string | null; // String
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -734,6 +738,7 @@ export interface NexusGenFieldTypes {
     deletedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     updatedMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updatedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+    writeEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -1093,6 +1098,10 @@ export interface NexusGenFieldTypes {
     rating: number | null; // Int
     status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
+  redisRes: { // field return type
+    error: string | null; // String
+    successMsg: string | null; // String
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -1261,6 +1270,7 @@ export interface NexusGenFieldTypeNames {
     deletedShow: 'UserShow'
     updatedMovie: 'UserMovie'
     updatedShow: 'UserShow'
+    writeEmailVerificationToken: 'redisRes'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1620,6 +1630,10 @@ export interface NexusGenFieldTypeNames {
     rating: 'Int'
     status: 'WatchStatusTypes'
   }
+  redisRes: { // field return type name
+    error: 'String'
+    successMsg: 'String'
+  }
 }
 
 export interface NexusGenArgTypes {
@@ -1651,6 +1665,9 @@ export interface NexusGenArgTypes {
       showId: string; // ID!
       showRating?: number | null; // Int
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+    }
+    writeEmailVerificationToken: { // args
+      email: string; // String!
     }
   }
   Query: {

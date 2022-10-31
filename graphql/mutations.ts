@@ -104,3 +104,12 @@ export const MUTATION_DELETE_SHOW = gql`
 		}
 	}
 `;
+
+export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
+	mutation WriteEmailVerificationToken($email: String!) {
+		writeEmailVerificationToken(email: $email) {
+			error
+			successMsg
+		}
+	}
+`;

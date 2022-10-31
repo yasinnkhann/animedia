@@ -6,6 +6,13 @@ import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
+import { useGQLQuery, useGQLMutation } from '../hooks/useGQL';
+import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import {
+	NexusGenArgTypes,
+	NexusGenObjects,
+} from '../graphql/generated/nexus-typegen';
+import * as Mutations from '../graphql/mutations';
 
 export default function Register() {
 	const [show, setShow] = useState({ password: false, confirmPassword: false });
@@ -23,11 +30,25 @@ export default function Register() {
 		onSubmit,
 	});
 
-	async function onSubmit(values: any) {
+	const {
+		mutateFunction: writeEmailVerificationToken,
+		mutateData: writeEmailVerificationTokenData,
+	}: IUseGQLMutation<
+		NexusGenObjects['redisRes'],
+		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
+	> = useGQLMutation<
+		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
+	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
+		variables: {
+			email: formik.values.email,
+		},
+	});
+
+	async function onSubmit() {
 		const options = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(values),
+			body: JSON.stringify(formik.values),
 		};
 		try {
 			const res = await fetch(
@@ -38,19 +59,29 @@ export default function Register() {
 			if (data.status === 201 && data.user) {
 				console.log('DATA FROM ON SUBMIT: ', data);
 				// route to verification sent page
-				const status = await signIn('credentials', {
-					redirect: false,
-					email: values.email,
-					password: values.password,
-					callbackUrl: '/',
+				const redisRes = await writeEmailVerificationToken({
+					variables: {
+						email: formik.values.email,
+					},
 				});
+				console.log('REDIS RES :', redisRes);
+				console.log('DATA: ', writeEmailVerificationTokenData);
+				//!
+				// const status = await signIn('credentials', {
+				// 	redirect: false,
+				// 	email: values.email,
+				// 	password: values.password,
+				// 	callbackUrl: '/',
+				// });
 
-				if (status?.ok) router.push(status.url as any);
+				// if (status?.ok) router.push(status.url as any);
 			}
 		} catch (err) {
 			console.error(err);
 		}
 	}
+
+	console.log('FORMIK ERRS: ', formik.errors);
 
 	return (
 		<>

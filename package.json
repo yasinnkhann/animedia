@@ -42,7 +42,6 @@
 		"react-horizontal-scrolling-menu": "^3.2.0",
 		"react-icons": "^4.6.0",
 		"react-loading-icons": "^1.1.0",
-		"redis": "^4.3.1",
 		"tinycolor2": "^1.4.2",
 		"uuid": "^9.0.0",
 		"yarn": "^1.22.19"
@@ -56,6 +55,7 @@
 		"@types/react": "18.0.20",
 		"@types/react-dom": "18.0.6",
 		"@types/tinycolor2": "^1.4.3",
+		"@types/uuid": "^8.3.4",
 		"autoprefixer": "^10.4.11",
 		"eslint": "8.23.1",
 		"eslint-config-next": "12.3.0",

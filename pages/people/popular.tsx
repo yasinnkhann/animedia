@@ -4,7 +4,7 @@ import PeopleList from 'components/UI/MediaPersonUI/PeopleList';
 import * as Queries from '../../graphql/queries';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { RESULTS_PER_PAGE } from 'utils/specificNums';
+import { RESULTS_PER_PAGE } from 'utils/specificVals';
 import { Circles } from 'react-loading-icons';
 import {
 	NexusGenObjects,

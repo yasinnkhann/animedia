@@ -5,9 +5,9 @@ import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHo
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../hooks/useGQL';
+import { IUseGQLQuery } from '@ts/interfaces';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
-import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,

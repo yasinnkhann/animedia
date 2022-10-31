@@ -11,7 +11,7 @@ import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
-} from '../../utils/specificNums';
+} from '../../utils/specificVals';
 
 interface Props {
 	personDetails: NexusGenObjects['PersonDetailsRes'];

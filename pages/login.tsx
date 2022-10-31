@@ -16,8 +16,6 @@ export default function Login({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [show, setShow] = useState(false);
 
-	console.log('CSRF: ', csrfToken);
-
 	const router = useRouter();
 
 	const formik = useFormik({

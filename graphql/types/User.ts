@@ -7,6 +7,8 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
+import { v4 } from 'uuid';
+import { EMAIL_VERIFICATION_PREFIX } from 'utils/specificVals';
 
 export const watchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
@@ -328,6 +330,57 @@ export const deleteShow = extendType({
 						},
 					},
 				});
+			},
+		});
+	},
+});
+
+export const redisRes = objectType({
+	name: 'redisRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('successMsg', {
+			type: 'String',
+		});
+	},
+});
+
+export const writeEmailVerificationToken = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('writeEmailVerificationToken', {
+			type: 'redisRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				const user = await ctx.prisma.user.findUnique({
+					where: { email },
+					select: { id: true },
+				});
+
+				if (!user) {
+					return {
+						error: 'User not found.',
+						successMsg: null,
+					};
+				}
+
+				const token = v4();
+
+				await ctx.redis.set(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`,
+					user.id,
+					'EX',
+					1000 * 60 * 60 * 24 * 3 // 3 days
+				);
+
+				return {
+					error: null,
+					successMsg: 'Email Verification Token Added',
+				};
 			},
 		});
 	},

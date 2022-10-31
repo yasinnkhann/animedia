@@ -6,7 +6,7 @@ import { Select } from 'antd';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { DocumentNode } from '@apollo/client';
 import { IUseGQLQuery } from '@ts/interfaces';
-import { RESULTS_PER_PAGE } from 'utils/specificNums';
+import { RESULTS_PER_PAGE } from 'utils/specificVals';
 import { Circles } from 'react-loading-icons';
 import {
 	SORT_BY_OPTIONS,

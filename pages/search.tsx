@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useGQLQuery } from '../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
-import { RESULTS_PER_PAGE } from '../utils/specificNums';
+import { RESULTS_PER_PAGE } from '../utils/specificVals';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,

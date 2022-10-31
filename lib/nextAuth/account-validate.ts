@@ -44,12 +44,12 @@ export function registerValidate(values: any) {
 	}
 
 	// validate confirm password
-	if (!values.cpassword) {
-		errors.cpassword = 'Required';
-	} else if (values.password !== values.cpassword) {
-		errors.cpassword = 'Password Not Match...!';
-	} else if (values.cpassword.includes(' ')) {
-		errors.cpassword = 'Invalid Confirm Password';
+	if (!values.confirmPassword) {
+		errors.confirmPassword = 'Required';
+	} else if (values.password !== values.confirmPassword) {
+		errors.confirmPassword = 'Password Not Match...!';
+	} else if (values.confirmPassword.includes(' ')) {
+		errors.confirmPassword = 'Invalid Confirm Password';
 	}
 
 	return errors;

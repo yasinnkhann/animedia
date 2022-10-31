@@ -220,6 +220,7 @@ type Mutation {
   deletedShow(showId: ID!): UserShow
   updatedMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updatedShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
+  writeEmailVerificationToken(email: String!): redisRes
 }
 
 type PeopleRes {
@@ -643,4 +644,9 @@ enum WatchStatusTypes {
   ON_HOLD
   PLAN_TO_WATCH
   WATCHING
+}
+
+type redisRes {
+  error: String
+  successMsg: String
 }
