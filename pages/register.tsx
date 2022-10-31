@@ -6,13 +6,14 @@ import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
-import { useGQLQuery, useGQLMutation } from '../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
+import { useGQLMutation } from '../hooks/useGQL';
+import { IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from '../graphql/generated/nexus-typegen';
 import * as Mutations from '../graphql/mutations';
+import { CLIENT_BASE_URL } from '../utils/URLs';
 
 export default function Register() {
 	const [show, setShow] = useState({ password: false, confirmPassword: false });
@@ -57,7 +58,7 @@ export default function Register() {
 		};
 		try {
 			const registerRes = await fetch(
-				'http://localhost:3000/api/auth/register',
+				`${CLIENT_BASE_URL}/api/auth/register`,
 				registerOptions
 			);
 
@@ -81,8 +82,8 @@ export default function Register() {
 					const nodeMailerInfo: INodeMailerInfo = {
 						recipientEmail: email,
 						subject: 'Email Verification Link',
-						text: 'Hello world!',
-						html: '<b>Hello world!</b>',
+						text: 'This is the text',
+						html: `<a href="${CLIENT_BASE_URL}/verification-email/${redisData.token}">Verify Email</a>`,
 					};
 
 					const nodeMailerOptions = {
@@ -92,7 +93,7 @@ export default function Register() {
 					};
 
 					const nodeMailerRes = await fetch(
-						'http://localhost:3000/api/auth/send-verification-email',
+						`${CLIENT_BASE_URL}/api/auth/send-verification-email`,
 						nodeMailerOptions
 					);
 
