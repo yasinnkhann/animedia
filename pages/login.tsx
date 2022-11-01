@@ -9,6 +9,13 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
+import { useGQLQuery } from '../hooks/useGQL';
+import { IUseGQLQuery } from '@ts/interfaces';
+import * as Queries from '../graphql/queries';
+import {
+	NexusGenArgTypes,
+	NexusGenObjects,
+} from '../graphql/generated/nexus-typegen';
 
 export default function Login({
 	providers,
@@ -27,15 +34,51 @@ export default function Login({
 		onSubmit,
 	});
 
+	const {
+		fetchData: fetchAccountVerifiedData,
+		lazyData: fetchAccountVerifiedLazyData,
+	}: IUseGQLQuery<
+		NexusGenObjects['accountVerifiedRes'],
+		NexusGenArgTypes['Query']['accountVerified']
+	> = useGQLQuery<NexusGenArgTypes['Query']['accountVerified']>(
+		Queries.QUERY_ACCOUNT_VERIFIED,
+		{
+			variables: {
+				email: formik.values.email,
+			},
+		}
+	);
+
+	console.log('VE: ', fetchAccountVerifiedLazyData);
+
+	// console.log('ERRS: ', formik.errors);
+
 	const oAuthProviders = Object.values(providers).filter(
 		(provider: any) => provider.type === 'oauth'
 	);
 
-	async function onSubmit(values: any) {
+	async function onSubmit() {
+		const { email, password } = formik.values;
+
+		const { data } = await fetchAccountVerifiedData({
+			variables: {
+				email: formik.values.email,
+			},
+		});
+
+		const acctVerifiedData: typeof fetchAccountVerifiedLazyData =
+			data?.[Object.keys(data)[0]];
+
+		console.log('acctVerifiedData: ', acctVerifiedData);
+
+		if (acctVerifiedData?.error) {
+			alert(acctVerifiedData.error);
+			return;
+		}
 		const status = await signIn('credentials', {
 			redirect: false,
-			email: values.email,
-			password: values.password,
+			email: email,
+			password: password,
 			callbackUrl: '/',
 		});
 

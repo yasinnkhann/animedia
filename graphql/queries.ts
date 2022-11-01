@@ -1017,3 +1017,13 @@ export const QUERY_CHECK_EMAIL_VERIFICATION_TOKEN = gql`
 		}
 	}
 `;
+
+export const QUERY_ACCOUNT_VERIFIED = gql`
+	query AccountVerified($email: String!) {
+		accountVerified(email: $email) {
+			error
+			id
+			emailVerified
+		}
+	}
+`;

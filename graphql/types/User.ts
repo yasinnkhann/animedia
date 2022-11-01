@@ -485,3 +485,60 @@ export const verifyUserEmail = extendType({
 		});
 	},
 });
+
+export const accountVerifiedRes = objectType({
+	name: 'accountVerifiedRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('id', {
+			type: 'String',
+		});
+		t.field('emailVerified', {
+			type: 'DateTime',
+		});
+	},
+});
+
+export const accountVerified = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('accountVerified', {
+			type: 'accountVerifiedRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				const acct = await ctx.prisma.user.findUnique({
+					where: { email },
+					select: { id: true, emailVerified: true },
+				});
+
+				if (!acct) {
+					return {
+						error: 'Account Not Found.',
+						id: null,
+						emailVerified: null,
+					};
+				}
+
+				if (acct.id && !acct.emailVerified) {
+					return {
+						error: 'Account Not Verified.',
+						id: acct.id,
+						emailVerified: null,
+					};
+				}
+
+				if (acct.id && acct.emailVerified) {
+					return {
+						error: null,
+						id: acct.id,
+						emailVerified: acct.emailVerified,
+					};
+				}
+			},
+		});
+	},
+});

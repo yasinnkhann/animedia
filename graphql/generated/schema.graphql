@@ -354,6 +354,7 @@ type PersonsKnownForShowRes {
 }
 
 type Query {
+  accountVerified(email: String!): accountVerifiedRes
   checkEmailVerificationToken(token: String!): redisRes
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails
   id: Int
@@ -647,6 +648,12 @@ enum WatchStatusTypes {
   ON_HOLD
   PLAN_TO_WATCH
   WATCHING
+}
+
+type accountVerifiedRes {
+  emailVerified: DateTime
+  error: String
+  id: String
 }
 
 type redisRes {

@@ -1,4 +1,4 @@
-export default function loginValidate(values: any) {
+export default async function loginValidate(values: any) {
 	const errors: any = {};
 
 	if (!values.email) {

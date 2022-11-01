@@ -556,6 +556,11 @@ export interface NexusGenObjects {
     rating?: number | null; // Int
     status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
+  accountVerifiedRes: { // root type
+    emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
+    error?: string | null; // String
+    id?: string | null; // String
+  }
   redisRes: { // root type
     error?: string | null; // String
     successMsg?: string | null; // String
@@ -864,6 +869,7 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
   }
   Query: { // field return type
+    accountVerified: NexusGenRootTypes['accountVerifiedRes'] | null; // accountVerifiedRes
     checkEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
     episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
     id: number | null; // Int
@@ -1102,6 +1108,11 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     rating: number | null; // Int
     status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+  }
+  accountVerifiedRes: { // field return type
+    emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
+    error: string | null; // String
+    id: string | null; // String
   }
   redisRes: { // field return type
     error: string | null; // String
@@ -1401,6 +1412,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
   }
   Query: { // field return type name
+    accountVerified: 'accountVerifiedRes'
     checkEmailVerificationToken: 'redisRes'
     episodeDetails: 'EpisodeDetails'
     id: 'Int'
@@ -1640,6 +1652,11 @@ export interface NexusGenFieldTypeNames {
     rating: 'Int'
     status: 'WatchStatusTypes'
   }
+  accountVerifiedRes: { // field return type name
+    emailVerified: 'DateTime'
+    error: 'String'
+    id: 'String'
+  }
   redisRes: { // field return type name
     error: 'String'
     successMsg: 'String'
@@ -1689,6 +1706,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    accountVerified: { // args
+      email: string; // String!
+    }
     checkEmailVerificationToken: { // args
       token: string; // String!
     }

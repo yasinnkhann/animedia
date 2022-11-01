@@ -12,7 +12,11 @@ import {
 import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
 
-const VerificationEmail = ({ verificationEmailData }: any) => {
+interface Props {
+	verificationEmailData: NexusGenObjects['redisRes'];
+}
+
+const VerificationEmail = ({ verificationEmailData }: Props) => {
 	const router = useRouter();
 	const [verified, setVerified] = useState<boolean>(false);
 
@@ -26,7 +30,7 @@ const VerificationEmail = ({ verificationEmailData }: any) => {
 			Mutations.MUTATION_VERIFY_USER_EMAIL,
 			{
 				variables: {
-					userId: verificationEmailData.userId,
+					userId: verificationEmailData.userId!,
 				},
 			}
 		);
@@ -41,7 +45,7 @@ const VerificationEmail = ({ verificationEmailData }: any) => {
 		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
 	>(Mutations.MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
-			token: verificationEmailData.token,
+			token: verificationEmailData.token!,
 		},
 	});
 
@@ -50,7 +54,7 @@ const VerificationEmail = ({ verificationEmailData }: any) => {
 			try {
 				const updatedUserVerificationRes = await verifyUserEmail({
 					variables: {
-						userId: verificationEmailData.userId,
+						userId: verificationEmailData.userId!,
 					},
 				});
 
@@ -67,7 +71,7 @@ const VerificationEmail = ({ verificationEmailData }: any) => {
 				if (updatedUserVerificationData === 200) {
 					const deleteRes = await deleteEmailVerificationToken({
 						variables: {
-							token: verificationEmailData.token,
+							token: verificationEmailData.token!,
 						},
 					});
 
