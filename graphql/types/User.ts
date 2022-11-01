@@ -509,6 +509,7 @@ export const accountVerified = extendType({
 			args: {
 				email: nonNull(stringArg()),
 			},
+			// @ts-ignore
 			resolve: async (_parent, { email }, ctx) => {
 				const acct = await ctx.prisma.user.findUnique({
 					where: { email },

@@ -49,10 +49,6 @@ export default function Login({
 		}
 	);
 
-	console.log('VE: ', fetchAccountVerifiedLazyData);
-
-	// console.log('ERRS: ', formik.errors);
-
 	const oAuthProviders = Object.values(providers).filter(
 		(provider: any) => provider.type === 'oauth'
 	);
