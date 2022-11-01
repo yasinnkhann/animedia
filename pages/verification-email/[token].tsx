@@ -116,6 +116,10 @@ const VerificationEmail = () => {
 		deleteEmailVerificationToken,
 	]);
 
+	if (verificationEmailData?.error) {
+		router.replace('/');
+	}
+
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{verificationEmailLoading && <div>Loading...</div>}

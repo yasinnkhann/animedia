@@ -1,15 +1,8 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
-import * as Queries from '../../graphql/queries';
-import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from '../../graphql/generated/nexus-typegen';
 import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL } from '../../utils/URLs';
+import * as Queries from '../../graphql/queries';
 
 const VerificationEmailSent = () => {
 	return (
