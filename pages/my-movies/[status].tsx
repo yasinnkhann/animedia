@@ -10,6 +10,7 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
+import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -66,3 +67,7 @@ const Status = () => {
 };
 
 export default Status;
+
+export const getServerSideProps = getClientAuthSession(async _ctx => {
+	return { props: {} };
+});
