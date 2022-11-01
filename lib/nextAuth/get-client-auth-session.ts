@@ -20,19 +20,5 @@ export const getClientAuthSession =
 			};
 		}
 
-		const giveFullPrivs =
-			session.user &&
-			((session.user as any)?.emailVerified ||
-				(session.user as any)?.provider !== 'credentials');
-
-		if (!giveFullPrivs) {
-			return {
-				redirect: {
-					destination: '/',
-					permanent: false,
-				},
-			};
-		}
-
 		return await func(ctx);
 	};

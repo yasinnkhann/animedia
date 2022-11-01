@@ -99,51 +99,78 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				<div className='title'>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)] w-3/4 mx-auto flex flex-col gap-10'>
+				<div>
 					<h1 className='text-gray-800 text-4xl font-bold py-4'>Login</h1>
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					<div>
+					<div
+						className={`border rounded-xl relative ${
+							formik.errors.email && formik.touched.email
+								? 'border-rose-600'
+								: ''
+						}`}
+					>
 						<input
 							{...formik.getFieldProps('email')}
 							type='email'
 							name='email'
 							placeholder='Email'
 						/>
-						<span className='icon flex items-center px-4'>
+						<span className='flex items-center px-4'>
 							<HiAtSymbol size={25} />
 						</span>
 					</div>
+					{/* {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>} */}
 
-					<div>
+					<div
+						className={`border rounded-xl relative ${
+							formik.errors.email && formik.touched.email
+								? 'border-rose-600'
+								: ''
+						}`}
+					>
 						<input
 							{...formik.getFieldProps('password')}
 							type={`${showPW ? 'text' : 'password'}`}
 							name='password'
 							placeholder='password'
+							className='text-black'
 						/>
 						<span
-							className='icon flex items-center px-4'
+							className='flex items-center px-4'
 							onClick={() => setShowPW(!showPW)}
 						>
 							<HiFingerPrint size={25} />
 						</span>
 					</div>
+					{/* {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>} */}
 
-					<div className='input-button'>
-						<button type='submit'>Login</button>
+					<div>
+						<button
+							type='submit'
+							className='w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md py-3 text-gray-50 text-lg'
+						>
+							Login
+						</button>
 					</div>
 
 					<section>
 						{oAuthProviders.map((provider: any) => (
-							<div key={provider.id} className='input-button'>
+							<div key={provider.id}>
 								<button
 									type='button'
 									onClick={() => signIn(provider.id, { callbackUrl: '/' })}
+									className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
 								>
-									Sign in with {provider.name}
+									Sign in with {provider.name}{' '}
+									{/* <Image
+										src={'/assets/github.svg'}
+										alt=''
+										width={25}
+										height={25}
+									/> */}
 								</button>
 							</div>
 						))}

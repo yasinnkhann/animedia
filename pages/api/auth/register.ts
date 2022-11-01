@@ -16,12 +16,10 @@ export default async function handler(
 
 		const { name, email, password } = req.body;
 
-		// check duplicate users
-		const checkExisting = await prisma.user.findUnique({
+		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
-
-		if (checkExisting) {
+		if (existingUser) {
 			return res
 				.status(422)
 				.json({ status: 422, message: 'User Already Exists...!' });

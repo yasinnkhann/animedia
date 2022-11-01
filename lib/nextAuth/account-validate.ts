@@ -24,8 +24,6 @@ export function registerValidate(values: any) {
 
 	if (!values.name) {
 		errors.name = 'Required';
-	} else if (values.name.includes(' ')) {
-		errors.name = 'Invalid name...!';
 	}
 
 	if (!values.email) {

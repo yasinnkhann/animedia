@@ -7,11 +7,6 @@ import 'antd/dist/antd.css';
 const Header = () => {
 	const { data: session, status } = useSession();
 
-	const giveFullPrivs =
-		session?.user &&
-		((session.user as any)?.emailVerified ||
-			(session.user as any)?.provider !== 'credentials');
-
 	if (status === 'loading') {
 		return <></>;
 	}
@@ -91,7 +86,7 @@ const Header = () => {
 						className='!flex !justify-around !w-[20rem] !mr-4'
 					>
 						<li className='!flex !justify-around !items-center !w-full'>
-							{status === 'authenticated' && giveFullPrivs && (
+							{status === 'authenticated' && session && (
 								<>
 									<Link href='/my-shows'>
 										<a>My Shows</a>
