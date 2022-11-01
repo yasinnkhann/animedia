@@ -10,8 +10,23 @@ export const getClientAuthSession =
 			ctx.res,
 			nextAuthOptions
 		);
+		console.log('SERV: ', session);
 
 		if (!session) {
+			return {
+				redirect: {
+					destination: '/',
+					permanent: false,
+				},
+			};
+		}
+
+		const giveFullPrivs =
+			session.user &&
+			((session.user as any)?.emailVerified ||
+				(session.user as any)?.provider !== 'credentials');
+
+		if (!giveFullPrivs) {
 			return {
 				redirect: {
 					destination: '/',
