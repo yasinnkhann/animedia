@@ -1,7 +1,7 @@
 import Head from 'next/head';
+import { useState } from 'react';
 import Link from 'next/link';
 import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi';
-import { useState } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import { useFormik } from 'formik';
 import loginValidate from '../lib/nextAuth/account-validate';
@@ -21,7 +21,10 @@ export default function Login({
 	providers,
 	csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-	const [show, setShow] = useState(false);
+	const [showPW, setShowPW] = useState(false);
+	const [acctVerifiedErr, setAcctVerifiedErr] = useState<{
+		error: null | string;
+	}>({ error: null });
 
 	const router = useRouter();
 
@@ -33,6 +36,8 @@ export default function Login({
 		validate: loginValidate,
 		onSubmit,
 	});
+
+	console.log('AcctVerifiedErr: ', acctVerifiedErr);
 
 	const {
 		fetchData: fetchAccountVerifiedData,
@@ -68,7 +73,9 @@ export default function Login({
 		console.log('acctVerifiedData: ', acctVerifiedData);
 
 		if (acctVerifiedData?.error) {
-			alert(acctVerifiedData.error);
+			setAcctVerifiedErr({
+				error: acctVerifiedData.error,
+			});
 			return;
 		}
 		const status = await signIn('credentials', {
@@ -78,7 +85,12 @@ export default function Login({
 			callbackUrl: '/',
 		});
 
-		if (status?.ok) router.push(status.url as any);
+		if (status?.ok) {
+			setAcctVerifiedErr({
+				error: null,
+			});
+			router.push(status.url as any);
+		}
 	}
 
 	return (
@@ -108,13 +120,13 @@ export default function Login({
 					<div>
 						<input
 							{...formik.getFieldProps('password')}
-							type={`${show ? 'text' : 'password'}`}
+							type={`${showPW ? 'text' : 'password'}`}
 							name='password'
 							placeholder='password'
 						/>
 						<span
 							className='icon flex items-center px-4'
-							onClick={() => setShow(!show)}
+							onClick={() => setShowPW(!showPW)}
 						>
 							<HiFingerPrint size={25} />
 						</span>
