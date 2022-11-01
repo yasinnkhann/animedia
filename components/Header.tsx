@@ -1,13 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import DropDownItem from './DropDownItem';
 import 'antd/dist/antd.css';
 
 const Header = () => {
-	const { data: _session, status } = useSession();
-	const router = useRouter();
+	const { data: session, status } = useSession();
+
+	const giveFullPrivs =
+		session?.user &&
+		((session.user as any)?.emailVerified ||
+			(session.user as any)?.provider !== 'credentials');
 
 	if (status === 'loading') {
 		return <></>;
@@ -88,7 +91,7 @@ const Header = () => {
 						className='!flex !justify-around !w-[20rem] !mr-4'
 					>
 						<li className='!flex !justify-around !items-center !w-full'>
-							{status === 'authenticated' && (
+							{status === 'authenticated' && giveFullPrivs && (
 								<>
 									<Link href='/my-shows'>
 										<a>My Shows</a>

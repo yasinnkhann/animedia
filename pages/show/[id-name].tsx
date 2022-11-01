@@ -31,6 +31,11 @@ interface Props {
 const ShowDetails = ({ showDetails }: Props) => {
 	const { data: session, status } = useSession();
 
+	const giveFullPrivs =
+		session?.user &&
+		((session.user as any)?.emailVerified ||
+			(session.user as any)?.provider !== 'credentials');
+
 	const recShowsContainerRef = useRef<HTMLElement>(null);
 	const showCastContainerRef = useRef<HTMLElement>(null);
 	const episodesContainerRef = useRef<HTMLElement>(null);
@@ -87,7 +92,6 @@ const ShowDetails = ({ showDetails }: Props) => {
 			},
 		}
 	);
-
 
 	const {
 		mutateFunction: addShow,
@@ -568,7 +572,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 					</p>
 				</section>
 
-				{status === 'authenticated' && session.user && (
+				{status === 'authenticated' && giveFullPrivs && (
 					<section className='my-4 h-[1.5rem] flex'>
 						<select
 							className='h-full rounded outline-none'

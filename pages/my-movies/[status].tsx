@@ -12,8 +12,9 @@ import {
 } from '../../graphql/generated/nexus-typegen';
 
 const Status = () => {
-	const router = useRouter();
 	const { data: session, status } = useSession();
+
+	const router = useRouter();
 
 	if (!session && status === 'unauthenticated') {
 		router.push('/');

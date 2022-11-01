@@ -120,12 +120,7 @@ const VerificationEmail = () => {
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{verificationEmailLoading && <div>Loading...</div>}
 
-			{verified && (
-				<div>
-					You have been successfully verified! Go ahead and login to enjoy the
-					full benefits of animedia!
-				</div>
-			)}
+			{verified && <div>You have been successfully verified!</div>}
 		</main>
 	);
 };

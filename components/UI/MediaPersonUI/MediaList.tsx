@@ -15,6 +15,11 @@ interface Props {
 const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 	const { data: session } = useSession();
 
+	const giveFullPrivs =
+		session?.user &&
+		((session.user as any)?.emailVerified ||
+			(session.user as any)?.provider !== 'credentials');
+
 	return (
 		<section className={`w-full ${!genrePage ? 'px-40' : ''}`}>
 			<section className='flex flex-col'>
@@ -25,7 +30,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 							<th className='border-r-2 border-gray-200 w-[5rem] p-4'>Rank</th>
 							<th className='border-r-2 border-gray-200 p-4'>Title</th>
 							<th className='w-[5rem] p-4'>Rating</th>
-							{session && (
+							{giveFullPrivs && (
 								<>
 									<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
 										My Rating

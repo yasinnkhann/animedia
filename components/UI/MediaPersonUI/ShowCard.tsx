@@ -23,6 +23,11 @@ interface Props {
 const ShowCard = ({ show, rank }: Props) => {
 	const { data: session } = useSession();
 
+	const giveFullPrivs =
+		session?.user &&
+		((session.user as any)?.emailVerified ||
+			(session.user as any)?.provider !== 'credentials');
+
 	const router = useRouter();
 
 	const {
@@ -72,7 +77,7 @@ const ShowCard = ({ show, rank }: Props) => {
 				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
 			</td>
 
-			{session && (
+			{giveFullPrivs && (
 				<>
 					<td className='align-middle text-center border-x-2 border-gray-200'>
 						<p>{usersShowData?.rating ? usersShowData.rating : 'N/A'}</p>

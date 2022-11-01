@@ -30,6 +30,11 @@ interface Props {
 const MovieDetails = ({ movieDetails }: Props) => {
 	const { data: session, status } = useSession();
 
+	const giveFullPrivs =
+		session?.user &&
+		((session.user as any)?.emailVerified ||
+			(session.user as any)?.provider !== 'credentials');
+
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
 	const movieCastContainerRef = useRef<HTMLElement>(null);
 
@@ -262,7 +267,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 					</p>
 				</section>
 
-				{status === 'authenticated' && session.user && (
+				{status === 'authenticated' && giveFullPrivs && (
 					<section className='my-4 h-[1.5rem]'>
 						<select
 							className='mr-4 h-full rounded outline-none'
