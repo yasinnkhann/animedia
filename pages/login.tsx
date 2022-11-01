@@ -105,8 +105,14 @@ export default function Login({
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
+					{formik.errors.email && formik.touched.email ? (
+						<span className='text-rose-500'>{formik.errors.email}</span>
+					) : (
+						<></>
+					)}
+
 					<div
-						className={`border rounded-xl relative ${
+						className={`border rounded-xl relative flex h-[2.5rem] ${
 							formik.errors.email && formik.touched.email
 								? 'border-rose-600'
 								: ''
@@ -117,16 +123,21 @@ export default function Login({
 							type='email'
 							name='email'
 							placeholder='Email'
+							className='w-full border-none outline-none bg-inherit pl-4'
 						/>
 						<span className='flex items-center px-4'>
 							<HiAtSymbol size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>} */}
 
+					{formik.errors.password && formik.touched.password ? (
+						<span className='text-rose-500'>{formik.errors.password}</span>
+					) : (
+						<></>
+					)}
 					<div
-						className={`border rounded-xl relative ${
-							formik.errors.email && formik.touched.email
+						className={`border rounded-xl relative flex h-[2.5rem] ${
+							formik.errors.password && formik.touched.password
 								? 'border-rose-600'
 								: ''
 						}`}
@@ -135,17 +146,16 @@ export default function Login({
 							{...formik.getFieldProps('password')}
 							type={`${showPW ? 'text' : 'password'}`}
 							name='password'
-							placeholder='password'
-							className='text-black'
+							placeholder='Password'
+							className='w-full border-none outline-none bg-inherit pl-4'
 						/>
 						<span
-							className='flex items-center px-4'
+							className='flex items-center px-4 cursor-pointer'
 							onClick={() => setShowPW(!showPW)}
 						>
 							<HiFingerPrint size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>} */}
 
 					<div>
 						<button
@@ -177,12 +187,12 @@ export default function Login({
 					</section>
 				</form>
 
-				<p className='text-center text-gray-400 '>
-					don&apos;t have an account yet?{' '}
-					<Link href={'/register'}>
-						<a className='text-blue-700'>Sign Up</a>
-					</Link>
-				</p>
+				<div className='flex flex-col items-center'>
+					<p className='text-center text-gray-400 '>
+						Don&apos;t have an account yet?{' '}
+					</p>
+					<Link href='/register'>Register</Link>
+				</div>
 			</main>
 		</>
 	);
