@@ -1,33 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useGQLQuery, useGQLMutation } from '../../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation } from '@ts/interfaces';
+import { useGQLMutation } from '../../hooks/useGQL';
+import { IUseGQLMutation } from '@ts/interfaces';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from '../../graphql/generated/nexus-typegen';
+import { request } from 'graphql-request';
+import { SERVER_BASE_URL } from '../../utils/URLs';
 
-const VerificationEmail = () => {
+const VerificationEmail = ({ verificationEmailData }: any) => {
 	const router = useRouter();
 	const [verified, setVerified] = useState<boolean>(false);
 
-	const {
-		data: verificationEmailData,
-		loading: verificationEmailLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Query']['checkEmailVerificationToken']
-	> = useGQLQuery<NexusGenArgTypes['Query']['checkEmailVerificationToken']>(
-		Queries.QUERY_CHECK_EMAIL_VERIFICATION_TOKEN,
-		{
-			variables: {
-				token: router.query.token as string,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	console.log('verificationEmailData: ', verificationEmailData);
 
 	const {
 		mutateFunction: verifyUserEmail,
@@ -37,7 +26,7 @@ const VerificationEmail = () => {
 			Mutations.MUTATION_VERIFY_USER_EMAIL,
 			{
 				variables: {
-					userId: verificationEmailData?.userId ?? '',
+					userId: verificationEmailData.userId,
 				},
 			}
 		);
@@ -52,81 +41,89 @@ const VerificationEmail = () => {
 		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
 	>(Mutations.MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
-			token: verificationEmailData?.token ?? '',
+			token: verificationEmailData.token,
 		},
 	});
 
 	useEffect(() => {
 		(async () => {
-			if (
-				router.query.token &&
-				!verificationEmailLoading &&
-				verificationEmailData?.successMsg
-			) {
-				console.log('verificationEmailData: ', verificationEmailData);
-				try {
-					const updatedUserVerificationRes = await verifyUserEmail({
+			try {
+				const updatedUserVerificationRes = await verifyUserEmail({
+					variables: {
+						userId: verificationEmailData.userId,
+					},
+				});
+
+				const updatedUserVerificationData: typeof verifyUserEmailData =
+					updatedUserVerificationRes.data?.[
+						Object.keys(updatedUserVerificationRes.data)[0]
+					];
+
+				console.log(
+					'updatedUserVerificationData: ',
+					updatedUserVerificationData
+				);
+
+				if (updatedUserVerificationData === 200) {
+					const deleteRes = await deleteEmailVerificationToken({
 						variables: {
-							userId: verificationEmailData.userId!,
+							token: verificationEmailData.token,
 						},
 					});
 
-					const updatedUserVerificationData: typeof verifyUserEmailData =
-						updatedUserVerificationRes.data?.[
-							Object.keys(updatedUserVerificationRes.data)[0]
-						];
+					const deleteData: typeof deleteEmailVerificationTokenData =
+						deleteRes.data?.[Object.keys(deleteRes.data)[0]];
 
-					console.log(
-						'updatedUserVerificationData: ',
-						updatedUserVerificationData
-					);
-
-					if (updatedUserVerificationData === 200) {
-						const deleteRes = await deleteEmailVerificationToken({
-							variables: {
-								token: verificationEmailData.token!,
-							},
-						});
-
-						const deleteData: typeof deleteEmailVerificationTokenData =
-							deleteRes.data?.[Object.keys(deleteRes.data)[0]];
-
-						if (deleteData?.successMsg) {
-							setVerified(true);
-						}
+					if (deleteData?.successMsg) {
+						setVerified(true);
 					}
-				} catch (err) {
-					console.error(err);
 				}
-			}
-
-			if (
-				router.query.token &&
-				!verificationEmailLoading &&
-				verificationEmailData?.error
-			) {
-				console.log('VERIF ERR: ', verificationEmailData.error);
+			} catch (err) {
+				console.error(err);
 			}
 		})();
 	}, [
-		verificationEmailLoading,
-		verificationEmailData,
+		verificationEmailData.token,
+		verificationEmailData.userId,
 		router.query.token,
 		verifyUserEmail,
 		deleteEmailVerificationToken,
 	]);
 
-	if (verificationEmailData?.error) {
-		router.replace('/');
-	}
-
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{verificationEmailLoading && <div>Loading...</div>}
-
 			{verified && <div>You have been successfully verified!</div>}
 		</main>
 	);
 };
 
 export default VerificationEmail;
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+	const token = ctx.params?.token as string;
+
+	const res = await request(
+		SERVER_BASE_URL,
+		Queries.QUERY_CHECK_EMAIL_VERIFICATION_TOKEN,
+		{
+			token,
+		}
+	);
+
+	const data = res?.[Object.keys(res)[0]];
+
+	if (data.error) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {
+			verificationEmailData: data,
+		},
+	};
+};

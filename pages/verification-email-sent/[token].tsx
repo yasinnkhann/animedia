@@ -1,6 +1,6 @@
 import React from 'react';
-import { request } from 'graphql-request';
 import { GetServerSideProps } from 'next';
+import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
 import * as Queries from '../../graphql/queries';
 
