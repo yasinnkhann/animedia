@@ -10,7 +10,6 @@ export const getClientAuthSession =
 			ctx.res,
 			nextAuthOptions
 		);
-		console.log('SERV: ', session);
 
 		if (!session) {
 			return {
