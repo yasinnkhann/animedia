@@ -15,7 +15,10 @@ import * as Mutations from '../graphql/mutations';
 import { CLIENT_BASE_URL } from '../utils/URLs';
 
 export default function Register() {
-	const [show, setShow] = useState({ password: false, confirmPassword: false });
+	const [showPW, setShowPW] = useState({
+		password: false,
+		confirmPassword: false,
+	});
 
 	const router = useRouter();
 
@@ -112,84 +115,139 @@ export default function Register() {
 				<title>Register</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				<div className='title'>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)] w-3/4 mx-auto flex flex-col gap-10'>
+				<div>
 					<h1 className='text-gray-800 text-4xl font-bold py-4'>Register</h1>
 				</div>
 
-				{/* form */}
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					<div>
+					{formik.errors.name && formik.touched.name ? (
+						<span className='text-rose-500'>{formik.errors.name}</span>
+					) : (
+						<></>
+					)}
+
+					<div
+						className={`border rounded-xl relative flex h-[2.5rem] ${
+							formik.errors.name && formik.touched.name ? 'border-rose-600' : ''
+						}`}
+					>
 						<input
 							{...formik.getFieldProps('name')}
 							type='text'
-							placeholder='Name'
 							name='name'
+							placeholder='Name'
+							className='w-full border-none outline-none bg-inherit pl-4'
 						/>
 						<span className='icon flex items-center px-4'>
 							<HiOutlineUser size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.name && formik.touched.name ? <span className='text-rose-500'>{formik.errors.name}</span> : <></>} */}
-					<div>
+
+					{formik.errors.email && formik.touched.email ? (
+						<span className='text-rose-500'>{formik.errors.email}</span>
+					) : (
+						<></>
+					)}
+
+					<div
+						className={`border rounded-xl relative flex h-[2.5rem] ${
+							formik.errors.email && formik.touched.email
+								? 'border-rose-600'
+								: ''
+						}`}
+					>
 						<input
 							{...formik.getFieldProps('email')}
 							type='email'
-							placeholder='Email'
 							name='email'
+							placeholder='Email'
+							className='w-full border-none outline-none bg-inherit pl-4'
 						/>
 						<span className='icon flex items-center px-4'>
 							<HiAtSymbol size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.email && formik.touched.email ? <span className='text-rose-500'>{formik.errors.email}</span> : <></>} */}
-					<div>
+
+					{formik.errors.password && formik.touched.password ? (
+						<span className='text-rose-500'>{formik.errors.password}</span>
+					) : (
+						<></>
+					)}
+
+					<div
+						className={`border rounded-xl relative flex h-[2.5rem] ${
+							formik.errors.password && formik.touched.password
+								? 'border-rose-600'
+								: ''
+						}`}
+					>
 						<input
 							{...formik.getFieldProps('password')}
-							type={`${show.password ? 'text' : 'password'}`}
+							type={`${showPW.password ? 'text' : 'password'}`}
 							name='password'
-							placeholder='password'
+							placeholder='Password'
+							className='w-full border-none outline-none bg-inherit pl-4'
 						/>
 						<span
-							className='icon flex items-center px-4'
-							onClick={() => setShow({ ...show, password: !show.password })}
-						>
-							<HiFingerPrint size={25} />
-						</span>
-					</div>
-					{/* {formik.errors.password && formik.touched.password ? <span className='text-rose-500'>{formik.errors.password}</span> : <></>} */}
-
-					<div>
-						<input
-							{...formik.getFieldProps('confirmPassword')}
-							type={`${show.confirmPassword ? 'text' : 'password'}`}
-							name='confirmPassword'
-							placeholder='Confirm Password'
-						/>
-						<span
-							className='icon flex items-center px-4'
+							className='icon flex items-center px-4 cursor-pointer'
 							onClick={() =>
-								setShow({ ...show, confirmPassword: !show.confirmPassword })
+								setShowPW({ ...showPW, password: !showPW.password })
 							}
 						>
 							<HiFingerPrint size={25} />
 						</span>
 					</div>
-					{/* {formik.errors.confirmPassword && formik.touched.confirmPassword ? <span className='text-rose-500'>{formik.errors.confirmPassword}</span> : <></>} */}
 
-					{/* login buttons */}
-					<div className='input-button'>
-						<button type='submit'>Sign Up</button>
+					{formik.errors.confirmPassword && formik.touched.confirmPassword ? (
+						<span className='text-rose-500'>
+							{formik.errors.confirmPassword}
+						</span>
+					) : (
+						<></>
+					)}
+
+					<div
+						className={`border rounded-xl relative flex h-[2.5rem] ${
+							formik.errors.confirmPassword && formik.touched.confirmPassword
+								? 'border-rose-600'
+								: ''
+						}`}
+					>
+						<input
+							{...formik.getFieldProps('confirmPassword')}
+							type={`${showPW.confirmPassword ? 'text' : 'password'}`}
+							name='confirmPassword'
+							placeholder='Confirm Password'
+							className='w-full border-none outline-none bg-inherit pl-4'
+						/>
+						<span
+							className='icon flex items-center px-4 cursor-pointer'
+							onClick={() =>
+								setShowPW({
+									...showPW,
+									confirmPassword: !showPW.confirmPassword,
+								})
+							}
+						>
+							<HiFingerPrint size={25} />
+						</span>
+					</div>
+
+					<div>
+						<button
+							type='submit'
+							className='w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md py-3 text-gray-50 text-lg'
+						>
+							Sign Up
+						</button>
 					</div>
 				</form>
 
-				{/* bottom */}
-				<p className='text-center text-gray-400 '>
-					Have an account?{' '}
-					<Link href={'/login'}>
-						<a className='text-blue-700'>Sign In</a>
-					</Link>
-				</p>
+				<div className='flex flex-col items-center'>
+					<p className='text-center text-gray-400 '>Have an account? </p>
+					<Link href='/login'>Login</Link>
+				</div>
 			</main>
 		</>
 	);

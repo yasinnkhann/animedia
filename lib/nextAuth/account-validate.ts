@@ -45,7 +45,7 @@ export function registerValidate(values: any) {
 	if (!values.confirmPassword) {
 		errors.confirmPassword = 'Please confirm your password';
 	} else if (values.password !== values.confirmPassword) {
-		errors.confirmPassword = 'Password Not Match...!';
+		errors.confirmPassword = 'Passwords Do Not Match!';
 	} else if (values.confirmPassword.includes(' ')) {
 		errors.confirmPassword = 'Invalid Confirm Password';
 	}
