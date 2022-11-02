@@ -38,8 +38,6 @@ export default function Login({
 		onSubmit,
 	});
 
-	console.log('AcctVerifiedErr: ', acctVerifiedErr);
-
 	const {
 		fetchData: fetchAccountVerifiedData,
 		lazyData: fetchAccountVerifiedLazyData,
@@ -70,8 +68,6 @@ export default function Login({
 
 		const acctVerifiedData: typeof fetchAccountVerifiedLazyData =
 			data?.[Object.keys(data)[0]];
-
-		console.log('acctVerifiedData: ', acctVerifiedData);
 
 		if (acctVerifiedData?.error) {
 			setAcctVerifiedErr({

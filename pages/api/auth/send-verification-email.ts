@@ -35,8 +35,6 @@ const sendVerificationEmail = async (
 			html, // html body
 		});
 
-		console.log('INFO: ', info);
-		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 		res.json('EMAIL VERIFICATION SENT!');
 	} catch (err) {
 		console.error(err);

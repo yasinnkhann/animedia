@@ -147,8 +147,6 @@ const Home: NextPage = () => {
 		);
 	}
 
-	console.log('SESH: ', session);
-
 	return (
 		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 			{allDataLoaded && (

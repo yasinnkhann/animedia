@@ -20,8 +20,6 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 	const router = useRouter();
 	const [verified, setVerified] = useState<boolean>(false);
 
-	console.log('verificationEmailData: ', verificationEmailData);
-
 	const {
 		mutateFunction: verifyUserEmail,
 		mutateData: verifyUserEmailData,
@@ -62,11 +60,6 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 					updatedUserVerificationRes.data?.[
 						Object.keys(updatedUserVerificationRes.data)[0]
 					];
-
-				console.log(
-					'updatedUserVerificationData: ',
-					updatedUserVerificationData
-				);
 
 				if (updatedUserVerificationData === 200) {
 					const deleteRes = await deleteEmailVerificationToken({
