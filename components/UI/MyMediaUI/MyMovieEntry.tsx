@@ -100,7 +100,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<BsFillTrashFill
-					className='cursor-pointer text-red-500 w-full text-lg'
+					size={20}
+					className='cursor-pointer text-red-500 w-full'
 					onClick={() => {
 						deleteMovie({
 							variables: {

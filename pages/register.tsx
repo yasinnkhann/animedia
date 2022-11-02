@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { HiAtSymbol, HiFingerPrint, HiOutlineUser } from 'react-icons/hi';
+import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
@@ -195,7 +196,11 @@ export default function Register() {
 								setShowPW({ ...showPW, password: !showPW.password })
 							}
 						>
-							<HiFingerPrint size={25} />
+							{showPW.password ? (
+								<BsFillEyeFill size={25} />
+							) : (
+								<BsFillEyeSlashFill size={25} />
+							)}
 						</span>
 					</div>
 
@@ -230,7 +235,11 @@ export default function Register() {
 								})
 							}
 						>
-							<HiFingerPrint size={25} />
+							{showPW.confirmPassword ? (
+								<BsFillEyeFill size={25} />
+							) : (
+								<BsFillEyeSlashFill size={25} />
+							)}
 						</span>
 					</div>
 

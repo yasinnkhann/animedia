@@ -62,8 +62,8 @@ const Header = () => {
 			<nav className='!flex !items-center w-full ml-[4rem]'>
 				<section>
 					<Link href='/'>
-						<a className='text-black hover:text-black text-2xl !mb-0'>
-							<AiFillHome />
+						<a className='text-black hover:text-black !mb-0'>
+							<AiFillHome size={25} />
 						</a>
 					</Link>
 				</section>

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import Link from 'next/link';
-import { HiAtSymbol, HiFingerPrint } from 'react-icons/hi';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { HiAtSymbol } from 'react-icons/hi';
 import { getProviders, signIn } from 'next-auth/react';
 import { useFormik } from 'formik';
 import loginValidate from '../lib/nextAuth/account-validate';
@@ -154,7 +155,11 @@ export default function Login({
 							className='flex items-center px-4 cursor-pointer'
 							onClick={() => setShowPW(!showPW)}
 						>
-							<HiFingerPrint size={25} />
+							{showPW ? (
+								<BsFillEyeFill size={25} />
+							) : (
+								<BsFillEyeSlashFill size={25} />
+							)}
 						</span>
 					</div>
 
