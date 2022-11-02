@@ -518,7 +518,7 @@ export const accountVerified = extendType({
 
 				if (!acct) {
 					return {
-						error: 'Account Not Found.',
+						error: 'Account Not Found',
 						id: null,
 						emailVerified: null,
 					};
@@ -526,7 +526,7 @@ export const accountVerified = extendType({
 
 				if (acct.id && !acct.emailVerified) {
 					return {
-						error: 'Account Not Verified.',
+						error: 'Account Not Verified',
 						id: acct.id,
 						emailVerified: null,
 					};

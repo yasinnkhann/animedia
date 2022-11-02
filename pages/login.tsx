@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
 import { getProviders, signIn } from 'next-auth/react';
-import { useFormik, Formik, Form, Field, ErrorMessage } from 'formik';
+import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
@@ -161,8 +161,8 @@ export default function Login({
 
 					<div>
 						<button
-							type='submit'
 							className='w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md py-3 text-gray-50 text-lg'
+							type='submit'
 						>
 							Login
 						</button>
@@ -182,6 +182,12 @@ export default function Login({
 						))}
 					</section>
 				</form>
+
+				{acctVerifiedErr.error && (
+					<span className='text-rose-500 text-center'>
+						{acctVerifiedErr.error}
+					</span>
+				)}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>

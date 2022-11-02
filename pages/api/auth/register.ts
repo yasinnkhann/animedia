@@ -6,12 +6,11 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	// only post method is accepted
 	if (req.method === 'POST') {
 		if (!req.body) {
 			return res
 				.status(404)
-				.json({ status: 404, error: "Don't have form data...!" });
+				.json({ error: "Don't have sufficient form data", user: null });
 		}
 
 		const { name, email, password } = req.body;
@@ -19,10 +18,11 @@ export default async function handler(
 		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
+
 		if (existingUser) {
 			return res
 				.status(422)
-				.json({ status: 422, message: 'User Already Exists...!' });
+				.json({ error: 'Email Already Exists', user: null });
 		}
 
 		// hash password
@@ -30,13 +30,13 @@ export default async function handler(
 			const newUser = await prisma.user.create({
 				data: { name, email, password: await hash(password, 12) },
 			});
-			res.status(201).json({ status: 201, user: newUser });
+			res.status(201).json({ error: null, user: newUser });
 		} catch (err) {
 			return res.status(404).json({ err });
 		}
 	} else {
 		res
 			.status(500)
-			.json({ message: 'HTTP method not valid only POST Accepted' });
+			.json({ error: 'HTTP method not valid only POST Accepted', user: null });
 	}
 }

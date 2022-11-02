@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import * as Mutations from '../graphql/mutations';
+import { useState } from 'react';
+import { CLIENT_BASE_URL } from '../utils/URLs';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { useState } from 'react';
 import { useFormik } from 'formik';
 import { registerValidate } from '../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
@@ -12,8 +14,6 @@ import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from '../graphql/generated/nexus-typegen';
-import * as Mutations from '../graphql/mutations';
-import { CLIENT_BASE_URL } from '../utils/URLs';
 
 export default function Register() {
 	const [showPW, setShowPW] = useState({
@@ -32,6 +32,10 @@ export default function Register() {
 		},
 		validate: registerValidate,
 		onSubmit,
+	});
+
+	const [registerErr, setRegisterErr] = useState<{ error: null }>({
+		error: null,
 	});
 
 	const {
@@ -67,7 +71,7 @@ export default function Register() {
 
 			const registerData = await registerRes.json();
 
-			if (registerData.status === 201 && registerData.user) {
+			if (registerData.user) {
 				console.log('DATA FROM ON SUBMIT: ', registerData);
 				const redisRes = await writeEmailVerificationToken({
 					variables: {
@@ -103,12 +107,13 @@ export default function Register() {
 					router.push(`/verification-email-sent/${redisData.token}`);
 				}
 			}
+			if (registerData.error) {
+				setRegisterErr({ error: registerData.error });
+			}
 		} catch (err) {
 			console.error(err);
 		}
 	}
-
-	console.log('FORMIK ERRS: ', formik.errors);
 
 	return (
 		<>
@@ -244,6 +249,10 @@ export default function Register() {
 						</button>
 					</div>
 				</form>
+
+				{registerErr.error && (
+					<span className='text-rose-500 text-center'>{registerErr.error}</span>
+				)}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>Have an account? </p>
