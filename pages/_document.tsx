@@ -31,11 +31,6 @@ class MyDocument extends Document {
 						href='https://fonts.googleapis.com/css2?family=Rubik&display=swap'
 						rel='stylesheet'
 					/>
-					<script
-						src='https://kit.fontawesome.com/5c2d069c26.js'
-						crossOrigin='anonymous'
-						defer
-					></script>
 				</Head>
 				<body className={pageProps.hideScrollBar ? 'scrollbar-hide' : ''}>
 					<Main />

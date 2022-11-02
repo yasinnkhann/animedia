@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import DropDownItem from './DropDownItem';
+import { AiFillHome } from 'react-icons/ai';
 import 'antd/dist/antd.css';
 
 const Header = () => {
@@ -61,11 +62,8 @@ const Header = () => {
 			<nav className='!flex !items-center w-full ml-[4rem]'>
 				<section>
 					<Link href='/'>
-						<a className='text-black hover:text-black'>
-							<i
-								className='fa-solid fa-house !mb-0 cursor-pointer'
-								aria-hidden='true'
-							/>
+						<a className='text-black hover:text-black text-2xl !mb-0'>
+							<AiFillHome />
 						</a>
 					</Link>
 				</section>

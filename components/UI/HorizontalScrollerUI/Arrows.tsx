@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 function Arrow({
 	children,
@@ -42,7 +43,7 @@ export function LeftArrow() {
 	);
 
 	useEffect(() => {
-		// NOTE: detect if whole component visible
+		// detect if whole component visible
 		if (visibleItemsWithoutSeparators.length) {
 			setDisabled(isFirstItemVisible);
 		}
@@ -51,10 +52,7 @@ export function LeftArrow() {
 	return (
 		<section className='flex pl-10 relative'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
-				<i
-					className='fa-solid fa-arrow-left absolute left-3 top-[30%] text-xl'
-					aria-hidden='true'
-				/>
+				<FaArrowLeft className='absolute left-3 top-[30%] text-xl' />
 			</Arrow>
 		</section>
 	);
@@ -77,10 +75,7 @@ export function RightArrow() {
 	return (
 		<section className='flex pr-10 relative'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
-				<i
-					className='fa-solid fa-arrow-right absolute right-3 top-[30%] text-xl'
-					aria-hidden='true'
-				/>
+				<FaArrowRight className='absolute left-3 top-[30%] text-xl' />
 			</Arrow>
 		</section>
 	);

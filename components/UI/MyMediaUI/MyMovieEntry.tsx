@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../../graphql/queries';
 import * as Mutations from '../../../graphql/mutations';
 import { useRouter } from 'next/router';
@@ -98,9 +99,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 			</td>
 
 			<td className='align-middle text-center border-x-2 border-gray-200'>
-				<i
-					className='fa fa-trash cursor-pointer text-red-600'
-					aria-hidden='true'
+				<BsFillTrashFill
+					className='cursor-pointer text-red-500 w-full text-lg'
 					onClick={() => {
 						deleteMovie({
 							variables: {

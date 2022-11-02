@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { FaSearch } from 'react-icons/fa';
 
 const SearchBar = forwardRef<HTMLInputElement>((props, ref) => {
 	const router = useRouter();
@@ -27,10 +28,10 @@ const SearchBar = forwardRef<HTMLInputElement>((props, ref) => {
 				{...props}
 			/>
 			<button
-				className='absolute bg-transparent text-[1.5rem] text-gray-700 z-10 border-none transition-all hover:cursor-pointer hover:text-black hover:scale-125 focus:text-black focus:outline-none left-[calc(100%-3rem)] top-2'
+				className='absolute bg-transparent text-[1.5rem] text-gray-700 z-10 border-none transition-all hover:cursor-pointer hover:text-black hover:scale-125 focus:text-black focus:outline-none left-[calc(100%-3.5rem)] top-3.5'
 				type='submit'
 			>
-				<i className='fas fa-search' />
+				<FaSearch />
 			</button>
 		</form>
 	);
