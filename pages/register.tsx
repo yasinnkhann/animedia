@@ -122,10 +122,8 @@ export default function Register() {
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					{formik.errors.name && formik.touched.name ? (
+					{formik.errors.name && formik.touched.name && (
 						<span className='text-rose-500'>{formik.errors.name}</span>
-					) : (
-						<></>
 					)}
 
 					<div
@@ -145,10 +143,8 @@ export default function Register() {
 						</span>
 					</div>
 
-					{formik.errors.email && formik.touched.email ? (
+					{formik.errors.email && formik.touched.email && (
 						<span className='text-rose-500'>{formik.errors.email}</span>
-					) : (
-						<></>
 					)}
 
 					<div
@@ -170,10 +166,8 @@ export default function Register() {
 						</span>
 					</div>
 
-					{formik.errors.password && formik.touched.password ? (
+					{formik.errors.password && formik.touched.password && (
 						<span className='text-rose-500'>{formik.errors.password}</span>
-					) : (
-						<></>
 					)}
 
 					<div
@@ -204,12 +198,10 @@ export default function Register() {
 						</span>
 					</div>
 
-					{formik.errors.confirmPassword && formik.touched.confirmPassword ? (
+					{formik.errors.confirmPassword && formik.touched.confirmPassword && (
 						<span className='text-rose-500'>
 							{formik.errors.confirmPassword}
 						</span>
-					) : (
-						<></>
 					)}
 
 					<div

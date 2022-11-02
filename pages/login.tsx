@@ -1,18 +1,18 @@
 import Head from 'next/head';
-import { useState } from 'react';
 import Link from 'next/link';
+import loginValidate from '../lib/nextAuth/account-validate';
+import * as Queries from '../graphql/queries';
+import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
 import { getProviders, signIn } from 'next-auth/react';
-import { useFormik } from 'formik';
-import loginValidate from '../lib/nextAuth/account-validate';
+import { useFormik, Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useGQLQuery } from '../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
-import * as Queries from '../graphql/queries';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -106,10 +106,8 @@ export default function Login({
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					{formik.errors.email && formik.touched.email ? (
+					{formik.errors.email && formik.touched.email && (
 						<span className='text-rose-500'>{formik.errors.email}</span>
-					) : (
-						<></>
 					)}
 
 					<div
@@ -131,10 +129,8 @@ export default function Login({
 						</span>
 					</div>
 
-					{formik.errors.password && formik.touched.password ? (
+					{formik.errors.password && formik.touched.password && (
 						<span className='text-rose-500'>{formik.errors.password}</span>
-					) : (
-						<></>
 					)}
 
 					<div
@@ -181,12 +177,6 @@ export default function Login({
 									className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
 								>
 									Sign in with {provider.name}{' '}
-									{/* <Image
-										src={'/assets/github.svg'}
-										alt=''
-										width={25}
-										height={25}
-									/> */}
 								</button>
 							</div>
 						))}
