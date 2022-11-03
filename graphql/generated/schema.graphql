@@ -356,6 +356,7 @@ type PersonsKnownForShowRes {
 type Query {
   accountVerified(email: String!): accountVerifiedRes
   checkEmailVerificationToken(token: String!): redisRes
+  emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails
   id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!

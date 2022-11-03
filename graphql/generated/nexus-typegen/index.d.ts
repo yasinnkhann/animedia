@@ -871,6 +871,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     accountVerified: NexusGenRootTypes['accountVerifiedRes'] | null; // accountVerifiedRes
     checkEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
+    emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
     id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
@@ -1414,6 +1415,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     accountVerified: 'accountVerifiedRes'
     checkEmailVerificationToken: 'redisRes'
+    emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetails'
     id: 'Int'
     movieDetails: 'MovieDetailsRes'
@@ -1710,6 +1712,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
     }
     checkEmailVerificationToken: { // args
+      token: string; // String!
+    }
+    emailFromRedisToken: { // args
       token: string; // String!
     }
     episodeDetails: { // args

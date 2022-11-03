@@ -27,7 +27,7 @@ const sendVerificationEmail = async (
 	} as any);
 
 	try {
-		const info = await transporter.sendMail({
+		await transporter.sendMail({
 			from: process.env.EMAIL_FROM, // verified sender email
 			to: recipientEmail, // recipient email
 			subject, // Subject line

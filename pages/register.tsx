@@ -72,7 +72,6 @@ export default function Register() {
 			const registerData = await registerRes.json();
 
 			if (registerData.user) {
-				console.log('DATA FROM ON SUBMIT: ', registerData);
 				const redisRes = await writeEmailVerificationToken({
 					variables: {
 						email: formik.values.email,
@@ -82,7 +81,6 @@ export default function Register() {
 				const redisData: typeof writeEmailVerificationTokenData =
 					redisRes.data?.[Object.keys(redisRes.data)[0]];
 
-				console.log('REDIS DATA: ', redisData);
 				if (!redisData?.error && redisData?.token) {
 					const nodeMailerInfo: INodeMailerInfo = {
 						recipientEmail: email,

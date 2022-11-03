@@ -543,3 +543,31 @@ export const accountVerified = extendType({
 		});
 	},
 });
+
+export const emailFromRedisToken = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('emailFromRedisToken', {
+			type: 'String',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) return null;
+
+				const user = await ctx.prisma.user.findUnique({
+					where: { id: userId },
+					select: { email: true },
+				});
+
+				if (!user) return null;
+
+				return user.email;
+			},
+		});
+	},
+});

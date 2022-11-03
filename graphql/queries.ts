@@ -1027,3 +1027,9 @@ export const QUERY_ACCOUNT_VERIFIED = gql`
 		}
 	}
 `;
+
+export const QUERY_EMAIL_FROM_REDIS_TOKEN = gql`
+	query EmailFromRedisToken($token: String!) {
+		emailFromRedisToken(token: $token)
+	}
+`;
