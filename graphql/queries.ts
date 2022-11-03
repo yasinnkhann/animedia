@@ -1033,3 +1033,14 @@ export const QUERY_EMAIL_FROM_REDIS_TOKEN = gql`
 		emailFromRedisToken(token: $token)
 	}
 `;
+
+export const QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
+	query CheckRetryEmailVerificationLimit($email: String!) {
+		checkRetryEmailVerificationLimit(email: $email) {
+			error
+			successMsg
+			token
+			userId
+		}
+	}
+`;

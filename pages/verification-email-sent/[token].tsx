@@ -7,8 +7,8 @@ import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { useGQLMutation } from '../../hooks/useGQL';
-import { IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
+import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
+import { IUseGQLMutation, IUseGQLQuery, INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -19,6 +19,8 @@ const VerificationEmailSent = ({
 	email,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	const [isResending, setIsResending] = useState(false);
+	const [reachedLimit, setReachedLimit] = useState(false);
+
 	const {
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
@@ -33,9 +35,52 @@ const VerificationEmailSent = ({
 		},
 	});
 
+	const {
+		data: checkRetryEmailVerificationLimitData,
+	}: IUseGQLQuery<
+		NexusGenObjects['redisRes'],
+		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
+	> = useGQLQuery<
+		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
+	>(Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
+		variables: {
+			email,
+		},
+	});
+
+	const {
+		mutateFunction: writeRetryEmailVerificationToken,
+	}: IUseGQLMutation<
+		NexusGenObjects['redisRes'],
+		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
+	> = useGQLMutation<
+		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
+	>(Mutations.MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
+		variables: {
+			email,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
+			},
+			'CheckRetryEmailVerificationLimit',
+		],
+	});
+
 	const handleResendLink = async () => {
+		if (checkRetryEmailVerificationLimitData?.token === String(3)) {
+			// alert('STOP');
+			setReachedLimit(true);
+			return;
+		}
 		setIsResending(true);
 		try {
+			await writeRetryEmailVerificationToken({
+				variables: {
+					email,
+				},
+			});
+
 			const writtenTokenRes = await writeEmailVerificationToken({
 				variables: {
 					email,
@@ -65,7 +110,7 @@ const VerificationEmailSent = ({
 				nodeMailerOptions
 			);
 
-			const nodeMailerData = await nodeMailerRes.json();
+			await nodeMailerRes.json();
 		} catch (err) {
 			console.error(err);
 		}
@@ -90,6 +135,12 @@ const VerificationEmailSent = ({
 						<div>
 							<Oval className='mt-8' stroke='#00b3ff' />
 						</div>
+					)}
+					{reachedLimit && (
+						<p className='mt-8 text-red-500'>
+							You have reached the limit of verification emails. Please wait 24
+							hours to try again.
+						</p>
 					)}
 				</div>
 			</section>
@@ -130,6 +181,15 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	);
 
 	const email = emailRes?.[Object.keys(emailRes)[0]];
+
+	if (!email) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
 
 	return {
 		props: { token, email },

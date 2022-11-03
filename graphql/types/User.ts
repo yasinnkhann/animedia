@@ -8,7 +8,10 @@ import {
 	enumType,
 } from 'nexus';
 import { v4 } from 'uuid';
-import { EMAIL_VERIFICATION_PREFIX } from 'utils/specificVals';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/specificVals';
 
 export const watchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
@@ -567,6 +570,71 @@ export const emailFromRedisToken = extendType({
 				if (!user) return null;
 
 				return user.email;
+			},
+		});
+	},
+});
+
+export const checkRetryEmailVerificationLimit = extendType({
+	type: 'Query',
+	definition(t) {
+		t.field('checkRetryEmailVerificationLimit', {
+			type: 'redisRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				const limitFound = await ctx.redis.get(
+					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+				);
+
+				if (!limitFound) {
+					return {
+						error: null,
+						successMsg: 'Retry Email Verification Limit Not Found',
+						token: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Retry Email Verification Limit Found',
+					token: limitFound,
+				};
+			},
+		});
+	},
+});
+
+export const writeRetryEmailVerificationLimit = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('writeRetryEmailVerificationLimit', {
+			type: 'redisRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				let currNum = await ctx.redis.get(
+					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+				);
+
+				if (!currNum) {
+					currNum = '0';
+				}
+
+				await ctx.redis.set(
+					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`,
+					(+currNum + 1).toString(),
+					'EX',
+					1000 * 60 * 60 * 24 * 1 // 1 day
+				);
+
+				return {
+					error: null,
+					successMsg: 'Retry Email Verification Limit Added',
+					token: (+currNum + 1).toString(),
+				};
 			},
 		});
 	},

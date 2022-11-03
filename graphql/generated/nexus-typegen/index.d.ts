@@ -748,6 +748,7 @@ export interface NexusGenFieldTypes {
     updatedShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     verifyUserEmail: number | null; // Int
     writeEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
+    writeRetryEmailVerificationLimit: NexusGenRootTypes['redisRes'] | null; // redisRes
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -871,6 +872,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     accountVerified: NexusGenRootTypes['accountVerifiedRes'] | null; // accountVerifiedRes
     checkEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
+    checkRetryEmailVerificationLimit: NexusGenRootTypes['redisRes'] | null; // redisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
     id: number | null; // Int
@@ -1292,6 +1294,7 @@ export interface NexusGenFieldTypeNames {
     updatedShow: 'UserShow'
     verifyUserEmail: 'Int'
     writeEmailVerificationToken: 'redisRes'
+    writeRetryEmailVerificationLimit: 'redisRes'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1415,6 +1418,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     accountVerified: 'accountVerifiedRes'
     checkEmailVerificationToken: 'redisRes'
+    checkRetryEmailVerificationLimit: 'redisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetails'
     id: 'Int'
@@ -1706,6 +1710,9 @@ export interface NexusGenArgTypes {
     writeEmailVerificationToken: { // args
       email: string; // String!
     }
+    writeRetryEmailVerificationLimit: { // args
+      email: string; // String!
+    }
   }
   Query: {
     accountVerified: { // args
@@ -1713,6 +1720,9 @@ export interface NexusGenArgTypes {
     }
     checkEmailVerificationToken: { // args
       token: string; // String!
+    }
+    checkRetryEmailVerificationLimit: { // args
+      email: string; // String!
     }
     emailFromRedisToken: { // args
       token: string; // String!

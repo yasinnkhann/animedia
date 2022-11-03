@@ -223,6 +223,7 @@ type Mutation {
   updatedShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
   verifyUserEmail(userId: ID!): Int
   writeEmailVerificationToken(email: String!): redisRes
+  writeRetryEmailVerificationLimit(email: String!): redisRes
 }
 
 type PeopleRes {
@@ -356,6 +357,7 @@ type PersonsKnownForShowRes {
 type Query {
   accountVerified(email: String!): accountVerifiedRes
   checkEmailVerificationToken(token: String!): redisRes
+  checkRetryEmailVerificationLimit(email: String!): redisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails
   id: Int

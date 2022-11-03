@@ -132,3 +132,14 @@ export const MUTATION_VERIFY_USER_EMAIL = gql`
 		verifyUserEmail(userId: $userId)
 	}
 `;
+
+export const MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
+	mutation Mutation($email: String!) {
+		writeRetryEmailVerificationLimit(email: $email) {
+			error
+			successMsg
+			token
+			userId
+		}
+	}
+`;
