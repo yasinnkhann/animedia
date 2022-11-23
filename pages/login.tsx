@@ -2,6 +2,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import loginValidate from '../lib/nextAuth/account-validate';
 import * as Queries from '../graphql/queries';
+import GoogleIcon from '../assets/google-icon.svg';
+import FacebookIcon from '../assets/facebook-icon.svg';
+import TwitterIcon from '../assets/twitter-icon.svg';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
@@ -165,17 +168,58 @@ export default function Login({
 					</div>
 
 					<section>
-						{oAuthProviders.map((provider: any) => (
+						<div>
+							<button
+								type='button'
+								onClick={() => signIn('google', { callbackUrl: '/' })}
+								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
+							>
+								<p>Sign in with Google</p>
+								<div>
+									<GoogleIcon aria-label='Google Icon' />
+								</div>
+							</button>
+						</div>
+
+						<div>
+							<button
+								type='button'
+								onClick={() => signIn('facebook', { callbackUrl: '/' })}
+								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
+							>
+								<p>Sign in with Facebook</p>
+								<div>
+									<FacebookIcon aria-label='Facebook Icon' />
+								</div>
+							</button>
+						</div>
+
+						<div>
+							<button
+								type='button'
+								onClick={() => signIn('twitter', { callbackUrl: '/' })}
+								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
+							>
+								<p>Sign in with Twitter</p>
+								<div>
+									<TwitterIcon aria-label='Twitter Icon' />
+								</div>
+							</button>
+						</div>
+						{/* {oAuthProviders.map((provider: any) => (
 							<div key={provider.id}>
 								<button
 									type='button'
 									onClick={() => signIn(provider.id, { callbackUrl: '/' })}
 									className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
 								>
-									Sign in with {provider.name}{' '}
+									<p>Sign in with {provider.name}</p>
+									<div>
+										<GoogleIcon aria-label='Google Icon' />
+									</div>
 								</button>
 							</div>
-						))}
+						))} */}
 					</section>
 				</form>
 

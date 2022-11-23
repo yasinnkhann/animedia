@@ -47,6 +47,7 @@
 		"yarn": "^1.22.19"
 	},
 	"devDependencies": {
+		"@svgr/webpack": "^6.5.1",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/comma-number": "^2.1.0",
 		"@types/micro-cors": "^0.1.2",
