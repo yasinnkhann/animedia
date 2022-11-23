@@ -8,8 +8,19 @@ import { prisma } from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
 import { isValidEmail } from '../../../utils/isValidEmail';
 
+const adapter = PrismaAdapter(prisma);
+const _linkAccount = adapter.linkAccount;
+adapter.linkAccount = ({ oauth_token, oauth_token_secret, ...data }) => {
+	if (oauth_token && oauth_token_secret) {
+		data.refresh_token = oauth_token as string;
+		data.access_token = oauth_token_secret as string;
+	}
+
+	return _linkAccount(data);
+};
+
 export const authOptions: NextAuthOptions = {
-	adapter: PrismaAdapter(prisma),
+	adapter,
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -22,7 +33,7 @@ export const authOptions: NextAuthOptions = {
 		TwitterProvider({
 			clientId: process.env.TWITTER_CLIENT_ID as string,
 			clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
-			version: '2.0',
+			// version: '2.0',
 		}),
 		CredentialsProvider({
 			name: 'Credentials',
