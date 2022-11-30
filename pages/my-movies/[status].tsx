@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import MyMoviesList from 'components/UI/MyMediaUI/MyMoviesList';
+import Head from 'next/head';
+import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import * as Queries from '../../graphql/queries';
+import MyMoviesList from 'components/UI/MyMediaUI/MyMoviesList';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { IUseGQLQuery } from '@ts/interfaces';
@@ -10,7 +12,6 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -57,12 +58,21 @@ const Status = () => {
 	}, [router.query.status, usersMoviesData]);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<MyMoviesList
-				status={router.query.status as TStatusParam}
-				myMovies={myMovies}
-			/>
-		</main>
+		<>
+			<Head>
+				<title>{`${(router.query.status as string)
+					.split('-')
+					.map(word => word[0].toUpperCase() + word.slice(1))
+					.join(' ')} - Movies`}</title>
+			</Head>
+
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				<MyMoviesList
+					status={router.query.status as TStatusParam}
+					myMovies={myMovies}
+				/>
+			</main>
+		</>
 	);
 };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import { Oval } from 'react-loading-icons';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
@@ -118,33 +119,39 @@ const VerificationEmailSent = ({
 	};
 
 	return (
-		<main className='flex flex-col items-center justify-center h-screen'>
-			<section className='flex flex-col h-36'>
-				<p>
-					A verification link has been sent to your email. If you cannot find
-					it, be sure to check your spam folder.
-				</p>
-				<div className='flex flex-col items-center mt-8'>
-					<button
-						className='rounded bg-blue-500 py-2 px-4 text-white'
-						onClick={handleResendLink}
-					>
-						{isResending ? 'Resending Link...' : 'Resend Link'}
-					</button>
-					{isResending && (
-						<div>
-							<Oval className='mt-8' stroke='#00b3ff' />
-						</div>
-					)}
-					{reachedLimit && (
-						<p className='mt-8 text-red-500'>
-							You have reached the limit of verification emails. Please wait 24
-							hours to try again.
-						</p>
-					)}
-				</div>
-			</section>
-		</main>
+		<>
+			<Head>
+				<title>Verification Email Sent</title>
+			</Head>
+
+			<main className='flex flex-col items-center justify-center h-screen'>
+				<section className='flex flex-col h-36'>
+					<p>
+						A verification link has been sent to your email. If you cannot find
+						it, be sure to check your spam folder.
+					</p>
+					<div className='flex flex-col items-center mt-8'>
+						<button
+							className='rounded bg-blue-500 py-2 px-4 text-white'
+							onClick={handleResendLink}
+						>
+							{isResending ? 'Resending Link...' : 'Resend Link'}
+						</button>
+						{isResending && (
+							<div>
+								<Oval className='mt-8' stroke='#00b3ff' />
+							</div>
+						)}
+						{reachedLimit && (
+							<p className='mt-8 text-red-500'>
+								You have reached the limit of verification emails. Please wait
+								24 hours to try again.
+							</p>
+						)}
+					</div>
+				</section>
+			</main>
+		</>
 	);
 };
 

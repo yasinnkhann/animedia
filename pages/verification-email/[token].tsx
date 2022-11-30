@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useGQLMutation } from '../../hooks/useGQL';
@@ -88,9 +89,15 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 	]);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{verified && <div>You have been successfully verified!</div>}
-		</main>
+		<>
+			<Head>
+				<title>Verification Email</title>
+			</Head>
+
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				{verified && <div>You have been successfully verified!</div>}
+			</main>
+		</>
 	);
 };
 

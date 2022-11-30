@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Head from 'next/head';
 import type { NextPage } from 'next';
 import Pagination from 'components/Pagination';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
@@ -129,101 +130,107 @@ const Search: NextPage = () => {
 	}, [searchedMovies, searchedShows, searchedPeople, router.query.q]);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{searchedMovies && searchedShows && searchedPeople && (
-				<>
-					<SearchBar ref={searchBarRef} />
-					<section className='grid grid-cols-[20%_80%]'>
-						<section className='m-4 border rounded-lg flex flex-col items-center px-8'>
-							<div className='w-full mb-4'>
-								<h3>Search Results</h3>
-							</div>
-							<ul className='w-full'>
-								<li className='flex items-center w-full justify-between'>
-									<h4
-										className='cursor-pointer text-left'
-										onClick={() =>
-											setSearchResultsType(ESearchResultsType.MOVIES)
-										}
-										style={{
-											borderBottom:
-												searchResultsType === ESearchResultsType.MOVIES
-													? '1px solid black'
-													: undefined,
-										}}
-									>
-										Movies
-									</h4>
-									<p className='text-right'>{searchedMovies.total_results}</p>
-								</li>
-								<li className='flex items-center w-full justify-between'>
-									<h4
-										className='cursor-pointer text-left'
-										onClick={() =>
-											setSearchResultsType(ESearchResultsType.SHOWS)
-										}
-										style={{
-											borderBottom:
-												searchResultsType === ESearchResultsType.SHOWS
-													? '1px solid black'
-													: undefined,
-										}}
-									>
-										Shows
-									</h4>
-									<p className='text-right'>{searchedShows.total_results}</p>
-								</li>
-								<li className='flex items-center w-full justify-between'>
-									<h4
-										className='cursor-pointer text-left'
-										onClick={() =>
-											setSearchResultsType(ESearchResultsType.PEOPLE)
-										}
-										style={{
-											borderBottom:
-												searchResultsType === ESearchResultsType.PEOPLE
-													? '1px solid black'
-													: undefined,
-										}}
-									>
-										People
-									</h4>
-									<p className='text-right'>{searchedPeople.total_results}</p>
-								</li>
-							</ul>
-						</section>
-						<section>
-							{getSearchedTypeData()?.results.length ? (
-								getSearchedTypeData()?.results.map(result => (
-									<SearchResult
-										key={result.id}
-										result={result}
-										searchedResultType={getSearchResultType()}
-									/>
-								))
-							) : (
-								<div>No results</div>
-							)}
-						</section>
-					</section>
+		<>
+			<Head>
+				<title>{`${router.query.q} - Search Results`}</title>
+			</Head>
 
-					<Pagination
-						currPage={currPage}
-						totalItems={
-							searchResultsType === ESearchResultsType.MOVIES
-								? searchedMovies.total_results
-								: searchResultsType === ESearchResultsType.SHOWS
-								? searchedShows.total_results
-								: searchedPeople.total_results
-						}
-						itemsPerPage={RESULTS_PER_PAGE}
-						paginate={(pageNum: number) => setCurrPage(pageNum)}
-						siblingCount={1}
-						maxPageNum={500}
-					/>
-				</>
-			)}
-		</main>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				{searchedMovies && searchedShows && searchedPeople && (
+					<>
+						<SearchBar ref={searchBarRef} />
+						<section className='grid grid-cols-[20%_80%]'>
+							<section className='m-4 border rounded-lg flex flex-col items-center px-8'>
+								<div className='w-full mb-4'>
+									<h3>Search Results</h3>
+								</div>
+								<ul className='w-full'>
+									<li className='flex items-center w-full justify-between'>
+										<h4
+											className='cursor-pointer text-left'
+											onClick={() =>
+												setSearchResultsType(ESearchResultsType.MOVIES)
+											}
+											style={{
+												borderBottom:
+													searchResultsType === ESearchResultsType.MOVIES
+														? '1px solid black'
+														: undefined,
+											}}
+										>
+											Movies
+										</h4>
+										<p className='text-right'>{searchedMovies.total_results}</p>
+									</li>
+									<li className='flex items-center w-full justify-between'>
+										<h4
+											className='cursor-pointer text-left'
+											onClick={() =>
+												setSearchResultsType(ESearchResultsType.SHOWS)
+											}
+											style={{
+												borderBottom:
+													searchResultsType === ESearchResultsType.SHOWS
+														? '1px solid black'
+														: undefined,
+											}}
+										>
+											Shows
+										</h4>
+										<p className='text-right'>{searchedShows.total_results}</p>
+									</li>
+									<li className='flex items-center w-full justify-between'>
+										<h4
+											className='cursor-pointer text-left'
+											onClick={() =>
+												setSearchResultsType(ESearchResultsType.PEOPLE)
+											}
+											style={{
+												borderBottom:
+													searchResultsType === ESearchResultsType.PEOPLE
+														? '1px solid black'
+														: undefined,
+											}}
+										>
+											People
+										</h4>
+										<p className='text-right'>{searchedPeople.total_results}</p>
+									</li>
+								</ul>
+							</section>
+							<section>
+								{getSearchedTypeData()?.results.length ? (
+									getSearchedTypeData()?.results.map(result => (
+										<SearchResult
+											key={result.id}
+											result={result}
+											searchedResultType={getSearchResultType()}
+										/>
+									))
+								) : (
+									<div>No results</div>
+								)}
+							</section>
+						</section>
+
+						<Pagination
+							currPage={currPage}
+							totalItems={
+								searchResultsType === ESearchResultsType.MOVIES
+									? searchedMovies.total_results
+									: searchResultsType === ESearchResultsType.SHOWS
+									? searchedShows.total_results
+									: searchedPeople.total_results
+							}
+							itemsPerPage={RESULTS_PER_PAGE}
+							paginate={(pageNum: number) => setCurrPage(pageNum)}
+							siblingCount={1}
+							maxPageNum={500}
+						/>
+					</>
+				)}
+			</main>
+		</>
 	);
 };
 

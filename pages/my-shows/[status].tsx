@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import MyShowsList from 'components/UI/MyMediaUI/MyShowsList';
 import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
@@ -53,12 +54,21 @@ const Status = () => {
 	}, [router.query.status, usersShowsData]);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<MyShowsList
-				status={router.query.status as TStatusParam}
-				myShows={myShows}
-			/>
-		</main>
+		<>
+			<Head>
+				<title>{`${(router.query.status as string)
+					.split('-')
+					.map(word => word[0].toUpperCase() + word.slice(1))
+					.join(' ')} - Shows`}</title>
+			</Head>
+
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				<MyShowsList
+					status={router.query.status as TStatusParam}
+					myShows={myShows}
+				/>
+			</main>
+		</>
 	);
 };
 
