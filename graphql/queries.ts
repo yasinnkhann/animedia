@@ -671,8 +671,8 @@ export const QUERY_POPULAR_PEOPLE = gql`
 `;
 
 export const QUERY_PERSON_DETAILS = gql`
-	query getPersonDetails($personDetailsId: Int!) {
-		personDetails(id: $personDetailsId) {
+	query PersonDetails($personDetailsId: Int!) {
+		personDetails(personDetailsId: $personDetailsId) {
 			adult
 			also_known_as
 			biography
@@ -799,7 +799,9 @@ export const QUERY_GET_USERS_SHOWS = gql`
 
 export const QUERY_GET_PERSONS_KNOWN_FOR_MOVIES = gql`
 	query PersonsKnownForMovieRes($personsKnownForMovieResId: Int!) {
-		personsKnownForMovieRes(id: $personsKnownForMovieResId) {
+		personsKnownForMovieRes(
+			personsKnownForMovieResId: $personsKnownForMovieResId
+		) {
 			id
 			cast {
 				adult
@@ -845,7 +847,9 @@ export const QUERY_GET_PERSONS_KNOWN_FOR_MOVIES = gql`
 
 export const QUERY_GET_PERSONS_KNOWN_FOR_SHOWS = gql`
 	query PersonsKnownForShowRes($personsKnownForShowResId: Int!) {
-		personsKnownForShowRes(id: $personsKnownForShowResId) {
+		personsKnownForShowRes(
+			personsKnownForShowResId: $personsKnownForShowResId
+		) {
 			id
 			cast {
 				adult

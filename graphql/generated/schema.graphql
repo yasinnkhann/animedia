@@ -365,9 +365,9 @@ type Query {
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesCastCrew(movieId: Int!): MoviesCastCrewRes
   moviesInTheatres(page: Int): MoviesInTheatresRes!
-  personDetails(id: Int!): PersonDetailsRes!
-  personsKnownForMovieRes(id: Int!): PersonsKnownForMovieRes!
-  personsKnownForShowRes(id: Int!): PersonsKnownForShowRes!
+  personDetails(personDetailsId: Int!): PersonDetailsRes!
+  personsKnownForMovieRes(personsKnownForMovieResId: Int!): PersonsKnownForMovieRes!
+  personsKnownForShowRes(personsKnownForShowResId: Int!): PersonsKnownForShowRes!
   popularAnimeMovies(page: Int): MoviesRes!
   popularAnimeShows(page: Int): ShowsRes!
   popularMovies(page: Int): MoviesRes!

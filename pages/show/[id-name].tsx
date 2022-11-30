@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../components/RoundProgressBar';
+import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCastHorizontalScroller';
 import EpisodeDetailsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { request } from 'graphql-request';
-import { GetServerSideProps } from 'next';
-import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
+import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
@@ -24,12 +24,9 @@ import {
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
 
-interface Props {
-	showDetails: NexusGenObjects['ShowDetailsRes'];
-}
-
-const ShowDetails = ({ showDetails }: Props) => {
+const ShowDetails = () => {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 
 	const recShowsContainerRef = useRef<HTMLElement>(null);
 	const showCastContainerRef = useRef<HTMLElement>(null);
@@ -42,6 +39,24 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
+	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+
+	const {
+		data: showDetailsData,
+		loading: showDetailsLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['ShowDetailsRes'],
+		NexusGenArgTypes['Query']['showDetails']
+	> = useGQLQuery<NexusGenArgTypes['Query']['showDetails']>(
+		Queries.QUERY_SHOW_DETAILS,
+		{
+			variables: {
+				showDetailsId: id,
+			},
+			fetchPolicy: 'network-only',
+		}
+	);
+
 	const {
 		data: usersShowData,
 		loading: usersShowLoading,
@@ -52,7 +67,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Queries.QUERY_GET_USERS_SHOW,
 		{
 			variables: {
-				showId: String(showDetails.id),
+				showId: String(showDetailsData?.id),
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -68,7 +83,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Queries.QUERY_RECOMMENDED_SHOWS,
 		{
 			variables: {
-				recommendedShowsId: showDetails.id,
+				recommendedShowsId: showDetailsData?.id!,
 			},
 		}
 	);
@@ -83,7 +98,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Queries.QUERY_GET_SHOWS_CAST_CREW,
 		{
 			variables: {
-				showId: showDetails.id,
+				showId: showDetailsData?.id!,
 			},
 		}
 	);
@@ -98,8 +113,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Mutations.MUTATION_ADD_SHOW,
 		{
 			variables: {
-				showId: String(showDetails.id),
-				showName: showDetails.name,
+				showId: String(showDetailsData?.id),
+				showName: showDetailsData?.name!,
 				watchStatus,
 				currentEpisode: Number(currEp),
 			},
@@ -107,7 +122,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				{
 					query: Queries.QUERY_GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 					},
 				},
 				'UsersShow',
@@ -125,7 +140,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Mutations.MUTATION_UPDATE_SHOW,
 		{
 			variables: {
-				showId: String(showDetails.id),
+				showId: String(showDetailsData?.id),
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
 				currentEpisode: Number(currEp),
@@ -134,7 +149,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 				{
 					query: Queries.QUERY_GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 					},
 				},
 				'UsersShow',
@@ -152,13 +167,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 		Mutations.MUTATION_DELETE_SHOW,
 		{
 			variables: {
-				showId: String(showDetails.id),
+				showId: String(showDetailsData?.id),
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.QUERY_GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 					},
 				},
 				'UsersShow',
@@ -177,7 +192,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'NOT_WATCHING') {
 				deleteShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 					},
 				});
 
@@ -190,7 +205,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						watchStatus: 'PLAN_TO_WATCH',
 						currentEpisode: 0,
 						showRating: null,
@@ -201,13 +216,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 			}
 
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
-				setCurrEp(String(showDetails.number_of_episodes));
+				setCurrEp(String(showDetailsData?.number_of_episodes));
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						watchStatus: 'COMPLETED',
-						currentEpisode: showDetails.number_of_episodes,
+						currentEpisode: showDetailsData?.number_of_episodes,
 					},
 				});
 
@@ -216,21 +231,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			updateShow({
 				variables: {
-					showId: String(showDetails.id),
+					showId: String(showDetailsData?.id),
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 					currentEpisode: usersShowData.current_episode,
 				},
 			});
 		} else {
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'COMPLETED') {
-				setCurrEp(String(showDetails.number_of_episodes));
+				setCurrEp(String(showDetailsData?.number_of_episodes));
 
 				addShow({
 					variables: {
-						showId: String(showDetails.id),
-						showName: showDetails.name,
+						showId: String(showDetailsData?.id),
+						showName: showDetailsData?.name!,
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
-						currentEpisode: showDetails.number_of_episodes,
+						currentEpisode: showDetailsData?.number_of_episodes,
 					},
 				});
 
@@ -239,8 +254,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			addShow({
 				variables: {
-					showId: String(showDetails.id),
-					showName: showDetails.name,
+					showId: String(showDetailsData?.id),
+					showName: showDetailsData?.name!,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 					currentEpisode: Number(currEp),
 				},
@@ -255,7 +270,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 		updateShow({
 			variables: {
-				showId: String(showDetails.id),
+				showId: String(showDetailsData?.id),
 				showRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 			},
@@ -274,17 +289,17 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (currEp === '' || +currEp > showDetails.number_of_episodes) return;
+		if (currEp === '' || +currEp > showDetailsData!.number_of_episodes) return;
 
-		if (+currEp === showDetails.number_of_episodes) {
+		if (+currEp === showDetailsData!.number_of_episodes) {
 			setWatchStatus('COMPLETED');
 
 			updateShow({
 				variables: {
-					showId: String(showDetails.id),
+					showId: String(showDetailsData?.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: 'COMPLETED',
-					currentEpisode: showDetails.number_of_episodes,
+					currentEpisode: showDetailsData?.number_of_episodes,
 				},
 			});
 
@@ -293,7 +308,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 		updateShow({
 			variables: {
-				showId: String(showDetails.id),
+				showId: String(showDetailsData?.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
 				currentEpisode: Number(currEp),
@@ -304,22 +319,22 @@ const ShowDetails = ({ showDetails }: Props) => {
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (
 			e.target.value === '' ||
-			+e.target.value > showDetails.number_of_episodes
+			+e.target.value > showDetailsData!.number_of_episodes
 		) {
 			setCurrEp(String(usersShowData?.current_episode) ?? '0');
 		} else {
 			if (
 				watchStatus === 'WATCHING' &&
-				+e.target.value === showDetails.number_of_episodes
+				+e.target.value === showDetailsData!.number_of_episodes
 			) {
 				setWatchStatus('COMPLETED');
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: 'COMPLETED',
-						currentEpisode: showDetails.number_of_episodes,
+						currentEpisode: showDetailsData?.number_of_episodes,
 					},
 				});
 
@@ -327,7 +342,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			}
 			updateShow({
 				variables: {
-					showId: String(showDetails.id),
+					showId: String(showDetailsData?.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
 					currentEpisode: Number(currEp),
@@ -345,8 +360,8 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			addShow({
 				variables: {
-					showId: String(showDetails.id),
-					showName: showDetails.name,
+					showId: String(showDetailsData?.id),
+					showName: showDetailsData?.name!,
 					watchStatus: 'WATCHING',
 					currentEpisode: 1,
 				},
@@ -367,7 +382,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: 'WATCHING',
 						currentEpisode: 1,
@@ -381,7 +396,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 			updateShow({
 				variables: {
-					showId: String(showDetails.id),
+					showId: String(showDetailsData?.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: usersShowData.status!,
 					currentEpisode: prevEp + 1,
@@ -391,7 +406,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 			return;
 		}
 
-		if (prevEp + 1 < showDetails.number_of_episodes && usersShowData) {
+		if (prevEp + 1 < showDetailsData!.number_of_episodes && usersShowData) {
 			setTimeout(() => {
 				setCurrEp(String(prevEp + 1));
 
@@ -400,7 +415,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 					updateShow({
 						variables: {
-							showId: String(showDetails.id),
+							showId: String(showDetailsData?.id),
 							showRating: typeof rating === 'string' ? null : rating,
 							watchStatus: 'WATCHING',
 							currentEpisode: prevEp + 1,
@@ -412,7 +427,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: usersShowData.status!,
 						currentEpisode: prevEp + 1,
@@ -423,13 +438,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 			return;
 		}
 
-		if (prevEp + 1 === showDetails.number_of_episodes && usersShowData) {
+		if (prevEp + 1 === showDetailsData!.number_of_episodes && usersShowData) {
 			setWatchStatus('COMPLETED');
 			setCurrEp(String(prevEp + 1));
 
 			updateShow({
 				variables: {
-					showId: String(showDetails.id),
+					showId: String(showDetailsData?.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: 'COMPLETED',
 					currentEpisode: prevEp + 1,
@@ -457,7 +472,7 @@ const ShowDetails = ({ showDetails }: Props) => {
 	useEffect(() => {
 		if (!usersShowLoading && usersShowData) {
 			if (
-				+currEp === showDetails.number_of_episodes &&
+				+currEp === showDetailsData!.number_of_episodes &&
 				watchStatus !== 'DROPPED' &&
 				watchStatus !== 'ON_HOLD' &&
 				watchStatus !== 'WATCHING' &&
@@ -467,10 +482,10 @@ const ShowDetails = ({ showDetails }: Props) => {
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: 'COMPLETED',
-						currentEpisode: showDetails.number_of_episodes,
+						currentEpisode: showDetailsData?.number_of_episodes,
 					},
 				});
 
@@ -478,14 +493,14 @@ const ShowDetails = ({ showDetails }: Props) => {
 			}
 
 			if (
-				usersShowData.current_episode! < showDetails.number_of_episodes &&
+				usersShowData.current_episode! < showDetailsData!.number_of_episodes &&
 				watchStatus === 'COMPLETED'
 			) {
 				setWatchStatus('WATCHING');
 
 				updateShow({
 					variables: {
-						showId: String(showDetails.id),
+						showId: String(showDetailsData?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: 'WATCHING',
 						currentEpisode: usersShowData.current_episode!,
@@ -506,12 +521,12 @@ const ShowDetails = ({ showDetails }: Props) => {
 	}, [
 		rating,
 		currEp,
-		showDetails.number_of_episodes,
+		showDetailsData?.number_of_episodes!,
 		usersShowLoading,
 		usersShowData,
 		watchStatus,
 		updateShow,
-		showDetails.id,
+		showDetailsData?.id!,
 	]);
 
 	useEffect(() => {
@@ -542,15 +557,21 @@ const ShowDetails = ({ showDetails }: Props) => {
 		}
 	});
 
-	console.log('SHOW DETAILS: ', showDetails);
+	if (showDetailsLoading) {
+		return (
+			<div className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</div>
+		);
+	}
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + showDetails.poster_path}
-					alt={showDetails.name ?? undefined}
+					src={BASE_IMG_URL + showDetailsData!.poster_path}
+					alt={showDetailsData!.name ?? undefined}
 					layout='fill'
 				/>
 			</section>
@@ -559,11 +580,11 @@ const ShowDetails = ({ showDetails }: Props) => {
 				<section className='flex items-center mb-8 mt-8'>
 					<section className='h-[5rem] w-[5rem]'>
 						<RoundProgressBar
-							percentageVal={+showDetails.vote_average.toFixed(1) * 10}
+							percentageVal={+showDetailsData!.vote_average.toFixed(1) * 10}
 						/>
 					</section>
 					<p className='ml-[.5rem] font-medium text-base'>
-						{commaNumber(showDetails.vote_count)} voted users
+						{commaNumber(showDetailsData!.vote_count)} voted users
 					</p>
 				</section>
 
@@ -618,13 +639,13 @@ const ShowDetails = ({ showDetails }: Props) => {
 								onBlur={handleEpisodeOnBlur}
 							/>
 							<span>/</span>
-							<span>{showDetails.number_of_episodes}</span>
+							<span>{showDetailsData!.number_of_episodes}</span>
 							<button
 								className='mx-1 text-blue-500'
 								onClick={handleIncrementBtn}
 								type='button'
 								disabled={
-									+currEp >= showDetails.number_of_episodes || isDBPending
+									+currEp >= showDetailsData!.number_of_episodes || isDBPending
 								}
 							>
 								+
@@ -634,66 +655,68 @@ const ShowDetails = ({ showDetails }: Props) => {
 				)}
 
 				<section className='pb-32'>
-					<h1>{showDetails.name}</h1>
-					<h4 className='my-4'>{showDetails.tagline}</h4>
-					<p>{showDetails.overview}</p>
+					<h1>{showDetailsData!.name}</h1>
+					<h4 className='my-4'>{showDetailsData!.tagline}</h4>
+					<p>{showDetailsData!.overview}</p>
 				</section>
 			</section>
 
 			<section className='ml-8 my-4'>
 				<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 				<h4 className='mt-4'>No. of Seasons</h4>
-				<p className='ml-1'>{showDetails.number_of_seasons}</p>
+				<p className='ml-1'>{showDetailsData!.number_of_seasons}</p>
 				<h4 className='mt-4'>No. of Episodes</h4>
-				<p className='ml-1'>{showDetails.number_of_episodes}</p>
+				<p className='ml-1'>{showDetailsData!.number_of_episodes}</p>
 				<h4 className='mt-4'>First Air Date</h4>
-				{showDetails.first_air_date ? (
-					<p className='ml-1'>{formatDate(showDetails.first_air_date)}</p>
+				{showDetailsData!.first_air_date ? (
+					<p className='ml-1'>{formatDate(showDetailsData!.first_air_date)}</p>
 				) : (
 					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Last Episode to Air</h4>
-				{showDetails.last_episode_to_air ? (
+				{showDetailsData!.last_episode_to_air ? (
 					<div className='ml-1'>
 						<p>
-							Season {showDetails.last_episode_to_air.season_number} Episode{' '}
-							{showDetails.last_episode_to_air.episode_number}
+							Season {showDetailsData!.last_episode_to_air.season_number}{' '}
+							Episode {showDetailsData!.last_episode_to_air.episode_number}
 							<br />
-							{formatDate(showDetails.last_episode_to_air.air_date!)}
+							{formatDate(showDetailsData!.last_episode_to_air.air_date!)}
 						</p>
 					</div>
 				) : (
 					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Next Episode to Air</h4>
-				{showDetails.next_episode_to_air ? (
+				{showDetailsData!.next_episode_to_air ? (
 					<div className='ml-1'>
 						<p>
-							Season {showDetails.next_episode_to_air.season_number} Episode{' '}
-							{showDetails.next_episode_to_air.episode_number}
+							Season {showDetailsData!.next_episode_to_air.season_number}{' '}
+							Episode {showDetailsData!.next_episode_to_air.episode_number}
 							<br />
-							{formatDate(showDetails.next_episode_to_air.air_date!)}
+							{formatDate(showDetailsData!.next_episode_to_air.air_date!)}
 						</p>
 					</div>
 				) : (
 					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Status</h4>
-				<p className='ml-1'>{showDetails.status}</p>
+				<p className='ml-1'>{showDetailsData!.status}</p>
 				<h4 className='mt-4'>In Production</h4>
-				<p className='ml-1'>{showDetails.in_production ? 'Yes' : 'No'}</p>
+				<p className='ml-1'>{showDetailsData!.in_production ? 'Yes' : 'No'}</p>
 				<h4 className='mt-4'>Genre(s)</h4>
 				<div className='ml-1'>
-					{showDetails.genres.map((genre, idx) => (
+					{showDetailsData!.genres.map((genre, idx) => (
 						<p key={idx}>{genre.name}</p>
 					))}
 				</div>
 				<h4 className='mt-4'>Original Language</h4>
-				<p className='ml-1'>{getEnglishName(showDetails.original_language)}</p>
-				{showDetails.homepage.length > 0 && (
+				<p className='ml-1'>
+					{getEnglishName(showDetailsData!.original_language)}
+				</p>
+				{showDetailsData!.homepage.length > 0 && (
 					<>
 						<h4 className='mt-4'>Official Page</h4>
-						<Link href={showDetails.homepage}>
+						<Link href={showDetailsData!.homepage}>
 							<a className='underline ml-1' target='_blank'>
 								Learn More
 							</a>
@@ -703,15 +726,15 @@ const ShowDetails = ({ showDetails }: Props) => {
 			</section>
 
 			<section className='col-start-2 mt-4'>
-				{showDetails.seasons.length > 0 &&
-					showDetails.number_of_episodes <= 500 && (
+				{showDetailsData!.seasons.length > 0 &&
+					showDetailsData!.number_of_episodes! <= 500 && (
 						<section ref={episodesContainerRef}>
 							<h3 className='mb-4 ml-8'>Episodes</h3>
 							<EpisodeDetailsHorizontalScroller
-								seasons={showDetails.seasons.filter(
+								seasons={showDetailsData!.seasons!.filter(
 									season => season?.season_number! > 0
 								)}
-								showId={showDetails.id}
+								showId={showDetailsData!.id}
 							/>
 						</section>
 					)}
@@ -751,19 +774,3 @@ const ShowDetails = ({ showDetails }: Props) => {
 	);
 };
 export default ShowDetails;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
-
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_SHOW_DETAILS, {
-		showDetailsId: id,
-	});
-
-	const { showDetails } = data;
-
-	return {
-		props: {
-			showDetails,
-		},
-	};
-};

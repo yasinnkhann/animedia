@@ -96,11 +96,11 @@ export const getPersonDetails = extendType({
 		t.nonNull.field('personDetails', {
 			type: 'PersonDetailsRes',
 			args: {
-				id: nonNull(intArg()),
+				personDetailsId: nonNull(intArg()),
 			},
-			resolve: async (_parent, { id }) => {
+			resolve: async (_parent, { personDetailsId }) => {
 				const { data } = await axios.get(
-					`${BASE_URL}/person/${id}?api_key=${process.env
+					`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
 						.API_KEY!}&language=en-US&page=1`
 				);
 
@@ -199,12 +199,12 @@ export const getPersonsKnownForMovie = extendType({
 			t.nonNull.field('personsKnownForMovieRes', {
 				type: 'PersonsKnownForMovieRes',
 				args: {
-					id: nonNull(intArg()),
+					personsKnownForMovieResId: nonNull(intArg()),
 				},
-				resolve: async (_parent, { id }) => {
+				resolve: async (_parent, { personsKnownForMovieResId }) => {
 					const { data } = await axios.get(
-						`${BASE_URL}/person/${id}/movie_credits?api_key=${process.env
-							.API_KEY!}&language=en-US`
+						`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
+							.env.API_KEY!}&language=en-US`
 					);
 					return data;
 				},
@@ -279,12 +279,12 @@ export const getPersonsKnownForShow = extendType({
 			t.nonNull.field('personsKnownForShowRes', {
 				type: 'PersonsKnownForShowRes',
 				args: {
-					id: nonNull(intArg()),
+					personsKnownForShowResId: nonNull(intArg()),
 				},
-				resolve: async (_parent, { id }) => {
+				resolve: async (_parent, { personsKnownForShowResId }) => {
 					const { data } = await axios.get(
-						`${BASE_URL}/person/${id}/tv_credits?api_key=${process.env
-							.API_KEY!}&language=en-US`
+						`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
+							.env.API_KEY!}&language=en-US`
 					);
 					return data;
 				},

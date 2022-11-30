@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
-import { request } from 'graphql-request';
-import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
-import { GetServerSideProps } from 'next';
-import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
+import { Circles } from 'react-loading-icons';
+import { useGQLQuery } from '../../hooks/useGQL';
+import { IUseGQLQuery } from '@ts/interfaces';
+import {
+	NexusGenObjects,
+	NexusGenArgTypes,
+} from '../../graphql/generated/nexus-typegen';
+import { BASE_IMG_URL } from '../../utils/URLs';
 import { IKnownForMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
 import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
@@ -13,16 +18,64 @@ import {
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/specificVals';
 
-interface Props {
-	personDetails: NexusGenObjects['PersonDetailsRes'];
-	personsKnownForMovieRes: NexusGenObjects['PersonsKnownForMovieRes'];
-	personsKnownForShowRes: NexusGenObjects['PersonsKnownForShowRes'];
-}
-const PersonDetails = ({
-	personDetails,
-	personsKnownForMovieRes,
-	personsKnownForShowRes,
-}: Props) => {
+const PersonDetails = () => {
+	const router = useRouter();
+	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+
+	const {
+		data: personDetailsData,
+		loading: personDetailsLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['PersonDetailsRes'],
+		NexusGenArgTypes['Query']['personDetails']
+	> = useGQLQuery<NexusGenArgTypes['Query']['personDetails']>(
+		Queries.QUERY_PERSON_DETAILS,
+		{
+			variables: {
+				personDetailsId: id,
+			},
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	console.log('PERSON DETAILS DATA ', personDetailsData);
+
+	const {
+		data: knownForMoviesData,
+		loading: knownForMoviesLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['PersonsKnownForMovieRes'],
+		NexusGenArgTypes['Query']['personsKnownForMovieRes']
+	> = useGQLQuery<NexusGenArgTypes['Query']['personsKnownForMovieRes']>(
+		Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES,
+		{
+			variables: {
+				personsKnownForMovieResId: id,
+			},
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	console.log('knownForMoviesData ', knownForMoviesData);
+
+	const {
+		data: knownForShowsData,
+		loading: knownForShowsLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['PersonsKnownForShowRes'],
+		NexusGenArgTypes['Query']['personsKnownForShowRes']
+	> = useGQLQuery<NexusGenArgTypes['Query']['personsKnownForShowRes']>(
+		Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS,
+		{
+			variables: {
+				personsKnownForShowResId: id,
+			},
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	console.log('knownForShowsData ', knownForShowsData);
+
 	const knownForContainerRef = useRef<HTMLElement>(null);
 
 	const memoMappedMedia = useMemo(() => {
@@ -30,7 +83,7 @@ const PersonDetails = ({
 
 		const mappedMoviesCast: IKnownForMedia[] = [];
 
-		for (const castObj of personsKnownForMovieRes.cast) {
+		for (const castObj of knownForMoviesData?.cast ?? []) {
 			if (!moviesTracker.hasOwnProperty(castObj!.id)) {
 				moviesTracker[String(castObj!.id)] = true;
 
@@ -47,7 +100,7 @@ const PersonDetails = ({
 
 		const mappedShowsCast: IKnownForMedia[] = [];
 
-		for (const castObj of personsKnownForShowRes.cast) {
+		for (const castObj of knownForShowsData?.cast ?? []) {
 			if (
 				!showsTracker.hasOwnProperty(castObj!.id) &&
 				castObj!.episode_count! > KNOWN_FOR_MIN_EP_COUNT
@@ -67,7 +120,7 @@ const PersonDetails = ({
 			.concat(mappedShowsCast)
 			.sort((a, b) => b.popularity! - a.popularity!)
 			.slice(0, KNOWN_FOR_CARDS_LIMIT);
-	}, [personsKnownForMovieRes, personsKnownForShowRes]);
+	}, [knownForMoviesData, knownForShowsData]);
 
 	useEffect(() => {
 		if (knownForContainerRef.current) {
@@ -93,62 +146,71 @@ const PersonDetails = ({
 		return age;
 	};
 
+	if (personDetailsLoading || knownForMoviesLoading || knownForShowsLoading) {
+		return (
+			<div className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</div>
+		);
+	}
+
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + personDetails.profile_path}
-					alt={personDetails.name ?? undefined}
+					src={BASE_IMG_URL + personDetailsData!.profile_path}
+					alt={personDetailsData!.name ?? undefined}
 					layout='fill'
 				/>
 			</section>
 
 			<section className='pb-48'>
-				<h1>{personDetails.name}</h1>
+				<h1>{personDetailsData!.name}</h1>
 				<h3 className='my-4'>Biography</h3>
 				<p>
-					{personDetails.biography!.length > 0
-						? personDetails.biography
-						: `We don't have a biography for ${personDetails.name}.`}
+					{personDetailsData!.biography!.length > 0
+						? personDetailsData!.biography
+						: `We don't have a biography for ${personDetailsData!.name}.`}
 				</p>
 			</section>
 
 			<section className='ml-8 mt-4'>
 				<h3 className='mb-4 underline underline-offset-4'>Personal Info</h3>
 				<h4>Known For</h4>
-				<p className='ml-1'>{personDetails.known_for_department}</p>
+				<p className='ml-1'>{personDetailsData!.known_for_department}</p>
 				<h4 className='mt-4'>Gender</h4>
 				<p className='ml-1'>
-					{personDetails.gender === 1
+					{personDetailsData!.gender === 1
 						? 'Female'
-						: personDetails.gender === 2
+						: personDetailsData!.gender === 2
 						? 'Male'
 						: 'Unknown'}
 				</p>
 				<h4 className='mt-4'>Date of Birth</h4>
 				<p className='ml-1'>
-					{personDetails.birthday
-						? `${formatDate(personDetails.birthday)}${
-								!personDetails.deathday
-									? ` (${getAge(personDetails.birthday)} years old)`
+					{personDetailsData!.birthday
+						? `${formatDate(personDetailsData!.birthday)}${
+								!personDetailsData!.deathday
+									? ` (${getAge(personDetailsData!.birthday)} years old)`
 									: ''
 						  }`
 						: 'Unknown'}
 				</p>
 				<h4 className='mt-4'>Born In</h4>
 				<p className='ml-1'>
-					{personDetails.place_of_birth
-						? personDetails.place_of_birth
+					{personDetailsData!.place_of_birth
+						? personDetailsData!.place_of_birth
 						: 'Unknown'}
 				</p>
-				{personDetails.deathday && (
+				{personDetailsData!.deathday && (
 					<>
 						<h4 className='mt-4'>Date of Death</h4>
-						<p className='ml-1'>{`${formatDate(personDetails.deathday)}${
-							personDetails.birthday &&
+						<p className='ml-1'>{`${formatDate(personDetailsData!.deathday)}${
+							personDetailsData!.birthday &&
 							` (${
-								getAge(personDetails.birthday) - getAge(personDetails.deathday)
+								getAge(personDetailsData!.birthday) -
+								getAge(personDetailsData!.deathday)
 							}`
 						} years old)`}</p>
 					</>
@@ -164,45 +226,3 @@ const PersonDetails = ({
 };
 
 export default PersonDetails;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
-
-	const personDetailsData = await request(
-		SERVER_BASE_URL,
-		Queries.QUERY_PERSON_DETAILS,
-		{
-			personDetailsId: id,
-		}
-	);
-
-	const { personDetails } = personDetailsData;
-
-	const knownForMoviesData = await request(
-		SERVER_BASE_URL,
-		Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES,
-		{
-			personsKnownForMovieResId: id,
-		}
-	);
-
-	const { personsKnownForMovieRes } = knownForMoviesData;
-
-	const knownForShowsData = await request(
-		SERVER_BASE_URL,
-		Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS,
-		{
-			personsKnownForShowResId: id,
-		}
-	);
-
-	const { personsKnownForShowRes } = knownForShowsData;
-
-	return {
-		props: {
-			personDetails,
-			personsKnownForMovieRes,
-			personsKnownForShowRes,
-		},
-	};
-};

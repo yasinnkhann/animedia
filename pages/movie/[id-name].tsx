@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
+import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCastHorizontalScroller';
-import { request } from 'graphql-request';
-import { GetServerSideProps } from 'next';
-import { SERVER_BASE_URL, BASE_IMG_URL } from '../../utils/URLs';
+import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
@@ -23,12 +23,9 @@ import {
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
 
-interface Props {
-	movieDetails: NexusGenObjects['MovieDetailsRes'];
-}
-
-const MovieDetails = ({ movieDetails }: Props) => {
+const MovieDetails = () => {
 	const { data: session, status } = useSession();
+	const router = useRouter();
 
 	const recMoviesContainerRef = useRef<HTMLElement>(null);
 	const movieCastContainerRef = useRef<HTMLElement>(null);
@@ -37,6 +34,24 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
+
+	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+
+	const {
+		data: movieDetailsData,
+		loading: movieDetailsLoading,
+	}: IUseGQLQuery<
+		NexusGenObjects['MovieDetailsRes'],
+		NexusGenArgTypes['Query']['movieDetails']
+	> = useGQLQuery<NexusGenArgTypes['Query']['movieDetails']>(
+		Queries.QUERY_MOVIE_DETAILS,
+		{
+			variables: {
+				movieDetailsId: id,
+			},
+			fetchPolicy: 'network-only',
+		}
+	);
 
 	const {
 		data: usersMovieData,
@@ -48,7 +63,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_USERS_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetails.id),
+				movieId: String(movieDetailsData?.id),
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -64,7 +79,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_RECOMMENDED_MOVIES,
 		{
 			variables: {
-				recommendedMoviesId: movieDetails.id,
+				recommendedMoviesId: movieDetailsData?.id!,
 			},
 		}
 	);
@@ -79,7 +94,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Queries.QUERY_GET_MOVIES_CAST_CREW,
 		{
 			variables: {
-				movieId: movieDetails.id,
+				movieId: movieDetailsData?.id!,
 			},
 		}
 	);
@@ -94,15 +109,15 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Mutations.MUTATION_ADD_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetails.id),
-				movieName: movieDetails.title,
+				movieId: String(movieDetailsData?.id),
+				movieName: movieDetailsData?.title!,
 				watchStatus,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetails.id),
+						movieId: String(movieDetailsData?.id),
 					},
 				},
 				'UsersMovie',
@@ -120,7 +135,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Mutations.MUTATION_UPDATE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetails.id),
+				movieId: String(movieDetailsData?.id),
 				watchStatus,
 				movieRating: typeof rating === 'number' ? rating : null,
 			},
@@ -128,7 +143,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetails.id),
+						movieId: String(movieDetailsData?.id),
 					},
 				},
 				'UsersMovie',
@@ -146,13 +161,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		Mutations.MUTATION_DELETE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetails.id),
+				movieId: String(movieDetailsData?.id),
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetails.id),
+						movieId: String(movieDetailsData?.id),
 					},
 				},
 				'UsersMovie',
@@ -172,13 +187,13 @@ const MovieDetails = ({ movieDetails }: Props) => {
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'NOT_WATCHING') {
 				deleteMovie({
 					variables: {
-						movieId: String(movieDetails.id),
+						movieId: String(movieDetailsData?.id),
 					},
 				});
 			} else {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetails.id),
+						movieId: String(movieDetailsData?.id),
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 					},
 				});
@@ -186,8 +201,8 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		} else {
 			addMovie({
 				variables: {
-					movieId: String(movieDetails.id),
-					movieName: movieDetails.title,
+					movieId: String(movieDetailsData?.id),
+					movieName: movieDetailsData?.title!,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 				},
 			});
@@ -200,7 +215,7 @@ const MovieDetails = ({ movieDetails }: Props) => {
 
 		updateMovie({
 			variables: {
-				movieId: String(movieDetails.id),
+				movieId: String(movieDetailsData!.id),
 				movieRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 			},
@@ -239,13 +254,21 @@ const MovieDetails = ({ movieDetails }: Props) => {
 		}
 	});
 
+	if (movieDetailsLoading) {
+		return (
+			<div className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</div>
+		);
+	}
+
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 			<section className='relative mx-4 mt-4'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + movieDetails.poster_path}
-					alt={movieDetails.title ?? undefined}
+					src={BASE_IMG_URL + movieDetailsData!.poster_path}
+					alt={movieDetailsData!.title ?? undefined}
 					layout='fill'
 				/>
 			</section>
@@ -254,11 +277,11 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				<section className='flex items-center mb-8 mt-8'>
 					<section className='h-[5rem] w-[5rem]'>
 						<RoundProgressBar
-							percentageVal={+movieDetails.vote_average.toFixed(1) * 10}
+							percentageVal={+movieDetailsData!.vote_average.toFixed(1) * 10}
 						/>
 					</section>
 					<p className='ml-[.5rem] font-medium text-base'>
-						{commaNumber(movieDetails.vote_count)} voted users
+						{commaNumber(movieDetailsData!.vote_count!)} voted users
 					</p>
 				</section>
 
@@ -297,36 +320,38 @@ const MovieDetails = ({ movieDetails }: Props) => {
 				)}
 
 				<section className='pb-32'>
-					<h1>{movieDetails.title}</h1>
-					<h4 className='my-4'>{movieDetails.tagline}</h4>
-					<p>{movieDetails.overview}</p>
+					<h1>{movieDetailsData!.title}</h1>
+					<h4 className='my-4'>{movieDetailsData!.tagline}</h4>
+					<p>{movieDetailsData!.overview}</p>
 				</section>
 			</section>
 
 			<section className='ml-8 my-4'>
 				<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 				<h4>Runtime</h4>
-				<p className='ml-1'>{movieDetails.runtime} minutes</p>
+				<p className='ml-1'>{movieDetailsData!.runtime} minutes</p>
 				<h4 className='mt-4'>Status</h4>
-				<p className='ml-1'>{movieDetails.status}</p>
+				<p className='ml-1'>{movieDetailsData!.status}</p>
 				<h4 className='mt-4'>Release Date</h4>
-				{movieDetails.release_date ? (
-					<p className='ml-1'>{formatDate(movieDetails.release_date)}</p>
+				{movieDetailsData!.release_date ? (
+					<p className='ml-1'>{formatDate(movieDetailsData!.release_date)}</p>
 				) : (
 					<p className='ml-1'>N/A</p>
 				)}
 				<h4 className='mt-4'>Genre(s)</h4>
 				<div className='ml-1'>
-					{movieDetails.genres.map((genre, idx) => (
+					{movieDetailsData!.genres.map((genre, idx) => (
 						<p key={idx}>{genre.name}</p>
 					))}
 				</div>
 				<h4 className='mt-4'>Original Language</h4>
-				<p className='ml-1'>{getEnglishName(movieDetails.original_language)}</p>
-				{movieDetails.homepage.length > 0 && (
+				<p className='ml-1'>
+					{getEnglishName(movieDetailsData!.original_language!)}
+				</p>
+				{movieDetailsData!.homepage.length > 0 && (
 					<>
 						<h4 className='mt-4'>Official Page</h4>
-						<Link href={movieDetails.homepage}>
+						<Link href={movieDetailsData!.homepage}>
 							<a className='underline ml-1' target='_blank'>
 								Learn More
 							</a>
@@ -373,19 +398,3 @@ const MovieDetails = ({ movieDetails }: Props) => {
 };
 
 export default MovieDetails;
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-	const id = Number((ctx.params?.['id-name'] as string).split('-')[0]);
-
-	const data = await request(SERVER_BASE_URL, Queries.QUERY_MOVIE_DETAILS, {
-		movieDetailsId: id,
-	});
-
-	const { movieDetails } = data;
-
-	return {
-		props: {
-			movieDetails,
-		},
-	};
-};

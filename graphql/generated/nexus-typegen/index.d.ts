@@ -1746,13 +1746,13 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
     }
     personDetails: { // args
-      id: number; // Int!
+      personDetailsId: number; // Int!
     }
     personsKnownForMovieRes: { // args
-      id: number; // Int!
+      personsKnownForMovieResId: number; // Int!
     }
     personsKnownForShowRes: { // args
-      id: number; // Int!
+      personsKnownForShowResId: number; // Int!
     }
     popularAnimeMovies: { // args
       page?: number | null; // Int
