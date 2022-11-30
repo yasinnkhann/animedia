@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import PeopleList from 'components/UI/MediaPersonUI/PeopleList';
 import * as Queries from '../../graphql/queries';
@@ -37,26 +38,32 @@ const PopularPeople = () => {
 	}, [currPage]);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
-			{popularPeopleData ? (
-				<>
-					<h3 className='mb-4'>Popular People</h3>
-					<PeopleList peopleData={popularPeopleData} pageNum={currPage} />
-					<Pagination
-						currPage={currPage}
-						totalItems={popularPeopleData.total_results}
-						itemsPerPage={RESULTS_PER_PAGE}
-						paginate={(pageNum: number) => setCurrPage(pageNum)}
-						siblingCount={1}
-						maxPageNum={500}
-					/>
-				</>
-			) : (
-				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
-					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-				</div>
-			)}
-		</section>
+		<>
+			<Head>
+				<title>Popular People</title>
+			</Head>
+
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
+				{popularPeopleData ? (
+					<>
+						<h3 className='mb-4'>Popular People</h3>
+						<PeopleList peopleData={popularPeopleData} pageNum={currPage} />
+						<Pagination
+							currPage={currPage}
+							totalItems={popularPeopleData.total_results}
+							itemsPerPage={RESULTS_PER_PAGE}
+							paginate={(pageNum: number) => setCurrPage(pageNum)}
+							siblingCount={1}
+							maxPageNum={500}
+						/>
+					</>
+				) : (
+					<section className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+						<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+					</section>
+				)}
+			</main>
+		</>
 	);
 };
 

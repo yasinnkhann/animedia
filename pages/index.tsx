@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import type { NextPage, GetStaticProps } from 'next';
+import Head from 'next/head';
+import { useSession } from 'next-auth/react';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
 import * as Queries from '../graphql/queries';
@@ -13,7 +15,6 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen';
-import { useSession } from 'next-auth/react';
 
 const Home: NextPage = () => {
 	const { data: session } = useSession();
@@ -148,87 +149,31 @@ const Home: NextPage = () => {
 	}
 
 	return (
-		<div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{allDataLoaded && (
-				<div>
-					<SearchBar />
-					<section className='mt-4'>
-						<section className='flex w-full ml-[3rem] items-end'>
-							<div className='flex'>
-								<h1>What&apos;s Popular</h1>
-							</div>
-							<ul className='flex w-[25%] justify-around'>
-								<li
-									className='cursor-pointer'
-									style={{
-										borderBottom:
-											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
-												? '5px solid black'
-												: undefined,
-									}}
-									onClick={() =>
-										handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
-									}
-								>
-									Movies
-								</li>
-								<li
-									className='cursor-pointer'
-									style={{
-										borderBottom:
-											whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
-												? '5px solid black'
-												: undefined,
-									}}
-									onClick={() =>
-										handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
-									}
-								>
-									Shows
-								</li>
-								<li
-									className='cursor-pointer'
-									style={{
-										borderBottom:
-											whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
-												? '5px solid black'
-												: undefined,
-									}}
-									onClick={() =>
-										handleChangePopularQueryType(
-											Queries.QUERY_MOVIES_IN_THEATRES
-										)
-									}
-								>
-									In Theatres
-								</li>
-							</ul>
-						</section>
+		<>
+			<Head>
+				<title>Home</title>
+			</Head>
 
-						<section className='mt-4' ref={whatsPopularContainerRef}>
-							<HomeHorizontalScroller
-								items={whatsPopularData.results as THorizontalScrollerData}
-							/>
-						</section>
-
-						<section className='flex items-end ml-[3rem] mt-4'>
-							<div className=''>
-								<h1>Trending</h1>
-							</div>
-							<section className='flex w-full justify-around'>
-								<ul className='flex w-[20%] justify-around'>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				{allDataLoaded && (
+					<div>
+						<SearchBar />
+						<section className='mt-4'>
+							<section className='flex w-full ml-[3rem] items-end'>
+								<div className='flex'>
+									<h1>What&apos;s Popular</h1>
+								</div>
+								<ul className='flex w-[25%] justify-around'>
 									<li
 										className='cursor-pointer'
 										style={{
 											borderBottom:
-												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+												whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
 													? '5px solid black'
 													: undefined,
 										}}
 										onClick={() =>
-											handleChangeTrendingQueryType(
-												Queries.QUERY_TRENDING_MOVIES
-											)
+											handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 										}
 									>
 										Movies
@@ -237,57 +182,120 @@ const Home: NextPage = () => {
 										className='cursor-pointer'
 										style={{
 											borderBottom:
-												trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+												whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
 													? '5px solid black'
 													: undefined,
 										}}
 										onClick={() =>
-											handleChangeTrendingQueryType(
-												Queries.QUERY_TRENDING_SHOWS
-											)
+											handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 										}
 									>
 										Shows
 									</li>
-								</ul>
-								<ul className='flex w-[20%] justify-around'>
 									<li
 										className='cursor-pointer'
 										style={{
 											borderBottom:
-												trendingTimeWindow === 'day'
+												whatsPopularQueryType ===
+												Queries.QUERY_MOVIES_IN_THEATRES
 													? '5px solid black'
 													: undefined,
 										}}
-										onClick={() => setTrendingTimeWindow('day')}
+										onClick={() =>
+											handleChangePopularQueryType(
+												Queries.QUERY_MOVIES_IN_THEATRES
+											)
+										}
 									>
-										Today
-									</li>
-									<li
-										className='cursor-pointer'
-										style={{
-											borderBottom:
-												trendingTimeWindow === 'week'
-													? '5px solid black'
-													: undefined,
-										}}
-										onClick={() => setTrendingTimeWindow('week')}
-									>
-										This Week
+										In Theatres
 									</li>
 								</ul>
 							</section>
-						</section>
 
-						<section className='mt-4' ref={trendingContainerRef}>
-							<HomeHorizontalScroller
-								items={trendingData.results as THorizontalScrollerData}
-							/>
+							<section className='mt-4' ref={whatsPopularContainerRef}>
+								<HomeHorizontalScroller
+									items={whatsPopularData.results as THorizontalScrollerData}
+								/>
+							</section>
+
+							<section className='flex items-end ml-[3rem] mt-4'>
+								<div className=''>
+									<h1>Trending</h1>
+								</div>
+								<section className='flex w-full justify-around'>
+									<ul className='flex w-[20%] justify-around'>
+										<li
+											className='cursor-pointer'
+											style={{
+												borderBottom:
+													trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+														? '5px solid black'
+														: undefined,
+											}}
+											onClick={() =>
+												handleChangeTrendingQueryType(
+													Queries.QUERY_TRENDING_MOVIES
+												)
+											}
+										>
+											Movies
+										</li>
+										<li
+											className='cursor-pointer'
+											style={{
+												borderBottom:
+													trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+														? '5px solid black'
+														: undefined,
+											}}
+											onClick={() =>
+												handleChangeTrendingQueryType(
+													Queries.QUERY_TRENDING_SHOWS
+												)
+											}
+										>
+											Shows
+										</li>
+									</ul>
+									<ul className='flex w-[20%] justify-around'>
+										<li
+											className='cursor-pointer'
+											style={{
+												borderBottom:
+													trendingTimeWindow === 'day'
+														? '5px solid black'
+														: undefined,
+											}}
+											onClick={() => setTrendingTimeWindow('day')}
+										>
+											Today
+										</li>
+										<li
+											className='cursor-pointer'
+											style={{
+												borderBottom:
+													trendingTimeWindow === 'week'
+														? '5px solid black'
+														: undefined,
+											}}
+											onClick={() => setTrendingTimeWindow('week')}
+										>
+											This Week
+										</li>
+									</ul>
+								</section>
+							</section>
+
+							<section className='mt-4' ref={trendingContainerRef}>
+								<HomeHorizontalScroller
+									items={trendingData.results as THorizontalScrollerData}
+								/>
+							</section>
 						</section>
-					</section>
-				</div>
-			)}
-		</div>
+					</div>
+				)}
+			</main>
+		</>
 	);
 };
 

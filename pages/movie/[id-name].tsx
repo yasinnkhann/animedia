@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -256,144 +257,150 @@ const MovieDetails = () => {
 
 	if (movieDetailsLoading) {
 		return (
-			<div className='flex justify-center items-center h-screen'>
+			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-			</div>
+			</section>
 		);
 	}
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-			<section className='relative mx-4 mt-4'>
-				<Image
-					className='rounded-lg'
-					src={BASE_IMG_URL + movieDetailsData!.poster_path}
-					alt={movieDetailsData!.title ?? undefined}
-					layout='fill'
-				/>
-			</section>
+		<>
+			<Head>
+				<title>{movieDetailsData?.title}</title>
+			</Head>
 
-			<section className='mt-4'>
-				<section className='flex items-center mb-8 mt-8'>
-					<section className='h-[5rem] w-[5rem]'>
-						<RoundProgressBar
-							percentageVal={+movieDetailsData!.vote_average.toFixed(1) * 10}
-						/>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
+				<section className='relative mx-4 mt-4'>
+					<Image
+						className='rounded-lg'
+						src={BASE_IMG_URL + movieDetailsData!.poster_path}
+						alt={movieDetailsData!.title ?? undefined}
+						layout='fill'
+					/>
+				</section>
+
+				<section className='mt-4'>
+					<section className='flex items-center mb-8 mt-8'>
+						<section className='h-[5rem] w-[5rem]'>
+							<RoundProgressBar
+								percentageVal={+movieDetailsData!.vote_average.toFixed(1) * 10}
+							/>
+						</section>
+						<p className='ml-[.5rem] font-medium text-base'>
+							{commaNumber(movieDetailsData!.vote_count!)} voted users
+						</p>
 					</section>
-					<p className='ml-[.5rem] font-medium text-base'>
-						{commaNumber(movieDetailsData!.vote_count!)} voted users
+
+					{status === 'authenticated' && session && (
+						<section className='my-4 h-[1.5rem]'>
+							<select
+								className='mr-4 h-full rounded outline-none'
+								value={watchStatus}
+								onChange={handleChangeWatchStatus}
+								disabled={isDBPending}
+							>
+								{watchStatusOptions.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</select>
+
+							<select
+								className='h-full rounded outline-none'
+								value={rating}
+								onChange={handleChangeRating}
+								disabled={
+									watchStatus === 'NOT_WATCHING' ||
+									watchStatus === 'PLAN_TO_WATCH' ||
+									isDBPending
+								}
+							>
+								{ratingOptions.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</select>
+						</section>
+					)}
+
+					<section className='pb-32'>
+						<h1>{movieDetailsData!.title}</h1>
+						<h4 className='my-4'>{movieDetailsData!.tagline}</h4>
+						<p>{movieDetailsData!.overview}</p>
+					</section>
+				</section>
+
+				<section className='ml-8 my-4'>
+					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
+					<h4>Runtime</h4>
+					<p className='ml-1'>{movieDetailsData!.runtime} minutes</p>
+					<h4 className='mt-4'>Status</h4>
+					<p className='ml-1'>{movieDetailsData!.status}</p>
+					<h4 className='mt-4'>Release Date</h4>
+					{movieDetailsData!.release_date ? (
+						<p className='ml-1'>{formatDate(movieDetailsData!.release_date)}</p>
+					) : (
+						<p className='ml-1'>N/A</p>
+					)}
+					<h4 className='mt-4'>Genre(s)</h4>
+					<div className='ml-1'>
+						{movieDetailsData!.genres.map((genre, idx) => (
+							<p key={idx}>{genre.name}</p>
+						))}
+					</div>
+					<h4 className='mt-4'>Original Language</h4>
+					<p className='ml-1'>
+						{getEnglishName(movieDetailsData!.original_language!)}
 					</p>
+					{movieDetailsData!.homepage.length > 0 && (
+						<>
+							<h4 className='mt-4'>Official Page</h4>
+							<Link href={movieDetailsData!.homepage}>
+								<a className='underline ml-1' target='_blank'>
+									Learn More
+								</a>
+							</Link>
+						</>
+					)}
 				</section>
 
-				{status === 'authenticated' && session && (
-					<section className='my-4 h-[1.5rem]'>
-						<select
-							className='mr-4 h-full rounded outline-none'
-							value={watchStatus}
-							onChange={handleChangeWatchStatus}
-							disabled={isDBPending}
-						>
-							{watchStatusOptions.map(option => (
-								<option key={option.value} value={option.value}>
-									{option.text}
-								</option>
-							))}
-						</select>
+				<section className='col-start-2 mt-4'>
+					{!moviesCastCrewLoading && moviesCastCrewData?.cast?.length! > 0 && (
+						<section ref={movieCastContainerRef}>
+							<h3 className='mb-4 ml-8'>Cast</h3>
+							<MediaCastHorizontalScroller
+								items={
+									moviesCastCrewData?.cast
+										?.map(cast => ({
+											id: cast!.id,
+											name: cast!.name,
+											character: cast!.character,
+											profile_path: cast!.profile_path,
+										}))
+										.slice(0, 20) as ICast[]
+								}
+							/>
+						</section>
+					)}
 
-						<select
-							className='h-full rounded outline-none'
-							value={rating}
-							onChange={handleChangeRating}
-							disabled={
-								watchStatus === 'NOT_WATCHING' ||
-								watchStatus === 'PLAN_TO_WATCH' ||
-								isDBPending
-							}
-						>
-							{ratingOptions.map(option => (
-								<option key={option.value} value={option.value}>
-									{option.text}
-								</option>
-							))}
-						</select>
-					</section>
-				)}
-
-				<section className='pb-32'>
-					<h1>{movieDetailsData!.title}</h1>
-					<h4 className='my-4'>{movieDetailsData!.tagline}</h4>
-					<p>{movieDetailsData!.overview}</p>
+					{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
+						<section ref={recMoviesContainerRef}>
+							<h3 className='mb-4 ml-8'>Recommended Movies</h3>
+							<RecommendedMoviesHorizontalScroller
+								items={recMoviesData!.results.map(movie => ({
+									id: movie.id,
+									poster_path: movie.poster_path,
+									title: movie.title,
+									popularity: movie.popularity,
+								}))}
+							/>
+						</section>
+					)}
 				</section>
-			</section>
-
-			<section className='ml-8 my-4'>
-				<h3 className='mb-4 underline underline-offset-4'>Details</h3>
-				<h4>Runtime</h4>
-				<p className='ml-1'>{movieDetailsData!.runtime} minutes</p>
-				<h4 className='mt-4'>Status</h4>
-				<p className='ml-1'>{movieDetailsData!.status}</p>
-				<h4 className='mt-4'>Release Date</h4>
-				{movieDetailsData!.release_date ? (
-					<p className='ml-1'>{formatDate(movieDetailsData!.release_date)}</p>
-				) : (
-					<p className='ml-1'>N/A</p>
-				)}
-				<h4 className='mt-4'>Genre(s)</h4>
-				<div className='ml-1'>
-					{movieDetailsData!.genres.map((genre, idx) => (
-						<p key={idx}>{genre.name}</p>
-					))}
-				</div>
-				<h4 className='mt-4'>Original Language</h4>
-				<p className='ml-1'>
-					{getEnglishName(movieDetailsData!.original_language!)}
-				</p>
-				{movieDetailsData!.homepage.length > 0 && (
-					<>
-						<h4 className='mt-4'>Official Page</h4>
-						<Link href={movieDetailsData!.homepage}>
-							<a className='underline ml-1' target='_blank'>
-								Learn More
-							</a>
-						</Link>
-					</>
-				)}
-			</section>
-
-			<section className='col-start-2 mt-4'>
-				{!moviesCastCrewLoading && moviesCastCrewData?.cast?.length! > 0 && (
-					<section ref={movieCastContainerRef}>
-						<h3 className='mb-4 ml-8'>Cast</h3>
-						<MediaCastHorizontalScroller
-							items={
-								moviesCastCrewData?.cast
-									?.map(cast => ({
-										id: cast!.id,
-										name: cast!.name,
-										character: cast!.character,
-										profile_path: cast!.profile_path,
-									}))
-									.slice(0, 20) as ICast[]
-							}
-						/>
-					</section>
-				)}
-
-				{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
-					<section ref={recMoviesContainerRef}>
-						<h3 className='mb-4 ml-8'>Recommended Movies</h3>
-						<RecommendedMoviesHorizontalScroller
-							items={recMoviesData!.results.map(movie => ({
-								id: movie.id,
-								poster_path: movie.poster_path,
-								title: movie.title,
-								popularity: movie.popularity,
-							}))}
-						/>
-					</section>
-				)}
-			</section>
-		</main>
+			</main>
+		</>
 	);
 };
 

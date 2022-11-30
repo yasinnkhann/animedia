@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from '../../graphql/queries';
@@ -37,29 +38,35 @@ const PopularAnimeMovies = () => {
 	}, [currPage]);
 
 	return (
-		<section className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{popularAnimeMoviesData ? (
-				<section className='flex flex-col items-center'>
-					<MediaList
-						mediaData={popularAnimeMoviesData}
-						pageNum={currPage}
-						title='Popular Anime Movies'
-					/>
-					<Pagination
-						currPage={currPage}
-						totalItems={popularAnimeMoviesData.total_results}
-						itemsPerPage={RESULTS_PER_PAGE}
-						paginate={(pageNum: number) => setCurrPage(pageNum)}
-						siblingCount={1}
-						maxPageNum={500}
-					/>
-				</section>
-			) : (
-				<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
-					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-				</div>
-			)}
-		</section>
+		<>
+			<Head>
+				<title>Popular Anime Movies</title>
+			</Head>
+
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				{popularAnimeMoviesData ? (
+					<section className='flex flex-col items-center'>
+						<MediaList
+							mediaData={popularAnimeMoviesData}
+							pageNum={currPage}
+							title='Popular Anime Movies'
+						/>
+						<Pagination
+							currPage={currPage}
+							totalItems={popularAnimeMoviesData.total_results}
+							itemsPerPage={RESULTS_PER_PAGE}
+							paginate={(pageNum: number) => setCurrPage(pageNum)}
+							siblingCount={1}
+							maxPageNum={500}
+						/>
+					</section>
+				) : (
+					<section className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+						<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+					</section>
+				)}
+			</main>
+		</>
 	);
 };
 

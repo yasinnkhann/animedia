@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from 'graphql/queries';
@@ -67,81 +68,87 @@ const Genre = () => {
 	}, [currPage]);
 
 	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<section className='grid grid-cols-[20%_60%_20%]'>
-				<section className='mt-4 justify-self-center'>
-					<div className='mb-2'>
-						<label
-							className='block mb-1 text-blue-500'
-							htmlFor='sort-by-dropdown'
-						>
-							Sort By:
-						</label>
-						<Select
-							className='!w-[10rem]'
-							id='sort-by-dropdown'
-							defaultValue='Popular'
-							onChange={handleSortByChange}
-						>
-							{SORT_BY_OPTIONS.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.text}
-								</Option>
-							))}
-						</Select>
-					</div>
+		<>
+			<Head>
+				<title>Explore Movies by Genres</title>
+			</Head>
 
-					<div>
-						<label
-							className='block mb-1 text-blue-500'
-							htmlFor='genre-type-dropdown'
-						>
-							Genre Type:
-						</label>
-						<Select
-							className='!w-[10rem]'
-							id='genre-type-dropdown'
-							size='middle'
-							defaultValue='Action'
-							onChange={handleGenreTypeChange}
-						>
-							{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
-								<Option key={option.value} value={option.value}>
-									{option.text}
-								</Option>
-							))}
-						</Select>
-					</div>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+				<section className='grid grid-cols-[20%_60%_20%]'>
+					<section className='mt-4 justify-self-center'>
+						<div className='mb-2'>
+							<label
+								className='block mb-1 text-blue-500'
+								htmlFor='sort-by-dropdown'
+							>
+								Sort By:
+							</label>
+							<Select
+								className='!w-[10rem]'
+								id='sort-by-dropdown'
+								defaultValue='Popular'
+								onChange={handleSortByChange}
+							>
+								{SORT_BY_OPTIONS.map(option => (
+									<Option key={option.value} value={option.value}>
+										{option.text}
+									</Option>
+								))}
+							</Select>
+						</div>
+
+						<div>
+							<label
+								className='block mb-1 text-blue-500'
+								htmlFor='genre-type-dropdown'
+							>
+								Genre Type:
+							</label>
+							<Select
+								className='!w-[10rem]'
+								id='genre-type-dropdown'
+								size='middle'
+								defaultValue='Action'
+								onChange={handleGenreTypeChange}
+							>
+								{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
+									<Option key={option.value} value={option.value}>
+										{option.text}
+									</Option>
+								))}
+							</Select>
+						</div>
+					</section>
+					{genreOfMoviesData ? (
+						<div>
+							<MediaList
+								mediaData={genreOfMoviesData}
+								pageNum={currPage}
+								title={`${
+									sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+										? 'Popular'
+										: 'Top-Rated'
+								} ${movieGenreType} Movies`}
+								genrePage
+							/>
+
+							<Pagination
+								currPage={currPage}
+								totalItems={genreOfMoviesData.total_results}
+								itemsPerPage={RESULTS_PER_PAGE}
+								paginate={(pageNum: number) => setCurrPage(pageNum)}
+								siblingCount={1}
+								maxPageNum={500}
+							/>
+						</div>
+					) : (
+						<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+							<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+						</div>
+					)}
 				</section>
-				{genreOfMoviesData ? (
-					<div>
-						<MediaList
-							mediaData={genreOfMoviesData}
-							pageNum={currPage}
-							title={`${
-								sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
-									? 'Popular'
-									: 'Top-Rated'
-							} ${movieGenreType} Movies`}
-							genrePage
-						/>
-
-						<Pagination
-							currPage={currPage}
-							totalItems={genreOfMoviesData.total_results}
-							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) => setCurrPage(pageNum)}
-							siblingCount={1}
-							maxPageNum={500}
-						/>
-					</div>
-				) : (
-					<div className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
-						<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-					</div>
-				)}
-			</section>
-		</main>
+			</main>
+		</>
 	);
 };
 
