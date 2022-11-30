@@ -167,59 +167,51 @@ export default function Login({
 						</button>
 					</div>
 
-					<section>
-						<div>
+					<section className='flex flex-col justify-center'>
+						<div className='flex justify-center'>
 							<button
+								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
 								type='button'
 								onClick={() => signIn('google', { callbackUrl: '/' })}
-								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
 							>
-								<p>Sign in with Google</p>
-								<div>
-									<GoogleIcon aria-label='Google Icon' />
-								</div>
-							</button>
-						</div>
-
-						<div>
-							<button
-								type='button'
-								onClick={() => signIn('facebook', { callbackUrl: '/' })}
-								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
-							>
-								<p>Sign in with Facebook</p>
-								<div>
-									<FacebookIcon aria-label='Facebook Icon' />
-								</div>
-							</button>
-						</div>
-
-						<div>
-							<button
-								type='button'
-								onClick={() => signIn('twitter', { callbackUrl: '/' })}
-								className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
-							>
-								<p>Sign in with Twitter</p>
-								<div>
-									<TwitterIcon aria-label='Twitter Icon' />
-								</div>
-							</button>
-						</div>
-						{/* {oAuthProviders.map((provider: any) => (
-							<div key={provider.id}>
-								<button
-									type='button'
-									onClick={() => signIn(provider.id, { callbackUrl: '/' })}
-									className='w-full border py-3 flex justify-center gap-2 hover:bg-gray-200'
-								>
-									<p>Sign in with {provider.name}</p>
-									<div>
+								<div className='w-[50%] flex justify-center items-center'>
+									<div className='mr-3'>
 										<GoogleIcon aria-label='Google Icon' />
 									</div>
-								</button>
-							</div>
-						))} */}
+									<p>Sign in with Google</p>
+								</div>
+							</button>
+						</div>
+
+						<div className='flex justify-center'>
+							<button
+								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
+								type='button'
+								onClick={() => signIn('facebook', { callbackUrl: '/' })}
+							>
+								<div className='w-[50%] flex justify-center items-center'>
+									<div className='mr-3'>
+										<FacebookIcon aria-label='Facebook Icon' />
+									</div>
+									<p>Sign in with Facebook</p>
+								</div>
+							</button>
+						</div>
+
+						<div className='flex justify-center'>
+							<button
+								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
+								type='button'
+								onClick={() => signIn('twitter', { callbackUrl: '/' })}
+							>
+								<div className='w-[50%] flex justify-center items-center'>
+									<div className='mr-3'>
+										<TwitterIcon aria-label='Twitter Icon' />
+									</div>
+									<p>Sign in with Twitter</p>
+								</div>
+							</button>
+						</div>
 					</section>
 				</form>
 
