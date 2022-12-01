@@ -42,6 +42,7 @@ export const baseSchema = makeSchema({
 
 export const schema = baseSchema;
 
+// // BUG
 // export const schema = applyMiddleware(
 // 	baseSchema,
 // 	permissions.generate(baseSchema)

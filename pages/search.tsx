@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import type { NextPage } from 'next';
+import { Circles } from 'react-loading-icons';
 import Pagination from 'components/Pagination';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import SearchResult from '../components/UI/SearchUI/SearchResult';
@@ -128,6 +129,14 @@ const Search: NextPage = () => {
 			}
 		}
 	}, [searchedMovies, searchedShows, searchedPeople, router.query.q]);
+
+	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
+		return (
+			<section className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</section>
+		);
+	}
 
 	return (
 		<>

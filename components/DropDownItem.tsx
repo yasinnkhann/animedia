@@ -69,10 +69,10 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 	};
 
 	const renderAvatar = () => {
-		if (session?.user?.image || (session?.token as any)?.picture) {
+		if (session?.user?.image || (session as any)?.token?.picture) {
 			return (
 				<Avatar
-					src={session?.user?.image || (session?.token as any)?.picture}
+					src={session?.user?.image || (session as any)?.token?.picture}
 					size='large'
 				/>
 			);
@@ -87,7 +87,7 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 					size='large'
 				>
 					{session?.user?.name![0].toUpperCase() ||
-						(session?.token as any)?.name![0].toUpperCase()}
+						(session as any)?.token?.name![0].toUpperCase()}
 				</Avatar>
 			);
 		}

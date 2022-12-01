@@ -142,9 +142,9 @@ const Home: NextPage = () => {
 
 	if (trendingLoading || whatsPopularLoading) {
 		return (
-			<div className='flex justify-center items-center h-screen'>
+			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-			</div>
+			</section>
 		);
 	}
 
