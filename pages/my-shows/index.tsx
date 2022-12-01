@@ -1,6 +1,7 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { Circles } from 'react-loading-icons';
 import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
@@ -11,10 +12,23 @@ import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 const MyShows: NextPage = () => {
 	const router = useRouter();
 
-	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS, {
+	const {
+		data: usersShowsData,
+		loading: usersShowsLoading,
+	}: IUseGQLQuery<NexusGenObjects['UserShow'][]> = useGQLQuery(
+		Queries.QUERY_GET_USERS_SHOWS,
+		{
 			fetchPolicy: 'network-only',
-		});
+		}
+	);
+
+	if (usersShowsLoading) {
+		return (
+			<section className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</section>
+		);
+	}
 
 	return (
 		<>

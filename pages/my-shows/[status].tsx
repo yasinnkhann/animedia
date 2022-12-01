@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import MyShowsList from 'components/UI/MyMediaUI/MyShowsList';
 import * as Queries from '../../graphql/queries';
+import { Circles } from 'react-loading-icons';
+import { statusParams } from 'utils/statusParams';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { IUseGQLQuery } from '@ts/interfaces';
@@ -22,10 +24,15 @@ const Status = () => {
 		router.push('/');
 	}
 
-	const { data: usersShowsData }: IUseGQLQuery<NexusGenObjects['UserShow'][]> =
-		useGQLQuery(Queries.QUERY_GET_USERS_SHOWS, {
+	const {
+		data: usersShowsData,
+		loading: usersShowsLoading,
+	}: IUseGQLQuery<NexusGenObjects['UserShow'][]> = useGQLQuery(
+		Queries.QUERY_GET_USERS_SHOWS,
+		{
 			fetchPolicy: 'network-only',
-		});
+		}
+	);
 
 	const [myShows, setMyShows] = useState<NexusGenObjects['UserShow'][]>([]);
 
@@ -53,6 +60,14 @@ const Status = () => {
 		}
 	}, [router.query.status, usersShowsData]);
 
+	if (usersShowsLoading) {
+		return (
+			<section className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</section>
+		);
+	}
+
 	return (
 		<>
 			<Head>
@@ -74,6 +89,15 @@ const Status = () => {
 
 export default Status;
 
-export const getServerSideProps = getClientAuthSession(async _ctx => {
+export const getServerSideProps = getClientAuthSession(async ctx => {
+	if (!statusParams.has(ctx.query.status as string)) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
+
 	return { props: {} };
 });

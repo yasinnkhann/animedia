@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import * as Queries from '../../graphql/queries';
 import MyMoviesList from 'components/UI/MyMediaUI/MyMoviesList';
+import { Circles } from 'react-loading-icons';
+import { statusParams } from 'utils/statusParams';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { IUseGQLQuery } from '@ts/interfaces';
@@ -24,6 +26,7 @@ const Status = () => {
 
 	const {
 		data: usersMoviesData,
+		loading: usersMoviesLoading,
 	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
 		Queries.QUERY_GET_USERS_MOVIES,
 		{
@@ -57,6 +60,14 @@ const Status = () => {
 		}
 	}, [router.query.status, usersMoviesData]);
 
+	if (usersMoviesLoading) {
+		return (
+			<section className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</section>
+		);
+	}
+
 	return (
 		<>
 			<Head>
@@ -78,6 +89,15 @@ const Status = () => {
 
 export default Status;
 
-export const getServerSideProps = getClientAuthSession(async _ctx => {
+export const getServerSideProps = getClientAuthSession(async ctx => {
+	if (!statusParams.has(ctx.query.status as string)) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		};
+	}
+
 	return { props: {} };
 });

@@ -5,8 +5,6 @@ import {
 	NexusGenEnums,
 } from '../graphql/generated/nexus-typegen/index';
 
-// MIGHT USE GENERICS ON THE FRONTEND SIDE
-
 /*
 MOVIE
 Action          28

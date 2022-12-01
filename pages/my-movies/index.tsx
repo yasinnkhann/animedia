@@ -1,6 +1,7 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { Circles } from 'react-loading-icons';
 import * as Queries from '../../graphql/queries';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../../hooks/useGQL';
@@ -13,12 +14,21 @@ const MyMovies: NextPage = () => {
 
 	const {
 		data: usersMoviesData,
+		loading: usersMoviesLoading,
 	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
 		Queries.QUERY_GET_USERS_MOVIES,
 		{
 			fetchPolicy: 'network-only',
 		}
 	);
+
+	if (usersMoviesLoading) {
+		return (
+			<section className='flex justify-center items-center h-screen'>
+				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+			</section>
+		);
+	}
 
 	return (
 		<>
