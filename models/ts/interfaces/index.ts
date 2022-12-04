@@ -55,13 +55,10 @@ export interface ICast {
 	profile_path: string | null;
 }
 
-export interface IEPDetailsCard {
-	id: number;
+export interface IEPDetails {
 	showId: number;
-	seasonNumber: number;
-	episodeNumber: number;
-	stillPath: string;
-	name: string;
+	season: number;
+	episode: number;
 }
 
 export interface INodeMailerInfo {

@@ -3,7 +3,7 @@ import EpisodeDetailsCard from './EpisodeDetailsCard';
 import useDrag from './UseDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
-import { IEPDetailsCard } from '@ts/interfaces';
+import { IEPDetails } from '@ts/interfaces';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -43,7 +43,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 	};
 
 	const groupSeasonsAndEps = () => {
-		const groupedArr: any[] = [];
+		const groupedArr: IEPDetails[] = [];
 
 		Array.from({ length: seasons.length }, (_, idx) =>
 			new Array(seasons[idx]?.episode_count).fill(0)
