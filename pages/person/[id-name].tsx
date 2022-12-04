@@ -141,7 +141,12 @@ const PersonDetails = () => {
 		return age;
 	};
 
-	if (personDetailsLoading || knownForMoviesLoading || knownForShowsLoading) {
+	if (
+		personDetailsLoading ||
+		!personDetailsData ||
+		knownForMoviesLoading ||
+		knownForShowsLoading
+	) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -152,65 +157,65 @@ const PersonDetails = () => {
 	return (
 		<>
 			<Head>
-				<title>{personDetailsData?.name}</title>
+				<title>{personDetailsData.name}</title>
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + personDetailsData!.profile_path}
-						alt={personDetailsData!.name ?? undefined}
+						src={BASE_IMG_URL + personDetailsData.profile_path}
+						alt={personDetailsData.name ?? undefined}
 						layout='fill'
 					/>
 				</section>
 
 				<section className='pb-48'>
-					<h1>{personDetailsData!.name}</h1>
+					<h1>{personDetailsData.name}</h1>
 					<h3 className='my-4'>Biography</h3>
 					<p>
-						{personDetailsData!.biography!.length > 0
-							? personDetailsData!.biography
-							: `We don't have a biography for ${personDetailsData!.name}.`}
+						{personDetailsData.biography!.length > 0
+							? personDetailsData.biography
+							: `We don't have a biography for ${personDetailsData.name}.`}
 					</p>
 				</section>
 
 				<section className='ml-8 mt-4'>
 					<h3 className='mb-4 underline underline-offset-4'>Personal Info</h3>
 					<h4>Known For</h4>
-					<p className='ml-1'>{personDetailsData!.known_for_department}</p>
+					<p className='ml-1'>{personDetailsData.known_for_department}</p>
 					<h4 className='mt-4'>Gender</h4>
 					<p className='ml-1'>
-						{personDetailsData!.gender === 1
+						{personDetailsData.gender === 1
 							? 'Female'
-							: personDetailsData!.gender === 2
+							: personDetailsData.gender === 2
 							? 'Male'
 							: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Date of Birth</h4>
 					<p className='ml-1'>
-						{personDetailsData!.birthday
-							? `${formatDate(personDetailsData!.birthday)}${
-									!personDetailsData!.deathday
-										? ` (${getAge(personDetailsData!.birthday)} years old)`
+						{personDetailsData.birthday
+							? `${formatDate(personDetailsData.birthday)}${
+									!personDetailsData.deathday
+										? ` (${getAge(personDetailsData.birthday)} years old)`
 										: ''
 							  }`
 							: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Born In</h4>
 					<p className='ml-1'>
-						{personDetailsData!.place_of_birth
-							? personDetailsData!.place_of_birth
+						{personDetailsData.place_of_birth
+							? personDetailsData.place_of_birth
 							: 'Unknown'}
 					</p>
-					{personDetailsData!.deathday && (
+					{personDetailsData.deathday && (
 						<>
 							<h4 className='mt-4'>Date of Death</h4>
-							<p className='ml-1'>{`${formatDate(personDetailsData!.deathday)}${
-								personDetailsData!.birthday &&
+							<p className='ml-1'>{`${formatDate(personDetailsData.deathday)}${
+								personDetailsData.birthday &&
 								` (${
-									getAge(personDetailsData!.birthday) -
-									getAge(personDetailsData!.deathday)
+									getAge(personDetailsData.birthday) -
+									getAge(personDetailsData.deathday)
 								}`
 							} years old)`}</p>
 						</>

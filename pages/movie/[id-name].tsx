@@ -64,7 +64,7 @@ const MovieDetails = () => {
 		Queries.QUERY_GET_USERS_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.id),
+				movieId: String(movieDetailsData?.id!),
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -110,7 +110,7 @@ const MovieDetails = () => {
 		Mutations.MUTATION_ADD_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.id),
+				movieId: String(movieDetailsData?.id!),
 				movieName: movieDetailsData?.title!,
 				watchStatus,
 			},
@@ -118,7 +118,7 @@ const MovieDetails = () => {
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.id),
+						movieId: String(movieDetailsData?.id!),
 					},
 				},
 				'UsersMovie',
@@ -136,7 +136,7 @@ const MovieDetails = () => {
 		Mutations.MUTATION_UPDATE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.id),
+				movieId: String(movieDetailsData?.id!),
 				watchStatus,
 				movieRating: typeof rating === 'number' ? rating : null,
 			},
@@ -144,7 +144,7 @@ const MovieDetails = () => {
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.id),
+						movieId: String(movieDetailsData?.id!),
 					},
 				},
 				'UsersMovie',
@@ -162,13 +162,13 @@ const MovieDetails = () => {
 		Mutations.MUTATION_DELETE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.id),
+				movieId: String(movieDetailsData?.id!),
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.QUERY_GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.id),
+						movieId: String(movieDetailsData?.id!),
 					},
 				},
 				'UsersMovie',
@@ -188,13 +188,13 @@ const MovieDetails = () => {
 			if ((value as NexusGenEnums['WatchStatusTypes']) === 'NOT_WATCHING') {
 				deleteMovie({
 					variables: {
-						movieId: String(movieDetailsData?.id),
+						movieId: String(movieDetailsData?.id!),
 					},
 				});
 			} else {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetailsData?.id),
+						movieId: String(movieDetailsData?.id!),
 						watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 					},
 				});
@@ -202,7 +202,7 @@ const MovieDetails = () => {
 		} else {
 			addMovie({
 				variables: {
-					movieId: String(movieDetailsData?.id),
+					movieId: String(movieDetailsData?.id!),
 					movieName: movieDetailsData?.title!,
 					watchStatus: value as NexusGenEnums['WatchStatusTypes'],
 				},
@@ -255,7 +255,7 @@ const MovieDetails = () => {
 		}
 	});
 
-	if (movieDetailsLoading) {
+	if (movieDetailsLoading || !movieDetailsData) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -266,15 +266,15 @@ const MovieDetails = () => {
 	return (
 		<>
 			<Head>
-				<title>{movieDetailsData?.title}</title>
+				<title>{movieDetailsData.title}</title>
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + movieDetailsData!.poster_path}
-						alt={movieDetailsData!.title ?? undefined}
+						src={BASE_IMG_URL + movieDetailsData.poster_path}
+						alt={movieDetailsData.title ?? undefined}
 						layout='fill'
 					/>
 				</section>
@@ -283,11 +283,11 @@ const MovieDetails = () => {
 					<section className='flex items-center mb-8 mt-8'>
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
-								percentageVal={+movieDetailsData!.vote_average.toFixed(1) * 10}
+								percentageVal={+movieDetailsData.vote_average.toFixed(1) * 10}
 							/>
 						</section>
 						<p className='ml-[.5rem] font-medium text-base'>
-							{commaNumber(movieDetailsData!.vote_count!)} voted users
+							{commaNumber(movieDetailsData.vote_count)} voted users
 						</p>
 					</section>
 
@@ -326,38 +326,38 @@ const MovieDetails = () => {
 					)}
 
 					<section className='pb-32'>
-						<h1>{movieDetailsData!.title}</h1>
-						<h4 className='my-4'>{movieDetailsData!.tagline}</h4>
-						<p>{movieDetailsData!.overview}</p>
+						<h1>{movieDetailsData.title}</h1>
+						<h4 className='my-4'>{movieDetailsData.tagline}</h4>
+						<p>{movieDetailsData.overview}</p>
 					</section>
 				</section>
 
 				<section className='ml-8 my-4'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 					<h4>Runtime</h4>
-					<p className='ml-1'>{movieDetailsData!.runtime} minutes</p>
+					<p className='ml-1'>{movieDetailsData.runtime} minutes</p>
 					<h4 className='mt-4'>Status</h4>
-					<p className='ml-1'>{movieDetailsData!.status}</p>
+					<p className='ml-1'>{movieDetailsData.status}</p>
 					<h4 className='mt-4'>Release Date</h4>
-					{movieDetailsData!.release_date ? (
-						<p className='ml-1'>{formatDate(movieDetailsData!.release_date)}</p>
+					{movieDetailsData.release_date ? (
+						<p className='ml-1'>{formatDate(movieDetailsData.release_date)}</p>
 					) : (
 						<p className='ml-1'>N/A</p>
 					)}
 					<h4 className='mt-4'>Genre(s)</h4>
 					<div className='ml-1'>
-						{movieDetailsData!.genres.map((genre, idx) => (
+						{movieDetailsData.genres.map((genre, idx) => (
 							<p key={idx}>{genre.name}</p>
 						))}
 					</div>
 					<h4 className='mt-4'>Original Language</h4>
 					<p className='ml-1'>
-						{getEnglishName(movieDetailsData!.original_language!)}
+						{getEnglishName(movieDetailsData.original_language)}
 					</p>
-					{movieDetailsData!.homepage.length > 0 && (
+					{movieDetailsData.homepage.length > 0 && (
 						<>
 							<h4 className='mt-4'>Official Page</h4>
-							<Link href={movieDetailsData!.homepage}>
+							<Link href={movieDetailsData.homepage}>
 								<a className='underline ml-1' target='_blank'>
 									Learn More
 								</a>

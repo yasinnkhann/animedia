@@ -56,10 +56,6 @@ export default function Login({
 		}
 	);
 
-	const oAuthProviders = Object.values(providers).filter(
-		(provider: any) => provider.type === 'oauth'
-	);
-
 	async function onSubmit() {
 		const { email, password } = formik.values;
 
