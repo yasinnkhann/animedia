@@ -1354,7 +1354,7 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@next-auth/prisma-adapter@^1.0.4":
+"@next-auth/prisma-adapter@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@next-auth/prisma-adapter/-/prisma-adapter-1.0.5.tgz#41a2fc7b44907054b81d456b426164e58becf4ed"
   integrity sha512-VqMS11IxPXrPGXw6Oul6jcyS/n8GLOWzRMrPr3EMdtD6eOalM6zz05j08PcNiis8QzkfuYnCv49OvufTuaEwYQ==
@@ -3742,7 +3742,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-next-auth@^4.10.3:
+next-auth@^4.18.0:
   version "4.18.0"
   resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.18.0.tgz#f6fb4d2a1bfd6e90650755c13324e24d1f44b0d4"
   integrity sha512-lqJtusYqUwDiwzO4+B+lx/vKCuf/akcdhxT5R47JmS5gvI9O6Y4CZYc8coysY7XaMGHCxfttvTSEw76RA8gNTg==
@@ -4274,9 +4274,9 @@ rc-mentions@~1.13.1:
     rc-util "^5.22.5"
 
 rc-menu@~9.8.0:
-  version "9.8.0"
-  resolved "https://registry.yarnpkg.com/rc-menu/-/rc-menu-9.8.0.tgz#d3d820f52ec37e27c5aec42b3cc68bbcfcaba1f7"
-  integrity sha512-ftO5ExUMMSprzinxtHQz11KIRWY6P/tOs5ZexboWJ835LVQAMXuqDFqkjB/BXVC8WAKjj9t3eZmmweZp+guoYw==
+  version "9.8.1"
+  resolved "https://registry.yarnpkg.com/rc-menu/-/rc-menu-9.8.1.tgz#988cd807f78d2f92eab686f6813f50b165f78405"
+  integrity sha512-179weouypfjWJSRvvoo/vPy+StojsMzK2XC5jRNhL1ryt/N/8wAFESte8K6jZJkNp9DHDLFTe+dCGmikKpiFuA==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "2.x"
@@ -4472,9 +4472,9 @@ rc-tree-select@~5.5.0:
     rc-util "^5.16.1"
 
 rc-tree@~5.7.0:
-  version "5.7.1"
-  resolved "https://registry.yarnpkg.com/rc-tree/-/rc-tree-5.7.1.tgz#c642b80ad35fef3bf5c63c35382209c84600187e"
-  integrity sha512-fP04wmM5oyi9jT3DvmweLENswMHuNV5bDqT/1lWcmzAUqJ5/O/Bj7y8dMR5JlnnTojsRoJP6HlS+Az4Bc1h9jA==
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/rc-tree/-/rc-tree-5.7.2.tgz#270ea7d9e1b2e5e81cd3659eba2fbd022a4831f6"
+  integrity sha512-nmnL6qLnfwVckO5zoqKL2I9UhwDqzyCtjITQCkwhimyz1zfuFkG5ZPIXpzD/Guzso94qQA/QrMsvzic5W6QDjg==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "2.x"
@@ -4503,9 +4503,9 @@ rc-upload@~4.3.0:
     rc-util "^5.2.0"
 
 rc-util@^5.0.1, rc-util@^5.0.6, rc-util@^5.12.0, rc-util@^5.15.0, rc-util@^5.16.0, rc-util@^5.16.1, rc-util@^5.17.0, rc-util@^5.18.1, rc-util@^5.19.2, rc-util@^5.2.0, rc-util@^5.2.1, rc-util@^5.20.1, rc-util@^5.21.0, rc-util@^5.21.2, rc-util@^5.22.5, rc-util@^5.23.0, rc-util@^5.24.4, rc-util@^5.3.0, rc-util@^5.4.0, rc-util@^5.6.1, rc-util@^5.8.0, rc-util@^5.9.4:
-  version "5.24.8"
-  resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-5.24.8.tgz#4d234a5263f42080fb39b9c1b36f9df73af3497b"
-  integrity sha512-AS222gRVeH5RDdaRUd9ur9/E9MMQn5sZA3d4Z1vGU7JXW9dxD9kPijax00RG+dU2EJTfwySstFLDoSqpAPMNKw==
+  version "5.25.2"
+  resolved "https://registry.yarnpkg.com/rc-util/-/rc-util-5.25.2.tgz#09fd3ce88da7d2149427d51e40a84e3527f5a263"
+  integrity sha512-OyCO675K/rh4zG3e+LYaHw54WQFEYGV9ibkGawQxqCvf0G0PzUrLQjgZ6SfoHORdbEKN7eQMFn3hHQyA/P8Y5Q==
   dependencies:
     "@babel/runtime" "^7.18.3"
     react-is "^16.12.0"
