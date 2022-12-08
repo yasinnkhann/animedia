@@ -5,8 +5,6 @@ import {
 	GraphQLBigInt,
 } from 'graphql-scalars';
 import { join } from 'path';
-import { applyMiddleware } from 'graphql-middleware';
-import { permissions } from './permissions';
 import * as allTypes from './types';
 
 export const dateScalar = asNexusMethod(DateTimeResolver, 'date');
@@ -41,9 +39,3 @@ export const baseSchema = makeSchema({
 });
 
 export const schema = baseSchema;
-
-// // BUG
-// export const schema = applyMiddleware(
-// 	baseSchema,
-// 	permissions.generate(baseSchema)
-// );

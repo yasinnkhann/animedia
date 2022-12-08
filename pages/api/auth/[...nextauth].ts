@@ -19,9 +19,25 @@ adapter.linkAccount = ({ oauth_token, oauth_token_secret, ...data }) => {
 	return _linkAccount(data);
 };
 
+const cookiesPolicy =
+	process.env.NODE_ENV === 'development'
+		? {
+				sessionToken: {
+					name: `_Secure_next-auth.session-token`,
+					options: {
+						httpOnly: true,
+						sameSite: 'None',
+						path: '/',
+						secure: true,
+					},
+				},
+		  }
+		: {};
+
 export const authOptions: NextAuthOptions = {
 	adapter,
 	debug: process.env.NODE_ENV === 'development',
+	cookies: cookiesPolicy,
 	secret: process.env.NEXTAUTH_SECRET,
 
 	providers: [
