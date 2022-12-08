@@ -1,23 +1,12 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
-import TwitterProvider from 'next-auth/providers/twitter';
+import DiscordProvider from 'next-auth/providers/discord';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
 import { isValidEmail } from '../../../utils/isValidEmail';
-
-const adapter = PrismaAdapter(prisma);
-const _linkAccount = adapter.linkAccount;
-adapter.linkAccount = ({ oauth_token, oauth_token_secret, ...data }) => {
-	if (oauth_token && oauth_token_secret) {
-		data.refresh_token = oauth_token as string;
-		data.access_token = oauth_token_secret as string;
-	}
-
-	return _linkAccount(data);
-};
 
 const cookiesPolicy =
 	process.env.NODE_ENV === 'development'
@@ -35,7 +24,7 @@ const cookiesPolicy =
 		: {};
 
 export const authOptions: NextAuthOptions = {
-	adapter,
+	adapter: PrismaAdapter(prisma),
 	debug: process.env.NODE_ENV === 'development',
 	cookies: cookiesPolicy,
 	secret: process.env.NEXTAUTH_SECRET,
@@ -51,9 +40,9 @@ export const authOptions: NextAuthOptions = {
 			clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
 		}),
 
-		TwitterProvider({
-			clientId: process.env.TWITTER_CLIENT_ID as string,
-			clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
+		DiscordProvider({
+			clientId: process.env.DISCORD_CLIENT_ID as string,
+			clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
 		}),
 
 		CredentialsProvider({

@@ -4,7 +4,7 @@ import loginValidate from '../../lib/nextAuth/account-validate';
 import * as Queries from '../../graphql/queries';
 import GoogleIcon from '../../assets/google-icon.svg';
 import FacebookIcon from '../../assets/facebook-icon.svg';
-import TwitterIcon from '../../assets/twitter-icon.svg';
+import DiscordIcon from '../../assets/discord-icon.svg';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { HiAtSymbol } from 'react-icons/hi';
@@ -198,13 +198,13 @@ export default function Login({
 							<button
 								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
 								type='button'
-								onClick={() => signIn('twitter', { callbackUrl: '/' })}
+								onClick={() => signIn('discord', { callbackUrl: '/' })}
 							>
 								<div className='w-[50%] flex justify-center items-center'>
 									<div className='mr-3'>
-										<TwitterIcon aria-label='Twitter Icon' />
+										<DiscordIcon aria-label='Twitter Icon' />
 									</div>
-									<p>Sign in with Twitter</p>
+									<p>Sign in with Discord</p>
 								</div>
 							</button>
 						</div>
