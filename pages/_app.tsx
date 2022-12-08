@@ -9,14 +9,14 @@ import '../styles/globals.css';
 
 function MyApp({
 	Component,
-	pageProps,
+	pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session; hideScrollBar: string }>) {
 	useEffect(() => {
 		document.body.className = pageProps.hideScrollBar ? 'scrollbar-hide' : '';
 	});
 
 	return (
-		<SessionProvider session={pageProps.session}>
+		<SessionProvider session={session}>
 			<ApolloProvider client={client}>
 				<Layout>
 					<Component {...pageProps} />

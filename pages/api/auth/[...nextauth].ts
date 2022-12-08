@@ -21,19 +21,25 @@ adapter.linkAccount = ({ oauth_token, oauth_token_secret, ...data }) => {
 
 export const authOptions: NextAuthOptions = {
 	adapter,
+	debug: process.env.NODE_ENV === 'development',
+	secret: process.env.NEXTAUTH_SECRET,
+
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID as string,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 		}),
+
 		FacebookProvider({
 			clientId: process.env.FACEBOOK_CLIENT_ID as string,
 			clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
 		}),
+
 		TwitterProvider({
 			clientId: process.env.TWITTER_CLIENT_ID as string,
 			clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
 		}),
+
 		CredentialsProvider({
 			name: 'Credentials',
 			credentials: {
@@ -72,19 +78,20 @@ export const authOptions: NextAuthOptions = {
 			},
 		}),
 	],
-	debug: process.env.NODE_ENV === 'development',
-	secret: process.env.NEXTAUTH_SECRET,
+
+	pages: {
+		signIn: '/auth/login',
+	},
 
 	jwt: {
 		secret: process.env.JWT_SECRET,
 	},
-	pages: {
-		signIn: '/login',
-	},
+
 	callbacks: {
 		signIn: async ({ user, account, profile, email, credentials }) => {
 			return true;
 		},
+
 		// Getting the JWT token from API response
 		jwt: async ({ token, user, account, profile, isNewUser }) => {
 			// console.log('PROFILE IN JWT: ', profile);
@@ -116,6 +123,7 @@ export const authOptions: NextAuthOptions = {
 
 			return Promise.resolve(token);
 		},
+
 		session: async ({ session, token }) => {
 			if ((token.user as any).id && !(token.user as any).emailVerified) {
 				const isEmailVerifiedUpdatedInDB = await prisma.user.findUnique({
@@ -137,6 +145,7 @@ export const authOptions: NextAuthOptions = {
 			return Promise.resolve(session);
 		},
 	},
+
 	session: {
 		// Choose how you want to save the user session.
 		// The default is `"jwt"`, an encrypted JWT (JWE) in the session cookie.
