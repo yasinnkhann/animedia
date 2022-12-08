@@ -13,7 +13,7 @@ export const SORT_BY_OPTIONS = [
 
 interface IMovieGenreTypeOption {
 	value: NexusGenEnums['MovieGenreTypes'];
-	text: NexusGenEnums['MovieGenreTypes'];
+	text: string;
 }
 
 export const MOVIE_GENRE_TYPE_OPTIONS: IMovieGenreTypeOption[] = [
@@ -74,12 +74,12 @@ export const MOVIE_GENRE_TYPE_OPTIONS: IMovieGenreTypeOption[] = [
 		text: 'Romance',
 	},
 	{
-		value: 'Science',
-		text: 'Science',
+		value: 'Science_Fiction',
+		text: 'Science Fiction',
 	},
 	{
-		value: 'TV',
-		text: 'TV',
+		value: 'TV_Movie',
+		text: 'TV Movie',
 	},
 	{
 		value: 'Thriller',

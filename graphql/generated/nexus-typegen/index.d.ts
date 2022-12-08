@@ -57,7 +57,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  MovieGenreTypes: "Action" | "Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "History" | "Horror" | "Music" | "Mystery" | "Romance" | "Science" | "TV" | "Thriller" | "War" | "Western"
+  MovieGenreTypes: "Action" | "Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "History" | "Horror" | "Music" | "Mystery" | "Romance" | "Science_Fiction" | "TV_Movie" | "Thriller" | "War" | "Western"
   ShowGenreTypes: "Action_AMPERSAND_Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Kids" | "Mystery" | "News" | "Reality" | "SciDASHFi_AMPERSAND_Fantasy" | "Soap" | "Talk" | "War_AMPERSAND_Politics" | "Western"
   TimeWindowTypes: "day" | "week"
   WatchStatusTypes: "COMPLETED" | "DROPPED" | "NOT_WATCHING" | "ON_HOLD" | "PLAN_TO_WATCH" | "WATCHING"
