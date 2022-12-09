@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import DropDownItem from './DropDownItem';
 import { AiFillHome } from 'react-icons/ai';
+import { BiLogIn } from 'react-icons/bi';
 
 const Header = () => {
 	const { data: session, status } = useSession();
@@ -82,7 +83,13 @@ const Header = () => {
 						id='right-section'
 						className='!flex !justify-around !w-[20rem] !mr-4'
 					>
-						<li className='!flex !justify-around !items-center !w-full'>
+						<li
+							className={`!flex !items-center !w-full ${
+								status === 'authenticated'
+									? '!justify-around'
+									: '!justify-end mr-8'
+							}`}
+						>
 							{status === 'authenticated' && session && (
 								<>
 									<Link href='/my-shows'>
@@ -95,7 +102,13 @@ const Header = () => {
 								</>
 							)}
 							{status === 'unauthenticated' && (
-								<a onClick={() => signIn()}>Login</a>
+								<div
+									className='flex items-center cursor-pointer'
+									onClick={() => signIn()}
+								>
+									<p className='text-base'>Login</p>
+									<BiLogIn className='ml-2' size={30} />
+								</div>
 							)}
 							{status === 'authenticated' && (
 								<DropDownItem
