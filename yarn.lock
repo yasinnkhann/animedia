@@ -3219,7 +3219,7 @@ grapheme-splitter@^1.0.4:
   resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
   integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
 
-graphql-middleware@^6.1.32:
+graphql-middleware@^6.1.33:
   version "6.1.33"
   resolved "https://registry.yarnpkg.com/graphql-middleware/-/graphql-middleware-6.1.33.tgz#81bbf0eab83a2829a5d2da4e3878e9e7f3e610ed"
   integrity sha512-5gJqTvsBlcuZEcYqWEqhF0eAHlmP3SWenX86djfdnr27UNOY74i7HR9LEUiIUnCyxdSjg1ukpwugI6CF0GX2Lw==
@@ -3237,14 +3237,14 @@ graphql-request@^5.0.0:
     extract-files "^9.0.0"
     form-data "^3.0.0"
 
-graphql-scalars@^1.18.0:
+graphql-scalars@^1.20.1:
   version "1.20.1"
   resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.20.1.tgz#295817deff224ac0562545858e370447b97e7457"
   integrity sha512-HCSosMh8l/DVYL3/wCesnZOb+gbiaO/XlZQEIKOkWDJUGBrc15xWAs5TCQVmrycT0tbEInii+J8eoOyMwxx8zg==
   dependencies:
     tslib "~2.4.0"
 
-graphql-shield@^7.5.0:
+graphql-shield@^7.6.5:
   version "7.6.5"
   resolved "https://registry.yarnpkg.com/graphql-shield/-/graphql-shield-7.6.5.tgz#91683254e498e120ce58d560b8b4f118e10530ea"
   integrity sha512-etbzf7UIhQW6vadn/UR+ds0LJOceO8ITDXwbUkQMlP2KqPgSKTZRE2zci+AUfqP+cpV9zDQdbTJfPfW5OCEamg==

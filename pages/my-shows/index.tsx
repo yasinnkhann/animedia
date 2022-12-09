@@ -44,7 +44,7 @@ const MyShows: NextPage = () => {
 							<section className='bg-gray-200 flex flex-col justify-around items-center rounded-lg w-[25rem] h-[15rem]'>
 								<div className='pt-4'>
 									<a
-										className='no-underline'
+										className='no-underline cursor-pointer'
 										onClick={() => router.push('/my-shows/watching')}
 									>
 										Watching:{' '}
@@ -59,7 +59,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline'
+										className='no-underline cursor-pointer'
 										onClick={() => router.push('/my-shows/completed')}
 									>
 										Completed:{' '}
@@ -75,7 +75,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline'
+										className='no-underline cursor-pointer'
 										onClick={() => router.push('/my-shows/on-hold')}
 									>
 										On-Hold:{' '}
@@ -90,7 +90,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline'
+										className='no-underline cursor-pointer'
 										onClick={() => router.push('/my-shows/dropped')}
 									>
 										Dropped:{' '}
@@ -105,7 +105,7 @@ const MyShows: NextPage = () => {
 
 								<div className='pb-4'>
 									<a
-										className='no-underline'
+										className='no-underline cursor-pointer'
 										onClick={() => router.push('/my-shows/plan-to-watch')}
 									>
 										Plan to Watch:{' '}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dropdown, Space } from 'antd';
+import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
