@@ -19,7 +19,6 @@ import {
 	NexusGenArgTypes,
 	NexusGenObjects,
 } from 'graphql/generated/nexus-typegen';
-import 'antd/dist/antd.css';
 
 const { Option } = Select;
 

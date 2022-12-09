@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Dropdown, Space } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
-import { Menu } from 'antd';
 import { signOut } from 'next-auth/react';
 import { Avatar } from 'antd';
 import tinycolor from 'tinycolor2';
@@ -93,18 +92,16 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 		}
 	};
 
-	const menu = <Menu onClick={handleMenuClick} items={items} />;
-
 	return (
 		<Dropdown
-			overlay={menu}
+			menu={{ items, onClick: handleMenuClick }}
 			placement='bottom'
 			arrow={{ pointAtCenter: true }}
 			onOpenChange={handleOpenChange}
 			open={open}
 		>
 			<a onClick={e => e.preventDefault()}>
-				{isProfile ? renderAvatar() : <Space>{name}</Space>}
+				{isProfile ? renderAvatar() : <p className='text-base'>{name}</p>}
 			</a>
 		</Dropdown>
 	);

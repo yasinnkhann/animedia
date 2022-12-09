@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import DropDownItem from './DropDownItem';
 import { AiFillHome } from 'react-icons/ai';
-import 'antd/dist/antd.css';
 
 const Header = () => {
 	const { data: session, status } = useSession();
