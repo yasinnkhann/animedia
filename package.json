@@ -18,7 +18,7 @@
 		"all-iso-language-codes": "^1.0.9",
 		"antd": "^5.0.5",
 		"apollo-server-micro": "^3.10.2",
-		"axios": "^0.27.2",
+		"axios": "^1.2.1",
 		"bcryptjs": "^2.4.3",
 		"comma-number": "^2.1.0",
 		"formik": "^2.2.9",
