@@ -3,6 +3,7 @@ const nextConfig = {
 	reactStrictMode: true,
 	images: {
 		domains: ['image.tmdb.org'],
+		unoptimized: true,
 	},
 	webpack(config) {
 		config.module.rules.push({

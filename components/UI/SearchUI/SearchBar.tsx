@@ -2,13 +2,21 @@ import React, { forwardRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
 
-const SearchBar = forwardRef<HTMLInputElement>((props, ref) => {
+interface Props {
+	closeSearch?: () => void;
+}
+
+const SearchBar = forwardRef<HTMLInputElement, Props>((props, ref) => {
 	const router = useRouter();
 
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		// console.log('PROPS: ', props);
+		// if (props.closeSearch) {
+		// 	props.closeSearch();
+		// }
 		if (searchQuery.trim().length === 0) return;
 
 		router.push(`/search?q=${searchQuery.trim().split(' ').join('+')}`);

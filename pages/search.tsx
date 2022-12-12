@@ -29,8 +29,6 @@ const Search: NextPage = () => {
 	const {
 		data: searchedMovies,
 		loading: searchedMoviesLoading,
-		error: searchedMoviesError,
-		refetch: refetchSearchedMovies,
 	}: IUseGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['searchedMovies']
@@ -47,8 +45,6 @@ const Search: NextPage = () => {
 	const {
 		data: searchedShows,
 		loading: searchedShowsLoading,
-		error: searchedShowsError,
-		refetch: refetchSearchedShows,
 	}: IUseGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['searchedShows']
@@ -65,8 +61,6 @@ const Search: NextPage = () => {
 	const {
 		data: searchedPeople,
 		loading: searchedPeopleLoading,
-		error: searchedPeopleError,
-		refetch: refetchSearchedPeople,
 	}: IUseGQLQuery<
 		NexusGenObjects['PeopleRes'],
 		NexusGenArgTypes['Query']['searchedPeople']
