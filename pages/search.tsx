@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
 import type { NextPage } from 'next';
+import Head from 'next/head';
 import { Circles } from 'react-loading-icons';
 import Pagination from 'components/Pagination';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
