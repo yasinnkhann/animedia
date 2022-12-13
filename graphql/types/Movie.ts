@@ -7,7 +7,6 @@ import {
 	enumType,
 	arg,
 } from 'nexus';
-import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
@@ -55,12 +54,17 @@ export const getPopularMovies = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/popular?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/popular?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -77,12 +81,17 @@ export const getSearchedMovies = extendType({
 			},
 			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
-				const { data } = await axios.get(
-					`${BASE_URL}/search/movie?api_key=${process.env
-						.API_KEY!}&language=en-US&query=${q}&page=${page ?? 1}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/search/movie?api_key=${process.env
+							.API_KEY!}&language=en-US&query=${q}&page=${page ?? 1}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -169,11 +178,17 @@ export const getMovieDetails = extendType({
 				movieDetailsId: nonNull(intArg()),
 			},
 			resolve: async (_parent, { movieDetailsId }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/${movieDetailsId}?api_key=${process.env
-						.API_KEY!}&language=en-US`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/${movieDetailsId}?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -188,16 +203,21 @@ export const getPopularAnimeMovies = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const keywordID = await GET_KEYWORD_ID('anime');
+				try {
+					const keywordID = await GET_KEYWORD_ID('anime');
 
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/movie?api_key=${process.env
-						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
-						page ?? 1
-					}&with_keywords=${keywordID}`
-				);
+					const res = await fetch(
+						`${BASE_URL}/discover/movie?api_key=${process.env
+							.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
+							page ?? 1
+						}&with_keywords=${keywordID}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -215,12 +235,16 @@ export const getTrendingMovies = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
-				const trendingMovies = await GET_TRENDING_MEDIA(
-					'movie',
-					timeWindow,
-					page
-				);
-				return trendingMovies;
+				try {
+					const trendingMovies = await GET_TRENDING_MEDIA(
+						'movie',
+						timeWindow,
+						page
+					);
+					return trendingMovies;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -235,11 +259,17 @@ export const getTopRatedMovies = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/top_rated?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/top_rated?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -255,11 +285,17 @@ export const getRecommendedMovies = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { recommendedMoviesId, page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process
-						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process
+							.env.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -313,11 +349,17 @@ export const getMovieReviews = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { id, page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/${id}/reviews?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/${id}/reviews?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -355,11 +397,17 @@ export const getMoviesInTheatres = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/now_playing?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/now_playing?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -402,15 +450,21 @@ export const getPopularMoviesByGenre = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { genre, page }) => {
-				const genreID = await GET_GENRE_ID(genre, 'movie');
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/movie?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${
-						page ?? 1
-					}&with_genres=${genreID}&sort_by=popularity.desc`
-				);
+				try {
+					const genreID = await GET_GENRE_ID(genre, 'movie');
 
-				return data;
+					const res = await fetch(
+						`${BASE_URL}/discover/movie?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${
+							page ?? 1
+						}&with_genres=${genreID}&sort_by=popularity.desc`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -428,15 +482,21 @@ export const getTopRatedMoviesByGenre = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { genre, page }) => {
-				const genreID = await GET_GENRE_ID(genre, 'movie');
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/movie?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${
-						page ?? 1
-					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
-				);
+				try {
+					const genreID = await GET_GENRE_ID(genre, 'movie');
 
-				return data;
+					const res = await fetch(
+						`${BASE_URL}/discover/movie?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${
+							page ?? 1
+						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -499,12 +559,17 @@ export const getMoviesCastCrew = extendType({
 				movieId: nonNull(intArg()),
 			},
 			resolve: async (_parent, { movieId }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/movie/${movieId}/casts?api_key=${process.env
-						.API_KEY!}&language=en-US`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/movie/${movieId}/casts?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},

@@ -1,5 +1,4 @@
 import { BASE_URL } from './URLs';
-import axios from 'axios';
 import {
 	NexusGenObjects,
 	NexusGenEnums,
@@ -61,12 +60,11 @@ export const GET_GENRE_ID = async (
 		.replace(/AMPERSAND/gi, '&')
 		.replace(/DASH/gi, '-');
 
-	const {
-		data: { genres },
-	} = await axios.get(
+	const res = await fetch(
 		`${BASE_URL}/genre/${mediaType}/list?api_key=${process.env
 			.API_KEY!}&language=en-US`
 	);
+	const { genres } = await res.json();
 
 	const genreObj = (genres as TGenreObj[]).find(
 		genreObj => genreObj.name === parsedGenreName

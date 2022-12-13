@@ -1,5 +1,4 @@
 import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
-import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 
 export const knownForResult = objectType({
@@ -59,12 +58,17 @@ export const getPopularPeople = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/person/popular?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/popular?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -99,12 +103,17 @@ export const getPersonDetails = extendType({
 				personDetailsId: nonNull(intArg()),
 			},
 			resolve: async (_parent, { personDetailsId }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
-						.API_KEY!}&language=en-US&page=1`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
+							.API_KEY!}&language=en-US&page=1`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -121,13 +130,18 @@ export const getSearchedPeople = extendType({
 			},
 			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
-				const { data } = await axios.get(
-					`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
-						page ?? 1
-					}&query=${q}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
+							page ?? 1
+						}&query=${q}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -202,11 +216,17 @@ export const getPersonsKnownForMovie = extendType({
 					personsKnownForMovieResId: nonNull(intArg()),
 				},
 				resolve: async (_parent, { personsKnownForMovieResId }) => {
-					const { data } = await axios.get(
-						`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
-							.env.API_KEY!}&language=en-US`
-					);
-					return data;
+					try {
+						const res = await fetch(
+							`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
+								.env.API_KEY!}&language=en-US`
+						);
+						const data = await res.json();
+
+						return data;
+					} catch (err) {
+						console.error(err);
+					}
 				},
 			});
 	},
@@ -282,11 +302,17 @@ export const getPersonsKnownForShow = extendType({
 					personsKnownForShowResId: nonNull(intArg()),
 				},
 				resolve: async (_parent, { personsKnownForShowResId }) => {
-					const { data } = await axios.get(
-						`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
-							.env.API_KEY!}&language=en-US`
-					);
-					return data;
+					try {
+						const res = await fetch(
+							`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
+								.env.API_KEY!}&language=en-US`
+						);
+						const data = await res.json();
+
+						return data;
+					} catch (err) {
+						console.error(err);
+					}
 				},
 			});
 	},

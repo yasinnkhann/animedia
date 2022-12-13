@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { BASE_URL } from './URLs';
 
 export const GET_TRENDING_MEDIA = async (
@@ -6,10 +5,12 @@ export const GET_TRENDING_MEDIA = async (
 	timeWindow: 'day' | 'week',
 	pageNum: number | null | undefined
 ) => {
-	const { data } = await axios.get(
+	const res = await fetch(
 		`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env
 			.API_KEY!}&language=en-US&page=${pageNum ?? 1}`
 	);
+
+	const data = await res.json();
 
 	return data;
 };

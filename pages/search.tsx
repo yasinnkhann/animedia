@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Circles } from 'react-loading-icons';
 import Pagination from 'components/Pagination';
@@ -11,6 +10,7 @@ import { useGQLQuery } from '../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/specificVals';
+import type { NextPage } from 'next';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,

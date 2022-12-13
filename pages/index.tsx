@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import type { NextPage, GetStaticProps } from 'next';
 import Head from 'next/head';
-import { useSession } from 'next-auth/react';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
 import * as Queries from '../graphql/queries';
@@ -10,6 +8,7 @@ import { useGQLQuery } from '../hooks/useGQL';
 import { IUseGQLQuery } from '@ts/interfaces';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
+import type { NextPage, GetStaticProps } from 'next';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -17,8 +16,6 @@ import {
 } from '../graphql/generated/nexus-typegen';
 
 const Home: NextPage = () => {
-	const { data: session } = useSession();
-
 	const whatsPopularContainerRef = useRef<HTMLElement>(null);
 	const trendingContainerRef = useRef<HTMLElement>(null);
 
@@ -94,11 +91,13 @@ const Home: NextPage = () => {
 	}: IUseGQLQuery<NexusGenObjects['ShowsRes']> = useGQLQuery(
 		Queries.QUERY_POPULAR_SHOWS
 	);
+
 	const {
 		fetchData: fetchMoviesInTheatresData,
 	}: IUseGQLQuery<NexusGenObjects['MoviesInTheatresRes']> = useGQLQuery(
 		Queries.QUERY_MOVIES_IN_THEATRES
 	);
+
 	const {
 		fetchData: fetchWeeklyTrendingMoviesData,
 	}: IUseGQLQuery<
@@ -126,6 +125,7 @@ const Home: NextPage = () => {
 			},
 		}
 	);
+
 	const {
 		fetchData: fetchWeeklyTrendingShowsData,
 	}: IUseGQLQuery<

@@ -6,9 +6,7 @@ import {
 	intArg,
 	enumType,
 	arg,
-	list,
 } from 'nexus';
-import axios from 'axios';
 import { BASE_URL } from '../../utils/URLs';
 import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
@@ -55,12 +53,17 @@ export const getPopularShows = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/popular?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/popular?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -77,12 +80,17 @@ export const getSearchedShows = extendType({
 			},
 			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
-				const { data } = await axios.get(
-					`${BASE_URL}/search/tv?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/search/tv?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -258,11 +266,17 @@ export const getShowDetails = extendType({
 				showDetailsId: nonNull(intArg()),
 			},
 			resolve: async (_parent, { showDetailsId }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/${showDetailsId}?api_key=${process.env
-						.API_KEY!}&language=en-US`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/${showDetailsId}?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -277,16 +291,21 @@ export const getPopularAnimeShows = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const keywordID = await GET_KEYWORD_ID('anime');
+				try {
+					const keywordID = await GET_KEYWORD_ID('anime');
 
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/tv?api_key=${process.env
-						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
-						page ?? 1
-					}&with_keywords=${keywordID}`
-				);
+					const res = await fetch(
+						`${BASE_URL}/discover/tv?api_key=${process.env
+							.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
+							page ?? 1
+						}&with_keywords=${keywordID}`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -320,11 +339,17 @@ export const getTopRatedShows = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/top_rated?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/top_rated?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -340,11 +365,17 @@ export const getRecommendedShows = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { recommendedShowsId, page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process
-						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process
+							.env.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -398,11 +429,17 @@ export const getShowReviews = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { id, page }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/${id}/reviews?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${page ?? 1}`
-				);
-				return data;
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/${id}/reviews?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -442,15 +479,21 @@ export const getPopularShowsByGenre = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { genre, page }) => {
-				const genreID = await GET_GENRE_ID(genre, 'tv');
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/tv?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${
-						page ?? 1
-					}&with_genres=${genreID}&sort_by=popularity.desc`
-				);
+				try {
+					const genreID = await GET_GENRE_ID(genre, 'tv');
 
-				return data;
+					const res = await fetch(
+						`${BASE_URL}/discover/tv?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${
+							page ?? 1
+						}&with_genres=${genreID}&sort_by=popularity.desc`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -468,15 +511,21 @@ export const getTopRatedShowsByGenre = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { genre, page }) => {
-				const genreID = await GET_GENRE_ID(genre, 'tv');
-				const { data } = await axios.get(
-					`${BASE_URL}/discover/tv?api_key=${process.env
-						.API_KEY!}&language=en-US&page=${
-						page ?? 1
-					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
-				);
+				try {
+					const genreID = await GET_GENRE_ID(genre, 'tv');
 
-				return data;
+					const res = await fetch(
+						`${BASE_URL}/discover/tv?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${
+							page ?? 1
+						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+					);
+					const data = await res.json();
+
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -538,12 +587,17 @@ export const getShowsCastCrew = extendType({
 				showId: nonNull(intArg()),
 			},
 			resolve: async (_parent, { showId }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/${showId}/credits?api_key=${process.env
-						.API_KEY!}&language=en-US`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/${showId}/credits?api_key=${process.env
+							.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
@@ -583,12 +637,17 @@ export const getEpisodeDetails = extendType({
 				episodeNum: nonNull(intArg()),
 			},
 			resolve: async (_parent, { showId, seasonNum, episodeNum }) => {
-				const { data } = await axios.get(
-					`${BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process
-						.env.API_KEY!}&language=en-US`
-				);
+				try {
+					const res = await fetch(
+						`${BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process
+							.env.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
 
-				return data;
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 		});
 	},
