@@ -40,7 +40,11 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					</div>
 					<div className='p-4'>
 						<h3 className='cursor-pointer'>{searchResult.title}</h3>
-						<p>{formatDate(searchResult.release_date as string)}</p>
+						<p>
+							{searchResult.release_date
+								? formatDate(searchResult.release_date)
+								: 'Release Date Not Available'}
+						</p>
 						<p>
 							{searchResult.overview.split(' ').length > 50
 								? `${searchResult.overview
@@ -67,7 +71,11 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					</div>
 					<div className='p-4'>
 						<h3 className='cursor-pointer'>{searchResult.name}</h3>
-						<p>{formatDate(searchResult.first_air_date as string)}</p>
+						<p>
+							{searchResult.first_air_date
+								? formatDate(searchResult.first_air_date)
+								: 'First Air Date Not Available'}
+						</p>
 						<p>
 							{searchResult.overview.split(' ').length > 50
 								? `${searchResult.overview

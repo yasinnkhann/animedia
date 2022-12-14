@@ -37,8 +37,6 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 
 	if (!epDetailsCardData) return <></>;
 
-	console.log('DATA: ', epDetailsCardData);
-
 	return (
 		<>
 			<section

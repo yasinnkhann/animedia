@@ -55,52 +55,56 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							</p>
 						</div>
 					</section>
-					<section className='w-3/4 mt-[-3rem] ml-8'>
-						<div className='mt-12 mb-8'>
-							<h5 className='mb-2 underline underline-offset-4'>
-								Description:
-							</h5>
-							<p>{episodeDetails.overview}</p>
-						</div>
+					<section className='mt-4 ml-8 flex justify-between'>
+						<section className='flex flex-col mr-4'>
+							<div className='mb-8'>
+								<h5 className='mb-2 underline underline-offset-4'>
+									Description:
+								</h5>
+								<p>{episodeDetails.overview}</p>
+							</div>
 
-						<div className='mt-2'>
-							<p>
-								<span className='font-bold'>Season: </span>
-								{episodeDetails.season_number}
-							</p>
-						</div>
+							<div className='mt-2'>
+								<p>
+									<span className='font-bold'>Season: </span>
+									{episodeDetails.season_number}
+								</p>
+							</div>
 
-						<div className='mt-2'>
-							<p>
-								<span className='font-bold'>Episode: </span>
-								{episodeDetails.episode_number}
-							</p>
-						</div>
+							<div className='mt-2'>
+								<p>
+									<span className='font-bold'>Episode: </span>
+									{episodeDetails.episode_number}
+								</p>
+							</div>
 
-						<div className='mt-2'>
-							<p>
-								<span className='font-bold'>Runtime: </span>
-								{episodeDetails.runtime}
-							</p>
-						</div>
+							<div className='mt-2'>
+								<p>
+									<span className='font-bold'>Runtime: </span>
+									{episodeDetails.runtime}
+								</p>
+							</div>
 
-						<div className='mt-2'>
-							<p>
-								<span className='font-bold'>Air Date: </span>
-								{formatDate(episodeDetails.air_date!)}
-							</p>
+							<div className='mt-2'>
+								<p>
+									<span className='font-bold'>Air Date: </span>
+									{episodeDetails.air_date
+										? formatDate(episodeDetails.air_date)
+										: 'Air Date Not Available'}
+								</p>
+							</div>
+						</section>
+
+						<div>
+							<Image
+								className='rounded-lg'
+								src={BASE_IMG_URL + episodeDetails.still_path}
+								alt={episodeDetails.name ?? undefined}
+								height={400}
+								width={400}
+							/>
 						</div>
 					</section>
-
-					{/* <div className='absolute bottom-2 right-4'>
-						<Image
-							className='rounded-lg'
-							src={BASE_IMG_URL + episodeDetails.still_path}
-							alt={episodeDetails.name ?? undefined}
-							height={300}
-							width={300}
-						/>
-					</div> */}
 
 					<button className='absolute top-2 right-2' onClick={closeModal}>
 						<GrClose size={25} />

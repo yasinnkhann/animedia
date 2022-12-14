@@ -55,11 +55,13 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 				</h2>
 
 				<p className='text-sm m-0 p-0'>
-					{formatDate(
-						isMovie
-							? (item.release_date as string)
-							: (item.first_air_date as string)
-					)}
+					{isMovie
+						? item.release_date
+							? formatDate(item.release_date)
+							: 'Release Date Not Available'
+						: item.first_air_date
+						? formatDate(item.first_air_date)
+						: 'First Air Date Not Available'}
 				</p>
 			</div>
 		</section>
