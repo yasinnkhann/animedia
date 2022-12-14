@@ -40,6 +40,6 @@ export const baseSchema = makeSchema({
 	},
 });
 
-export const schema = baseSchema;
+// export const schema = baseSchema;
 
-// export const schema = applyMiddleware(baseSchema, permissions);
+export const schema = applyMiddleware(baseSchema, permissions);

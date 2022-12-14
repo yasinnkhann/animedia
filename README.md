@@ -21,4 +21,3 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 ## Future Features
 
 - Compare your lists with others given their id
-- Make Search Bar available on every page

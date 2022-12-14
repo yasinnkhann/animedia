@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import DropDownItem from './DropDownItem';
@@ -9,6 +10,7 @@ import { ImCross } from 'react-icons/im';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 
 const Header = () => {
+	const router = useRouter();
 	const { data: session, status } = useSession();
 	const [isSearchBtnClicked, setIsSearchBtnClicked] = useState(false);
 
@@ -110,29 +112,31 @@ const Header = () => {
 									</>
 								)}
 
+								{router.pathname !== '/' &&
+									router.pathname !== '/search' &&
+									(!isSearchBtnClicked ? (
+										<TbSearch
+											className='cursor-pointer'
+											size={25}
+											onClick={() => setIsSearchBtnClicked(curr => !curr)}
+										/>
+									) : (
+										<ImCross
+											className='cursor-pointer'
+											size={20}
+											onClick={() => setIsSearchBtnClicked(curr => !curr)}
+										/>
+									))}
+
 								{status === 'unauthenticated' && (
 									<div
-										className='flex items-center cursor-pointer'
+										className='flex items-center cursor-pointer ml-8'
 										onClick={() => signIn()}
 									>
 										<p className='text-base'>Login</p>
 										<BiLogIn className='ml-2' size={30} />
 									</div>
 								)}
-
-								{/* {!isSearchBtnClicked ? (
-									<TbSearch
-										className='cursor-pointer'
-										size={25}
-										onClick={() => setIsSearchBtnClicked(curr => !curr)}
-									/>
-								) : (
-									<ImCross
-										className='cursor-pointer'
-										size={25}
-										onClick={() => setIsSearchBtnClicked(curr => !curr)}
-									/>
-								)} */}
 
 								{status === 'authenticated' && (
 									<DropDownItem
@@ -150,11 +154,11 @@ const Header = () => {
 					</section>
 				</nav>
 			</header>
-			{/* {isSearchBtnClicked && (
+			{isSearchBtnClicked && (
 				<section className='mt-24'>
 					<SearchBar closeSearch={() => setIsSearchBtnClicked(false)} />
 				</section>
-			)} */}
+			)}
 		</>
 	);
 };

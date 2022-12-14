@@ -14,7 +14,6 @@ interface Props {
 
 const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 	const contentRef = useRef<HTMLDivElement>(null);
-	console.log('EP DETAILS: ', episodeDetails);
 
 	useEffect(() => {
 		const close = (e: any) => {
@@ -56,7 +55,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							</p>
 						</div>
 					</section>
-					<section className='w-3/4 mt-[-3rem]'>
+					<section className='w-3/4 mt-[-3rem] ml-8'>
 						<div className='mt-12 mb-8'>
 							<h5 className='mb-2 underline underline-offset-4'>
 								Description:

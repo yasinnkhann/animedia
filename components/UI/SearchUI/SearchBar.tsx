@@ -13,10 +13,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// console.log('PROPS: ', props);
-		// if (props.closeSearch) {
-		// 	props.closeSearch();
-		// }
+
+		if (props.closeSearch) props.closeSearch();
+
 		if (searchQuery.trim().length === 0) return;
 
 		router.push(`/search?q=${searchQuery.trim().split(' ').join('+')}`);
