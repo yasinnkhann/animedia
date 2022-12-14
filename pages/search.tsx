@@ -18,6 +18,7 @@ import {
 
 const Search: NextPage = () => {
 	const router = useRouter();
+	// console.log(router);
 
 	const [currPage, setCurrPage] = useState(1);
 
@@ -106,6 +107,12 @@ const Search: NextPage = () => {
 		scrollToTop();
 	}, [currPage]);
 
+	// useEffect(() => {
+	// 	if (router.query.page) {
+	// 		setCurrPage(+(router.query.page as string));
+	// 	}
+	// }, [router]);
+
 	useEffect(() => {
 		if (searchedMovies && searchedShows && searchedPeople) {
 			if (!searchedMovies.results.length && searchedShows.results.length) {
@@ -119,10 +126,25 @@ const Search: NextPage = () => {
 			}
 
 			if (searchBarRef.current) {
+				// if (router.query.page) {
+				// 	const endIdx = (router.query.q as string).indexOf('?page=');
+				// 	console.log('END IDX: ', endIdx);
+				// 	searchBarRef.current.value = (router.query.q as string).slice(
+				// 		0,
+				// 		endIdx
+				// 	);
+				// } else {
 				searchBarRef.current.value = router.query.q as string;
+				// }
 			}
 		}
-	}, [searchedMovies, searchedShows, searchedPeople, router.query.q]);
+	}, [
+		searchedMovies,
+		searchedShows,
+		searchedPeople,
+		router.query.q,
+		router.query.page,
+	]);
 
 	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
 		return (
@@ -227,6 +249,11 @@ const Search: NextPage = () => {
 							}
 							itemsPerPage={RESULTS_PER_PAGE}
 							paginate={(pageNum: number) => setCurrPage(pageNum)}
+							// paginate={(pageNum: number) =>
+							// 	router.push(
+							// 		`${router.pathname}?q=${router.query.q}?page=${pageNum}`
+							// 	)
+							// }
 							siblingCount={1}
 							maxPageNum={500}
 						/>

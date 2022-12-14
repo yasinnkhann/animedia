@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
@@ -23,6 +24,7 @@ import {
 const { Option } = Select;
 
 const Genre = () => {
+	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
 	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
@@ -67,6 +69,12 @@ const Genre = () => {
 	useEffect(() => {
 		scrollToTop();
 	}, [currPage]);
+
+	useEffect(() => {
+		if (router.query.page) {
+			setCurrPage(+(router.query.page as string));
+		}
+	}, [router]);
 
 	return (
 		<>
@@ -137,7 +145,9 @@ const Genre = () => {
 								currPage={currPage}
 								totalItems={genreOfShowsData.total_results}
 								itemsPerPage={RESULTS_PER_PAGE}
-								paginate={(pageNum: number) => setCurrPage(pageNum)}
+								paginate={(pageNum: number) =>
+									router.push(`${router.pathname}?page=${pageNum}`)
+								}
 								siblingCount={1}
 								maxPageNum={500}
 							/>
