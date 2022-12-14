@@ -65,7 +65,11 @@ const MovieCard = ({ movie, rank }: Props) => {
 						{movie.title}
 					</h3>
 
-					<p>{formatDate(movie.release_date as string)}</p>
+					<p>
+						{movie.release_date
+							? formatDate(movie.release_date)
+							: 'Release Date Not Available'}
+					</p>
 				</section>
 			</td>
 

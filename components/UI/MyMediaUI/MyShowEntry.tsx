@@ -90,7 +90,11 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 						{myShow.name}
 					</h3>
 
-					<p>{formatDate(showData?.first_air_date as string)}</p>
+					<p>
+						{showData?.first_air_date
+							? formatDate(showData?.first_air_date)
+							: 'First Air Date Not Available'}
+					</p>
 				</section>
 			</td>
 

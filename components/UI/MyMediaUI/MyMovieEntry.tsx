@@ -90,7 +90,11 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 						{myMovie.name}
 					</h3>
 
-					<p>{formatDate(movieData?.release_date as string)}</p>
+					<p>
+						{movieData?.release_date
+							? formatDate(movieData?.release_date)
+							: 'Release Date Not Available'}
+					</p>
 				</section>
 			</td>
 

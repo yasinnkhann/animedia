@@ -64,7 +64,11 @@ const ShowCard = ({ show, rank }: Props) => {
 					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
 						{show.name}
 					</h3>
-					<p>{formatDate(show.first_air_date as string)}</p>
+					<p>
+						{show.first_air_date
+							? formatDate(show.first_air_date)
+							: 'First Air Date Not Available'}
+					</p>
 				</section>
 			</td>
 
