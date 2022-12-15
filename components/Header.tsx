@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
@@ -13,6 +13,7 @@ const Header = () => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
 	const [isSearchBtnClicked, setIsSearchBtnClicked] = useState(false);
+	const searchBarRef = useRef<HTMLInputElement>(null);
 
 	if (status === 'loading') {
 		return <></>;
@@ -156,7 +157,10 @@ const Header = () => {
 			</header>
 			{isSearchBtnClicked && (
 				<section className='mt-24'>
-					<SearchBar closeSearch={() => setIsSearchBtnClicked(false)} />
+					<SearchBar
+						ref={searchBarRef}
+						closeSearch={() => setIsSearchBtnClicked(false)}
+					/>
 				</section>
 			)}
 		</>
