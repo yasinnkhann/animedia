@@ -29,13 +29,25 @@ const Home: NextPage = () => {
 					scrollerClass
 				) as HTMLDivElement;
 
-			whatsPopularScroller.style.height = '25rem';
+			whatsPopularScroller.style.height = '26rem';
+
+			whatsPopularScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 
 			const trendingScroller = trendingContainerRef.current.querySelector(
 				scrollerClass
 			) as HTMLDivElement;
 
-			trendingScroller.style.height = '25rem';
+			trendingScroller.style.height = '26rem';
+
+			trendingScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 	});
 
@@ -286,7 +298,7 @@ const Home: NextPage = () => {
 								</section>
 							</section>
 
-							<section className='mt-4' ref={trendingContainerRef}>
+							<section className='mt-4 pb-4' ref={trendingContainerRef}>
 								<HomeHorizontalScroller
 									items={trendingData.results as THorizontalScrollerData}
 								/>

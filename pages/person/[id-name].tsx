@@ -127,6 +127,12 @@ const PersonDetails = () => {
 			) as HTMLDivElement;
 
 			knownForScroller.style.height = '23rem';
+
+			knownForScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 	});
 
@@ -161,7 +167,7 @@ const PersonDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4'>
+				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + personDetailsData.profile_path}
@@ -222,7 +228,7 @@ const PersonDetails = () => {
 					)}
 				</section>
 
-				<section className='col-start-2 mt-4' ref={knownForContainerRef}>
+				<section className='col-start-2 mt-4 pb-4' ref={knownForContainerRef}>
 					<h3 className='mb-4 ml-8'>Known For</h3>
 					<KnownForHorizontalScroller items={memoMappedMedia} />
 				</section>

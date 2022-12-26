@@ -8,7 +8,14 @@ module.exports = {
 			screens: {},
 		},
 	},
-	plugins: [require('tailwind-scrollbar'), require('tailwind-scrollbar-hide')],
+	corePlugins: {
+		aspectRatio: false,
+	},
+	plugins: [
+		require('tailwind-scrollbar'),
+		require('tailwind-scrollbar-hide'),
+		require('@tailwindcss/aspect-ratio'),
+	],
 };
 
 /*

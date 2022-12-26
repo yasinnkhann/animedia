@@ -244,6 +244,12 @@ const MovieDetails = () => {
 			) as HTMLDivElement;
 
 			recMoviesScroller.style.height = '23rem';
+
+			recMoviesScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 
 		if (movieCastContainerRef.current) {
@@ -252,6 +258,12 @@ const MovieDetails = () => {
 			) as HTMLDivElement;
 
 			movieCastScroller.style.height = '23rem';
+
+			movieCastScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 	});
 
@@ -270,7 +282,7 @@ const MovieDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4'>
+				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieDetailsData.poster_path}
@@ -386,8 +398,8 @@ const MovieDetails = () => {
 					)}
 
 					{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
-						<section ref={recMoviesContainerRef}>
-							<h3 className='mb-4 ml-8'>Recommended Movies</h3>
+						<section className='pb-4' ref={recMoviesContainerRef}>
+							<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
 							<RecommendedMoviesHorizontalScroller
 								items={recMoviesData!.results.map(movie => ({
 									id: movie.id,

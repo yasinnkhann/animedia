@@ -539,6 +539,12 @@ const ShowDetails = () => {
 			) as HTMLDivElement;
 
 			recMoviesScroller.style.height = '23rem';
+
+			recMoviesScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 
 		if (showCastContainerRef.current) {
@@ -547,6 +553,12 @@ const ShowDetails = () => {
 			) as HTMLDivElement;
 
 			showCastScroller.style.height = '23rem';
+
+			showCastScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 
 		if (episodesContainerRef.current) {
@@ -555,6 +567,12 @@ const ShowDetails = () => {
 			) as HTMLDivElement;
 
 			episodesScroller.style.height = '14rem';
+
+			episodesScroller.classList.add(
+				'scrollbar-thin',
+				'scrollbar-thumb-gray-900',
+				'scrollbar-track-gray-100'
+			);
 		}
 	});
 
@@ -573,7 +591,7 @@ const ShowDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4'>
+				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + showDetailsData.poster_path}
@@ -747,7 +765,7 @@ const ShowDetails = () => {
 
 					{!showsCastCrewLoading && showsCastCrewData?.cast?.length! > 0 && (
 						<section ref={showCastContainerRef}>
-							<h3 className='mb-4 ml-8'>Cast</h3>
+							<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
 							<MediaCastHorizontalScroller
 								items={
 									showsCastCrewData?.cast
@@ -763,8 +781,8 @@ const ShowDetails = () => {
 						</section>
 					)}
 					{!recShowsLoading && recShowsData?.results?.length! > 0 && (
-						<section ref={recShowsContainerRef}>
-							<h3 className='mb-4 ml-8'>Recommended Shows</h3>
+						<section className='pb-4' ref={recShowsContainerRef}>
+							<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
 							<RecommendedShowsHorizontalScroller
 								items={recShowsData!.results.map(show => ({
 									id: show.id,
