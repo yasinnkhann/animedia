@@ -42,6 +42,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>((props, ref) => {
 		</form>
 	);
 });
+
 SearchBar.displayName = 'SearchBar';
 
 export default SearchBar;

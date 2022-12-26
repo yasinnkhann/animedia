@@ -122,7 +122,10 @@ const Header = () => {
 										<TbSearch
 											className='cursor-pointer'
 											size={25}
-											onClick={() => setIsSearchBtnClicked(curr => !curr)}
+											onClick={() => {
+												setIsSearchBtnClicked(curr => !curr);
+												window.scrollTo(0, 0);
+											}}
 										/>
 									) : (
 										<ImCross
