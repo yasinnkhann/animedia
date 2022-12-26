@@ -32,7 +32,6 @@ const SearchBar = forwardRef<HTMLInputElement, Props>((props, ref) => {
 				placeholder='Search for a movie, tv show, or person...'
 				ref={ref}
 				onChange={e => setSearchQuery(e.target.value)}
-				{...props}
 			/>
 			<button
 				className='absolute bg-transparent text-[1.5rem] text-gray-700 z-10 border-none transition-all hover:cursor-pointer hover:text-black hover:scale-125 focus:text-black focus:outline-none left-[calc(100%-3.5rem)] top-3.5'

@@ -71,7 +71,10 @@ const Header = () => {
 					<section>
 						<Link href='/'>
 							<a className='text-black hover:text-black !mb-0'>
-								<AiFillHome size={25} />
+								<AiFillHome
+									size={25}
+									onClick={() => setIsSearchBtnClicked(false)}
+								/>
 							</a>
 						</Link>
 					</section>
