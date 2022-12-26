@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHorizontalScroller';
@@ -16,45 +16,6 @@ import {
 } from '../graphql/generated/nexus-typegen';
 
 const Home: NextPage = () => {
-	const whatsPopularContainerRef = useRef<HTMLElement>(null);
-	const trendingContainerRef = useRef<HTMLElement>(null);
-
-	useEffect(() => {
-		if (whatsPopularContainerRef.current && trendingContainerRef.current) {
-			const scrollerClass =
-				'.react-horizontal-scrolling-menu--scroll-container';
-
-			const whatsPopularScroller =
-				whatsPopularContainerRef.current.querySelector(
-					scrollerClass
-				) as HTMLDivElement;
-
-			whatsPopularScroller.style.height = '26rem';
-
-			whatsPopularScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-
-			const trendingScroller = trendingContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			trendingScroller.style.height = '26rem';
-
-			trendingScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-	});
-
 	const [whatsPopularQueryType, setWhatsPopularQueryType] =
 		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
 
@@ -183,7 +144,7 @@ const Home: NextPage = () => {
 									<li
 										className={`cursor-pointer ${
 											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
-												? 'border-b-4 border-indigo-500 rounded-sm'
+												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
@@ -195,7 +156,7 @@ const Home: NextPage = () => {
 									<li
 										className={`cursor-pointer ${
 											whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
-												? 'border-b-4 border-indigo-500 rounded-sm'
+												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
@@ -207,7 +168,7 @@ const Home: NextPage = () => {
 									<li
 										className={`cursor-pointer ${
 											whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
-												? 'border-b-4 border-indigo-500 rounded-sm'
+												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
@@ -221,7 +182,7 @@ const Home: NextPage = () => {
 								</ul>
 							</section>
 
-							<section className='mt-4' ref={whatsPopularContainerRef}>
+							<section className='mt-4'>
 								<HomeHorizontalScroller
 									items={whatsPopularData.results as THorizontalScrollerData}
 								/>
@@ -236,7 +197,7 @@ const Home: NextPage = () => {
 										<li
 											className={`cursor-pointer ${
 												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
-													? 'border-b-4 border-indigo-500 rounded-sm'
+													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() =>
@@ -250,7 +211,7 @@ const Home: NextPage = () => {
 										<li
 											className={`cursor-pointer ${
 												trendingQueryType === Queries.QUERY_TRENDING_SHOWS
-													? 'border-b-4 border-indigo-500 rounded-sm'
+													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() =>
@@ -266,7 +227,7 @@ const Home: NextPage = () => {
 										<li
 											className={`cursor-pointer ${
 												trendingTimeWindow === 'day'
-													? 'border-b-4 border-indigo-500 rounded-sm'
+													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() => setTrendingTimeWindow('day')}
@@ -276,7 +237,7 @@ const Home: NextPage = () => {
 										<li
 											className={`cursor-pointer ${
 												trendingTimeWindow === 'week'
-													? 'border-b-4 border-indigo-500 rounded-sm'
+													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() => setTrendingTimeWindow('week')}
@@ -287,7 +248,7 @@ const Home: NextPage = () => {
 								</section>
 							</section>
 
-							<section className='mt-4 pb-4' ref={trendingContainerRef}>
+							<section className='mt-4 pb-4'>
 								<HomeHorizontalScroller
 									items={trendingData.results as THorizontalScrollerData}
 								/>

@@ -28,9 +28,6 @@ const MovieDetails = () => {
 	const { data: session, status } = useSession();
 	const router = useRouter();
 
-	const recMoviesContainerRef = useRef<HTMLElement>(null);
-	const movieCastContainerRef = useRef<HTMLElement>(null);
-
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
 
@@ -235,42 +232,6 @@ const MovieDetails = () => {
 		}
 	}, [usersMovieData, usersMovieLoading]);
 
-	useEffect(() => {
-		const scrollerClass = '.react-horizontal-scrolling-menu--scroll-container';
-
-		if (recMoviesContainerRef.current) {
-			const recMoviesScroller = recMoviesContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			recMoviesScroller.style.height = '23rem';
-
-			recMoviesScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-
-		if (movieCastContainerRef.current) {
-			const movieCastScroller = movieCastContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			movieCastScroller.style.height = '23rem';
-
-			movieCastScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-	});
-
 	if (movieDetailsLoading || !movieDetailsData) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
@@ -384,7 +345,7 @@ const MovieDetails = () => {
 
 				<section className='col-start-2 mt-4'>
 					{!moviesCastCrewLoading && moviesCastCrewData?.cast?.length! > 0 && (
-						<section ref={movieCastContainerRef}>
+						<section>
 							<h3 className='mb-4 ml-8'>Cast</h3>
 							<MediaCastHorizontalScroller
 								items={
@@ -402,7 +363,7 @@ const MovieDetails = () => {
 					)}
 
 					{!recMoviesLoading && recMoviesData?.results?.length! > 0 && (
-						<section className='pb-4' ref={recMoviesContainerRef}>
+						<section className='pb-4'>
 							<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
 							<RecommendedMoviesHorizontalScroller
 								items={recMoviesData!.results.map(movie => ({

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -71,8 +71,6 @@ const PersonDetails = () => {
 		}
 	);
 
-	const knownForContainerRef = useRef<HTMLElement>(null);
-
 	const memoMappedMedia = useMemo(() => {
 		const uniqueMovies: Set<number> = new Set();
 
@@ -116,27 +114,6 @@ const PersonDetails = () => {
 			.sort((a, b) => b.popularity! - a.popularity!)
 			.slice(0, KNOWN_FOR_CARDS_LIMIT);
 	}, [knownForMoviesData, knownForShowsData]);
-
-	useEffect(() => {
-		if (knownForContainerRef.current) {
-			const scrollerClass =
-				'.react-horizontal-scrolling-menu--scroll-container';
-
-			const knownForScroller = knownForContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			knownForScroller.style.height = '23rem';
-
-			knownForScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-	});
 
 	const getAge = (dateStr: string) => {
 		const today = new Date();
@@ -230,7 +207,7 @@ const PersonDetails = () => {
 					)}
 				</section>
 
-				<section className='col-start-2 mt-4 pb-4' ref={knownForContainerRef}>
+				<section className='col-start-2 mt-4 pb-4'>
 					<h3 className='mb-4 ml-8'>Known For</h3>
 					<KnownForHorizontalScroller items={memoMappedMedia} />
 				</section>

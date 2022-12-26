@@ -63,6 +63,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 			onMouseDown={() => dragStart}
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
+			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
 				<MovieCastCard

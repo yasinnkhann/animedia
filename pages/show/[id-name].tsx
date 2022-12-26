@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -28,10 +28,6 @@ import {
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
 	const router = useRouter();
-
-	const recShowsContainerRef = useRef<HTMLElement>(null);
-	const showCastContainerRef = useRef<HTMLElement>(null);
-	const episodesContainerRef = useRef<HTMLElement>(null);
 
 	const [watchStatus, setWatchStatus] =
 		useState<NexusGenEnums['WatchStatusTypes']>('NOT_WATCHING');
@@ -530,58 +526,6 @@ const ShowDetails = () => {
 		showDetailsData?.id!,
 	]);
 
-	useEffect(() => {
-		const scrollerClass = '.react-horizontal-scrolling-menu--scroll-container';
-
-		if (recShowsContainerRef.current) {
-			const recMoviesScroller = recShowsContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			recMoviesScroller.style.height = '23rem';
-
-			recMoviesScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-
-		if (showCastContainerRef.current) {
-			const showCastScroller = showCastContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			showCastScroller.style.height = '23rem';
-
-			showCastScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-
-		if (episodesContainerRef.current) {
-			const episodesScroller = episodesContainerRef.current.querySelector(
-				scrollerClass
-			) as HTMLDivElement;
-
-			episodesScroller.style.height = '14rem';
-
-			episodesScroller.classList.add(
-				'scrollbar-thin',
-				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400',
-				'scrollbar-thumb-rounded-2xl',
-				'scrollbar-track-rounded-2xl'
-			);
-		}
-	});
-
 	if (showDetailsLoading || !showDetailsData) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
@@ -758,7 +702,7 @@ const ShowDetails = () => {
 				<section className='col-start-2 mt-4'>
 					{showDetailsData.seasons.length > 0 &&
 						showDetailsData.number_of_episodes! <= 500 && (
-							<section ref={episodesContainerRef}>
+							<section>
 								<h3 className='mb-4 ml-8'>Episodes</h3>
 								<EpisodeDetailsHorizontalScroller
 									seasons={showDetailsData.seasons!.filter(
@@ -770,7 +714,7 @@ const ShowDetails = () => {
 						)}
 
 					{!showsCastCrewLoading && showsCastCrewData?.cast?.length! > 0 && (
-						<section ref={showCastContainerRef}>
+						<section>
 							<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
 							<MediaCastHorizontalScroller
 								items={
@@ -787,7 +731,7 @@ const ShowDetails = () => {
 						</section>
 					)}
 					{!recShowsLoading && recShowsData?.results?.length! > 0 && (
-						<section className='pb-4' ref={recShowsContainerRef}>
+						<section className='pb-4'>
 							<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
 							<RecommendedShowsHorizontalScroller
 								items={recShowsData!.results.map(show => ({
