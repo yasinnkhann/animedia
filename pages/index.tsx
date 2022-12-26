@@ -34,7 +34,9 @@ const Home: NextPage = () => {
 			whatsPopularScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400'
+				'scrollbar-track-gray-400',
+				'scrollbar-thumb-rounded-2xl',
+				'scrollbar-track-rounded-2xl'
 			);
 
 			const trendingScroller = trendingContainerRef.current.querySelector(
@@ -46,7 +48,9 @@ const Home: NextPage = () => {
 			trendingScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400'
+				'scrollbar-track-gray-400',
+				'scrollbar-thumb-rounded-2xl',
+				'scrollbar-track-rounded-2xl'
 			);
 		}
 	});

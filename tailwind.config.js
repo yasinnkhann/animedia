@@ -12,7 +12,7 @@ module.exports = {
 		aspectRatio: false,
 	},
 	plugins: [
-		require('tailwind-scrollbar'),
+		require('tailwind-scrollbar')({ nocompatible: true }),
 		require('tailwind-scrollbar-hide'),
 		require('@tailwindcss/aspect-ratio'),
 	],

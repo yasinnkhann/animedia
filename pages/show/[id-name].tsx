@@ -543,7 +543,9 @@ const ShowDetails = () => {
 			recMoviesScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400'
+				'scrollbar-track-gray-400',
+				'scrollbar-thumb-rounded-2xl',
+				'scrollbar-track-rounded-2xl'
 			);
 		}
 
@@ -557,7 +559,9 @@ const ShowDetails = () => {
 			showCastScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400'
+				'scrollbar-track-gray-400',
+				'scrollbar-thumb-rounded-2xl',
+				'scrollbar-track-rounded-2xl'
 			);
 		}
 
@@ -571,7 +575,9 @@ const ShowDetails = () => {
 			episodesScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-400'
+				'scrollbar-track-gray-400',
+				'scrollbar-thumb-rounded-2xl',
+				'scrollbar-track-rounded-2xl'
 			);
 		}
 	});
