@@ -34,7 +34,7 @@ const Home: NextPage = () => {
 			whatsPopularScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-100'
+				'scrollbar-track-gray-400'
 			);
 
 			const trendingScroller = trendingContainerRef.current.querySelector(
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
 			trendingScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-100'
+				'scrollbar-track-gray-400'
 			);
 		}
 	});
@@ -177,13 +177,11 @@ const Home: NextPage = () => {
 								</div>
 								<ul className='flex w-[25%] justify-around'>
 									<li
-										className='cursor-pointer'
-										style={{
-											borderBottom:
-												whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
-													? '5px solid black'
-													: undefined,
-										}}
+										className={`cursor-pointer ${
+											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
+												? 'border-b-4 border-indigo-500 rounded-sm'
+												: ''
+										}`}
 										onClick={() =>
 											handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
 										}
@@ -191,13 +189,11 @@ const Home: NextPage = () => {
 										Movies
 									</li>
 									<li
-										className='cursor-pointer'
-										style={{
-											borderBottom:
-												whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
-													? '5px solid black'
-													: undefined,
-										}}
+										className={`cursor-pointer ${
+											whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
+												? 'border-b-4 border-indigo-500 rounded-sm'
+												: ''
+										}`}
 										onClick={() =>
 											handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
 										}
@@ -205,14 +201,11 @@ const Home: NextPage = () => {
 										Shows
 									</li>
 									<li
-										className='cursor-pointer'
-										style={{
-											borderBottom:
-												whatsPopularQueryType ===
-												Queries.QUERY_MOVIES_IN_THEATRES
-													? '5px solid black'
-													: undefined,
-										}}
+										className={`cursor-pointer ${
+											whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
+												? 'border-b-4 border-indigo-500 rounded-sm'
+												: ''
+										}`}
 										onClick={() =>
 											handleChangePopularQueryType(
 												Queries.QUERY_MOVIES_IN_THEATRES
@@ -237,13 +230,11 @@ const Home: NextPage = () => {
 								<section className='flex w-full justify-around'>
 									<ul className='flex w-[20%] justify-around'>
 										<li
-											className='cursor-pointer'
-											style={{
-												borderBottom:
-													trendingQueryType === Queries.QUERY_TRENDING_MOVIES
-														? '5px solid black'
-														: undefined,
-											}}
+											className={`cursor-pointer ${
+												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+													? 'border-b-4 border-indigo-500 rounded-sm'
+													: ''
+											}`}
 											onClick={() =>
 												handleChangeTrendingQueryType(
 													Queries.QUERY_TRENDING_MOVIES
@@ -253,13 +244,11 @@ const Home: NextPage = () => {
 											Movies
 										</li>
 										<li
-											className='cursor-pointer'
-											style={{
-												borderBottom:
-													trendingQueryType === Queries.QUERY_TRENDING_SHOWS
-														? '5px solid black'
-														: undefined,
-											}}
+											className={`cursor-pointer ${
+												trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+													? 'border-b-4 border-indigo-500 rounded-sm'
+													: ''
+											}`}
 											onClick={() =>
 												handleChangeTrendingQueryType(
 													Queries.QUERY_TRENDING_SHOWS
@@ -271,25 +260,21 @@ const Home: NextPage = () => {
 									</ul>
 									<ul className='flex w-[20%] justify-around'>
 										<li
-											className='cursor-pointer'
-											style={{
-												borderBottom:
-													trendingTimeWindow === 'day'
-														? '5px solid black'
-														: undefined,
-											}}
+											className={`cursor-pointer ${
+												trendingTimeWindow === 'day'
+													? 'border-b-4 border-indigo-500 rounded-sm'
+													: ''
+											}`}
 											onClick={() => setTrendingTimeWindow('day')}
 										>
 											Today
 										</li>
 										<li
-											className='cursor-pointer'
-											style={{
-												borderBottom:
-													trendingTimeWindow === 'week'
-														? '5px solid black'
-														: undefined,
-											}}
+											className={`cursor-pointer ${
+												trendingTimeWindow === 'week'
+													? 'border-b-4 border-indigo-500 rounded-sm'
+													: ''
+											}`}
 											onClick={() => setTrendingTimeWindow('week')}
 										>
 											This Week

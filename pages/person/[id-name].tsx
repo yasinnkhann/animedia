@@ -131,7 +131,7 @@ const PersonDetails = () => {
 			knownForScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-100'
+				'scrollbar-track-gray-400'
 			);
 		}
 	});

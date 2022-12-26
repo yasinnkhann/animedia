@@ -11,19 +11,6 @@
 	@apply box-border;
 }
 
-/* *::-webkit-scrollbar {
-	width: 10px;
-}
-
-*::-webkit-scrollbar-track {
-	background: #f1f1f1;
-}
-
-*::-webkit-scrollbar-thumb {
-	background: #000;
-	border-radius: 10px;
-} */
-
 @layer base {
 	body {
 		@apply bg-gray-100 h-[90vh];

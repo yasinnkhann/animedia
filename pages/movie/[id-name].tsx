@@ -248,7 +248,7 @@ const MovieDetails = () => {
 			recMoviesScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-100'
+				'scrollbar-track-gray-400'
 			);
 		}
 
@@ -262,7 +262,7 @@ const MovieDetails = () => {
 			movieCastScroller.classList.add(
 				'scrollbar-thin',
 				'scrollbar-thumb-gray-900',
-				'scrollbar-track-gray-100'
+				'scrollbar-track-gray-400'
 			);
 		}
 	});
