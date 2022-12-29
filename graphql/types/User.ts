@@ -170,10 +170,10 @@ export const usersShows = extendType({
 	},
 });
 
-export const addedMovie = extendType({
+export const addMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('addedMovie', {
+		t.field('addMovie', {
 			type: 'UserMovie',
 			args: {
 				movieId: nonNull(idArg()),
@@ -198,10 +198,10 @@ export const addedMovie = extendType({
 	},
 });
 
-export const addedShow = extendType({
+export const addShow = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('addedShow', {
+		t.field('addShow', {
 			type: 'UserShow',
 			args: {
 				showId: nonNull(idArg()),
@@ -235,7 +235,7 @@ export const addedShow = extendType({
 export const updateMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('updatedMovie', {
+		t.field('updateMovie', {
 			type: 'UserMovie',
 			args: {
 				movieId: nonNull(idArg()),
@@ -263,7 +263,7 @@ export const updateMovie = extendType({
 export const updateShow = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('updatedShow', {
+		t.field('updateShow', {
 			type: 'UserShow',
 			args: {
 				showId: nonNull(idArg()),
@@ -297,7 +297,7 @@ export const updateShow = extendType({
 export const deleteMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('deletedMovie', {
+		t.field('deleteMovie', {
 			type: 'UserMovie',
 			args: {
 				movieId: nonNull(idArg()),
@@ -319,7 +319,7 @@ export const deleteMovie = extendType({
 export const deleteShow = extendType({
 	type: 'Mutation',
 	definition(t) {
-		t.field('deletedShow', {
+		t.field('deleteShow', {
 			type: 'UserShow',
 			args: {
 				showId: nonNull(idArg()),

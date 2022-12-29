@@ -102,8 +102,8 @@ const MovieDetails = () => {
 		mutateLoading: addMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['addedMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['addedMovie']>(
+		NexusGenArgTypes['Mutation']['addMovie']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['addMovie']>(
 		Mutations.MUTATION_ADD_MOVIE,
 		{
 			variables: {
@@ -128,8 +128,8 @@ const MovieDetails = () => {
 		mutateLoading: updateMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['updatedMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['updatedMovie']>(
+		NexusGenArgTypes['Mutation']['updateMovie']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['updateMovie']>(
 		Mutations.MUTATION_UPDATE_MOVIE,
 		{
 			variables: {
@@ -154,8 +154,8 @@ const MovieDetails = () => {
 		mutateLoading: deleteMovieLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['deletedMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedMovie']>(
+		NexusGenArgTypes['Mutation']['deleteMovie']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteMovie']>(
 		Mutations.MUTATION_DELETE_MOVIE,
 		{
 			variables: {

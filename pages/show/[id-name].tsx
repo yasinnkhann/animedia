@@ -105,8 +105,8 @@ const ShowDetails = () => {
 		mutateLoading: addShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['addedShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['addedShow']>(
+		NexusGenArgTypes['Mutation']['addShow']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['addShow']>(
 		Mutations.MUTATION_ADD_SHOW,
 		{
 			variables: {
@@ -132,8 +132,8 @@ const ShowDetails = () => {
 		mutateLoading: updateShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['updatedShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['updatedShow']>(
+		NexusGenArgTypes['Mutation']['updateShow']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['updateShow']>(
 		Mutations.MUTATION_UPDATE_SHOW,
 		{
 			variables: {
@@ -159,8 +159,8 @@ const ShowDetails = () => {
 		mutateLoading: deleteShowLoading,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['deletedShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedShow']>(
+		NexusGenArgTypes['Mutation']['deleteShow']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteShow']>(
 		Mutations.MUTATION_DELETE_SHOW,
 		{
 			variables: {

@@ -214,13 +214,13 @@ type MoviesRes {
 }
 
 type Mutation {
-  addedMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
-  addedShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
+  addMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
+  addShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
   deleteEmailVerificationToken(token: String!): redisRes
-  deletedMovie(movieId: ID!): UserMovie
-  deletedShow(showId: ID!): UserShow
-  updatedMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
-  updatedShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
+  deleteMovie(movieId: ID!): UserMovie
+  deleteShow(showId: ID!): UserShow
+  updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
+  updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
   verifyUserEmail(userId: ID!): Int
   writeEmailVerificationToken(email: String!): redisRes
   writeRetryEmailVerificationLimit(email: String!): redisRes

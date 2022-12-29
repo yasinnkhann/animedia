@@ -10,6 +10,11 @@ export const permissions = shield({
 		usersShows: isAuthenticated,
 	},
 	Mutation: {
-		'*': isAuthenticated,
+		addMovie: isAuthenticated,
+		addShow: isAuthenticated,
+		deleteMovie: isAuthenticated,
+		deleteShow: isAuthenticated,
+		updateMovie: isAuthenticated,
+		updateShow: isAuthenticated,
 	},
 });

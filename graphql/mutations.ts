@@ -6,7 +6,7 @@ export const MUTATION_ADD_MOVIE = gql`
 		$movieName: String!
 		$watchStatus: WatchStatusTypes!
 	) {
-		addedMovie(
+		addMovie(
 			movieId: $movieId
 			movieName: $movieName
 			watchStatus: $watchStatus
@@ -25,7 +25,7 @@ export const MUTATION_UPDATE_MOVIE = gql`
 		$watchStatus: WatchStatusTypes!
 		$movieRating: Int
 	) {
-		updatedMovie(
+		updateMovie(
 			movieId: $movieId
 			watchStatus: $watchStatus
 			movieRating: $movieRating
@@ -40,7 +40,7 @@ export const MUTATION_UPDATE_MOVIE = gql`
 
 export const MUTATION_DELETE_MOVIE = gql`
 	mutation DeletedMovie($movieId: ID!) {
-		deletedMovie(movieId: $movieId) {
+		deleteMovie(movieId: $movieId) {
 			id
 			name
 			status
@@ -56,7 +56,7 @@ export const MUTATION_ADD_SHOW = gql`
 		$watchStatus: WatchStatusTypes!
 		$currentEpisode: Int
 	) {
-		addedShow(
+		addShow(
 			showId: $showId
 			showName: $showName
 			watchStatus: $watchStatus
@@ -78,7 +78,7 @@ export const MUTATION_UPDATE_SHOW = gql`
 		$showRating: Int
 		$currentEpisode: Int
 	) {
-		updatedShow(
+		updateShow(
 			showId: $showId
 			watchStatus: $watchStatus
 			showRating: $showRating
@@ -95,7 +95,7 @@ export const MUTATION_UPDATE_SHOW = gql`
 
 export const MUTATION_DELETE_SHOW = gql`
 	mutation DeletedShow($showId: ID!) {
-		deletedShow(showId: $showId) {
+		deleteShow(showId: $showId) {
 			id
 			name
 			status

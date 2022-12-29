@@ -101,7 +101,6 @@ export default function Register() {
 					);
 
 					const nodeMailerData = await nodeMailerRes.json();
-					console.log('NODEMAILER DATA: ', nodeMailerData);
 					router.push(`/verification-email-sent/${redisData.token}`);
 				}
 			}

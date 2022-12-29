@@ -41,8 +41,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 		mutateFunction: deleteMovie,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['deletedMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedMovie']>(
+		NexusGenArgTypes['Mutation']['deleteMovie']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteMovie']>(
 		Mutations.MUTATION_DELETE_MOVIE,
 		{
 			variables: {

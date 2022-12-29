@@ -41,8 +41,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		mutateFunction: deleteShow,
 	}: IUseGQLMutation<
 		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['deletedShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deletedShow']>(
+		NexusGenArgTypes['Mutation']['deleteShow']
+	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteShow']>(
 		Mutations.MUTATION_DELETE_SHOW,
 		{
 			variables: {

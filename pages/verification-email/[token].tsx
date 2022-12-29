@@ -95,7 +95,12 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				{verified && <div>You have been successfully verified!</div>}
+				{verified && (
+					<div>
+						You have been successfully verified! Please login to get redirected
+						to your account.
+					</div>
+				)}
 			</main>
 		</>
 	);
