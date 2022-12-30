@@ -38,6 +38,42 @@ const Home: NextPage = () => {
 		},
 	});
 
+	// Preparing the queries
+	const {} = useGQLQuery<NexusGenObjects['ShowsRes']>(
+		Queries.QUERY_POPULAR_SHOWS
+	);
+
+	const {} = useGQLQuery<NexusGenObjects['MoviesInTheatresRes']>(
+		Queries.QUERY_MOVIES_IN_THEATRES
+	);
+
+	const {} = useGQLQuery<
+		NexusGenObjects['MoviesRes'],
+		NexusGenArgTypes['Query']['trendingMovies']
+	>(Queries.QUERY_TRENDING_MOVIES, {
+		variables: {
+			timeWindow: 'week',
+		},
+	});
+
+	const {} = useGQLQuery<
+		NexusGenObjects['ShowsRes'],
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		variables: {
+			timeWindow: 'day',
+		},
+	});
+
+	const {} = useGQLQuery<
+		NexusGenObjects['ShowsRes'],
+		NexusGenArgTypes['Query']['trendingShows']
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		variables: {
+			timeWindow: 'week',
+		},
+	});
+
 	const allDataLoaded =
 		whatsPopularData &&
 		!whatsPopularLoading &&
@@ -51,43 +87,6 @@ const Home: NextPage = () => {
 	const handleChangeTrendingQueryType = (queryType: DocumentNode) => {
 		setTrendingQueryType(queryType);
 	};
-
-	// Preparing the lazy functions
-	useLazyQuery;
-	const { fetchData: fetchPopularShowsData } = useGQLQuery<
-		NexusGenObjects['ShowsRes']
-	>(Queries.QUERY_POPULAR_SHOWS);
-
-	const { fetchData: fetchMoviesInTheatresData } = useGQLQuery<
-		NexusGenObjects['MoviesInTheatresRes']
-	>(Queries.QUERY_MOVIES_IN_THEATRES);
-
-	const { fetchData: fetchWeeklyTrendingMoviesData } = useGQLQuery<
-		NexusGenObjects['MoviesRes'],
-		NexusGenArgTypes['Query']['trendingMovies']
-	>(Queries.QUERY_TRENDING_MOVIES, {
-		variables: {
-			timeWindow: 'week',
-		},
-	});
-
-	const { fetchData: fetchDailyTrendingShowsData } = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.QUERY_TRENDING_SHOWS, {
-		variables: {
-			timeWindow: 'day',
-		},
-	});
-
-	const { fetchData: fetchWeeklyTrendingShowsData } = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.QUERY_TRENDING_SHOWS, {
-		variables: {
-			timeWindow: 'week',
-		},
-	});
 
 	if (trendingLoading || whatsPopularLoading) {
 		return (
