@@ -15,7 +15,6 @@ import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -44,17 +43,14 @@ export default function Login({
 	const {
 		fetchData: fetchAccountVerifiedData,
 		lazyData: fetchAccountVerifiedLazyData,
-	}: IUseGQLQuery<
+	} = useGQLQuery<
 		NexusGenObjects['accountVerifiedRes'],
 		NexusGenArgTypes['Query']['accountVerified']
-	> = useGQLQuery<NexusGenArgTypes['Query']['accountVerified']>(
-		Queries.QUERY_ACCOUNT_VERIFIED,
-		{
-			variables: {
-				email: formik.values.email,
-			},
-		}
-	);
+	>(Queries.QUERY_ACCOUNT_VERIFIED, {
+		variables: {
+			email: formik.values.email,
+		},
+	});
 
 	async function onSubmit() {
 		const { email, password } = formik.values;
@@ -66,7 +62,7 @@ export default function Login({
 		});
 
 		const acctVerifiedData: typeof fetchAccountVerifiedLazyData =
-			data?.[Object.keys(data)[0]];
+			data?.[Object.keys(data)[0] as keyof typeof data];
 
 		if (acctVerifiedData?.error) {
 			setAcctVerifiedErr({

@@ -5,7 +5,6 @@ import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHo
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
@@ -26,27 +25,18 @@ const Home: NextPage = () => {
 	const [trendingTimeWindow, setTrendingTimeWindow] =
 		useState<NexusGenEnums['TimeWindowTypes']>('day');
 
-	const {
-		data: whatsPopularData,
-		loading: whatsPopularLoading,
-	}: IUseGQLQuery<NexusGenObjects['MoviesRes']> = useGQLQuery(
-		whatsPopularQueryType
-	);
+	const { data: whatsPopularData, loading: whatsPopularLoading } = useGQLQuery<
+		NexusGenObjects['MoviesRes']
+	>(whatsPopularQueryType);
 
-	const {
-		data: trendingData,
-		loading: trendingLoading,
-	}: IUseGQLQuery<
+	const { data: trendingData, loading: trendingLoading } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['trendingMovies']
-	> = useGQLQuery<NexusGenArgTypes['Query']['trendingMovies']>(
-		trendingQueryType,
-		{
-			variables: {
-				timeWindow: trendingTimeWindow,
-			},
-		}
-	);
+	>(trendingQueryType, {
+		variables: {
+			timeWindow: trendingTimeWindow,
+		},
+	});
 
 	const allDataLoaded =
 		whatsPopularData &&
@@ -63,59 +53,40 @@ const Home: NextPage = () => {
 	};
 
 	// Preparing the lazy functions
-	const {
-		fetchData: fetchPopularShowsData,
-	}: IUseGQLQuery<NexusGenObjects['ShowsRes']> = useGQLQuery(
-		Queries.QUERY_POPULAR_SHOWS
-	);
+	const { fetchData: fetchPopularShowsData } = useGQLQuery<
+		NexusGenObjects['ShowsRes']
+	>(Queries.QUERY_POPULAR_SHOWS);
 
-	const {
-		fetchData: fetchMoviesInTheatresData,
-	}: IUseGQLQuery<NexusGenObjects['MoviesInTheatresRes']> = useGQLQuery(
-		Queries.QUERY_MOVIES_IN_THEATRES
-	);
+	const { fetchData: fetchMoviesInTheatresData } = useGQLQuery<
+		NexusGenObjects['MoviesInTheatresRes']
+	>(Queries.QUERY_MOVIES_IN_THEATRES);
 
-	const {
-		fetchData: fetchWeeklyTrendingMoviesData,
-	}: IUseGQLQuery<
+	const { fetchData: fetchWeeklyTrendingMoviesData } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['trendingMovies']
-	> = useGQLQuery<NexusGenArgTypes['Query']['trendingMovies']>(
-		Queries.QUERY_TRENDING_MOVIES,
-		{
-			variables: {
-				timeWindow: 'week',
-			},
-		}
-	);
+	>(Queries.QUERY_TRENDING_MOVIES, {
+		variables: {
+			timeWindow: 'week',
+		},
+	});
 
-	const {
-		fetchData: fetchDailyTrendingShowsData,
-	}: IUseGQLQuery<
+	const { fetchData: fetchDailyTrendingShowsData } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['trendingShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['trendingShows']>(
-		Queries.QUERY_TRENDING_SHOWS,
-		{
-			variables: {
-				timeWindow: 'day',
-			},
-		}
-	);
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		variables: {
+			timeWindow: 'day',
+		},
+	});
 
-	const {
-		fetchData: fetchWeeklyTrendingShowsData,
-	}: IUseGQLQuery<
+	const { fetchData: fetchWeeklyTrendingShowsData } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['trendingShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['trendingShows']>(
-		Queries.QUERY_TRENDING_SHOWS,
-		{
-			variables: {
-				timeWindow: 'week',
-			},
-		}
-	);
+	>(Queries.QUERY_TRENDING_SHOWS, {
+		variables: {
+			timeWindow: 'week',
+		},
+	});
 
 	if (trendingLoading || whatsPopularLoading) {
 		return (

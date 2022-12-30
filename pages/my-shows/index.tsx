@@ -6,21 +6,16 @@ import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 
 const MyShows: NextPage = () => {
 	const router = useRouter();
 
-	const {
-		data: usersShowsData,
-		loading: usersShowsLoading,
-	}: IUseGQLQuery<NexusGenObjects['UserShow'][]> = useGQLQuery(
-		Queries.QUERY_GET_USERS_SHOWS,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersShowsData, loading: usersShowsLoading } = useGQLQuery<
+		NexusGenObjects['UserShow'][]
+	>(Queries.QUERY_GET_USERS_SHOWS, {
+		fetchPolicy: 'network-only',
+	});
 
 	if (usersShowsLoading) {
 		return (

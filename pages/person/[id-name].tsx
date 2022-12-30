@@ -5,7 +5,6 @@ import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { IKnownForMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
@@ -23,53 +22,38 @@ const PersonDetails = () => {
 	const router = useRouter();
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
-	const {
-		data: personDetailsData,
-		loading: personDetailsLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['PersonDetailsRes'],
-		NexusGenArgTypes['Query']['personDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['personDetails']>(
-		Queries.QUERY_PERSON_DETAILS,
-		{
+	const { data: personDetailsData, loading: personDetailsLoading } =
+		useGQLQuery<
+			NexusGenObjects['PersonDetailsRes'],
+			NexusGenArgTypes['Query']['personDetails']
+		>(Queries.QUERY_PERSON_DETAILS, {
 			variables: {
 				personDetailsId: id,
 			},
 			fetchPolicy: 'network-only',
-		}
-	);
+		});
 
-	const {
-		data: knownForMoviesData,
-		loading: knownForMoviesLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['PersonsKnownForMovieRes'],
-		NexusGenArgTypes['Query']['personsKnownForMovieRes']
-	> = useGQLQuery<NexusGenArgTypes['Query']['personsKnownForMovieRes']>(
-		Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES,
-		{
+	const { data: knownForMoviesData, loading: knownForMoviesLoading } =
+		useGQLQuery<
+			NexusGenObjects['PersonsKnownForMovieRes'],
+			NexusGenArgTypes['Query']['personsKnownForMovieRes']
+		>(Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES, {
 			variables: {
 				personsKnownForMovieResId: id,
 			},
 			fetchPolicy: 'network-only',
-		}
-	);
+		});
 
-	const {
-		data: knownForShowsData,
-		loading: knownForShowsLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['PersonsKnownForShowRes'],
-		NexusGenArgTypes['Query']['personsKnownForShowRes']
-	> = useGQLQuery<NexusGenArgTypes['Query']['personsKnownForShowRes']>(
-		Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS,
-		{
+	const { data: knownForShowsData, loading: knownForShowsLoading } =
+		useGQLQuery<
+			NexusGenObjects['PersonsKnownForShowRes'],
+			NexusGenArgTypes['Query']['personsKnownForShowRes']
+		>(Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS, {
 			variables: {
 				personsKnownForShowResId: id,
 			},
 			fetchPolicy: 'network-only',
-		}
-	);
+		});
 
 	const memoMappedMedia = useMemo(() => {
 		const uniqueMovies: Set<number> = new Set();

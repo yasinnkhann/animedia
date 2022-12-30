@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 import * as Queries from '../../../graphql/queries';
 import { useGQLQuery } from '../../../hooks/useGQL';
-import { IUseGQLQuery, IEPDetails } from '@ts/interfaces';
+import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
 import {
 	NexusGenObjects,
@@ -18,22 +18,17 @@ interface Props {
 const EpisodeDetailsCard = ({ item }: Props) => {
 	const [showModal, setShowModal] = useState(false);
 
-	const {
-		data: epDetailsCardData,
-		loading: epDetailsCardLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['EpisodeDetails'],
-		NexusGenArgTypes['Query']['episodeDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['episodeDetails']>(
-		Queries.QUERY_GET_EPISODE_DETAILS,
-		{
+	const { data: epDetailsCardData, loading: epDetailsCardLoading } =
+		useGQLQuery<
+			NexusGenObjects['EpisodeDetails'],
+			NexusGenArgTypes['Query']['episodeDetails']
+		>(Queries.QUERY_GET_EPISODE_DETAILS, {
 			variables: {
 				showId: item.showId,
 				seasonNum: item.season,
 				episodeNum: item.episode,
 			},
-		}
-	);
+		});
 
 	if (!epDetailsCardData) return <></>;
 

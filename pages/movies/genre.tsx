@@ -7,7 +7,6 @@ import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { DocumentNode } from '@apollo/client';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { RESULTS_PER_PAGE } from 'utils/specificVals';
 import { Circles } from 'react-loading-icons';
 import {
@@ -33,20 +32,12 @@ const Genre = () => {
 	const [movieGenreType, setMovieGenreType] =
 		useState<NexusGenEnums['MovieGenreTypes']>('Action');
 
-	const {
-		data: genreOfMoviesData,
-	}: IUseGQLQuery<
+	const { data: genreOfMoviesData } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['popularMoviesByGenre']
-	> = useGQLQuery<NexusGenArgTypes['Query']['popularMoviesByGenre']>(
-		sortByQueryType,
-		{
-			variables: {
-				genre: movieGenreType,
-				page: currPage,
-			},
-		}
-	);
+	>(sortByQueryType, {
+		variables: { genre: movieGenreType, page: currPage },
+	});
 
 	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
 		if (value === 'Popular') {

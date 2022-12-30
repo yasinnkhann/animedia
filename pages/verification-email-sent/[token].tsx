@@ -9,7 +9,7 @@ import { SERVER_BASE_URL } from '../../utils/URLs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLMutation, IUseGQLQuery, INodeMailerInfo } from '@ts/interfaces';
+import { INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -25,10 +25,8 @@ const VerificationEmailSent = ({
 	const {
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
-	}: IUseGQLMutation<
+	} = useGQLMutation<
 		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	> = useGQLMutation<
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
 	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
@@ -36,12 +34,8 @@ const VerificationEmailSent = ({
 		},
 	});
 
-	const {
-		data: checkRetryEmailVerificationLimitData,
-	}: IUseGQLQuery<
+	const { data: checkRetryEmailVerificationLimitData } = useGQLQuery<
 		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
-	> = useGQLQuery<
 		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
 	>(Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {
@@ -49,12 +43,8 @@ const VerificationEmailSent = ({
 		},
 	});
 
-	const {
-		mutateFunction: writeRetryEmailVerificationToken,
-	}: IUseGQLMutation<
+	const { mutateFunction: writeRetryEmailVerificationToken } = useGQLMutation<
 		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
-	> = useGQLMutation<
 		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
 	>(Mutations.MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {
@@ -70,7 +60,6 @@ const VerificationEmailSent = ({
 
 	const handleResendLink = async () => {
 		if (checkRetryEmailVerificationLimitData?.token === String(3)) {
-			// alert('STOP');
 			setReachedLimit(true);
 			return;
 		}
@@ -89,7 +78,11 @@ const VerificationEmailSent = ({
 			});
 
 			const writtenTokenData: typeof writeEmailVerificationTokenData =
-				writtenTokenRes.data?.[Object.keys(writtenTokenRes.data)[0]];
+				writtenTokenRes.data?.[
+					Object.keys(
+						writtenTokenRes.data
+					)[0] as keyof typeof writeEmailVerificationTokenData
+				] as any;
 
 			if (!writtenTokenData?.token) throw new Error('No Token');
 

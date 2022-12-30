@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useGQLMutation } from '../../hooks/useGQL';
-import { IUseGQLMutation } from '@ts/interfaces';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import {
@@ -21,11 +20,8 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 	const router = useRouter();
 	const [verified, setVerified] = useState<boolean>(false);
 
-	const {
-		mutateFunction: verifyUserEmail,
-		mutateData: verifyUserEmailData,
-	}: IUseGQLMutation<number, NexusGenArgTypes['Mutation']['verifyUserEmail']> =
-		useGQLMutation<NexusGenArgTypes['Mutation']['verifyUserEmail']>(
+	const { mutateFunction: verifyUserEmail, mutateData: verifyUserEmailData } =
+		useGQLMutation<number, NexusGenArgTypes['Mutation']['verifyUserEmail']>(
 			Mutations.MUTATION_VERIFY_USER_EMAIL,
 			{
 				variables: {
@@ -37,10 +33,8 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 	const {
 		mutateFunction: deleteEmailVerificationToken,
 		mutateData: deleteEmailVerificationTokenData,
-	}: IUseGQLMutation<
+	} = useGQLMutation<
 		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
-	> = useGQLMutation<
 		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
 	>(Mutations.MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
@@ -59,8 +53,10 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 
 				const updatedUserVerificationData: typeof verifyUserEmailData =
 					updatedUserVerificationRes.data?.[
-						Object.keys(updatedUserVerificationRes.data)[0]
-					];
+						Object.keys(
+							updatedUserVerificationRes.data
+						)[0] as keyof typeof verifyUserEmailData
+					] as any;
 
 				if (updatedUserVerificationData === 200) {
 					const deleteRes = await deleteEmailVerificationToken({
@@ -69,8 +65,12 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 						},
 					});
 
-					const deleteData: typeof deleteEmailVerificationTokenData =
-						deleteRes.data?.[Object.keys(deleteRes.data)[0]];
+					const deleteData: typeof deleteEmailVerificationTokenData = deleteRes
+						.data?.[
+						Object.keys(
+							deleteRes.data
+						)[0] as keyof typeof deleteEmailVerificationTokenData
+					] as any;
 
 					if (deleteData?.successMsg) {
 						setVerified(true);
@@ -96,7 +96,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				{verified && (
-					<div>
+					<div className='flex justify-center items-center h-[80vh]'>
 						You have been successfully verified! Please login to get redirected
 						to your account.
 					</div>

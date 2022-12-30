@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../../hooks/useGQL';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
@@ -25,19 +24,14 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	const router = useRouter();
 
-	const {
-		data: usersShowData,
-	}: IUseGQLQuery<
+	const { data: usersShowData } = useGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersShow']>(
-		Queries.QUERY_GET_USERS_SHOW,
-		{
-			variables: {
-				showId: String(show.id),
-			},
-		}
-	);
+	>(Queries.QUERY_GET_USERS_SHOW, {
+		variables: {
+			showId: String(show.id),
+		},
+	});
 
 	const handleGoToDetailsPage = () => {
 		router.push(getDetailsPageRoute(ESearchType.SHOW, show.id, show.name));

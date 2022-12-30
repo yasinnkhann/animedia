@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import { registerValidate } from '../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { useGQLMutation } from '../../hooks/useGQL';
-import { IUseGQLMutation, INodeMailerInfo } from '@ts/interfaces';
+import { INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -41,10 +41,8 @@ export default function Register() {
 	const {
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
-	}: IUseGQLMutation<
+	} = useGQLMutation<
 		NexusGenObjects['redisRes'],
-		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	> = useGQLMutation<
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
 	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
@@ -78,8 +76,12 @@ export default function Register() {
 					},
 				});
 
-				const redisData: typeof writeEmailVerificationTokenData =
-					redisRes.data?.[Object.keys(redisRes.data)[0]];
+				const redisData: typeof writeEmailVerificationTokenData = redisRes
+					.data?.[
+					Object.keys(
+						redisRes.data
+					)[0] as keyof typeof writeEmailVerificationTokenData
+				] as any;
 
 				if (!redisData?.error && redisData?.token) {
 					const nodeMailerInfo: INodeMailerInfo = {
@@ -101,6 +103,7 @@ export default function Register() {
 					);
 
 					const nodeMailerData = await nodeMailerRes.json();
+					console.log('NODEMAILER DATA: ', nodeMailerData);
 					router.push(`/verification-email-sent/${redisData.token}`);
 				}
 			}

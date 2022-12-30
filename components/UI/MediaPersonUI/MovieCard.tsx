@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../../hooks/useGQL';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
@@ -25,19 +24,14 @@ const MovieCard = ({ movie, rank }: Props) => {
 
 	const router = useRouter();
 
-	const {
-		data: usersMovieData,
-	}: IUseGQLQuery<
+	const { data: usersMovieData } = useGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
-		Queries.QUERY_GET_USERS_MOVIE,
-		{
-			variables: {
-				movieId: String(movie.id),
-			},
-		}
-	);
+	>(Queries.QUERY_GET_USERS_MOVIE, {
+		variables: {
+			movieId: String(movie.id),
+		},
+	});
 
 	const handleGoToDetailsPage = () => {
 		router.push(getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title));

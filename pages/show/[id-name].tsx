@@ -14,7 +14,7 @@ import * as Mutations from '../../graphql/mutations';
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
+import { ICast } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
 import { getEnglishName } from 'all-iso-language-codes';
@@ -38,77 +38,50 @@ const ShowDetails = () => {
 
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
-	const {
-		data: showDetailsData,
-		loading: showDetailsLoading,
-	}: IUseGQLQuery<
+	const { data: showDetailsData, loading: showDetailsLoading } = useGQLQuery<
 		NexusGenObjects['ShowDetailsRes'],
 		NexusGenArgTypes['Query']['showDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['showDetails']>(
-		Queries.QUERY_SHOW_DETAILS,
-		{
-			variables: {
-				showDetailsId: id,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	>(Queries.QUERY_SHOW_DETAILS, {
+		variables: {
+			showDetailsId: id,
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const {
-		data: usersShowData,
-		loading: usersShowLoading,
-	}: IUseGQLQuery<
+	const { data: usersShowData, loading: usersShowLoading } = useGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersShow']>(
-		Queries.QUERY_GET_USERS_SHOW,
-		{
-			variables: {
-				showId: String(showDetailsData?.id!),
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	>(Queries.QUERY_GET_USERS_SHOW, {
+		variables: {
+			showId: String(showDetailsData?.id!),
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const {
-		data: recShowsData,
-		loading: recShowsLoading,
-	}: IUseGQLQuery<
+	const { data: recShowsData, loading: recShowsLoading } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['recommendedShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['recommendedShows']>(
-		Queries.QUERY_RECOMMENDED_SHOWS,
-		{
-			variables: {
-				recommendedShowsId: showDetailsData?.id!,
-			},
-		}
-	);
+	>(Queries.QUERY_RECOMMENDED_SHOWS, {
+		variables: {
+			recommendedShowsId: showDetailsData?.id!,
+		},
+	});
 
-	const {
-		data: showsCastCrewData,
-		loading: showsCastCrewLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['ShowsCastCrewRes'],
-		NexusGenArgTypes['Query']['showsCastCrew']
-	> = useGQLQuery<NexusGenArgTypes['Query']['showsCastCrew']>(
-		Queries.QUERY_GET_SHOWS_CAST_CREW,
-		{
+	const { data: showsCastCrewData, loading: showsCastCrewLoading } =
+		useGQLQuery<
+			NexusGenObjects['ShowsCastCrewRes'],
+			NexusGenArgTypes['Query']['showsCastCrew']
+		>(Queries.QUERY_GET_SHOWS_CAST_CREW, {
 			variables: {
 				showId: showDetailsData?.id!,
 			},
-		}
-	);
+		});
 
-	const {
-		mutateFunction: addShow,
-		mutateLoading: addShowLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['addShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['addShow']>(
-		Mutations.MUTATION_ADD_SHOW,
-		{
+	const { mutateFunction: addShow, mutateLoading: addShowLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserShow'],
+			NexusGenArgTypes['Mutation']['addShow']
+		>(Mutations.MUTATION_ADD_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 				showName: showDetailsData?.name!,
@@ -124,18 +97,13 @@ const ShowDetails = () => {
 				},
 				'UsersShow',
 			],
-		}
-	);
+		});
 
-	const {
-		mutateFunction: updateShow,
-		mutateLoading: updateShowLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['updateShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['updateShow']>(
-		Mutations.MUTATION_UPDATE_SHOW,
-		{
+	const { mutateFunction: updateShow, mutateLoading: updateShowLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserShow'],
+			NexusGenArgTypes['Mutation']['updateShow']
+		>(Mutations.MUTATION_UPDATE_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 				watchStatus,
@@ -151,18 +119,13 @@ const ShowDetails = () => {
 				},
 				'UsersShow',
 			],
-		}
-	);
+		});
 
-	const {
-		mutateFunction: deleteShow,
-		mutateLoading: deleteShowLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['deleteShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteShow']>(
-		Mutations.MUTATION_DELETE_SHOW,
-		{
+	const { mutateFunction: deleteShow, mutateLoading: deleteShowLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserShow'],
+			NexusGenArgTypes['Mutation']['deleteShow']
+		>(Mutations.MUTATION_DELETE_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 			},
@@ -175,8 +138,7 @@ const ShowDetails = () => {
 				},
 				'UsersShow',
 			],
-		}
-	);
+		});
 
 	const isDBPending = addShowLoading || updateShowLoading || deleteShowLoading;
 

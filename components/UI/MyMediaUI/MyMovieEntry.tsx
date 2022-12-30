@@ -7,13 +7,13 @@ import { useRouter } from 'next/router';
 import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
 } from '../../../graphql/generated/nexus-typegen';
+import { useMutation } from '@apollo/client';
 
 interface Props {
 	myMovie: NexusGenObjects['UserMovie'];
@@ -23,39 +23,29 @@ interface Props {
 const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const router = useRouter();
 
-	const {
-		data: movieData,
-	}: IUseGQLQuery<
+	const { data: movieData } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['movieDetails']>(
-		Queries.QUERY_MOVIE_DETAILS,
-		{
-			variables: {
-				movieDetailsId: Number(myMovie.id),
-			},
-		}
-	);
+	>(Queries.QUERY_MOVIE_DETAILS, {
+		variables: {
+			movieDetailsId: Number(myMovie.id),
+		},
+	});
 
-	const {
-		mutateFunction: deleteMovie,
-	}: IUseGQLMutation<
+	const { mutateFunction: deleteMovie } = useGQLMutation<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['deleteMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteMovie']>(
-		Mutations.MUTATION_DELETE_MOVIE,
-		{
-			variables: {
-				movieId: String(myMovie.id),
+	>(Mutations.MUTATION_DELETE_MOVIE, {
+		variables: {
+			movieId: String(myMovie.id),
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.QUERY_GET_USERS_MOVIES,
 			},
-			refetchQueries: () => [
-				{
-					query: Queries.QUERY_GET_USERS_MOVIES,
-				},
-				'UsersMovies',
-			],
-		}
-	);
+			'UsersMovies',
+		],
+	});
 
 	const handleGoToDetailsPage = () => {
 		router.push(

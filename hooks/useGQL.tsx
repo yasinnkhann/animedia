@@ -5,13 +5,19 @@ import {
 	useMutation,
 	QueryHookOptions,
 	MutationHookOptions,
+	OperationVariables,
+	TypedDocumentNode,
+	DefaultContext,
 } from '@apollo/client';
 
-export function useGQLQuery<TVars>(
-	query: DocumentNode,
-	options?: QueryHookOptions<any, TVars>
+export function useGQLQuery<TData = any, TVars = OperationVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVars>,
+	options?: QueryHookOptions<TData, TVars>
 ) {
-	const { data, loading, error, refetch } = useQuery(query, options);
+	const { data, loading, error, refetch } = useQuery<TData, TVars>(
+		query,
+		options
+	);
 
 	const [
 		fetchData,
@@ -19,20 +25,24 @@ export function useGQLQuery<TVars>(
 	] = useLazyQuery(query, options);
 
 	return {
-		data: data?.[Object.keys(data)[0]],
+		data: data?.[Object.keys(data)[0] as keyof TData] as TData,
 		loading,
 		error,
 		refetch,
 		fetchData,
-		lazyData: lazyData?.[Object.keys(lazyData)[0]],
+		lazyData: lazyData?.[Object.keys(lazyData)[0] as keyof TData] as TData,
 		lazyLoading,
 		lazyError,
 	};
 }
 
-export function useGQLMutation<TVars>(
-	mutation: DocumentNode,
-	options?: MutationHookOptions<any, TVars>
+export function useGQLMutation<
+	TData = any,
+	TVars = OperationVariables,
+	TContext = DefaultContext
+>(
+	mutation: DocumentNode | TypedDocumentNode<TData, TVars>,
+	options?: MutationHookOptions<TData, TVars, TContext>
 ) {
 	const [
 		mutateFunction,
@@ -41,7 +51,9 @@ export function useGQLMutation<TVars>(
 
 	return {
 		mutateFunction,
-		mutateData: mutateData?.[Object.keys(mutateData)[0]],
+		mutateData: mutateData?.[
+			Object.keys(mutateData)[0] as keyof TData
+		] as TData,
 		mutateLoading,
 		mutateError,
 	};

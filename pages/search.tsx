@@ -7,7 +7,6 @@ import SearchResult from '../components/UI/SearchUI/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
 import { useGQLQuery } from '../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/specificVals';
 import type { NextPage } from 'next';
@@ -26,53 +25,35 @@ const Search: NextPage = () => {
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
 
-	const {
-		data: searchedMovies,
-		loading: searchedMoviesLoading,
-	}: IUseGQLQuery<
+	const { data: searchedMovies, loading: searchedMoviesLoading } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['searchedMovies']
-	> = useGQLQuery<NexusGenArgTypes['Query']['searchedMovies']>(
-		Queries.QUERY_SEARCHED_MOVIES,
-		{
-			variables: {
-				q: (router.query.q as string) ?? '',
-				page: currPage,
-			},
-		}
-	);
+	>(Queries.QUERY_SEARCHED_MOVIES, {
+		variables: {
+			q: (router.query.q as string) ?? '',
+			page: currPage,
+		},
+	});
 
-	const {
-		data: searchedShows,
-		loading: searchedShowsLoading,
-	}: IUseGQLQuery<
+	const { data: searchedShows, loading: searchedShowsLoading } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['searchedShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['searchedShows']>(
-		Queries.QUERY_SEARCHED_SHOWS,
-		{
-			variables: {
-				q: (router.query.q as string) ?? '',
-				page: currPage,
-			},
-		}
-	);
+	>(Queries.QUERY_SEARCHED_SHOWS, {
+		variables: {
+			q: (router.query.q as string) ?? '',
+			page: currPage,
+		},
+	});
 
-	const {
-		data: searchedPeople,
-		loading: searchedPeopleLoading,
-	}: IUseGQLQuery<
+	const { data: searchedPeople, loading: searchedPeopleLoading } = useGQLQuery<
 		NexusGenObjects['PeopleRes'],
 		NexusGenArgTypes['Query']['searchedPeople']
-	> = useGQLQuery<NexusGenArgTypes['Query']['searchedPeople']>(
-		Queries.QUERY_SEARCHED_PEOPLE,
-		{
-			variables: {
-				q: (router.query.q as string) ?? '',
-				page: currPage,
-			},
-		}
-	);
+	>(Queries.QUERY_SEARCHED_PEOPLE, {
+		variables: {
+			q: (router.query.q as string) ?? '',
+			page: currPage,
+		},
+	});
 
 	const getSearchedTypeData = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {

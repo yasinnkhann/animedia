@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
 import { isValidEmail } from '../../../utils/isValidEmail';
+import nodemailer from 'nodemailer';
 
 const sendVerificationEmail = async (
 	req: NextApiRequest,

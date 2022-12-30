@@ -7,7 +7,6 @@ import { Circles } from 'react-loading-icons';
 import { statusParams } from 'utils/statusParams';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { useSession } from 'next-auth/react';
 import {
@@ -24,15 +23,11 @@ const Status = () => {
 		router.push('/');
 	}
 
-	const {
-		data: usersMoviesData,
-		loading: usersMoviesLoading,
-	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
-		Queries.QUERY_GET_USERS_MOVIES,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useGQLQuery<
+		NexusGenObjects['UserMovie'][]
+	>(Queries.QUERY_GET_USERS_MOVIES, {
+		fetchPolicy: 'network-only',
+	});
 
 	const [myMovies, setMyMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
 

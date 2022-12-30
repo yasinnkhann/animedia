@@ -7,7 +7,6 @@ import { formatDate } from '../../../utils/formatDate';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { IUseGQLMutation, IUseGQLQuery } from '@ts/interfaces';
 import { useGQLMutation, useGQLQuery } from '../../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 import {
@@ -23,39 +22,29 @@ interface Props {
 const MyShowEntry = ({ myShow, count }: Props) => {
 	const router = useRouter();
 
-	const {
-		data: showData,
-	}: IUseGQLQuery<
+	const { data: showData } = useGQLQuery<
 		NexusGenObjects['ShowDetailsRes'],
 		NexusGenArgTypes['Query']['showDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['showDetails']>(
-		Queries.QUERY_SHOW_DETAILS,
-		{
-			variables: {
-				showDetailsId: Number(myShow.id),
-			},
-		}
-	);
+	>(Queries.QUERY_SHOW_DETAILS, {
+		variables: {
+			showDetailsId: Number(myShow.id),
+		},
+	});
 
-	const {
-		mutateFunction: deleteShow,
-	}: IUseGQLMutation<
+	const { mutateFunction: deleteShow } = useGQLMutation<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['deleteShow']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteShow']>(
-		Mutations.MUTATION_DELETE_SHOW,
-		{
-			variables: {
-				showId: String(myShow.id),
+	>(Mutations.MUTATION_DELETE_SHOW, {
+		variables: {
+			showId: String(myShow.id),
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.QUERY_GET_USERS_SHOWS,
 			},
-			refetchQueries: () => [
-				{
-					query: Queries.QUERY_GET_USERS_SHOWS,
-				},
-				'UsersShows',
-			],
-		}
-	);
+			'UsersShows',
+		],
+	});
 
 	const handleGoToDetailsPage = () => {
 		router.push(

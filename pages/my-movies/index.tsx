@@ -5,22 +5,17 @@ import { Circles } from 'react-loading-icons';
 import * as Queries from '../../graphql/queries';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
 import { useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { useRouter } from 'next/router';
 
 const MyMovies: NextPage = () => {
 	const router = useRouter();
 
-	const {
-		data: usersMoviesData,
-		loading: usersMoviesLoading,
-	}: IUseGQLQuery<NexusGenObjects['UserMovie'][]> = useGQLQuery(
-		Queries.QUERY_GET_USERS_MOVIES,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useGQLQuery<
+		NexusGenObjects['UserMovie'][]
+	>(Queries.QUERY_GET_USERS_MOVIES, {
+		fetchPolicy: 'network-only',
+	});
 
 	if (usersMoviesLoading) {
 		return (

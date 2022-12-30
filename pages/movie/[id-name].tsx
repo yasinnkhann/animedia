@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerU
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { IUseGQLQuery, IUseGQLMutation, ICast } from '@ts/interfaces';
+import { ICast } from '@ts/interfaces';
 import { watchStatusOptions } from 'models/watchStatusOptions';
 import { ratingOptions } from 'models/ratingOptions';
 import { getEnglishName } from 'all-iso-language-codes';
@@ -35,77 +35,50 @@ const MovieDetails = () => {
 
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
-	const {
-		data: movieDetailsData,
-		loading: movieDetailsLoading,
-	}: IUseGQLQuery<
+	const { data: movieDetailsData, loading: movieDetailsLoading } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
-	> = useGQLQuery<NexusGenArgTypes['Query']['movieDetails']>(
-		Queries.QUERY_MOVIE_DETAILS,
-		{
-			variables: {
-				movieDetailsId: id,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	>(Queries.QUERY_MOVIE_DETAILS, {
+		variables: {
+			movieDetailsId: id,
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const {
-		data: usersMovieData,
-		loading: usersMovieLoading,
-	}: IUseGQLQuery<
+	const { data: usersMovieData, loading: usersMovieLoading } = useGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
-	> = useGQLQuery<NexusGenArgTypes['Query']['usersMovie']>(
-		Queries.QUERY_GET_USERS_MOVIE,
-		{
-			variables: {
-				movieId: String(movieDetailsData?.id!),
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	>(Queries.QUERY_GET_USERS_MOVIE, {
+		variables: {
+			movieId: String(movieDetailsData?.id!),
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const {
-		data: recMoviesData,
-		loading: recMoviesLoading,
-	}: IUseGQLQuery<
+	const { data: recMoviesData, loading: recMoviesLoading } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['recommendedMovies']
-	> = useGQLQuery<NexusGenArgTypes['Query']['recommendedMovies']>(
-		Queries.QUERY_RECOMMENDED_MOVIES,
-		{
-			variables: {
-				recommendedMoviesId: movieDetailsData?.id!,
-			},
-		}
-	);
+	>(Queries.QUERY_RECOMMENDED_MOVIES, {
+		variables: {
+			recommendedMoviesId: movieDetailsData?.id!,
+		},
+	});
 
-	const {
-		data: moviesCastCrewData,
-		loading: moviesCastCrewLoading,
-	}: IUseGQLQuery<
-		NexusGenObjects['MoviesCastCrewRes'],
-		NexusGenArgTypes['Query']['moviesCastCrew']
-	> = useGQLQuery<NexusGenArgTypes['Query']['moviesCastCrew']>(
-		Queries.QUERY_GET_MOVIES_CAST_CREW,
-		{
+	const { data: moviesCastCrewData, loading: moviesCastCrewLoading } =
+		useGQLQuery<
+			NexusGenObjects['MoviesCastCrewRes'],
+			NexusGenArgTypes['Query']['moviesCastCrew']
+		>(Queries.QUERY_GET_MOVIES_CAST_CREW, {
 			variables: {
 				movieId: movieDetailsData?.id!,
 			},
-		}
-	);
+		});
 
-	const {
-		mutateFunction: addMovie,
-		mutateLoading: addMovieLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['addMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['addMovie']>(
-		Mutations.MUTATION_ADD_MOVIE,
-		{
+	const { mutateFunction: addMovie, mutateLoading: addMovieLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserMovie'],
+			NexusGenArgTypes['Mutation']['addMovie']
+		>(Mutations.MUTATION_ADD_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 				movieName: movieDetailsData?.title!,
@@ -120,18 +93,13 @@ const MovieDetails = () => {
 				},
 				'UsersMovie',
 			],
-		}
-	);
+		});
 
-	const {
-		mutateFunction: updateMovie,
-		mutateLoading: updateMovieLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['updateMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['updateMovie']>(
-		Mutations.MUTATION_UPDATE_MOVIE,
-		{
+	const { mutateFunction: updateMovie, mutateLoading: updateMovieLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserMovie'],
+			NexusGenArgTypes['Mutation']['updateMovie']
+		>(Mutations.MUTATION_UPDATE_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 				watchStatus,
@@ -146,18 +114,13 @@ const MovieDetails = () => {
 				},
 				'UsersMovie',
 			],
-		}
-	);
+		});
 
-	const {
-		mutateFunction: deleteMovie,
-		mutateLoading: deleteMovieLoading,
-	}: IUseGQLMutation<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['deleteMovie']
-	> = useGQLMutation<NexusGenArgTypes['Mutation']['deleteMovie']>(
-		Mutations.MUTATION_DELETE_MOVIE,
-		{
+	const { mutateFunction: deleteMovie, mutateLoading: deleteMovieLoading } =
+		useGQLMutation<
+			NexusGenObjects['UserMovie'],
+			NexusGenArgTypes['Mutation']['deleteMovie']
+		>(Mutations.MUTATION_DELETE_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 			},
@@ -170,8 +133,7 @@ const MovieDetails = () => {
 				},
 				'UsersMovie',
 			],
-		}
-	);
+		});
 
 	const isDBPending =
 		addMovieLoading || updateMovieLoading || deleteMovieLoading;

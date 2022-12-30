@@ -4,7 +4,6 @@ import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from '../../graphql/queries';
-import { IUseGQLQuery } from '@ts/interfaces';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { RESULTS_PER_PAGE } from '../../utils/specificVals';
 import { Circles } from 'react-loading-icons';
@@ -17,19 +16,14 @@ const PopularAnimeShows = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const {
-		data: popularAnimeShowsData,
-	}: IUseGQLQuery<
+	const { data: popularAnimeShowsData } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['popularAnimeShows']
-	> = useGQLQuery<NexusGenArgTypes['Query']['popularAnimeShows']>(
-		Queries.QUERY_POPULAR_ANIME_SHOWS,
-		{
-			variables: {
-				page: currPage,
-			},
-		}
-	);
+	>(Queries.QUERY_POPULAR_ANIME_SHOWS, {
+		variables: {
+			page: currPage,
+		},
+	});
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
