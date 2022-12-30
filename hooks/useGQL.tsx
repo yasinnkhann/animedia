@@ -20,20 +20,11 @@ export function useGQLQuery<TData = any, TVars = OperationVariables>(
 		options
 	);
 
-	const [
-		fetchData,
-		{ data: lazyData, loading: lazyLoading, error: lazyError },
-	] = useLazyQuery(query, options);
-
 	return {
 		data: data?.[Object.keys(data)[0] as keyof TData] as TData,
 		loading,
 		error,
 		refetch,
-		fetchData,
-		lazyData: lazyData?.[Object.keys(lazyData)[0] as keyof TData] as TData,
-		lazyLoading,
-		lazyError,
 	};
 }
 

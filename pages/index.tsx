@@ -5,7 +5,7 @@ import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/HomeHo
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../hooks/useGQL';
-import { DocumentNode, useLazyQuery } from '@apollo/client';
+import { DocumentNode } from '@apollo/client';
 import { THorizontalScrollerData } from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
 import {
