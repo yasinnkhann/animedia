@@ -100,7 +100,7 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 			onOpenChange={handleOpenChange}
 			open={open}
 		>
-			<a onClick={e => e.preventDefault()}>
+			<a className='no-underline font-bold' onClick={e => e.preventDefault()}>
 				{isProfile ? renderAvatar() : <p className='text-base'>{name}</p>}
 			</a>
 		</Dropdown>
