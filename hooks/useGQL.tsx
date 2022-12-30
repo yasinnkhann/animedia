@@ -8,6 +8,7 @@ import {
 	OperationVariables,
 	TypedDocumentNode,
 	DefaultContext,
+	LazyQueryHookOptions,
 } from '@apollo/client';
 
 export function useGQLQuery<TData = any, TVars = OperationVariables>(
@@ -29,6 +30,23 @@ export function useGQLQuery<TData = any, TVars = OperationVariables>(
 		loading,
 		error,
 		refetch,
+		fetchData,
+		lazyData: lazyData?.[Object.keys(lazyData)[0] as keyof TData] as TData,
+		lazyLoading,
+		lazyError,
+	};
+}
+
+export function useGQLLazyQuery<TData = any, TVars = OperationVariables>(
+	query: DocumentNode | TypedDocumentNode<TData, TVars>,
+	options?: LazyQueryHookOptions<TData, TVars>
+) {
+	const [
+		fetchData,
+		{ data: lazyData, loading: lazyLoading, error: lazyError },
+	] = useLazyQuery(query, options);
+
+	return {
 		fetchData,
 		lazyData: lazyData?.[Object.keys(lazyData)[0] as keyof TData] as TData,
 		lazyLoading,

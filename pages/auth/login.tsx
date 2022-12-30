@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
-import { useGQLQuery } from '../../hooks/useGQL';
+import { useGQLLazyQuery } from '../../hooks/useGQL';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -43,7 +43,7 @@ export default function Login({
 	const {
 		fetchData: fetchAccountVerifiedData,
 		lazyData: fetchAccountVerifiedLazyData,
-	} = useGQLQuery<
+	} = useGQLLazyQuery<
 		NexusGenObjects['accountVerifiedRes'],
 		NexusGenArgTypes['Query']['accountVerified']
 	>(Queries.QUERY_ACCOUNT_VERIFIED, {
