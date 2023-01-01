@@ -108,10 +108,10 @@ const Home: NextPage = () => {
 						<SearchBar />
 						<section className='mt-4'>
 							<section className='flex w-full ml-[3rem] items-end'>
-								<div className='flex'>
+								<div>
 									<h1>What&apos;s Popular</h1>
 								</div>
-								<ul className='flex w-[25%] justify-around'>
+								<ul className='flex w-[15rem] md:w-[25rem] justify-around'>
 									<li
 										className={`cursor-pointer ${
 											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
@@ -160,13 +160,13 @@ const Home: NextPage = () => {
 							</section>
 
 							<section className='flex items-end ml-[3rem] mt-4'>
-								<div className=''>
+								<div>
 									<h1>Trending</h1>
 								</div>
 								<section className='flex w-full justify-around'>
-									<ul className='flex w-[20%] justify-around'>
+									<ul className='flex justify-around'>
 										<li
-											className={`cursor-pointer ${
+											className={`cursor-pointer mr-4 md:mr-20 ${
 												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
 													? 'border-b-4 border-indigo-500'
 													: ''
@@ -194,9 +194,9 @@ const Home: NextPage = () => {
 											Shows
 										</li>
 									</ul>
-									<ul className='flex w-[20%] justify-around'>
+									<ul className='flex justify-around'>
 										<li
-											className={`cursor-pointer ${
+											className={`cursor-pointer mr-4 md:mr-20 ${
 												trendingTimeWindow === 'day'
 													? 'border-b-4 border-indigo-500'
 													: ''

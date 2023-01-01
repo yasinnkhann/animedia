@@ -17,13 +17,13 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 
 	return (
 		<section
-			className={`w-full sm:w-full md:w-full lg:w-full xl:w-full ${
-				!genrePage ? 'px-40' : ''
+			className={`w-full ${
+				!genrePage ? 'px-4 sm:px-10 md:px-20 lg:px-40' : ''
 			}`}
 		>
 			<section className='flex flex-col'>
 				<h3 className='mb-2'>{title.split('_').join(' ')}</h3>
-				<table className='w-full sm:w-full md:w-full lg:w-full xl:w-full'>
+				<table className='w-full'>
 					<thead>
 						<tr className='border-2 border-gray-200'>
 							<th className='border-r-2 border-gray-200 w-[5rem] p-4'>Rank</th>

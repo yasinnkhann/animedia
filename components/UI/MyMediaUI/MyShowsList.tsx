@@ -12,7 +12,7 @@ const MyShowsList = ({ status, myShows }: Props) => {
 	const adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
 
 	return (
-		<section className='w-full px-40'>
+		<section className='w-full px-4 sm:px-10 md:px-20 lg:px-40'>
 			<section className='flex flex-col pb-4'>
 				<div className='bg-gray-200 flex justify-center items-center h-[3rem] mt-8'>
 					<h4 className='text-blue-500'>{adjustedStatus} SHOWS</h4>
