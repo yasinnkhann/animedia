@@ -109,7 +109,7 @@ const Home: NextPage = () => {
 						<section className='mt-4'>
 							<section className='flex w-full ml-[3rem] items-end'>
 								<div>
-									<h1>What&apos;s Popular</h1>
+									<h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
 								</div>
 								<ul className='flex w-[15rem] md:w-[25rem] justify-around'>
 									<li
@@ -161,7 +161,7 @@ const Home: NextPage = () => {
 
 							<section className='flex items-end ml-[3rem] mt-4'>
 								<div>
-									<h1>Trending</h1>
+									<h1 className='text-xl sm:text-3xl'>Trending</h1>
 								</div>
 								<section className='flex w-full justify-around'>
 									<ul className='flex justify-around'>
