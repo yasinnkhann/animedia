@@ -39,7 +39,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 				onClick={handleClickOutside}
 			>
 				<section
-					className='bg-white m-auto p-4 rounded w-[90vw]	h-[85vh] relative'
+					className='bg-white m-auto p-4 rounded w-[80vw] h-[85vh] relative'
 					ref={contentRef}
 				>
 					<section className='flex flex-col'>
@@ -97,7 +97,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 
 						<div>
 							<Image
-								className='rounded-lg'
+								className='rounded-lg overflow-hidden'
 								src={BASE_IMG_URL + episodeDetails.still_path}
 								alt={episodeDetails.name ?? undefined}
 								height={400}

@@ -1,6 +1,6 @@
 import React from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import useDrag from './UseDrag';
+import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
 import { IEPDetails } from '@ts/interfaces';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
-	const { dragStart, dragStop, dragMove, dragging } = useDrag();
+	const { dragStart, dragStop, dragMove } = useDrag();
 
 	const handleDrag =
 		({ scrollContainer }: scrollVisibilityApiType) =>

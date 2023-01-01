@@ -1,6 +1,6 @@
 import React from 'react';
 import HomeCard from './HomeCard';
-import useDrag from './UseDrag';
+import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from './Arrows';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
