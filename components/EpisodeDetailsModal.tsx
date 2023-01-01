@@ -39,31 +39,23 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 				onClick={handleClickOutside}
 			>
 				<section
-					className='bg-white m-auto p-4 rounded w-[80vw] h-[85vh] relative'
+					className='bg-white m-auto p-4 rounded w-[70vw]	h-[85vh] relative overflow-scroll scrollbar-hide'
 					ref={contentRef}
 				>
-					<section className='flex flex-col'>
-						<h2 className='text-center mt-4'>{episodeDetails.name}</h2>
-						<div className='flex items-center mb-8 mt-8 justify-end mr-16'>
-							<div className='h-[5rem] w-[5rem]'>
-								<RoundProgressBar
-									percentageVal={+episodeDetails.vote_average!.toFixed(1) * 10}
-								/>
-							</div>
-							<p className='ml-[.5rem] font-medium text-base'>
-								{commaNumber(episodeDetails.vote_count!)} voted users
-							</p>
+					<h2 className='text-center mt-4'>{episodeDetails.name}</h2>
+					<div className='flex items-center mb-8 mt-8 justify-end mr-16'>
+						<div className='h-[5rem] w-[5rem]'>
+							<RoundProgressBar
+								percentageVal={+episodeDetails.vote_average!.toFixed(1) * 10}
+							/>
 						</div>
-					</section>
-					<section className='mt-4 ml-8 flex justify-between'>
-						<section className='flex flex-col mr-4'>
-							<div className='mb-8'>
-								<h5 className='mb-2 underline underline-offset-4'>
-									Description:
-								</h5>
-								<p>{episodeDetails.overview}</p>
-							</div>
+						<p className='ml-[.5rem] font-medium text-base'>
+							{commaNumber(episodeDetails.vote_count!)} voted users
+						</p>
+					</div>
 
+					<section className='flex justify-between mt-16'>
+						<section className='flex flex-col justify-center mb-4'>
 							<div className='mt-2'>
 								<p>
 									<span className='font-bold'>Season: </span>
@@ -95,15 +87,20 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							</div>
 						</section>
 
-						<div>
+						<section>
 							<Image
-								className='rounded-lg overflow-hidden'
+								className='rounded-lg'
 								src={BASE_IMG_URL + episodeDetails.still_path}
 								alt={episodeDetails.name ?? undefined}
-								height={400}
-								width={400}
+								height={200}
+								width={300}
 							/>
-						</div>
+						</section>
+					</section>
+
+					<section className='mt-4'>
+						<h5 className='mb-2 underline underline-offset-4'>Description:</h5>
+						<p>{episodeDetails.overview}</p>
 					</section>
 
 					<button className='absolute top-2 right-2' onClick={closeModal}>
