@@ -42,7 +42,7 @@ export default function Register() {
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
 	} = useGQLMutation<
-		NexusGenObjects['redisRes'],
+		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
 	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {

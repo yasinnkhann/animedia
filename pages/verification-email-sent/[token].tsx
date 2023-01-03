@@ -26,7 +26,7 @@ const VerificationEmailSent = ({
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
 	} = useGQLMutation<
-		NexusGenObjects['redisRes'],
+		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
 	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
@@ -35,7 +35,7 @@ const VerificationEmailSent = ({
 	});
 
 	const { data: checkRetryEmailVerificationLimitData } = useGQLQuery<
-		NexusGenObjects['redisRes'],
+		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
 	>(Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {
@@ -44,7 +44,7 @@ const VerificationEmailSent = ({
 	});
 
 	const { mutateFunction: writeRetryEmailVerificationToken } = useGQLMutation<
-		NexusGenObjects['redisRes'],
+		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
 	>(Mutations.MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {

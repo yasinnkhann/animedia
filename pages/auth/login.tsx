@@ -44,7 +44,7 @@ export default function Login({
 		fetchData: fetchAccountVerifiedData,
 		lazyData: fetchAccountVerifiedLazyData,
 	} = useGQLLazyQuery<
-		NexusGenObjects['accountVerifiedRes'],
+		NexusGenObjects['AccountVerifiedRes'],
 		NexusGenArgTypes['Query']['accountVerified']
 	>(Queries.QUERY_ACCOUNT_VERIFIED, {
 		variables: {

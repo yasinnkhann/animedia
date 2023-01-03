@@ -13,7 +13,7 @@ import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
 
 interface Props {
-	verificationEmailData: NexusGenObjects['redisRes'];
+	verificationEmailData: NexusGenObjects['RedisRes'];
 }
 
 const VerificationEmail = ({ verificationEmailData }: Props) => {
@@ -34,7 +34,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 		mutateFunction: deleteEmailVerificationToken,
 		mutateData: deleteEmailVerificationTokenData,
 	} = useGQLMutation<
-		NexusGenObjects['redisRes'],
+		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
 	>(Mutations.MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
