@@ -1,7 +1,7 @@
 import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
 import { BASE_URL } from '../../utils/URLs';
 
-export const knownForResult = objectType({
+export const KnownForResult = objectType({
 	name: 'KnownForResult',
 	definition(t) {
 		t.boolean('adult');
@@ -21,7 +21,7 @@ export const knownForResult = objectType({
 	},
 });
 
-export const personResult = objectType({
+export const PersonResult = objectType({
 	name: 'PersonResult',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -37,7 +37,7 @@ export const personResult = objectType({
 	},
 });
 
-export const people = objectType({
+export const PeopleRes = objectType({
 	name: 'PeopleRes',
 	definition(t) {
 		t.nonNull.int('page');
@@ -49,7 +49,7 @@ export const people = objectType({
 	},
 });
 
-export const getPopularPeople = extendType({
+export const PopularPeople = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularPeople', {
@@ -74,7 +74,7 @@ export const getPopularPeople = extendType({
 	},
 });
 
-export const personDetails = objectType({
+export const PersonDetailsRes = objectType({
 	name: 'PersonDetailsRes',
 	definition(t) {
 		t.boolean('adult');
@@ -94,7 +94,7 @@ export const personDetails = objectType({
 	},
 });
 
-export const getPersonDetails = extendType({
+export const PersonDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('personDetails', {
@@ -119,7 +119,7 @@ export const getPersonDetails = extendType({
 	},
 });
 
-export const getSearchedPeople = extendType({
+export const SearchedPeople = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('searchedPeople', {
@@ -147,7 +147,7 @@ export const getSearchedPeople = extendType({
 	},
 });
 
-export const personsKnownForMovieCast = objectType({
+export const PersonsKnownForMovieCast = objectType({
 	name: 'PersonsKnownForMovieCast',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -170,7 +170,7 @@ export const personsKnownForMovieCast = objectType({
 	},
 });
 
-export const personsKnownForMovieCrew = objectType({
+export const PersonsKnownForMovieCrew = objectType({
 	name: 'PersonsKnownForMovieCrew',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -193,7 +193,7 @@ export const personsKnownForMovieCrew = objectType({
 	},
 });
 
-export const personsKnownForMovieRes = objectType({
+export const PersonsKnownForMovieRes = objectType({
 	name: 'PersonsKnownForMovieRes',
 	definition(t) {
 		t.int('id'),
@@ -206,7 +206,7 @@ export const personsKnownForMovieRes = objectType({
 	},
 });
 
-export const getPersonsKnownForMovie = extendType({
+export const PersonsKnownForMovie = extendType({
 	type: 'Query',
 	definition(t) {
 		t.int('id'),
@@ -232,7 +232,7 @@ export const getPersonsKnownForMovie = extendType({
 	},
 });
 
-export const personsKnownForShowCast = objectType({
+export const PersonsKnownForShowCast = objectType({
 	name: 'PersonsKnownForShowCast',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -255,7 +255,7 @@ export const personsKnownForShowCast = objectType({
 	},
 });
 
-export const personsKnownForShowCrew = objectType({
+export const PersonsKnownForShowCrew = objectType({
 	name: 'PersonsKnownForShowCrew',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -279,7 +279,7 @@ export const personsKnownForShowCrew = objectType({
 	},
 });
 
-export const personsKnownForShowRes = objectType({
+export const PersonsKnownForShowRes = objectType({
 	name: 'PersonsKnownForShowRes',
 	definition(t) {
 		t.int('id'),
@@ -292,7 +292,7 @@ export const personsKnownForShowRes = objectType({
 	},
 });
 
-export const getPersonsKnownForShow = extendType({
+export const PersonsKnownForShow = extendType({
 	type: 'Query',
 	definition(t) {
 		t.int('id'),

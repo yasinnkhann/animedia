@@ -75,7 +75,12 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  EpisodeDetails: { // root type
+  AccountVerifiedRes: { // root type
+    emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
+    error?: string | null; // String
+    id?: string | null; // String
+  }
+  EpisodeDetailsRes: { // root type
     air_date?: string | null; // String
     crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
     episode_number?: number | null; // Int
@@ -354,6 +359,12 @@ export interface NexusGenObjects {
     id?: number | null; // Int
   }
   Query: {};
+  RedisRes: { // root type
+    error?: string | null; // String
+    successMsg?: string | null; // String
+    token?: string | null; // String
+    userId?: string | null; // String
+  }
   ShowDetailsCountry: { // root type
     iso_3166_1: string; // String!
     name: string; // String!
@@ -535,7 +546,13 @@ export interface NexusGenObjects {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // root type
+  UserMovie: { // root type
+    id?: string | null; // ID
+    name?: string | null; // String
+    rating?: number | null; // Int
+    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+  }
+  UserRes: { // root type
     email?: string | null; // String
     id?: string | null; // ID
     image?: string | null; // String
@@ -543,29 +560,12 @@ export interface NexusGenObjects {
     name?: string | null; // String
     shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
-  UserMovie: { // root type
-    id?: string | null; // ID
-    name?: string | null; // String
-    rating?: number | null; // Int
-    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
   UserShow: { // root type
     current_episode?: number | null; // Int
     id?: string | null; // ID
     name?: string | null; // String
     rating?: number | null; // Int
     status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
-  accountVerifiedRes: { // root type
-    emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
-    error?: string | null; // String
-    id?: string | null; // String
-  }
-  redisRes: { // root type
-    error?: string | null; // String
-    successMsg?: string | null; // String
-    token?: string | null; // String
-    userId?: string | null; // String
   }
 }
 
@@ -580,7 +580,12 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
-  EpisodeDetails: { // field return type
+  AccountVerifiedRes: { // field return type
+    emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
+    error: string | null; // String
+    id: string | null; // String
+  }
+  EpisodeDetailsRes: { // field return type
     air_date: string | null; // String
     crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
     episode_number: number | null; // Int
@@ -741,14 +746,14 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    deleteEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
+    deleteEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     verifyUserEmail: number | null; // Int
-    writeEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
-    writeRetryEmailVerificationLimit: NexusGenRootTypes['redisRes'] | null; // redisRes
+    writeEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    writeRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -870,11 +875,11 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
   }
   Query: { // field return type
-    accountVerified: NexusGenRootTypes['accountVerifiedRes'] | null; // accountVerifiedRes
-    checkEmailVerificationToken: NexusGenRootTypes['redisRes'] | null; // redisRes
-    checkRetryEmailVerificationLimit: NexusGenRootTypes['redisRes'] | null; // redisRes
+    accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
+    checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    checkRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
-    episodeDetails: NexusGenRootTypes['EpisodeDetails'] | null; // EpisodeDetails
+    episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
     id: number | null; // Int
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
@@ -904,11 +909,17 @@ export interface NexusGenFieldTypes {
     topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    user: NexusGenRootTypes['User'] | null; // User
+    user: NexusGenRootTypes['UserRes'] | null; // UserRes
     usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
     usersShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     usersShows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
+  }
+  RedisRes: { // field return type
+    error: string | null; // String
+    successMsg: string | null; // String
+    token: string | null; // String
+    userId: string | null; // String
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -1091,19 +1102,19 @@ export interface NexusGenFieldTypes {
     maximum: string; // String!
     minimum: string; // String!
   }
-  User: { // field return type
+  UserMovie: { // field return type
+    id: string | null; // ID
+    name: string | null; // String
+    rating: number | null; // Int
+    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+  }
+  UserRes: { // field return type
     email: string | null; // String
     id: string | null; // ID
     image: string | null; // String
     movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
     name: string | null; // String
     shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
-  }
-  UserMovie: { // field return type
-    id: string | null; // ID
-    name: string | null; // String
-    rating: number | null; // Int
-    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
   UserShow: { // field return type
     current_episode: number | null; // Int
@@ -1112,21 +1123,15 @@ export interface NexusGenFieldTypes {
     rating: number | null; // Int
     status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
   }
-  accountVerifiedRes: { // field return type
-    emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
-    error: string | null; // String
-    id: string | null; // String
-  }
-  redisRes: { // field return type
-    error: string | null; // String
-    successMsg: string | null; // String
-    token: string | null; // String
-    userId: string | null; // String
-  }
 }
 
 export interface NexusGenFieldTypeNames {
-  EpisodeDetails: { // field return type name
+  AccountVerifiedRes: { // field return type name
+    emailVerified: 'DateTime'
+    error: 'String'
+    id: 'String'
+  }
+  EpisodeDetailsRes: { // field return type name
     air_date: 'String'
     crew: 'ShowsCrewModel'
     episode_number: 'Int'
@@ -1287,14 +1292,14 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addMovie: 'UserMovie'
     addShow: 'UserShow'
-    deleteEmailVerificationToken: 'redisRes'
+    deleteEmailVerificationToken: 'RedisRes'
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     updateMovie: 'UserMovie'
     updateShow: 'UserShow'
     verifyUserEmail: 'Int'
-    writeEmailVerificationToken: 'redisRes'
-    writeRetryEmailVerificationLimit: 'redisRes'
+    writeEmailVerificationToken: 'RedisRes'
+    writeRetryEmailVerificationLimit: 'RedisRes'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1416,11 +1421,11 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
   }
   Query: { // field return type name
-    accountVerified: 'accountVerifiedRes'
-    checkEmailVerificationToken: 'redisRes'
-    checkRetryEmailVerificationLimit: 'redisRes'
+    accountVerified: 'AccountVerifiedRes'
+    checkEmailVerificationToken: 'RedisRes'
+    checkRetryEmailVerificationLimit: 'RedisRes'
     emailFromRedisToken: 'String'
-    episodeDetails: 'EpisodeDetails'
+    episodeDetails: 'EpisodeDetailsRes'
     id: 'Int'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
@@ -1450,11 +1455,17 @@ export interface NexusGenFieldTypeNames {
     topRatedShowsByGenre: 'ShowsRes'
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
-    user: 'User'
+    user: 'UserRes'
     usersMovie: 'UserMovie'
     usersMovies: 'UserMovie'
     usersShow: 'UserShow'
     usersShows: 'UserShow'
+  }
+  RedisRes: { // field return type name
+    error: 'String'
+    successMsg: 'String'
+    token: 'String'
+    userId: 'String'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'
@@ -1637,7 +1648,13 @@ export interface NexusGenFieldTypeNames {
     maximum: 'String'
     minimum: 'String'
   }
-  User: { // field return type name
+  UserMovie: { // field return type name
+    id: 'ID'
+    name: 'String'
+    rating: 'Int'
+    status: 'WatchStatusTypes'
+  }
+  UserRes: { // field return type name
     email: 'String'
     id: 'ID'
     image: 'String'
@@ -1645,29 +1662,12 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     shows: 'UserShow'
   }
-  UserMovie: { // field return type name
-    id: 'ID'
-    name: 'String'
-    rating: 'Int'
-    status: 'WatchStatusTypes'
-  }
   UserShow: { // field return type name
     current_episode: 'Int'
     id: 'ID'
     name: 'String'
     rating: 'Int'
     status: 'WatchStatusTypes'
-  }
-  accountVerifiedRes: { // field return type name
-    emailVerified: 'DateTime'
-    error: 'String'
-    id: 'String'
-  }
-  redisRes: { // field return type name
-    error: 'String'
-    successMsg: 'String'
-    token: 'String'
-    userId: 'String'
   }
 }
 

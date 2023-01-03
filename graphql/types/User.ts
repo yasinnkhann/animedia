@@ -1,3 +1,8 @@
+import { v4 } from 'uuid';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/specificVals';
 import {
 	objectType,
 	extendType,
@@ -7,13 +12,8 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
-import { v4 } from 'uuid';
-import {
-	EMAIL_VERIFICATION_PREFIX,
-	RETRY_EMAIL_VERIFICATION_PREFIX,
-} from 'utils/specificVals';
 
-export const watchStatusTypes = enumType({
+export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
 	members: [
 		'NOT_WATCHING',
@@ -25,7 +25,7 @@ export const watchStatusTypes = enumType({
 	],
 });
 
-export const userMovie = objectType({
+export const UserMovie = objectType({
 	name: 'UserMovie',
 	definition(t) {
 		t.id('id');
@@ -37,7 +37,7 @@ export const userMovie = objectType({
 	},
 });
 
-export const userShow = objectType({
+export const UserShow = objectType({
 	name: 'UserShow',
 	definition(t) {
 		t.id('id');
@@ -50,8 +50,8 @@ export const userShow = objectType({
 	},
 });
 
-export const user = objectType({
-	name: 'User',
+export const UserRes = objectType({
+	name: 'UserRes',
 	definition(t) {
 		t.id('id');
 		t.string('name');
@@ -66,11 +66,11 @@ export const user = objectType({
 	},
 });
 
-export const getUser = extendType({
+export const User = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('user', {
-			type: 'User',
+			type: 'UserRes',
 			resolve: async (_parent, _args, ctx) => {
 				return await ctx.prisma.user.findUnique({
 					where: { id: ctx.session!.user?.id! },
@@ -84,7 +84,7 @@ export const getUser = extendType({
 	},
 });
 
-export const usersMovie = extendType({
+export const UsersMovie = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('usersMovie', {
@@ -106,7 +106,7 @@ export const usersMovie = extendType({
 	},
 });
 
-export const usersShow = extendType({
+export const UsersShow = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('usersShow', {
@@ -128,7 +128,7 @@ export const usersShow = extendType({
 	},
 });
 
-export const usersMovies = extendType({
+export const UsersMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.list.field('usersMovies', {
@@ -149,7 +149,7 @@ export const usersMovies = extendType({
 	},
 });
 
-export const usersShows = extendType({
+export const UsersShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.list.field('usersShows', {
@@ -170,7 +170,7 @@ export const usersShows = extendType({
 	},
 });
 
-export const addMovie = extendType({
+export const AddMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('addMovie', {
@@ -178,7 +178,7 @@ export const addMovie = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 				movieName: nonNull(stringArg()),
-				watchStatus: nonNull(watchStatusTypes),
+				watchStatus: nonNull(WatchStatusTypes),
 			},
 			resolve: async (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				return await ctx.prisma.user.update({
@@ -198,7 +198,7 @@ export const addMovie = extendType({
 	},
 });
 
-export const addShow = extendType({
+export const AddShow = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('addShow', {
@@ -206,7 +206,7 @@ export const addShow = extendType({
 			args: {
 				showId: nonNull(idArg()),
 				showName: nonNull(stringArg()),
-				watchStatus: nonNull(watchStatusTypes),
+				watchStatus: nonNull(WatchStatusTypes),
 				currentEpisode: intArg(),
 			},
 			resolve: async (
@@ -232,14 +232,14 @@ export const addShow = extendType({
 	},
 });
 
-export const updateMovie = extendType({
+export const UpdateMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('updateMovie', {
 			type: 'UserMovie',
 			args: {
 				movieId: nonNull(idArg()),
-				watchStatus: nonNull(watchStatusTypes),
+				watchStatus: nonNull(WatchStatusTypes),
 				movieRating: intArg(),
 			},
 			resolve: async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
@@ -260,14 +260,14 @@ export const updateMovie = extendType({
 	},
 });
 
-export const updateShow = extendType({
+export const UpdateShow = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('updateShow', {
 			type: 'UserShow',
 			args: {
 				showId: nonNull(idArg()),
-				watchStatus: nonNull(watchStatusTypes),
+				watchStatus: nonNull(WatchStatusTypes),
 				showRating: intArg(),
 				currentEpisode: intArg(),
 			},
@@ -294,7 +294,7 @@ export const updateShow = extendType({
 	},
 });
 
-export const deleteMovie = extendType({
+export const DeleteMovie = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('deleteMovie', {
@@ -316,7 +316,7 @@ export const deleteMovie = extendType({
 	},
 });
 
-export const deleteShow = extendType({
+export const DeleteShow = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('deleteShow', {
@@ -338,8 +338,8 @@ export const deleteShow = extendType({
 	},
 });
 
-export const redisRes = objectType({
-	name: 'redisRes',
+export const RedisRes = objectType({
+	name: 'RedisRes',
 	definition(t) {
 		t.field('error', {
 			type: 'String',
@@ -356,11 +356,11 @@ export const redisRes = objectType({
 	},
 });
 
-export const writeEmailVerificationToken = extendType({
+export const WriteEmailVerificationToken = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('writeEmailVerificationToken', {
-			type: 'redisRes',
+			type: 'RedisRes',
 			args: {
 				email: nonNull(stringArg()),
 			},
@@ -399,11 +399,11 @@ export const writeEmailVerificationToken = extendType({
 	},
 });
 
-export const checkEmailVerificationToken = extendType({
+export const CheckEmailVerificationToken = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('checkEmailVerificationToken', {
-			type: 'redisRes',
+			type: 'RedisRes',
 			args: {
 				token: nonNull(stringArg()),
 			},
@@ -432,11 +432,11 @@ export const checkEmailVerificationToken = extendType({
 	},
 });
 
-export const deleteEmailVerificationToken = extendType({
+export const DeleteEmailVerificationToken = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('deleteEmailVerificationToken', {
-			type: 'redisRes',
+			type: 'RedisRes',
 			args: {
 				token: nonNull(stringArg()),
 			},
@@ -465,7 +465,7 @@ export const deleteEmailVerificationToken = extendType({
 	},
 });
 
-export const verifyUserEmail = extendType({
+export const VerifyUserEmail = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('verifyUserEmail', {
@@ -489,8 +489,8 @@ export const verifyUserEmail = extendType({
 	},
 });
 
-export const accountVerifiedRes = objectType({
-	name: 'accountVerifiedRes',
+export const AccountVerifiedRes = objectType({
+	name: 'AccountVerifiedRes',
 	definition(t) {
 		t.field('error', {
 			type: 'String',
@@ -504,11 +504,11 @@ export const accountVerifiedRes = objectType({
 	},
 });
 
-export const accountVerified = extendType({
+export const AccountVerified = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('accountVerified', {
-			type: 'accountVerifiedRes',
+			type: 'AccountVerifiedRes',
 			args: {
 				email: nonNull(stringArg()),
 			},
@@ -547,7 +547,7 @@ export const accountVerified = extendType({
 	},
 });
 
-export const emailFromRedisToken = extendType({
+export const EmailFromRedisToken = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('emailFromRedisToken', {
@@ -575,11 +575,11 @@ export const emailFromRedisToken = extendType({
 	},
 });
 
-export const checkRetryEmailVerificationLimit = extendType({
+export const CheckRetryEmailVerificationLimit = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('checkRetryEmailVerificationLimit', {
-			type: 'redisRes',
+			type: 'RedisRes',
 			args: {
 				email: nonNull(stringArg()),
 			},
@@ -606,11 +606,11 @@ export const checkRetryEmailVerificationLimit = extendType({
 	},
 });
 
-export const writeRetryEmailVerificationLimit = extendType({
+export const WriteRetryEmailVerificationLimit = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('writeRetryEmailVerificationLimit', {
-			type: 'redisRes',
+			type: 'RedisRes',
 			args: {
 				email: nonNull(stringArg()),
 			},

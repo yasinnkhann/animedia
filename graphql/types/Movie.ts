@@ -1,3 +1,8 @@
+import { BASE_URL } from '../../utils/URLs';
+import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
+import { GET_GENRE_ID } from '../../utils/getGenreID';
+import { timeWindowTypes } from '../models/enums';
 import {
 	objectType,
 	extendType,
@@ -7,13 +12,8 @@ import {
 	enumType,
 	arg,
 } from 'nexus';
-import { BASE_URL } from '../../utils/URLs';
-import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
-import { GET_GENRE_ID } from '../../utils/getGenreID';
-import { timeWindowTypes } from '../models/enums';
 
-export const movieResult = objectType({
+export const MovieResult = objectType({
 	name: 'MovieResult',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -33,7 +33,7 @@ export const movieResult = objectType({
 	},
 });
 
-export const movie = objectType({
+export const MoviesRes = objectType({
 	name: 'MoviesRes',
 	definition(t) {
 		t.nonNull.int('page');
@@ -45,7 +45,7 @@ export const movie = objectType({
 	},
 });
 
-export const getPopularMovies = extendType({
+export const PopularMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularMovies', {
@@ -70,7 +70,7 @@ export const getPopularMovies = extendType({
 	},
 });
 
-export const getSearchedMovies = extendType({
+export const SearchedMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('searchedMovies', {
@@ -97,7 +97,7 @@ export const getSearchedMovies = extendType({
 	},
 });
 
-export const movieDetailsGenre = objectType({
+export const MovieDetailsGenre = objectType({
 	name: 'MovieDetailsGenre',
 	definition(t) {
 		t.nonNull.int('id');
@@ -105,7 +105,7 @@ export const movieDetailsGenre = objectType({
 	},
 });
 
-export const movieDetailsProdCompany = objectType({
+export const MovieDetailsProdCompany = objectType({
 	name: 'MovieDetailsProdCompany',
 	definition(t) {
 		t.nonNull.int('id');
@@ -115,7 +115,7 @@ export const movieDetailsProdCompany = objectType({
 	},
 });
 
-export const movieDetailsProdCountry = objectType({
+export const MovieDetailsProdCountry = objectType({
 	name: 'MovieDetailsProdCountry',
 	definition(t) {
 		t.nonNull.string('iso_3166_1');
@@ -123,7 +123,7 @@ export const movieDetailsProdCountry = objectType({
 	},
 });
 
-export const movieDetailsSpokenLang = objectType({
+export const MovieDetailsSpokenLang = objectType({
 	name: 'MovieDetailsSpokenLang',
 	definition(t) {
 		t.nonNull.string('english_name');
@@ -132,7 +132,7 @@ export const movieDetailsSpokenLang = objectType({
 	},
 });
 
-export const movieDetails = objectType({
+export const MovieDetailsRes = objectType({
 	name: 'MovieDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -169,7 +169,7 @@ export const movieDetails = objectType({
 	},
 });
 
-export const getMovieDetails = extendType({
+export const MovieDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('movieDetails', {
@@ -194,7 +194,7 @@ export const getMovieDetails = extendType({
 	},
 });
 
-export const getPopularAnimeMovies = extendType({
+export const PopularAnimeMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularAnimeMovies', {
@@ -223,7 +223,7 @@ export const getPopularAnimeMovies = extendType({
 	},
 });
 
-export const getTrendingMovies = extendType({
+export const TrendingMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('trendingMovies', {
@@ -250,7 +250,7 @@ export const getTrendingMovies = extendType({
 	},
 });
 
-export const getTopRatedMovies = extendType({
+export const TopRatedMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('topRatedMovies', {
@@ -275,7 +275,7 @@ export const getTopRatedMovies = extendType({
 	},
 });
 
-export const getRecommendedMovies = extendType({
+export const RecommendedMovies = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('recommendedMovies', {
@@ -301,7 +301,7 @@ export const getRecommendedMovies = extendType({
 	},
 });
 
-export const movieReviewAuthorDetails = objectType({
+export const MovieReviewAuthorDetails = objectType({
 	name: 'MovieReviewAuthorDetails',
 	definition(t) {
 		t.nonNull.string('name');
@@ -311,7 +311,7 @@ export const movieReviewAuthorDetails = objectType({
 	},
 });
 
-export const movieReviewsResult = objectType({
+export const MovieReviewsResult = objectType({
 	name: 'MovieReviewsResult',
 	definition(t) {
 		t.nonNull.string('author');
@@ -326,7 +326,7 @@ export const movieReviewsResult = objectType({
 	},
 });
 
-export const movieReview = objectType({
+export const MovieReviewsRes = objectType({
 	name: 'MovieReviewsRes',
 	definition(t) {
 		t.nonNull.int('id'),
@@ -339,7 +339,7 @@ export const movieReview = objectType({
 	},
 });
 
-export const getMovieReviews = extendType({
+export const MovieReviews = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('movieReviews', {
@@ -365,7 +365,7 @@ export const getMovieReviews = extendType({
 	},
 });
 
-export const theatreDates = objectType({
+export const TheatreDates = objectType({
 	name: 'TheatreDates',
 	definition(t) {
 		t.nonNull.string('maximum');
@@ -373,7 +373,7 @@ export const theatreDates = objectType({
 	},
 });
 
-export const moviesInTheatres = objectType({
+export const MoviesInTheatresRes = objectType({
 	name: 'MoviesInTheatresRes',
 	definition(t) {
 		t.nonNull.field('dates', {
@@ -388,7 +388,7 @@ export const moviesInTheatres = objectType({
 	},
 });
 
-export const getMoviesInTheatres = extendType({
+export const MoviesInTheatres = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('moviesInTheatres', {
@@ -413,7 +413,7 @@ export const getMoviesInTheatres = extendType({
 	},
 });
 
-export const movieGenreTypes = enumType({
+export const MovieGenreTypes = enumType({
 	name: 'MovieGenreTypes',
 	members: [
 		'Action',
@@ -438,14 +438,14 @@ export const movieGenreTypes = enumType({
 	],
 });
 
-export const getPopularMoviesByGenre = extendType({
+export const PopularMoviesByGenre = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
 				genre: arg({
-					type: nonNull(movieGenreTypes),
+					type: nonNull(MovieGenreTypes),
 				}),
 				page: intArg(),
 			},
@@ -470,14 +470,14 @@ export const getPopularMoviesByGenre = extendType({
 	},
 });
 
-export const getTopRatedMoviesByGenre = extendType({
+export const TopRatedMoviesByGenre = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('topRatedMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
 				genre: arg({
-					type: nonNull(movieGenreTypes),
+					type: nonNull(MovieGenreTypes),
 				}),
 				page: intArg(),
 			},
@@ -502,7 +502,7 @@ export const getTopRatedMoviesByGenre = extendType({
 	},
 });
 
-export const moviesCastModel = objectType({
+export const MoviesCastModel = objectType({
 	name: 'MoviesCastModel',
 	definition(t) {
 		t.boolean('adult');
@@ -520,7 +520,7 @@ export const moviesCastModel = objectType({
 	},
 });
 
-export const moviesCrewModel = objectType({
+export const MoviesCrewModel = objectType({
 	name: 'MoviesCrewModel',
 	definition(t) {
 		t.boolean('adult');
@@ -537,7 +537,7 @@ export const moviesCrewModel = objectType({
 	},
 });
 
-export const moviesCastCrewRes = objectType({
+export const MoviesCastCrewRes = objectType({
 	name: 'MoviesCastCrewRes',
 	definition(t) {
 		t.int('id');
@@ -550,7 +550,7 @@ export const moviesCastCrewRes = objectType({
 	},
 });
 
-export const getMoviesCastCrew = extendType({
+export const MoviesCastCrew = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('moviesCastCrew', {

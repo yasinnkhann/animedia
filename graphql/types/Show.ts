@@ -1,3 +1,8 @@
+import { BASE_URL } from '../../utils/URLs';
+import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
+import { GET_GENRE_ID } from '../../utils/getGenreID';
+import { timeWindowTypes } from 'graphql/models/enums';
 import {
 	objectType,
 	extendType,
@@ -7,13 +12,8 @@ import {
 	enumType,
 	arg,
 } from 'nexus';
-import { BASE_URL } from '../../utils/URLs';
-import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
-import { GET_GENRE_ID } from '../../utils/getGenreID';
-import { timeWindowTypes } from 'graphql/models/enums';
 
-export const showResult = objectType({
+export const ShowResult = objectType({
 	name: 'ShowResult',
 	definition(t) {
 		t.string('backdrop_path');
@@ -32,7 +32,7 @@ export const showResult = objectType({
 	},
 });
 
-export const shows = objectType({
+export const ShowsRes = objectType({
 	name: 'ShowsRes',
 	definition(t) {
 		t.nonNull.int('page');
@@ -44,7 +44,7 @@ export const shows = objectType({
 	},
 });
 
-export const getPopularShows = extendType({
+export const PopularShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularShows', {
@@ -69,7 +69,7 @@ export const getPopularShows = extendType({
 	},
 });
 
-export const getSearchedShows = extendType({
+export const SearchedShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('searchedShows', {
@@ -96,7 +96,7 @@ export const getSearchedShows = extendType({
 	},
 });
 
-export const showDetailsCreatedBy = objectType({
+export const ShowDetailsCreatedBy = objectType({
 	name: 'ShowDetailsCreatedBy',
 	definition(t) {
 		t.int('id');
@@ -107,7 +107,7 @@ export const showDetailsCreatedBy = objectType({
 	},
 });
 
-export const showDetailsGenre = objectType({
+export const ShowDetailsGenre = objectType({
 	name: 'ShowDetailsGenre',
 	definition(t) {
 		t.nonNull.int('id');
@@ -115,7 +115,7 @@ export const showDetailsGenre = objectType({
 	},
 });
 
-export const showDetailsLastEpToAir = objectType({
+export const ShowDetailsLastEpToAir = objectType({
 	name: 'ShowDetailsLastEpToAir',
 	definition(t) {
 		t.string('air_date');
@@ -133,7 +133,7 @@ export const showDetailsLastEpToAir = objectType({
 	},
 });
 
-export const showDetailsNetwork = objectType({
+export const ShowDetailsNetwork = objectType({
 	name: 'ShowDetailsNetwork',
 	definition(t) {
 		t.nonNull.int('id');
@@ -143,7 +143,7 @@ export const showDetailsNetwork = objectType({
 	},
 });
 
-export const showDetailsProdCompany = objectType({
+export const ShowDetailsProdCompany = objectType({
 	name: 'ShowDetailsProdCompany',
 	definition(t) {
 		t.nonNull.int('id');
@@ -153,7 +153,7 @@ export const showDetailsProdCompany = objectType({
 	},
 });
 
-export const showDetailsCountry = objectType({
+export const ShowDetailsCountry = objectType({
 	name: 'ShowDetailsCountry',
 	definition(t) {
 		t.nonNull.string('iso_3166_1');
@@ -161,7 +161,7 @@ export const showDetailsCountry = objectType({
 	},
 });
 
-export const showDetailsSeason = objectType({
+export const ShowDetailsSeason = objectType({
 	name: 'ShowDetailsSeason',
 	definition(t) {
 		t.string('air_date');
@@ -174,7 +174,7 @@ export const showDetailsSeason = objectType({
 	},
 });
 
-export const showDetailsSpokenLang = objectType({
+export const ShowDetailsSpokenLang = objectType({
 	name: 'ShowDetailsSpokenLang',
 	definition(t) {
 		t.nonNull.string('english_name');
@@ -183,7 +183,7 @@ export const showDetailsSpokenLang = objectType({
 	},
 });
 
-export const showDetailsNextEpToAir = objectType({
+export const ShowDetailsNextEpToAir = objectType({
 	name: 'ShowDetailsNextEpToAir',
 	definition(t) {
 		t.string('air_date');
@@ -201,7 +201,7 @@ export const showDetailsNextEpToAir = objectType({
 	},
 });
 
-export const showDetails = objectType({
+export const ShowDetailsRes = objectType({
 	name: 'ShowDetailsRes',
 	definition(t) {
 		t.nonNull.boolean('adult');
@@ -257,7 +257,7 @@ export const showDetails = objectType({
 	},
 });
 
-export const getShowDetails = extendType({
+export const ShowDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('showDetails', {
@@ -282,7 +282,7 @@ export const getShowDetails = extendType({
 	},
 });
 
-export const getPopularAnimeShows = extendType({
+export const PopularAnimeShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularAnimeShows', {
@@ -311,7 +311,7 @@ export const getPopularAnimeShows = extendType({
 	},
 });
 
-export const getTrendingShows = extendType({
+export const TrendingShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('trendingShows', {
@@ -330,7 +330,7 @@ export const getTrendingShows = extendType({
 	},
 });
 
-export const getTopRatedShows = extendType({
+export const TopRatedShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('topRatedShows', {
@@ -355,7 +355,7 @@ export const getTopRatedShows = extendType({
 	},
 });
 
-export const getRecommendedShows = extendType({
+export const RecommendedShows = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('recommendedShows', {
@@ -381,7 +381,7 @@ export const getRecommendedShows = extendType({
 	},
 });
 
-export const showReviewAuthorDetails = objectType({
+export const ShowReviewAuthorDetails = objectType({
 	name: 'ShowReviewAuthorDetails',
 	definition(t) {
 		t.nonNull.string('name');
@@ -391,7 +391,7 @@ export const showReviewAuthorDetails = objectType({
 	},
 });
 
-export const showReviewResult = objectType({
+export const ShowReviewResult = objectType({
 	name: 'ShowReviewResult',
 	definition(t) {
 		t.nonNull.string('author');
@@ -406,7 +406,7 @@ export const showReviewResult = objectType({
 	},
 });
 
-export const showReview = objectType({
+export const ShowReviewRes = objectType({
 	name: 'ShowReviewRes',
 	definition(t) {
 		t.nonNull.int('id'),
@@ -419,7 +419,7 @@ export const showReview = objectType({
 	},
 });
 
-export const getShowReviews = extendType({
+export const ShowReviews = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('showReviews', {
@@ -445,7 +445,7 @@ export const getShowReviews = extendType({
 	},
 });
 
-export const showGenreTypes = enumType({
+export const ShowGenreTypes = enumType({
 	name: 'ShowGenreTypes',
 	members: [
 		'Action_AMPERSAND_Adventure',
@@ -467,14 +467,14 @@ export const showGenreTypes = enumType({
 	],
 });
 
-export const getPopularShowsByGenre = extendType({
+export const PopularShowsByGenre = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('popularShowsByGenre', {
 			type: 'ShowsRes',
 			args: {
 				genre: arg({
-					type: nonNull(showGenreTypes),
+					type: nonNull(ShowGenreTypes),
 				}),
 				page: intArg(),
 			},
@@ -499,14 +499,14 @@ export const getPopularShowsByGenre = extendType({
 	},
 });
 
-export const getTopRatedShowsByGenre = extendType({
+export const TopRatedShowsByGenre = extendType({
 	type: 'Query',
 	definition(t) {
 		t.nonNull.field('topRatedShowsByGenre', {
 			type: 'ShowsRes',
 			args: {
 				genre: arg({
-					type: nonNull(showGenreTypes),
+					type: nonNull(ShowGenreTypes),
 				}),
 				page: intArg(),
 			},
@@ -531,7 +531,7 @@ export const getTopRatedShowsByGenre = extendType({
 	},
 });
 
-export const showsCastModel = objectType({
+export const ShowsCastModel = objectType({
 	name: 'ShowsCastModel',
 	definition(t) {
 		t.boolean('adult');
@@ -548,7 +548,7 @@ export const showsCastModel = objectType({
 	},
 });
 
-export const showsCrewModel = objectType({
+export const ShowsCrewModel = objectType({
 	name: 'ShowsCrewModel',
 	definition(t) {
 		t.boolean('adult');
@@ -565,7 +565,7 @@ export const showsCrewModel = objectType({
 	},
 });
 
-export const showsCastCrewRes = objectType({
+export const ShowsCastCrewRes = objectType({
 	name: 'ShowsCastCrewRes',
 	definition(t) {
 		t.int('id');
@@ -578,7 +578,7 @@ export const showsCastCrewRes = objectType({
 	},
 });
 
-export const getShowsCastCrew = extendType({
+export const ShowsCastCrew = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('showsCastCrew', {
@@ -603,8 +603,8 @@ export const getShowsCastCrew = extendType({
 	},
 });
 
-export const episodeDetails = objectType({
-	name: 'EpisodeDetails',
+export const EpisodeDetailsRes = objectType({
+	name: 'EpisodeDetailsRes',
 	definition(t) {
 		t.string('air_date');
 		t.list.field('crew', {
@@ -626,11 +626,11 @@ export const episodeDetails = objectType({
 	},
 });
 
-export const getEpisodeDetails = extendType({
+export const EpisodeDetails = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('episodeDetails', {
-			type: 'EpisodeDetails',
+			type: 'EpisodeDetailsRes',
 			args: {
 				showId: nonNull(intArg()),
 				seasonNum: nonNull(intArg()),

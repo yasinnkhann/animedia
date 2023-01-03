@@ -2,6 +2,12 @@
 ### Do not make changes to this file directly
 
 
+type AccountVerifiedRes {
+  emailVerified: DateTime
+  error: String
+  id: String
+}
+
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
@@ -12,7 +18,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type EpisodeDetails {
+type EpisodeDetailsRes {
   air_date: String
   crew: [ShowsCrewModel]
   episode_number: Int
@@ -216,14 +222,14 @@ type MoviesRes {
 type Mutation {
   addMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
   addShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
-  deleteEmailVerificationToken(token: String!): redisRes
+  deleteEmailVerificationToken(token: String!): RedisRes
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
   updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
   verifyUserEmail(userId: ID!): Int
-  writeEmailVerificationToken(email: String!): redisRes
-  writeRetryEmailVerificationLimit(email: String!): redisRes
+  writeEmailVerificationToken(email: String!): RedisRes
+  writeRetryEmailVerificationLimit(email: String!): RedisRes
 }
 
 type PeopleRes {
@@ -355,11 +361,11 @@ type PersonsKnownForShowRes {
 }
 
 type Query {
-  accountVerified(email: String!): accountVerifiedRes
-  checkEmailVerificationToken(token: String!): redisRes
-  checkRetryEmailVerificationLimit(email: String!): redisRes
+  accountVerified(email: String!): AccountVerifiedRes
+  checkEmailVerificationToken(token: String!): RedisRes
+  checkRetryEmailVerificationLimit(email: String!): RedisRes
   emailFromRedisToken(token: String!): String
-  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetails
+  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetailsRes
   id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
@@ -389,11 +395,18 @@ type Query {
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: TimeWindowTypes!): MoviesRes!
   trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
-  user: User
+  user: UserRes
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]
   usersShow(showId: String!): UserShow
   usersShows: [UserShow]
+}
+
+type RedisRes {
+  error: String
+  successMsg: String
+  token: String
+  userId: String
 }
 
 type ShowDetailsCountry {
@@ -620,20 +633,20 @@ enum TimeWindowTypes {
   week
 }
 
-type User {
+type UserMovie {
+  id: ID
+  name: String
+  rating: Int
+  status: WatchStatusTypes
+}
+
+type UserRes {
   email: String
   id: ID
   image: String
   movies: [UserMovie]
   name: String
   shows: [UserShow]
-}
-
-type UserMovie {
-  id: ID
-  name: String
-  rating: Int
-  status: WatchStatusTypes
 }
 
 type UserShow {
@@ -651,17 +664,4 @@ enum WatchStatusTypes {
   ON_HOLD
   PLAN_TO_WATCH
   WATCHING
-}
-
-type accountVerifiedRes {
-  emailVerified: DateTime
-  error: String
-  id: String
-}
-
-type redisRes {
-  error: String
-  successMsg: String
-  token: String
-  userId: String
 }
