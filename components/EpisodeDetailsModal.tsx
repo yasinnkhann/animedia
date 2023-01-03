@@ -8,7 +8,7 @@ import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
 
 interface Props {
-	episodeDetails: NexusGenObjects['EpisodeDetails'];
+	episodeDetails: NexusGenObjects['EpisodeDetailsRes'];
 	closeModal: () => void;
 }
 
