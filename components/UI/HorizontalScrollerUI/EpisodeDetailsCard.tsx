@@ -18,17 +18,16 @@ interface Props {
 const EpisodeDetailsCard = ({ item }: Props) => {
 	const [showModal, setShowModal] = useState(false);
 
-	const { data: epDetailsCardData, loading: epDetailsCardLoading } =
-		useGQLQuery<
-			NexusGenObjects['EpisodeDetailsRes'],
-			NexusGenArgTypes['Query']['episodeDetails']
-		>(Queries.QUERY_GET_EPISODE_DETAILS, {
-			variables: {
-				showId: item.showId,
-				seasonNum: item.season,
-				episodeNum: item.episode,
-			},
-		});
+	const { data: epDetailsCardData } = useGQLQuery<
+		NexusGenObjects['EpisodeDetailsRes'],
+		NexusGenArgTypes['Query']['episodeDetails']
+	>(Queries.QUERY_GET_EPISODE_DETAILS, {
+		variables: {
+			showId: item.showId,
+			seasonNum: item.season,
+			episodeNum: item.episode,
+		},
+	});
 
 	if (!epDetailsCardData) return <></>;
 
