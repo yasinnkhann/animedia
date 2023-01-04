@@ -1,5 +1,5 @@
 import { ESearchType } from '../enums/index';
-// import { TSearchResults } from '@ts/types';
+
 export interface IHorizontalScrollerItemClickInfo {
 	mediaType: ESearchType;
 	id: number;

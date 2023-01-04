@@ -81,7 +81,7 @@ export default function Login({
 			setAcctVerifiedErr({
 				error: null,
 			});
-			router.push(status.url as any);
+			router.push(status.url!);
 		}
 	}
 
