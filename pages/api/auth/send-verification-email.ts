@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isValidEmail } from '../../../utils/isValidEmail';
-import nodemailer from 'nodemailer';
+import nodemailer, { Transport, TransportOptions } from 'nodemailer';
 
 const sendVerificationEmail = async (
 	req: NextApiRequest,
@@ -24,7 +24,7 @@ const sendVerificationEmail = async (
 			user: process.env.EMAIL_SERVER_USER,
 			pass: process.env.EMAIL_SERVER_PASSWORD,
 		},
-	} as any);
+	} as TransportOptions | Transport<unknown>);
 
 	try {
 		await transporter.sendMail({
