@@ -1,7 +1,13 @@
 import { isValidEmail } from '../../utils/isValidEmail';
 
-export default async function loginValidate(values: any) {
-	const errors: any = {};
+export default async function loginValidate(values: {
+	email: string;
+	password: string;
+}) {
+	const errors: Partial<{
+		email: string;
+		password: string;
+	}> = {};
 
 	if (!values.email) {
 		errors.email = 'Email Required';
@@ -20,8 +26,18 @@ export default async function loginValidate(values: any) {
 	return errors;
 }
 
-export function registerValidate(values: any) {
-	const errors: any = {};
+export function registerValidate(values: {
+	name: string;
+	email: string;
+	password: string;
+	confirmPassword: string;
+}) {
+	const errors: Partial<{
+		name: string;
+		email: string;
+		password: string;
+		confirmPassword: string;
+	}> = {};
 
 	if (!values.name) {
 		errors.name = 'Name Required';

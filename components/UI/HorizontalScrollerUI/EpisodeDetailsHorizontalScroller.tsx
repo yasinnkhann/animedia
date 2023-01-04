@@ -66,7 +66,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 			onMouseMove={handleDrag}
 			scrollContainerClassName='!h-[14rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
-			{groupSeasonsAndEps().map((item: any, idx) => (
+			{groupSeasonsAndEps().map((item, idx) => (
 				<EpisodeDetailsCard item={item} key={idx} />
 			))}
 		</ScrollMenu>

@@ -16,8 +16,8 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 	const contentRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const close = (e: any) => {
-			if (e.keyCode === 27) {
+		const close = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
 				closeModal();
 			}
 		};
