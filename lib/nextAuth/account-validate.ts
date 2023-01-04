@@ -1,13 +1,8 @@
 import { isValidEmail } from '../../utils/isValidEmail';
+import { ILogin, IRegister } from '@ts/interfaces';
 
-export default async function loginValidate(values: {
-	email: string;
-	password: string;
-}) {
-	const errors: Partial<{
-		email: string;
-		password: string;
-	}> = {};
+export default async function loginValidate(values: ILogin) {
+	const errors: Partial<ILogin> = {};
 
 	if (!values.email) {
 		errors.email = 'Email Required';
@@ -26,18 +21,8 @@ export default async function loginValidate(values: {
 	return errors;
 }
 
-export function registerValidate(values: {
-	name: string;
-	email: string;
-	password: string;
-	confirmPassword: string;
-}) {
-	const errors: Partial<{
-		name: string;
-		email: string;
-		password: string;
-		confirmPassword: string;
-	}> = {};
+export function registerValidate(values: IRegister) {
+	const errors: Partial<IRegister> = {};
 
 	if (!values.name) {
 		errors.name = 'Name Required';

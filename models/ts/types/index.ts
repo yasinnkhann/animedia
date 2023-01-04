@@ -1,6 +1,6 @@
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 
-export type THorizontalScrollerData =
+export type THomeHorizontalScrollerData =
 	| NexusGenObjects['MoviesRes']['results']
 	| NexusGenObjects['ShowsRes']['results'];
 
@@ -10,3 +10,7 @@ export type TStatusParam =
 	| 'on-hold'
 	| 'dropped'
 	| 'plan-to-watch';
+
+export const searchResultsConst = ['movies', 'shows', 'people'] as const;
+
+export type TSearchResults = typeof searchResultsConst[number];

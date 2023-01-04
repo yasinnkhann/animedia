@@ -6,7 +6,7 @@ import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../hooks/useGQL';
 import { DocumentNode } from '@apollo/client';
-import { THorizontalScrollerData } from '@ts/types';
+import { THomeHorizontalScrollerData } from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
 import {
 	NexusGenArgTypes,
@@ -155,7 +155,9 @@ const Home: NextPage = () => {
 
 							<section className='mt-4'>
 								<HomeHorizontalScroller
-									items={whatsPopularData.results as THorizontalScrollerData}
+									items={
+										whatsPopularData.results as THomeHorizontalScrollerData
+									}
 								/>
 							</section>
 
@@ -221,7 +223,7 @@ const Home: NextPage = () => {
 
 							<section className='mt-4 pb-4'>
 								<HomeHorizontalScroller
-									items={trendingData.results as THorizontalScrollerData}
+									items={trendingData.results as THomeHorizontalScrollerData}
 								/>
 							</section>
 						</section>

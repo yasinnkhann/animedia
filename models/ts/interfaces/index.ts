@@ -1,7 +1,7 @@
 import { ESearchType } from '../enums/index';
-
+// import { TSearchResults } from '@ts/types';
 export interface IHorizontalScrollerItemClickInfo {
-	mediaType: ESearchType.MOVIE | ESearchType.SHOW | ESearchType.PERSON;
+	mediaType: ESearchType;
 	id: number;
 	title: string;
 }
@@ -32,4 +32,16 @@ export interface INodeMailerInfo {
 	subject: string;
 	text: string;
 	html: string;
+}
+
+export interface ILogin {
+	email: string;
+	password: string;
+}
+
+export interface IRegister {
+	name: string;
+	email: string;
+	password: string;
+	confirmPassword: string;
 }
