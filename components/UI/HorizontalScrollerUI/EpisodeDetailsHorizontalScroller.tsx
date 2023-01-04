@@ -28,16 +28,16 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 		apiObj: scrollVisibilityApiType,
 		e: React.WheelEvent
 	): void => {
-		const isTouchpad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
+		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
-		if (isTouchpad) {
+		if (isTouchPad) {
 			e.stopPropagation();
 			return;
 		}
 
-		if (e.deltaY < 0) {
+		if (e.deltaX < 0) {
 			apiObj.scrollNext();
-		} else if (e.deltaY > 0) {
+		} else if (e.deltaX > 0) {
 			apiObj.scrollPrev();
 		}
 	};
