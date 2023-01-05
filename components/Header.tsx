@@ -162,22 +162,20 @@ const Header = () => {
 					</section>
 				</nav>
 			</header>
-			{isSearchBtnClicked && (
-				<motion.div
-					animate={{ y: 75 }}
-					transition={{
-						duration: 1,
-						ease: [0.08, 0.69, 0.2, 0.99],
-					}}
-				>
-					<section className='mb-24'>
-						<SearchBar
-							ref={searchBarRef}
-							closeSearch={() => setIsSearchBtnClicked(false)}
-						/>
-					</section>
-				</motion.div>
-			)}
+			<motion.div
+				animate={{ y: isSearchBtnClicked ? 75 : -20 }}
+				transition={{
+					duration: 1,
+					ease: [0.08, 0.69, 0.2, 0.99],
+				}}
+			>
+				<div className='mb-24'>
+					<SearchBar
+						ref={searchBarRef}
+						closeSearch={() => setIsSearchBtnClicked(false)}
+					/>
+				</div>
+			</motion.div>
 		</>
 	);
 };
