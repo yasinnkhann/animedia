@@ -8,6 +8,7 @@ import { BiLogIn } from 'react-icons/bi';
 import { TbSearch } from 'react-icons/tb';
 import { ImCross } from 'react-icons/im';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
+import { motion } from 'framer-motion';
 
 const Header = () => {
 	const router = useRouter();
@@ -162,12 +163,20 @@ const Header = () => {
 				</nav>
 			</header>
 			{isSearchBtnClicked && (
-				<section className='mt-24'>
-					<SearchBar
-						ref={searchBarRef}
-						closeSearch={() => setIsSearchBtnClicked(false)}
-					/>
-				</section>
+				<motion.div
+					animate={{ y: 75 }}
+					transition={{
+						duration: 1,
+						ease: [0.08, 0.69, 0.2, 0.99],
+					}}
+				>
+					<section className='mb-24'>
+						<SearchBar
+							ref={searchBarRef}
+							closeSearch={() => setIsSearchBtnClicked(false)}
+						/>
+					</section>
+				</motion.div>
 			)}
 		</>
 	);

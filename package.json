@@ -21,6 +21,7 @@
 		"bcryptjs": "^2.4.3",
 		"comma-number": "^2.1.0",
 		"formik": "^2.2.9",
+		"framer-motion": "^8.1.7",
 		"graphql": "^16.6.0",
 		"graphql-middleware": "^6.1.33",
 		"graphql-request": "^5.1.0",
