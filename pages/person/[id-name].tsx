@@ -191,10 +191,12 @@ const PersonDetails = () => {
 					)}
 				</section>
 
-				<section className='col-start-2 mt-4 pb-4'>
-					<h3 className='mb-4 ml-8'>Known For</h3>
-					<RelatedHorizontalScroller items={memoMappedMedia} />
-				</section>
+				{memoMappedMedia.length > 0 && (
+					<section className='col-start-2 mt-4 pb-4'>
+						<h3 className='mb-4 ml-8'>Known For</h3>
+						<RelatedHorizontalScroller items={memoMappedMedia} />
+					</section>
+				)}
 			</main>
 		</>
 	);
