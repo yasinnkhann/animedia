@@ -1,20 +1,20 @@
 import React from 'react';
-import MovieCastCard from './MediaCastCard';
-import { useDrag } from '../../../hooks/useDrag';
+import KnownForCard from './KnownForCard';
+import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from './Arrows';
+import { LeftArrow, RightArrow } from '../Arrows';
 import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
-import { ICast } from '@ts/interfaces';
+import { IKnownForMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: ICast[];
+	items: IKnownForMedia[];
 }
 
-const MediaCastHorizontalScroller = ({ items }: Props) => {
+const KnownForHorizontalScroller = ({ items }: Props) => {
 	const router = useRouter();
 
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
@@ -67,7 +67,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<MovieCastCard
+				<KnownForCard
 					key={item.id}
 					item={item}
 					handleItemClick={handleItemClick}
@@ -77,4 +77,4 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 	);
 };
 
-export default MediaCastHorizontalScroller;
+export default KnownForHorizontalScroller;

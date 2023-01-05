@@ -1,20 +1,22 @@
 import React from 'react';
-import KnownForCard from './KnownForCard';
-import { useDrag } from '../../../hooks/useDrag';
+import HomeCard from './HomeCard';
+import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from './Arrows';
+import { LeftArrow, RightArrow } from '../Arrows';
+import { NexusGenObjects } from '../../../../graphql/generated/nexus-typegen/index';
 import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
-import { IKnownForMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: IKnownForMedia[];
+	items:
+		| NexusGenObjects['MoviesRes']['results']
+		| NexusGenObjects['ShowsRes']['results'];
 }
 
-const KnownForHorizontalScroller = ({ items }: Props) => {
+const HomeHorizontalScroller = ({ items }: Props) => {
 	const router = useRouter();
 
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
@@ -64,17 +66,13 @@ const KnownForHorizontalScroller = ({ items }: Props) => {
 			onMouseDown={() => dragStart}
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
-			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+			scrollContainerClassName='!h-[26rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<KnownForCard
-					key={item.id}
-					item={item}
-					handleItemClick={handleItemClick}
-				/>
+				<HomeCard key={item.id} item={item} handleItemClick={handleItemClick} />
 			))}
 		</ScrollMenu>
 	);
 };
 
-export default KnownForHorizontalScroller;
+export default HomeHorizontalScroller;

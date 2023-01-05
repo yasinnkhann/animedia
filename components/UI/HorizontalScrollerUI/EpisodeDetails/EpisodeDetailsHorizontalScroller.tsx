@@ -1,10 +1,11 @@
 import React from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { useDrag } from '../../../hooks/useDrag';
+import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from './Arrows';
+import { LeftArrow, RightArrow } from '../Arrows';
 import { IEPDetails } from '@ts/interfaces';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
+import { NexusGenObjects } from '../../../../graphql/generated/nexus-typegen/index';
+
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {

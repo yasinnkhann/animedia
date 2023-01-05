@@ -8,7 +8,7 @@ import { useGQLQuery } from '../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { IKnownForMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
-import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownForHorizontalScroller';
+import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownFor/KnownForHorizontalScroller';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,

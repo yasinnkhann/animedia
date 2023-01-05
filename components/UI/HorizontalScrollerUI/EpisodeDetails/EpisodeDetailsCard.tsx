@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BASE_IMG_URL } from '../../../utils/URLs';
-import * as Queries from '../../../graphql/queries';
-import { useGQLQuery } from '../../../hooks/useGQL';
+import { BASE_IMG_URL } from '../../../../utils/URLs';
+import * as Queries from '../../../../graphql/queries';
+import { useGQLQuery } from '../../../../hooks/useGQL';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
-} from '../../../graphql/generated/nexus-typegen';
+} from '../../../../graphql/generated/nexus-typegen';
 
 interface Props {
 	item: IEPDetails;

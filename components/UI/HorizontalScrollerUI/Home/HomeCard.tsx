@@ -1,10 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen/index';
-import { BASE_IMG_URL } from '../../../utils/URLs';
+import { NexusGenObjects } from '../../../../graphql/generated/nexus-typegen/index';
+import { BASE_IMG_URL } from '../../../../utils/URLs';
 import { ESearchType } from '@ts/enums';
-import { formatDate } from '../../../utils/formatDate';
-import RoundProgressBar from '../../RoundProgressBar';
+import { formatDate } from '../../../../utils/formatDate';
+import RoundProgressBar from '../../../RoundProgressBar';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 
 interface Props {
