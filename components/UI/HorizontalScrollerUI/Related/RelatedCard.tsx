@@ -3,19 +3,19 @@ import Image from 'next/image';
 import { BASE_IMG_URL } from '../../../../utils/URLs';
 import { ESearchType } from '@ts/enums';
 import {
-	IKnownForMedia,
+	IRelatedMedia,
 	IHorizontalScrollerItemClickInfo,
 } from '@ts/interfaces';
 
 interface Props {
-	item: IKnownForMedia;
+	item: IRelatedMedia;
 
 	handleItemClick: (
 		itemClickInfo: IHorizontalScrollerItemClickInfo
 	) => false | void | undefined;
 }
 
-const KnownForCard = ({ item, handleItemClick }: Props) => {
+const RelatedCard = ({ item, handleItemClick }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
@@ -51,4 +51,4 @@ const KnownForCard = ({ item, handleItemClick }: Props) => {
 	);
 };
 
-export default KnownForCard;
+export default RelatedCard;

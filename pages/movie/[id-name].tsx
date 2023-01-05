@@ -8,7 +8,7 @@ import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
-import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownFor/KnownForHorizontalScroller';
+import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCast/MediaCastHorizontalScroller';
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';

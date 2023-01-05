@@ -1,20 +1,20 @@
 import React from 'react';
-import KnownForCard from './KnownForCard';
+import RelatedCard from './RelatedCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
-import { IKnownForMedia } from '@ts/interfaces';
+import { IRelatedMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: IKnownForMedia[];
+	items: IRelatedMedia[];
 }
 
-const KnownForHorizontalScroller = ({ items }: Props) => {
+const RelatedHorizontalScroller = ({ items }: Props) => {
 	const router = useRouter();
 
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
@@ -67,7 +67,7 @@ const KnownForHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<KnownForCard
+				<RelatedCard
 					key={item.id}
 					item={item}
 					handleItemClick={handleItemClick}
@@ -77,4 +77,4 @@ const KnownForHorizontalScroller = ({ items }: Props) => {
 	);
 };
 
-export default KnownForHorizontalScroller;
+export default RelatedHorizontalScroller;

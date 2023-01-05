@@ -6,9 +6,9 @@ import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../utils/URLs';
-import { IKnownForMedia } from '@ts/interfaces';
+import { IRelatedMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
-import KnownForHorizontalScroller from '../../components/UI/HorizontalScrollerUI/KnownFor/KnownForHorizontalScroller';
+import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -58,7 +58,7 @@ const PersonDetails = () => {
 	const memoMappedMedia = useMemo(() => {
 		const uniqueMovies: Set<number> = new Set();
 
-		const mappedMoviesCast: IKnownForMedia[] = [];
+		const mappedMoviesCast: IRelatedMedia[] = [];
 
 		for (const castObj of knownForMoviesData?.cast ?? []) {
 			if (!uniqueMovies.has(castObj!.id)) {
@@ -75,7 +75,7 @@ const PersonDetails = () => {
 
 		const uniqueShows: Set<number> = new Set();
 
-		const mappedShowsCast: IKnownForMedia[] = [];
+		const mappedShowsCast: IRelatedMedia[] = [];
 
 		for (const castObj of knownForShowsData?.cast ?? []) {
 			if (
@@ -193,7 +193,7 @@ const PersonDetails = () => {
 
 				<section className='col-start-2 mt-4 pb-4'>
 					<h3 className='mb-4 ml-8'>Known For</h3>
-					<KnownForHorizontalScroller items={memoMappedMedia} />
+					<RelatedHorizontalScroller items={memoMappedMedia} />
 				</section>
 			</main>
 		</>
