@@ -164,7 +164,7 @@ const Header = () => {
 			</header>
 			{isSearchBtnClicked && (
 				<motion.div
-					animate={{ y: isSearchBtnClicked ? 75 : -20 }}
+					animate={{ y: 75 }}
 					transition={{
 						duration: 1,
 						ease: [0.08, 0.69, 0.2, 0.99],
