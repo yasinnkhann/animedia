@@ -52,8 +52,9 @@ const ShowDetails = () => {
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
 	>(Queries.QUERY_GET_USERS_SHOW, {
+		skip: !showDetailsData,
 		variables: {
-			showId: String(showDetailsData?.id!),
+			showId: String(showDetailsData?.id),
 		},
 		fetchPolicy: 'network-only',
 	});
@@ -62,8 +63,9 @@ const ShowDetails = () => {
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['recommendedShows']
 	>(Queries.QUERY_RECOMMENDED_SHOWS, {
+		skip: !showDetailsData,
 		variables: {
-			recommendedShowsId: showDetailsData?.id!,
+			recommendedShowsId: showDetailsData?.id,
 		},
 	});
 
@@ -72,8 +74,9 @@ const ShowDetails = () => {
 			NexusGenObjects['ShowsCastCrewRes'],
 			NexusGenArgTypes['Query']['showsCastCrew']
 		>(Queries.QUERY_GET_SHOWS_CAST_CREW, {
+			skip: !showDetailsData,
 			variables: {
-				showId: showDetailsData?.id!,
+				showId: showDetailsData?.id,
 			},
 		});
 
@@ -480,12 +483,11 @@ const ShowDetails = () => {
 	}, [
 		rating,
 		currEp,
-		showDetailsData?.number_of_episodes!,
+		showDetailsData,
 		usersShowLoading,
 		usersShowData,
 		watchStatus,
 		updateShow,
-		showDetailsData?.id!,
 	]);
 
 	if (showDetailsLoading || !showDetailsData) {
@@ -710,4 +712,5 @@ const ShowDetails = () => {
 		</>
 	);
 };
+
 export default ShowDetails;
