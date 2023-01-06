@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'antd';
-import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { Avatar } from 'antd';
 import tinycolor from 'tinycolor2';
 import { useSession } from 'next-auth/react';
+import type { MenuProps } from 'antd';
 
 interface Props {
 	items: {
@@ -49,14 +49,17 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 
 	const handleMenuClick: MenuProps['onClick'] = e => {
 		setOpen(false);
-		const { textContent } = e.domEvent.currentTarget;
 		let routeType;
 
-		if (textContent?.includes('Movies')) {
+		if (name?.includes('My Movies')) {
+			routeType = 'my-movies';
+		} else if (name?.includes('My Shows')) {
+			routeType = 'my-shows';
+		} else if (name?.includes('Movies')) {
 			routeType = 'movies';
-		} else if (textContent?.includes('Shows')) {
+		} else if (name?.includes('Shows')) {
 			routeType = 'shows';
-		} else if (textContent?.includes('People')) {
+		} else if (name?.includes('People')) {
 			routeType = 'people';
 		} else {
 			return signOut({

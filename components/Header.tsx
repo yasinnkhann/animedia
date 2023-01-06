@@ -6,9 +6,15 @@ import DropDownItem from './DropDownItem';
 import { AiFillHome } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
 import { TbSearch } from 'react-icons/tb';
-import { ImCross } from 'react-icons/im';
+import { RxCross1 } from 'react-icons/rx';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import { motion } from 'framer-motion';
+import {
+	MY_MEDIA_ITEMS,
+	MOVIES_ITEMS,
+	SHOWS_ITEMS,
+	PEOPLE_ITEMS,
+} from 'models/dropDownOptions';
 
 const Header = () => {
 	const router = useRouter();
@@ -19,51 +25,6 @@ const Header = () => {
 	if (status === 'loading') {
 		return <></>;
 	}
-
-	const moviesItems = [
-		{
-			label: 'Popular Movies',
-			key: 'popular',
-		},
-		{
-			label: 'Top Rated Movies',
-			key: 'top-rated',
-		},
-		{
-			label: 'Popular Anime Movies',
-			key: 'popular-anime',
-		},
-		{
-			label: 'Explore Movies by Genre',
-			key: 'genre',
-		},
-	];
-
-	const showsItems = [
-		{
-			label: 'Popular Shows',
-			key: 'popular',
-		},
-		{
-			label: 'Top Rated Shows',
-			key: 'top-rated',
-		},
-		{
-			label: 'Popular Anime Shows',
-			key: 'popular-anime',
-		},
-		{
-			label: 'Explore Shows by Genre',
-			key: 'genre',
-		},
-	];
-
-	const peopleItems = [
-		{
-			label: 'Popular People',
-			key: 'popular',
-		},
-	];
 
 	return (
 		<>
@@ -85,13 +46,13 @@ const Header = () => {
 							className='!flex justify-around w-[50%] !mb-0'
 						>
 							<li>
-								<DropDownItem items={moviesItems} name='Movies' />
+								<DropDownItem items={MOVIES_ITEMS} name='Movies' />
 							</li>
 							<li>
-								<DropDownItem items={showsItems} name='Shows' />
+								<DropDownItem items={SHOWS_ITEMS} name='Shows' />
 							</li>
 							<li>
-								<DropDownItem items={peopleItems} name='People' />
+								<DropDownItem items={PEOPLE_ITEMS} name='People' />
 							</li>
 						</ul>
 						<ul
@@ -107,13 +68,8 @@ const Header = () => {
 							>
 								{status === 'authenticated' && session && (
 									<>
-										<Link href='/my-shows'>
-											<a>My Shows</a>
-										</Link>
-
-										<Link href='/my-movies'>
-											<a>My Movies</a>
-										</Link>
+										<DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' />
+										<DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' />
 									</>
 								)}
 
@@ -129,9 +85,9 @@ const Header = () => {
 											}}
 										/>
 									) : (
-										<ImCross
+										<RxCross1
 											className='cursor-pointer'
-											size={20}
+											size={25}
 											onClick={() => setIsSearchBtnClicked(curr => !curr)}
 										/>
 									))}

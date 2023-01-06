@@ -15,7 +15,8 @@ const MyShowsList = ({ status, myShows }: Props) => {
 		<section className='w-full px-4 sm:px-10 md:px-20 lg:px-40'>
 			<section className='flex flex-col pb-4'>
 				<div className='bg-gray-200 flex justify-center items-center h-[3rem] mt-8'>
-					<h4 className='text-blue-500'>{adjustedStatus} SHOWS</h4>
+					<h4 className='text-blue-500'>{adjustedStatus} SHOWS:</h4>
+					<h4 className='text-green-700 ml-2'>{myShows.length}</h4>
 				</div>
 				<table>
 					<thead>

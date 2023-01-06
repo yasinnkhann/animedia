@@ -181,3 +181,71 @@ export const SHOW_GENRE_TYPE_OPTIONS: IShowGenreTypeOption[] = [
 		text: 'Western',
 	},
 ];
+
+export const MOVIES_ITEMS = [
+	{
+		label: 'Popular Movies',
+		key: 'popular',
+	},
+	{
+		label: 'Top Rated Movies',
+		key: 'top-rated',
+	},
+	{
+		label: 'Popular Anime Movies',
+		key: 'popular-anime',
+	},
+	{
+		label: 'Explore Movies by Genre',
+		key: 'genre',
+	},
+];
+
+export const SHOWS_ITEMS = [
+	{
+		label: 'Popular Shows',
+		key: 'popular',
+	},
+	{
+		label: 'Top Rated Shows',
+		key: 'top-rated',
+	},
+	{
+		label: 'Popular Anime Shows',
+		key: 'popular-anime',
+	},
+	{
+		label: 'Explore Shows by Genre',
+		key: 'genre',
+	},
+];
+
+export const PEOPLE_ITEMS = [
+	{
+		label: 'Popular People',
+		key: 'popular',
+	},
+];
+
+export const MY_MEDIA_ITEMS = [
+	{
+		label: 'Watching',
+		key: 'watching',
+	},
+	{
+		label: 'Completed',
+		key: 'completed',
+	},
+	{
+		label: 'On Hold',
+		key: 'on-hold',
+	},
+	{
+		label: 'Dropped',
+		key: 'dropped',
+	},
+	{
+		label: 'Plan To Watch',
+		key: 'plan-to-watch',
+	},
+];
