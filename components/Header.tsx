@@ -18,6 +18,7 @@ import {
 
 const Header = () => {
 	const router = useRouter();
+	d;
 	const { data: session, status } = useSession();
 	const [isSearchBtnClicked, setIsSearchBtnClicked] = useState(false);
 	const searchBarRef = useRef<HTMLInputElement>(null);
