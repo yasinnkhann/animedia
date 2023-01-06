@@ -89,7 +89,7 @@ const ShowDetails = () => {
 				showId: String(showDetailsData?.id!),
 				showName: showDetailsData?.name!,
 				watchStatus,
-				currentEpisode: currEp,
+				currentEpisode: Number(currEp),
 			},
 			refetchQueries: () => [
 				{
