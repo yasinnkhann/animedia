@@ -26,7 +26,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 	}, [closeModal]);
 
 	const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (contentRef?.current?.contains(e.target as Node)) {
+		if (contentRef.current?.contains(e.target as Node)) {
 			return;
 		}
 		closeModal();
