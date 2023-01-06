@@ -35,7 +35,7 @@ const Pagination = ({
 	}, [currPage, paginate, lastPage]);
 
 	// If there are less than 2 times in pagination range we shall not render the component
-	if (currPage === 0 || paginationRange!.length < 2) {
+	if (currPage ==== 0 || paginationRange!.length < 2) {
 		return null;
 	}
 
