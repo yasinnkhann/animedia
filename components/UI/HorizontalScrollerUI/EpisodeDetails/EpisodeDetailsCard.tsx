@@ -21,7 +21,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 	const { data: epDetailsCardData } = useGQLQuery<
 		NexusGenObjects['EpisodeDetailsRes'],
 		NexusGenArgTypes['Query']['episodeDetails']
-	>(Queries.QUERY_GET_EPISODE_DETAILS, {
+	>(Queries.GET_EPISODE_DETAILS, {
 		variables: {
 			showId: item.showId,
 			seasonNum: item.season,

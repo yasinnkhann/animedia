@@ -19,7 +19,7 @@ const PopularAnimeShows = () => {
 	const { data: popularAnimeShowsData } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['popularAnimeShows']
-	>(Queries.QUERY_POPULAR_ANIME_SHOWS, {
+	>(Queries.POPULAR_ANIME_SHOWS, {
 		variables: {
 			page: currPage,
 		},

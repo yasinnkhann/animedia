@@ -19,7 +19,7 @@ const PopularPeople = () => {
 	const { data: popularPeopleData } = useGQLQuery<
 		NexusGenObjects['PeopleRes'],
 		NexusGenArgTypes['Query']['popularPeople']
-	>(Queries.QUERY_POPULAR_PEOPLE, {
+	>(Queries.POPULAR_PEOPLE, {
 		variables: {
 			page: currPage,
 		},

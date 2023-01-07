@@ -38,7 +38,7 @@ const MovieDetails = () => {
 	const { data: movieDetailsData, loading: movieDetailsLoading } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
-	>(Queries.QUERY_MOVIE_DETAILS, {
+	>(Queries.MOVIE_DETAILS, {
 		variables: {
 			movieDetailsId: id,
 		},
@@ -48,7 +48,7 @@ const MovieDetails = () => {
 	const { data: usersMovieData, loading: usersMovieLoading } = useGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
-	>(Queries.QUERY_GET_USERS_MOVIE, {
+	>(Queries.GET_USERS_MOVIE, {
 		variables: {
 			movieId: String(movieDetailsData?.id!),
 		},
@@ -58,7 +58,7 @@ const MovieDetails = () => {
 	const { data: recMoviesData, loading: recMoviesLoading } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['recommendedMovies']
-	>(Queries.QUERY_RECOMMENDED_MOVIES, {
+	>(Queries.RECOMMENDED_MOVIES, {
 		variables: {
 			recommendedMoviesId: movieDetailsData?.id!,
 		},
@@ -68,7 +68,7 @@ const MovieDetails = () => {
 		useGQLQuery<
 			NexusGenObjects['MoviesCastCrewRes'],
 			NexusGenArgTypes['Query']['moviesCastCrew']
-		>(Queries.QUERY_GET_MOVIES_CAST_CREW, {
+		>(Queries.GET_MOVIES_CAST_CREW, {
 			variables: {
 				movieId: movieDetailsData?.id!,
 			},
@@ -78,7 +78,7 @@ const MovieDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserMovie'],
 			NexusGenArgTypes['Mutation']['addMovie']
-		>(Mutations.MUTATION_ADD_MOVIE, {
+		>(Mutations.ADD_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 				movieName: movieDetailsData?.title!,
@@ -86,7 +86,7 @@ const MovieDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_MOVIE,
+					query: Queries.GET_USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.id!),
 					},
@@ -99,7 +99,7 @@ const MovieDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserMovie'],
 			NexusGenArgTypes['Mutation']['updateMovie']
-		>(Mutations.MUTATION_UPDATE_MOVIE, {
+		>(Mutations.UPDATE_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 				watchStatus,
@@ -107,7 +107,7 @@ const MovieDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_MOVIE,
+					query: Queries.GET_USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.id!),
 					},
@@ -120,13 +120,13 @@ const MovieDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserMovie'],
 			NexusGenArgTypes['Mutation']['deleteMovie']
-		>(Mutations.MUTATION_DELETE_MOVIE, {
+		>(Mutations.DELETE_MOVIE, {
 			variables: {
 				movieId: String(movieDetailsData?.id!),
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_MOVIE,
+					query: Queries.GET_USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.id!),
 					},

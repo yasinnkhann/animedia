@@ -43,7 +43,7 @@ export default function Register() {
 	} = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
+	>(Mutations.WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
 			email: formik.values.email,
 		},
@@ -53,12 +53,12 @@ export default function Register() {
 		useGQLMutation<
 			NexusGenObjects['RegisteredUserRes'],
 			NexusGenArgTypes['Mutation']['registerUser']
-		>(Mutations.MUTATION_REGISTER_USER);
+		>(Mutations.REGISTER_USER);
 
 	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
 		NexusGenObjects['NodeRes'],
 		NexusGenArgTypes['Mutation']['sendVerificationEmail']
-	>(Mutations.MUTATION_SEND_VERIFICATION_EMAIL);
+	>(Mutations.SEND_VERIFICATION_EMAIL);
 
 	async function onSubmit() {
 		const { name, email, password } = formik.values;

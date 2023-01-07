@@ -46,7 +46,7 @@ export default function Login({
 	} = useGQLLazyQuery<
 		NexusGenObjects['AccountVerifiedRes'],
 		NexusGenArgTypes['Query']['accountVerified']
-	>(Queries.QUERY_ACCOUNT_VERIFIED, {
+	>(Queries.ACCOUNT_VERIFIED, {
 		variables: {
 			email: formik.values.email,
 		},

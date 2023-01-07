@@ -27,7 +27,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 	const { data: usersMovieData } = useGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
-	>(Queries.QUERY_GET_USERS_MOVIE, {
+	>(Queries.GET_USERS_MOVIE, {
 		variables: {
 			movieId: String(movie.id),
 		},

@@ -25,7 +25,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 	const { data: showData } = useGQLQuery<
 		NexusGenObjects['ShowDetailsRes'],
 		NexusGenArgTypes['Query']['showDetails']
-	>(Queries.QUERY_SHOW_DETAILS, {
+	>(Queries.SHOW_DETAILS, {
 		variables: {
 			showDetailsId: Number(myShow.id),
 		},
@@ -34,13 +34,13 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 	const { mutateFunction: deleteShow } = useGQLMutation<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Mutation']['deleteShow']
-	>(Mutations.MUTATION_DELETE_SHOW, {
+	>(Mutations.DELETE_SHOW, {
 		variables: {
 			showId: String(myShow.id),
 		},
 		refetchQueries: () => [
 			{
-				query: Queries.QUERY_GET_USERS_SHOWS,
+				query: Queries.GET_USERS_SHOWS,
 			},
 			'UsersShows',
 		],

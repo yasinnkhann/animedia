@@ -16,10 +16,10 @@ import {
 
 const Home: NextPage = () => {
 	const [whatsPopularQueryType, setWhatsPopularQueryType] =
-		useState<DocumentNode>(Queries.QUERY_POPULAR_MOVIES);
+		useState<DocumentNode>(Queries.POPULAR_MOVIES);
 
 	const [trendingQueryType, setTrendingQueryType] = useState<DocumentNode>(
-		Queries.QUERY_TRENDING_MOVIES
+		Queries.TRENDING_MOVIES
 	);
 
 	const [trendingTimeWindow, setTrendingTimeWindow] =
@@ -39,18 +39,16 @@ const Home: NextPage = () => {
 	});
 
 	// Preparing the queries
-	const {} = useGQLQuery<NexusGenObjects['ShowsRes']>(
-		Queries.QUERY_POPULAR_SHOWS
-	);
+	const {} = useGQLQuery<NexusGenObjects['ShowsRes']>(Queries.POPULAR_SHOWS);
 
 	const {} = useGQLQuery<NexusGenObjects['MoviesInTheatresRes']>(
-		Queries.QUERY_MOVIES_IN_THEATRES
+		Queries.MOVIES_IN_THEATRES
 	);
 
 	const {} = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['trendingMovies']
-	>(Queries.QUERY_TRENDING_MOVIES, {
+	>(Queries.TRENDING_MOVIES, {
 		variables: {
 			timeWindow: 'week',
 		},
@@ -59,7 +57,7 @@ const Home: NextPage = () => {
 	const {} = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.QUERY_TRENDING_SHOWS, {
+	>(Queries.TRENDING_SHOWS, {
 		variables: {
 			timeWindow: 'day',
 		},
@@ -68,7 +66,7 @@ const Home: NextPage = () => {
 	const {} = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.QUERY_TRENDING_SHOWS, {
+	>(Queries.TRENDING_SHOWS, {
 		variables: {
 			timeWindow: 'week',
 		},
@@ -114,38 +112,36 @@ const Home: NextPage = () => {
 								<ul className='flex w-[15rem] md:w-[25rem] justify-around'>
 									<li
 										className={`cursor-pointer ${
-											whatsPopularQueryType === Queries.QUERY_POPULAR_MOVIES
+											whatsPopularQueryType === Queries.POPULAR_MOVIES
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
-											handleChangePopularQueryType(Queries.QUERY_POPULAR_MOVIES)
+											handleChangePopularQueryType(Queries.POPULAR_MOVIES)
 										}
 									>
 										Movies
 									</li>
 									<li
 										className={`cursor-pointer ${
-											whatsPopularQueryType === Queries.QUERY_POPULAR_SHOWS
+											whatsPopularQueryType === Queries.POPULAR_SHOWS
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
-											handleChangePopularQueryType(Queries.QUERY_POPULAR_SHOWS)
+											handleChangePopularQueryType(Queries.POPULAR_SHOWS)
 										}
 									>
 										Shows
 									</li>
 									<li
 										className={`cursor-pointer ${
-											whatsPopularQueryType === Queries.QUERY_MOVIES_IN_THEATRES
+											whatsPopularQueryType === Queries.MOVIES_IN_THEATRES
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
 										onClick={() =>
-											handleChangePopularQueryType(
-												Queries.QUERY_MOVIES_IN_THEATRES
-											)
+											handleChangePopularQueryType(Queries.MOVIES_IN_THEATRES)
 										}
 									>
 										In Theatres
@@ -169,28 +165,24 @@ const Home: NextPage = () => {
 									<ul className='flex justify-around'>
 										<li
 											className={`cursor-pointer mr-4 md:mr-20 ${
-												trendingQueryType === Queries.QUERY_TRENDING_MOVIES
+												trendingQueryType === Queries.TRENDING_MOVIES
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() =>
-												handleChangeTrendingQueryType(
-													Queries.QUERY_TRENDING_MOVIES
-												)
+												handleChangeTrendingQueryType(Queries.TRENDING_MOVIES)
 											}
 										>
 											Movies
 										</li>
 										<li
 											className={`cursor-pointer ${
-												trendingQueryType === Queries.QUERY_TRENDING_SHOWS
+												trendingQueryType === Queries.TRENDING_SHOWS
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
 											onClick={() =>
-												handleChangeTrendingQueryType(
-													Queries.QUERY_TRENDING_SHOWS
-												)
+												handleChangeTrendingQueryType(Queries.TRENDING_SHOWS)
 											}
 										>
 											Shows

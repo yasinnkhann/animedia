@@ -13,7 +13,7 @@ const MyMovies: NextPage = () => {
 
 	const { data: usersMoviesData, loading: usersMoviesLoading } = useGQLQuery<
 		NexusGenObjects['UserMovie'][]
-	>(Queries.QUERY_GET_USERS_MOVIES, {
+	>(Queries.GET_USERS_MOVIES, {
 		fetchPolicy: 'network-only',
 	});
 

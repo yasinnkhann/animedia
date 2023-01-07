@@ -27,7 +27,7 @@ const ShowCard = ({ show, rank }: Props) => {
 	const { data: usersShowData } = useGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
-	>(Queries.QUERY_GET_USERS_SHOW, {
+	>(Queries.GET_USERS_SHOW, {
 		variables: {
 			showId: String(show.id),
 		},

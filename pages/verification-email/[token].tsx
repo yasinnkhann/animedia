@@ -22,7 +22,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 
 	const { mutateFunction: verifyUserEmail, mutateData: verifyUserEmailData } =
 		useGQLMutation<number, NexusGenArgTypes['Mutation']['verifyUserEmail']>(
-			Mutations.MUTATION_VERIFY_USER_EMAIL,
+			Mutations.VERIFY_USER_EMAIL,
 			{
 				variables: {
 					userId: verificationEmailData.userId!,
@@ -36,7 +36,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 	} = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
-	>(Mutations.MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN, {
+	>(Mutations.DELETE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
 			token: verificationEmailData.token!,
 		},
@@ -113,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 	const res = await request(
 		SERVER_BASE_URL,
-		Queries.QUERY_CHECK_EMAIL_VERIFICATION_TOKEN,
+		Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
 		{
 			token,
 		}

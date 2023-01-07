@@ -26,7 +26,7 @@ const Genre = () => {
 	const [currPage, setCurrPage] = useState(1);
 
 	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
-		Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+		Queries.POPULAR_MOVIES_BY_GENRE
 	);
 
 	const [movieGenreType, setMovieGenreType] =
@@ -41,9 +41,9 @@ const Genre = () => {
 
 	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
 		if (value === 'Popular') {
-			setSortByQueryType(Queries.QUERY_POPULAR_MOVIES_BY_GENRE);
+			setSortByQueryType(Queries.POPULAR_MOVIES_BY_GENRE);
 		} else {
-			setSortByQueryType(Queries.QUERY_TOP_RATED_MOVIES_BY_GENRE);
+			setSortByQueryType(Queries.TOP_RATED_MOVIES_BY_GENRE);
 		}
 	};
 
@@ -123,7 +123,7 @@ const Genre = () => {
 								mediaData={genreOfMoviesData}
 								pageNum={currPage}
 								title={`${
-									sortByQueryType === Queries.QUERY_POPULAR_MOVIES_BY_GENRE
+									sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE
 										? 'Popular'
 										: 'Top-Rated'
 								} ${movieGenreType} Movies`}

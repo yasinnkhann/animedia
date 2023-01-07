@@ -26,7 +26,7 @@ const PersonDetails = () => {
 		useGQLQuery<
 			NexusGenObjects['PersonDetailsRes'],
 			NexusGenArgTypes['Query']['personDetails']
-		>(Queries.QUERY_PERSON_DETAILS, {
+		>(Queries.PERSON_DETAILS, {
 			variables: {
 				personDetailsId: id,
 			},
@@ -37,7 +37,7 @@ const PersonDetails = () => {
 		useGQLQuery<
 			NexusGenObjects['PersonsKnownForMovieRes'],
 			NexusGenArgTypes['Query']['personsKnownForMovieRes']
-		>(Queries.QUERY_GET_PERSONS_KNOWN_FOR_MOVIES, {
+		>(Queries.GET_PERSONS_KNOWN_FOR_MOVIES, {
 			variables: {
 				personsKnownForMovieResId: id,
 			},
@@ -48,7 +48,7 @@ const PersonDetails = () => {
 		useGQLQuery<
 			NexusGenObjects['PersonsKnownForShowRes'],
 			NexusGenArgTypes['Query']['personsKnownForShowRes']
-		>(Queries.QUERY_GET_PERSONS_KNOWN_FOR_SHOWS, {
+		>(Queries.GET_PERSONS_KNOWN_FOR_SHOWS, {
 			variables: {
 				personsKnownForShowResId: id,
 			},

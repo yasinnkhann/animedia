@@ -26,7 +26,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const { data: movieData } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
-	>(Queries.QUERY_MOVIE_DETAILS, {
+	>(Queries.MOVIE_DETAILS, {
 		variables: {
 			movieDetailsId: Number(myMovie.id),
 		},
@@ -35,13 +35,13 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const { mutateFunction: deleteMovie } = useGQLMutation<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Mutation']['deleteMovie']
-	>(Mutations.MUTATION_DELETE_MOVIE, {
+	>(Mutations.DELETE_MOVIE, {
 		variables: {
 			movieId: String(myMovie.id),
 		},
 		refetchQueries: () => [
 			{
-				query: Queries.QUERY_GET_USERS_MOVIES,
+				query: Queries.GET_USERS_MOVIES,
 			},
 			'UsersMovies',
 		],

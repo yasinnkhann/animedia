@@ -27,7 +27,7 @@ const VerificationEmailSent = ({
 	} = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	>(Mutations.MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN, {
+	>(Mutations.WRITE_EMAIL_VERIFICATION_TOKEN, {
 		variables: {
 			email,
 		},
@@ -36,7 +36,7 @@ const VerificationEmailSent = ({
 	const { data: checkRetryEmailVerificationLimitData } = useGQLQuery<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
-	>(Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
+	>(Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {
 			email,
 		},
@@ -45,13 +45,13 @@ const VerificationEmailSent = ({
 	const { mutateFunction: writeRetryEmailVerificationToken } = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
-	>(Mutations.MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
+	>(Mutations.WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
 		variables: {
 			email,
 		},
 		refetchQueries: () => [
 			{
-				query: Queries.QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
+				query: Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
 			},
 			'CheckRetryEmailVerificationLimit',
 		],
@@ -60,7 +60,7 @@ const VerificationEmailSent = ({
 	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
 		NexusGenObjects['NodeRes'],
 		NexusGenArgTypes['Mutation']['sendVerificationEmail']
-	>(Mutations.MUTATION_SEND_VERIFICATION_EMAIL);
+	>(Mutations.SEND_VERIFICATION_EMAIL);
 
 	const handleResendLink = async () => {
 		if (checkRetryEmailVerificationLimitData?.token === String(3)) {
@@ -145,7 +145,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 	const hasTokenRes = await request(
 		SERVER_BASE_URL,
-		Queries.QUERY_CHECK_EMAIL_VERIFICATION_TOKEN,
+		Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
 		{
 			token,
 		}
@@ -164,7 +164,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 	const emailRes = await request(
 		SERVER_BASE_URL,
-		Queries.QUERY_EMAIL_FROM_REDIS_TOKEN,
+		Queries.EMAIL_FROM_REDIS_TOKEN,
 		{
 			token,
 		}

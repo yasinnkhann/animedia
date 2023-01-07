@@ -28,7 +28,7 @@ const Search: NextPage = () => {
 	const { data: searchedMovies, loading: searchedMoviesLoading } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['searchedMovies']
-	>(Queries.QUERY_SEARCHED_MOVIES, {
+	>(Queries.SEARCHED_MOVIES, {
 		variables: {
 			q: (router.query.q as string) ?? '',
 			page: currPage,
@@ -38,7 +38,7 @@ const Search: NextPage = () => {
 	const { data: searchedShows, loading: searchedShowsLoading } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['searchedShows']
-	>(Queries.QUERY_SEARCHED_SHOWS, {
+	>(Queries.SEARCHED_SHOWS, {
 		variables: {
 			q: (router.query.q as string) ?? '',
 			page: currPage,
@@ -48,7 +48,7 @@ const Search: NextPage = () => {
 	const { data: searchedPeople, loading: searchedPeopleLoading } = useGQLQuery<
 		NexusGenObjects['PeopleRes'],
 		NexusGenArgTypes['Query']['searchedPeople']
-	>(Queries.QUERY_SEARCHED_PEOPLE, {
+	>(Queries.SEARCHED_PEOPLE, {
 		variables: {
 			q: (router.query.q as string) ?? '',
 			page: currPage,

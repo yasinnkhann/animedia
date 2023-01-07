@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 // MOVIE
-export const QUERY_POPULAR_MOVIES = gql`
+export const POPULAR_MOVIES = gql`
 	query PopularMovies($page: Int) {
 		popularMovies(page: $page) {
 			page
@@ -27,7 +27,7 @@ export const QUERY_POPULAR_MOVIES = gql`
 	}
 `;
 
-export const QUERY_SEARCHED_MOVIES = gql`
+export const SEARCHED_MOVIES = gql`
 	query SearchedMovies($q: String!, $page: Int) {
 		searchedMovies(q: $q, page: $page) {
 			page
@@ -53,7 +53,7 @@ export const QUERY_SEARCHED_MOVIES = gql`
 	}
 `;
 
-export const QUERY_MOVIE_DETAILS = gql`
+export const MOVIE_DETAILS = gql`
 	query getMovieDetails($movieDetailsId: Int!) {
 		movieDetails(movieDetailsId: $movieDetailsId) {
 			adult
@@ -98,7 +98,7 @@ export const QUERY_MOVIE_DETAILS = gql`
 	}
 `;
 
-export const QUERY_POPULAR_ANIME_MOVIES = gql`
+export const POPULAR_ANIME_MOVIES = gql`
 	query PopularAnimeMovies($page: Int) {
 		popularAnimeMovies(page: $page) {
 			page
@@ -124,7 +124,7 @@ export const QUERY_POPULAR_ANIME_MOVIES = gql`
 	}
 `;
 
-export const QUERY_TRENDING_MOVIES = gql`
+export const TRENDING_MOVIES = gql`
 	query TrendingMovies($timeWindow: TimeWindowTypes!, $page: Int) {
 		trendingMovies(timeWindow: $timeWindow, page: $page) {
 			page
@@ -150,7 +150,7 @@ export const QUERY_TRENDING_MOVIES = gql`
 	}
 `;
 
-export const QUERY_TOP_RATED_MOVIES = gql`
+export const TOP_RATED_MOVIES = gql`
 	query TopRatedMovies($page: Int) {
 		topRatedMovies(page: $page) {
 			page
@@ -176,7 +176,7 @@ export const QUERY_TOP_RATED_MOVIES = gql`
 	}
 `;
 
-export const QUERY_RECOMMENDED_MOVIES = gql`
+export const RECOMMENDED_MOVIES = gql`
 	query RecommendedMovies($recommendedMoviesId: Int!, $page: Int) {
 		recommendedMovies(recommendedMoviesId: $recommendedMoviesId, page: $page) {
 			page
@@ -202,7 +202,7 @@ export const QUERY_RECOMMENDED_MOVIES = gql`
 	}
 `;
 
-export const QUERY_MOVIE_REVIEWS = gql`
+export const MOVIE_REVIEWS = gql`
 	query MovieReviews($movieReviewsId: Int!, $page: Int) {
 		movieReviews(id: $movieReviewsId, page: $page) {
 			id
@@ -227,7 +227,7 @@ export const QUERY_MOVIE_REVIEWS = gql`
 	}
 `;
 
-export const QUERY_MOVIES_IN_THEATRES = gql`
+export const MOVIES_IN_THEATRES = gql`
 	query MoviesInTheatres($page: Int) {
 		moviesInTheatres(page: $page) {
 			dates {
@@ -257,7 +257,7 @@ export const QUERY_MOVIES_IN_THEATRES = gql`
 	}
 `;
 
-export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
+export const POPULAR_MOVIES_BY_GENRE = gql`
 	query PopularMoviesByGenre($page: Int, $genre: MovieGenreTypes!) {
 		popularMoviesByGenre(page: $page, genre: $genre) {
 			page
@@ -283,7 +283,7 @@ export const QUERY_POPULAR_MOVIES_BY_GENRE = gql`
 	}
 `;
 
-export const QUERY_TOP_RATED_MOVIES_BY_GENRE = gql`
+export const TOP_RATED_MOVIES_BY_GENRE = gql`
 	query TopRatedMoviesByGenre($page: Int, $genre: MovieGenreTypes!) {
 		topRatedMoviesByGenre(page: $page, genre: $genre) {
 			page
@@ -310,7 +310,7 @@ export const QUERY_TOP_RATED_MOVIES_BY_GENRE = gql`
 `;
 
 // SHOW
-export const QUERY_POPULAR_SHOWS = gql`
+export const POPULAR_SHOWS = gql`
 	query PopularShows($page: Int) {
 		popularShows(page: $page) {
 			page
@@ -335,7 +335,7 @@ export const QUERY_POPULAR_SHOWS = gql`
 	}
 `;
 
-export const QUERY_SEARCHED_SHOWS = gql`
+export const SEARCHED_SHOWS = gql`
 	query SearchedShows($q: String!, $page: Int) {
 		searchedShows(q: $q, page: $page) {
 			page
@@ -360,7 +360,7 @@ export const QUERY_SEARCHED_SHOWS = gql`
 	}
 `;
 
-export const QUERY_SHOW_DETAILS = gql`
+export const SHOW_DETAILS = gql`
 	query getShowDetails($showDetailsId: Int!) {
 		showDetails(showDetailsId: $showDetailsId) {
 			adult
@@ -459,7 +459,7 @@ export const QUERY_SHOW_DETAILS = gql`
 	}
 `;
 
-export const QUERY_POPULAR_ANIME_SHOWS = gql`
+export const POPULAR_ANIME_SHOWS = gql`
 	query PopularAnimeShows($page: Int) {
 		popularAnimeShows(page: $page) {
 			page
@@ -484,7 +484,7 @@ export const QUERY_POPULAR_ANIME_SHOWS = gql`
 	}
 `;
 
-export const QUERY_TRENDING_SHOWS = gql`
+export const TRENDING_SHOWS = gql`
 	query TrendingShows($timeWindow: TimeWindowTypes!, $page: Int) {
 		trendingShows(timeWindow: $timeWindow, page: $page) {
 			page
@@ -509,7 +509,7 @@ export const QUERY_TRENDING_SHOWS = gql`
 	}
 `;
 
-export const QUERY_TOP_RATED_SHOWS = gql`
+export const TOP_RATED_SHOWS = gql`
 	query TopRatedShows($page: Int) {
 		topRatedShows(page: $page) {
 			page
@@ -534,7 +534,7 @@ export const QUERY_TOP_RATED_SHOWS = gql`
 	}
 `;
 
-export const QUERY_RECOMMENDED_SHOWS = gql`
+export const RECOMMENDED_SHOWS = gql`
 	query RecommendedShows($recommendedShowsId: Int!, $page: Int) {
 		recommendedShows(recommendedShowsId: $recommendedShowsId, page: $page) {
 			page
@@ -559,7 +559,7 @@ export const QUERY_RECOMMENDED_SHOWS = gql`
 	}
 `;
 
-export const QUERY_SHOW_REVIEWS = gql`
+export const SHOW_REVIEWS = gql`
 	query ShowReviews($showReviewsId: Int!, $page: Int) {
 		showReviews(id: $showReviewsId, page: $page) {
 			id
@@ -584,7 +584,7 @@ export const QUERY_SHOW_REVIEWS = gql`
 	}
 `;
 
-export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
+export const POPULAR_SHOWS_BY_GENRE = gql`
 	query PopularShowsByGenre($page: Int, $genre: ShowGenreTypes!) {
 		popularShowsByGenre(page: $page, genre: $genre) {
 			page
@@ -609,7 +609,7 @@ export const QUERY_POPULAR_SHOWS_BY_GENRE = gql`
 	}
 `;
 
-export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
+export const TOP_RATED_SHOWS_BY_GENRE = gql`
 	query TopRatedShowsByGenre($genre: ShowGenreTypes!, $page: Int) {
 		topRatedShowsByGenre(genre: $genre, page: $page) {
 			page
@@ -635,7 +635,7 @@ export const QUERY_TOP_RATED_SHOWS_BY_GENRE = gql`
 `;
 
 // PERSON
-export const QUERY_POPULAR_PEOPLE = gql`
+export const POPULAR_PEOPLE = gql`
 	query PopularPeople($page: Int) {
 		popularPeople(page: $page) {
 			page
@@ -670,7 +670,7 @@ export const QUERY_POPULAR_PEOPLE = gql`
 	}
 `;
 
-export const QUERY_PERSON_DETAILS = gql`
+export const PERSON_DETAILS = gql`
 	query PersonDetails($personDetailsId: Int!) {
 		personDetails(personDetailsId: $personDetailsId) {
 			adult
@@ -691,7 +691,7 @@ export const QUERY_PERSON_DETAILS = gql`
 	}
 `;
 
-export const QUERY_SEARCHED_PEOPLE = gql`
+export const SEARCHED_PEOPLE = gql`
 	query SearchedPeople($q: String!, $page: Int) {
 		searchedPeople(q: $q, page: $page) {
 			page
@@ -727,7 +727,7 @@ export const QUERY_SEARCHED_PEOPLE = gql`
 `;
 
 // USER
-export const QUERY_GET_USER = gql`
+export const GET_USER = gql`
 	query User {
 		user {
 			id
@@ -751,7 +751,7 @@ export const QUERY_GET_USER = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_MOVIE = gql`
+export const GET_USERS_MOVIE = gql`
 	query UsersMovie($movieId: String!) {
 		usersMovie(movieId: $movieId) {
 			id
@@ -762,7 +762,7 @@ export const QUERY_GET_USERS_MOVIE = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_MOVIES = gql`
+export const GET_USERS_MOVIES = gql`
 	query UsersMovies {
 		usersMovies {
 			id
@@ -773,7 +773,7 @@ export const QUERY_GET_USERS_MOVIES = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_SHOW = gql`
+export const GET_USERS_SHOW = gql`
 	query UsersShow($showId: String!) {
 		usersShow(showId: $showId) {
 			id
@@ -785,7 +785,7 @@ export const QUERY_GET_USERS_SHOW = gql`
 	}
 `;
 
-export const QUERY_GET_USERS_SHOWS = gql`
+export const GET_USERS_SHOWS = gql`
 	query UsersShows {
 		usersShows {
 			id
@@ -797,7 +797,7 @@ export const QUERY_GET_USERS_SHOWS = gql`
 	}
 `;
 
-export const QUERY_GET_PERSONS_KNOWN_FOR_MOVIES = gql`
+export const GET_PERSONS_KNOWN_FOR_MOVIES = gql`
 	query PersonsKnownForMovieRes($personsKnownForMovieResId: Int!) {
 		personsKnownForMovieRes(
 			personsKnownForMovieResId: $personsKnownForMovieResId
@@ -845,7 +845,7 @@ export const QUERY_GET_PERSONS_KNOWN_FOR_MOVIES = gql`
 	}
 `;
 
-export const QUERY_GET_PERSONS_KNOWN_FOR_SHOWS = gql`
+export const GET_PERSONS_KNOWN_FOR_SHOWS = gql`
 	query PersonsKnownForShowRes($personsKnownForShowResId: Int!) {
 		personsKnownForShowRes(
 			personsKnownForShowResId: $personsKnownForShowResId
@@ -894,7 +894,7 @@ export const QUERY_GET_PERSONS_KNOWN_FOR_SHOWS = gql`
 	}
 `;
 
-export const QUERY_GET_SHOWS_CAST_CREW = gql`
+export const GET_SHOWS_CAST_CREW = gql`
 	query ShowsCastCrew($showId: Int!) {
 		showsCastCrew(showId: $showId) {
 			id
@@ -928,7 +928,7 @@ export const QUERY_GET_SHOWS_CAST_CREW = gql`
 	}
 `;
 
-export const QUERY_GET_MOVIES_CAST_CREW = gql`
+export const GET_MOVIES_CAST_CREW = gql`
 	query MoviesCastCrew($movieId: Int!) {
 		moviesCastCrew(movieId: $movieId) {
 			id
@@ -963,7 +963,7 @@ export const QUERY_GET_MOVIES_CAST_CREW = gql`
 	}
 `;
 
-export const QUERY_GET_EPISODE_DETAILS = gql`
+export const GET_EPISODE_DETAILS = gql`
 	query EpisodeDetails($showId: Int!, $seasonNum: Int!, $episodeNum: Int!) {
 		episodeDetails(
 			showId: $showId
@@ -1011,7 +1011,7 @@ export const QUERY_GET_EPISODE_DETAILS = gql`
 	}
 `;
 
-export const QUERY_CHECK_EMAIL_VERIFICATION_TOKEN = gql`
+export const CHECK_EMAIL_VERIFICATION_TOKEN = gql`
 	query CheckEmailVerificationToken($token: String!) {
 		checkEmailVerificationToken(token: $token) {
 			error
@@ -1022,7 +1022,7 @@ export const QUERY_CHECK_EMAIL_VERIFICATION_TOKEN = gql`
 	}
 `;
 
-export const QUERY_ACCOUNT_VERIFIED = gql`
+export const ACCOUNT_VERIFIED = gql`
 	query AccountVerified($email: String!) {
 		accountVerified(email: $email) {
 			error
@@ -1032,13 +1032,13 @@ export const QUERY_ACCOUNT_VERIFIED = gql`
 	}
 `;
 
-export const QUERY_EMAIL_FROM_REDIS_TOKEN = gql`
+export const EMAIL_FROM_REDIS_TOKEN = gql`
 	query EmailFromRedisToken($token: String!) {
 		emailFromRedisToken(token: $token)
 	}
 `;
 
-export const QUERY_CHECK_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
+export const CHECK_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
 	query CheckRetryEmailVerificationLimit($email: String!) {
 		checkRetryEmailVerificationLimit(email: $email) {
 			error

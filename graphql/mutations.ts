@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const MUTATION_ADD_MOVIE = gql`
+export const ADD_MOVIE = gql`
 	mutation AddedMovie(
 		$movieId: ID!
 		$movieName: String!
@@ -19,7 +19,7 @@ export const MUTATION_ADD_MOVIE = gql`
 	}
 `;
 
-export const MUTATION_UPDATE_MOVIE = gql`
+export const UPDATE_MOVIE = gql`
 	mutation UpdatedMovie(
 		$movieId: ID!
 		$watchStatus: WatchStatusTypes!
@@ -38,7 +38,7 @@ export const MUTATION_UPDATE_MOVIE = gql`
 	}
 `;
 
-export const MUTATION_DELETE_MOVIE = gql`
+export const DELETE_MOVIE = gql`
 	mutation DeletedMovie($movieId: ID!) {
 		deleteMovie(movieId: $movieId) {
 			id
@@ -49,7 +49,7 @@ export const MUTATION_DELETE_MOVIE = gql`
 	}
 `;
 
-export const MUTATION_ADD_SHOW = gql`
+export const ADD_SHOW = gql`
 	mutation AddedShow(
 		$showId: ID!
 		$showName: String!
@@ -71,7 +71,7 @@ export const MUTATION_ADD_SHOW = gql`
 	}
 `;
 
-export const MUTATION_UPDATE_SHOW = gql`
+export const UPDATE_SHOW = gql`
 	mutation UpdatedShow(
 		$showId: ID!
 		$watchStatus: WatchStatusTypes!
@@ -93,7 +93,7 @@ export const MUTATION_UPDATE_SHOW = gql`
 	}
 `;
 
-export const MUTATION_DELETE_SHOW = gql`
+export const DELETE_SHOW = gql`
 	mutation DeletedShow($showId: ID!) {
 		deleteShow(showId: $showId) {
 			id
@@ -105,7 +105,7 @@ export const MUTATION_DELETE_SHOW = gql`
 	}
 `;
 
-export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
+export const WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 	mutation WriteEmailVerificationToken($email: String!) {
 		writeEmailVerificationToken(email: $email) {
 			error
@@ -116,7 +116,7 @@ export const MUTATION_WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 	}
 `;
 
-export const MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN = gql`
+export const DELETE_EMAIL_VERIFICATION_TOKEN = gql`
 	mutation DeleteEmailVerificationToken($token: String!) {
 		deleteEmailVerificationToken(token: $token) {
 			error
@@ -127,13 +127,13 @@ export const MUTATION_DELETE_EMAIL_VERIFICATION_TOKEN = gql`
 	}
 `;
 
-export const MUTATION_VERIFY_USER_EMAIL = gql`
+export const VERIFY_USER_EMAIL = gql`
 	mutation VerifyUserEmail($userId: ID!) {
 		verifyUserEmail(userId: $userId)
 	}
 `;
 
-export const MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
+export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
 	mutation Mutation($email: String!) {
 		writeRetryEmailVerificationLimit(email: $email) {
 			error
@@ -144,7 +144,7 @@ export const MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
 	}
 `;
 
-export const MUTATION_SEND_VERIFICATION_EMAIL = gql`
+export const SEND_VERIFICATION_EMAIL = gql`
 	mutation SendVerificationEmail(
 		$recipientEmail: String!
 		$subject: String!
@@ -165,7 +165,7 @@ export const MUTATION_SEND_VERIFICATION_EMAIL = gql`
 	}
 `;
 
-export const MUTATION_REGISTER_USER = gql`
+export const REGISTER_USER = gql`
 	mutation RegisterUser($name: String!, $email: String!, $password: String!) {
 		registerUser(name: $name, email: $email, password: $password) {
 			error

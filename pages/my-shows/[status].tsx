@@ -25,7 +25,7 @@ const Status = () => {
 
 	const { data: usersShowsData, loading: usersShowsLoading } = useGQLQuery<
 		NexusGenObjects['UserShow'][]
-	>(Queries.QUERY_GET_USERS_SHOWS, {
+	>(Queries.GET_USERS_SHOWS, {
 		fetchPolicy: 'network-only',
 	});
 

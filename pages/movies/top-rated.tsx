@@ -19,7 +19,7 @@ const TopRatedMovies = () => {
 	const { data: topRatedMoviesData } = useGQLQuery<
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['topRatedMovies']
-	>(Queries.QUERY_TOP_RATED_MOVIES, {
+	>(Queries.TOP_RATED_MOVIES, {
 		variables: {
 			page: currPage,
 		},

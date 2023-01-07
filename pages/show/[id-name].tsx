@@ -41,7 +41,7 @@ const ShowDetails = () => {
 	const { data: showDetailsData, loading: showDetailsLoading } = useGQLQuery<
 		NexusGenObjects['ShowDetailsRes'],
 		NexusGenArgTypes['Query']['showDetails']
-	>(Queries.QUERY_SHOW_DETAILS, {
+	>(Queries.SHOW_DETAILS, {
 		variables: {
 			showDetailsId: id,
 		},
@@ -51,7 +51,7 @@ const ShowDetails = () => {
 	const { data: usersShowData, loading: usersShowLoading } = useGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
-	>(Queries.QUERY_GET_USERS_SHOW, {
+	>(Queries.GET_USERS_SHOW, {
 		skip: !showDetailsData,
 		variables: {
 			showId: String(showDetailsData?.id),
@@ -62,7 +62,7 @@ const ShowDetails = () => {
 	const { data: recShowsData, loading: recShowsLoading } = useGQLQuery<
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['recommendedShows']
-	>(Queries.QUERY_RECOMMENDED_SHOWS, {
+	>(Queries.RECOMMENDED_SHOWS, {
 		skip: !showDetailsData,
 		variables: {
 			recommendedShowsId: showDetailsData?.id,
@@ -73,7 +73,7 @@ const ShowDetails = () => {
 		useGQLQuery<
 			NexusGenObjects['ShowsCastCrewRes'],
 			NexusGenArgTypes['Query']['showsCastCrew']
-		>(Queries.QUERY_GET_SHOWS_CAST_CREW, {
+		>(Queries.GET_SHOWS_CAST_CREW, {
 			skip: !showDetailsData,
 			variables: {
 				showId: showDetailsData?.id,
@@ -84,7 +84,7 @@ const ShowDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserShow'],
 			NexusGenArgTypes['Mutation']['addShow']
-		>(Mutations.MUTATION_ADD_SHOW, {
+		>(Mutations.ADD_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 				showName: showDetailsData?.name!,
@@ -93,7 +93,7 @@ const ShowDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_SHOW,
+					query: Queries.GET_USERS_SHOW,
 					variables: {
 						showId: String(showDetailsData?.id!),
 					},
@@ -106,7 +106,7 @@ const ShowDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserShow'],
 			NexusGenArgTypes['Mutation']['updateShow']
-		>(Mutations.MUTATION_UPDATE_SHOW, {
+		>(Mutations.UPDATE_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 				watchStatus,
@@ -115,7 +115,7 @@ const ShowDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_SHOW,
+					query: Queries.GET_USERS_SHOW,
 					variables: {
 						showId: String(showDetailsData?.id!),
 					},
@@ -128,13 +128,13 @@ const ShowDetails = () => {
 		useGQLMutation<
 			NexusGenObjects['UserShow'],
 			NexusGenArgTypes['Mutation']['deleteShow']
-		>(Mutations.MUTATION_DELETE_SHOW, {
+		>(Mutations.DELETE_SHOW, {
 			variables: {
 				showId: String(showDetailsData?.id!),
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.QUERY_GET_USERS_SHOW,
+					query: Queries.GET_USERS_SHOW,
 					variables: {
 						showId: String(showDetailsData?.id!),
 					},
