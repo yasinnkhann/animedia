@@ -225,11 +225,19 @@ type Mutation {
   deleteEmailVerificationToken(token: String!): RedisRes
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
+  sendVerificationEmail(html: String!, recipientEmail: String!, subject: String!, text: String!): NodeRes
   updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
   verifyUserEmail(userId: ID!): Int
   writeEmailVerificationToken(email: String!): RedisRes
   writeRetryEmailVerificationLimit(email: String!): RedisRes
+}
+
+type NodeRes {
+  error: String
+  ok: Boolean
+  statusCode: Int
+  successMsg: String
 }
 
 type PeopleRes {

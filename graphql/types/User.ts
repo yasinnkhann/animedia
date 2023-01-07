@@ -1,9 +1,5 @@
 import { v4 } from 'uuid';
 import {
-	EMAIL_VERIFICATION_PREFIX,
-	RETRY_EMAIL_VERIFICATION_PREFIX,
-} from 'utils/specificVals';
-import {
 	objectType,
 	extendType,
 	stringArg,
@@ -12,6 +8,12 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
+import nodemailer, { Transport, TransportOptions } from 'nodemailer';
+import { isValidEmail } from '../../utils/isValidEmail';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/specificVals';
 
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
@@ -356,6 +358,24 @@ export const RedisRes = objectType({
 	},
 });
 
+export const NodeRes = objectType({
+	name: 'NodeRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('successMsg', {
+			type: 'String',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
 export const WriteEmailVerificationToken = extendType({
 	type: 'Mutation',
 	definition(t) {
@@ -584,7 +604,7 @@ export const CheckRetryEmailVerificationLimit = extendType({
 				email: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { email }, ctx) => {
-				const limitFound = await ctx.redis.get(
+				const limitFound: string | null = await ctx.redis.get(
 					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
 				);
 
@@ -635,6 +655,66 @@ export const WriteRetryEmailVerificationLimit = extendType({
 					successMsg: 'Retry Email Verification Limit Added',
 					token: (+currNum + 1).toString(),
 				};
+			},
+		});
+	},
+});
+
+export const SendVerificationEmail = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('sendVerificationEmail', {
+			type: 'NodeRes',
+			args: {
+				recipientEmail: nonNull(stringArg()),
+				subject: nonNull(stringArg()),
+				text: nonNull(stringArg()),
+				html: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { recipientEmail, subject, text, html }) => {
+				if (!isValidEmail(recipientEmail)) {
+					return {
+						error: 'Please provide a valid email address',
+						successMsg: null,
+						ok: false,
+						statusCode: 400,
+					};
+				}
+
+				const transporter = nodemailer.createTransport({
+					host: process.env.EMAIL_SERVER_HOST,
+					port: process.env.EMAIL_SERVER_PORT,
+					secure: false, // true for 465, false for other ports
+					auth: {
+						user: process.env.EMAIL_SERVER_USER,
+						pass: process.env.EMAIL_SERVER_PASSWORD,
+					},
+				} as TransportOptions | Transport<unknown>);
+
+				try {
+					await transporter.sendMail({
+						from: process.env.EMAIL_FROM, // verified sender email
+						to: recipientEmail, // recipient email
+						subject, // Subject line
+						text, // plain text body
+						html, // html body
+					});
+
+					return {
+						error: null,
+						successMsg: 'EMAIL VERIFICATION SENT!',
+						ok: true,
+						statusCode: 201,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						error: `ERROR ${err}`,
+						successMsg: null,
+						ok: false,
+						statusCode: 500,
+					};
+				}
 			},
 		});
 	},

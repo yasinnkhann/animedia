@@ -143,3 +143,24 @@ export const MUTATION_WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
 		}
 	}
 `;
+
+export const MUTATION_SEND_VERIFICATION_EMAIL = gql`
+	mutation SendVerificationEmail(
+		$recipientEmail: String!
+		$subject: String!
+		$text: String!
+		$html: String!
+	) {
+		sendVerificationEmail(
+			recipientEmail: $recipientEmail
+			subject: $subject
+			text: $text
+			html: $html
+		) {
+			error
+			successMsg
+			ok
+			statusCode
+		}
+	}
+`;

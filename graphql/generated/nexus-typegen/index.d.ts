@@ -3,1846 +3,2138 @@
  * Do not make changes to this file directly
  */
 
-
-import type { Context } from "./../../context"
-import type { core, connectionPluginCore } from "nexus"
+import type { Context } from './../../context';
+import type { core, connectionPluginCore } from 'nexus';
 declare global {
-  interface NexusGenCustomInputMethods<TypeName extends string> {
-    /**
-     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-     */
-    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
-    /**
-     * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-     */
-    json<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "JSONObject";
-    /**
-     * The `BigInt` scalar type represents non-fractional signed whole numeric values.
-     */
-    bigint<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "BigInt";
-  }
+	interface NexusGenCustomInputMethods<TypeName extends string> {
+		/**
+		 * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+		 */
+		date<FieldName extends string>(
+			fieldName: FieldName,
+			opts?: core.CommonInputFieldConfig<TypeName, FieldName>
+		): void; // "DateTime";
+		/**
+		 * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+		 */
+		json<FieldName extends string>(
+			fieldName: FieldName,
+			opts?: core.CommonInputFieldConfig<TypeName, FieldName>
+		): void; // "JSONObject";
+		/**
+		 * The `BigInt` scalar type represents non-fractional signed whole numeric values.
+		 */
+		bigint<FieldName extends string>(
+			fieldName: FieldName,
+			opts?: core.CommonInputFieldConfig<TypeName, FieldName>
+		): void; // "BigInt";
+	}
 }
 declare global {
-  interface NexusGenCustomOutputMethods<TypeName extends string> {
-    /**
-     * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-     */
-    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
-    /**
-     * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-     */
-    json<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "JSONObject";
-    /**
-     * The `BigInt` scalar type represents non-fractional signed whole numeric values.
-     */
-    bigint<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "BigInt";
-    /**
-     * Adds a Relay-style connection to the type, with numerous options for configuration
-     *
-     * @see https://nexusjs.org/docs/plugins/connection
-     */
-    connectionField<FieldName extends string>(
-      fieldName: FieldName,
-      config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>
-    ): void
-  }
+	interface NexusGenCustomOutputMethods<TypeName extends string> {
+		/**
+		 * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+		 */
+		date<FieldName extends string>(
+			fieldName: FieldName,
+			...opts: core.ScalarOutSpread<TypeName, FieldName>
+		): void; // "DateTime";
+		/**
+		 * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+		 */
+		json<FieldName extends string>(
+			fieldName: FieldName,
+			...opts: core.ScalarOutSpread<TypeName, FieldName>
+		): void; // "JSONObject";
+		/**
+		 * The `BigInt` scalar type represents non-fractional signed whole numeric values.
+		 */
+		bigint<FieldName extends string>(
+			fieldName: FieldName,
+			...opts: core.ScalarOutSpread<TypeName, FieldName>
+		): void; // "BigInt";
+		/**
+		 * Adds a Relay-style connection to the type, with numerous options for configuration
+		 *
+		 * @see https://nexusjs.org/docs/plugins/connection
+		 */
+		connectionField<FieldName extends string>(
+			fieldName: FieldName,
+			config: connectionPluginCore.ConnectionFieldConfig<TypeName, FieldName>
+		): void;
+	}
 }
-
 
 declare global {
-  interface NexusGen extends NexusGenTypes {}
+	interface NexusGen extends NexusGenTypes {}
 }
 
-export interface NexusGenInputs {
-}
+export interface NexusGenInputs {}
 
 export interface NexusGenEnums {
-  MovieGenreTypes: "Action" | "Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "History" | "Horror" | "Music" | "Mystery" | "Romance" | "Science_Fiction" | "TV_Movie" | "Thriller" | "War" | "Western"
-  ShowGenreTypes: "Action_AMPERSAND_Adventure" | "Animation" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Kids" | "Mystery" | "News" | "Reality" | "SciDASHFi_AMPERSAND_Fantasy" | "Soap" | "Talk" | "War_AMPERSAND_Politics" | "Western"
-  TimeWindowTypes: "day" | "week"
-  WatchStatusTypes: "COMPLETED" | "DROPPED" | "NOT_WATCHING" | "ON_HOLD" | "PLAN_TO_WATCH" | "WATCHING"
+	MovieGenreTypes:
+		| 'Action'
+		| 'Adventure'
+		| 'Animation'
+		| 'Comedy'
+		| 'Crime'
+		| 'Documentary'
+		| 'Drama'
+		| 'Family'
+		| 'Fantasy'
+		| 'History'
+		| 'Horror'
+		| 'Music'
+		| 'Mystery'
+		| 'Romance'
+		| 'Science_Fiction'
+		| 'TV_Movie'
+		| 'Thriller'
+		| 'War'
+		| 'Western';
+	ShowGenreTypes:
+		| 'Action_AMPERSAND_Adventure'
+		| 'Animation'
+		| 'Comedy'
+		| 'Crime'
+		| 'Documentary'
+		| 'Drama'
+		| 'Family'
+		| 'Kids'
+		| 'Mystery'
+		| 'News'
+		| 'Reality'
+		| 'SciDASHFi_AMPERSAND_Fantasy'
+		| 'Soap'
+		| 'Talk'
+		| 'War_AMPERSAND_Politics'
+		| 'Western';
+	TimeWindowTypes: 'day' | 'week';
+	WatchStatusTypes:
+		| 'COMPLETED'
+		| 'DROPPED'
+		| 'NOT_WATCHING'
+		| 'ON_HOLD'
+		| 'PLAN_TO_WATCH'
+		| 'WATCHING';
 }
 
 export interface NexusGenScalars {
-  String: string
-  Int: number
-  Float: number
-  Boolean: boolean
-  ID: string
-  BigInt: any
-  DateTime: any
-  JSONObject: any
+	String: string;
+	Int: number;
+	Float: number;
+	Boolean: boolean;
+	ID: string;
+	BigInt: any;
+	DateTime: any;
+	JSONObject: any;
 }
 
 export interface NexusGenObjects {
-  AccountVerifiedRes: { // root type
-    emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
-    error?: string | null; // String
-    id?: string | null; // String
-  }
-  EpisodeDetailsRes: { // root type
-    air_date?: string | null; // String
-    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
-    episode_number?: number | null; // Int
-    guest_stars?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    id?: number | null; // Int
-    name?: string | null; // String
-    overview?: string | null; // String
-    production_code?: string | null; // String
-    runtime?: number | null; // Int
-    season_number?: number | null; // Int
-    still_path?: string | null; // String
-    vote_average?: number | null; // Float
-    vote_count?: number | null; // Int
-  }
-  KnownForResult: { // root type
-    adult?: boolean | null; // Boolean
-    backdrop_path?: string | null; // String
-    genre_ids?: Array<number | null> | null; // [Int]
-    id?: number | null; // Int
-    media_type?: string | null; // String
-    original_language?: string | null; // String
-    original_title?: string | null; // String
-    overview?: string | null; // String
-    poster_path?: string | null; // String
-    release_date?: string | null; // String
-    title?: string | null; // String
-    video?: boolean | null; // Boolean
-    vote_average?: number | null; // Float
-    vote_count?: number | null; // Int
-  }
-  MovieDetailsGenre: { // root type
-    id: number; // Int!
-    name: string; // String!
-  }
-  MovieDetailsProdCompany: { // root type
-    id: number; // Int!
-    logo_path?: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  MovieDetailsProdCountry: { // root type
-    iso_3166_1: string; // String!
-    name: string; // String!
-  }
-  MovieDetailsRes: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    genres: NexusGenRootTypes['MovieDetailsGenre'][]; // [MovieDetailsGenre!]!
-    homepage: string; // String!
-    id: number; // Int!
-    imdb_id?: string | null; // String
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
-    release_date?: string | null; // String
-    revenue?: NexusGenScalars['BigInt'] | null; // BigInt
-    runtime?: number | null; // Int
-    spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
-    status: string; // String!
-    tagline: string; // String!
-    title: string; // String!
-    video?: boolean | null; // Boolean
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  MovieDetailsSpokenLang: { // root type
-    english_name: string; // String!
-    iso_639_1: string; // String!
-    name: string; // String!
-  }
-  MovieResult: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    release_date?: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  MovieReviewAuthorDetails: { // root type
-    avatar_path?: string | null; // String
-    name: string; // String!
-    rating?: number | null; // Float
-    username: string; // String!
-  }
-  MovieReviewsRes: { // root type
-    id: number; // Int!
-    page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  MovieReviewsResult: { // root type
-    author: string; // String!
-    author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
-    content: string; // String!
-    created_at: string; // String!
-    id: string; // String!
-    updated_at: string; // String!
-    url: string; // String!
-  }
-  MoviesCastCrewRes: { // root type
-    cast?: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
-    crew?: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
-    id?: number | null; // Int
-  }
-  MoviesCastModel: { // root type
-    adult?: boolean | null; // Boolean
-    cast_id?: number | null; // Int
-    character?: string | null; // String
-    credit_id?: string | null; // String
-    gender?: number | null; // Int
-    id?: number | null; // Int
-    known_for_department?: string | null; // String
-    name?: string | null; // String
-    order?: number | null; // Int
-    original_name?: string | null; // String
-    popularity?: number | null; // Float
-    profile_path?: string | null; // String
-  }
-  MoviesCrewModel: { // root type
-    adult?: boolean | null; // Boolean
-    credit_id?: string | null; // String
-    department?: string | null; // String
-    gender?: number | null; // Int
-    id?: number | null; // Int
-    job?: string | null; // String
-    known_for_department?: string | null; // String
-    name?: string | null; // String
-    original_name?: string | null; // String
-    popularity?: number | null; // Float
-    profile_path?: string | null; // String
-  }
-  MoviesInTheatresRes: { // root type
-    dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
-    page: string; // String!
-    results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  MoviesRes: { // root type
-    page: number; // Int!
-    results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  Mutation: {};
-  PeopleRes: { // root type
-    page: number; // Int!
-    results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  PersonDetailsRes: { // root type
-    adult?: boolean | null; // Boolean
-    also_known_as?: Array<string | null> | null; // [String]
-    biography?: string | null; // String
-    birthday?: string | null; // String
-    deathday?: string | null; // String
-    gender?: number | null; // Int
-    homepage?: string | null; // String
-    id: number; // Int!
-    imdb_id?: string | null; // String
-    known_for_department?: string | null; // String
-    name?: string | null; // String
-    place_of_birth?: string | null; // String
-    popularity?: number | null; // Float
-    profile_path?: string | null; // String
-  }
-  PersonResult: { // root type
-    adult: boolean; // Boolean!
-    gender: number; // Int!
-    id: number; // Int!
-    known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
-    known_for_department?: string | null; // String
-    name: string; // String!
-    popularity: number; // Float!
-    profile_path?: string | null; // String
-  }
-  PersonsKnownForMovieCast: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    character?: string | null; // String
-    credit_id?: string | null; // ID
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    order?: number | null; // Int
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    release_date?: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForMovieCrew: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    credit_id?: string | null; // ID
-    department?: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    job?: string | null; // String
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    release_date?: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForMovieRes: { // root type
-    cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
-    crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
-    id?: number | null; // Int
-  }
-  PersonsKnownForShowCast: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    character?: string | null; // String
-    credit_id?: string | null; // ID
-    episode_count?: number | null; // Int
-    first_air_date?: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForShowCrew: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    credit_id?: string | null; // ID
-    department?: string | null; // String
-    episode_count?: number | null; // Int
-    first_air_date?: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    job?: string | null; // String
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForShowRes: { // root type
-    cast: Array<NexusGenRootTypes['PersonsKnownForShowCast'] | null>; // [PersonsKnownForShowCast]!
-    crew: Array<NexusGenRootTypes['PersonsKnownForShowCrew'] | null>; // [PersonsKnownForShowCrew]!
-    id?: number | null; // Int
-  }
-  Query: {};
-  RedisRes: { // root type
-    error?: string | null; // String
-    successMsg?: string | null; // String
-    token?: string | null; // String
-    userId?: string | null; // String
-  }
-  ShowDetailsCountry: { // root type
-    iso_3166_1: string; // String!
-    name: string; // String!
-  }
-  ShowDetailsCreatedBy: { // root type
-    credit_id?: string | null; // String
-    gender?: number | null; // Int
-    id?: number | null; // Int
-    name?: string | null; // String
-    profile_path?: string | null; // String
-  }
-  ShowDetailsGenre: { // root type
-    id: number; // Int!
-    name: string; // String!
-  }
-  ShowDetailsLastEpToAir: { // root type
-    air_date?: string | null; // String
-    episode_number: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    production_code: string; // String!
-    runtime?: number | null; // Int
-    season_number: number; // Int!
-    show_id: number; // Int!
-    still_path?: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsNetwork: { // root type
-    id: number; // Int!
-    logo_path?: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  ShowDetailsNextEpToAir: { // root type
-    air_date?: string | null; // String
-    episode_number: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    production_code: string; // String!
-    runtime?: number | null; // Int
-    season_number: number; // Int!
-    show_id: number; // Int!
-    still_path?: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsProdCompany: { // root type
-    id: number; // Int!
-    logo_path?: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  ShowDetailsRes: { // root type
-    adult: boolean; // Boolean!
-    backdrop_path?: string | null; // String
-    created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
-    episode_run_time: Array<number | null>; // [Int]!
-    first_air_date?: string | null; // String
-    genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
-    homepage: string; // String!
-    id: number; // Int!
-    in_production: boolean; // Boolean!
-    languages: Array<string | null>; // [String]!
-    last_air_date?: string | null; // String
-    last_episode_to_air?: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
-    name: string; // String!
-    networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air?: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
-    number_of_episodes: number; // Int!
-    number_of_seasons: number; // Int!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
-    seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
-    spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
-    status: string; // String!
-    tagline: string; // String!
-    type: string; // String!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsSeason: { // root type
-    air_date?: string | null; // String
-    episode_count: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    poster_path?: string | null; // String
-    season_number: number; // Int!
-  }
-  ShowDetailsSpokenLang: { // root type
-    english_name: string; // String!
-    iso_639_1: string; // String!
-    name: string; // String!
-  }
-  ShowResult: { // root type
-    backdrop_path?: string | null; // String
-    first_air_date?: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path?: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowReviewAuthorDetails: { // root type
-    avatar_path?: string | null; // String
-    name: string; // String!
-    rating?: number | null; // Float
-    username: string; // String!
-  }
-  ShowReviewRes: { // root type
-    id: number; // Int!
-    page: number; // Int!
-    results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  ShowReviewResult: { // root type
-    author: string; // String!
-    author_details: NexusGenRootTypes['ShowReviewAuthorDetails']; // ShowReviewAuthorDetails!
-    content: string; // String!
-    created_at: string; // String!
-    id: string; // String!
-    updated_at: string; // String!
-    url: string; // String!
-  }
-  ShowsCastCrewRes: { // root type
-    cast?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
-    id?: number | null; // Int
-  }
-  ShowsCastModel: { // root type
-    adult?: boolean | null; // Boolean
-    character?: string | null; // String
-    credit_id?: string | null; // String
-    gender?: number | null; // Int
-    id?: number | null; // Int
-    known_for_department?: string | null; // String
-    name?: string | null; // String
-    order?: number | null; // Int
-    original_name?: string | null; // String
-    popularity?: number | null; // Float
-    profile_path?: string | null; // String
-  }
-  ShowsCrewModel: { // root type
-    adult?: boolean | null; // Boolean
-    credit_id?: string | null; // String
-    department?: string | null; // String
-    gender?: number | null; // Int
-    id?: number | null; // Int
-    job?: string | null; // String
-    known_for_department?: string | null; // String
-    name?: string | null; // String
-    original_name?: string | null; // String
-    popularity?: number | null; // Float
-    profile_path?: string | null; // String
-  }
-  ShowsRes: { // root type
-    page: number; // Int!
-    results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  TheatreDates: { // root type
-    maximum: string; // String!
-    minimum: string; // String!
-  }
-  UserMovie: { // root type
-    id?: string | null; // ID
-    name?: string | null; // String
-    rating?: number | null; // Int
-    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
-  UserRes: { // root type
-    email?: string | null; // String
-    id?: string | null; // ID
-    image?: string | null; // String
-    movies?: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
-    name?: string | null; // String
-    shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
-  }
-  UserShow: { // root type
-    current_episode?: number | null; // Int
-    id?: string | null; // ID
-    name?: string | null; // String
-    rating?: number | null; // Int
-    status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
+	AccountVerifiedRes: {
+		// root type
+		emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
+		error?: string | null; // String
+		id?: string | null; // String
+	};
+	EpisodeDetailsRes: {
+		// root type
+		air_date?: string | null; // String
+		crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+		episode_number?: number | null; // Int
+		guest_stars?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+		id?: number | null; // Int
+		name?: string | null; // String
+		overview?: string | null; // String
+		production_code?: string | null; // String
+		runtime?: number | null; // Int
+		season_number?: number | null; // Int
+		still_path?: string | null; // String
+		vote_average?: number | null; // Float
+		vote_count?: number | null; // Int
+	};
+	KnownForResult: {
+		// root type
+		adult?: boolean | null; // Boolean
+		backdrop_path?: string | null; // String
+		genre_ids?: Array<number | null> | null; // [Int]
+		id?: number | null; // Int
+		media_type?: string | null; // String
+		original_language?: string | null; // String
+		original_title?: string | null; // String
+		overview?: string | null; // String
+		poster_path?: string | null; // String
+		release_date?: string | null; // String
+		title?: string | null; // String
+		video?: boolean | null; // Boolean
+		vote_average?: number | null; // Float
+		vote_count?: number | null; // Int
+	};
+	MovieDetailsGenre: {
+		// root type
+		id: number; // Int!
+		name: string; // String!
+	};
+	MovieDetailsProdCompany: {
+		// root type
+		id: number; // Int!
+		logo_path?: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	MovieDetailsProdCountry: {
+		// root type
+		iso_3166_1: string; // String!
+		name: string; // String!
+	};
+	MovieDetailsRes: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		genres: NexusGenRootTypes['MovieDetailsGenre'][]; // [MovieDetailsGenre!]!
+		homepage: string; // String!
+		id: number; // Int!
+		imdb_id?: string | null; // String
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		production_companies: Array<
+			NexusGenRootTypes['MovieDetailsProdCompany'] | null
+		>; // [MovieDetailsProdCompany]!
+		production_countries: Array<
+			NexusGenRootTypes['MovieDetailsProdCountry'] | null
+		>; // [MovieDetailsProdCountry]!
+		release_date?: string | null; // String
+		revenue?: NexusGenScalars['BigInt'] | null; // BigInt
+		runtime?: number | null; // Int
+		spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
+		status: string; // String!
+		tagline: string; // String!
+		title: string; // String!
+		video?: boolean | null; // Boolean
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	MovieDetailsSpokenLang: {
+		// root type
+		english_name: string; // String!
+		iso_639_1: string; // String!
+		name: string; // String!
+	};
+	MovieResult: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		release_date?: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	MovieReviewAuthorDetails: {
+		// root type
+		avatar_path?: string | null; // String
+		name: string; // String!
+		rating?: number | null; // Float
+		username: string; // String!
+	};
+	MovieReviewsRes: {
+		// root type
+		id: number; // Int!
+		page: number; // Int!
+		results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	MovieReviewsResult: {
+		// root type
+		author: string; // String!
+		author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
+		content: string; // String!
+		created_at: string; // String!
+		id: string; // String!
+		updated_at: string; // String!
+		url: string; // String!
+	};
+	MoviesCastCrewRes: {
+		// root type
+		cast?: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
+		crew?: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+		id?: number | null; // Int
+	};
+	MoviesCastModel: {
+		// root type
+		adult?: boolean | null; // Boolean
+		cast_id?: number | null; // Int
+		character?: string | null; // String
+		credit_id?: string | null; // String
+		gender?: number | null; // Int
+		id?: number | null; // Int
+		known_for_department?: string | null; // String
+		name?: string | null; // String
+		order?: number | null; // Int
+		original_name?: string | null; // String
+		popularity?: number | null; // Float
+		profile_path?: string | null; // String
+	};
+	MoviesCrewModel: {
+		// root type
+		adult?: boolean | null; // Boolean
+		credit_id?: string | null; // String
+		department?: string | null; // String
+		gender?: number | null; // Int
+		id?: number | null; // Int
+		job?: string | null; // String
+		known_for_department?: string | null; // String
+		name?: string | null; // String
+		original_name?: string | null; // String
+		popularity?: number | null; // Float
+		profile_path?: string | null; // String
+	};
+	MoviesInTheatresRes: {
+		// root type
+		dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
+		page: string; // String!
+		results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	MoviesRes: {
+		// root type
+		page: number; // Int!
+		results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	Mutation: {};
+	NodeRes: {
+		// root type
+		error?: string | null; // String
+		ok?: boolean | null; // Boolean
+		statusCode?: number | null; // Int
+		successMsg?: string | null; // String
+	};
+	PeopleRes: {
+		// root type
+		page: number; // Int!
+		results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	PersonDetailsRes: {
+		// root type
+		adult?: boolean | null; // Boolean
+		also_known_as?: Array<string | null> | null; // [String]
+		biography?: string | null; // String
+		birthday?: string | null; // String
+		deathday?: string | null; // String
+		gender?: number | null; // Int
+		homepage?: string | null; // String
+		id: number; // Int!
+		imdb_id?: string | null; // String
+		known_for_department?: string | null; // String
+		name?: string | null; // String
+		place_of_birth?: string | null; // String
+		popularity?: number | null; // Float
+		profile_path?: string | null; // String
+	};
+	PersonResult: {
+		// root type
+		adult: boolean; // Boolean!
+		gender: number; // Int!
+		id: number; // Int!
+		known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
+		known_for_department?: string | null; // String
+		name: string; // String!
+		popularity: number; // Float!
+		profile_path?: string | null; // String
+	};
+	PersonsKnownForMovieCast: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		character?: string | null; // String
+		credit_id?: string | null; // ID
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		order?: number | null; // Int
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		release_date?: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForMovieCrew: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		credit_id?: string | null; // ID
+		department?: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		job?: string | null; // String
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		release_date?: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForMovieRes: {
+		// root type
+		cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
+		crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
+		id?: number | null; // Int
+	};
+	PersonsKnownForShowCast: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		character?: string | null; // String
+		credit_id?: string | null; // ID
+		episode_count?: number | null; // Int
+		first_air_date?: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForShowCrew: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		credit_id?: string | null; // ID
+		department?: string | null; // String
+		episode_count?: number | null; // Int
+		first_air_date?: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		job?: string | null; // String
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForShowRes: {
+		// root type
+		cast: Array<NexusGenRootTypes['PersonsKnownForShowCast'] | null>; // [PersonsKnownForShowCast]!
+		crew: Array<NexusGenRootTypes['PersonsKnownForShowCrew'] | null>; // [PersonsKnownForShowCrew]!
+		id?: number | null; // Int
+	};
+	Query: {};
+	RedisRes: {
+		// root type
+		error?: string | null; // String
+		successMsg?: string | null; // String
+		token?: string | null; // String
+		userId?: string | null; // String
+	};
+	ShowDetailsCountry: {
+		// root type
+		iso_3166_1: string; // String!
+		name: string; // String!
+	};
+	ShowDetailsCreatedBy: {
+		// root type
+		credit_id?: string | null; // String
+		gender?: number | null; // Int
+		id?: number | null; // Int
+		name?: string | null; // String
+		profile_path?: string | null; // String
+	};
+	ShowDetailsGenre: {
+		// root type
+		id: number; // Int!
+		name: string; // String!
+	};
+	ShowDetailsLastEpToAir: {
+		// root type
+		air_date?: string | null; // String
+		episode_number: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		production_code: string; // String!
+		runtime?: number | null; // Int
+		season_number: number; // Int!
+		show_id: number; // Int!
+		still_path?: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsNetwork: {
+		// root type
+		id: number; // Int!
+		logo_path?: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	ShowDetailsNextEpToAir: {
+		// root type
+		air_date?: string | null; // String
+		episode_number: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		production_code: string; // String!
+		runtime?: number | null; // Int
+		season_number: number; // Int!
+		show_id: number; // Int!
+		still_path?: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsProdCompany: {
+		// root type
+		id: number; // Int!
+		logo_path?: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	ShowDetailsRes: {
+		// root type
+		adult: boolean; // Boolean!
+		backdrop_path?: string | null; // String
+		created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
+		episode_run_time: Array<number | null>; // [Int]!
+		first_air_date?: string | null; // String
+		genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
+		homepage: string; // String!
+		id: number; // Int!
+		in_production: boolean; // Boolean!
+		languages: Array<string | null>; // [String]!
+		last_air_date?: string | null; // String
+		last_episode_to_air?: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
+		name: string; // String!
+		networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
+		next_episode_to_air?: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
+		number_of_episodes: number; // Int!
+		number_of_seasons: number; // Int!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		production_companies: Array<
+			NexusGenRootTypes['ShowDetailsProdCompany'] | null
+		>; // [ShowDetailsProdCompany]!
+		production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
+		seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
+		spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
+		status: string; // String!
+		tagline: string; // String!
+		type: string; // String!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsSeason: {
+		// root type
+		air_date?: string | null; // String
+		episode_count: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		poster_path?: string | null; // String
+		season_number: number; // Int!
+	};
+	ShowDetailsSpokenLang: {
+		// root type
+		english_name: string; // String!
+		iso_639_1: string; // String!
+		name: string; // String!
+	};
+	ShowResult: {
+		// root type
+		backdrop_path?: string | null; // String
+		first_air_date?: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path?: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowReviewAuthorDetails: {
+		// root type
+		avatar_path?: string | null; // String
+		name: string; // String!
+		rating?: number | null; // Float
+		username: string; // String!
+	};
+	ShowReviewRes: {
+		// root type
+		id: number; // Int!
+		page: number; // Int!
+		results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	ShowReviewResult: {
+		// root type
+		author: string; // String!
+		author_details: NexusGenRootTypes['ShowReviewAuthorDetails']; // ShowReviewAuthorDetails!
+		content: string; // String!
+		created_at: string; // String!
+		id: string; // String!
+		updated_at: string; // String!
+		url: string; // String!
+	};
+	ShowsCastCrewRes: {
+		// root type
+		cast?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+		crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+		id?: number | null; // Int
+	};
+	ShowsCastModel: {
+		// root type
+		adult?: boolean | null; // Boolean
+		character?: string | null; // String
+		credit_id?: string | null; // String
+		gender?: number | null; // Int
+		id?: number | null; // Int
+		known_for_department?: string | null; // String
+		name?: string | null; // String
+		order?: number | null; // Int
+		original_name?: string | null; // String
+		popularity?: number | null; // Float
+		profile_path?: string | null; // String
+	};
+	ShowsCrewModel: {
+		// root type
+		adult?: boolean | null; // Boolean
+		credit_id?: string | null; // String
+		department?: string | null; // String
+		gender?: number | null; // Int
+		id?: number | null; // Int
+		job?: string | null; // String
+		known_for_department?: string | null; // String
+		name?: string | null; // String
+		original_name?: string | null; // String
+		popularity?: number | null; // Float
+		profile_path?: string | null; // String
+	};
+	ShowsRes: {
+		// root type
+		page: number; // Int!
+		results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	TheatreDates: {
+		// root type
+		maximum: string; // String!
+		minimum: string; // String!
+	};
+	UserMovie: {
+		// root type
+		id?: string | null; // ID
+		name?: string | null; // String
+		rating?: number | null; // Int
+		status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+	};
+	UserRes: {
+		// root type
+		email?: string | null; // String
+		id?: string | null; // ID
+		image?: string | null; // String
+		movies?: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+		name?: string | null; // String
+		shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
+	};
+	UserShow: {
+		// root type
+		current_episode?: number | null; // Int
+		id?: string | null; // ID
+		name?: string | null; // String
+		rating?: number | null; // Int
+		status?: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+	};
 }
 
-export interface NexusGenInterfaces {
-}
+export interface NexusGenInterfaces {}
 
-export interface NexusGenUnions {
-}
+export interface NexusGenUnions {}
 
-export type NexusGenRootTypes = NexusGenObjects
+export type NexusGenRootTypes = NexusGenObjects;
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
+export type NexusGenAllTypes = NexusGenRootTypes &
+	NexusGenScalars &
+	NexusGenEnums;
 
 export interface NexusGenFieldTypes {
-  AccountVerifiedRes: { // field return type
-    emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
-    error: string | null; // String
-    id: string | null; // String
-  }
-  EpisodeDetailsRes: { // field return type
-    air_date: string | null; // String
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
-    episode_number: number | null; // Int
-    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    id: number | null; // Int
-    name: string | null; // String
-    overview: string | null; // String
-    production_code: string | null; // String
-    runtime: number | null; // Int
-    season_number: number | null; // Int
-    still_path: string | null; // String
-    vote_average: number | null; // Float
-    vote_count: number | null; // Int
-  }
-  KnownForResult: { // field return type
-    adult: boolean | null; // Boolean
-    backdrop_path: string | null; // String
-    genre_ids: Array<number | null> | null; // [Int]
-    id: number | null; // Int
-    media_type: string | null; // String
-    original_language: string | null; // String
-    original_title: string | null; // String
-    overview: string | null; // String
-    poster_path: string | null; // String
-    release_date: string | null; // String
-    title: string | null; // String
-    video: boolean | null; // Boolean
-    vote_average: number | null; // Float
-    vote_count: number | null; // Int
-  }
-  MovieDetailsGenre: { // field return type
-    id: number; // Int!
-    name: string; // String!
-  }
-  MovieDetailsProdCompany: { // field return type
-    id: number; // Int!
-    logo_path: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  MovieDetailsProdCountry: { // field return type
-    iso_3166_1: string; // String!
-    name: string; // String!
-  }
-  MovieDetailsRes: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    genres: NexusGenRootTypes['MovieDetailsGenre'][]; // [MovieDetailsGenre!]!
-    homepage: string; // String!
-    id: number; // Int!
-    imdb_id: string | null; // String
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
-    release_date: string | null; // String
-    revenue: NexusGenScalars['BigInt'] | null; // BigInt
-    runtime: number | null; // Int
-    spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
-    status: string; // String!
-    tagline: string; // String!
-    title: string; // String!
-    video: boolean | null; // Boolean
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  MovieDetailsSpokenLang: { // field return type
-    english_name: string; // String!
-    iso_639_1: string; // String!
-    name: string; // String!
-  }
-  MovieResult: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    release_date: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  MovieReviewAuthorDetails: { // field return type
-    avatar_path: string | null; // String
-    name: string; // String!
-    rating: number | null; // Float
-    username: string; // String!
-  }
-  MovieReviewsRes: { // field return type
-    id: number; // Int!
-    page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  MovieReviewsResult: { // field return type
-    author: string; // String!
-    author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
-    content: string; // String!
-    created_at: string; // String!
-    id: string; // String!
-    updated_at: string; // String!
-    url: string; // String!
-  }
-  MoviesCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
-    crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
-    id: number | null; // Int
-  }
-  MoviesCastModel: { // field return type
-    adult: boolean | null; // Boolean
-    cast_id: number | null; // Int
-    character: string | null; // String
-    credit_id: string | null; // String
-    gender: number | null; // Int
-    id: number | null; // Int
-    known_for_department: string | null; // String
-    name: string | null; // String
-    order: number | null; // Int
-    original_name: string | null; // String
-    popularity: number | null; // Float
-    profile_path: string | null; // String
-  }
-  MoviesCrewModel: { // field return type
-    adult: boolean | null; // Boolean
-    credit_id: string | null; // String
-    department: string | null; // String
-    gender: number | null; // Int
-    id: number | null; // Int
-    job: string | null; // String
-    known_for_department: string | null; // String
-    name: string | null; // String
-    original_name: string | null; // String
-    popularity: number | null; // Float
-    profile_path: string | null; // String
-  }
-  MoviesInTheatresRes: { // field return type
-    dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
-    page: string; // String!
-    results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  MoviesRes: { // field return type
-    page: number; // Int!
-    results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  Mutation: { // field return type
-    addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
-    addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    deleteEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
-    deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
-    updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    verifyUserEmail: number | null; // Int
-    writeEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    writeRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-  }
-  PeopleRes: { // field return type
-    page: number; // Int!
-    results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  PersonDetailsRes: { // field return type
-    adult: boolean | null; // Boolean
-    also_known_as: Array<string | null> | null; // [String]
-    biography: string | null; // String
-    birthday: string | null; // String
-    deathday: string | null; // String
-    gender: number | null; // Int
-    homepage: string | null; // String
-    id: number; // Int!
-    imdb_id: string | null; // String
-    known_for_department: string | null; // String
-    name: string | null; // String
-    place_of_birth: string | null; // String
-    popularity: number | null; // Float
-    profile_path: string | null; // String
-  }
-  PersonResult: { // field return type
-    adult: boolean; // Boolean!
-    gender: number; // Int!
-    id: number; // Int!
-    known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
-    known_for_department: string | null; // String
-    name: string; // String!
-    popularity: number; // Float!
-    profile_path: string | null; // String
-  }
-  PersonsKnownForMovieCast: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    character: string | null; // String
-    credit_id: string | null; // ID
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    order: number | null; // Int
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    release_date: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForMovieCrew: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    credit_id: string | null; // ID
-    department: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    job: string | null; // String
-    original_language: string; // String!
-    original_title: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    release_date: string | null; // String
-    title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForMovieRes: { // field return type
-    cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
-    crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
-    id: number | null; // Int
-  }
-  PersonsKnownForShowCast: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    character: string | null; // String
-    credit_id: string | null; // ID
-    episode_count: number | null; // Int
-    first_air_date: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForShowCrew: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    credit_id: string | null; // ID
-    department: string | null; // String
-    episode_count: number | null; // Int
-    first_air_date: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    job: string | null; // String
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  PersonsKnownForShowRes: { // field return type
-    cast: Array<NexusGenRootTypes['PersonsKnownForShowCast'] | null>; // [PersonsKnownForShowCast]!
-    crew: Array<NexusGenRootTypes['PersonsKnownForShowCrew'] | null>; // [PersonsKnownForShowCrew]!
-    id: number | null; // Int
-  }
-  Query: { // field return type
-    accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
-    checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    checkRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    emailFromRedisToken: string | null; // String
-    episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    id: number | null; // Int
-    movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
-    movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
-    moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
-    moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
-    personDetails: NexusGenRootTypes['PersonDetailsRes']; // PersonDetailsRes!
-    personsKnownForMovieRes: NexusGenRootTypes['PersonsKnownForMovieRes']; // PersonsKnownForMovieRes!
-    personsKnownForShowRes: NexusGenRootTypes['PersonsKnownForShowRes']; // PersonsKnownForShowRes!
-    popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    popularMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    popularPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
-    popularShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    recommendedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    searchedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    searchedPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
-    searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
-    showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
-    showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
-    topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
-    trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    user: NexusGenRootTypes['UserRes'] | null; // UserRes
-    usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
-    usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
-    usersShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    usersShows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
-  }
-  RedisRes: { // field return type
-    error: string | null; // String
-    successMsg: string | null; // String
-    token: string | null; // String
-    userId: string | null; // String
-  }
-  ShowDetailsCountry: { // field return type
-    iso_3166_1: string; // String!
-    name: string; // String!
-  }
-  ShowDetailsCreatedBy: { // field return type
-    credit_id: string | null; // String
-    gender: number | null; // Int
-    id: number | null; // Int
-    name: string | null; // String
-    profile_path: string | null; // String
-  }
-  ShowDetailsGenre: { // field return type
-    id: number; // Int!
-    name: string; // String!
-  }
-  ShowDetailsLastEpToAir: { // field return type
-    air_date: string | null; // String
-    episode_number: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    production_code: string; // String!
-    runtime: number | null; // Int
-    season_number: number; // Int!
-    show_id: number; // Int!
-    still_path: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsNetwork: { // field return type
-    id: number; // Int!
-    logo_path: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  ShowDetailsNextEpToAir: { // field return type
-    air_date: string | null; // String
-    episode_number: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    production_code: string; // String!
-    runtime: number | null; // Int
-    season_number: number; // Int!
-    show_id: number; // Int!
-    still_path: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsProdCompany: { // field return type
-    id: number; // Int!
-    logo_path: string | null; // String
-    name: string; // String!
-    origin_country: string; // String!
-  }
-  ShowDetailsRes: { // field return type
-    adult: boolean; // Boolean!
-    backdrop_path: string | null; // String
-    created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
-    episode_run_time: Array<number | null>; // [Int]!
-    first_air_date: string | null; // String
-    genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
-    homepage: string; // String!
-    id: number; // Int!
-    in_production: boolean; // Boolean!
-    languages: Array<string | null>; // [String]!
-    last_air_date: string | null; // String
-    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
-    name: string; // String!
-    networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
-    number_of_episodes: number; // Int!
-    number_of_seasons: number; // Int!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
-    seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
-    spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
-    status: string; // String!
-    tagline: string; // String!
-    type: string; // String!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowDetailsSeason: { // field return type
-    air_date: string | null; // String
-    episode_count: number; // Int!
-    id: number; // Int!
-    name: string; // String!
-    overview: string; // String!
-    poster_path: string | null; // String
-    season_number: number; // Int!
-  }
-  ShowDetailsSpokenLang: { // field return type
-    english_name: string; // String!
-    iso_639_1: string; // String!
-    name: string; // String!
-  }
-  ShowResult: { // field return type
-    backdrop_path: string | null; // String
-    first_air_date: string | null; // String
-    genre_ids: Array<number | null>; // [Int]!
-    id: number; // Int!
-    name: string; // String!
-    origin_country: Array<string | null>; // [String]!
-    original_language: string; // String!
-    original_name: string; // String!
-    overview: string; // String!
-    popularity: number; // Float!
-    poster_path: string | null; // String
-    vote_average: number; // Float!
-    vote_count: number; // Int!
-  }
-  ShowReviewAuthorDetails: { // field return type
-    avatar_path: string | null; // String
-    name: string; // String!
-    rating: number | null; // Float
-    username: string; // String!
-  }
-  ShowReviewRes: { // field return type
-    id: number; // Int!
-    page: number; // Int!
-    results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  ShowReviewResult: { // field return type
-    author: string; // String!
-    author_details: NexusGenRootTypes['ShowReviewAuthorDetails']; // ShowReviewAuthorDetails!
-    content: string; // String!
-    created_at: string; // String!
-    id: string; // String!
-    updated_at: string; // String!
-    url: string; // String!
-  }
-  ShowsCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
-    id: number | null; // Int
-  }
-  ShowsCastModel: { // field return type
-    adult: boolean | null; // Boolean
-    character: string | null; // String
-    credit_id: string | null; // String
-    gender: number | null; // Int
-    id: number | null; // Int
-    known_for_department: string | null; // String
-    name: string | null; // String
-    order: number | null; // Int
-    original_name: string | null; // String
-    popularity: number | null; // Float
-    profile_path: string | null; // String
-  }
-  ShowsCrewModel: { // field return type
-    adult: boolean | null; // Boolean
-    credit_id: string | null; // String
-    department: string | null; // String
-    gender: number | null; // Int
-    id: number | null; // Int
-    job: string | null; // String
-    known_for_department: string | null; // String
-    name: string | null; // String
-    original_name: string | null; // String
-    popularity: number | null; // Float
-    profile_path: string | null; // String
-  }
-  ShowsRes: { // field return type
-    page: number; // Int!
-    results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
-    total_pages: number; // Int!
-    total_results: number; // Int!
-  }
-  TheatreDates: { // field return type
-    maximum: string; // String!
-    minimum: string; // String!
-  }
-  UserMovie: { // field return type
-    id: string | null; // ID
-    name: string | null; // String
-    rating: number | null; // Int
-    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
-  UserRes: { // field return type
-    email: string | null; // String
-    id: string | null; // ID
-    image: string | null; // String
-    movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
-    name: string | null; // String
-    shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
-  }
-  UserShow: { // field return type
-    current_episode: number | null; // Int
-    id: string | null; // ID
-    name: string | null; // String
-    rating: number | null; // Int
-    status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
-  }
+	AccountVerifiedRes: {
+		// field return type
+		emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
+		error: string | null; // String
+		id: string | null; // String
+	};
+	EpisodeDetailsRes: {
+		// field return type
+		air_date: string | null; // String
+		crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+		episode_number: number | null; // Int
+		guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+		id: number | null; // Int
+		name: string | null; // String
+		overview: string | null; // String
+		production_code: string | null; // String
+		runtime: number | null; // Int
+		season_number: number | null; // Int
+		still_path: string | null; // String
+		vote_average: number | null; // Float
+		vote_count: number | null; // Int
+	};
+	KnownForResult: {
+		// field return type
+		adult: boolean | null; // Boolean
+		backdrop_path: string | null; // String
+		genre_ids: Array<number | null> | null; // [Int]
+		id: number | null; // Int
+		media_type: string | null; // String
+		original_language: string | null; // String
+		original_title: string | null; // String
+		overview: string | null; // String
+		poster_path: string | null; // String
+		release_date: string | null; // String
+		title: string | null; // String
+		video: boolean | null; // Boolean
+		vote_average: number | null; // Float
+		vote_count: number | null; // Int
+	};
+	MovieDetailsGenre: {
+		// field return type
+		id: number; // Int!
+		name: string; // String!
+	};
+	MovieDetailsProdCompany: {
+		// field return type
+		id: number; // Int!
+		logo_path: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	MovieDetailsProdCountry: {
+		// field return type
+		iso_3166_1: string; // String!
+		name: string; // String!
+	};
+	MovieDetailsRes: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		genres: NexusGenRootTypes['MovieDetailsGenre'][]; // [MovieDetailsGenre!]!
+		homepage: string; // String!
+		id: number; // Int!
+		imdb_id: string | null; // String
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		production_companies: Array<
+			NexusGenRootTypes['MovieDetailsProdCompany'] | null
+		>; // [MovieDetailsProdCompany]!
+		production_countries: Array<
+			NexusGenRootTypes['MovieDetailsProdCountry'] | null
+		>; // [MovieDetailsProdCountry]!
+		release_date: string | null; // String
+		revenue: NexusGenScalars['BigInt'] | null; // BigInt
+		runtime: number | null; // Int
+		spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
+		status: string; // String!
+		tagline: string; // String!
+		title: string; // String!
+		video: boolean | null; // Boolean
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	MovieDetailsSpokenLang: {
+		// field return type
+		english_name: string; // String!
+		iso_639_1: string; // String!
+		name: string; // String!
+	};
+	MovieResult: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		release_date: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	MovieReviewAuthorDetails: {
+		// field return type
+		avatar_path: string | null; // String
+		name: string; // String!
+		rating: number | null; // Float
+		username: string; // String!
+	};
+	MovieReviewsRes: {
+		// field return type
+		id: number; // Int!
+		page: number; // Int!
+		results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	MovieReviewsResult: {
+		// field return type
+		author: string; // String!
+		author_details: NexusGenRootTypes['MovieReviewAuthorDetails']; // MovieReviewAuthorDetails!
+		content: string; // String!
+		created_at: string; // String!
+		id: string; // String!
+		updated_at: string; // String!
+		url: string; // String!
+	};
+	MoviesCastCrewRes: {
+		// field return type
+		cast: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
+		crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+		id: number | null; // Int
+	};
+	MoviesCastModel: {
+		// field return type
+		adult: boolean | null; // Boolean
+		cast_id: number | null; // Int
+		character: string | null; // String
+		credit_id: string | null; // String
+		gender: number | null; // Int
+		id: number | null; // Int
+		known_for_department: string | null; // String
+		name: string | null; // String
+		order: number | null; // Int
+		original_name: string | null; // String
+		popularity: number | null; // Float
+		profile_path: string | null; // String
+	};
+	MoviesCrewModel: {
+		// field return type
+		adult: boolean | null; // Boolean
+		credit_id: string | null; // String
+		department: string | null; // String
+		gender: number | null; // Int
+		id: number | null; // Int
+		job: string | null; // String
+		known_for_department: string | null; // String
+		name: string | null; // String
+		original_name: string | null; // String
+		popularity: number | null; // Float
+		profile_path: string | null; // String
+	};
+	MoviesInTheatresRes: {
+		// field return type
+		dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
+		page: string; // String!
+		results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	MoviesRes: {
+		// field return type
+		page: number; // Int!
+		results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	Mutation: {
+		// field return type
+		addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+		addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+		deleteEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+		deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+		deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+		sendVerificationEmail: NexusGenRootTypes['NodeRes'] | null; // NodeRes
+		updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+		updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+		verifyUserEmail: number | null; // Int
+		writeEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+		writeRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+	};
+	NodeRes: {
+		// field return type
+		error: string | null; // String
+		ok: boolean | null; // Boolean
+		statusCode: number | null; // Int
+		successMsg: string | null; // String
+	};
+	PeopleRes: {
+		// field return type
+		page: number; // Int!
+		results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	PersonDetailsRes: {
+		// field return type
+		adult: boolean | null; // Boolean
+		also_known_as: Array<string | null> | null; // [String]
+		biography: string | null; // String
+		birthday: string | null; // String
+		deathday: string | null; // String
+		gender: number | null; // Int
+		homepage: string | null; // String
+		id: number; // Int!
+		imdb_id: string | null; // String
+		known_for_department: string | null; // String
+		name: string | null; // String
+		place_of_birth: string | null; // String
+		popularity: number | null; // Float
+		profile_path: string | null; // String
+	};
+	PersonResult: {
+		// field return type
+		adult: boolean; // Boolean!
+		gender: number; // Int!
+		id: number; // Int!
+		known_for: NexusGenRootTypes['KnownForResult'][]; // [KnownForResult!]!
+		known_for_department: string | null; // String
+		name: string; // String!
+		popularity: number; // Float!
+		profile_path: string | null; // String
+	};
+	PersonsKnownForMovieCast: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		character: string | null; // String
+		credit_id: string | null; // ID
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		order: number | null; // Int
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		release_date: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForMovieCrew: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		credit_id: string | null; // ID
+		department: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		job: string | null; // String
+		original_language: string; // String!
+		original_title: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		release_date: string | null; // String
+		title: string; // String!
+		video: boolean; // Boolean!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForMovieRes: {
+		// field return type
+		cast: Array<NexusGenRootTypes['PersonsKnownForMovieCast'] | null>; // [PersonsKnownForMovieCast]!
+		crew: Array<NexusGenRootTypes['PersonsKnownForMovieCrew'] | null>; // [PersonsKnownForMovieCrew]!
+		id: number | null; // Int
+	};
+	PersonsKnownForShowCast: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		character: string | null; // String
+		credit_id: string | null; // ID
+		episode_count: number | null; // Int
+		first_air_date: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForShowCrew: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		credit_id: string | null; // ID
+		department: string | null; // String
+		episode_count: number | null; // Int
+		first_air_date: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		job: string | null; // String
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	PersonsKnownForShowRes: {
+		// field return type
+		cast: Array<NexusGenRootTypes['PersonsKnownForShowCast'] | null>; // [PersonsKnownForShowCast]!
+		crew: Array<NexusGenRootTypes['PersonsKnownForShowCrew'] | null>; // [PersonsKnownForShowCrew]!
+		id: number | null; // Int
+	};
+	Query: {
+		// field return type
+		accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
+		checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+		checkRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+		emailFromRedisToken: string | null; // String
+		episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
+		id: number | null; // Int
+		movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
+		movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
+		moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
+		moviesInTheatres: NexusGenRootTypes['MoviesInTheatresRes']; // MoviesInTheatresRes!
+		personDetails: NexusGenRootTypes['PersonDetailsRes']; // PersonDetailsRes!
+		personsKnownForMovieRes: NexusGenRootTypes['PersonsKnownForMovieRes']; // PersonsKnownForMovieRes!
+		personsKnownForShowRes: NexusGenRootTypes['PersonsKnownForShowRes']; // PersonsKnownForShowRes!
+		popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		popularMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		popularPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
+		popularShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		recommendedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		searchedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		searchedPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
+		searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
+		showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
+		showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
+		topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		topRatedShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
+		trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+		user: NexusGenRootTypes['UserRes'] | null; // UserRes
+		usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
+		usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+		usersShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+		usersShows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
+	};
+	RedisRes: {
+		// field return type
+		error: string | null; // String
+		successMsg: string | null; // String
+		token: string | null; // String
+		userId: string | null; // String
+	};
+	ShowDetailsCountry: {
+		// field return type
+		iso_3166_1: string; // String!
+		name: string; // String!
+	};
+	ShowDetailsCreatedBy: {
+		// field return type
+		credit_id: string | null; // String
+		gender: number | null; // Int
+		id: number | null; // Int
+		name: string | null; // String
+		profile_path: string | null; // String
+	};
+	ShowDetailsGenre: {
+		// field return type
+		id: number; // Int!
+		name: string; // String!
+	};
+	ShowDetailsLastEpToAir: {
+		// field return type
+		air_date: string | null; // String
+		episode_number: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		production_code: string; // String!
+		runtime: number | null; // Int
+		season_number: number; // Int!
+		show_id: number; // Int!
+		still_path: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsNetwork: {
+		// field return type
+		id: number; // Int!
+		logo_path: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	ShowDetailsNextEpToAir: {
+		// field return type
+		air_date: string | null; // String
+		episode_number: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		production_code: string; // String!
+		runtime: number | null; // Int
+		season_number: number; // Int!
+		show_id: number; // Int!
+		still_path: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsProdCompany: {
+		// field return type
+		id: number; // Int!
+		logo_path: string | null; // String
+		name: string; // String!
+		origin_country: string; // String!
+	};
+	ShowDetailsRes: {
+		// field return type
+		adult: boolean; // Boolean!
+		backdrop_path: string | null; // String
+		created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
+		episode_run_time: Array<number | null>; // [Int]!
+		first_air_date: string | null; // String
+		genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
+		homepage: string; // String!
+		id: number; // Int!
+		in_production: boolean; // Boolean!
+		languages: Array<string | null>; // [String]!
+		last_air_date: string | null; // String
+		last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
+		name: string; // String!
+		networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
+		next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
+		number_of_episodes: number; // Int!
+		number_of_seasons: number; // Int!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		production_companies: Array<
+			NexusGenRootTypes['ShowDetailsProdCompany'] | null
+		>; // [ShowDetailsProdCompany]!
+		production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
+		seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
+		spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
+		status: string; // String!
+		tagline: string; // String!
+		type: string; // String!
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowDetailsSeason: {
+		// field return type
+		air_date: string | null; // String
+		episode_count: number; // Int!
+		id: number; // Int!
+		name: string; // String!
+		overview: string; // String!
+		poster_path: string | null; // String
+		season_number: number; // Int!
+	};
+	ShowDetailsSpokenLang: {
+		// field return type
+		english_name: string; // String!
+		iso_639_1: string; // String!
+		name: string; // String!
+	};
+	ShowResult: {
+		// field return type
+		backdrop_path: string | null; // String
+		first_air_date: string | null; // String
+		genre_ids: Array<number | null>; // [Int]!
+		id: number; // Int!
+		name: string; // String!
+		origin_country: Array<string | null>; // [String]!
+		original_language: string; // String!
+		original_name: string; // String!
+		overview: string; // String!
+		popularity: number; // Float!
+		poster_path: string | null; // String
+		vote_average: number; // Float!
+		vote_count: number; // Int!
+	};
+	ShowReviewAuthorDetails: {
+		// field return type
+		avatar_path: string | null; // String
+		name: string; // String!
+		rating: number | null; // Float
+		username: string; // String!
+	};
+	ShowReviewRes: {
+		// field return type
+		id: number; // Int!
+		page: number; // Int!
+		results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	ShowReviewResult: {
+		// field return type
+		author: string; // String!
+		author_details: NexusGenRootTypes['ShowReviewAuthorDetails']; // ShowReviewAuthorDetails!
+		content: string; // String!
+		created_at: string; // String!
+		id: string; // String!
+		updated_at: string; // String!
+		url: string; // String!
+	};
+	ShowsCastCrewRes: {
+		// field return type
+		cast: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+		crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+		id: number | null; // Int
+	};
+	ShowsCastModel: {
+		// field return type
+		adult: boolean | null; // Boolean
+		character: string | null; // String
+		credit_id: string | null; // String
+		gender: number | null; // Int
+		id: number | null; // Int
+		known_for_department: string | null; // String
+		name: string | null; // String
+		order: number | null; // Int
+		original_name: string | null; // String
+		popularity: number | null; // Float
+		profile_path: string | null; // String
+	};
+	ShowsCrewModel: {
+		// field return type
+		adult: boolean | null; // Boolean
+		credit_id: string | null; // String
+		department: string | null; // String
+		gender: number | null; // Int
+		id: number | null; // Int
+		job: string | null; // String
+		known_for_department: string | null; // String
+		name: string | null; // String
+		original_name: string | null; // String
+		popularity: number | null; // Float
+		profile_path: string | null; // String
+	};
+	ShowsRes: {
+		// field return type
+		page: number; // Int!
+		results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
+		total_pages: number; // Int!
+		total_results: number; // Int!
+	};
+	TheatreDates: {
+		// field return type
+		maximum: string; // String!
+		minimum: string; // String!
+	};
+	UserMovie: {
+		// field return type
+		id: string | null; // ID
+		name: string | null; // String
+		rating: number | null; // Int
+		status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+	};
+	UserRes: {
+		// field return type
+		email: string | null; // String
+		id: string | null; // ID
+		image: string | null; // String
+		movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
+		name: string | null; // String
+		shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
+	};
+	UserShow: {
+		// field return type
+		current_episode: number | null; // Int
+		id: string | null; // ID
+		name: string | null; // String
+		rating: number | null; // Int
+		status: NexusGenEnums['WatchStatusTypes'] | null; // WatchStatusTypes
+	};
 }
 
 export interface NexusGenFieldTypeNames {
-  AccountVerifiedRes: { // field return type name
-    emailVerified: 'DateTime'
-    error: 'String'
-    id: 'String'
-  }
-  EpisodeDetailsRes: { // field return type name
-    air_date: 'String'
-    crew: 'ShowsCrewModel'
-    episode_number: 'Int'
-    guest_stars: 'ShowsCastModel'
-    id: 'Int'
-    name: 'String'
-    overview: 'String'
-    production_code: 'String'
-    runtime: 'Int'
-    season_number: 'Int'
-    still_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  KnownForResult: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    media_type: 'String'
-    original_language: 'String'
-    original_title: 'String'
-    overview: 'String'
-    poster_path: 'String'
-    release_date: 'String'
-    title: 'String'
-    video: 'Boolean'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  MovieDetailsGenre: { // field return type name
-    id: 'Int'
-    name: 'String'
-  }
-  MovieDetailsProdCompany: { // field return type name
-    id: 'Int'
-    logo_path: 'String'
-    name: 'String'
-    origin_country: 'String'
-  }
-  MovieDetailsProdCountry: { // field return type name
-    iso_3166_1: 'String'
-    name: 'String'
-  }
-  MovieDetailsRes: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    genres: 'MovieDetailsGenre'
-    homepage: 'String'
-    id: 'Int'
-    imdb_id: 'String'
-    original_language: 'String'
-    original_title: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    production_companies: 'MovieDetailsProdCompany'
-    production_countries: 'MovieDetailsProdCountry'
-    release_date: 'String'
-    revenue: 'BigInt'
-    runtime: 'Int'
-    spoken_languages: 'MovieDetailsSpokenLang'
-    status: 'String'
-    tagline: 'String'
-    title: 'String'
-    video: 'Boolean'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  MovieDetailsSpokenLang: { // field return type name
-    english_name: 'String'
-    iso_639_1: 'String'
-    name: 'String'
-  }
-  MovieResult: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    original_language: 'String'
-    original_title: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    release_date: 'String'
-    title: 'String'
-    video: 'Boolean'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  MovieReviewAuthorDetails: { // field return type name
-    avatar_path: 'String'
-    name: 'String'
-    rating: 'Float'
-    username: 'String'
-  }
-  MovieReviewsRes: { // field return type name
-    id: 'Int'
-    page: 'Int'
-    results: 'MovieReviewsResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  MovieReviewsResult: { // field return type name
-    author: 'String'
-    author_details: 'MovieReviewAuthorDetails'
-    content: 'String'
-    created_at: 'String'
-    id: 'String'
-    updated_at: 'String'
-    url: 'String'
-  }
-  MoviesCastCrewRes: { // field return type name
-    cast: 'MoviesCastModel'
-    crew: 'MoviesCrewModel'
-    id: 'Int'
-  }
-  MoviesCastModel: { // field return type name
-    adult: 'Boolean'
-    cast_id: 'Int'
-    character: 'String'
-    credit_id: 'String'
-    gender: 'Int'
-    id: 'Int'
-    known_for_department: 'String'
-    name: 'String'
-    order: 'Int'
-    original_name: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  MoviesCrewModel: { // field return type name
-    adult: 'Boolean'
-    credit_id: 'String'
-    department: 'String'
-    gender: 'Int'
-    id: 'Int'
-    job: 'String'
-    known_for_department: 'String'
-    name: 'String'
-    original_name: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  MoviesInTheatresRes: { // field return type name
-    dates: 'TheatreDates'
-    page: 'String'
-    results: 'MovieResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  MoviesRes: { // field return type name
-    page: 'Int'
-    results: 'MovieResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  Mutation: { // field return type name
-    addMovie: 'UserMovie'
-    addShow: 'UserShow'
-    deleteEmailVerificationToken: 'RedisRes'
-    deleteMovie: 'UserMovie'
-    deleteShow: 'UserShow'
-    updateMovie: 'UserMovie'
-    updateShow: 'UserShow'
-    verifyUserEmail: 'Int'
-    writeEmailVerificationToken: 'RedisRes'
-    writeRetryEmailVerificationLimit: 'RedisRes'
-  }
-  PeopleRes: { // field return type name
-    page: 'Int'
-    results: 'PersonResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  PersonDetailsRes: { // field return type name
-    adult: 'Boolean'
-    also_known_as: 'String'
-    biography: 'String'
-    birthday: 'String'
-    deathday: 'String'
-    gender: 'Int'
-    homepage: 'String'
-    id: 'Int'
-    imdb_id: 'String'
-    known_for_department: 'String'
-    name: 'String'
-    place_of_birth: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  PersonResult: { // field return type name
-    adult: 'Boolean'
-    gender: 'Int'
-    id: 'Int'
-    known_for: 'KnownForResult'
-    known_for_department: 'String'
-    name: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  PersonsKnownForMovieCast: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    character: 'String'
-    credit_id: 'ID'
-    genre_ids: 'Int'
-    id: 'Int'
-    order: 'Int'
-    original_language: 'String'
-    original_title: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    release_date: 'String'
-    title: 'String'
-    video: 'Boolean'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  PersonsKnownForMovieCrew: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    credit_id: 'ID'
-    department: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    job: 'String'
-    original_language: 'String'
-    original_title: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    release_date: 'String'
-    title: 'String'
-    video: 'Boolean'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  PersonsKnownForMovieRes: { // field return type name
-    cast: 'PersonsKnownForMovieCast'
-    crew: 'PersonsKnownForMovieCrew'
-    id: 'Int'
-  }
-  PersonsKnownForShowCast: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    character: 'String'
-    credit_id: 'ID'
-    episode_count: 'Int'
-    first_air_date: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    name: 'String'
-    origin_country: 'String'
-    original_language: 'String'
-    original_name: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  PersonsKnownForShowCrew: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    credit_id: 'ID'
-    department: 'String'
-    episode_count: 'Int'
-    first_air_date: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    job: 'String'
-    name: 'String'
-    origin_country: 'String'
-    original_language: 'String'
-    original_name: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  PersonsKnownForShowRes: { // field return type name
-    cast: 'PersonsKnownForShowCast'
-    crew: 'PersonsKnownForShowCrew'
-    id: 'Int'
-  }
-  Query: { // field return type name
-    accountVerified: 'AccountVerifiedRes'
-    checkEmailVerificationToken: 'RedisRes'
-    checkRetryEmailVerificationLimit: 'RedisRes'
-    emailFromRedisToken: 'String'
-    episodeDetails: 'EpisodeDetailsRes'
-    id: 'Int'
-    movieDetails: 'MovieDetailsRes'
-    movieReviews: 'MovieReviewsRes'
-    moviesCastCrew: 'MoviesCastCrewRes'
-    moviesInTheatres: 'MoviesInTheatresRes'
-    personDetails: 'PersonDetailsRes'
-    personsKnownForMovieRes: 'PersonsKnownForMovieRes'
-    personsKnownForShowRes: 'PersonsKnownForShowRes'
-    popularAnimeMovies: 'MoviesRes'
-    popularAnimeShows: 'ShowsRes'
-    popularMovies: 'MoviesRes'
-    popularMoviesByGenre: 'MoviesRes'
-    popularPeople: 'PeopleRes'
-    popularShows: 'ShowsRes'
-    popularShowsByGenre: 'ShowsRes'
-    recommendedMovies: 'MoviesRes'
-    recommendedShows: 'ShowsRes'
-    searchedMovies: 'MoviesRes'
-    searchedPeople: 'PeopleRes'
-    searchedShows: 'ShowsRes'
-    showDetails: 'ShowDetailsRes'
-    showReviews: 'ShowReviewRes'
-    showsCastCrew: 'ShowsCastCrewRes'
-    topRatedMovies: 'MoviesRes'
-    topRatedMoviesByGenre: 'MoviesRes'
-    topRatedShows: 'ShowsRes'
-    topRatedShowsByGenre: 'ShowsRes'
-    trendingMovies: 'MoviesRes'
-    trendingShows: 'ShowsRes'
-    user: 'UserRes'
-    usersMovie: 'UserMovie'
-    usersMovies: 'UserMovie'
-    usersShow: 'UserShow'
-    usersShows: 'UserShow'
-  }
-  RedisRes: { // field return type name
-    error: 'String'
-    successMsg: 'String'
-    token: 'String'
-    userId: 'String'
-  }
-  ShowDetailsCountry: { // field return type name
-    iso_3166_1: 'String'
-    name: 'String'
-  }
-  ShowDetailsCreatedBy: { // field return type name
-    credit_id: 'String'
-    gender: 'Int'
-    id: 'Int'
-    name: 'String'
-    profile_path: 'String'
-  }
-  ShowDetailsGenre: { // field return type name
-    id: 'Int'
-    name: 'String'
-  }
-  ShowDetailsLastEpToAir: { // field return type name
-    air_date: 'String'
-    episode_number: 'Int'
-    id: 'Int'
-    name: 'String'
-    overview: 'String'
-    production_code: 'String'
-    runtime: 'Int'
-    season_number: 'Int'
-    show_id: 'Int'
-    still_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  ShowDetailsNetwork: { // field return type name
-    id: 'Int'
-    logo_path: 'String'
-    name: 'String'
-    origin_country: 'String'
-  }
-  ShowDetailsNextEpToAir: { // field return type name
-    air_date: 'String'
-    episode_number: 'Int'
-    id: 'Int'
-    name: 'String'
-    overview: 'String'
-    production_code: 'String'
-    runtime: 'Int'
-    season_number: 'Int'
-    show_id: 'Int'
-    still_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  ShowDetailsProdCompany: { // field return type name
-    id: 'Int'
-    logo_path: 'String'
-    name: 'String'
-    origin_country: 'String'
-  }
-  ShowDetailsRes: { // field return type name
-    adult: 'Boolean'
-    backdrop_path: 'String'
-    created_by: 'ShowDetailsCreatedBy'
-    episode_run_time: 'Int'
-    first_air_date: 'String'
-    genres: 'ShowDetailsGenre'
-    homepage: 'String'
-    id: 'Int'
-    in_production: 'Boolean'
-    languages: 'String'
-    last_air_date: 'String'
-    last_episode_to_air: 'ShowDetailsLastEpToAir'
-    name: 'String'
-    networks: 'ShowDetailsNetwork'
-    next_episode_to_air: 'ShowDetailsNextEpToAir'
-    number_of_episodes: 'Int'
-    number_of_seasons: 'Int'
-    origin_country: 'String'
-    original_language: 'String'
-    original_name: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    production_companies: 'ShowDetailsProdCompany'
-    production_countries: 'ShowDetailsCountry'
-    seasons: 'ShowDetailsSeason'
-    spoken_languages: 'ShowDetailsSpokenLang'
-    status: 'String'
-    tagline: 'String'
-    type: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  ShowDetailsSeason: { // field return type name
-    air_date: 'String'
-    episode_count: 'Int'
-    id: 'Int'
-    name: 'String'
-    overview: 'String'
-    poster_path: 'String'
-    season_number: 'Int'
-  }
-  ShowDetailsSpokenLang: { // field return type name
-    english_name: 'String'
-    iso_639_1: 'String'
-    name: 'String'
-  }
-  ShowResult: { // field return type name
-    backdrop_path: 'String'
-    first_air_date: 'String'
-    genre_ids: 'Int'
-    id: 'Int'
-    name: 'String'
-    origin_country: 'String'
-    original_language: 'String'
-    original_name: 'String'
-    overview: 'String'
-    popularity: 'Float'
-    poster_path: 'String'
-    vote_average: 'Float'
-    vote_count: 'Int'
-  }
-  ShowReviewAuthorDetails: { // field return type name
-    avatar_path: 'String'
-    name: 'String'
-    rating: 'Float'
-    username: 'String'
-  }
-  ShowReviewRes: { // field return type name
-    id: 'Int'
-    page: 'Int'
-    results: 'ShowReviewResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  ShowReviewResult: { // field return type name
-    author: 'String'
-    author_details: 'ShowReviewAuthorDetails'
-    content: 'String'
-    created_at: 'String'
-    id: 'String'
-    updated_at: 'String'
-    url: 'String'
-  }
-  ShowsCastCrewRes: { // field return type name
-    cast: 'ShowsCastModel'
-    crew: 'ShowsCrewModel'
-    id: 'Int'
-  }
-  ShowsCastModel: { // field return type name
-    adult: 'Boolean'
-    character: 'String'
-    credit_id: 'String'
-    gender: 'Int'
-    id: 'Int'
-    known_for_department: 'String'
-    name: 'String'
-    order: 'Int'
-    original_name: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  ShowsCrewModel: { // field return type name
-    adult: 'Boolean'
-    credit_id: 'String'
-    department: 'String'
-    gender: 'Int'
-    id: 'Int'
-    job: 'String'
-    known_for_department: 'String'
-    name: 'String'
-    original_name: 'String'
-    popularity: 'Float'
-    profile_path: 'String'
-  }
-  ShowsRes: { // field return type name
-    page: 'Int'
-    results: 'ShowResult'
-    total_pages: 'Int'
-    total_results: 'Int'
-  }
-  TheatreDates: { // field return type name
-    maximum: 'String'
-    minimum: 'String'
-  }
-  UserMovie: { // field return type name
-    id: 'ID'
-    name: 'String'
-    rating: 'Int'
-    status: 'WatchStatusTypes'
-  }
-  UserRes: { // field return type name
-    email: 'String'
-    id: 'ID'
-    image: 'String'
-    movies: 'UserMovie'
-    name: 'String'
-    shows: 'UserShow'
-  }
-  UserShow: { // field return type name
-    current_episode: 'Int'
-    id: 'ID'
-    name: 'String'
-    rating: 'Int'
-    status: 'WatchStatusTypes'
-  }
+	AccountVerifiedRes: {
+		// field return type name
+		emailVerified: 'DateTime';
+		error: 'String';
+		id: 'String';
+	};
+	EpisodeDetailsRes: {
+		// field return type name
+		air_date: 'String';
+		crew: 'ShowsCrewModel';
+		episode_number: 'Int';
+		guest_stars: 'ShowsCastModel';
+		id: 'Int';
+		name: 'String';
+		overview: 'String';
+		production_code: 'String';
+		runtime: 'Int';
+		season_number: 'Int';
+		still_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	KnownForResult: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		media_type: 'String';
+		original_language: 'String';
+		original_title: 'String';
+		overview: 'String';
+		poster_path: 'String';
+		release_date: 'String';
+		title: 'String';
+		video: 'Boolean';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	MovieDetailsGenre: {
+		// field return type name
+		id: 'Int';
+		name: 'String';
+	};
+	MovieDetailsProdCompany: {
+		// field return type name
+		id: 'Int';
+		logo_path: 'String';
+		name: 'String';
+		origin_country: 'String';
+	};
+	MovieDetailsProdCountry: {
+		// field return type name
+		iso_3166_1: 'String';
+		name: 'String';
+	};
+	MovieDetailsRes: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		genres: 'MovieDetailsGenre';
+		homepage: 'String';
+		id: 'Int';
+		imdb_id: 'String';
+		original_language: 'String';
+		original_title: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		production_companies: 'MovieDetailsProdCompany';
+		production_countries: 'MovieDetailsProdCountry';
+		release_date: 'String';
+		revenue: 'BigInt';
+		runtime: 'Int';
+		spoken_languages: 'MovieDetailsSpokenLang';
+		status: 'String';
+		tagline: 'String';
+		title: 'String';
+		video: 'Boolean';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	MovieDetailsSpokenLang: {
+		// field return type name
+		english_name: 'String';
+		iso_639_1: 'String';
+		name: 'String';
+	};
+	MovieResult: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		original_language: 'String';
+		original_title: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		release_date: 'String';
+		title: 'String';
+		video: 'Boolean';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	MovieReviewAuthorDetails: {
+		// field return type name
+		avatar_path: 'String';
+		name: 'String';
+		rating: 'Float';
+		username: 'String';
+	};
+	MovieReviewsRes: {
+		// field return type name
+		id: 'Int';
+		page: 'Int';
+		results: 'MovieReviewsResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	MovieReviewsResult: {
+		// field return type name
+		author: 'String';
+		author_details: 'MovieReviewAuthorDetails';
+		content: 'String';
+		created_at: 'String';
+		id: 'String';
+		updated_at: 'String';
+		url: 'String';
+	};
+	MoviesCastCrewRes: {
+		// field return type name
+		cast: 'MoviesCastModel';
+		crew: 'MoviesCrewModel';
+		id: 'Int';
+	};
+	MoviesCastModel: {
+		// field return type name
+		adult: 'Boolean';
+		cast_id: 'Int';
+		character: 'String';
+		credit_id: 'String';
+		gender: 'Int';
+		id: 'Int';
+		known_for_department: 'String';
+		name: 'String';
+		order: 'Int';
+		original_name: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	MoviesCrewModel: {
+		// field return type name
+		adult: 'Boolean';
+		credit_id: 'String';
+		department: 'String';
+		gender: 'Int';
+		id: 'Int';
+		job: 'String';
+		known_for_department: 'String';
+		name: 'String';
+		original_name: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	MoviesInTheatresRes: {
+		// field return type name
+		dates: 'TheatreDates';
+		page: 'String';
+		results: 'MovieResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	MoviesRes: {
+		// field return type name
+		page: 'Int';
+		results: 'MovieResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	Mutation: {
+		// field return type name
+		addMovie: 'UserMovie';
+		addShow: 'UserShow';
+		deleteEmailVerificationToken: 'RedisRes';
+		deleteMovie: 'UserMovie';
+		deleteShow: 'UserShow';
+		sendVerificationEmail: 'NodeRes';
+		updateMovie: 'UserMovie';
+		updateShow: 'UserShow';
+		verifyUserEmail: 'Int';
+		writeEmailVerificationToken: 'RedisRes';
+		writeRetryEmailVerificationLimit: 'RedisRes';
+	};
+	NodeRes: {
+		// field return type name
+		error: 'String';
+		ok: 'Boolean';
+		statusCode: 'Int';
+		successMsg: 'String';
+	};
+	PeopleRes: {
+		// field return type name
+		page: 'Int';
+		results: 'PersonResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	PersonDetailsRes: {
+		// field return type name
+		adult: 'Boolean';
+		also_known_as: 'String';
+		biography: 'String';
+		birthday: 'String';
+		deathday: 'String';
+		gender: 'Int';
+		homepage: 'String';
+		id: 'Int';
+		imdb_id: 'String';
+		known_for_department: 'String';
+		name: 'String';
+		place_of_birth: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	PersonResult: {
+		// field return type name
+		adult: 'Boolean';
+		gender: 'Int';
+		id: 'Int';
+		known_for: 'KnownForResult';
+		known_for_department: 'String';
+		name: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	PersonsKnownForMovieCast: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		character: 'String';
+		credit_id: 'ID';
+		genre_ids: 'Int';
+		id: 'Int';
+		order: 'Int';
+		original_language: 'String';
+		original_title: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		release_date: 'String';
+		title: 'String';
+		video: 'Boolean';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	PersonsKnownForMovieCrew: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		credit_id: 'ID';
+		department: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		job: 'String';
+		original_language: 'String';
+		original_title: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		release_date: 'String';
+		title: 'String';
+		video: 'Boolean';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	PersonsKnownForMovieRes: {
+		// field return type name
+		cast: 'PersonsKnownForMovieCast';
+		crew: 'PersonsKnownForMovieCrew';
+		id: 'Int';
+	};
+	PersonsKnownForShowCast: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		character: 'String';
+		credit_id: 'ID';
+		episode_count: 'Int';
+		first_air_date: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		name: 'String';
+		origin_country: 'String';
+		original_language: 'String';
+		original_name: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	PersonsKnownForShowCrew: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		credit_id: 'ID';
+		department: 'String';
+		episode_count: 'Int';
+		first_air_date: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		job: 'String';
+		name: 'String';
+		origin_country: 'String';
+		original_language: 'String';
+		original_name: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	PersonsKnownForShowRes: {
+		// field return type name
+		cast: 'PersonsKnownForShowCast';
+		crew: 'PersonsKnownForShowCrew';
+		id: 'Int';
+	};
+	Query: {
+		// field return type name
+		accountVerified: 'AccountVerifiedRes';
+		checkEmailVerificationToken: 'RedisRes';
+		checkRetryEmailVerificationLimit: 'RedisRes';
+		emailFromRedisToken: 'String';
+		episodeDetails: 'EpisodeDetailsRes';
+		id: 'Int';
+		movieDetails: 'MovieDetailsRes';
+		movieReviews: 'MovieReviewsRes';
+		moviesCastCrew: 'MoviesCastCrewRes';
+		moviesInTheatres: 'MoviesInTheatresRes';
+		personDetails: 'PersonDetailsRes';
+		personsKnownForMovieRes: 'PersonsKnownForMovieRes';
+		personsKnownForShowRes: 'PersonsKnownForShowRes';
+		popularAnimeMovies: 'MoviesRes';
+		popularAnimeShows: 'ShowsRes';
+		popularMovies: 'MoviesRes';
+		popularMoviesByGenre: 'MoviesRes';
+		popularPeople: 'PeopleRes';
+		popularShows: 'ShowsRes';
+		popularShowsByGenre: 'ShowsRes';
+		recommendedMovies: 'MoviesRes';
+		recommendedShows: 'ShowsRes';
+		searchedMovies: 'MoviesRes';
+		searchedPeople: 'PeopleRes';
+		searchedShows: 'ShowsRes';
+		showDetails: 'ShowDetailsRes';
+		showReviews: 'ShowReviewRes';
+		showsCastCrew: 'ShowsCastCrewRes';
+		topRatedMovies: 'MoviesRes';
+		topRatedMoviesByGenre: 'MoviesRes';
+		topRatedShows: 'ShowsRes';
+		topRatedShowsByGenre: 'ShowsRes';
+		trendingMovies: 'MoviesRes';
+		trendingShows: 'ShowsRes';
+		user: 'UserRes';
+		usersMovie: 'UserMovie';
+		usersMovies: 'UserMovie';
+		usersShow: 'UserShow';
+		usersShows: 'UserShow';
+	};
+	RedisRes: {
+		// field return type name
+		error: 'String';
+		successMsg: 'String';
+		token: 'String';
+		userId: 'String';
+	};
+	ShowDetailsCountry: {
+		// field return type name
+		iso_3166_1: 'String';
+		name: 'String';
+	};
+	ShowDetailsCreatedBy: {
+		// field return type name
+		credit_id: 'String';
+		gender: 'Int';
+		id: 'Int';
+		name: 'String';
+		profile_path: 'String';
+	};
+	ShowDetailsGenre: {
+		// field return type name
+		id: 'Int';
+		name: 'String';
+	};
+	ShowDetailsLastEpToAir: {
+		// field return type name
+		air_date: 'String';
+		episode_number: 'Int';
+		id: 'Int';
+		name: 'String';
+		overview: 'String';
+		production_code: 'String';
+		runtime: 'Int';
+		season_number: 'Int';
+		show_id: 'Int';
+		still_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	ShowDetailsNetwork: {
+		// field return type name
+		id: 'Int';
+		logo_path: 'String';
+		name: 'String';
+		origin_country: 'String';
+	};
+	ShowDetailsNextEpToAir: {
+		// field return type name
+		air_date: 'String';
+		episode_number: 'Int';
+		id: 'Int';
+		name: 'String';
+		overview: 'String';
+		production_code: 'String';
+		runtime: 'Int';
+		season_number: 'Int';
+		show_id: 'Int';
+		still_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	ShowDetailsProdCompany: {
+		// field return type name
+		id: 'Int';
+		logo_path: 'String';
+		name: 'String';
+		origin_country: 'String';
+	};
+	ShowDetailsRes: {
+		// field return type name
+		adult: 'Boolean';
+		backdrop_path: 'String';
+		created_by: 'ShowDetailsCreatedBy';
+		episode_run_time: 'Int';
+		first_air_date: 'String';
+		genres: 'ShowDetailsGenre';
+		homepage: 'String';
+		id: 'Int';
+		in_production: 'Boolean';
+		languages: 'String';
+		last_air_date: 'String';
+		last_episode_to_air: 'ShowDetailsLastEpToAir';
+		name: 'String';
+		networks: 'ShowDetailsNetwork';
+		next_episode_to_air: 'ShowDetailsNextEpToAir';
+		number_of_episodes: 'Int';
+		number_of_seasons: 'Int';
+		origin_country: 'String';
+		original_language: 'String';
+		original_name: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		production_companies: 'ShowDetailsProdCompany';
+		production_countries: 'ShowDetailsCountry';
+		seasons: 'ShowDetailsSeason';
+		spoken_languages: 'ShowDetailsSpokenLang';
+		status: 'String';
+		tagline: 'String';
+		type: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	ShowDetailsSeason: {
+		// field return type name
+		air_date: 'String';
+		episode_count: 'Int';
+		id: 'Int';
+		name: 'String';
+		overview: 'String';
+		poster_path: 'String';
+		season_number: 'Int';
+	};
+	ShowDetailsSpokenLang: {
+		// field return type name
+		english_name: 'String';
+		iso_639_1: 'String';
+		name: 'String';
+	};
+	ShowResult: {
+		// field return type name
+		backdrop_path: 'String';
+		first_air_date: 'String';
+		genre_ids: 'Int';
+		id: 'Int';
+		name: 'String';
+		origin_country: 'String';
+		original_language: 'String';
+		original_name: 'String';
+		overview: 'String';
+		popularity: 'Float';
+		poster_path: 'String';
+		vote_average: 'Float';
+		vote_count: 'Int';
+	};
+	ShowReviewAuthorDetails: {
+		// field return type name
+		avatar_path: 'String';
+		name: 'String';
+		rating: 'Float';
+		username: 'String';
+	};
+	ShowReviewRes: {
+		// field return type name
+		id: 'Int';
+		page: 'Int';
+		results: 'ShowReviewResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	ShowReviewResult: {
+		// field return type name
+		author: 'String';
+		author_details: 'ShowReviewAuthorDetails';
+		content: 'String';
+		created_at: 'String';
+		id: 'String';
+		updated_at: 'String';
+		url: 'String';
+	};
+	ShowsCastCrewRes: {
+		// field return type name
+		cast: 'ShowsCastModel';
+		crew: 'ShowsCrewModel';
+		id: 'Int';
+	};
+	ShowsCastModel: {
+		// field return type name
+		adult: 'Boolean';
+		character: 'String';
+		credit_id: 'String';
+		gender: 'Int';
+		id: 'Int';
+		known_for_department: 'String';
+		name: 'String';
+		order: 'Int';
+		original_name: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	ShowsCrewModel: {
+		// field return type name
+		adult: 'Boolean';
+		credit_id: 'String';
+		department: 'String';
+		gender: 'Int';
+		id: 'Int';
+		job: 'String';
+		known_for_department: 'String';
+		name: 'String';
+		original_name: 'String';
+		popularity: 'Float';
+		profile_path: 'String';
+	};
+	ShowsRes: {
+		// field return type name
+		page: 'Int';
+		results: 'ShowResult';
+		total_pages: 'Int';
+		total_results: 'Int';
+	};
+	TheatreDates: {
+		// field return type name
+		maximum: 'String';
+		minimum: 'String';
+	};
+	UserMovie: {
+		// field return type name
+		id: 'ID';
+		name: 'String';
+		rating: 'Int';
+		status: 'WatchStatusTypes';
+	};
+	UserRes: {
+		// field return type name
+		email: 'String';
+		id: 'ID';
+		image: 'String';
+		movies: 'UserMovie';
+		name: 'String';
+		shows: 'UserShow';
+	};
+	UserShow: {
+		// field return type name
+		current_episode: 'Int';
+		id: 'ID';
+		name: 'String';
+		rating: 'Int';
+		status: 'WatchStatusTypes';
+	};
 }
 
 export interface NexusGenArgTypes {
-  Mutation: {
-    addMovie: { // args
-      movieId: string; // ID!
-      movieName: string; // String!
-      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
-    }
-    addShow: { // args
-      currentEpisode?: number | null; // Int
-      showId: string; // ID!
-      showName: string; // String!
-      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
-    }
-    deleteEmailVerificationToken: { // args
-      token: string; // String!
-    }
-    deleteMovie: { // args
-      movieId: string; // ID!
-    }
-    deleteShow: { // args
-      showId: string; // ID!
-    }
-    updateMovie: { // args
-      movieId: string; // ID!
-      movieRating?: number | null; // Int
-      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
-    }
-    updateShow: { // args
-      currentEpisode?: number | null; // Int
-      showId: string; // ID!
-      showRating?: number | null; // Int
-      watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
-    }
-    verifyUserEmail: { // args
-      userId: string; // ID!
-    }
-    writeEmailVerificationToken: { // args
-      email: string; // String!
-    }
-    writeRetryEmailVerificationLimit: { // args
-      email: string; // String!
-    }
-  }
-  Query: {
-    accountVerified: { // args
-      email: string; // String!
-    }
-    checkEmailVerificationToken: { // args
-      token: string; // String!
-    }
-    checkRetryEmailVerificationLimit: { // args
-      email: string; // String!
-    }
-    emailFromRedisToken: { // args
-      token: string; // String!
-    }
-    episodeDetails: { // args
-      episodeNum: number; // Int!
-      seasonNum: number; // Int!
-      showId: number; // Int!
-    }
-    movieDetails: { // args
-      movieDetailsId: number; // Int!
-    }
-    movieReviews: { // args
-      id: number; // Int!
-      page?: number | null; // Int
-    }
-    moviesCastCrew: { // args
-      movieId: number; // Int!
-    }
-    moviesInTheatres: { // args
-      page?: number | null; // Int
-    }
-    personDetails: { // args
-      personDetailsId: number; // Int!
-    }
-    personsKnownForMovieRes: { // args
-      personsKnownForMovieResId: number; // Int!
-    }
-    personsKnownForShowRes: { // args
-      personsKnownForShowResId: number; // Int!
-    }
-    popularAnimeMovies: { // args
-      page?: number | null; // Int
-    }
-    popularAnimeShows: { // args
-      page?: number | null; // Int
-    }
-    popularMovies: { // args
-      page?: number | null; // Int
-    }
-    popularMoviesByGenre: { // args
-      genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
-      page?: number | null; // Int
-    }
-    popularPeople: { // args
-      page?: number | null; // Int
-    }
-    popularShows: { // args
-      page?: number | null; // Int
-    }
-    popularShowsByGenre: { // args
-      genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
-      page?: number | null; // Int
-    }
-    recommendedMovies: { // args
-      page?: number | null; // Int
-      recommendedMoviesId: number; // Int!
-    }
-    recommendedShows: { // args
-      page?: number | null; // Int
-      recommendedShowsId: number; // Int!
-    }
-    searchedMovies: { // args
-      page?: number | null; // Int
-      q: string; // String!
-    }
-    searchedPeople: { // args
-      page?: number | null; // Int
-      q: string; // String!
-    }
-    searchedShows: { // args
-      page?: number | null; // Int
-      q: string; // String!
-    }
-    showDetails: { // args
-      showDetailsId: number; // Int!
-    }
-    showReviews: { // args
-      id: number; // Int!
-      page?: number | null; // Int
-    }
-    showsCastCrew: { // args
-      showId: number; // Int!
-    }
-    topRatedMovies: { // args
-      page?: number | null; // Int
-    }
-    topRatedMoviesByGenre: { // args
-      genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
-      page?: number | null; // Int
-    }
-    topRatedShows: { // args
-      page?: number | null; // Int
-    }
-    topRatedShowsByGenre: { // args
-      genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
-      page?: number | null; // Int
-    }
-    trendingMovies: { // args
-      page?: number | null; // Int
-      timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
-    }
-    trendingShows: { // args
-      page?: number | null; // Int
-      timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
-    }
-    usersMovie: { // args
-      movieId: string; // String!
-    }
-    usersShow: { // args
-      showId: string; // String!
-    }
-  }
+	Mutation: {
+		addMovie: {
+			// args
+			movieId: string; // ID!
+			movieName: string; // String!
+			watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+		};
+		addShow: {
+			// args
+			currentEpisode?: number | null; // Int
+			showId: string; // ID!
+			showName: string; // String!
+			watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+		};
+		deleteEmailVerificationToken: {
+			// args
+			token: string; // String!
+		};
+		deleteMovie: {
+			// args
+			movieId: string; // ID!
+		};
+		deleteShow: {
+			// args
+			showId: string; // ID!
+		};
+		sendVerificationEmail: {
+			// args
+			html: string; // String!
+			recipientEmail: string; // String!
+			subject: string; // String!
+			text: string; // String!
+		};
+		updateMovie: {
+			// args
+			movieId: string; // ID!
+			movieRating?: number | null; // Int
+			watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+		};
+		updateShow: {
+			// args
+			currentEpisode?: number | null; // Int
+			showId: string; // ID!
+			showRating?: number | null; // Int
+			watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+		};
+		verifyUserEmail: {
+			// args
+			userId: string; // ID!
+		};
+		writeEmailVerificationToken: {
+			// args
+			email: string; // String!
+		};
+		writeRetryEmailVerificationLimit: {
+			// args
+			email: string; // String!
+		};
+	};
+	Query: {
+		accountVerified: {
+			// args
+			email: string; // String!
+		};
+		checkEmailVerificationToken: {
+			// args
+			token: string; // String!
+		};
+		checkRetryEmailVerificationLimit: {
+			// args
+			email: string; // String!
+		};
+		emailFromRedisToken: {
+			// args
+			token: string; // String!
+		};
+		episodeDetails: {
+			// args
+			episodeNum: number; // Int!
+			seasonNum: number; // Int!
+			showId: number; // Int!
+		};
+		movieDetails: {
+			// args
+			movieDetailsId: number; // Int!
+		};
+		movieReviews: {
+			// args
+			id: number; // Int!
+			page?: number | null; // Int
+		};
+		moviesCastCrew: {
+			// args
+			movieId: number; // Int!
+		};
+		moviesInTheatres: {
+			// args
+			page?: number | null; // Int
+		};
+		personDetails: {
+			// args
+			personDetailsId: number; // Int!
+		};
+		personsKnownForMovieRes: {
+			// args
+			personsKnownForMovieResId: number; // Int!
+		};
+		personsKnownForShowRes: {
+			// args
+			personsKnownForShowResId: number; // Int!
+		};
+		popularAnimeMovies: {
+			// args
+			page?: number | null; // Int
+		};
+		popularAnimeShows: {
+			// args
+			page?: number | null; // Int
+		};
+		popularMovies: {
+			// args
+			page?: number | null; // Int
+		};
+		popularMoviesByGenre: {
+			// args
+			genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
+			page?: number | null; // Int
+		};
+		popularPeople: {
+			// args
+			page?: number | null; // Int
+		};
+		popularShows: {
+			// args
+			page?: number | null; // Int
+		};
+		popularShowsByGenre: {
+			// args
+			genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
+			page?: number | null; // Int
+		};
+		recommendedMovies: {
+			// args
+			page?: number | null; // Int
+			recommendedMoviesId: number; // Int!
+		};
+		recommendedShows: {
+			// args
+			page?: number | null; // Int
+			recommendedShowsId: number; // Int!
+		};
+		searchedMovies: {
+			// args
+			page?: number | null; // Int
+			q: string; // String!
+		};
+		searchedPeople: {
+			// args
+			page?: number | null; // Int
+			q: string; // String!
+		};
+		searchedShows: {
+			// args
+			page?: number | null; // Int
+			q: string; // String!
+		};
+		showDetails: {
+			// args
+			showDetailsId: number; // Int!
+		};
+		showReviews: {
+			// args
+			id: number; // Int!
+			page?: number | null; // Int
+		};
+		showsCastCrew: {
+			// args
+			showId: number; // Int!
+		};
+		topRatedMovies: {
+			// args
+			page?: number | null; // Int
+		};
+		topRatedMoviesByGenre: {
+			// args
+			genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
+			page?: number | null; // Int
+		};
+		topRatedShows: {
+			// args
+			page?: number | null; // Int
+		};
+		topRatedShowsByGenre: {
+			// args
+			genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
+			page?: number | null; // Int
+		};
+		trendingMovies: {
+			// args
+			page?: number | null; // Int
+			timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
+		};
+		trendingShows: {
+			// args
+			page?: number | null; // Int
+			timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
+		};
+		usersMovie: {
+			// args
+			movieId: string; // String!
+		};
+		usersShow: {
+			// args
+			showId: string; // String!
+		};
+	};
 }
 
-export interface NexusGenAbstractTypeMembers {
-}
+export interface NexusGenAbstractTypeMembers {}
 
-export interface NexusGenTypeInterfaces {
-}
+export interface NexusGenTypeInterfaces {}
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
@@ -1861,52 +2153,60 @@ export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 export type NexusGenAbstractsUsingStrategyResolveType = never;
 
 export type NexusGenFeaturesConfig = {
-  abstractTypeStrategies: {
-    isTypeOf: false
-    resolveType: true
-    __typename: false
-  }
-}
+	abstractTypeStrategies: {
+		isTypeOf: false;
+		resolveType: true;
+		__typename: false;
+	};
+};
 
 export interface NexusGenTypes {
-  context: Context;
-  inputTypes: NexusGenInputs;
-  rootTypes: NexusGenRootTypes;
-  inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
-  argTypes: NexusGenArgTypes;
-  fieldTypes: NexusGenFieldTypes;
-  fieldTypeNames: NexusGenFieldTypeNames;
-  allTypes: NexusGenAllTypes;
-  typeInterfaces: NexusGenTypeInterfaces;
-  objectNames: NexusGenObjectNames;
-  inputNames: NexusGenInputNames;
-  enumNames: NexusGenEnumNames;
-  interfaceNames: NexusGenInterfaceNames;
-  scalarNames: NexusGenScalarNames;
-  unionNames: NexusGenUnionNames;
-  allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
-  allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
-  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
-  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
-  abstractTypeMembers: NexusGenAbstractTypeMembers;
-  objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
-  abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
-  features: NexusGenFeaturesConfig;
+	context: Context;
+	inputTypes: NexusGenInputs;
+	rootTypes: NexusGenRootTypes;
+	inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
+	argTypes: NexusGenArgTypes;
+	fieldTypes: NexusGenFieldTypes;
+	fieldTypeNames: NexusGenFieldTypeNames;
+	allTypes: NexusGenAllTypes;
+	typeInterfaces: NexusGenTypeInterfaces;
+	objectNames: NexusGenObjectNames;
+	inputNames: NexusGenInputNames;
+	enumNames: NexusGenEnumNames;
+	interfaceNames: NexusGenInterfaceNames;
+	scalarNames: NexusGenScalarNames;
+	unionNames: NexusGenUnionNames;
+	allInputTypes:
+		| NexusGenTypes['inputNames']
+		| NexusGenTypes['enumNames']
+		| NexusGenTypes['scalarNames'];
+	allOutputTypes:
+		| NexusGenTypes['objectNames']
+		| NexusGenTypes['enumNames']
+		| NexusGenTypes['unionNames']
+		| NexusGenTypes['interfaceNames']
+		| NexusGenTypes['scalarNames'];
+	allNamedTypes:
+		| NexusGenTypes['allInputTypes']
+		| NexusGenTypes['allOutputTypes'];
+	abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
+	abstractTypeMembers: NexusGenAbstractTypeMembers;
+	objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
+	abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
+	features: NexusGenFeaturesConfig;
 }
 
-
 declare global {
-  interface NexusGenPluginTypeConfig<TypeName extends string> {
-  }
-  interface NexusGenPluginInputTypeConfig<TypeName extends string> {
-  }
-  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
-    
-  }
-  interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
-  }
-  interface NexusGenPluginSchemaConfig {
-  }
-  interface NexusGenPluginArgConfig {
-  }
+	interface NexusGenPluginTypeConfig<TypeName extends string> {}
+	interface NexusGenPluginInputTypeConfig<TypeName extends string> {}
+	interface NexusGenPluginFieldConfig<
+		TypeName extends string,
+		FieldName extends string
+	> {}
+	interface NexusGenPluginInputFieldConfig<
+		TypeName extends string,
+		FieldName extends string
+	> {}
+	interface NexusGenPluginSchemaConfig {}
+	interface NexusGenPluginArgConfig {}
 }
