@@ -459,6 +459,13 @@ export interface NexusGenObjects {
 		token?: string | null; // String
 		userId?: string | null; // String
 	};
+	RegisteredUserRes: {
+		// root type
+		createdUser?: NexusGenRootTypes['UserRes'] | null; // UserRes
+		error?: string | null; // String
+		ok?: boolean | null; // Boolean
+		statusCode?: number | null; // Int
+	};
 	ShowDetailsCountry: {
 		// root type
 		iso_3166_1: string; // String!
@@ -670,11 +677,14 @@ export interface NexusGenObjects {
 	};
 	UserRes: {
 		// root type
+		created_at?: NexusGenScalars['DateTime'] | null; // DateTime
 		email?: string | null; // String
+		emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
 		id?: string | null; // ID
 		image?: string | null; // String
 		movies?: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
 		name?: string | null; // String
+		password?: string | null; // String
 		shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
 	};
 	UserShow: {
@@ -889,6 +899,7 @@ export interface NexusGenFieldTypes {
 		deleteEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
 		deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
 		deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+		registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
 		sendVerificationEmail: NexusGenRootTypes['NodeRes'] | null; // NodeRes
 		updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
 		updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
@@ -1079,6 +1090,13 @@ export interface NexusGenFieldTypes {
 		successMsg: string | null; // String
 		token: string | null; // String
 		userId: string | null; // String
+	};
+	RegisteredUserRes: {
+		// field return type
+		createdUser: NexusGenRootTypes['UserRes'] | null; // UserRes
+		error: string | null; // String
+		ok: boolean | null; // Boolean
+		statusCode: number | null; // Int
 	};
 	ShowDetailsCountry: {
 		// field return type
@@ -1291,11 +1309,14 @@ export interface NexusGenFieldTypes {
 	};
 	UserRes: {
 		// field return type
+		created_at: NexusGenScalars['DateTime'] | null; // DateTime
 		email: string | null; // String
+		emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
 		id: string | null; // ID
 		image: string | null; // String
 		movies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
 		name: string | null; // String
+		password: string | null; // String
 		shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
 	};
 	UserShow: {
@@ -1496,6 +1517,7 @@ export interface NexusGenFieldTypeNames {
 		deleteEmailVerificationToken: 'RedisRes';
 		deleteMovie: 'UserMovie';
 		deleteShow: 'UserShow';
+		registerUser: 'RegisteredUserRes';
 		sendVerificationEmail: 'NodeRes';
 		updateMovie: 'UserMovie';
 		updateShow: 'UserShow';
@@ -1686,6 +1708,13 @@ export interface NexusGenFieldTypeNames {
 		successMsg: 'String';
 		token: 'String';
 		userId: 'String';
+	};
+	RegisteredUserRes: {
+		// field return type name
+		createdUser: 'UserRes';
+		error: 'String';
+		ok: 'Boolean';
+		statusCode: 'Int';
 	};
 	ShowDetailsCountry: {
 		// field return type name
@@ -1896,11 +1925,14 @@ export interface NexusGenFieldTypeNames {
 	};
 	UserRes: {
 		// field return type name
+		created_at: 'DateTime';
 		email: 'String';
+		emailVerified: 'DateTime';
 		id: 'ID';
 		image: 'String';
 		movies: 'UserMovie';
 		name: 'String';
+		password: 'String';
 		shows: 'UserShow';
 	};
 	UserShow: {
@@ -1939,6 +1971,12 @@ export interface NexusGenArgTypes {
 		deleteShow: {
 			// args
 			showId: string; // ID!
+		};
+		registerUser: {
+			// args
+			email: string; // String!
+			name: string; // String!
+			password: string; // String!
 		};
 		sendVerificationEmail: {
 			// args

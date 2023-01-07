@@ -9,7 +9,6 @@ import { SERVER_BASE_URL } from '../../utils/URLs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import { INodeMailerInfo } from '@ts/interfaces';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -58,56 +57,47 @@ const VerificationEmailSent = ({
 		],
 	});
 
+	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
+		NexusGenObjects['NodeRes'],
+		NexusGenArgTypes['Mutation']['sendVerificationEmail']
+	>(Mutations.MUTATION_SEND_VERIFICATION_EMAIL);
+
 	const handleResendLink = async () => {
 		if (checkRetryEmailVerificationLimitData?.token === String(3)) {
 			setReachedLimit(true);
 			return;
 		}
 		setIsResending(true);
-		try {
-			await writeRetryEmailVerificationToken({
-				variables: {
-					email,
-				},
-			});
+		await writeRetryEmailVerificationToken({
+			variables: {
+				email,
+			},
+		});
 
-			const writtenTokenRes = await writeEmailVerificationToken({
-				variables: {
-					email,
-				},
-			});
+		const writtenTokenRes = await writeEmailVerificationToken({
+			variables: {
+				email,
+			},
+		});
 
-			const writtenTokenData: typeof writeEmailVerificationTokenData =
-				writtenTokenRes.data?.[
-					Object.keys(
-						writtenTokenRes.data
-					)[0] as keyof typeof writeEmailVerificationTokenData
-				] as any;
+		const writtenTokenData: typeof writeEmailVerificationTokenData =
+			writtenTokenRes.data?.[
+				Object.keys(
+					writtenTokenRes.data
+				)[0] as keyof typeof writeEmailVerificationTokenData
+			] as any;
 
-			if (!writtenTokenData?.token) throw new Error('No Token');
+		if (!writtenTokenData?.token) throw new Error('No Token');
 
-			const nodeMailerInfo: INodeMailerInfo = {
+		await sendVerificationEmail({
+			variables: {
 				recipientEmail: email,
 				subject: 'Email Verification Link',
 				text: 'This is the text',
 				html: `<a href="${CLIENT_BASE_URL}/verification-email/${writtenTokenData.token}">Verify Email</a>`,
-			};
+			},
+		});
 
-			const nodeMailerOptions = {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(nodeMailerInfo),
-			};
-
-			const nodeMailerRes = await fetch(
-				`${CLIENT_BASE_URL}/api/auth/send-verification-email`,
-				nodeMailerOptions
-			);
-
-			await nodeMailerRes.json();
-		} catch (err) {
-			console.error(err);
-		}
 		setIsResending(false);
 	};
 

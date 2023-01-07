@@ -8,6 +8,7 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
+import { hash } from 'bcryptjs';
 import nodemailer, { Transport, TransportOptions } from 'nodemailer';
 import { isValidEmail } from '../../utils/isValidEmail';
 import {
@@ -58,7 +59,10 @@ export const UserRes = objectType({
 		t.id('id');
 		t.string('name');
 		t.string('email');
+		t.string('password');
 		t.string('image');
+		t.date('created_at');
+		t.date('emailVerified');
 		t.list.field('movies', {
 			type: 'UserMovie',
 		});
@@ -711,6 +715,71 @@ export const SendVerificationEmail = extendType({
 					return {
 						error: `ERROR ${err}`,
 						successMsg: null,
+						ok: false,
+						statusCode: 500,
+					};
+				}
+			},
+		});
+	},
+});
+
+export const RegisteredUserRes = objectType({
+	name: 'RegisteredUserRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('createdUser', {
+			type: 'UserRes',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
+export const RegisterUser = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('registerUser', {
+			type: 'RegisteredUserRes',
+			args: {
+				name: nonNull(stringArg()),
+				email: nonNull(stringArg()),
+				password: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { name, email, password }, ctx) => {
+				try {
+					const existingUser = await ctx.prisma.user.findUnique({
+						where: { email },
+					});
+
+					if (existingUser) {
+						return {
+							error: 'Email Already Exists',
+							createdUser: null,
+							ok: false,
+							statusCode: 422,
+						};
+					}
+					const newUser = await ctx.prisma.user.create({
+						data: { name, email, password: await hash(password, 12) },
+					});
+					return {
+						error: null,
+						createdUser: newUser,
+						ok: true,
+						statusCode: 201,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						error: `ERROR ${err}`,
+						createdUser: null,
 						ok: false,
 						statusCode: 500,
 					};

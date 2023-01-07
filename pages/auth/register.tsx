@@ -8,8 +8,7 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import { registerValidate } from '../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
-import { useGQLQuery, useGQLMutation } from '../../hooks/useGQL';
-import { INodeMailerInfo } from '@ts/interfaces';
+import { useGQLMutation } from '../../hooks/useGQL';
 import {
 	NexusGenArgTypes,
 	NexusGenObjects,
@@ -34,7 +33,7 @@ export default function Register() {
 		onSubmit,
 	});
 
-	const [registerErr, setRegisterErr] = useState<{ error: null }>({
+	const [registerErr, setRegisterErr] = useState<{ error: null | string }>({
 		error: null,
 	});
 
@@ -50,6 +49,12 @@ export default function Register() {
 		},
 	});
 
+	const { mutateFunction: registerUser, mutateData: registerUserData } =
+		useGQLMutation<
+			NexusGenObjects['RegisteredUserRes'],
+			NexusGenArgTypes['Mutation']['registerUser']
+		>(Mutations.MUTATION_REGISTER_USER);
+
 	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
 		NexusGenObjects['NodeRes'],
 		NexusGenArgTypes['Mutation']['sendVerificationEmail']
@@ -57,23 +62,20 @@ export default function Register() {
 
 	async function onSubmit() {
 		const { name, email, password } = formik.values;
-		const registerOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				name,
-				email,
-				password,
-			}),
-		};
 		try {
-			const registerRes = await fetch(
-				`${CLIENT_BASE_URL}/api/auth/register`,
-				registerOptions
-			);
+			const registerUserRes = await registerUser({
+				variables: {
+					name,
+					email,
+					password,
+				},
+			});
 
-			const registerData = await registerRes.json();
-			if (registerData.user) {
+			const userData: typeof registerUserData = registerUserRes.data?.[
+				Object.keys(registerUserRes.data)[0] as keyof typeof registerUserData
+			] as any;
+
+			if (userData.createdUser) {
 				const redisRes = await writeEmailVerificationToken({
 					variables: {
 						email: formik.values.email,
@@ -88,7 +90,7 @@ export default function Register() {
 				] as any;
 
 				if (!redisData?.error && redisData?.token) {
-					const sendVerificationRes = await sendVerificationEmail({
+					await sendVerificationEmail({
 						variables: {
 							recipientEmail: email,
 							subject: 'Email Verification Link',
@@ -96,86 +98,16 @@ export default function Register() {
 							html: `<a href="${CLIENT_BASE_URL}/verification-email/${redisData.token}">Verify Email</a>`,
 						},
 					});
-
-					if (sendVerificationRes.data?.ok) {
-						router.push(`/verification-email-sent/${redisData.token}`);
-					} else {
-						throw new Error("Couldn't send email");
-					}
+					router.push(`/verification-email-sent/${redisData.token}`);
 				}
 			}
-			if (registerData.error) {
-				setRegisterErr({ error: registerData.error });
+			if (userData.error) {
+				setRegisterErr({ error: userData.error });
 			}
 		} catch (err) {
 			console.error(err);
 		}
 	}
-
-	// async function onSubmit() {
-	// 	const { name, email, password } = formik.values;
-	// 	const registerOptions = {
-	// 		method: 'POST',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({
-	// 			name,
-	// 			email,
-	// 			password,
-	// 		}),
-	// 	};
-	// 	try {
-	// 		const registerRes = await fetch(
-	// 			`${CLIENT_BASE_URL}/api/auth/register`,
-	// 			registerOptions
-	// 		);
-
-	// 		const registerData = await registerRes.json();
-
-	// 		if (registerData.user) {
-	// 			const redisRes = await writeEmailVerificationToken({
-	// 				variables: {
-	// 					email: formik.values.email,
-	// 				},
-	// 			});
-
-	// 			const redisData: typeof writeEmailVerificationTokenData = redisRes
-	// 				.data?.[
-	// 				Object.keys(
-	// 					redisRes.data
-	// 				)[0] as keyof typeof writeEmailVerificationTokenData
-	// 			] as any;
-
-	// 			if (!redisData?.error && redisData?.token) {
-	// 				const nodeMailerInfo: INodeMailerInfo = {
-	// 					recipientEmail: email,
-	// 					subject: 'Email Verification Link',
-	// 					text: 'This is the text',
-	// 					html: `<a href="${CLIENT_BASE_URL}/verification-email/${redisData.token}">Verify Email</a>`,
-	// 				};
-
-	// 				const nodeMailerOptions = {
-	// 					method: 'POST',
-	// 					headers: { 'Content-Type': 'application/json' },
-	// 					body: JSON.stringify(nodeMailerInfo),
-	// 				};
-
-	// 				const nodeMailerRes = await fetch(
-	// 					`${CLIENT_BASE_URL}/api/auth/send-verification-email`,
-	// 					nodeMailerOptions
-	// 				);
-
-	// 				const nodeMailerData = await nodeMailerRes.json();
-	// 				console.log('NODEMAILER DATA: ', nodeMailerData);
-	// 				router.push(`/verification-email-sent/${redisData.token}`);
-	// 			}
-	// 		}
-	// 		if (registerData.error) {
-	// 			setRegisterErr({ error: registerData.error });
-	// 		}
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 	}
-	// }
 
 	return (
 		<>

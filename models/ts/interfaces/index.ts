@@ -27,13 +27,6 @@ export interface IEPDetails {
 	episode: number;
 }
 
-export interface INodeMailerInfo {
-	recipientEmail: string;
-	subject: string;
-	text: string;
-	html: string;
-}
-
 export interface ILogin {
 	email: string;
 	password: string;

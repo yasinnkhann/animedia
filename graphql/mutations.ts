@@ -164,3 +164,35 @@ export const MUTATION_SEND_VERIFICATION_EMAIL = gql`
 		}
 	}
 `;
+
+export const MUTATION_REGISTER_USER = gql`
+	mutation RegisterUser($name: String!, $email: String!, $password: String!) {
+		registerUser(name: $name, email: $email, password: $password) {
+			error
+			createdUser {
+				id
+				name
+				email
+				password
+				image
+				created_at
+				emailVerified
+				movies {
+					id
+					name
+					status
+					rating
+				}
+				shows {
+					id
+					name
+					status
+					rating
+					current_episode
+				}
+			}
+			ok
+			statusCode
+		}
+	}
+`;
