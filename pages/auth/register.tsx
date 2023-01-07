@@ -55,7 +55,10 @@ export default function Register() {
 			NexusGenArgTypes['Mutation']['registerUser']
 		>(Mutations.REGISTER_USER);
 
-	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
+	const {
+		mutateFunction: sendVerificationEmail,
+		mutateData: sendVerificationEmailData,
+	} = useGQLMutation<
 		NexusGenObjects['NodeRes'],
 		NexusGenArgTypes['Mutation']['sendVerificationEmail']
 	>(Mutations.SEND_VERIFICATION_EMAIL);
@@ -90,7 +93,7 @@ export default function Register() {
 				] as any;
 
 				if (!redisData?.error && redisData?.token) {
-					await sendVerificationEmail({
+					const sendVerificationEmailRes = await sendVerificationEmail({
 						variables: {
 							recipientEmail: email,
 							subject: 'Email Verification Link',
@@ -98,7 +101,17 @@ export default function Register() {
 							html: `<a href="${CLIENT_BASE_URL}/verification-email/${redisData.token}">Verify Email</a>`,
 						},
 					});
-					router.push(`/verification-email-sent/${redisData.token}`);
+					const verificationEmailData: typeof sendVerificationEmailData =
+						sendVerificationEmailRes.data?.[
+							Object.keys(
+								sendVerificationEmailRes.data
+							)[0] as keyof typeof sendVerificationEmailData
+						] as any;
+					if (verificationEmailData.ok) {
+						router.push(`/verification-email-sent/${redisData.token}`);
+					} else {
+						throw new Error('Could not send verification email');
+					}
 				}
 			}
 			if (userData.error) {

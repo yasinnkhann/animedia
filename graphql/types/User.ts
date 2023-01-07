@@ -344,6 +344,71 @@ export const DeleteShow = extendType({
 	},
 });
 
+export const RegisteredUserRes = objectType({
+	name: 'RegisteredUserRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('createdUser', {
+			type: 'UserRes',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
+export const RegisterUser = extendType({
+	type: 'Mutation',
+	definition(t) {
+		t.field('registerUser', {
+			type: 'RegisteredUserRes',
+			args: {
+				name: nonNull(stringArg()),
+				email: nonNull(stringArg()),
+				password: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { name, email, password }, ctx) => {
+				try {
+					const existingUser = await ctx.prisma.user.findUnique({
+						where: { email },
+					});
+
+					if (existingUser) {
+						return {
+							error: 'Email Already Exists',
+							createdUser: null,
+							ok: false,
+							statusCode: 422,
+						};
+					}
+					const newUser = await ctx.prisma.user.create({
+						data: { name, email, password: await hash(password, 12) },
+					});
+					return {
+						error: null,
+						createdUser: newUser,
+						ok: true,
+						statusCode: 201,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						error: `ERROR ${err}`,
+						createdUser: null,
+						ok: false,
+						statusCode: 500,
+					};
+				}
+			},
+		});
+	},
+});
+
 export const RedisRes = objectType({
 	name: 'RedisRes',
 	definition(t) {
@@ -362,20 +427,35 @@ export const RedisRes = objectType({
 	},
 });
 
-export const NodeRes = objectType({
-	name: 'NodeRes',
+export const CheckEmailVerificationToken = extendType({
+	type: 'Query',
 	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('successMsg', {
-			type: 'String',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
+		t.field('checkEmailVerificationToken', {
+			type: 'RedisRes',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) {
+					return {
+						error: 'Email Verification Not Found.',
+						successMsg: null,
+						token: null,
+						userId: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Valid EMAIL VERIFICATION.',
+					token,
+					userId,
+				};
+			},
 		});
 	},
 });
@@ -417,39 +497,6 @@ export const WriteEmailVerificationToken = extendType({
 					successMsg: 'Email Verification Token Added',
 					token,
 					userId: user.id,
-				};
-			},
-		});
-	},
-});
-
-export const CheckEmailVerificationToken = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('checkEmailVerificationToken', {
-			type: 'RedisRes',
-			args: {
-				token: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
-				);
-
-				if (!userId) {
-					return {
-						error: 'Email Verification Not Found.',
-						successMsg: null,
-						token: null,
-						userId: null,
-					};
-				}
-
-				return {
-					error: null,
-					successMsg: 'Valid EMAIL VERIFICATION.',
-					token,
-					userId,
 				};
 			},
 		});
@@ -664,6 +711,24 @@ export const WriteRetryEmailVerificationLimit = extendType({
 	},
 });
 
+export const NodeRes = objectType({
+	name: 'NodeRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('successMsg', {
+			type: 'String',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
 export const SendVerificationEmail = extendType({
 	type: 'Mutation',
 	definition(t) {
@@ -715,71 +780,6 @@ export const SendVerificationEmail = extendType({
 					return {
 						error: `ERROR ${err}`,
 						successMsg: null,
-						ok: false,
-						statusCode: 500,
-					};
-				}
-			},
-		});
-	},
-});
-
-export const RegisteredUserRes = objectType({
-	name: 'RegisteredUserRes',
-	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('createdUser', {
-			type: 'UserRes',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
-		});
-	},
-});
-
-export const RegisterUser = extendType({
-	type: 'Mutation',
-	definition(t) {
-		t.field('registerUser', {
-			type: 'RegisteredUserRes',
-			args: {
-				name: nonNull(stringArg()),
-				email: nonNull(stringArg()),
-				password: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { name, email, password }, ctx) => {
-				try {
-					const existingUser = await ctx.prisma.user.findUnique({
-						where: { email },
-					});
-
-					if (existingUser) {
-						return {
-							error: 'Email Already Exists',
-							createdUser: null,
-							ok: false,
-							statusCode: 422,
-						};
-					}
-					const newUser = await ctx.prisma.user.create({
-						data: { name, email, password: await hash(password, 12) },
-					});
-					return {
-						error: null,
-						createdUser: newUser,
-						ok: true,
-						statusCode: 201,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						error: `ERROR ${err}`,
-						createdUser: null,
 						ok: false,
 						statusCode: 500,
 					};
