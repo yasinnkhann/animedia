@@ -9,6 +9,7 @@ import {
 	TypedDocumentNode,
 	DefaultContext,
 	LazyQueryHookOptions,
+	ApolloCache,
 } from '@apollo/client';
 
 export function useGQLQuery<TData = any, TVars = OperationVariables>(
@@ -51,12 +52,12 @@ export function useGQLMutation<
 	TContext = DefaultContext
 >(
 	mutation: DocumentNode | TypedDocumentNode<TData, TVars>,
-	options?: MutationHookOptions<TData, TVars, TContext>
+	options?: MutationHookOptions<TData, TVars, TContext, ApolloCache<any>>
 ) {
 	const [
 		mutateFunction,
 		{ data: mutateData, loading: mutateLoading, error: mutateError },
-	] = useMutation(mutation, options);
+	] = useMutation<TData, TVars, TContext, ApolloCache<any>>(mutation, options);
 
 	return {
 		mutateFunction,
