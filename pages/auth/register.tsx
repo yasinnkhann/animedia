@@ -49,11 +49,14 @@ export default function Register() {
 		},
 	});
 
-	const { mutateFunction: registerUser, mutateData: registerUserData } =
-		useGQLMutation<
-			NexusGenObjects['RegisteredUserRes'],
-			NexusGenArgTypes['Mutation']['registerUser']
-		>(Mutations.REGISTER_USER);
+	const {
+		mutateFunction: registerUser,
+		mutateData: registerUserData,
+		extractData,
+	} = useGQLMutation<
+		NexusGenObjects['RegisteredUserRes'],
+		NexusGenArgTypes['Mutation']['registerUser']
+	>(Mutations.REGISTER_USER);
 
 	const {
 		mutateFunction: sendVerificationEmail,
@@ -74,9 +77,7 @@ export default function Register() {
 				},
 			});
 
-			const userData: typeof registerUserData = registerUserRes.data?.[
-				Object.keys(registerUserRes.data)[0] as keyof typeof registerUserData
-			] as any;
+			const userData = extractData(registerUserRes as any);
 
 			if (userData.createdUser) {
 				const redisRes = await writeEmailVerificationToken({

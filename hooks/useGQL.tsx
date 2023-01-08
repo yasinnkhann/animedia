@@ -59,6 +59,10 @@ export function useGQLMutation<
 		{ data: mutateData, loading: mutateLoading, error: mutateError },
 	] = useMutation<TData, TVars, TContext, ApolloCache<any>>(mutation, options);
 
+	function extractData(res: { data: TData }): TData {
+		return res.data[Object.keys(res.data as any)[0] as keyof TData] as TData;
+	}
+
 	return {
 		mutateFunction,
 		mutateData: mutateData?.[
@@ -66,5 +70,6 @@ export function useGQLMutation<
 		] as TData,
 		mutateLoading,
 		mutateError,
+		extractData,
 	};
 }
