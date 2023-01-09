@@ -24,6 +24,7 @@ const VerificationEmailSent = ({
 	const {
 		mutateFunction: writeEmailVerificationToken,
 		mutateData: writeEmailVerificationTokenData,
+		extractData: extractWriteEmailVerificationTokenData,
 	} = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
@@ -80,12 +81,9 @@ const VerificationEmailSent = ({
 			},
 		});
 
-		const writtenTokenData: typeof writeEmailVerificationTokenData =
-			writtenTokenRes.data?.[
-				Object.keys(
-					writtenTokenRes.data
-				)[0] as keyof typeof writeEmailVerificationTokenData
-			] as any;
+		const writtenTokenData = extractWriteEmailVerificationTokenData(
+			writtenTokenRes as any
+		);
 
 		if (!writtenTokenData?.token) throw new Error('No Token');
 

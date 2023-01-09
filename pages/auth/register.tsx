@@ -37,9 +37,15 @@ export default function Register() {
 		error: null,
 	});
 
+	const { mutateFunction: registerUser, extractData: extractRegisterUserData } =
+		useGQLMutation<
+			NexusGenObjects['RegisteredUserRes'],
+			NexusGenArgTypes['Mutation']['registerUser']
+		>(Mutations.REGISTER_USER);
+
 	const {
 		mutateFunction: writeEmailVerificationToken,
-		mutateData: writeEmailVerificationTokenData,
+		extractData: extractWriteEmailVerificationTokenData,
 	} = useGQLMutation<
 		NexusGenObjects['RedisRes'],
 		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
@@ -50,17 +56,8 @@ export default function Register() {
 	});
 
 	const {
-		mutateFunction: registerUser,
-		mutateData: registerUserData,
-		extractData,
-	} = useGQLMutation<
-		NexusGenObjects['RegisteredUserRes'],
-		NexusGenArgTypes['Mutation']['registerUser']
-	>(Mutations.REGISTER_USER);
-
-	const {
 		mutateFunction: sendVerificationEmail,
-		mutateData: sendVerificationEmailData,
+		extractData: extractSendEmailVerificationTokenData,
 	} = useGQLMutation<
 		NexusGenObjects['NodeRes'],
 		NexusGenArgTypes['Mutation']['sendVerificationEmail']
@@ -77,39 +74,43 @@ export default function Register() {
 				},
 			});
 
-			const userData = extractData(registerUserRes as any);
+			const userData = extractRegisterUserData(registerUserRes as any);
 
 			if (userData.createdUser) {
-				const redisRes = await writeEmailVerificationToken({
-					variables: {
-						email: formik.values.email,
-					},
-				});
+				const writeEmailVerificationTokenRes =
+					await writeEmailVerificationToken({
+						variables: {
+							email: formik.values.email,
+						},
+					});
 
-				const redisData: typeof writeEmailVerificationTokenData = redisRes
-					.data?.[
-					Object.keys(
-						redisRes.data
-					)[0] as keyof typeof writeEmailVerificationTokenData
-				] as any;
+				const writeEmailVerificationTokenData =
+					extractWriteEmailVerificationTokenData(
+						writeEmailVerificationTokenRes as any
+					);
 
-				if (!redisData?.error && redisData?.token) {
+				if (
+					!writeEmailVerificationTokenData?.error &&
+					writeEmailVerificationTokenData?.token
+				) {
 					const sendVerificationEmailRes = await sendVerificationEmail({
 						variables: {
 							recipientEmail: email,
 							subject: 'Email Verification Link',
 							text: 'This is the text',
-							html: `<a href="${CLIENT_BASE_URL}/verification-email/${redisData.token}">Verify Email</a>`,
+							html: `<a href="${CLIENT_BASE_URL}/verification-email/${writeEmailVerificationTokenData.token}">Verify Email</a>`,
 						},
 					});
-					const verificationEmailData: typeof sendVerificationEmailData =
-						sendVerificationEmailRes.data?.[
-							Object.keys(
-								sendVerificationEmailRes.data
-							)[0] as keyof typeof sendVerificationEmailData
-						] as any;
-					if (verificationEmailData.ok) {
-						router.push(`/verification-email-sent/${redisData.token}`);
+
+					const sendVerificationEmailData =
+						extractSendEmailVerificationTokenData(
+							sendVerificationEmailRes as any
+						);
+
+					if (sendVerificationEmailData.ok) {
+						router.push(
+							`/verification-email-sent/${writeEmailVerificationTokenData.token}`
+						);
 					} else {
 						throw new Error('Could not send verification email');
 					}
