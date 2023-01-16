@@ -150,6 +150,7 @@ const Header = () => {
 						<SearchBar
 							ref={searchBarRef}
 							closeSearch={() => setIsSearchBtnClicked(false)}
+							isSearchBtnClicked={isSearchBtnClicked}
 						/>
 					</div>
 				</motion.div>
