@@ -15,8 +15,7 @@ import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { ICast } from '@ts/interfaces';
-import { watchStatusOptions } from 'models/watchStatusOptions';
-import { ratingOptions } from 'models/ratingOptions';
+import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { formatDate } from '../../utils/formatDate';
 import {

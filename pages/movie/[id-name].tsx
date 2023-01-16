@@ -14,8 +14,7 @@ import { BASE_IMG_URL } from '../../utils/URLs';
 import { useSession } from 'next-auth/react';
 import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
 import { ICast } from '@ts/interfaces';
-import { watchStatusOptions } from 'models/watchStatusOptions';
-import { ratingOptions } from 'models/ratingOptions';
+import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { formatDate } from '../../utils/formatDate';
 import {
@@ -23,6 +22,7 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
+import { Select } from 'antd';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -35,10 +35,13 @@ const MovieDetails = () => {
 
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
+	const { Option } = Select;
+
 	const { data: movieDetailsData, loading: movieDetailsLoading } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],
 		NexusGenArgTypes['Query']['movieDetails']
 	>(Queries.MOVIE_DETAILS, {
+		skip: isNaN(id),
 		variables: {
 			movieDetailsId: id,
 		},
@@ -49,6 +52,7 @@ const MovieDetails = () => {
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
 	>(Queries.GET_USERS_MOVIE, {
+		skip: !movieDetailsData?.id,
 		variables: {
 			movieId: String(movieDetailsData?.id!),
 		},
@@ -59,6 +63,7 @@ const MovieDetails = () => {
 		NexusGenObjects['MoviesRes'],
 		NexusGenArgTypes['Query']['recommendedMovies']
 	>(Queries.RECOMMENDED_MOVIES, {
+		skip: !movieDetailsData?.id,
 		variables: {
 			recommendedMoviesId: movieDetailsData?.id!,
 		},
@@ -69,6 +74,7 @@ const MovieDetails = () => {
 			NexusGenObjects['MoviesCastCrewRes'],
 			NexusGenArgTypes['Query']['moviesCastCrew']
 		>(Queries.GET_MOVIES_CAST_CREW, {
+			skip: !movieDetailsData?.id,
 			variables: {
 				movieId: movieDetailsData?.id!,
 			},
@@ -194,7 +200,7 @@ const MovieDetails = () => {
 		}
 	}, [usersMovieData, usersMovieLoading]);
 
-	if (movieDetailsLoading || !movieDetailsData) {
+	if (movieDetailsLoading || !movieDetailsData || usersMovieLoading) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />

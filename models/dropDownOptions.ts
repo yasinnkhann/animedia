@@ -11,12 +11,10 @@ export const SORT_BY_OPTIONS = [
 	},
 ];
 
-interface IMovieGenreTypeOption {
+export const MOVIE_GENRE_TYPE_OPTIONS: {
 	value: NexusGenEnums['MovieGenreTypes'];
 	text: string;
-}
-
-export const MOVIE_GENRE_TYPE_OPTIONS: IMovieGenreTypeOption[] = [
+}[] = [
 	{
 		value: 'Action',
 		text: 'Action',
@@ -95,12 +93,10 @@ export const MOVIE_GENRE_TYPE_OPTIONS: IMovieGenreTypeOption[] = [
 	},
 ];
 
-interface IShowGenreTypeOption {
+export const SHOW_GENRE_TYPE_OPTIONS: {
 	value: NexusGenEnums['ShowGenreTypes'];
 	text: string;
-}
-
-export const SHOW_GENRE_TYPE_OPTIONS: IShowGenreTypeOption[] = [
+}[] = [
 	{
 		value: 'Action_AMPERSAND_Adventure',
 		text: 'Action & Adventure',
@@ -247,5 +243,82 @@ export const MY_MEDIA_ITEMS = [
 	{
 		label: 'Plan To Watch',
 		key: 'plan-to-watch',
+	},
+];
+
+export const ratingOptions = [
+	{
+		value: '',
+		text: 'Select Rating',
+	},
+	{
+		value: 10,
+		text: '(10) Masterpiece',
+	},
+	{
+		value: 9,
+		text: '(9) Great',
+	},
+	{
+		value: 8,
+		text: '(8) Very Good',
+	},
+	{
+		value: 7,
+		text: '(7) Good',
+	},
+	{
+		value: 6,
+		text: '(6) Fine',
+	},
+	{
+		value: 5,
+		text: '(5) Average',
+	},
+	{
+		value: 4,
+		text: '(4) Bad',
+	},
+	{
+		value: 3,
+		text: '(3) Very Bad',
+	},
+	{
+		value: 2,
+		text: '(2) Horrible',
+	},
+	{
+		value: 1,
+		text: '(1) Appalling',
+	},
+];
+
+export const watchStatusOptions: {
+	value: NexusGenEnums['WatchStatusTypes'];
+	text: string;
+}[] = [
+	{
+		value: 'NOT_WATCHING',
+		text: 'Not Watching',
+	},
+	{
+		value: 'WATCHING',
+		text: 'Watching',
+	},
+	{
+		value: 'PLAN_TO_WATCH',
+		text: 'Plan to Watch',
+	},
+	{
+		value: 'COMPLETED',
+		text: 'Completed',
+	},
+	{
+		value: 'ON_HOLD',
+		text: 'On Hold',
+	},
+	{
+		value: 'DROPPED',
+		text: 'Dropped',
 	},
 ];
