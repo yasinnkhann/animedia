@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dropdown } from 'antd';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
@@ -13,10 +13,11 @@ interface Props {
 		key: string;
 	}[];
 	name?: string;
+	routeType?: string;
 	isProfile?: boolean;
 }
 
-const DropDownItem = ({ items, isProfile, name }: Props) => {
+const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 	const { data: session } = useSession();
 
 	const router = useRouter();
@@ -32,14 +33,10 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 			const r = randomBetween(0, 255);
 			const g = randomBetween(0, 255);
 			const b = randomBetween(0, 255);
-			const rgb = 'rgb('
-				.concat(String(r), ',')
-				.concat(String(g), ',')
-				.concat(String(b), ')');
 
-			if (tinycolor(rgb).isDark()) {
-				return rgb;
-			}
+			const rgb = `rgb(${String(r)},${String(g)},${String(b)})`;
+
+			if (tinycolor(rgb).isDark()) return rgb;
 		}
 	});
 
@@ -49,25 +46,14 @@ const DropDownItem = ({ items, isProfile, name }: Props) => {
 
 	const handleMenuClick: MenuProps['onClick'] = e => {
 		setOpen(false);
-		let routeType;
 
-		if (name?.includes('My Movies')) {
-			routeType = 'my-movies';
-		} else if (name?.includes('My Shows')) {
-			routeType = 'my-shows';
-		} else if (name?.includes('Movies')) {
-			routeType = 'movies';
-		} else if (name?.includes('Shows')) {
-			routeType = 'shows';
-		} else if (name?.includes('People')) {
-			routeType = 'people';
+		if (routeType) {
+			router.push(`/${routeType}/${e.key}`);
 		} else {
-			return signOut({
+			signOut({
 				callbackUrl: '/',
 			});
 		}
-
-		router.push(`/${routeType}/${e.key}`);
 	};
 
 	const renderAvatar = () => {

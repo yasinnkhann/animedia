@@ -46,13 +46,25 @@ const Header = () => {
 							className='!flex justify-around w-[50%] !mb-0'
 						>
 							<li>
-								<DropDownItem items={MOVIES_ITEMS} name='Movies' />
+								<DropDownItem
+									items={MOVIES_ITEMS}
+									name='Movies'
+									routeType='movies'
+								/>
 							</li>
 							<li>
-								<DropDownItem items={SHOWS_ITEMS} name='Shows' />
+								<DropDownItem
+									items={SHOWS_ITEMS}
+									name='Shows'
+									routeType='shows'
+								/>
 							</li>
 							<li>
-								<DropDownItem items={PEOPLE_ITEMS} name='People' />
+								<DropDownItem
+									items={PEOPLE_ITEMS}
+									name='People'
+									routeType='people'
+								/>
 							</li>
 						</ul>
 						<ul
@@ -68,8 +80,16 @@ const Header = () => {
 							>
 								{status === 'authenticated' && session && (
 									<>
-										<DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' />
-										<DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' />
+										<DropDownItem
+											items={MY_MEDIA_ITEMS}
+											name='My Shows'
+											routeType='my-shows'
+										/>
+										<DropDownItem
+											items={MY_MEDIA_ITEMS}
+											name='My Movies'
+											routeType='my-movies'
+										/>
 									</>
 								)}
 
