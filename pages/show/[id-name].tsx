@@ -41,6 +41,7 @@ const ShowDetails = () => {
 		NexusGenObjects['ShowDetailsRes'],
 		NexusGenArgTypes['Query']['showDetails']
 	>(Queries.SHOW_DETAILS, {
+		skip: isNaN(id),
 		variables: {
 			showDetailsId: id,
 		},
@@ -51,7 +52,7 @@ const ShowDetails = () => {
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
 	>(Queries.GET_USERS_SHOW, {
-		skip: !showDetailsData,
+		skip: !showDetailsData?.id,
 		variables: {
 			showId: String(showDetailsData?.id),
 		},
@@ -62,7 +63,7 @@ const ShowDetails = () => {
 		NexusGenObjects['ShowsRes'],
 		NexusGenArgTypes['Query']['recommendedShows']
 	>(Queries.RECOMMENDED_SHOWS, {
-		skip: !showDetailsData,
+		skip: !showDetailsData?.id,
 		variables: {
 			recommendedShowsId: showDetailsData?.id,
 		},
@@ -73,7 +74,7 @@ const ShowDetails = () => {
 			NexusGenObjects['ShowsCastCrewRes'],
 			NexusGenArgTypes['Query']['showsCastCrew']
 		>(Queries.GET_SHOWS_CAST_CREW, {
-			skip: !showDetailsData,
+			skip: !showDetailsData?.id,
 			variables: {
 				showId: showDetailsData?.id,
 			},
@@ -489,7 +490,7 @@ const ShowDetails = () => {
 		updateShow,
 	]);
 
-	if (showDetailsLoading || !showDetailsData) {
+	if (showDetailsLoading || !showDetailsData || usersShowLoading) {
 		return (
 			<section className='flex justify-center items-center h-screen'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />

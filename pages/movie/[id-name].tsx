@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -22,7 +22,6 @@ import {
 	NexusGenObjects,
 	NexusGenEnums,
 } from '../../graphql/generated/nexus-typegen';
-import { Select } from 'antd';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -34,8 +33,6 @@ const MovieDetails = () => {
 	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
 
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
-
-	const { Option } = Select;
 
 	const { data: movieDetailsData, loading: movieDetailsLoading } = useGQLQuery<
 		NexusGenObjects['MovieDetailsRes'],

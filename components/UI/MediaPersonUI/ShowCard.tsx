@@ -9,6 +9,7 @@ import { BASE_IMG_URL } from '../../../utils/URLs';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';
+import { Circles } from 'react-loading-icons';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -24,7 +25,7 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	const router = useRouter();
 
-	const { data: usersShowData } = useGQLQuery<
+	const { data: usersShowData, loading: usersShowLoading } = useGQLQuery<
 		NexusGenObjects['UserShow'],
 		NexusGenArgTypes['Query']['usersShow']
 	>(Queries.GET_USERS_SHOW, {

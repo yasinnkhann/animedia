@@ -9,6 +9,7 @@ import { BASE_IMG_URL } from '../../../utils/URLs';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';
+import { Circles } from 'react-loading-icons';
 import {
 	NexusGenObjects,
 	NexusGenArgTypes,
@@ -24,7 +25,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 
 	const router = useRouter();
 
-	const { data: usersMovieData } = useGQLQuery<
+	const { data: usersMovieData, loading: usersMovieLoading } = useGQLQuery<
 		NexusGenObjects['UserMovie'],
 		NexusGenArgTypes['Query']['usersMovie']
 	>(Queries.GET_USERS_MOVIE, {
