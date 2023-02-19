@@ -5,7 +5,7 @@ import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/Home/H
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useGQLQuery } from '../hooks/useGQL';
-import { DocumentNode } from '@apollo/client';
+import { DocumentNode, useQuery } from '@apollo/client';
 import { THomeHorizontalScrollerData } from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
 import {
@@ -37,6 +37,9 @@ const Home: NextPage = () => {
 			timeWindow: trendingTimeWindow,
 		},
 	});
+
+	const { data } = useQuery(Queries.POPULAR_MOVIES_TEST);
+	console.log('YO: ', data?.popularMovies);
 
 	// Preparing the queries
 	const {} = useGQLQuery<NexusGenObjects['ShowsRes']>(Queries.POPULAR_SHOWS);
