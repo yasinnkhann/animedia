@@ -1,15 +1,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { BASE_IMG_URL } from '../../../../utils/URLs';
 import * as Queries from '../../../../graphql/queries';
-import { useGQLQuery } from '../../../../hooks/useGQL';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
 
 interface Props {
 	item: IEPDetails;
@@ -18,10 +13,7 @@ interface Props {
 const EpisodeDetailsCard = ({ item }: Props) => {
 	const [showModal, setShowModal] = useState(false);
 
-	const { data: epDetailsCardData } = useGQLQuery<
-		NexusGenObjects['EpisodeDetailsRes'],
-		NexusGenArgTypes['Query']['episodeDetails']
-	>(Queries.GET_EPISODE_DETAILS, {
+	const { data: epDetailsCardData } = useQuery(Queries.GET_EPISODE_DETAILS, {
 		variables: {
 			showId: item.showId,
 			seasonNum: item.season,
@@ -29,7 +21,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 		},
 	});
 
-	if (!epDetailsCardData) return <></>;
+	if (!epDetailsCardData?.episodeDetails) return <></>;
 
 	return (
 		<>
@@ -45,18 +37,20 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					<div className='w-full h-full relative'>
 						<Image
 							className='rounded-lg object-contain'
-							src={BASE_IMG_URL + epDetailsCardData.still_path}
-							alt={epDetailsCardData.name ?? undefined}
+							src={BASE_IMG_URL + epDetailsCardData.episodeDetails.still_path}
+							alt={epDetailsCardData.episodeDetails.name ?? undefined}
 							layout='fill'
 						/>
 					</div>
 					<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
 						<h2 className='text-base m-0 w-full break-words text-center'>
 							<p>
-								Season {epDetailsCardData.season_number} Ep.{' '}
-								{epDetailsCardData.episode_number}
+								Season {epDetailsCardData.episodeDetails.season_number} Ep.{' '}
+								{epDetailsCardData.episodeDetails.episode_number}
 							</p>
-							<p className='font-bold'>{epDetailsCardData.name}</p>
+							<p className='font-bold'>
+								{epDetailsCardData.episodeDetails.name}
+							</p>
 						</h2>
 					</div>
 				</section>
@@ -64,7 +58,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 			{showModal && (
 				<EpisodeDetailsModal
 					closeModal={() => setShowModal(false)}
-					episodeDetails={epDetailsCardData}
+					episodeDetails={epDetailsCardData.episodeDetails}
 				/>
 			)}
 		</>

@@ -2,45 +2,35 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useGQLMutation } from '../../hooks/useGQL';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from '../../graphql/generated/nexus-typegen';
 import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
+import { useMutation } from '@apollo/client';
+import { RedisRes } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	verificationEmailData: NexusGenObjects['RedisRes'];
+	verificationEmailData: RedisRes;
 }
 
 const VerificationEmail = ({ verificationEmailData }: Props) => {
 	const router = useRouter();
 	const [verified, setVerified] = useState<boolean>(false);
 
-	const { mutateFunction: verifyUserEmail, mutateData: verifyUserEmailData } =
-		useGQLMutation<number, NexusGenArgTypes['Mutation']['verifyUserEmail']>(
-			Mutations.VERIFY_USER_EMAIL,
-			{
-				variables: {
-					userId: verificationEmailData.userId!,
-				},
-			}
-		);
-
-	const {
-		mutateFunction: deleteEmailVerificationToken,
-		mutateData: deleteEmailVerificationTokenData,
-	} = useGQLMutation<
-		NexusGenObjects['RedisRes'],
-		NexusGenArgTypes['Mutation']['deleteEmailVerificationToken']
-	>(Mutations.DELETE_EMAIL_VERIFICATION_TOKEN, {
+	const [verifyUserEmail] = useMutation(Mutations.VERIFY_USER_EMAIL, {
 		variables: {
-			token: verificationEmailData.token!,
+			userId: verificationEmailData.userId!,
 		},
 	});
+
+	const [deleteEmailVerificationToken] = useMutation(
+		Mutations.DELETE_EMAIL_VERIFICATION_TOKEN,
+		{
+			variables: {
+				token: verificationEmailData.token!,
+			},
+		}
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -51,28 +41,14 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 					},
 				});
 
-				const updatedUserVerificationData: typeof verifyUserEmailData =
-					updatedUserVerificationRes.data?.[
-						Object.keys(
-							updatedUserVerificationRes.data
-						)[0] as keyof typeof verifyUserEmailData
-					] as any;
-
-				if (updatedUserVerificationData === 200) {
+				if (updatedUserVerificationRes.data?.verifyUserEmail === 200) {
 					const deleteRes = await deleteEmailVerificationToken({
 						variables: {
 							token: verificationEmailData.token!,
 						},
 					});
 
-					const deleteData: typeof deleteEmailVerificationTokenData = deleteRes
-						.data?.[
-						Object.keys(
-							deleteRes.data
-						)[0] as keyof typeof deleteEmailVerificationTokenData
-					] as any;
-
-					if (deleteData?.successMsg) {
+					if (deleteRes.data?.deleteEmailVerificationToken?.successMsg) {
 						setVerified(true);
 					}
 				}
@@ -119,9 +95,9 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		}
 	);
 
-	const data = res?.[Object.keys(res)[0]];
+	const data = res.checkEmailVerificationToken;
 
-	if (data.error) {
+	if (data?.error) {
 		return {
 			redirect: {
 				destination: '/',

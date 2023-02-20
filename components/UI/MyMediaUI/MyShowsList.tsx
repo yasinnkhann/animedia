@@ -1,11 +1,11 @@
 import React from 'react';
 import MyShowEntry from './MyShowEntry';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { TStatusParam } from '@ts/types';
+import { UserShow } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
 	status: TStatusParam;
-	myShows: NexusGenObjects['UserShow'][];
+	myShows: UserShow[];
 }
 
 const MyShowsList = ({ status, myShows }: Props) => {

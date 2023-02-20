@@ -7,35 +7,25 @@ import { useRouter } from 'next/router';
 import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { useGQLMutation, useGQLQuery } from '../../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../../utils/URLs';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../../graphql/generated/nexus-typegen';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { UserMovie } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	myMovie: NexusGenObjects['UserMovie'];
+	myMovie: UserMovie;
 	count: number;
 }
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const router = useRouter();
 
-	const { data: movieData } = useGQLQuery<
-		NexusGenObjects['MovieDetailsRes'],
-		NexusGenArgTypes['Query']['movieDetails']
-	>(Queries.MOVIE_DETAILS, {
+	const { data: movieData } = useQuery(Queries.MOVIE_DETAILS, {
 		variables: {
 			movieDetailsId: Number(myMovie.id),
 		},
 	});
 
-	const { mutateFunction: deleteMovie } = useGQLMutation<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Mutation']['deleteMovie']
-	>(Mutations.DELETE_MOVIE, {
+	const [deleteMovie] = useMutation(Mutations.DELETE_MOVIE, {
 		variables: {
 			movieId: String(myMovie.id),
 		},
@@ -67,9 +57,9 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + movieData?.poster_path}
+						src={BASE_IMG_URL + movieData?.movieDetails?.poster_path}
 						priority
-						alt={movieData?.title}
+						alt={movieData?.movieDetails?.title}
 						layout='fill'
 						onClick={handleGoToDetailsPage}
 					/>
@@ -81,8 +71,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 					</h3>
 
 					<p>
-						{movieData?.release_date
-							? formatDate(movieData?.release_date)
+						{movieData?.movieDetails?.release_date
+							? formatDate(movieData.movieDetails?.release_date)
 							: 'Release Date Not Available'}
 					</p>
 				</section>

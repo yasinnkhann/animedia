@@ -4,74 +4,81 @@ import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/Home/HomeHorizontalScroller';
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { useGQLQuery } from '../hooks/useGQL';
-import { DocumentNode, useQuery } from '@apollo/client';
-import { THomeHorizontalScrollerData } from '@ts/types';
+import { TypedDocumentNode, useQuery } from '@apollo/client';
+import {
+	THomeHorizontalScrollerData,
+	TWhatsPopularData,
+	TTrendingData,
+} from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
 import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-	NexusGenEnums,
-} from '../graphql/generated/nexus-typegen';
+	PopularMoviesQuery,
+	Exact,
+	InputMaybe,
+	PopularShowsQuery,
+	MoviesInTheatresQuery,
+	TimeWindowTypes,
+	TrendingMoviesQuery,
+	TrendingShowsQuery,
+} from 'graphql/generated/code-gen/graphql';
 
 const Home: NextPage = () => {
-	const [whatsPopularQueryType, setWhatsPopularQueryType] =
-		useState<DocumentNode>(Queries.POPULAR_MOVIES);
+	const [whatsPopularQueryType, setWhatsPopularQueryType] = useState<
+		TypedDocumentNode<
+			PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery,
+			Exact<{
+				page?: InputMaybe<number> | undefined;
+			}>
+		>
+	>(Queries.POPULAR_MOVIES);
 
-	const [trendingQueryType, setTrendingQueryType] = useState<DocumentNode>(
-		Queries.TRENDING_MOVIES
+	const [trendingQueryType, setTrendingQueryType] = useState<
+		TypedDocumentNode<
+			TrendingMoviesQuery | TrendingShowsQuery,
+			Exact<{
+				timeWindow: TimeWindowTypes;
+				page?: InputMaybe<number> | undefined;
+			}>
+		>
+	>(Queries.TRENDING_MOVIES);
+
+	const [trendingTimeWindow, setTrendingTimeWindow] = useState<TimeWindowTypes>(
+		TimeWindowTypes.Day
 	);
 
-	const [trendingTimeWindow, setTrendingTimeWindow] =
-		useState<NexusGenEnums['TimeWindowTypes']>('day');
+	const { data: whatsPopularData, loading: whatsPopularLoading } = useQuery(
+		whatsPopularQueryType
+	);
 
-	const { data: whatsPopularData, loading: whatsPopularLoading } = useGQLQuery<
-		NexusGenObjects['MoviesRes']
-	>(whatsPopularQueryType);
-
-	const { data: trendingData, loading: trendingLoading } = useGQLQuery<
-		NexusGenObjects['MoviesRes'],
-		NexusGenArgTypes['Query']['trendingMovies']
-	>(trendingQueryType, {
-		variables: {
-			timeWindow: trendingTimeWindow,
-		},
-	});
-
-	const { data } = useQuery(Queries.POPULAR_MOVIES_TEST);
-	console.log('YO: ', data?.popularMovies);
+	const { data: trendingData, loading: trendingLoading } = useQuery(
+		trendingQueryType,
+		{
+			variables: {
+				timeWindow: trendingTimeWindow,
+			},
+		}
+	);
 
 	// Preparing the queries
-	const {} = useGQLQuery<NexusGenObjects['ShowsRes']>(Queries.POPULAR_SHOWS);
+	const {} = useQuery(Queries.POPULAR_SHOWS);
 
-	const {} = useGQLQuery<NexusGenObjects['MoviesInTheatresRes']>(
-		Queries.MOVIES_IN_THEATRES
-	);
+	const {} = useQuery(Queries.MOVIES_IN_THEATRES);
 
-	const {} = useGQLQuery<
-		NexusGenObjects['MoviesRes'],
-		NexusGenArgTypes['Query']['trendingMovies']
-	>(Queries.TRENDING_MOVIES, {
+	const {} = useQuery(Queries.TRENDING_MOVIES, {
 		variables: {
-			timeWindow: 'week',
+			timeWindow: TimeWindowTypes.Week,
 		},
 	});
 
-	const {} = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.TRENDING_SHOWS, {
+	const {} = useQuery(Queries.TRENDING_SHOWS, {
 		variables: {
-			timeWindow: 'day',
+			timeWindow: TimeWindowTypes.Day,
 		},
 	});
 
-	const {} = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['trendingShows']
-	>(Queries.TRENDING_SHOWS, {
+	const {} = useQuery(Queries.TRENDING_SHOWS, {
 		variables: {
-			timeWindow: 'week',
+			timeWindow: TimeWindowTypes.Week,
 		},
 	});
 
@@ -81,11 +88,26 @@ const Home: NextPage = () => {
 		trendingData &&
 		!trendingLoading;
 
-	const handleChangePopularQueryType = (queryType: DocumentNode) => {
+	const handleChangePopularQueryType = (
+		queryType: TypedDocumentNode<
+			PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery,
+			Exact<{
+				page?: InputMaybe<number> | undefined;
+			}>
+		>
+	) => {
 		setWhatsPopularQueryType(queryType);
 	};
 
-	const handleChangeTrendingQueryType = (queryType: DocumentNode) => {
+	const handleChangeTrendingQueryType = (
+		queryType: TypedDocumentNode<
+			TrendingMoviesQuery | TrendingShowsQuery,
+			Exact<{
+				timeWindow: TimeWindowTypes;
+				page?: InputMaybe<number> | undefined;
+			}>
+		>
+	) => {
 		setTrendingQueryType(queryType);
 	};
 
@@ -155,7 +177,13 @@ const Home: NextPage = () => {
 							<section className='mt-4'>
 								<HomeHorizontalScroller
 									items={
-										whatsPopularData.results as THomeHorizontalScrollerData
+										(
+											whatsPopularData[
+												Object.keys(
+													whatsPopularData
+												)[0] as keyof typeof whatsPopularData
+											] as unknown as TWhatsPopularData
+										).results as THomeHorizontalScrollerData
 									}
 								/>
 							</section>
@@ -198,7 +226,7 @@ const Home: NextPage = () => {
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
-											onClick={() => setTrendingTimeWindow('day')}
+											onClick={() => setTrendingTimeWindow(TimeWindowTypes.Day)}
 										>
 											Today
 										</li>
@@ -208,7 +236,9 @@ const Home: NextPage = () => {
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
-											onClick={() => setTrendingTimeWindow('week')}
+											onClick={() =>
+												setTrendingTimeWindow(TimeWindowTypes.Week)
+											}
 										>
 											This Week
 										</li>
@@ -218,7 +248,15 @@ const Home: NextPage = () => {
 
 							<section className='mt-4 pb-4'>
 								<HomeHorizontalScroller
-									items={trendingData.results as THomeHorizontalScrollerData}
+									items={
+										(
+											trendingData[
+												Object.keys(
+													trendingData
+												)[0] as keyof typeof trendingData
+											] as unknown as TTrendingData
+										).results as THomeHorizontalScrollerData
+									}
 								/>
 							</section>
 						</section>

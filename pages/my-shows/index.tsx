@@ -5,17 +5,18 @@ import { Circles } from 'react-loading-icons';
 import * as Queries from '../../graphql/queries';
 import { useRouter } from 'next/router';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
-import { useGQLQuery } from '../../hooks/useGQL';
-import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
+import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 const MyShows: NextPage = () => {
 	const router = useRouter();
 
-	const { data: usersShowsData, loading: usersShowsLoading } = useGQLQuery<
-		NexusGenObjects['UserShow'][]
-	>(Queries.GET_USERS_SHOWS, {
-		fetchPolicy: 'network-only',
-	});
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
+		Queries.GET_USERS_SHOWS,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
 
 	if (usersShowsLoading) {
 		return (
@@ -46,8 +47,9 @@ const MyShows: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersShowsData?.filter(show => show.status === 'WATCHING')
-												.length
+											usersShowsData?.usersShows?.filter(
+												show => show?.status === WatchStatusTypes.Watching
+											).length
 										}
 									</span>
 								</div>
@@ -61,8 +63,8 @@ const MyShows: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersShowsData?.filter(
-												show => show.status === 'COMPLETED'
+											usersShowsData?.usersShows?.filter(
+												show => show?.status === WatchStatusTypes.Completed
 											).length
 										}
 									</span>
@@ -77,8 +79,9 @@ const MyShows: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersShowsData?.filter(show => show.status === 'ON_HOLD')
-												.length
+											usersShowsData?.usersShows?.filter(
+												show => show?.status === WatchStatusTypes.OnHold
+											).length
 										}
 									</span>
 								</div>
@@ -92,8 +95,9 @@ const MyShows: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersShowsData?.filter(show => show.status === 'DROPPED')
-												.length
+											usersShowsData?.usersShows?.filter(
+												show => show?.status === WatchStatusTypes.Dropped
+											).length
 										}
 									</span>
 								</div>
@@ -107,8 +111,8 @@ const MyShows: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersShowsData?.filter(
-												show => show.status === 'PLAN_TO_WATCH'
+											usersShowsData?.usersShows?.filter(
+												show => show?.status === WatchStatusTypes.Dropped
 											).length
 										}
 									</span>

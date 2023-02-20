@@ -4,63 +4,57 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { useGQLQuery } from '../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../utils/URLs';
 import { IRelatedMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
 import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../graphql/generated/nexus-typegen';
-import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/specificVals';
+import { useQuery } from '@apollo/client';
 
 const PersonDetails = () => {
 	const router = useRouter();
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
-	const { data: personDetailsData, loading: personDetailsLoading } =
-		useGQLQuery<
-			NexusGenObjects['PersonDetailsRes'],
-			NexusGenArgTypes['Query']['personDetails']
-		>(Queries.PERSON_DETAILS, {
+	const { data: personDetailsData, loading: personDetailsLoading } = useQuery(
+		Queries.PERSON_DETAILS,
+		{
 			variables: {
 				personDetailsId: id,
 			},
 			fetchPolicy: 'network-only',
-		});
+		}
+	);
 
-	const { data: knownForMoviesData, loading: knownForMoviesLoading } =
-		useGQLQuery<
-			NexusGenObjects['PersonsKnownForMovieRes'],
-			NexusGenArgTypes['Query']['personsKnownForMovieRes']
-		>(Queries.GET_PERSONS_KNOWN_FOR_MOVIES, {
+	const { data: knownForMoviesData, loading: knownForMoviesLoading } = useQuery(
+		Queries.GET_PERSONS_KNOWN_FOR_MOVIES,
+		{
 			variables: {
 				personsKnownForMovieResId: id,
 			},
 			fetchPolicy: 'network-only',
-		});
+		}
+	);
 
-	const { data: knownForShowsData, loading: knownForShowsLoading } =
-		useGQLQuery<
-			NexusGenObjects['PersonsKnownForShowRes'],
-			NexusGenArgTypes['Query']['personsKnownForShowRes']
-		>(Queries.GET_PERSONS_KNOWN_FOR_SHOWS, {
+	const { data: knownForShowsData, loading: knownForShowsLoading } = useQuery(
+		Queries.GET_PERSONS_KNOWN_FOR_SHOWS,
+		{
 			variables: {
 				personsKnownForShowResId: id,
 			},
 			fetchPolicy: 'network-only',
-		});
+		}
+	);
 
 	const memoMappedMedia = useMemo(() => {
 		const uniqueMovies: Set<number> = new Set();
 
 		const mappedMoviesCast: IRelatedMedia[] = [];
 
-		for (const castObj of knownForMoviesData?.cast ?? []) {
+		for (const castObj of knownForMoviesData?.personsKnownForMovieRes?.cast ??
+			[]) {
 			if (!uniqueMovies.has(castObj!.id)) {
 				uniqueMovies.add(castObj!.id);
 
@@ -77,7 +71,8 @@ const PersonDetails = () => {
 
 		const mappedShowsCast: IRelatedMedia[] = [];
 
-		for (const castObj of knownForShowsData?.cast ?? []) {
+		for (const castObj of knownForShowsData?.personsKnownForShowRes?.cast ??
+			[]) {
 			if (
 				!uniqueShows.has(castObj!.id) &&
 				castObj!.episode_count! > KNOWN_FOR_MIN_EP_COUNT
@@ -126,65 +121,71 @@ const PersonDetails = () => {
 	return (
 		<>
 			<Head>
-				<title>{personDetailsData.name}</title>
+				<title>{personDetailsData.personDetails.name}</title>
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + personDetailsData.profile_path}
-						alt={personDetailsData.name ?? undefined}
+						src={BASE_IMG_URL + personDetailsData.personDetails.profile_path}
+						alt={personDetailsData.personDetails.name ?? undefined}
 						layout='fill'
 					/>
 				</section>
 
 				<section className='pb-48'>
-					<h1>{personDetailsData.name}</h1>
+					<h1>{personDetailsData.personDetails.name}</h1>
 					<h3 className='my-4'>Biography</h3>
 					<p>
-						{personDetailsData.biography!.length > 0
-							? personDetailsData.biography
-							: `We don't have a biography for ${personDetailsData.name}.`}
+						{personDetailsData.personDetails.biography!.length > 0
+							? personDetailsData.personDetails.biography
+							: `We don't have a biography for ${personDetailsData.personDetails.name}.`}
 					</p>
 				</section>
 
 				<section className='ml-8 mt-4'>
 					<h3 className='mb-4 underline underline-offset-4'>Personal Info</h3>
 					<h4>Known For</h4>
-					<p className='ml-1'>{personDetailsData.known_for_department}</p>
+					<p className='ml-1'>
+						{personDetailsData.personDetails.known_for_department}
+					</p>
 					<h4 className='mt-4'>Gender</h4>
 					<p className='ml-1'>
-						{personDetailsData.gender === 1
+						{personDetailsData.personDetails.gender === 1
 							? 'Female'
-							: personDetailsData.gender === 2
+							: personDetailsData.personDetails.gender === 2
 							? 'Male'
 							: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Date of Birth</h4>
 					<p className='ml-1'>
-						{personDetailsData.birthday
-							? `${formatDate(personDetailsData.birthday)}${
-									!personDetailsData.deathday
-										? ` (${getAge(personDetailsData.birthday)} years old)`
+						{personDetailsData.personDetails.birthday
+							? `${formatDate(personDetailsData.personDetails.birthday)}${
+									!personDetailsData.personDetails.deathday
+										? ` (${getAge(
+												personDetailsData.personDetails.birthday
+										  )} years old)`
 										: ''
 							  }`
 							: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Born In</h4>
 					<p className='ml-1'>
-						{personDetailsData.place_of_birth
-							? personDetailsData.place_of_birth
+						{personDetailsData.personDetails.place_of_birth
+							? personDetailsData.personDetails.place_of_birth
 							: 'Unknown'}
 					</p>
-					{personDetailsData.deathday && (
+					{personDetailsData.personDetails.deathday && (
 						<>
 							<h4 className='mt-4'>Date of Death</h4>
-							<p className='ml-1'>{`${formatDate(personDetailsData.deathday)}${
-								personDetailsData.birthday &&
+							<p className='ml-1'>{`${formatDate(
+								personDetailsData.personDetails.deathday
+							)}${
+								personDetailsData.personDetails.birthday &&
 								` (${
-									getAge(personDetailsData.birthday) -
-									getAge(personDetailsData.deathday)
+									getAge(personDetailsData.personDetails.birthday) -
+									getAge(personDetailsData.personDetails.deathday)
 								}`
 							} years old)`}</p>
 						</>

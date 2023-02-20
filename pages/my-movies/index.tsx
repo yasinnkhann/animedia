@@ -4,18 +4,19 @@ import Head from 'next/head';
 import { Circles } from 'react-loading-icons';
 import * as Queries from '../../graphql/queries';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
-import { useGQLQuery } from '../../hooks/useGQL';
-import { NexusGenObjects } from '../../graphql/generated/nexus-typegen';
 import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
+import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 const MyMovies: NextPage = () => {
 	const router = useRouter();
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useGQLQuery<
-		NexusGenObjects['UserMovie'][]
-	>(Queries.GET_USERS_MOVIES, {
-		fetchPolicy: 'network-only',
-	});
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
+		Queries.GET_USERS_MOVIES,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
 
 	if (usersMoviesLoading) {
 		return (
@@ -46,8 +47,8 @@ const MyMovies: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersMoviesData?.filter(
-												movie => movie.status === 'WATCHING'
+											usersMoviesData?.usersMovies?.filter(
+												movie => movie?.status === WatchStatusTypes.Watching
 											).length
 										}
 									</span>
@@ -62,8 +63,8 @@ const MyMovies: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersMoviesData?.filter(
-												movie => movie.status === 'COMPLETED'
+											usersMoviesData?.usersMovies?.filter(
+												movie => movie?.status === WatchStatusTypes.Completed
 											).length
 										}
 									</span>
@@ -78,8 +79,8 @@ const MyMovies: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersMoviesData?.filter(
-												movie => movie.status === 'ON_HOLD'
+											usersMoviesData?.usersMovies?.filter(
+												movie => movie?.status === WatchStatusTypes.OnHold
 											).length
 										}
 									</span>
@@ -94,8 +95,8 @@ const MyMovies: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersMoviesData?.filter(
-												movie => movie.status === 'DROPPED'
+											usersMoviesData?.usersMovies?.filter(
+												movie => movie?.status === WatchStatusTypes.Dropped
 											).length
 										}
 									</span>
@@ -110,8 +111,8 @@ const MyMovies: NextPage = () => {
 									</a>
 									<span>
 										{
-											usersMoviesData?.filter(
-												movie => movie.status === 'PLAN_TO_WATCH'
+											usersMoviesData?.usersMovies?.filter(
+												movie => movie?.status === WatchStatusTypes.PlanToWatch
 											).length
 										}
 									</span>

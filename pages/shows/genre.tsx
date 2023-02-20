@@ -5,8 +5,7 @@ import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
-import { useGQLQuery } from '../../hooks/useGQL';
-import { DocumentNode } from '@apollo/client';
+import { TypedDocumentNode, useQuery } from '@apollo/client';
 import { RESULTS_PER_PAGE } from 'utils/specificVals';
 import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
 import { Circles } from 'react-loading-icons';
@@ -15,10 +14,13 @@ import {
 	SHOW_GENRE_TYPE_OPTIONS,
 } from '../../models/dropDownOptions';
 import {
-	NexusGenEnums,
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from 'graphql/generated/nexus-typegen';
+	Exact,
+	InputMaybe,
+	PopularShowsByGenreQuery,
+	ShowGenreTypes,
+	TopRatedShowsByGenreQuery,
+} from 'graphql/generated/code-gen/graphql';
+import { TShowsGenreData } from '@ts/types';
 
 const { Option } = Select;
 
@@ -26,18 +28,21 @@ const Genre = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
-		Queries.POPULAR_SHOWS_BY_GENRE
+	const [sortByQueryType, setSortByQueryType] = useState<
+		TypedDocumentNode<
+			PopularShowsByGenreQuery | TopRatedShowsByGenreQuery,
+			Exact<{
+				page?: InputMaybe<number> | undefined;
+				genre: ShowGenreTypes;
+			}>
+		>
+	>(Queries.POPULAR_SHOWS_BY_GENRE);
+
+	const [showGenreType, setShowGenreType] = useState<ShowGenreTypes>(
+		ShowGenreTypes.ActionAmpersandAdventure
 	);
 
-	const [showGenreType, setShowGenreType] = useState<
-		NexusGenEnums['ShowGenreTypes']
-	>('Action_AMPERSAND_Adventure');
-
-	const { data: genreOfShowsData } = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['popularShowsByGenre']
-	>(sortByQueryType, {
+	const { data: genreOfShowsData } = useQuery(sortByQueryType, {
 		variables: {
 			genre: showGenreType,
 			page: currPage,
@@ -52,7 +57,7 @@ const Genre = () => {
 		}
 	};
 
-	const handleGenreTypeChange = (value: NexusGenEnums['ShowGenreTypes']) => {
+	const handleGenreTypeChange = (value: ShowGenreTypes) => {
 		setShowGenreType(value);
 	};
 
@@ -111,7 +116,7 @@ const Genre = () => {
 								className='!w-[10rem]'
 								id='genre-type-dropdown'
 								size='middle'
-								defaultValue='Action_AMPERSAND_Adventure'
+								defaultValue={ShowGenreTypes.ActionAmpersandAdventure}
 								onChange={handleGenreTypeChange}
 							>
 								{SHOW_GENRE_TYPE_OPTIONS.map(option => (
@@ -123,10 +128,18 @@ const Genre = () => {
 						</div>
 					</section>
 
-					{genreOfShowsData ? (
+					{(genreOfShowsData?.[
+						Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
+					] as unknown as TShowsGenreData) ? (
 						<div>
 							<MediaList
-								mediaData={genreOfShowsData}
+								mediaData={
+									genreOfShowsData?.[
+										Object.keys(
+											genreOfShowsData
+										)[0] as keyof typeof genreOfShowsData
+									] as unknown as TShowsGenreData
+								}
 								pageNum={currPage}
 								title={`${
 									sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE
@@ -137,7 +150,15 @@ const Genre = () => {
 							/>
 							<Pagination
 								currPage={currPage}
-								totalItems={genreOfShowsData.total_results}
+								totalItems={
+									(
+										genreOfShowsData?.[
+											Object.keys(
+												genreOfShowsData
+											)[0] as keyof typeof genreOfShowsData
+										] as unknown as TShowsGenreData
+									).total_results
+								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>
 									router.push(`${router.pathname}?page=${pageNum}`)

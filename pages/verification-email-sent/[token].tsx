@@ -8,11 +8,7 @@ import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/URLs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { useGQLMutation, useGQLQuery } from '../../hooks/useGQL';
-import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from '../../graphql/generated/nexus-typegen';
+import { useMutation, useQuery } from '@apollo/client';
 
 const VerificationEmailSent = ({
 	token,
@@ -21,50 +17,48 @@ const VerificationEmailSent = ({
 	const [isResending, setIsResending] = useState(false);
 	const [reachedLimit, setReachedLimit] = useState(false);
 
-	const {
-		mutateFunction: writeEmailVerificationToken,
-		mutateData: writeEmailVerificationTokenData,
-		extractData: extractWriteEmailVerificationTokenData,
-	} = useGQLMutation<
-		NexusGenObjects['RedisRes'],
-		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	>(Mutations.WRITE_EMAIL_VERIFICATION_TOKEN, {
-		variables: {
-			email,
-		},
-	});
-
-	const { data: checkRetryEmailVerificationLimitData } = useGQLQuery<
-		NexusGenObjects['RedisRes'],
-		NexusGenArgTypes['Query']['checkRetryEmailVerificationLimit']
-	>(Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT, {
-		variables: {
-			email,
-		},
-	});
-
-	const { mutateFunction: writeRetryEmailVerificationToken } = useGQLMutation<
-		NexusGenObjects['RedisRes'],
-		NexusGenArgTypes['Mutation']['writeRetryEmailVerificationLimit']
-	>(Mutations.WRITE_RETRY_EMAIL_VERIFICATION_LIMIT, {
-		variables: {
-			email,
-		},
-		refetchQueries: () => [
-			{
-				query: Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
+	const [writeEmailVerificationToken] = useMutation(
+		Mutations.WRITE_EMAIL_VERIFICATION_TOKEN,
+		{
+			variables: {
+				email,
 			},
-			'CheckRetryEmailVerificationLimit',
-		],
-	});
+		}
+	);
 
-	const { mutateFunction: sendVerificationEmail } = useGQLMutation<
-		NexusGenObjects['NodeRes'],
-		NexusGenArgTypes['Mutation']['sendVerificationEmail']
-	>(Mutations.SEND_VERIFICATION_EMAIL);
+	const { data: checkRetryEmailVerificationLimitData } = useQuery(
+		Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
+		{
+			variables: {
+				email,
+			},
+		}
+	);
+
+	const [writeRetryEmailVerificationToken] = useMutation(
+		Mutations.WRITE_RETRY_EMAIL_VERIFICATION_LIMIT,
+		{
+			variables: {
+				email,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
+				},
+				'CheckRetryEmailVerificationLimit',
+			],
+		}
+	);
+
+	const [sendVerificationEmail] = useMutation(
+		Mutations.SEND_VERIFICATION_EMAIL
+	);
 
 	const handleResendLink = async () => {
-		if (checkRetryEmailVerificationLimitData?.token === String(3)) {
+		if (
+			checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
+				?.token === String(3)
+		) {
 			setReachedLimit(true);
 			return;
 		}
@@ -81,18 +75,15 @@ const VerificationEmailSent = ({
 			},
 		});
 
-		const writtenTokenData = extractWriteEmailVerificationTokenData(
-			writtenTokenRes as any
-		);
-
-		if (!writtenTokenData?.token) throw new Error('No Token');
+		if (!writtenTokenRes.data?.writeEmailVerificationToken?.token)
+			throw new Error('No Token');
 
 		await sendVerificationEmail({
 			variables: {
 				recipientEmail: email,
 				subject: 'Email Verification Link',
 				text: 'This is the text',
-				html: `<a href="${CLIENT_BASE_URL}/verification-email/${writtenTokenData.token}">Verify Email</a>`,
+				html: `<a href="${CLIENT_BASE_URL}/verification-email/${writtenTokenRes.data.writeEmailVerificationToken.token}">Verify Email</a>`,
 			},
 		});
 
@@ -149,9 +140,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		}
 	);
 
-	const hasTokenData = hasTokenRes?.[Object.keys(hasTokenRes)[0]];
-
-	if (hasTokenData.error) {
+	if (hasTokenRes.checkEmailVerificationToken?.error) {
 		return {
 			redirect: {
 				destination: '/',
@@ -168,7 +157,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		}
 	);
 
-	const email = emailRes?.[Object.keys(emailRes)[0]];
+	const email = emailRes.emailFromRedisToken;
 
 	if (!email) {
 		return {

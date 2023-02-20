@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { graphql } from './generated/code-gen/gql';
 
-export const ADD_MOVIE = gql`
+export const ADD_MOVIE = graphql(`
 	mutation AddedMovie(
 		$movieId: ID!
 		$movieName: String!
@@ -17,9 +17,9 @@ export const ADD_MOVIE = gql`
 			rating
 		}
 	}
-`;
+`);
 
-export const UPDATE_MOVIE = gql`
+export const UPDATE_MOVIE = graphql(`
 	mutation UpdatedMovie(
 		$movieId: ID!
 		$watchStatus: WatchStatusTypes!
@@ -36,9 +36,9 @@ export const UPDATE_MOVIE = gql`
 			rating
 		}
 	}
-`;
+`);
 
-export const DELETE_MOVIE = gql`
+export const DELETE_MOVIE = graphql(`
 	mutation DeletedMovie($movieId: ID!) {
 		deleteMovie(movieId: $movieId) {
 			id
@@ -47,9 +47,9 @@ export const DELETE_MOVIE = gql`
 			rating
 		}
 	}
-`;
+`);
 
-export const ADD_SHOW = gql`
+export const ADD_SHOW = graphql(`
 	mutation AddedShow(
 		$showId: ID!
 		$showName: String!
@@ -69,9 +69,9 @@ export const ADD_SHOW = gql`
 			current_episode
 		}
 	}
-`;
+`);
 
-export const UPDATE_SHOW = gql`
+export const UPDATE_SHOW = graphql(`
 	mutation UpdatedShow(
 		$showId: ID!
 		$watchStatus: WatchStatusTypes!
@@ -91,9 +91,9 @@ export const UPDATE_SHOW = gql`
 			current_episode
 		}
 	}
-`;
+`);
 
-export const DELETE_SHOW = gql`
+export const DELETE_SHOW = graphql(`
 	mutation DeletedShow($showId: ID!) {
 		deleteShow(showId: $showId) {
 			id
@@ -103,9 +103,9 @@ export const DELETE_SHOW = gql`
 			current_episode
 		}
 	}
-`;
+`);
 
-export const WRITE_EMAIL_VERIFICATION_TOKEN = gql`
+export const WRITE_EMAIL_VERIFICATION_TOKEN = graphql(`
 	mutation WriteEmailVerificationToken($email: String!) {
 		writeEmailVerificationToken(email: $email) {
 			error
@@ -114,9 +114,9 @@ export const WRITE_EMAIL_VERIFICATION_TOKEN = gql`
 			userId
 		}
 	}
-`;
+`);
 
-export const DELETE_EMAIL_VERIFICATION_TOKEN = gql`
+export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
 	mutation DeleteEmailVerificationToken($token: String!) {
 		deleteEmailVerificationToken(token: $token) {
 			error
@@ -125,15 +125,15 @@ export const DELETE_EMAIL_VERIFICATION_TOKEN = gql`
 			userId
 		}
 	}
-`;
+`);
 
-export const VERIFY_USER_EMAIL = gql`
+export const VERIFY_USER_EMAIL = graphql(`
 	mutation VerifyUserEmail($userId: ID!) {
 		verifyUserEmail(userId: $userId)
 	}
-`;
+`);
 
-export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
+export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
 	mutation Mutation($email: String!) {
 		writeRetryEmailVerificationLimit(email: $email) {
 			error
@@ -142,9 +142,9 @@ export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = gql`
 			userId
 		}
 	}
-`;
+`);
 
-export const SEND_VERIFICATION_EMAIL = gql`
+export const SEND_VERIFICATION_EMAIL = graphql(`
 	mutation SendVerificationEmail(
 		$recipientEmail: String!
 		$subject: String!
@@ -163,9 +163,9 @@ export const SEND_VERIFICATION_EMAIL = gql`
 			statusCode
 		}
 	}
-`;
+`);
 
-export const REGISTER_USER = gql`
+export const REGISTER_USER = graphql(`
 	mutation RegisterUser($name: String!, $email: String!, $password: String!) {
 		registerUser(name: $name, email: $email, password: $password) {
 			error
@@ -195,4 +195,4 @@ export const REGISTER_USER = gql`
 			statusCode
 		}
 	}
-`;
+`);

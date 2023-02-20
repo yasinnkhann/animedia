@@ -7,12 +7,12 @@ import { Circles } from 'react-loading-icons';
 import { statusParams } from 'utils/statusParams';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
-import { useGQLQuery } from '../../hooks/useGQL';
 import { useSession } from 'next-auth/react';
+import { useQuery } from '@apollo/client';
 import {
-	NexusGenObjects,
-	NexusGenEnums,
-} from '../../graphql/generated/nexus-typegen';
+	UserMovie,
+	WatchStatusTypes,
+} from 'graphql/generated/code-gen/graphql';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -23,35 +23,36 @@ const Status = () => {
 		router.push('/');
 	}
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useGQLQuery<
-		NexusGenObjects['UserMovie'][]
-	>(Queries.GET_USERS_MOVIES, {
-		fetchPolicy: 'network-only',
-	});
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
+		Queries.GET_USERS_MOVIES,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
 
-	const [myMovies, setMyMovies] = useState<NexusGenObjects['UserMovie'][]>([]);
+	const [myMovies, setMyMovies] = useState<UserMovie[]>([]);
 
 	useEffect(() => {
-		if (usersMoviesData) {
+		if (usersMoviesData?.usersMovies) {
 			let statusParam = router.query.status as TStatusParam;
-			let status: NexusGenEnums['WatchStatusTypes'];
+			let status: WatchStatusTypes;
 
 			if (statusParam === 'watching') {
-				status = 'WATCHING';
+				status = WatchStatusTypes.Watching;
 			} else if (statusParam === 'completed') {
-				status = 'COMPLETED';
+				status = WatchStatusTypes.Completed;
 			} else if (statusParam === 'on-hold') {
-				status = 'ON_HOLD';
+				status = WatchStatusTypes.OnHold;
 			} else if (statusParam === 'dropped') {
-				status = 'DROPPED';
+				status = WatchStatusTypes.Dropped;
 			} else if (statusParam === 'plan-to-watch') {
-				status = 'PLAN_TO_WATCH';
+				status = WatchStatusTypes.PlanToWatch;
 			}
 
-			const moviesFiltered = usersMoviesData.filter(
-				(movie: NexusGenObjects['UserMovie']) => movie.status === status
+			const moviesFiltered = usersMoviesData.usersMovies.filter(
+				movie => movie?.status === status
 			);
-			setMyMovies(moviesFiltered);
+			setMyMovies(moviesFiltered as UserMovie[]);
 		}
 	}, [router.query.status, usersMoviesData]);
 

@@ -6,13 +6,10 @@ import { Circles } from 'react-loading-icons';
 import { statusParams } from 'utils/statusParams';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
-import { useGQLQuery } from '../../hooks/useGQL';
 import { useSession } from 'next-auth/react';
-import {
-	NexusGenObjects,
-	NexusGenEnums,
-} from '../../graphql/generated/nexus-typegen';
 import { getClientAuthSession } from '../../lib/nextAuth/get-client-auth-session';
+import { useQuery } from '@apollo/client';
+import { UserShow, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -23,35 +20,36 @@ const Status = () => {
 		router.push('/');
 	}
 
-	const { data: usersShowsData, loading: usersShowsLoading } = useGQLQuery<
-		NexusGenObjects['UserShow'][]
-	>(Queries.GET_USERS_SHOWS, {
-		fetchPolicy: 'network-only',
-	});
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
+		Queries.GET_USERS_SHOWS,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
 
-	const [myShows, setMyShows] = useState<NexusGenObjects['UserShow'][]>([]);
+	const [myShows, setMyShows] = useState<UserShow[]>([]);
 
 	useEffect(() => {
-		if (usersShowsData) {
+		if (usersShowsData?.usersShows) {
 			let statusParam = router.query.status;
-			let status: NexusGenEnums['WatchStatusTypes'];
+			let status: WatchStatusTypes;
 
 			if (statusParam === 'watching') {
-				status = 'WATCHING';
+				status = WatchStatusTypes.Watching;
 			} else if (statusParam === 'completed') {
-				status = 'COMPLETED';
+				status = WatchStatusTypes.Completed;
 			} else if (statusParam === 'on-hold') {
-				status = 'ON_HOLD';
+				status = WatchStatusTypes.OnHold;
 			} else if (statusParam === 'dropped') {
-				status = 'DROPPED';
+				status = WatchStatusTypes.Dropped;
 			} else if (statusParam === 'plan-to-watch') {
-				status = 'PLAN_TO_WATCH';
+				status = WatchStatusTypes.PlanToWatch;
 			}
 
-			const showsFiltered = usersShowsData.filter(
-				(show: NexusGenObjects['UserShow']) => show.status === status
+			const showsFiltered = usersShowsData.usersShows.filter(
+				show => show?.status === status
 			);
-			setMyShows(showsFiltered);
+			setMyShows(showsFiltered as UserShow[]);
 		}
 	}, [router.query.status, usersShowsData]);
 

@@ -5,8 +5,7 @@ import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
-import { useGQLQuery } from '../../hooks/useGQL';
-import { DocumentNode } from '@apollo/client';
+import { TypedDocumentNode, useQuery } from '@apollo/client';
 import { RESULTS_PER_PAGE } from 'utils/specificVals';
 import { Circles } from 'react-loading-icons';
 import {
@@ -14,10 +13,13 @@ import {
 	MOVIE_GENRE_TYPE_OPTIONS,
 } from '../../models/dropDownOptions';
 import {
-	NexusGenEnums,
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from 'graphql/generated/nexus-typegen';
+	Exact,
+	InputMaybe,
+	MovieGenreTypes,
+	PopularMoviesByGenreQuery,
+	TopRatedMoviesByGenreQuery,
+} from 'graphql/generated/code-gen/graphql';
+import { TMoviesGenreData } from '@ts/types';
 
 const { Option } = Select;
 
@@ -25,17 +27,21 @@ const Genre = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const [sortByQueryType, setSortByQueryType] = useState<DocumentNode>(
-		Queries.POPULAR_MOVIES_BY_GENRE
+	const [sortByQueryType, setSortByQueryType] = useState<
+		TypedDocumentNode<
+			PopularMoviesByGenreQuery | TopRatedMoviesByGenreQuery,
+			Exact<{
+				page?: InputMaybe<number> | undefined;
+				genre: MovieGenreTypes;
+			}>
+		>
+	>(Queries.POPULAR_MOVIES_BY_GENRE);
+
+	const [movieGenreType, setMovieGenreType] = useState<MovieGenreTypes>(
+		MovieGenreTypes.Action
 	);
 
-	const [movieGenreType, setMovieGenreType] =
-		useState<NexusGenEnums['MovieGenreTypes']>('Action');
-
-	const { data: genreOfMoviesData } = useGQLQuery<
-		NexusGenObjects['MoviesRes'],
-		NexusGenArgTypes['Query']['popularMoviesByGenre']
-	>(sortByQueryType, {
+	const { data: genreOfMoviesData } = useQuery(sortByQueryType, {
 		variables: { genre: movieGenreType, page: currPage },
 	});
 
@@ -47,7 +53,7 @@ const Genre = () => {
 		}
 	};
 
-	const handleGenreTypeChange = (value: NexusGenEnums['MovieGenreTypes']) => {
+	const handleGenreTypeChange = (value: MovieGenreTypes) => {
 		setMovieGenreType(value);
 	};
 
@@ -106,7 +112,7 @@ const Genre = () => {
 								className='!w-[10rem]'
 								id='genre-type-dropdown'
 								size='middle'
-								defaultValue='Action'
+								defaultValue={MovieGenreTypes.Action}
 								onChange={handleGenreTypeChange}
 							>
 								{MOVIE_GENRE_TYPE_OPTIONS.map(option => (
@@ -117,10 +123,18 @@ const Genre = () => {
 							</Select>
 						</div>
 					</section>
-					{genreOfMoviesData ? (
+					{(genreOfMoviesData?.[
+						Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
+					] as unknown as TMoviesGenreData) ? (
 						<div>
 							<MediaList
-								mediaData={genreOfMoviesData}
+								mediaData={
+									genreOfMoviesData?.[
+										Object.keys(
+											genreOfMoviesData
+										)[0] as keyof typeof genreOfMoviesData
+									] as unknown as TMoviesGenreData
+								}
 								pageNum={currPage}
 								title={`${
 									sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE
@@ -132,7 +146,15 @@ const Genre = () => {
 
 							<Pagination
 								currPage={currPage}
-								totalItems={genreOfMoviesData.total_results}
+								totalItems={
+									(
+										genreOfMoviesData?.[
+											Object.keys(
+												genreOfMoviesData
+											)[0] as keyof typeof genreOfMoviesData
+										] as unknown as TMoviesGenreData
+									).total_results
+								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>
 									router.push(`${router.pathname}?page=${pageNum}`)

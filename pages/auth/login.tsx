@@ -14,11 +14,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
-import { useGQLLazyQuery } from '../../hooks/useGQL';
-import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from '../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
 
 export default function Login({
 	providers,
@@ -40,36 +36,25 @@ export default function Login({
 		onSubmit,
 	});
 
-	const {
-		fetchData: fetchAccountVerifiedData,
-		lazyData: fetchAccountVerifiedLazyData,
-	} = useGQLLazyQuery<
-		NexusGenObjects['AccountVerifiedRes'],
-		NexusGenArgTypes['Query']['accountVerified']
-	>(Queries.ACCOUNT_VERIFIED, {
-		variables: {
-			email: formik.values.email,
-		},
-	});
+	const { data: fetchAccountVerifiedData } = useQuery(
+		Queries.ACCOUNT_VERIFIED,
+		{
+			variables: {
+				email: formik.values.email,
+			},
+		}
+	);
 
 	async function onSubmit() {
 		const { email, password } = formik.values;
 
-		const { data } = await fetchAccountVerifiedData({
-			variables: {
-				email: formik.values.email,
-			},
-		});
-
-		const acctVerifiedData: typeof fetchAccountVerifiedLazyData =
-			data?.[Object.keys(data)[0] as keyof typeof data];
-
-		if (acctVerifiedData?.error) {
+		if (fetchAccountVerifiedData?.accountVerified?.error) {
 			setAcctVerifiedErr({
-				error: acctVerifiedData.error,
+				error: fetchAccountVerifiedData?.accountVerified?.error,
 			});
 			return;
 		}
+
 		const status = await signIn('credentials', {
 			redirect: false,
 			email: email,

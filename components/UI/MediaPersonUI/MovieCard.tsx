@@ -2,21 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
-import { useGQLQuery } from '../../../hooks/useGQL';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';
-import { Circles } from 'react-loading-icons';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
+import { MovieResult } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	movie: NexusGenObjects['MovieResult'];
+	movie: MovieResult;
 	rank: number;
 }
 
@@ -25,14 +21,14 @@ const MovieCard = ({ movie, rank }: Props) => {
 
 	const router = useRouter();
 
-	const { data: usersMovieData, loading: usersMovieLoading } = useGQLQuery<
-		NexusGenObjects['UserMovie'],
-		NexusGenArgTypes['Query']['usersMovie']
-	>(Queries.GET_USERS_MOVIE, {
-		variables: {
-			movieId: String(movie.id),
-		},
-	});
+	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
+		Queries.GET_USERS_MOVIE,
+		{
+			variables: {
+				movieId: String(movie.id),
+			},
+		}
+	);
 
 	const handleGoToDetailsPage = () => {
 		router.push(getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title));
@@ -75,13 +71,17 @@ const MovieCard = ({ movie, rank }: Props) => {
 			{session && (
 				<>
 					<td className='align-middle text-center border-x-2 border-gray-200'>
-						<p>{usersMovieData?.rating ? usersMovieData.rating : 'N/A'}</p>
+						<p>
+							{usersMovieData?.usersMovie?.rating
+								? usersMovieData.usersMovie.rating
+								: 'N/A'}
+						</p>
 					</td>
 
 					<td className='align-middle text-center border-x-2 border-gray-200 px-4'>
 						<p>
-							{usersMovieData?.status
-								? renderTableStatus(usersMovieData.status)
+							{usersMovieData?.usersMovie?.status
+								? renderTableStatus(usersMovieData.usersMovie.status)
 								: 'N/A'}
 						</p>
 					</td>

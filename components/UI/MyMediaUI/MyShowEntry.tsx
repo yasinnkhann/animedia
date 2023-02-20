@@ -7,34 +7,25 @@ import { formatDate } from '../../../utils/formatDate';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { useGQLMutation, useGQLQuery } from '../../../hooks/useGQL';
 import { BASE_IMG_URL } from '../../../utils/URLs';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../../graphql/generated/nexus-typegen';
+import { useMutation, useQuery } from '@apollo/client';
+import { UserShow } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	myShow: NexusGenObjects['UserShow'];
+	myShow: UserShow;
 	count: number;
 }
 
 const MyShowEntry = ({ myShow, count }: Props) => {
 	const router = useRouter();
 
-	const { data: showData } = useGQLQuery<
-		NexusGenObjects['ShowDetailsRes'],
-		NexusGenArgTypes['Query']['showDetails']
-	>(Queries.SHOW_DETAILS, {
+	const { data: showData } = useQuery(Queries.SHOW_DETAILS, {
 		variables: {
 			showDetailsId: Number(myShow.id),
 		},
 	});
 
-	const { mutateFunction: deleteShow } = useGQLMutation<
-		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Mutation']['deleteShow']
-	>(Mutations.DELETE_SHOW, {
+	const [deleteShow] = useMutation(Mutations.DELETE_SHOW, {
 		variables: {
 			showId: String(myShow.id),
 		},
@@ -66,9 +57,9 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + showData?.poster_path}
+						src={BASE_IMG_URL + showData?.showDetails?.poster_path}
 						priority
-						alt={showData?.name}
+						alt={showData?.showDetails?.name}
 						layout='fill'
 						onClick={handleGoToDetailsPage}
 					/>
@@ -80,8 +71,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 					</h3>
 
 					<p>
-						{showData?.first_air_date
-							? formatDate(showData?.first_air_date)
+						{showData?.showDetails?.first_air_date
+							? formatDate(showData.showDetails?.first_air_date)
 							: 'First Air Date Not Available'}
 					</p>
 				</section>
@@ -93,7 +84,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
 			<td className='align-middle text-center border-x-2 border-gray-200'>
 				<p className='text-lg'>
-					{myShow.current_episode}/{showData?.number_of_episodes}
+					{myShow.current_episode}/{showData?.showDetails?.number_of_episodes}
 				</p>
 			</td>
 

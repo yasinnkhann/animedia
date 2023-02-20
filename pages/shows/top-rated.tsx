@@ -4,22 +4,15 @@ import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from '../../graphql/queries';
-import { useGQLQuery } from '../../hooks/useGQL';
 import { RESULTS_PER_PAGE } from '../../utils/specificVals';
 import { Circles } from 'react-loading-icons';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
 
 const TopRatedShows = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const { data: topRatedShowsData } = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['topRatedShows']
-	>(Queries.TOP_RATED_SHOWS, {
+	const { data: topRatedShowsData } = useQuery(Queries.TOP_RATED_SHOWS, {
 		variables: {
 			page: currPage,
 		},
@@ -49,13 +42,13 @@ const TopRatedShows = () => {
 				{topRatedShowsData ? (
 					<section className='flex flex-col items-center'>
 						<MediaList
-							mediaData={topRatedShowsData}
+							mediaData={topRatedShowsData.topRatedShows}
 							pageNum={currPage}
 							title='Top-Rated Shows'
 						/>
 						<Pagination
 							currPage={currPage}
-							totalItems={topRatedShowsData.total_results}
+							totalItems={topRatedShowsData.topRatedShows.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
 							paginate={(pageNum: number) =>
 								router.push(`${router.pathname}?page=${pageNum}`)

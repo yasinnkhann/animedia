@@ -6,14 +6,10 @@ import SearchBar from '../components/UI/SearchUI/SearchBar';
 import SearchResult from '../components/UI/SearchUI/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
-import { useGQLQuery } from '../hooks/useGQL';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/specificVals';
 import type { NextPage } from 'next';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
 
 const Search: NextPage = () => {
 	const router = useRouter();
@@ -25,47 +21,47 @@ const Search: NextPage = () => {
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
 
-	const { data: searchedMovies, loading: searchedMoviesLoading } = useGQLQuery<
-		NexusGenObjects['MoviesRes'],
-		NexusGenArgTypes['Query']['searchedMovies']
-	>(Queries.SEARCHED_MOVIES, {
-		variables: {
-			q: (router.query.q as string) ?? '',
-			page: currPage,
-		},
-	});
+	const { data: searchedMovies, loading: searchedMoviesLoading } = useQuery(
+		Queries.SEARCHED_MOVIES,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+				page: currPage,
+			},
+		}
+	);
 
-	const { data: searchedShows, loading: searchedShowsLoading } = useGQLQuery<
-		NexusGenObjects['ShowsRes'],
-		NexusGenArgTypes['Query']['searchedShows']
-	>(Queries.SEARCHED_SHOWS, {
-		variables: {
-			q: (router.query.q as string) ?? '',
-			page: currPage,
-		},
-	});
+	const { data: searchedShows, loading: searchedShowsLoading } = useQuery(
+		Queries.SEARCHED_SHOWS,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+				page: currPage,
+			},
+		}
+	);
 
-	const { data: searchedPeople, loading: searchedPeopleLoading } = useGQLQuery<
-		NexusGenObjects['PeopleRes'],
-		NexusGenArgTypes['Query']['searchedPeople']
-	>(Queries.SEARCHED_PEOPLE, {
-		variables: {
-			q: (router.query.q as string) ?? '',
-			page: currPage,
-		},
-	});
+	const { data: searchedPeople, loading: searchedPeopleLoading } = useQuery(
+		Queries.SEARCHED_PEOPLE,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+				page: currPage,
+			},
+		}
+	);
 
 	const getSearchedTypeData = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {
-			return searchedMovies;
+			return searchedMovies?.searchedMovies;
 		}
 
 		if (searchResultsType === ESearchResultsType.SHOWS) {
-			return searchedShows;
+			return searchedShows?.searchedShows;
 		}
 
 		if (searchResultsType === ESearchResultsType.PEOPLE) {
-			return searchedPeople;
+			return searchedPeople?.searchedPeople;
 		}
 	};
 
@@ -95,12 +91,15 @@ const Search: NextPage = () => {
 
 	useEffect(() => {
 		if (searchedMovies && searchedShows && searchedPeople) {
-			if (!searchedMovies.results.length && searchedShows.results.length) {
+			if (
+				!searchedMovies.searchedMovies.results.length &&
+				searchedShows.searchedShows.results.length
+			) {
 				setSearchResultsType(ESearchResultsType.SHOWS);
 			} else if (
-				!searchedMovies.results.length &&
-				!searchedShows.results.length &&
-				searchedPeople.results.length
+				!searchedMovies.searchedMovies.results.length &&
+				!searchedShows.searchedShows.results.length &&
+				searchedPeople.searchedPeople.results.length
 			) {
 				setSearchResultsType(ESearchResultsType.PEOPLE);
 			}
@@ -156,7 +155,9 @@ const Search: NextPage = () => {
 										>
 											Movies
 										</h4>
-										<p className='text-right'>{searchedMovies.total_results}</p>
+										<p className='text-right'>
+											{searchedMovies.searchedMovies.total_results}
+										</p>
 									</li>
 									<li className='flex items-center w-full justify-between'>
 										<h4
@@ -173,7 +174,9 @@ const Search: NextPage = () => {
 										>
 											Shows
 										</h4>
-										<p className='text-right'>{searchedShows.total_results}</p>
+										<p className='text-right'>
+											{searchedShows.searchedShows.total_results}
+										</p>
 									</li>
 									<li className='flex items-center w-full justify-between'>
 										<h4
@@ -190,7 +193,9 @@ const Search: NextPage = () => {
 										>
 											People
 										</h4>
-										<p className='text-right'>{searchedPeople.total_results}</p>
+										<p className='text-right'>
+											{searchedPeople.searchedPeople.total_results}
+										</p>
 									</li>
 								</ul>
 							</section>
@@ -213,10 +218,10 @@ const Search: NextPage = () => {
 							currPage={currPage}
 							totalItems={
 								searchResultsType === ESearchResultsType.MOVIES
-									? searchedMovies.total_results
+									? searchedMovies.searchedMovies.total_results
 									: searchResultsType === ESearchResultsType.SHOWS
-									? searchedShows.total_results
-									: searchedPeople.total_results
+									? searchedShows.searchedShows.total_results
+									: searchedPeople.searchedPeople.total_results
 							}
 							itemsPerPage={RESULTS_PER_PAGE}
 							paginate={(pageNum: number) =>

@@ -2,21 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
-import { useGQLQuery } from '../../../hooks/useGQL';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { BASE_IMG_URL } from '../../../utils/URLs';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';
-import { Circles } from 'react-loading-icons';
-import {
-	NexusGenObjects,
-	NexusGenArgTypes,
-} from '../../../graphql/generated/nexus-typegen';
+import { useQuery } from '@apollo/client';
+import { ShowResult } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	show: NexusGenObjects['ShowResult'];
+	show: ShowResult;
 	rank: number;
 }
 
@@ -25,14 +21,14 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	const router = useRouter();
 
-	const { data: usersShowData, loading: usersShowLoading } = useGQLQuery<
-		NexusGenObjects['UserShow'],
-		NexusGenArgTypes['Query']['usersShow']
-	>(Queries.GET_USERS_SHOW, {
-		variables: {
-			showId: String(show.id),
-		},
-	});
+	const { data: usersShowData, loading: usersShowLoading } = useQuery(
+		Queries.GET_USERS_SHOW,
+		{
+			variables: {
+				showId: String(show.id),
+			},
+		}
+	);
 
 	const handleGoToDetailsPage = () => {
 		router.push(getDetailsPageRoute(ESearchType.SHOW, show.id, show.name));
@@ -74,12 +70,16 @@ const ShowCard = ({ show, rank }: Props) => {
 			{session && (
 				<>
 					<td className='align-middle text-center border-x-2 border-gray-200'>
-						<p>{usersShowData?.rating ? usersShowData.rating : 'N/A'}</p>
+						<p>
+							{usersShowData?.usersShow?.rating
+								? usersShowData.usersShow.rating
+								: 'N/A'}
+						</p>
 					</td>
 					<td className='align-middle text-center border-x-2 border-gray-200 px-4'>
 						<p>
-							{usersShowData?.status
-								? renderTableStatus(usersShowData.status)
+							{usersShowData?.usersShow?.status
+								? renderTableStatus(usersShowData.usersShow.status)
 								: 'N/A'}
 						</p>
 					</td>

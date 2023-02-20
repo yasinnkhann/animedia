@@ -8,11 +8,7 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import { registerValidate } from '../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
-import { useGQLMutation } from '../../hooks/useGQL';
-import {
-	NexusGenArgTypes,
-	NexusGenObjects,
-} from '../../graphql/generated/nexus-typegen';
+import { useMutation } from '@apollo/client';
 
 export default function Register() {
 	const [showPW, setShowPW] = useState({
@@ -37,31 +33,20 @@ export default function Register() {
 		error: null,
 	});
 
-	const { mutateFunction: registerUser, extractData: extractRegisterUserData } =
-		useGQLMutation<
-			NexusGenObjects['RegisteredUserRes'],
-			NexusGenArgTypes['Mutation']['registerUser']
-		>(Mutations.REGISTER_USER);
+	const [registerUser] = useMutation(Mutations.REGISTER_USER);
 
-	const {
-		mutateFunction: writeEmailVerificationToken,
-		extractData: extractWriteEmailVerificationTokenData,
-	} = useGQLMutation<
-		NexusGenObjects['RedisRes'],
-		NexusGenArgTypes['Mutation']['writeEmailVerificationToken']
-	>(Mutations.WRITE_EMAIL_VERIFICATION_TOKEN, {
-		variables: {
-			email: formik.values.email,
-		},
-	});
+	const [writeEmailVerificationToken] = useMutation(
+		Mutations.WRITE_EMAIL_VERIFICATION_TOKEN,
+		{
+			variables: {
+				email: formik.values.email,
+			},
+		}
+	);
 
-	const {
-		mutateFunction: sendVerificationEmail,
-		extractData: extractSendEmailVerificationTokenData,
-	} = useGQLMutation<
-		NexusGenObjects['NodeRes'],
-		NexusGenArgTypes['Mutation']['sendVerificationEmail']
-	>(Mutations.SEND_VERIFICATION_EMAIL);
+	const [sendVerificationEmail] = useMutation(
+		Mutations.SEND_VERIFICATION_EMAIL
+	);
 
 	async function onSubmit() {
 		const { name, email, password } = formik.values;
@@ -74,9 +59,7 @@ export default function Register() {
 				},
 			});
 
-			const userData = extractRegisterUserData(registerUserRes as any);
-
-			if (userData.createdUser) {
+			if (registerUserRes?.data?.registerUser?.createdUser) {
 				const writeEmailVerificationTokenRes =
 					await writeEmailVerificationToken({
 						variables: {
@@ -84,40 +67,32 @@ export default function Register() {
 						},
 					});
 
-				const writeEmailVerificationTokenData =
-					extractWriteEmailVerificationTokenData(
-						writeEmailVerificationTokenRes as any
-					);
-
 				if (
-					!writeEmailVerificationTokenData?.error &&
-					writeEmailVerificationTokenData?.token
+					!writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
+						?.error &&
+					writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
+						?.token
 				) {
 					const sendVerificationEmailRes = await sendVerificationEmail({
 						variables: {
 							recipientEmail: email,
 							subject: 'Email Verification Link',
 							text: 'This is the text',
-							html: `<a href="${CLIENT_BASE_URL}/verification-email/${writeEmailVerificationTokenData.token}">Verify Email</a>`,
+							html: `<a href="${CLIENT_BASE_URL}/verification-email/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}">Verify Email</a>`,
 						},
 					});
 
-					const sendVerificationEmailData =
-						extractSendEmailVerificationTokenData(
-							sendVerificationEmailRes as any
-						);
-
-					if (sendVerificationEmailData.ok) {
+					if (sendVerificationEmailRes.data?.sendVerificationEmail?.ok) {
 						router.push(
-							`/verification-email-sent/${writeEmailVerificationTokenData.token}`
+							`/verification-email-sent/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}`
 						);
 					} else {
 						throw new Error('Could not send verification email');
 					}
 				}
 			}
-			if (userData.error) {
-				setRegisterErr({ error: userData.error });
+			if (registerUserRes.data?.registerUser?.error) {
+				setRegisterErr({ error: registerUserRes.data.registerUser.error });
 			}
 		} catch (err) {
 			console.error(err);

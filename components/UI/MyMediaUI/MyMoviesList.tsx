@@ -1,11 +1,11 @@
 import React from 'react';
 import MyMovieEntry from './MyMovieEntry';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { TStatusParam } from '@ts/types';
+import { UserMovie } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
 	status: TStatusParam;
-	myMovies: NexusGenObjects['UserMovie'][];
+	myMovies: UserMovie[];
 }
 
 const MyMoviesList = ({ status, myMovies }: Props) => {
