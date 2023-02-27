@@ -1,7 +1,7 @@
 import React from 'react';
 import PersonCard from './PersonCard';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
-import { RESULTS_PER_PAGE } from '../../../utils/specificVals';
+import { RESULTS_PER_PAGE } from '../../../utils/constants';
 
 interface Props {
 	peopleData: NexusGenObjects['PeopleRes'];

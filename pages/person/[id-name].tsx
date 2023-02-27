@@ -4,14 +4,14 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { BASE_IMG_URL } from '../../utils/URLs';
+import { BASE_IMG_URL } from '../../utils/constants';
 import { IRelatedMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
 import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
-} from '../../utils/specificVals';
+} from '../../utils/constants';
 import { useQuery } from '@apollo/client';
 
 const PersonDetails = () => {

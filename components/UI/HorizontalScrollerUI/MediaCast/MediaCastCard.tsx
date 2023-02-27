@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../../utils/constants';
 import { ICast, IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 import { ESearchType } from '@ts/enums';
 

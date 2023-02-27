@@ -11,7 +11,7 @@ import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerU
 import EpisodeDetailsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { BASE_IMG_URL } from '../../utils/URLs';
+import { BASE_IMG_URL } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';

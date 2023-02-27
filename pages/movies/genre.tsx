@@ -6,7 +6,7 @@ import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { TypedDocumentNode, useQuery } from '@apollo/client';
-import { RESULTS_PER_PAGE } from 'utils/specificVals';
+import { RESULTS_PER_PAGE } from 'utils/constants';
 import { Circles } from 'react-loading-icons';
 import {
 	SORT_BY_OPTIONS,

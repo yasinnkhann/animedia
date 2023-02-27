@@ -7,7 +7,7 @@ import SearchResult from '../components/UI/SearchUI/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
 import { ESearchResultsType, ESearchType } from '@ts/enums';
-import { RESULTS_PER_PAGE } from '../utils/specificVals';
+import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
 

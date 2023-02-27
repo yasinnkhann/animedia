@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
-import { RESULTS_PER_PAGE } from '../../../utils/specificVals';
+import { RESULTS_PER_PAGE } from '../../../utils/constants';
 import { useSession } from 'next-auth/react';
 
 interface Props {

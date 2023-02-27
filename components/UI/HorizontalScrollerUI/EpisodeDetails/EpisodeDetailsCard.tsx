@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../../utils/constants';
 import * as Queries from '../../../../graphql/queries';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
-import { SERVER_BASE_URL } from '../../utils/URLs';
+import { SERVER_BASE_URL } from '../../utils/constants';
 import { useMutation } from '@apollo/client';
 import { RedisRes } from 'graphql/generated/code-gen/graphql';
 

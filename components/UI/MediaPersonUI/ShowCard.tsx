@@ -4,7 +4,7 @@ import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../utils/constants';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';

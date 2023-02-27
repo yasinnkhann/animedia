@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../utils/URLs';
+import { BASE_IMG_URL } from '../utils/constants';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { GrClose } from 'react-icons/gr';
 import { formatDate } from '../utils/formatDate';

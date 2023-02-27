@@ -11,3 +11,13 @@ export const SERVER_BASE_URL =
 	process.env.NODE_ENV === 'production'
 		? 'https://animedia.vercel.app/api/graphql'
 		: 'http://localhost:3000/api/graphql';
+
+export const RESULTS_PER_PAGE = 20;
+
+export const KNOWN_FOR_MIN_EP_COUNT = 5;
+
+export const KNOWN_FOR_CARDS_LIMIT = 20;
+
+export const EMAIL_VERIFICATION_PREFIX = 'email-verification';
+
+export const RETRY_EMAIL_VERIFICATION_PREFIX = 'retry-email-verification';

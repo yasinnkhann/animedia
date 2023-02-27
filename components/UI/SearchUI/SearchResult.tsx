@@ -4,7 +4,7 @@ import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../utils/constants';
 import { formatDate } from '../../../utils/formatDate';
 
 interface Props {

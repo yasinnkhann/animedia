@@ -1,4 +1,4 @@
-import { BASE_URL } from './URLs';
+import { BASE_URL } from './constants';
 
 export const GET_TRENDING_MEDIA = async (
 	mediaType: 'all' | 'movie' | 'tv' | 'person',

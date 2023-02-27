@@ -1,4 +1,4 @@
-import { BASE_URL } from './URLs';
+import { BASE_URL } from './constants';
 
 export const GET_KEYWORD_ID = async (q: string) => {
 	q = q.split(' ').join('+');

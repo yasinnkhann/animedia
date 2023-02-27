@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Pagination from 'components/Pagination';
 import MediaList from 'components/UI/MediaPersonUI/MediaList';
 import * as Queries from '../../graphql/queries';
-import { RESULTS_PER_PAGE } from 'utils/specificVals';
+import { RESULTS_PER_PAGE } from 'utils/constants';
 import { Circles } from 'react-loading-icons';
 import { useQuery } from '@apollo/client';
 

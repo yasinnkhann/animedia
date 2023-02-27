@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../../utils/constants';
 import { ESearchType } from '@ts/enums';
 import {
 	IRelatedMedia,

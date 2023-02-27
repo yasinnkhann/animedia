@@ -10,7 +10,7 @@ import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCast/MediaCastHorizontalScroller';
-import { BASE_IMG_URL } from '../../utils/URLs';
+import { BASE_IMG_URL } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';

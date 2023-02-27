@@ -1,5 +1,5 @@
 import { ESearchType } from '@ts/enums';
-import { CLIENT_BASE_URL } from '../utils/URLs';
+import { CLIENT_BASE_URL } from '../utils/constants';
 
 export const getDetailsPageRoute = (
 	mediaType: ESearchType,

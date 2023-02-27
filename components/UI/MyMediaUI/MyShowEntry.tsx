@@ -7,7 +7,7 @@ import { formatDate } from '../../../utils/formatDate';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../../../utils/URLs';
+import { BASE_IMG_URL } from '../../../utils/constants';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserShow } from 'graphql/generated/code-gen/graphql';
 

@@ -1,4 +1,4 @@
-import { BASE_URL } from './URLs';
+import { BASE_URL } from './constants';
 import {
 	NexusGenObjects,
 	NexusGenEnums,

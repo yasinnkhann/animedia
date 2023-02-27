@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import * as Mutations from '../../graphql/mutations';
 import { useState } from 'react';
-import { CLIENT_BASE_URL } from '../../utils/URLs';
+import { CLIENT_BASE_URL } from '../../utils/constants';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';

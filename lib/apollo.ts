@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
-import { SERVER_BASE_URL } from 'utils/URLs';
+import { SERVER_BASE_URL } from 'utils/constants';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors) {

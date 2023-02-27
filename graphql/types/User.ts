@@ -14,7 +14,7 @@ import { isValidEmail } from '../../utils/isValidEmail';
 import {
 	EMAIL_VERIFICATION_PREFIX,
 	RETRY_EMAIL_VERIFICATION_PREFIX,
-} from 'utils/specificVals';
+} from 'utils/constants';
 
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
