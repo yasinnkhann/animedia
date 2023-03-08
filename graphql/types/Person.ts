@@ -64,7 +64,6 @@ export const PopularPeople = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -109,7 +108,6 @@ export const PersonDetails = extendType({
 							.API_KEY!}&language=en-US&page=1`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -137,7 +135,6 @@ export const SearchedPeople = extendType({
 						}&query=${q}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -222,7 +219,6 @@ export const PersonsKnownForMovie = extendType({
 								.env.API_KEY!}&language=en-US`
 						);
 						const data = await res.json();
-
 						return data;
 					} catch (err) {
 						console.error(err);
@@ -308,7 +304,6 @@ export const PersonsKnownForShow = extendType({
 								.env.API_KEY!}&language=en-US`
 						);
 						const data = await res.json();
-
 						return data;
 					} catch (err) {
 						console.error(err);

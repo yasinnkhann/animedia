@@ -60,7 +60,6 @@ export const PopularMovies = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -87,7 +86,6 @@ export const SearchedMovies = extendType({
 							.API_KEY!}&language=en-US&query=${q}&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -184,7 +182,6 @@ export const MovieDetails = extendType({
 							.API_KEY!}&language=en-US`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -213,7 +210,6 @@ export const PopularAnimeMovies = extendType({
 						}&with_keywords=${keywordID}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -265,7 +261,6 @@ export const TopRatedMovies = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -291,7 +286,6 @@ export const RecommendedMovies = extendType({
 							.env.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -355,7 +349,6 @@ export const MovieReviews = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -403,7 +396,6 @@ export const MoviesInTheatres = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -460,7 +452,6 @@ export const PopularMoviesByGenre = extendType({
 						}&with_genres=${genreID}&sort_by=popularity.desc`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -492,7 +483,6 @@ export const TopRatedMoviesByGenre = extendType({
 						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -565,7 +555,6 @@ export const MoviesCastCrew = extendType({
 							.API_KEY!}&language=en-US`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);

@@ -59,7 +59,6 @@ export const PopularShows = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -86,7 +85,6 @@ export const SearchedShows = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -272,7 +270,6 @@ export const ShowDetails = extendType({
 							.API_KEY!}&language=en-US`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -301,7 +298,6 @@ export const PopularAnimeShows = extendType({
 						}&with_keywords=${keywordID}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -345,7 +341,6 @@ export const TopRatedShows = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -371,7 +366,6 @@ export const RecommendedShows = extendType({
 							.env.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -435,7 +429,6 @@ export const ShowReviews = extendType({
 							.API_KEY!}&language=en-US&page=${page ?? 1}`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -489,7 +482,6 @@ export const PopularShowsByGenre = extendType({
 						}&with_genres=${genreID}&sort_by=popularity.desc`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -521,7 +513,6 @@ export const TopRatedShowsByGenre = extendType({
 						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -593,7 +584,6 @@ export const ShowsCastCrew = extendType({
 							.API_KEY!}&language=en-US`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
@@ -643,7 +633,6 @@ export const EpisodeDetails = extendType({
 							.env.API_KEY!}&language=en-US`
 					);
 					const data = await res.json();
-
 					return data;
 				} catch (err) {
 					console.error(err);
