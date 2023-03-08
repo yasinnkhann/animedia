@@ -60,6 +60,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 		if (session?.user?.image || (session as any)?.token?.picture) {
 			return (
 				<Avatar
+					onClick={() => setOpen(currOpen => !currOpen)}
 					src={session?.user?.image || (session as any)?.token?.picture}
 					size='large'
 				/>
@@ -67,6 +68,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 		} else {
 			return (
 				<Avatar
+					onClick={() => setOpen(currOpen => !currOpen)}
 					style={{
 						backgroundColor: color,
 						verticalAlign: 'middle',
@@ -89,8 +91,20 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 			onOpenChange={handleOpenChange}
 			open={open}
 		>
-			<a className='no-underline' onClick={e => e.preventDefault()}>
-				{isProfile ? renderAvatar() : <p className='text-base'>{name}</p>}
+			<a
+				className='no-underline cursor-pointer'
+				onClick={e => e.preventDefault()}
+			>
+				{isProfile ? (
+					renderAvatar()
+				) : (
+					<p
+						className='text-base'
+						onClick={() => setOpen(currOpen => !currOpen)}
+					>
+						{name}
+					</p>
+				)}
 			</a>
 		</Dropdown>
 	);
