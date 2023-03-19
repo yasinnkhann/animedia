@@ -27,7 +27,7 @@ function validateEmail(email: string) {
 	return errors;
 }
 
-export default async function loginValidate(values: ILogin) {
+export const loginValidate = (values: ILogin) => {
 	const errors: Partial<ILogin> = {};
 
 	const emailErrors = validateEmail(values.email);
@@ -43,9 +43,9 @@ export default async function loginValidate(values: ILogin) {
 	}
 
 	return errors;
-}
+};
 
-export function registerValidate(values: IRegister) {
+export const registerValidate = (values: IRegister) => {
 	const errors: Partial<IRegister> = {};
 
 	const nameErrors = values.name ? [] : ['Name Required!'];
@@ -77,4 +77,4 @@ export function registerValidate(values: IRegister) {
 	}
 
 	return errors;
-}
+};

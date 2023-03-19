@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import loginValidate from '../../lib/nextAuth/account-validate';
+import { loginValidate } from '../../lib/nextAuth/account-validate';
 import * as Queries from '../../graphql/queries';
 import GoogleIcon from '../../assets/google-icon.svg';
 import FacebookIcon from '../../assets/facebook-icon.svg';
