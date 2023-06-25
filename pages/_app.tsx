@@ -6,6 +6,7 @@ import { client } from '../lib/apollo';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
 import '../styles/globals.css';
+import { Analytics } from '@vercel/analytics/react';
 
 function MyApp({
 	Component,
@@ -20,6 +21,7 @@ function MyApp({
 			<ApolloProvider client={client}>
 				<Layout>
 					<Component {...pageProps} />
+					<Analytics />
 				</Layout>
 			</ApolloProvider>
 		</SessionProvider>
