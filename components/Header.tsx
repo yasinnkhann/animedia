@@ -8,7 +8,7 @@ import { BiLogIn } from 'react-icons/bi';
 import { TbSearch } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
 	MY_MEDIA_ITEMS,
 	MOVIES_ITEMS,
@@ -110,7 +110,10 @@ const Header = () => {
 										<RxCross1
 											className='mr-4 cursor-pointer'
 											size={25}
-											onClick={() => setIsSearchBtnClicked(curr => !curr)}
+											onClick={() => {
+												setIsSearchBtnClicked(curr => !curr);
+												searchBarRef.current!.value = '';
+											}}
 										/>
 									))}
 
@@ -140,23 +143,27 @@ const Header = () => {
 					</section>
 				</nav>
 			</header>
-			{isSearchBtnClicked && (
-				<motion.div
-					animate={{ y: 75 }}
-					transition={{
-						duration: 1,
-						ease: [0.08, 0.69, 0.2, 0.99],
-					}}
-				>
-					<div className='mb-24'>
-						<SearchBar
-							ref={searchBarRef}
-							closeSearch={() => setIsSearchBtnClicked(false)}
-							isSearchBtnClicked={isSearchBtnClicked}
-						/>
-					</div>
-				</motion.div>
-			)}
+			<AnimatePresence>
+				{isSearchBtnClicked && (
+					<motion.div
+						initial={{ y: 0 }}
+						animate={{ y: 75 }}
+						exit={{ y: -75 }}
+						transition={{
+							duration: 1.3,
+							ease: [0.08, 0.69, 0.2, 0.99],
+						}}
+					>
+						<div className='mb-24'>
+							<SearchBar
+								ref={searchBarRef}
+								closeSearch={() => setIsSearchBtnClicked(false)}
+								isSearchBtnClicked={isSearchBtnClicked}
+							/>
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</>
 	);
 };
