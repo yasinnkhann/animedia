@@ -95,9 +95,11 @@ const Header = () => {
 
 								{router.pathname !== '/' &&
 									router.pathname !== '/search' &&
+									router.pathname !== '/auth/login' &&
+									router.pathname !== '/auth/register' &&
 									(!isSearchBtnClicked ? (
 										<TbSearch
-											className='cursor-pointer'
+											className='mr-4 cursor-pointer'
 											size={25}
 											onClick={() => {
 												setIsSearchBtnClicked(curr => !curr);
@@ -106,21 +108,21 @@ const Header = () => {
 										/>
 									) : (
 										<RxCross1
-											className='cursor-pointer'
+											className='mr-4 cursor-pointer'
 											size={25}
 											onClick={() => setIsSearchBtnClicked(curr => !curr)}
 										/>
 									))}
 
-								{status === 'unauthenticated' && (
-									<div
-										className='ml-8 flex cursor-pointer items-center'
-										onClick={() => signIn()}
-									>
-										<p className='text-base'>Login</p>
-										<BiLogIn className='ml-2' size={30} />
-									</div>
-								)}
+								{status === 'unauthenticated' &&
+									router.pathname !== '/auth/login' && (
+										<div
+											className='flex cursor-pointer items-center'
+											onClick={() => signIn()}
+										>
+											<BiLogIn size={30} />
+										</div>
+									)}
 
 								{status === 'authenticated' && (
 									<DropDownItem
