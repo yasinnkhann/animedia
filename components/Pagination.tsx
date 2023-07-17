@@ -29,7 +29,7 @@ const Pagination = ({
 	let lastPage = paginationRange![paginationRange!.length - 1];
 
 	useEffect(() => {
-		if (currPage > lastPage) {
+		if (typeof lastPage === 'number' && currPage > lastPage) {
 			paginate(lastPage as number);
 		}
 	}, [currPage, paginate, lastPage]);
@@ -52,8 +52,8 @@ const Pagination = ({
 			{/* Left navigation arrow */}
 			<div className='px-2'>
 				<button
-					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
-						currPage === 1 ? '!text-gray-500 cursor-default' : '!text-green-700'
+					className={`cursor-pointer border-none bg-none p-0 font-sans text-inherit outline-inherit ${
+						currPage === 1 ? 'cursor-default !text-gray-500' : '!text-green-700'
 					}`}
 					onClick={goToPrevPage}
 					disabled={currPage === 1}
@@ -93,9 +93,9 @@ const Pagination = ({
 			{/*  Right Navigation arrow */}
 			<div className='px-2'>
 				<button
-					className={`bg-none text-inherit border-none p-0 font-sans cursor-pointer outline-inherit ${
+					className={`cursor-pointer border-none bg-none p-0 font-sans text-inherit outline-inherit ${
 						currPage === lastPage
-							? '!text-gray-500 cursor-default'
+							? 'cursor-default !text-gray-500'
 							: '!text-green-700'
 					}`}
 					onClick={goToNextPage}

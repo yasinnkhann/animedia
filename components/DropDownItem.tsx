@@ -92,7 +92,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 			open={open}
 		>
 			<a
-				className='no-underline cursor-pointer'
+				className='cursor-pointer no-underline'
 				onClick={e => e.preventDefault()}
 			>
 				{isProfile ? (

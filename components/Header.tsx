@@ -28,11 +28,11 @@ const Header = () => {
 
 	return (
 		<>
-			<header className='fixed top-0 !flex !items-center w-full h-[var(--header-height-mobile)] z-[999] !font-[Rubik] bg-gray-100 !text-base'>
-				<nav className='!flex !items-center w-full ml-[4rem]'>
+			<header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center bg-gray-100 !font-[Rubik] !text-base'>
+				<nav className='ml-[4rem] !flex w-full !items-center'>
 					<section>
 						<Link href='/'>
-							<a className='text-black hover:text-black !mb-0'>
+							<a className='!mb-0 text-black hover:text-black'>
 								<AiFillHome
 									size={25}
 									onClick={() => setIsSearchBtnClicked(false)}
@@ -40,10 +40,10 @@ const Header = () => {
 							</a>
 						</Link>
 					</section>
-					<section className='!flex w-full justify-between ml-[4rem] !items-center'>
+					<section className='ml-[4rem] !flex w-full !items-center justify-between'>
 						<ul
 							id='left-section'
-							className='!flex justify-around w-[50%] !mb-0'
+							className='!mb-0 !flex w-[50%] justify-around'
 						>
 							<li>
 								<DropDownItem
@@ -69,13 +69,13 @@ const Header = () => {
 						</ul>
 						<ul
 							id='right-section'
-							className='!flex !justify-around !w-[20rem] !mr-4'
+							className='!mr-4 !flex !w-[20rem] !justify-around'
 						>
 							<li
-								className={`!flex !items-center !w-full ${
+								className={`!flex !w-full !items-center ${
 									status === 'authenticated'
 										? '!justify-around'
-										: '!justify-end mr-8'
+										: 'mr-8 !justify-end'
 								}`}
 							>
 								{status === 'authenticated' && session && (
@@ -114,7 +114,7 @@ const Header = () => {
 
 								{status === 'unauthenticated' && (
 									<div
-										className='flex items-center cursor-pointer ml-8'
+										className='ml-8 flex cursor-pointer items-center'
 										onClick={() => signIn()}
 									>
 										<p className='text-base'>Login</p>

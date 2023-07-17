@@ -96,13 +96,13 @@ const VerificationEmailSent = ({
 				<title>Verification Email Sent</title>
 			</Head>
 
-			<main className='flex flex-col items-center justify-center h-screen'>
-				<section className='flex flex-col h-36'>
+			<main className='flex h-screen flex-col items-center justify-center'>
+				<section className='flex h-36 flex-col'>
 					<p>
 						A verification link has been sent to your email. If you cannot find
 						it, be sure to check your spam folder.
 					</p>
-					<div className='flex flex-col items-center mt-8'>
+					<div className='mt-8 flex flex-col items-center'>
 						<button
 							className='rounded bg-blue-500 py-2 px-4 text-white'
 							onClick={handleResendLink}

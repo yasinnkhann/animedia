@@ -35,27 +35,27 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 	return (
 		<Fragment>
 			<section
-				className='block fixed z-[1] pt-20 left-0 top-0 w-full h-full overflow-auto bg-black bg-black/[0.4]'
+				className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
 				onClick={handleClickOutside}
 			>
 				<section
-					className='bg-white m-auto p-4 rounded w-[70vw]	h-[85vh] relative overflow-scroll scrollbar-hide'
+					className='relative m-auto h-[85vh] w-[70vw] overflow-scroll	rounded bg-white p-4 scrollbar-hide'
 					ref={contentRef}
 				>
-					<h2 className='text-center mt-4'>{episodeDetails.name}</h2>
-					<div className='flex items-center mb-8 mt-8 justify-end mr-16'>
+					<h2 className='mt-4 text-center'>{episodeDetails.name}</h2>
+					<div className='mb-8 mt-8 mr-16 flex items-center justify-end'>
 						<div className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={+episodeDetails.vote_average!.toFixed(1) * 10}
 							/>
 						</div>
-						<p className='ml-[.5rem] font-medium text-base'>
+						<p className='ml-[.5rem] text-base font-medium'>
 							{commaNumber(episodeDetails.vote_count!)} voted users
 						</p>
 					</div>
 
-					<section className='flex justify-between mt-16'>
-						<section className='flex flex-col justify-center mb-4'>
+					<section className='mt-16 flex justify-between'>
+						<section className='mb-4 flex flex-col justify-center'>
 							<div className='mt-2'>
 								<p>
 									<span className='font-bold'>Season: </span>
