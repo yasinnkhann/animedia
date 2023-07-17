@@ -103,6 +103,11 @@ const Header = () => {
 											size={25}
 											onClick={() => {
 												setIsSearchBtnClicked(curr => !curr);
+												if (searchBarRef.current) {
+													searchBarRef.current.placeholder =
+														'Search for a movie, tv show, or person...';
+													searchBarRef.current.focus();
+												}
 												window.scrollTo(0, 0);
 											}}
 										/>
