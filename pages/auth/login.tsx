@@ -76,9 +76,9 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)] w-3/4 mx-auto flex flex-col gap-10'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-3/4 flex-col gap-10'>
 				<div>
-					<h1 className='text-gray-800 text-4xl font-bold py-4'>Login</h1>
+					<h1 className='py-4 text-4xl font-bold text-gray-800'>Login</h1>
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
@@ -87,7 +87,7 @@ export default function Login({
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.email && formik.touched.email
 								? 'border-rose-600'
 								: ''
@@ -98,7 +98,7 @@ export default function Login({
 							type='email'
 							name='email'
 							placeholder='Email'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span className='flex items-center px-4'>
 							<HiAtSymbol size={25} />
@@ -110,7 +110,7 @@ export default function Login({
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.password && formik.touched.password
 								? 'border-rose-600'
 								: ''
@@ -121,10 +121,10 @@ export default function Login({
 							type={`${showPW ? 'text' : 'password'}`}
 							name='password'
 							placeholder='Password'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span
-							className='flex items-center px-4 cursor-pointer'
+							className='flex cursor-pointer items-center px-4'
 							onClick={() => setShowPW(!showPW)}
 						>
 							{showPW ? (
@@ -137,7 +137,7 @@ export default function Login({
 
 					<div>
 						<button
-							className='w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md py-3 text-gray-50 text-lg'
+							className='w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-lg text-gray-50'
 							type='submit'
 						>
 							Login
@@ -147,11 +147,11 @@ export default function Login({
 					<section className='flex flex-col justify-center'>
 						<div className='flex justify-center'>
 							<button
-								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
+								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('google', { callbackUrl: '/' })}
 							>
-								<div className='w-[50%] flex justify-center items-center'>
+								<div className='flex w-[50%] items-center justify-center'>
 									<div className='mr-3'>
 										<GoogleIcon aria-label='Google Icon' />
 									</div>
@@ -162,11 +162,11 @@ export default function Login({
 
 						<div className='flex justify-center'>
 							<button
-								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
+								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('facebook', { callbackUrl: '/' })}
 							>
-								<div className='w-[50%] flex justify-center items-center'>
+								<div className='flex w-[50%] items-center justify-center'>
 									<div className='mr-3'>
 										<FacebookIcon aria-label='Facebook Icon' />
 									</div>
@@ -177,11 +177,11 @@ export default function Login({
 
 						<div className='flex justify-center'>
 							<button
-								className='w-1/2 border py-3 gap-2 hover:bg-gray-200 flex justify-center'
+								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('discord', { callbackUrl: '/' })}
 							>
-								<div className='w-[50%] flex justify-center items-center'>
+								<div className='flex w-[50%] items-center justify-center'>
 									<div className='mr-3'>
 										<DiscordIcon aria-label='Twitter Icon' />
 									</div>
@@ -193,7 +193,7 @@ export default function Login({
 				</form>
 
 				{acctVerifiedErr.error && (
-					<span className='text-rose-500 text-center'>
+					<span className='text-center text-rose-500'>
 						{acctVerifiedErr.error}
 					</span>
 				)}
