@@ -205,7 +205,7 @@ const MovieDetails = () => {
 		usersMovieLoading
 	) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -218,7 +218,7 @@ const MovieDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
+				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieDetailsData.movieDetails.poster_path}
@@ -228,7 +228,7 @@ const MovieDetails = () => {
 				</section>
 
 				<section className='mt-4'>
-					<section className='flex items-center mb-8 mt-8'>
+					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={
@@ -236,7 +236,7 @@ const MovieDetails = () => {
 								}
 							/>
 						</section>
-						<p className='ml-[.5rem] font-medium text-base'>
+						<p className='ml-[.5rem] text-base font-medium'>
 							{commaNumber(movieDetailsData.movieDetails.vote_count)} voted
 							users
 						</p>
@@ -283,7 +283,7 @@ const MovieDetails = () => {
 					</section>
 				</section>
 
-				<section className='ml-8 my-4'>
+				<section className='my-4 ml-8'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 					<h4>Runtime</h4>
 					<p className='ml-1'>
@@ -313,7 +313,7 @@ const MovieDetails = () => {
 						<>
 							<h4 className='mt-4'>Official Page</h4>
 							<Link href={movieDetailsData.movieDetails.homepage}>
-								<a className='underline ml-1' target='_blank'>
+								<a className='ml-1 underline' target='_blank'>
 									Learn More
 								</a>
 							</Link>

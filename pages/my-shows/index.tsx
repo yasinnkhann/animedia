@@ -20,7 +20,7 @@ const MyShows: NextPage = () => {
 
 	if (usersShowsLoading) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -34,13 +34,13 @@ const MyShows: NextPage = () => {
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				<section className='flex justify-center'>
-					<section className='w-[30rem] h-[30rem] mt-36'>
-						<h1 className='text-center mb-4 !font-[Rubik]'>My Shows</h1>
-						<section className='flex justify-center items-center'>
-							<section className='bg-gray-200 flex flex-col justify-around items-center rounded-lg w-[25rem] h-[15rem]'>
+					<section className='mt-36 h-[30rem] w-[30rem]'>
+						<h1 className='mb-4 text-center !font-[Rubik]'>My Shows</h1>
+						<section className='flex items-center justify-center'>
+							<section className='flex h-[15rem] w-[25rem] flex-col items-center justify-around rounded-lg bg-gray-200'>
 								<div className='pt-4'>
 									<a
-										className='no-underline cursor-pointer'
+										className='cursor-pointer no-underline'
 										onClick={() => router.push('/my-shows/watching')}
 									>
 										Watching:{' '}
@@ -56,7 +56,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline cursor-pointer'
+										className='cursor-pointer no-underline'
 										onClick={() => router.push('/my-shows/completed')}
 									>
 										Completed:{' '}
@@ -72,7 +72,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline cursor-pointer'
+										className='cursor-pointer no-underline'
 										onClick={() => router.push('/my-shows/on-hold')}
 									>
 										On-Hold:{' '}
@@ -88,7 +88,7 @@ const MyShows: NextPage = () => {
 
 								<div>
 									<a
-										className='no-underline cursor-pointer'
+										className='cursor-pointer no-underline'
 										onClick={() => router.push('/my-shows/dropped')}
 									>
 										Dropped:{' '}
@@ -104,7 +104,7 @@ const MyShows: NextPage = () => {
 
 								<div className='pb-4'>
 									<a
-										className='no-underline cursor-pointer'
+										className='cursor-pointer no-underline'
 										onClick={() => router.push('/my-shows/plan-to-watch')}
 									>
 										Plan to Watch:{' '}

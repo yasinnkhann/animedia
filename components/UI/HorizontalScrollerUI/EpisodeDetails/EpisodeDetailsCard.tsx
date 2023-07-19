@@ -26,15 +26,15 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 	return (
 		<>
 			<section
-				className='w-[15rem] h-[7rem] select-none mx-4 relative'
+				className='relative mx-4 h-[7rem] w-[15rem] select-none'
 				role='button'
 				tabIndex={0}
 			>
 				<section
-					className='w-full h-full relative'
+					className='relative h-full w-full'
 					onClick={() => setShowModal(true)}
 				>
-					<div className='w-full h-full relative'>
+					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg object-contain'
 							src={BASE_IMG_URL + epDetailsCardData.episodeDetails.still_path}
@@ -42,8 +42,8 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 							layout='fill'
 						/>
 					</div>
-					<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
-						<h2 className='text-base m-0 w-full break-words text-center'>
+					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
+						<h2 className='m-0 w-full break-words text-center text-base'>
 							<p>
 								Season {epDetailsCardData.episodeDetails.season_number} Ep.{' '}
 								{epDetailsCardData.episodeDetails.episode_number}

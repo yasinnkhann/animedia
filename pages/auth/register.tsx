@@ -105,9 +105,9 @@ export default function Register() {
 				<title>Register</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)] w-3/4 mx-auto flex flex-col gap-10'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-3/4 flex-col gap-10'>
 				<div>
-					<h1 className='text-gray-800 text-4xl font-bold py-4'>Register</h1>
+					<h1 className='py-4 text-4xl font-bold text-gray-800'>Register</h1>
 				</div>
 
 				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
@@ -116,7 +116,7 @@ export default function Register() {
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.name && formik.touched.name ? 'border-rose-600' : ''
 						}`}
 					>
@@ -125,7 +125,7 @@ export default function Register() {
 							type='text'
 							name='name'
 							placeholder='Name'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span className='icon flex items-center px-4'>
 							<HiOutlineUser size={25} />
@@ -137,7 +137,7 @@ export default function Register() {
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.email && formik.touched.email
 								? 'border-rose-600'
 								: ''
@@ -148,7 +148,7 @@ export default function Register() {
 							type='email'
 							name='email'
 							placeholder='Email'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span className='icon flex items-center px-4'>
 							<HiAtSymbol size={25} />
@@ -160,7 +160,7 @@ export default function Register() {
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.password && formik.touched.password
 								? 'border-rose-600'
 								: ''
@@ -171,10 +171,10 @@ export default function Register() {
 							type={`${showPW.password ? 'text' : 'password'}`}
 							name='password'
 							placeholder='Password'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span
-							className='icon flex items-center px-4 cursor-pointer'
+							className='icon flex cursor-pointer items-center px-4'
 							onClick={() =>
 								setShowPW({ ...showPW, password: !showPW.password })
 							}
@@ -194,7 +194,7 @@ export default function Register() {
 					)}
 
 					<div
-						className={`border rounded-xl relative flex h-[2.5rem] ${
+						className={`relative flex h-[2.5rem] rounded-xl border ${
 							formik.errors.confirmPassword && formik.touched.confirmPassword
 								? 'border-rose-600'
 								: ''
@@ -205,10 +205,10 @@ export default function Register() {
 							type={`${showPW.confirmPassword ? 'text' : 'password'}`}
 							name='confirmPassword'
 							placeholder='Confirm Password'
-							className='w-full border-none outline-none bg-inherit pl-4'
+							className='w-full border-none bg-inherit pl-4 outline-none'
 						/>
 						<span
-							className='icon flex items-center px-4 cursor-pointer'
+							className='icon flex cursor-pointer items-center px-4'
 							onClick={() =>
 								setShowPW({
 									...showPW,
@@ -227,7 +227,7 @@ export default function Register() {
 					<div>
 						<button
 							type='submit'
-							className='w-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-md py-3 text-gray-50 text-lg'
+							className='w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-lg text-gray-50'
 						>
 							Sign Up
 						</button>
@@ -235,7 +235,7 @@ export default function Register() {
 				</form>
 
 				{registerErr.error && (
-					<span className='text-rose-500 text-center'>{registerErr.error}</span>
+					<span className='text-center text-rose-500'>{registerErr.error}</span>
 				)}
 
 				<div className='flex flex-col items-center'>

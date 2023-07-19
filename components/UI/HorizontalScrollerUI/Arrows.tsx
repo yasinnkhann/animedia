@@ -50,7 +50,7 @@ export function LeftArrow() {
 	}, [isFirstItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<section className='flex pl-10 relative'>
+		<section className='relative flex pl-10'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollPrev()}>
 				<FaArrowLeft className='absolute left-3 top-[30%] text-xl' />
 			</Arrow>
@@ -73,7 +73,7 @@ export function RightArrow() {
 	}, [isLastItemVisible, visibleItemsWithoutSeparators]);
 
 	return (
-		<section className='flex pr-10 relative'>
+		<section className='relative flex pr-10'>
 			<Arrow handleDisabled={disabled} handleOnClick={() => scrollNext()}>
 				<FaArrowRight className='absolute left-3 top-[30%] text-xl' />
 			</Arrow>

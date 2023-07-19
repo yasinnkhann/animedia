@@ -36,12 +36,12 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	return (
 		<tr className='border'>
-			<td className='align-middle text-center border-x-2 border-gray-200'>
+			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{rank}</p>
 			</td>
 
-			<td className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'>
-				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
+			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
+				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + show.poster_path}
@@ -63,20 +63,20 @@ const ShowCard = ({ show, rank }: Props) => {
 				</section>
 			</td>
 
-			<td className='align-middle text-center border-x-2 border-gray-200'>
+			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
 			</td>
 
 			{session && (
 				<>
-					<td className='align-middle text-center border-x-2 border-gray-200'>
+					<td className='border-x-2 border-gray-200 text-center align-middle'>
 						<p>
 							{usersShowData?.usersShow?.rating
 								? usersShowData.usersShow.rating
 								: 'N/A'}
 						</p>
 					</td>
-					<td className='align-middle text-center border-x-2 border-gray-200 px-4'>
+					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
 						<p>
 							{usersShowData?.usersShow?.status
 								? renderTableStatus(usersShowData.usersShow.status)

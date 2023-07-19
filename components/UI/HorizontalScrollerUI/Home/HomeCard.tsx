@@ -22,7 +22,7 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 
 	return (
 		<section
-			className='w-[10rem] h-[15rem] select-none mx-4 relative'
+			className='relative mx-4 h-[15rem] w-[10rem] select-none'
 			onClick={() =>
 				handleItemClick({
 					mediaType: isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
@@ -33,7 +33,7 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 			role='button'
 			tabIndex={0}
 		>
-			<div className='w-full h-full relative'>
+			<div className='relative h-full w-full'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + item.poster_path}
@@ -43,18 +43,18 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 				/>
 			</div>
 
-			<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
-				<div className='h-[2.5rem] w-[2.5rem] relative bottom-[1rem] left-4'>
+			<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
+				<div className='relative bottom-[1rem] left-4 h-[2.5rem] w-[2.5rem]'>
 					<RoundProgressBar
 						percentageVal={+item.vote_average.toFixed(1) * 10}
 					/>
 				</div>
 
-				<h2 className='text-base m-0 w-full break-words'>
+				<h2 className='m-0 w-full break-words text-base'>
 					<p className='font-bold'>{mediaTitle}</p>
 				</h2>
 
-				<p className='text-sm m-0 p-0'>
+				<p className='m-0 p-0 text-sm'>
 					{isMovie
 						? item.release_date
 							? formatDate(item.release_date)

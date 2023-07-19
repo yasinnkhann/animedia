@@ -72,7 +72,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				{verified && (
-					<div className='flex justify-center items-center h-[80vh]'>
+					<div className='flex h-[80vh] items-center justify-center'>
 						You have been successfully verified! Please login to get redirected
 						to your account.
 					</div>

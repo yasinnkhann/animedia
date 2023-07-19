@@ -63,7 +63,7 @@ const PopularAnimeMovies = () => {
 						/>
 					</section>
 				) : (
-					<section className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+					<section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
 						<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 					</section>
 				)}

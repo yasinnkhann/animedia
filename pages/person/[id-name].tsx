@@ -112,7 +112,7 @@ const PersonDetails = () => {
 		knownForShowsLoading
 	) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -125,7 +125,7 @@ const PersonDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
+				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + personDetailsData.personDetails.profile_path}

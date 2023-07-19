@@ -29,7 +29,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			searchResult = result as NexusGenObjects['MovieResult'];
 			return (
 				<>
-					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
+					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
 							src={BASE_IMG_URL + searchResult.poster_path}
@@ -60,7 +60,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			searchResult = result as NexusGenObjects['ShowResult'];
 			return (
 				<>
-					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
+					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
 							src={BASE_IMG_URL + searchResult.poster_path}
@@ -91,7 +91,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			searchResult = result as NexusGenObjects['PersonResult'];
 			return (
 				<>
-					<div className='relative min-w-[5rem] w-[5rem] cursor-pointer'>
+					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
 							src={BASE_IMG_URL + searchResult.profile_path}
@@ -110,7 +110,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 
 	return (
 		<section
-			className='flex border rounded-lg my-4 mr-16 h-[8rem]'
+			className='my-4 mr-16 flex h-[8rem] rounded-lg border'
 			onClick={directToDetailsPage}
 		>
 			{renderSearchResult()}

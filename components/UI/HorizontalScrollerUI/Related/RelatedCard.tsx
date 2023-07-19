@@ -22,7 +22,7 @@ const RelatedCard = ({ item, handleItemClick }: Props) => {
 
 	return (
 		<section
-			className='w-[10rem] h-[15rem] select-none mx-4 relative'
+			className='relative mx-4 h-[15rem] w-[10rem] select-none'
 			onClick={() =>
 				handleItemClick({
 					mediaType: isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
@@ -33,7 +33,7 @@ const RelatedCard = ({ item, handleItemClick }: Props) => {
 			role='button'
 			tabIndex={0}
 		>
-			<div className='w-full h-full relative'>
+			<div className='relative h-full w-full'>
 				<Image
 					className='rounded-lg'
 					src={BASE_IMG_URL + item.poster_path}
@@ -42,8 +42,8 @@ const RelatedCard = ({ item, handleItemClick }: Props) => {
 				/>
 			</div>
 
-			<div className='w-full relative whitespace-normal flex content-start flex-wrap'>
-				<h2 className='text-base m-0 w-full break-words text-center'>
+			<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
+				<h2 className='m-0 w-full break-words text-center text-base'>
 					<p className='font-bold'>{mediaTitle}</p>
 				</h2>
 			</div>

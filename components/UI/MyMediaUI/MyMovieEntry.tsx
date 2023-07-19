@@ -49,12 +49,12 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
 	return (
 		<tr className='border-2'>
-			<td className='align-middle text-center border-x-2 border-gray-200'>
+			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{count}</p>
 			</td>
 
-			<td className='grid grid-rows-[100%] grid-cols-[5rem_calc(100%-5rem)] break-words p-4'>
-				<section className='row-start-1 w-[5rem] h-[7rem] relative cursor-pointer'>
+			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
+				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + movieData?.movieDetails?.poster_path}
@@ -78,14 +78,14 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				</section>
 			</td>
 
-			<td className='align-middle text-center border-x-2 border-gray-200'>
+			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{myMovie.rating ?? 'N/A'}</p>
 			</td>
 
-			<td className='align-middle text-center border-x-2 border-gray-200'>
+			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<BsFillTrashFill
 					size={20}
-					className='cursor-pointer text-red-500 w-full'
+					className='w-full cursor-pointer text-red-500'
 					onClick={() => {
 						deleteMovie({
 							variables: {

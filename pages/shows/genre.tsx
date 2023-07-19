@@ -86,7 +86,7 @@ const Genre = () => {
 					<section className='m-4 justify-self-center'>
 						<div className='mb-2'>
 							<label
-								className='block mb-1 text-blue-500'
+								className='mb-1 block text-blue-500'
 								htmlFor='sort-by-dropdown'
 							>
 								Sort By:
@@ -107,7 +107,7 @@ const Genre = () => {
 
 						<div>
 							<label
-								className='block mb-1 text-blue-500'
+								className='mb-1 block text-blue-500'
 								htmlFor='genre-type-dropdown'
 							>
 								Genre Type:
@@ -168,7 +168,7 @@ const Genre = () => {
 							/>
 						</div>
 					) : (
-						<section className='h-[calc(100vh-var(--header-height-mobile))] flex justify-center items-center'>
+						<section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
 							<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 						</section>
 					)}

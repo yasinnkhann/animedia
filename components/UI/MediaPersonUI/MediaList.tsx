@@ -26,12 +26,12 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 				<table className='w-full'>
 					<thead>
 						<tr className='border-2 border-gray-200'>
-							<th className='border-r-2 border-gray-200 w-[5rem] p-4'>Rank</th>
+							<th className='w-[5rem] border-r-2 border-gray-200 p-4'>Rank</th>
 							<th className='border-r-2 border-gray-200 p-4'>Title</th>
 							<th className='w-[5rem] p-4'>Rating</th>
 							{session && (
 								<>
-									<th className='border-x-2 border-gray-200 w-[7rem] p-4'>
+									<th className='w-[7rem] border-x-2 border-gray-200 p-4'>
 										My Rating
 									</th>
 									<th className='w-[7rem] p-4'>Status</th>

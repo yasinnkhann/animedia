@@ -23,7 +23,7 @@ const PersonCard = ({ person }: Props) => {
 	return (
 		<section>
 			<div
-				className='h-[20rem] relative cursor-pointer'
+				className='relative h-[20rem] cursor-pointer'
 				onClick={handleGoToDetailsPage}
 			>
 				<Image

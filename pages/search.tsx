@@ -118,7 +118,7 @@ const Search: NextPage = () => {
 
 	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -135,12 +135,12 @@ const Search: NextPage = () => {
 					<>
 						<SearchBar ref={searchBarRef} />
 						<section className='grid grid-cols-[20%_80%]'>
-							<section className='m-4 border rounded-lg flex flex-col items-center px-8'>
-								<div className='w-full mb-4'>
+							<section className='m-4 flex flex-col items-center rounded-lg border px-8'>
+								<div className='mb-4 w-full'>
 									<h3>Search Results</h3>
 								</div>
 								<ul className='w-full'>
-									<li className='flex items-center w-full justify-between'>
+									<li className='flex w-full items-center justify-between'>
 										<h4
 											className='cursor-pointer text-left'
 											onClick={() =>
@@ -159,7 +159,7 @@ const Search: NextPage = () => {
 											{searchedMovies.searchedMovies.total_results}
 										</p>
 									</li>
-									<li className='flex items-center w-full justify-between'>
+									<li className='flex w-full items-center justify-between'>
 										<h4
 											className='cursor-pointer text-left'
 											onClick={() =>
@@ -178,7 +178,7 @@ const Search: NextPage = () => {
 											{searchedShows.searchedShows.total_results}
 										</p>
 									</li>
-									<li className='flex items-center w-full justify-between'>
+									<li className='flex w-full items-center justify-between'>
 										<h4
 											className='cursor-pointer text-left'
 											onClick={() =>

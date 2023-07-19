@@ -113,7 +113,7 @@ const Home: NextPage = () => {
 
 	if (trendingLoading || whatsPopularLoading) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -130,11 +130,11 @@ const Home: NextPage = () => {
 					<div>
 						<SearchBar />
 						<section className='mt-4'>
-							<section className='flex w-full ml-[3rem] items-end'>
+							<section className='ml-[3rem] flex w-full items-end'>
 								<div>
 									<h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
 								</div>
-								<ul className='flex w-[15rem] md:w-[25rem] justify-around'>
+								<ul className='flex w-[15rem] justify-around md:w-[25rem]'>
 									<li
 										className={`cursor-pointer ${
 											whatsPopularQueryType === Queries.POPULAR_MOVIES
@@ -188,14 +188,14 @@ const Home: NextPage = () => {
 								/>
 							</section>
 
-							<section className='flex items-end ml-[3rem] mt-4'>
+							<section className='ml-[3rem] mt-4 flex items-end'>
 								<div>
 									<h1 className='text-xl sm:text-3xl'>Trending</h1>
 								</div>
 								<section className='flex w-full justify-around'>
 									<ul className='flex justify-around'>
 										<li
-											className={`cursor-pointer mr-4 md:mr-20 ${
+											className={`mr-4 cursor-pointer md:mr-20 ${
 												trendingQueryType === Queries.TRENDING_MOVIES
 													? 'border-b-4 border-indigo-500'
 													: ''
@@ -221,7 +221,7 @@ const Home: NextPage = () => {
 									</ul>
 									<ul className='flex justify-around'>
 										<li
-											className={`cursor-pointer mr-4 md:mr-20 ${
+											className={`mr-4 cursor-pointer md:mr-20 ${
 												trendingTimeWindow === 'day'
 													? 'border-b-4 border-indigo-500'
 													: ''

@@ -9,15 +9,15 @@ const Custom404 = () => {
 			</Head>
 
 			<main>
-				<section className='block my-[6.25rem] mx-auto relative text-center w-[80%]'>
-					<div className='inline-block h-[15.625rem] relative z-[2] text-[13.75rem] tracking-[1rem]'>
+				<section className='relative my-[6.25rem] mx-auto block w-[80%] text-center'>
+					<div className='relative z-[2] inline-block h-[15.625rem] text-[13.75rem] tracking-[1rem]'>
 						404
 					</div>
-					<hr className='border-white border-solid border-t-4 h-2 my-0 mx-auto p-0 text-center text-white w-[26.25rem] z-[-10] after:inline-block after:text-3xl after:py-0 after:px-1 after:relative after:content-[\u2022]' />
-					<div className='block text-[4em] relative text-center tracking-[0.75rem] leading-[80%] my-2'>
+					<hr className='z-[-10] my-0 mx-auto h-2 w-[26.25rem] border-t-4 border-solid border-white p-0 text-center text-white after:relative after:inline-block after:py-0 after:px-1 after:text-3xl after:content-[\u2022]' />
+					<div className='relative my-2 block text-center text-[4em] leading-[80%] tracking-[0.75rem]'>
 						THE PAGE
 					</div>
-					<div className='text-center block relative text-xl my-2'>
+					<div className='relative my-2 block text-center text-xl'>
 						WAS NOT FOUND
 					</div>
 				</section>
