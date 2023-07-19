@@ -494,7 +494,7 @@ const ShowDetails = () => {
 
 	if (showDetailsLoading || !showDetailsData?.showDetails || usersShowLoading) {
 		return (
-			<section className='flex justify-center items-center h-screen'>
+			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 			</section>
 		);
@@ -507,7 +507,7 @@ const ShowDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='relative mx-4 mt-4 aspect-w-16 aspect-h-16'>
+				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={BASE_IMG_URL + showDetailsData.showDetails.poster_path}
@@ -517,7 +517,7 @@ const ShowDetails = () => {
 				</section>
 
 				<section className='mt-4'>
-					<section className='flex items-center mb-8 mt-8'>
+					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={
@@ -525,13 +525,13 @@ const ShowDetails = () => {
 								}
 							/>
 						</section>
-						<p className='ml-[.5rem] font-medium text-base'>
+						<p className='ml-[.5rem] text-base font-medium'>
 							{commaNumber(showDetailsData.showDetails.vote_count)} voted users
 						</p>
 					</section>
 
 					{status === 'authenticated' && session && (
-						<section className='my-4 h-[1.5rem] flex'>
+						<section className='my-4 flex h-[1.5rem]'>
 							<select
 								className='h-full rounded outline-none'
 								value={watchStatus}
@@ -568,7 +568,7 @@ const ShowDetails = () => {
 							>
 								<span>Episodes:</span>
 								<input
-									className='text-right w-12 focus:outline-none'
+									className='w-12 text-right focus:outline-none'
 									type='text'
 									value={currEp}
 									onChange={handleEpisodeChange}
@@ -604,7 +604,7 @@ const ShowDetails = () => {
 					</section>
 				</section>
 
-				<section className='ml-8 my-4'>
+				<section className='my-4 ml-8'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 					<h4 className='mt-4'>No. of Seasons</h4>
 					<p className='ml-1'>
@@ -682,7 +682,7 @@ const ShowDetails = () => {
 						<>
 							<h4 className='mt-4'>Official Page</h4>
 							<Link href={showDetailsData.showDetails.homepage}>
-								<a className='underline ml-1' target='_blank'>
+								<a className='ml-1 underline' target='_blank'>
 									Learn More
 								</a>
 							</Link>
