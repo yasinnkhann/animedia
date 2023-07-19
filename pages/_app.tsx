@@ -5,8 +5,8 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from '../lib/apollo';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
-import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/react';
+import '../styles/globals.css';
 
 function MyApp({
 	Component,
