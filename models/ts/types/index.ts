@@ -24,7 +24,7 @@ export type TStatusParam =
 
 export const searchResultsConst = ['movies', 'shows', 'people'] as const;
 
-export type TSearchResults = typeof searchResultsConst[number];
+export type TSearchResults = (typeof searchResultsConst)[number];
 
 export type TWhatsPopularData =
 	| PopularMoviesQuery['popularMovies']
