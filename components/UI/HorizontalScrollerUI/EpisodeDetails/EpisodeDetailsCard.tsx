@@ -21,7 +21,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 		},
 	});
 
-	if (!epDetailsCardData?.episodeDetails) return <></>;
+	if (!epDetailsCardData?.episodeDetails?.id) return <></>;
 
 	return (
 		<>
