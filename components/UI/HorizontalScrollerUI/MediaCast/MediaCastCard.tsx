@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../../utils/constants';
 import { ICast, IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 import { ESearchType } from '@ts/enums';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	item: ICast;
@@ -29,7 +29,7 @@ const MediaCastCard = ({ item, handleItemClick }: Props) => {
 			<div className='relative h-full w-full'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + item.profile_path}
+					src={getImage(item.profile_path)}
 					alt={item.name}
 					layout='fill'
 				/>

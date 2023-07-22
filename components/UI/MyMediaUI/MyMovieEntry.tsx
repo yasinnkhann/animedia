@@ -7,9 +7,9 @@ import { useRouter } from 'next/router';
 import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../../../utils/constants';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserMovie } from 'graphql/generated/code-gen/graphql';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	myMovie: UserMovie;
@@ -57,7 +57,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + movieData?.movieDetails?.poster_path}
+						src={getImage(movieData?.movieDetails?.poster_path)}
 						priority
 						alt={movieData?.movieDetails?.title}
 						layout='fill'

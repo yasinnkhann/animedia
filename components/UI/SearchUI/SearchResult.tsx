@@ -4,8 +4,8 @@ import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../utils/constants';
 import { formatDate } from '../../../utils/formatDate';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	result:
@@ -32,7 +32,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
-							src={BASE_IMG_URL + searchResult.poster_path}
+							src={getImage(searchResult.poster_path)}
 							alt={searchResult.title}
 							layout='fill'
 							priority
@@ -63,7 +63,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
-							src={BASE_IMG_URL + searchResult.poster_path}
+							src={getImage(searchResult.poster_path)}
 							alt={searchResult.name}
 							layout='fill'
 							priority
@@ -94,7 +94,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
-							src={BASE_IMG_URL + searchResult.profile_path}
+							src={getImage(searchResult.profile_path)}
 							alt={searchResult.name}
 							layout='fill'
 							priority

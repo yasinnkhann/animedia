@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { BASE_IMG_URL } from '../../utils/constants';
 import { IRelatedMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
 import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
@@ -13,6 +12,7 @@ import {
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
+import { getImage } from 'utils/getImage';
 
 const PersonDetails = () => {
 	const router = useRouter();
@@ -128,7 +128,7 @@ const PersonDetails = () => {
 				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + personDetailsData.personDetails.profile_path}
+						src={getImage(personDetailsData.personDetails.profile_path)}
 						alt={personDetailsData.personDetails.name ?? undefined}
 						layout='fill'
 					/>

@@ -4,12 +4,12 @@ import * as Queries from '../../../graphql/queries';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../../../utils/constants';
 import { formatDate } from '../../../utils/formatDate';
 import { useSession } from 'next-auth/react';
 import { renderTableStatus } from '../../../utils/renderTableStatus';
 import { useQuery } from '@apollo/client';
 import { ShowResult } from 'graphql/generated/code-gen/graphql';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	show: ShowResult;
@@ -44,7 +44,7 @@ const ShowCard = ({ show, rank }: Props) => {
 				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + show.poster_path}
+						src={getImage(show.poster_path)}
 						alt={show.name}
 						layout='fill'
 						onClick={handleGoToDetailsPage}

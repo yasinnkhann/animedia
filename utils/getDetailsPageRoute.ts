@@ -6,13 +6,13 @@ export const getDetailsPageRoute = (
 	id: number,
 	title: string
 ) => {
-	return `${CLIENT_BASE_URL}/${mediaType}/${id}-${title
+	const cleanTitle = title
 		.toLowerCase()
 		.replace(/[^a-z0-9\/☆ -]/gi, '')
 		.replace(/[\/☆]/gi, ' ')
-		.replace(/'  '/gi, ' ')
+		.replace(/\s+/g, ' ')
 		.trim()
-		.split(' ')
-		.join('-')
-		.replace(/-{2,}/gi, '-')}`;
+		.replace(/ /g, '-');
+
+	return `${CLIENT_BASE_URL}/${mediaType}/${id}-${cleanTitle}`;
 };

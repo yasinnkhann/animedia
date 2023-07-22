@@ -10,7 +10,6 @@ import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RecommendedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCast/MediaCastHorizontalScroller';
-import { BASE_IMG_URL } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
@@ -18,6 +17,7 @@ import { getEnglishName } from 'all-iso-language-codes';
 import { formatDate } from '../../utils/formatDate';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import { getImage } from 'utils/getImage';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -221,7 +221,7 @@ const MovieDetails = () => {
 				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + movieDetailsData.movieDetails.poster_path}
+						src={getImage(movieDetailsData.movieDetails.poster_path)}
 						alt={movieDetailsData.movieDetails.title ?? undefined}
 						layout='fill'
 					/>

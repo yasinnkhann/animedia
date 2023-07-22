@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../../../../utils/constants';
 import * as Queries from '../../../../graphql/queries';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
 import { useQuery } from '@apollo/client';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	item: IEPDetails;
@@ -37,7 +37,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg object-contain'
-							src={BASE_IMG_URL + epDetailsCardData.episodeDetails.still_path}
+							src={getImage(epDetailsCardData.episodeDetails.still_path)}
 							alt={epDetailsCardData.episodeDetails.name ?? undefined}
 							layout='fill'
 						/>

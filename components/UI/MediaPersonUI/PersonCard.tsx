@@ -2,9 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
-import { BASE_IMG_URL } from '../../../utils/constants';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	person: NexusGenObjects['PersonResult'];
@@ -28,7 +28,7 @@ const PersonCard = ({ person }: Props) => {
 			>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + person.profile_path}
+					src={getImage(person.profile_path)}
 					alt={person.name}
 					layout='fill'
 				/>

@@ -11,7 +11,6 @@ import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerU
 import EpisodeDetailsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
-import { BASE_IMG_URL } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
@@ -19,6 +18,7 @@ import { getEnglishName } from 'all-iso-language-codes';
 import { formatDate } from '../../utils/formatDate';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
+import { getImage } from 'utils/getImage';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
@@ -510,7 +510,7 @@ const ShowDetails = () => {
 				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + showDetailsData.showDetails.poster_path}
+						src={getImage(showDetailsData.showDetails.poster_path)}
 						alt={showDetailsData.showDetails.name}
 						layout='fill'
 					/>

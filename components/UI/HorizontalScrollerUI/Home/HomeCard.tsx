@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { NexusGenObjects } from '../../../../graphql/generated/nexus-typegen/index';
-import { BASE_IMG_URL } from '../../../../utils/constants';
 import { ESearchType } from '@ts/enums';
 import { formatDate } from '../../../../utils/formatDate';
 import RoundProgressBar from '../../../RoundProgressBar';
 import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	item: NexusGenObjects['MovieResult'] | NexusGenObjects['ShowResult'];
@@ -36,7 +36,7 @@ const HomeCard = ({ item, handleItemClick }: Props) => {
 			<div className='relative h-full w-full'>
 				<Image
 					className='rounded-lg'
-					src={BASE_IMG_URL + item.poster_path}
+					src={getImage(item.poster_path)}
 					alt={mediaTitle}
 					layout='fill'
 					priority

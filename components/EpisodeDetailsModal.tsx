@@ -1,11 +1,11 @@
 import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { BASE_IMG_URL } from '../utils/constants';
 import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { GrClose } from 'react-icons/gr';
 import { formatDate } from '../utils/formatDate';
 import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	episodeDetails: NexusGenObjects['EpisodeDetailsRes'];
@@ -90,7 +90,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 						<section>
 							<Image
 								className='rounded-lg'
-								src={BASE_IMG_URL + episodeDetails.still_path}
+								src={getImage(episodeDetails.still_path)}
 								alt={episodeDetails.name ?? undefined}
 								height={200}
 								width={300}

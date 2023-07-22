@@ -7,9 +7,9 @@ import { formatDate } from '../../../utils/formatDate';
 import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
-import { BASE_IMG_URL } from '../../../utils/constants';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserShow } from 'graphql/generated/code-gen/graphql';
+import { getImage } from 'utils/getImage';
 
 interface Props {
 	myShow: UserShow;
@@ -57,7 +57,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 					<Image
 						className='rounded-lg'
-						src={BASE_IMG_URL + showData?.showDetails?.poster_path}
+						src={getImage(showData?.showDetails?.poster_path)}
 						priority
 						alt={showData?.showDetails?.name}
 						layout='fill'
