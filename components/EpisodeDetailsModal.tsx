@@ -73,16 +73,22 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							<div className='mt-2'>
 								<p>
 									<span className='font-bold'>Runtime: </span>
-									{episodeDetails.runtime}
+									{episodeDetails.runtime ? (
+										<p>{episodeDetails.runtime}</p>
+									) : (
+										<i>Runtime Not Available.</i>
+									)}
 								</p>
 							</div>
 
 							<div className='mt-2'>
 								<p>
 									<span className='font-bold'>Air Date: </span>
-									{episodeDetails.air_date
-										? formatDate(episodeDetails.air_date)
-										: 'Air Date Not Available'}
+									{episodeDetails.air_date ? (
+										<p>formatDate(episodeDetails.air_date)</p>
+									) : (
+										<i>Air Date Not Available</i>
+									)}
 								</p>
 							</div>
 						</section>
@@ -100,7 +106,11 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 
 					<section className='mt-4'>
 						<h5 className='mb-2 underline underline-offset-4'>Description:</h5>
-						<p>{episodeDetails.overview}</p>
+						{episodeDetails.overview ? (
+							<p>{episodeDetails.overview}</p>
+						) : (
+							<i>No Description Available.</i>
+						)}
 					</section>
 
 					<button className='absolute top-2 right-2' onClick={closeModal}>
