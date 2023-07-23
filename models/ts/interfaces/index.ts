@@ -6,7 +6,7 @@ export interface IHorizontalScrollerItemClickInfo {
 	title: string;
 }
 
-export interface IRelatedMedia {
+export interface IRecommendedMedia {
 	id: number;
 	poster_path: string | undefined | null;
 	title?: string;

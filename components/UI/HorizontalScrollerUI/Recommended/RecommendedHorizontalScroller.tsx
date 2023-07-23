@@ -1,22 +1,17 @@
 import React from 'react';
-import RelatedCard from './RelatedCard';
+import RecommendedCard from './RecommendedCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
-import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
-import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
-import { IRelatedMedia } from '@ts/interfaces';
+import { IRecommendedMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: IRelatedMedia[];
+	items: IRecommendedMedia[];
 }
 
-const RelatedHorizontalScroller = ({ items }: Props) => {
-	const router = useRouter();
-
+const RecommendedHorizontalScroller = ({ items }: Props) => {
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -27,16 +22,6 @@ const RelatedHorizontalScroller = ({ items }: Props) => {
 					scrollContainer.current.scrollLeft += posDiff;
 				}
 			});
-
-	const handleItemClick = (itemInfo: IHorizontalScrollerItemClickInfo) => {
-		if (dragging) {
-			return false;
-		}
-
-		router.push(
-			getDetailsPageRoute(itemInfo.mediaType, itemInfo.id, itemInfo.title)
-		);
-	};
 
 	const onWheel = (
 		apiObj: scrollVisibilityApiType,
@@ -67,14 +52,10 @@ const RelatedHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<RelatedCard
-					key={item.id}
-					item={item}
-					handleItemClick={handleItemClick}
-				/>
+				<RecommendedCard key={item.id} item={item} dragging={dragging} />
 			))}
 		</ScrollMenu>
 	);
 };
 
-export default RelatedHorizontalScroller;
+export default RecommendedHorizontalScroller;
