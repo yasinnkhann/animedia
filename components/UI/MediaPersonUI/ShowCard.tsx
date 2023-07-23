@@ -10,6 +10,7 @@ import { renderTableStatus } from '../../../utils/renderTableStatus';
 import { useQuery } from '@apollo/client';
 import { ShowResult } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
+import Link from 'next/link';
 
 interface Props {
 	show: ShowResult;
@@ -18,8 +19,6 @@ interface Props {
 
 const ShowCard = ({ show, rank }: Props) => {
 	const { data: session } = useSession();
-
-	const router = useRouter();
 
 	const { data: usersShowData, loading: usersShowLoading } = useQuery(
 		Queries.GET_USERS_SHOW,
@@ -30,10 +29,6 @@ const ShowCard = ({ show, rank }: Props) => {
 		}
 	);
 
-	const handleGoToDetailsPage = () => {
-		router.push(getDetailsPageRoute(ESearchType.SHOW, show.id, show.name));
-	};
-
 	return (
 		<tr className='border'>
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
@@ -41,20 +36,31 @@ const ShowCard = ({ show, rank }: Props) => {
 			</td>
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
-					<Image
-						className='rounded-lg'
-						src={getImage(show.poster_path)}
-						alt={show.name}
-						layout='fill'
-						onClick={handleGoToDetailsPage}
-					/>
-				</section>
+				<Link
+					href={getDetailsPageRoute(ESearchType.SHOW, show.id, show.name)}
+					passHref
+				>
+					<a className='text-inherit no-underline'>
+						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+							<Image
+								className='rounded-lg'
+								src={getImage(show.poster_path)}
+								alt={show.name}
+								layout='fill'
+							/>
+						</section>
+					</a>
+				</Link>
 
 				<section className='col-start-2 pl-4'>
-					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
-						{show.name}
-					</h3>
+					<Link
+						href={getDetailsPageRoute(ESearchType.SHOW, show.id, show.name)}
+						passHref
+					>
+						<a className='text-inherit no-underline'>
+							<h3 className='cursor-pointer'>{show.name}</h3>
+						</a>
+					</Link>
 					<p>
 						{show.first_air_date
 							? formatDate(show.first_air_date)

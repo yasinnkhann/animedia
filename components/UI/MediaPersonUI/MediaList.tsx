@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { RESULTS_PER_PAGE } from '../../../utils/constants';
 import { useSession } from 'next-auth/react';
+import {
+	MoviesRes,
+	ShowsRes,
+} from '../../../graphql/generated/code-gen/graphql';
 
 interface Props {
-	mediaData: NexusGenObjects['MoviesRes'] | NexusGenObjects['ShowsRes'];
+	mediaData: MoviesRes | ShowsRes;
 	pageNum: number;
 	title: string;
 	genrePage?: boolean;

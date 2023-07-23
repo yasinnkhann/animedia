@@ -1,44 +1,39 @@
 import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { getImage } from 'utils/getImage';
+import Link from 'next/link';
+import { PersonResult } from '../../../graphql/generated/code-gen/graphql';
 
 interface Props {
-	person: NexusGenObjects['PersonResult'];
+	person: PersonResult;
 	rank: number;
 }
 
 const PersonCard = ({ person }: Props) => {
-	const router = useRouter();
-
-	const handleGoToDetailsPage = () => {
-		router.push(
-			getDetailsPageRoute(ESearchType.PERSON, person.id, person.name)
-		);
-	};
-
 	return (
-		<section>
-			<div
-				className='relative h-[20rem] cursor-pointer'
-				onClick={handleGoToDetailsPage}
-			>
-				<Image
-					className='rounded-lg'
-					src={getImage(person.profile_path)}
-					alt={person.name}
-					layout='fill'
-				/>
-			</div>
-			<div className='ml-4 mt-2'>
-				<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
-					{person.name}
-				</h3>
-			</div>
-		</section>
+		<Link
+			href={getDetailsPageRoute(ESearchType.PERSON, person.id, person.name)}
+			passHref
+		>
+			<a className='text-inherit no-underline'>
+				<section>
+					<div className='relative h-[20rem] cursor-pointer'>
+						<Image
+							className='rounded-lg'
+							src={getImage(person.profile_path)}
+							alt={person.name}
+							layout='fill'
+						/>
+					</div>
+
+					<div className='ml-4 mt-2'>
+						<h3 className='cursor-pointer'>{person.name}</h3>
+					</div>
+				</section>
+			</a>
+		</Link>
 	);
 };
 

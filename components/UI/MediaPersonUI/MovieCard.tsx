@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
-import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { formatDate } from '../../../utils/formatDate';
@@ -10,6 +9,7 @@ import { renderTableStatus } from '../../../utils/renderTableStatus';
 import { useQuery } from '@apollo/client';
 import { MovieResult } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
+import Link from 'next/link';
 
 interface Props {
 	movie: MovieResult;
@@ -18,8 +18,6 @@ interface Props {
 
 const MovieCard = ({ movie, rank }: Props) => {
 	const { data: session } = useSession();
-
-	const router = useRouter();
 
 	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
 		Queries.GET_USERS_MOVIE,
@@ -30,31 +28,36 @@ const MovieCard = ({ movie, rank }: Props) => {
 		}
 	);
 
-	const handleGoToDetailsPage = () => {
-		router.push(getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title));
-	};
-
 	return (
 		<tr className='border-2'>
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{rank}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
-					<Image
-						className='rounded-lg'
-						src={getImage(movie.poster_path)}
-						alt={movie.title}
-						layout='fill'
-						onClick={handleGoToDetailsPage}
-					/>
-				</section>
-
+				<Link
+					href={getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title)}
+					passHref
+				>
+					<a className='text-inherit no-underline'>
+						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+							<Image
+								className='rounded-lg'
+								src={getImage(movie.poster_path)}
+								alt={movie.title}
+								layout='fill'
+							/>
+						</section>
+					</a>
+				</Link>
 				<section className='col-start-2 pl-4'>
-					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
-						{movie.title}
-					</h3>
+					<Link
+						href={getDetailsPageRoute(ESearchType.MOVIE, movie.id, movie.title)}
+						passHref
+					>
+						<a className='text-inherit no-underline'>
+							<h3 className='cursor-pointer'>{movie.title}</h3>
+						</a>
+					</Link>
 
 					<p>
 						{movie.release_date
