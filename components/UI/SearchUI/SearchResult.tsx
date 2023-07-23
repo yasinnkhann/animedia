@@ -1,32 +1,28 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import Image from 'next/image';
 import { formatDate } from '../../../utils/formatDate';
 import { getImage } from 'utils/getImage';
+import Link from 'next/link';
+import {
+	MovieResult,
+	ShowResult,
+	PersonResult,
+} from '../../../graphql/generated/code-gen/graphql';
 
 interface Props {
-	result:
-		| NexusGenObjects['MovieResult']
-		| NexusGenObjects['ShowResult']
-		| NexusGenObjects['PersonResult'];
+	result: MovieResult | ShowResult | PersonResult;
 	searchedResultType: ESearchType;
 }
 
 const SearchResult = ({ result, searchedResultType }: Props) => {
-	const router = useRouter();
 	const mediaTitle = 'title' in result ? result.title : result.name;
-
-	const directToDetailsPage = () => {
-		router.push(getDetailsPageRoute(searchedResultType, result.id, mediaTitle));
-	};
 
 	const renderSearchResult = () => {
 		let searchResult;
 		if (searchedResultType === ESearchType.MOVIE) {
-			searchResult = result as NexusGenObjects['MovieResult'];
+			searchResult = result as MovieResult;
 			return (
 				<>
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
@@ -57,7 +53,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 				</>
 			);
 		} else if (searchedResultType === ESearchType.SHOW) {
-			searchResult = result as NexusGenObjects['ShowResult'];
+			searchResult = result as ShowResult;
 			return (
 				<>
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
@@ -88,7 +84,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 				</>
 			);
 		} else {
-			searchResult = result as NexusGenObjects['PersonResult'];
+			searchResult = result as PersonResult;
 			return (
 				<>
 					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
@@ -109,12 +105,16 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 	};
 
 	return (
-		<section
-			className='my-4 mr-16 flex h-[8rem] rounded-lg border'
-			onClick={directToDetailsPage}
+		<Link
+			href={getDetailsPageRoute(searchedResultType, result.id, mediaTitle)}
+			passHref
 		>
-			{renderSearchResult()}
-		</section>
+			<a className='text-inherit no-underline'>
+				<section className='my-4 mr-16 flex h-[8rem] rounded-lg border'>
+					{renderSearchResult()}
+				</section>
+			</a>
+		</Link>
 	);
 };
 
