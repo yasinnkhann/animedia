@@ -4,8 +4,6 @@ import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
-import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
 import { ICast } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -27,16 +25,6 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 					scrollContainer.current.scrollLeft += posDiff;
 				}
 			});
-
-	const handleItemClick = (itemInfo: IHorizontalScrollerItemClickInfo) => {
-		if (dragging) {
-			return false;
-		}
-
-		router.push(
-			getDetailsPageRoute(itemInfo.mediaType, itemInfo.id, itemInfo.title)
-		);
-	};
 
 	const onWheel = (
 		apiObj: scrollVisibilityApiType,
@@ -67,11 +55,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<MovieCastCard
-					key={item.id}
-					item={item}
-					handleItemClick={handleItemClick}
-				/>
+				<MovieCastCard key={item.id} item={item} dragging={dragging} />
 			))}
 		</ScrollMenu>
 	);
