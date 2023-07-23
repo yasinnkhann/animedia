@@ -85,7 +85,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 								<p>
 									<span className='font-bold'>Air Date: </span>
 									{episodeDetails.air_date ? (
-										<p>formatDate(episodeDetails.air_date)</p>
+										<p>{formatDate(episodeDetails.air_date)}</p>
 									) : (
 										<i>Air Date Not Available</i>
 									)}
