@@ -17,24 +17,18 @@ const RecommendedCard = ({ item, dragging }: Props) => {
 
 	return (
 		<Link
-			href={{
-				pathname: getDetailsPageRoute(
-					isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
-					item.id,
-					mediaTitle
-				),
-			}}
+			href={getDetailsPageRoute(
+				isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
+				item.id,
+				mediaTitle
+			)}
 			passHref
 		>
 			<a
 				onClick={e => dragging && e.preventDefault()}
 				className='text-inherit no-underline'
 			>
-				<section
-					className='relative mx-4 h-[15rem] w-[10rem] select-none'
-					role='button'
-					tabIndex={0}
-				>
+				<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
