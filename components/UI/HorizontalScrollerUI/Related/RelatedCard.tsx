@@ -1,16 +1,16 @@
 import Image from 'next/image';
 import { ESearchType } from '@ts/enums';
-import { IRecommendedMedia } from '@ts/interfaces';
+import { IRelatedMedia } from '@ts/interfaces';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
 
 interface Props {
-	item: IRecommendedMedia;
+	item: IRelatedMedia;
 	dragging: boolean;
 }
 
-const RecommendedCard = ({ item, dragging }: Props) => {
+const RelatedCard = ({ item, dragging }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
@@ -49,4 +49,4 @@ const RecommendedCard = ({ item, dragging }: Props) => {
 	);
 };
 
-export default RecommendedCard;
+export default RelatedCard;

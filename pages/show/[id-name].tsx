@@ -6,7 +6,7 @@ import Link from 'next/link';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
-import RecommendedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Recommended/RecommendedHorizontalScroller';
+import RelatedShowsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCast/MediaCastHorizontalScroller';
 import EpisodeDetailsHorizontalScroller from '../../components/UI/HorizontalScrollerUI/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
@@ -726,7 +726,7 @@ const ShowDetails = () => {
 						recShowsData?.recommendedShows.results?.length! > 0 && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
-								<RecommendedShowsHorizontalScroller
+								<RelatedShowsHorizontalScroller
 									items={recShowsData!.recommendedShows.results.map(show => ({
 										id: show.id,
 										poster_path: show.poster_path,

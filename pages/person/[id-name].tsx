@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { IRecommendedMedia } from '@ts/interfaces';
+import { IRelatedMedia } from '@ts/interfaces';
 import { formatDate } from '../../utils/formatDate';
-import RecommendedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Recommended/RecommendedHorizontalScroller';
+import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
@@ -51,7 +51,7 @@ const PersonDetails = () => {
 	const memoMappedMedia = useMemo(() => {
 		const uniqueMovies: Set<number> = new Set();
 
-		const mappedMoviesCast: IRecommendedMedia[] = [];
+		const mappedMoviesCast: IRelatedMedia[] = [];
 
 		for (const castObj of knownForMoviesData?.personsKnownForMovieRes?.cast ??
 			[]) {
@@ -69,7 +69,7 @@ const PersonDetails = () => {
 
 		const uniqueShows: Set<number> = new Set();
 
-		const mappedShowsCast: IRecommendedMedia[] = [];
+		const mappedShowsCast: IRelatedMedia[] = [];
 
 		for (const castObj of knownForShowsData?.personsKnownForShowRes?.cast ??
 			[]) {
@@ -195,7 +195,7 @@ const PersonDetails = () => {
 				{memoMappedMedia.length > 0 && (
 					<section className='col-start-2 mt-4 pb-4'>
 						<h3 className='mb-4 ml-8'>Known For</h3>
-						<RecommendedHorizontalScroller items={memoMappedMedia} />
+						<RelatedHorizontalScroller items={memoMappedMedia} />
 					</section>
 				)}
 			</main>

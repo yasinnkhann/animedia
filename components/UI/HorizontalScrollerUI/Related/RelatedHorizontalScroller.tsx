@@ -1,17 +1,17 @@
 import React from 'react';
-import RecommendedCard from './RecommendedCard';
+import RelatedCard from './RelatedCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
-import { IRecommendedMedia } from '@ts/interfaces';
+import { IRelatedMedia } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items: IRecommendedMedia[];
+	items: IRelatedMedia[];
 }
 
-const RecommendedHorizontalScroller = ({ items }: Props) => {
+const RelatedHorizontalScroller = ({ items }: Props) => {
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -52,10 +52,10 @@ const RecommendedHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<RecommendedCard key={item.id} item={item} dragging={dragging} />
+				<RelatedCard key={item.id} item={item} dragging={dragging} />
 			))}
 		</ScrollMenu>
 	);
 };
 
-export default RecommendedHorizontalScroller;
+export default RelatedHorizontalScroller;
