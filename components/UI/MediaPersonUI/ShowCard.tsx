@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
-import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { formatDate } from '../../../utils/formatDate';

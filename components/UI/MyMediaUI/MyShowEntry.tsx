@@ -4,12 +4,12 @@ import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../../graphql/queries';
 import * as Mutations from '../../../graphql/mutations';
 import { formatDate } from '../../../utils/formatDate';
-import { useRouter } from 'next/router';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { ESearchType } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserShow } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
+import Link from 'next/link';
 
 interface Props {
 	myShow: UserShow;
@@ -17,8 +17,6 @@ interface Props {
 }
 
 const MyShowEntry = ({ myShow, count }: Props) => {
-	const router = useRouter();
-
 	const { data: showData } = useQuery(Queries.SHOW_DETAILS, {
 		variables: {
 			showDetailsId: Number(myShow.id),
@@ -37,16 +35,6 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		],
 	});
 
-	const handleGoToDetailsPage = () => {
-		router.push(
-			getDetailsPageRoute(
-				ESearchType.SHOW,
-				Number(myShow.id),
-				myShow.name as string
-			)
-		);
-	};
-
 	return (
 		<tr className='border-2'>
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
@@ -54,22 +42,39 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 			</td>
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
-					<Image
-						className='rounded-lg'
-						src={getImage(showData?.showDetails?.poster_path)}
-						priority
-						alt={showData?.showDetails?.name}
-						layout='fill'
-						onClick={handleGoToDetailsPage}
-					/>
-				</section>
-
+				<Link
+					href={getDetailsPageRoute(
+						ESearchType.SHOW,
+						Number(myShow.id),
+						myShow.name as string
+					)}
+					passHref
+				>
+					<a className='text-inherit no-underline'>
+						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+							<Image
+								className='rounded-lg'
+								src={getImage(showData?.showDetails?.poster_path)}
+								priority
+								alt={showData?.showDetails?.name}
+								layout='fill'
+							/>
+						</section>
+					</a>
+				</Link>
 				<section className='col-start-2 pl-4'>
-					<h3 className='cursor-pointer' onClick={handleGoToDetailsPage}>
-						{myShow.name}
-					</h3>
-
+					<Link
+						href={getDetailsPageRoute(
+							ESearchType.SHOW,
+							Number(myShow.id),
+							myShow.name as string
+						)}
+						passHref
+					>
+						<a className='text-inherit no-underline'>
+							<h3 className='cursor-pointer'>{myShow.name}</h3>
+						</a>
+					</Link>
 					<p>
 						{showData?.showDetails?.first_air_date
 							? formatDate(showData.showDetails?.first_air_date)
