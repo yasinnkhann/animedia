@@ -3,22 +3,18 @@ import HomeCard from './HomeCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
-import { NexusGenObjects } from '../../../../graphql/generated/nexus-typegen/index';
-import { useRouter } from 'next/router';
-import { getDetailsPageRoute } from '../../../../utils/getDetailsPageRoute';
-import { IHorizontalScrollerItemClickInfo } from '@ts/interfaces';
+import {
+	MovieResult,
+	ShowResult,
+} from '../../../../graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-	items:
-		| NexusGenObjects['MoviesRes']['results']
-		| NexusGenObjects['ShowsRes']['results'];
+	items: MovieResult[] | ShowResult[];
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
-	const router = useRouter();
-
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -29,16 +25,6 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 					scrollContainer.current.scrollLeft += posDiff;
 				}
 			});
-
-	const handleItemClick = (itemInfo: IHorizontalScrollerItemClickInfo) => {
-		if (dragging) {
-			return false;
-		}
-
-		router.push(
-			getDetailsPageRoute(itemInfo.mediaType, itemInfo.id, itemInfo.title)
-		);
-	};
 
 	const onWheel = (
 		apiObj: scrollVisibilityApiType,
@@ -69,7 +55,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[26rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<HomeCard key={item.id} item={item} handleItemClick={handleItemClick} />
+				<HomeCard key={item.id} item={item} dragging={dragging} />
 			))}
 		</ScrollMenu>
 	);
