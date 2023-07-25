@@ -1,14 +1,14 @@
 import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { NexusGenObjects } from '../graphql/generated/nexus-typegen';
 import { GrClose } from 'react-icons/gr';
 import { formatDate } from '../utils/formatDate';
 import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
 import { getImage } from 'utils/getImage';
+import { EpisodeDetailsRes } from '../graphql/generated/code-gen/graphql';
 
 interface Props {
-	episodeDetails: NexusGenObjects['EpisodeDetailsRes'];
+	episodeDetails: EpisodeDetailsRes;
 	closeModal: () => void;
 }
 
