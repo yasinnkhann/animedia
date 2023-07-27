@@ -10,9 +10,11 @@ export const getDetailsPageRoute = (
 		.toLowerCase()
 		.replace(/[^a-z0-9\/☆ -]/gi, '')
 		.replace(/[\/☆]/gi, ' ')
-		.replace(/\s+/g, ' ')
+		.replace(/'  '/gi, ' ')
 		.trim()
-		.replace(/ /g, '-');
+		.split(' ')
+		.join('-')
+		.replace(/-{2,}/gi, '-');
 
 	return `${CLIENT_BASE_URL}/${mediaType}/${id}-${cleanTitle}`;
 };
