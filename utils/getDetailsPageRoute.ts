@@ -13,5 +13,6 @@ export const getDetailsPageRoute = (
 		.replace(/\s+/g, '-')
 		.replace(/-{2,}/g, '-')
 		.trim();
+
 	return `${CLIENT_BASE_URL}/${mediaType}/${id}-${cleanTitle}`;
 };

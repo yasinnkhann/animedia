@@ -140,82 +140,63 @@ const ShowDetails = () => {
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
+		const showId = showDetailsData?.showDetails?.id!;
+		const totalEps = showDetailsData?.showDetails?.number_of_episodes;
+		const usersShow = usersShowData?.usersShow;
 
-		setWatchStatus(value as WatchStatusTypes);
-
-		if (usersShowData?.usersShow) {
-			if ((value as WatchStatusTypes) === WatchStatusTypes.NotWatching) {
+		if (usersShow) {
+			if (value === WatchStatusTypes.NotWatching) {
 				deleteShow({
-					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-					},
+					variables: { showId: String(showId) },
 				});
-				return;
-			}
-
-			if ((value as WatchStatusTypes) === WatchStatusTypes.PlanToWatch) {
-				setCurrEp('0');
-				setRating('');
-
+			} else if (value === WatchStatusTypes.PlanToWatch) {
 				updateShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: String(showId),
 						watchStatus: WatchStatusTypes.PlanToWatch,
 						currentEpisode: 0,
 						showRating: null,
 					},
 				});
-				return;
-			}
-
-			if ((value as WatchStatusTypes) === WatchStatusTypes.Completed) {
-				setCurrEp(String(showDetailsData?.showDetails?.number_of_episodes));
-
+			} else if (value === WatchStatusTypes.Completed) {
 				updateShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: String(showId),
 						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode:
-							showDetailsData?.showDetails?.number_of_episodes ?? 0,
-						showRating: usersShowData.usersShow?.rating ?? null,
+						currentEpisode: totalEps ?? 0,
+						showRating: usersShow?.rating ?? null,
 					},
 				});
-				return;
+			} else {
+				updateShow({
+					variables: {
+						showId: String(showId),
+						watchStatus: value as WatchStatusTypes,
+						currentEpisode: usersShow?.current_episode ?? 0,
+						showRating: usersShow?.rating ?? null,
+					},
+				});
 			}
-
-			updateShow({
-				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					watchStatus: value as WatchStatusTypes,
-					currentEpisode: usersShowData.usersShow.current_episode ?? 0,
-					showRating: usersShowData.usersShow?.rating ?? null,
-				},
-			});
 		} else {
-			if ((value as WatchStatusTypes) === 'COMPLETED') {
-				setCurrEp(
-					String(showDetailsData?.showDetails?.number_of_episodes ?? '0')
-				);
-
+			if (value === 'COMPLETED') {
 				addShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: String(showId),
 						showName: showDetailsData?.showDetails?.name!,
 						watchStatus: value as WatchStatusTypes,
-						currentEpisode: showDetailsData?.showDetails?.number_of_episodes!,
+						currentEpisode: totalEps!,
 					},
 				});
-				return;
+			} else {
+				addShow({
+					variables: {
+						showId: String(showId),
+						showName: showDetailsData?.showDetails?.name!,
+						watchStatus: value as WatchStatusTypes,
+						currentEpisode: Number(currEp),
+					},
+				});
 			}
-
-			addShow({
-				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					showName: showDetailsData?.showDetails?.name!,
-					watchStatus: value as WatchStatusTypes,
-					currentEpisode: Number(currEp),
-				},
-			});
 		}
 	};
 
@@ -315,182 +296,123 @@ const ShowDetails = () => {
 	const handleIncrementBtn = () => {
 		const prevEp = +currEp;
 
-		if (prevEp + 1 === 1 && !usersShowData) {
-			setWatchStatus(WatchStatusTypes.Watching);
-			setCurrEp('1');
+		const updateShowVariables = {
+			showId: String(showDetailsData?.showDetails?.id!),
+			showRating: typeof rating === 'string' ? null : rating,
+			currentEpisode: prevEp + 1,
+		};
 
-			addShow({
-				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					showName: showDetailsData?.showDetails?.name!,
-					watchStatus: WatchStatusTypes.Watching,
-					currentEpisode: 1,
-				},
-			});
-
-			return;
-		}
-
-		if (prevEp + 1 === 1 && usersShowData) {
-			if (
-				(watchStatus === 'PLAN_TO_WATCH' ||
-					watchStatus === 'DROPPED' ||
-					watchStatus === 'ON_HOLD') &&
-				prevEp === 0
-			) {
-				setWatchStatus(WatchStatusTypes.Watching);
-				setCurrEp('1');
-
-				updateShow({
+		if (prevEp + 1 === 1) {
+			if (!usersShowData?.usersShow?.status) {
+				addShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-						showRating: typeof rating === 'string' ? null : rating,
+						...updateShowVariables,
+						showName: showDetailsData?.showDetails?.name!,
 						watchStatus: WatchStatusTypes.Watching,
-						currentEpisode: 1,
 					},
 				});
-
-				return;
-			}
-
-			setCurrEp(String(prevEp + 1));
-
-			updateShow({
-				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					showRating: typeof rating === 'string' ? null : rating,
-					watchStatus: usersShowData.usersShow?.status!,
-					currentEpisode: prevEp + 1,
-				},
-			});
-
-			return;
-		}
-
-		if (
-			prevEp + 1 < showDetailsData!.showDetails.number_of_episodes &&
-			usersShowData
-		) {
-			setTimeout(() => {
-				setCurrEp(String(prevEp + 1));
-
-				if (watchStatus === 'DROPPED' || watchStatus === 'ON_HOLD') {
-					setWatchStatus(WatchStatusTypes.Watching);
-
-					updateShow({
-						variables: {
-							showId: String(showDetailsData?.showDetails?.id!),
-							showRating: typeof rating === 'string' ? null : rating,
-							watchStatus: WatchStatusTypes.Watching,
-							currentEpisode: prevEp + 1,
-						},
-					});
-
-					return;
-				}
-
+			} else if (
+				usersShowData.usersShow.status === 'PLAN_TO_WATCH' ||
+				usersShowData.usersShow.status === 'DROPPED' ||
+				usersShowData.usersShow.status === 'ON_HOLD'
+			) {
 				updateShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus: usersShowData?.usersShow?.status!,
-						currentEpisode: prevEp + 1,
+						...updateShowVariables,
+						watchStatus: WatchStatusTypes.Watching,
 					},
 				});
-			}, 500);
-
-			return;
-		}
-
-		if (
-			prevEp + 1 === showDetailsData?.showDetails!.number_of_episodes &&
-			usersShowData
+			} else {
+				updateShow({
+					variables: {
+						...updateShowVariables,
+						watchStatus: usersShowData.usersShow.status,
+					},
+				});
+			}
+		} else if (
+			prevEp + 1 < showDetailsData!.showDetails.number_of_episodes &&
+			usersShowData?.usersShow?.status
 		) {
-			setWatchStatus(WatchStatusTypes.Completed);
-			setCurrEp(String(prevEp + 1));
-
+			if (
+				usersShowData.usersShow.status === 'DROPPED' ||
+				usersShowData.usersShow.status === 'ON_HOLD'
+			) {
+				updateShow({
+					variables: {
+						...updateShowVariables,
+						watchStatus: WatchStatusTypes.Watching,
+					},
+				});
+			} else {
+				updateShow({
+					variables: {
+						...updateShowVariables,
+						watchStatus: usersShowData.usersShow.status,
+					},
+				});
+			}
+		} else if (
+			prevEp + 1 === showDetailsData?.showDetails!.number_of_episodes &&
+			usersShowData?.usersShow
+		) {
 			updateShow({
 				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					showRating: typeof rating === 'string' ? null : rating,
+					...updateShowVariables,
 					watchStatus: WatchStatusTypes.Completed,
-					currentEpisode: prevEp + 1,
 				},
 			});
-			return;
 		}
 	};
 
 	useEffect(() => {
-		if (!usersShowLoading) {
-			if (usersShowData?.usersShow) {
-				setWatchStatus(usersShowData.usersShow.status!);
-				setRating(usersShowData.usersShow.rating ?? '');
-				setCurrEp(String(usersShowData.usersShow.current_episode!));
-			} else {
-				setWatchStatus(WatchStatusTypes.NotWatching);
-				setRating('');
-				setCurrEp('0');
+		if (usersShowLoading) return;
+
+		if (usersShowData?.usersShow) {
+			setWatchStatus(
+				usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching
+			);
+			setRating(usersShowData.usersShow.rating ?? '');
+			setCurrEp(String(usersShowData.usersShow.current_episode ?? 0));
+
+			if (showDetailsData?.showDetails) {
+				const totalEps = showDetailsData.showDetails.number_of_episodes;
+
+				if (
+					usersShowData.usersShow.current_episode === totalEps &&
+					usersShowData.usersShow.status === WatchStatusTypes.Watching
+				) {
+					setWatchStatus(WatchStatusTypes.Completed);
+					updateShow({
+						variables: {
+							showId: String(showDetailsData.showDetails.id!),
+							showRating: usersShowData.usersShow.rating ?? null,
+							watchStatus: WatchStatusTypes.Completed,
+							currentEpisode: totalEps,
+						},
+					});
+				} else if (
+					usersShowData.usersShow.current_episode &&
+					usersShowData.usersShow.current_episode < totalEps &&
+					usersShowData.usersShow.status === WatchStatusTypes.Completed
+				) {
+					setWatchStatus(WatchStatusTypes.Watching);
+					updateShow({
+						variables: {
+							showId: String(showDetailsData.showDetails.id!),
+							showRating: usersShowData.usersShow.rating ?? null,
+							watchStatus: WatchStatusTypes.Watching,
+							currentEpisode: usersShowData.usersShow.current_episode,
+						},
+					});
+				}
 			}
-		}
-	}, [usersShowData, usersShowLoading]);
-
-	useEffect(() => {
-		if (!usersShowLoading && usersShowData) {
-			if (
-				+currEp === showDetailsData!.showDetails.number_of_episodes &&
-				watchStatus !== 'DROPPED' &&
-				watchStatus !== 'ON_HOLD' &&
-				watchStatus !== 'WATCHING' &&
-				watchStatus !== 'NOT_WATCHING'
-			) {
-				setWatchStatus(WatchStatusTypes.Completed);
-
-				updateShow({
-					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode: showDetailsData?.showDetails?.number_of_episodes!,
-					},
-				});
-				return;
-			}
-
-			if (
-				usersShowData.usersShow?.current_episode! <
-					showDetailsData!.showDetails.number_of_episodes &&
-				watchStatus === 'COMPLETED'
-			) {
-				setWatchStatus(WatchStatusTypes.Watching);
-
-				updateShow({
-					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus: WatchStatusTypes.Watching,
-						currentEpisode: usersShowData.usersShow?.current_episode!,
-					},
-				});
-				return;
-			}
-		}
-
-		if (!usersShowLoading && !usersShowData) {
+		} else {
 			setWatchStatus(WatchStatusTypes.NotWatching);
 			setRating('');
 			setCurrEp('0');
-			return;
 		}
-	}, [
-		rating,
-		currEp,
-		showDetailsData,
-		usersShowLoading,
-		usersShowData,
-		watchStatus,
-		updateShow,
-	]);
+	}, [usersShowData?.usersShow, showDetailsData, usersShowLoading, updateShow]);
 
 	if (showDetailsLoading || !showDetailsData?.showDetails || usersShowLoading) {
 		return (
