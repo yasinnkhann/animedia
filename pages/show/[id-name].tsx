@@ -178,7 +178,7 @@ const ShowDetails = () => {
 				});
 			}
 		} else {
-			if (value === 'COMPLETED') {
+			if (value === WatchStatusTypes.Completed) {
 				addShow({
 					variables: {
 						showId: String(showId),
@@ -266,7 +266,7 @@ const ShowDetails = () => {
 			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
 		} else {
 			if (
-				watchStatus === 'WATCHING' &&
+				watchStatus === WatchStatusTypes.Watching &&
 				+e.target.value === showDetailsData!.showDetails.number_of_episodes
 			) {
 				setWatchStatus(WatchStatusTypes.Completed);
@@ -312,9 +312,9 @@ const ShowDetails = () => {
 					},
 				});
 			} else if (
-				usersShowData.usersShow.status === 'PLAN_TO_WATCH' ||
-				usersShowData.usersShow.status === 'DROPPED' ||
-				usersShowData.usersShow.status === 'ON_HOLD'
+				usersShowData.usersShow.status === WatchStatusTypes.PlanToWatch ||
+				usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
+				usersShowData.usersShow.status === WatchStatusTypes.OnHold
 			) {
 				updateShow({
 					variables: {
@@ -335,8 +335,8 @@ const ShowDetails = () => {
 			usersShowData?.usersShow?.status
 		) {
 			if (
-				usersShowData.usersShow.status === 'DROPPED' ||
-				usersShowData.usersShow.status === 'ON_HOLD'
+				usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
+				usersShowData.usersShow.status === WatchStatusTypes.OnHold
 			) {
 				updateShow({
 					variables: {

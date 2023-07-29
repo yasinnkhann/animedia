@@ -8,6 +8,7 @@
 		"start": "next start",
 		"studio": "npx prisma studio",
 		"generate:prisma": "prisma generate",
+		"connect:dev-pscale": "pscale connect animedia dev --port 3309",
 		"codegen": "graphql-codegen --watch",
 		"lint": "next lint",
 		"prepare": "husky install"
