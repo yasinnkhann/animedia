@@ -9,6 +9,7 @@ import { ESearchType } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserShow } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
+import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import Link from 'next/link';
 
 interface Props {
@@ -89,7 +90,13 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>
-					{myShow.current_episode}/{showData?.showDetails?.number_of_episodes}
+					{myShow.status === WatchStatusTypes.PlanToWatch
+						? 0
+						: myShow.current_episode}
+					/
+					{myShow.status === WatchStatusTypes.Completed
+						? myShow.current_episode
+						: showData?.showDetails?.number_of_episodes}
 				</p>
 			</td>
 

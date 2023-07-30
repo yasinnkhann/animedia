@@ -660,7 +660,7 @@ const ShowDetails = () => {
 							<section>
 								<h3 className='mb-4 ml-8'>Episodes</h3>
 								<EpisodeDetailsHorizontalScroller
-									seasons={showDetailsData.showDetails.seasons!.filter(
+									seasons={showDetailsData.showDetails.seasons.filter(
 										season => season?.season_number! > 0
 									)}
 									showId={showDetailsData.showDetails.id}
@@ -691,7 +691,7 @@ const ShowDetails = () => {
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
 								<RelatedShowsHorizontalScroller
-									items={recShowsData!.recommendedShows.results.map(show => ({
+									items={recShowsData.recommendedShows.results.map(show => ({
 										id: show.id,
 										poster_path: show.poster_path,
 										name: show.name,

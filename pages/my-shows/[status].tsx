@@ -53,7 +53,7 @@ const Status = () => {
 				setMyShows(showsFiltered as UserShow[]);
 			}
 		}
-	}, [router, session, status, usersShowsData]);
+	}, [router, session, status, usersShowsData?.usersShows]);
 
 	if (
 		usersShowsLoading ||
