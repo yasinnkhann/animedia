@@ -154,10 +154,13 @@ const ShowDetails = () => {
 
 		for (let i = showDetailsData.showDetails.seasons.length - 1; i > -1; i--) {
 			const season = showDetailsData.showDetails.seasons[i];
+			const currDate = new Date();
+
 			if (
 				season?.name.startsWith('Season') &&
 				season.season_number !== 0 &&
-				!season.air_date
+				(!season.air_date ||
+					currDate.getTime() < new Date(season.air_date).getTime())
 			) {
 				currTotalEpCount -= season.episode_count;
 				currTotalSeasonCount--;
