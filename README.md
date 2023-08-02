@@ -21,3 +21,5 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 ## Future Features
 
 - Compare your lists with others given their id
+- Convert Nexus to Pothos
+- Have dropdown of search results as you type

@@ -655,7 +655,7 @@ const ShowDetails = () => {
 				</section>
 
 				<section className='col-start-2 mt-4'>
-					{showDetailsData.showDetails.seasons.length &&
+					{showDetailsData.showDetails.seasons.length > 0 &&
 						showDetailsData.showDetails.number_of_episodes <= 500 && (
 							<section>
 								<h3 className='mb-4 ml-8'>Episodes</h3>
@@ -669,7 +669,7 @@ const ShowDetails = () => {
 						)}
 
 					{!showsCastCrewLoading &&
-						showsCastCrewData?.showsCastCrew?.cast?.length! && (
+						showsCastCrewData?.showsCastCrew?.cast?.length! > 0 && (
 							<section>
 								<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
 								<MediaCastHorizontalScroller
@@ -687,11 +687,11 @@ const ShowDetails = () => {
 							</section>
 						)}
 					{!recShowsLoading &&
-						recShowsData?.recommendedShows.results?.length! && (
+						recShowsData?.recommendedShows.results?.length! > 0 && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
 								<RelatedShowsHorizontalScroller
-									items={recShowsData.recommendedShows.results.map(show => ({
+									items={recShowsData!.recommendedShows.results.map(show => ({
 										id: show.id,
 										poster_path: show.poster_path,
 										name: show.name,
