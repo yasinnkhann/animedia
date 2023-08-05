@@ -443,10 +443,6 @@ const ShowDetails = () => {
 					});
 				}
 			}
-		} else {
-			setWatchStatus(WatchStatusTypes.NotWatching);
-			setRating('');
-			setCurrEp('0');
 		}
 	}, [
 		usersShowData?.usersShow,
