@@ -13,6 +13,7 @@ import {
 } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
 import { getImage } from 'utils/getImage';
+import _ from 'lodash';
 
 const PersonDetails = () => {
 	const router = useRouter();
@@ -192,7 +193,7 @@ const PersonDetails = () => {
 					)}
 				</section>
 
-				{memoMappedMedia.length > 0 && (
+				{!_.isEmpty(memoMappedMedia) && (
 					<section className='col-start-2 mt-4 pb-4'>
 						<h3 className='mb-4 ml-8'>Known For</h3>
 						<RelatedHorizontalScroller items={memoMappedMedia} />

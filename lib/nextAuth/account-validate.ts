@@ -1,5 +1,6 @@
 import { isValidEmail } from '../../utils/isValidEmail';
 import { ILogin, IRegister } from '@ts/interfaces';
+import _ from 'lodash';
 
 function validatePassword(password: string) {
 	const errors: string[] = [];
@@ -32,13 +33,13 @@ export const loginValidate = async (values: ILogin) => {
 
 	const emailErrors = validateEmail(values.email);
 
-	if (emailErrors.length > 0) {
+	if (!_.isEmpty(emailErrors)) {
 		errors.email = emailErrors[0];
 	}
 
 	const passwordErrors = validatePassword(values.password);
 
-	if (passwordErrors.length > 0) {
+	if (!_.isEmpty(passwordErrors)) {
 		errors.password = passwordErrors[0];
 	}
 
@@ -50,19 +51,19 @@ export const registerValidate = async (values: IRegister) => {
 
 	const nameErrors = values.name ? [] : ['Name Required!'];
 
-	if (nameErrors.length > 0) {
+	if (!_.isEmpty(nameErrors)) {
 		errors.name = nameErrors[0];
 	}
 
 	const emailErrors = validateEmail(values.email);
 
-	if (emailErrors.length > 0) {
+	if (!_.isEmpty(emailErrors)) {
 		errors.email = emailErrors[0];
 	}
 
 	const passwordErrors = validatePassword(values.password);
 
-	if (passwordErrors.length > 0) {
+	if (!_.isEmpty(passwordErrors)) {
 		errors.password = passwordErrors[0];
 	}
 
