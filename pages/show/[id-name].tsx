@@ -33,6 +33,10 @@ const ShowDetails = () => {
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
+	const [currTotalEpCount, setCurrTotalEpCount] = useState<number>(0);
+
+	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
+
 	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
 
 	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(
@@ -140,18 +144,18 @@ const ShowDetails = () => {
 	const isDBPending = addShowLoading || updateShowLoading || deleteShowLoading;
 
 	const getCurrTotalSeasonAndEpCount = useCallback(() => {
-		let currTotalEpCount = 0;
-		let currTotalSeasonCount = 0;
+		let totalEpCount = 0;
+		let totalSeasonCount = 0;
 
 		if (
 			!showDetailsData?.showDetails.number_of_episodes ||
 			!showDetailsData?.showDetails.number_of_seasons
 		) {
-			return { currTotalEpCount, currTotalSeasonCount };
+			return;
 		}
 
-		currTotalEpCount = showDetailsData.showDetails.number_of_episodes;
-		currTotalSeasonCount = showDetailsData.showDetails.number_of_seasons;
+		totalEpCount = showDetailsData.showDetails.number_of_episodes;
+		totalSeasonCount = showDetailsData.showDetails.number_of_seasons;
 
 		for (let i = showDetailsData.showDetails.seasons.length - 1; i > -1; i--) {
 			const season = showDetailsData.showDetails.seasons[i];
@@ -163,21 +167,21 @@ const ShowDetails = () => {
 				(!season.air_date ||
 					currDate.getTime() < new Date(season.air_date).getTime())
 			) {
-				currTotalEpCount -= season.episode_count;
-				currTotalSeasonCount--;
+				totalEpCount -= season.episode_count;
+				totalSeasonCount--;
 			}
 		}
-		return { currTotalEpCount, currTotalSeasonCount };
+		setCurrTotalEpCount(totalEpCount);
+		setCurrTotalSeasonCount(totalSeasonCount);
 	}, [
-		showDetailsData?.showDetails.seasons,
 		showDetailsData?.showDetails.number_of_episodes,
 		showDetailsData?.showDetails.number_of_seasons,
+		showDetailsData?.showDetails.seasons,
 	]);
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		const showId = showDetailsData?.showDetails?.id!;
-		const totalEps = getCurrTotalSeasonAndEpCount().currTotalEpCount;
 		const usersShow = usersShowData?.usersShow;
 
 		if (usersShow) {
@@ -199,7 +203,7 @@ const ShowDetails = () => {
 					variables: {
 						showId: String(showId),
 						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode: totalEps ?? 0,
+						currentEpisode: currTotalEpCount ?? 0,
 						showRating: usersShow?.rating ?? null,
 					},
 				});
@@ -220,7 +224,7 @@ const ShowDetails = () => {
 						showId: String(showId),
 						showName: showDetailsData?.showDetails?.name!,
 						watchStatus: value as WatchStatusTypes,
-						currentEpisode: totalEps!,
+						currentEpisode: currTotalEpCount,
 					},
 				});
 			} else {
@@ -263,13 +267,9 @@ const ShowDetails = () => {
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (
-			currEp === '' ||
-			+currEp > getCurrTotalSeasonAndEpCount().currTotalEpCount
-		)
-			return;
+		if (currEp === '' || +currEp > currTotalEpCount) return;
 
-		if (+currEp === getCurrTotalSeasonAndEpCount().currTotalEpCount) {
+		if (+currEp === currTotalEpCount) {
 			setWatchStatus(WatchStatusTypes.Completed);
 
 			updateShow({
@@ -277,7 +277,7 @@ const ShowDetails = () => {
 					showId: String(showDetailsData?.showDetails?.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: WatchStatusTypes.Completed,
-					currentEpisode: getCurrTotalSeasonAndEpCount().currTotalEpCount,
+					currentEpisode: currTotalEpCount,
 				},
 			});
 
@@ -295,15 +295,12 @@ const ShowDetails = () => {
 	};
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-		if (
-			e.target.value === '' ||
-			+e.target.value > getCurrTotalSeasonAndEpCount().currTotalEpCount
-		) {
+		if (e.target.value === '' || +e.target.value > currTotalEpCount) {
 			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
 		} else {
 			if (
 				watchStatus === WatchStatusTypes.Watching &&
-				+e.target.value === getCurrTotalSeasonAndEpCount().currTotalEpCount
+				+e.target.value === currTotalEpCount
 			) {
 				setWatchStatus(WatchStatusTypes.Completed);
 
@@ -312,7 +309,7 @@ const ShowDetails = () => {
 						showId: String(showDetailsData?.showDetails?.id),
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode: getCurrTotalSeasonAndEpCount().currTotalEpCount,
+						currentEpisode: currTotalEpCount,
 					},
 				});
 
@@ -367,7 +364,7 @@ const ShowDetails = () => {
 				});
 			}
 		} else if (
-			prevEp + 1 < getCurrTotalSeasonAndEpCount().currTotalEpCount &&
+			prevEp + 1 < currTotalEpCount &&
 			usersShowData?.usersShow?.status
 		) {
 			if (
@@ -388,10 +385,7 @@ const ShowDetails = () => {
 					},
 				});
 			}
-		} else if (
-			prevEp + 1 === getCurrTotalSeasonAndEpCount().currTotalEpCount &&
-			usersShowData?.usersShow
-		) {
+		} else if (prevEp + 1 === currTotalEpCount && usersShowData?.usersShow) {
 			updateShow({
 				variables: {
 					...updateShowVariables,
@@ -402,7 +396,9 @@ const ShowDetails = () => {
 	};
 
 	useEffect(() => {
-		if (usersShowLoading) return;
+		if (usersShowLoading || !showDetailsData?.showDetails) return;
+
+		getCurrTotalSeasonAndEpCount();
 
 		if (usersShowData?.usersShow) {
 			setWatchStatus(
@@ -411,45 +407,46 @@ const ShowDetails = () => {
 			setRating(usersShowData.usersShow.rating ?? '');
 			setCurrEp(String(usersShowData.usersShow.current_episode ?? 0));
 
-			if (showDetailsData?.showDetails) {
-				const totalEps = getCurrTotalSeasonAndEpCount().currTotalEpCount;
-
-				if (
-					usersShowData.usersShow.current_episode === totalEps &&
-					usersShowData.usersShow.status === WatchStatusTypes.Watching
-				) {
-					setWatchStatus(WatchStatusTypes.Completed);
-					updateShow({
-						variables: {
-							showId: String(showDetailsData.showDetails.id!),
-							showRating: usersShowData.usersShow.rating ?? null,
-							watchStatus: WatchStatusTypes.Completed,
-							currentEpisode: totalEps,
-						},
-					});
-				} else if (
-					usersShowData.usersShow.current_episode &&
-					usersShowData.usersShow.current_episode < totalEps &&
-					usersShowData.usersShow.status === WatchStatusTypes.Completed
-				) {
-					setWatchStatus(WatchStatusTypes.Watching);
-					updateShow({
-						variables: {
-							showId: String(showDetailsData.showDetails.id!),
-							showRating: usersShowData.usersShow.rating ?? null,
-							watchStatus: WatchStatusTypes.Watching,
-							currentEpisode: usersShowData.usersShow.current_episode,
-						},
-					});
-				}
+			if (
+				usersShowData.usersShow.current_episode === currTotalEpCount &&
+				usersShowData.usersShow.status === WatchStatusTypes.Watching
+			) {
+				setWatchStatus(WatchStatusTypes.Completed);
+				updateShow({
+					variables: {
+						showId: String(showDetailsData.showDetails.id),
+						showRating: usersShowData.usersShow.rating ?? null,
+						watchStatus: WatchStatusTypes.Completed,
+						currentEpisode: currTotalEpCount,
+					},
+				});
+			} else if (
+				usersShowData.usersShow.current_episode &&
+				usersShowData.usersShow.current_episode < currTotalEpCount &&
+				usersShowData.usersShow.status === WatchStatusTypes.Completed
+			) {
+				setWatchStatus(WatchStatusTypes.Watching);
+				updateShow({
+					variables: {
+						showId: String(showDetailsData.showDetails.id),
+						showRating: usersShowData.usersShow.rating ?? null,
+						watchStatus: WatchStatusTypes.Watching,
+						currentEpisode: usersShowData.usersShow.current_episode,
+					},
+				});
 			}
+		} else {
+			setWatchStatus(WatchStatusTypes.NotWatching);
+			setRating('');
+			setCurrEp('0');
 		}
 	}, [
-		usersShowData?.usersShow,
-		showDetailsData,
-		usersShowLoading,
-		updateShow,
+		currTotalEpCount,
 		getCurrTotalSeasonAndEpCount,
+		showDetailsData?.showDetails,
+		updateShow,
+		usersShowData?.usersShow,
+		usersShowLoading,
 	]);
 
 	if (showDetailsLoading || !showDetailsData?.showDetails || usersShowLoading) {
@@ -541,16 +538,12 @@ const ShowDetails = () => {
 									onBlur={handleEpisodeOnBlur}
 								/>
 								<span>/</span>
-								<span>{getCurrTotalSeasonAndEpCount().currTotalEpCount}</span>
+								<span>{currTotalEpCount}</span>
 								<button
 									className='mx-1 text-blue-500'
 									onClick={handleIncrementBtn}
 									type='button'
-									disabled={
-										+currEp >=
-											getCurrTotalSeasonAndEpCount().currTotalEpCount ||
-										isDBPending
-									}
+									disabled={+currEp >= currTotalEpCount || isDBPending}
 								>
 									+
 								</button>
@@ -568,13 +561,9 @@ const ShowDetails = () => {
 				<section className='my-4 ml-8'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 					<h4 className='mt-4'>No. of Seasons</h4>
-					<p className='ml-1'>
-						{getCurrTotalSeasonAndEpCount().currTotalSeasonCount}
-					</p>
+					<p className='ml-1'>{currTotalSeasonCount}</p>
 					<h4 className='mt-4'>No. of Episodes</h4>
-					<p className='ml-1'>
-						{getCurrTotalSeasonAndEpCount().currTotalEpCount}
-					</p>
+					<p className='ml-1'>{currTotalEpCount}</p>
 					<h4 className='mt-4'>First Air Date</h4>
 					{showDetailsData.showDetails.first_air_date ? (
 						<p className='ml-1'>
