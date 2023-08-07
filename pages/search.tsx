@@ -10,6 +10,7 @@ import { ESearchResultsType, ESearchType } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
+import _ from 'lodash';
 
 const Search: NextPage = () => {
 	const router = useRouter();
@@ -21,7 +22,7 @@ const Search: NextPage = () => {
 	const [searchResultsType, setSearchResultsType] =
 		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
 
-	const { data: searchedMovies, loading: searchedMoviesLoading } = useQuery(
+	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
 		{
 			variables: {
@@ -31,7 +32,7 @@ const Search: NextPage = () => {
 		}
 	);
 
-	const { data: searchedShows, loading: searchedShowsLoading } = useQuery(
+	const { data: searchedShowsData, loading: searchedShowsLoading } = useQuery(
 		Queries.SEARCHED_SHOWS,
 		{
 			variables: {
@@ -41,7 +42,7 @@ const Search: NextPage = () => {
 		}
 	);
 
-	const { data: searchedPeople, loading: searchedPeopleLoading } = useQuery(
+	const { data: searchedPeopleData, loading: searchedPeopleLoading } = useQuery(
 		Queries.SEARCHED_PEOPLE,
 		{
 			variables: {
@@ -53,15 +54,15 @@ const Search: NextPage = () => {
 
 	const getSearchedTypeData = () => {
 		if (searchResultsType === ESearchResultsType.MOVIES) {
-			return searchedMovies?.searchedMovies;
+			return searchedMoviesData?.searchedMovies;
 		}
 
 		if (searchResultsType === ESearchResultsType.SHOWS) {
-			return searchedShows?.searchedShows;
+			return searchedShowsData?.searchedShows;
 		}
 
 		if (searchResultsType === ESearchResultsType.PEOPLE) {
-			return searchedPeople?.searchedPeople;
+			return searchedPeopleData?.searchedPeople;
 		}
 	};
 
@@ -90,16 +91,20 @@ const Search: NextPage = () => {
 	}, [router]);
 
 	useEffect(() => {
-		if (searchedMovies && searchedShows && searchedPeople) {
+		if (
+			searchedMoviesData?.searchedMovies &&
+			searchedShowsData?.searchedShows &&
+			searchedPeopleData?.searchedPeople
+		) {
 			if (
-				!searchedMovies.searchedMovies.results.length &&
-				searchedShows.searchedShows.results.length
+				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
+				!_.isEmpty(searchedShowsData.searchedShows.results)
 			) {
 				setSearchResultsType(ESearchResultsType.SHOWS);
 			} else if (
-				!searchedMovies.searchedMovies.results.length &&
-				!searchedShows.searchedShows.results.length &&
-				searchedPeople.searchedPeople.results.length
+				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
+				_.isEmpty(searchedShowsData.searchedShows.results) &&
+				!_.isEmpty(searchedPeopleData.searchedPeople.results)
 			) {
 				setSearchResultsType(ESearchResultsType.PEOPLE);
 			}
@@ -109,11 +114,11 @@ const Search: NextPage = () => {
 			}
 		}
 	}, [
-		searchedMovies,
-		searchedShows,
-		searchedPeople,
 		router.query.q,
 		router.query.page,
+		searchedMoviesData?.searchedMovies,
+		searchedShowsData?.searchedShows,
+		searchedPeopleData?.searchedPeople,
 	]);
 
 	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
@@ -131,109 +136,111 @@ const Search: NextPage = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				{searchedMovies && searchedShows && searchedPeople && (
-					<>
-						<SearchBar ref={searchBarRef} />
-						<section className='grid grid-cols-[20%_80%]'>
-							<section className='m-4 flex flex-col items-center rounded-lg border px-8'>
-								<div className='mb-4 w-full'>
-									<h3>Search Results</h3>
-								</div>
-								<ul className='w-full'>
-									<li className='flex w-full items-center justify-between'>
-										<h4
-											className='cursor-pointer text-left'
-											onClick={() =>
-												setSearchResultsType(ESearchResultsType.MOVIES)
-											}
-											style={{
-												borderBottom:
-													searchResultsType === ESearchResultsType.MOVIES
-														? '1px solid black'
-														: undefined,
-											}}
-										>
-											Movies
-										</h4>
-										<p className='text-right'>
-											{searchedMovies.searchedMovies.total_results}
-										</p>
-									</li>
-									<li className='flex w-full items-center justify-between'>
-										<h4
-											className='cursor-pointer text-left'
-											onClick={() =>
-												setSearchResultsType(ESearchResultsType.SHOWS)
-											}
-											style={{
-												borderBottom:
-													searchResultsType === ESearchResultsType.SHOWS
-														? '1px solid black'
-														: undefined,
-											}}
-										>
-											Shows
-										</h4>
-										<p className='text-right'>
-											{searchedShows.searchedShows.total_results}
-										</p>
-									</li>
-									<li className='flex w-full items-center justify-between'>
-										<h4
-											className='cursor-pointer text-left'
-											onClick={() =>
-												setSearchResultsType(ESearchResultsType.PEOPLE)
-											}
-											style={{
-												borderBottom:
-													searchResultsType === ESearchResultsType.PEOPLE
-														? '1px solid black'
-														: undefined,
-											}}
-										>
-											People
-										</h4>
-										<p className='text-right'>
-											{searchedPeople.searchedPeople.total_results}
-										</p>
-									</li>
-								</ul>
+				{searchedMoviesData?.searchedMovies &&
+					searchedShowsData?.searchedShows &&
+					searchedPeopleData?.searchedPeople && (
+						<>
+							<SearchBar ref={searchBarRef} />
+							<section className='grid grid-cols-[20%_80%]'>
+								<section className='m-4 flex flex-col items-center rounded-lg border px-8'>
+									<div className='mb-4 w-full'>
+										<h3>Search Results</h3>
+									</div>
+									<ul className='w-full'>
+										<li className='flex w-full items-center justify-between'>
+											<h4
+												className='cursor-pointer text-left'
+												onClick={() =>
+													setSearchResultsType(ESearchResultsType.MOVIES)
+												}
+												style={{
+													borderBottom:
+														searchResultsType === ESearchResultsType.MOVIES
+															? '1px solid black'
+															: undefined,
+												}}
+											>
+												Movies
+											</h4>
+											<p className='text-right'>
+												{searchedMoviesData.searchedMovies.total_results}
+											</p>
+										</li>
+										<li className='flex w-full items-center justify-between'>
+											<h4
+												className='cursor-pointer text-left'
+												onClick={() =>
+													setSearchResultsType(ESearchResultsType.SHOWS)
+												}
+												style={{
+													borderBottom:
+														searchResultsType === ESearchResultsType.SHOWS
+															? '1px solid black'
+															: undefined,
+												}}
+											>
+												Shows
+											</h4>
+											<p className='text-right'>
+												{searchedShowsData.searchedShows.total_results}
+											</p>
+										</li>
+										<li className='flex w-full items-center justify-between'>
+											<h4
+												className='cursor-pointer text-left'
+												onClick={() =>
+													setSearchResultsType(ESearchResultsType.PEOPLE)
+												}
+												style={{
+													borderBottom:
+														searchResultsType === ESearchResultsType.PEOPLE
+															? '1px solid black'
+															: undefined,
+												}}
+											>
+												People
+											</h4>
+											<p className='text-right'>
+												{searchedPeopleData.searchedPeople.total_results}
+											</p>
+										</li>
+									</ul>
+								</section>
+								<section>
+									{!_.isEmpty(getSearchedTypeData()?.results) ? (
+										getSearchedTypeData()?.results.map(result => (
+											<SearchResult
+												key={result.id}
+												result={result}
+												searchedResultType={getSearchResultType()}
+											/>
+										))
+									) : (
+										<div>No results</div>
+									)}
+								</section>
 							</section>
-							<section>
-								{getSearchedTypeData()?.results.length ? (
-									getSearchedTypeData()?.results.map(result => (
-										<SearchResult
-											key={result.id}
-											result={result}
-											searchedResultType={getSearchResultType()}
-										/>
-									))
-								) : (
-									<div>No results</div>
-								)}
-							</section>
-						</section>
 
-						<Pagination
-							currPage={currPage}
-							totalItems={
-								searchResultsType === ESearchResultsType.MOVIES
-									? searchedMovies.searchedMovies.total_results
-									: searchResultsType === ESearchResultsType.SHOWS
-									? searchedShows.searchedShows.total_results
-									: searchedPeople.searchedPeople.total_results
-							}
-							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) =>
-								router.push(
-									`${router.pathname}?q=${router.query.q}&page=${pageNum}`
-								)
-							}
-							siblingCount={1}
-							maxPageNum={500}
-						/>
-					</>
-				)}
+							<Pagination
+								currPage={currPage}
+								totalItems={
+									searchResultsType === ESearchResultsType.MOVIES
+										? searchedMoviesData.searchedMovies.total_results
+										: searchResultsType === ESearchResultsType.SHOWS
+										? searchedShowsData.searchedShows.total_results
+										: searchedPeopleData.searchedPeople.total_results
+								}
+								itemsPerPage={RESULTS_PER_PAGE}
+								paginate={(pageNum: number) =>
+									router.push(
+										`${router.pathname}?q=${router.query.q}&page=${pageNum}`
+									)
+								}
+								siblingCount={1}
+								maxPageNum={500}
+							/>
+						</>
+					)}
 			</main>
 		</>
 	);
