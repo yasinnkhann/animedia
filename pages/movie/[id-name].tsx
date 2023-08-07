@@ -18,6 +18,7 @@ import { formatDate } from '../../utils/formatDate';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
+import _ from 'lodash';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -323,7 +324,7 @@ const MovieDetails = () => {
 
 				<section className='col-start-2 mt-4'>
 					{!moviesCastCrewLoading &&
-						moviesCastCrewData?.moviesCastCrew?.cast?.length! > 0 && (
+						!_.isEmpty(moviesCastCrewData?.moviesCastCrew?.cast) && (
 							<section>
 								<h3 className='mb-4 ml-8'>Cast</h3>
 								<MediaCastHorizontalScroller
@@ -342,7 +343,7 @@ const MovieDetails = () => {
 						)}
 
 					{!recMoviesLoading &&
-						recMoviesData?.recommendedMovies?.results?.length! > 0 && (
+						!_.isEmpty(recMoviesData?.recommendedMovies?.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
 								<RelatedMoviesHorizontalScroller
