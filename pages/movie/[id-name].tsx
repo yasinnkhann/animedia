@@ -8,7 +8,7 @@ import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
-import RelatedMoviesHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
+import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '../../components/UI/HorizontalScrollerUI/MediaCast/MediaCastHorizontalScroller';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
@@ -346,7 +346,7 @@ const MovieDetails = () => {
 						!_.isEmpty(recMoviesData?.recommendedMovies?.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
-								<RelatedMoviesHorizontalScroller
+								<RelatedHorizontalScroller
 									items={recMoviesData!.recommendedMovies.results.map(
 										movie => ({
 											id: movie.id,
