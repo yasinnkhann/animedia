@@ -4,16 +4,41 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
+import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import _ from 'lodash';
 
 interface Props {
 	item: IRelatedMedia;
 	dragging: boolean;
+	userMatchedMedia: UserShow[] | UserMovie[];
 }
 
-const RelatedCard = ({ item, dragging }: Props) => {
+const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
+
+	const getUserWatchStatus = () => {
+		// if (!_.isEmpty(userMatchedMedia)) {
+		// 	const dataFound = userMatchedMedia.find(
+		// 		data => parseInt(data.id!) === item.id
+		// 	);
+		// 	if (dataFound?.status) {
+		// 		switch (dataFound.status) {
+		// 			case 'WATCHING':
+		// 				return 'W';
+		// 			case 'COMPLETED':
+		// 				return 'C';
+		// 			case 'PLAN_TO_WATCH':
+		// 				return 'PW';
+		// 			case 'ON_HOLD':
+		// 				return 'OH';
+		// 			default:
+		// 				return 'D';
+		// 		}
+		// 	}
+		// }
+	};
 
 	return (
 		<Link
@@ -36,6 +61,25 @@ const RelatedCard = ({ item, dragging }: Props) => {
 							alt={mediaTitle}
 							layout='fill'
 						/>
+						{/* {getUserWatchStatus() && (
+							<div
+								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
+									getUserWatchStatus() === 'W'
+										? 'bg-green-500'
+										: getUserWatchStatus() === 'C'
+										? 'bg-yellow-500'
+										: getUserWatchStatus() === 'PW'
+										? 'bg-blue-500'
+										: getUserWatchStatus() === 'OH'
+										? 'bg-orange-500'
+										: getUserWatchStatus() === 'D'
+										? 'bg-red-500'
+										: ''
+								} text-base text-white`}
+							>
+								{getUserWatchStatus()}
+							</div>
+						)} */}
 					</div>
 
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>

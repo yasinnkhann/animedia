@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import RelatedCard from './RelatedCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
+import { useQuery } from '@apollo/client';
+import * as Queries from '../../../../graphql/queries';
+import _ from 'lodash';
+import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -12,6 +16,24 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items }: Props) => {
+	const [userMatchedMedia, setUserMatchedMedia] = useState<
+		UserShow[] | UserMovie[]
+	>([]);
+
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
+		Queries.GET_USERS_SHOWS,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
+		Queries.GET_USERS_MOVIES,
+		{
+			fetchPolicy: 'network-only',
+		}
+	);
+
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -41,6 +63,22 @@ const RelatedHorizontalScroller = ({ items }: Props) => {
 		}
 	};
 
+	useEffect(() => {
+		const matchedMedia: UserShow[] | UserMovie[] = [];
+
+		for (const item of items) {
+			for (const userData of ('title' in item
+				? usersMoviesData?.usersMovies
+				: usersShowsData?.usersShows) ?? []) {
+				if (item.id === parseInt(userData!.id!)) {
+					matchedMedia.push(userData as any);
+				}
+			}
+		}
+		console.log(matchedMedia);
+		setUserMatchedMedia(matchedMedia);
+	}, [usersShowsData?.usersShows, items, usersMoviesData?.usersMovies]);
+
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
@@ -52,7 +90,12 @@ const RelatedHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<RelatedCard key={item.id} item={item} dragging={dragging} />
+				<RelatedCard
+					key={item.id}
+					item={item}
+					dragging={dragging}
+					userMatchedMedia={userMatchedMedia}
+				/>
 			))}
 		</ScrollMenu>
 	);
