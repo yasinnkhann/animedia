@@ -19,25 +19,27 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
 
 	const getUserWatchStatus = () => {
-		// if (!_.isEmpty(userMatchedMedia)) {
-		// 	const dataFound = userMatchedMedia.find(
-		// 		data => parseInt(data.id!) === item.id
-		// 	);
-		// 	if (dataFound?.status) {
-		// 		switch (dataFound.status) {
-		// 			case 'WATCHING':
-		// 				return 'W';
-		// 			case 'COMPLETED':
-		// 				return 'C';
-		// 			case 'PLAN_TO_WATCH':
-		// 				return 'PW';
-		// 			case 'ON_HOLD':
-		// 				return 'OH';
-		// 			default:
-		// 				return 'D';
-		// 		}
-		// 	}
-		// }
+		if (!_.isEmpty(userMatchedMedia)) {
+			//@ts-ignore
+			const dataFound = userMatchedMedia.find(
+				//@ts-ignore
+				data => parseInt(data.id!) === item.id
+			);
+			if (dataFound?.status) {
+				switch (dataFound.status) {
+					case 'WATCHING':
+						return 'W';
+					case 'COMPLETED':
+						return 'C';
+					case 'PLAN_TO_WATCH':
+						return 'PW';
+					case 'ON_HOLD':
+						return 'OH';
+					default:
+						return 'D';
+				}
+			}
+		}
 	};
 
 	return (
@@ -61,7 +63,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 							alt={mediaTitle}
 							layout='fill'
 						/>
-						{/* {getUserWatchStatus() && (
+						{getUserWatchStatus() && (
 							<div
 								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
 									getUserWatchStatus() === 'W'
@@ -79,7 +81,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 							>
 								{getUserWatchStatus()}
 							</div>
-						)} */}
+						)}
 					</div>
 
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
