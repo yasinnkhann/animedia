@@ -7,7 +7,7 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../../graphql/queries';
 import _ from 'lodash';
-import { Maybe, UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -65,26 +65,16 @@ const RelatedHorizontalScroller = ({ items }: Props) => {
 
 	useEffect(() => {
 		const matchedMedia: UserShow[] | UserMovie[] = [];
-		const userDataMap = new Map<number, UserShow | UserMovie>();
-		// @ts-ignore
-		const mediaData: UserShow[] | UserMovie[] =
-			'title' in items[0]
-				? usersMoviesData?.usersMovies
-				: usersShowsData?.usersShows;
-
-		if (_.isEmpty(mediaData)) return;
-
-		for (const userData of mediaData) {
-			userDataMap.set(parseInt(userData!.id!), userData);
-		}
 
 		for (const item of items) {
-			const userData = userDataMap.get(item.id);
-			if (userData) {
-				matchedMedia.push(userData as any);
+			for (const userData of ('title' in item
+				? usersMoviesData?.usersMovies
+				: usersShowsData?.usersShows) ?? []) {
+				if (item.id === parseInt(userData!.id!)) {
+					matchedMedia.push(userData as any);
+				}
 			}
 		}
-
 		setUserMatchedMedia(matchedMedia);
 	}, [usersShowsData?.usersShows, items, usersMoviesData?.usersMovies]);
 
