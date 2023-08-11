@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import { formatDate } from '../../../../utils/formatDate';
 import RoundProgressBar from '../../../RoundProgressBar';
 import { getImage } from 'utils/getImage';
@@ -24,7 +24,7 @@ const HomeCard = ({ item, dragging }: Props) => {
 	return (
 		<Link
 			href={getDetailsPageRoute(
-				isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
+				isMovie ? EContent.MOVIE : EContent.SHOW,
 				item.id,
 				mediaTitle
 			)}

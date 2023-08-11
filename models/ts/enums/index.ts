@@ -1,10 +1,7 @@
-export enum ESearchResultsType {
+export enum EContent {
 	MOVIES = 'movies',
 	SHOWS = 'shows',
 	PEOPLE = 'people',
-}
-
-export enum ESearchType {
 	MOVIE = 'movie',
 	SHOW = 'show',
 	PERSON = 'person',

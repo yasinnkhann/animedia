@@ -19,7 +19,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
 import _ from 'lodash';
-import { ESearchResultsType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -356,7 +356,7 @@ const MovieDetails = () => {
 											popularity: movie.popularity,
 										})
 									)}
-									mediaType={ESearchResultsType.MOVIES}
+									mediaType={EContent.MOVIES}
 								/>
 							</section>
 						)}

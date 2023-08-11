@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { ICast } from '@ts/interfaces';
-import { ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
@@ -14,7 +14,7 @@ interface Props {
 const MediaCastCard = ({ item, dragging }: Props) => {
 	return (
 		<Link
-			href={getDetailsPageRoute(ESearchType.PERSON, item.id, item.name)}
+			href={getDetailsPageRoute(EContent.PERSON, item.id, item.name)}
 			passHref
 		>
 			<a

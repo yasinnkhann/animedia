@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
-import { ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { PersonResult } from '../../../graphql/generated/code-gen/graphql';
@@ -14,7 +14,7 @@ interface Props {
 const PersonCard = ({ person }: Props) => {
 	return (
 		<Link
-			href={getDetailsPageRoute(ESearchType.PERSON, person.id, person.name)}
+			href={getDetailsPageRoute(EContent.PERSON, person.id, person.name)}
 			passHref
 		>
 			<a className='text-inherit no-underline'>

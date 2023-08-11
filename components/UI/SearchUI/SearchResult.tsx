@@ -1,6 +1,6 @@
 import React from 'react';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
-import { ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import Image from 'next/image';
 import { formatDate } from '../../../utils/formatDate';
 import { getImage } from 'utils/getImage';
@@ -13,7 +13,7 @@ import {
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult;
-	searchedResultType: ESearchType;
+	searchedResultType: EContent;
 }
 
 const SearchResult = ({ result, searchedResultType }: Props) => {
@@ -21,7 +21,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 
 	const renderSearchResult = () => {
 		let searchResult;
-		if (searchedResultType === ESearchType.MOVIE) {
+		if (searchedResultType === EContent.MOVIE) {
 			searchResult = result as MovieResult;
 			return (
 				<>
@@ -52,7 +52,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 					</div>
 				</>
 			);
-		} else if (searchedResultType === ESearchType.SHOW) {
+		} else if (searchedResultType === EContent.SHOW) {
 			searchResult = result as ShowResult;
 			return (
 				<>

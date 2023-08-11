@@ -7,13 +7,13 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../../graphql/queries';
 import { UserShow, UserMovie } from 'graphql/generated/code-gen/graphql';
-import { ESearchResultsType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
 	items: IRelatedMedia[];
-	mediaType?: ESearchResultsType.MOVIES | ESearchResultsType.SHOWS;
+	mediaType?: EContent.MOVIES | EContent.SHOWS;
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
@@ -24,7 +24,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
 		Queries.GET_USERS_SHOWS,
 		{
-			skip: mediaType === ESearchResultsType.MOVIES,
+			skip: mediaType === EContent.MOVIES,
 			fetchPolicy: 'network-only',
 		}
 	);
@@ -32,7 +32,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
 		Queries.GET_USERS_MOVIES,
 		{
-			skip: mediaType === ESearchResultsType.SHOWS,
+			skip: mediaType === EContent.SHOWS,
 			fetchPolicy: 'network-only',
 		}
 	);

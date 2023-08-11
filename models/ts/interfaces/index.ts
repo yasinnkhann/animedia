@@ -1,7 +1,7 @@
-import { ESearchType } from '../enums/index';
+import { EContent } from '../enums/index';
 
 export interface IHorizontalScrollerItemClickInfo {
-	mediaType: ESearchType;
+	mediaType: EContent;
 	id: number;
 	title: string;
 }

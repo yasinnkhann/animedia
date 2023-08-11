@@ -6,7 +6,7 @@ import SearchBar from '../components/UI/SearchUI/SearchBar';
 import SearchResult from '../components/UI/SearchUI/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
-import { ESearchResultsType, ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
@@ -19,8 +19,9 @@ const Search: NextPage = () => {
 
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
-	const [searchResultsType, setSearchResultsType] =
-		useState<ESearchResultsType>(ESearchResultsType.MOVIES);
+	const [searchResultsType, setSearchResultsType] = useState<EContent>(
+		EContent.MOVIES
+	);
 
 	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
@@ -53,26 +54,26 @@ const Search: NextPage = () => {
 	);
 
 	const getSearchedTypeData = () => {
-		if (searchResultsType === ESearchResultsType.MOVIES) {
+		if (searchResultsType === EContent.MOVIES) {
 			return searchedMoviesData?.searchedMovies;
 		}
 
-		if (searchResultsType === ESearchResultsType.SHOWS) {
+		if (searchResultsType === EContent.SHOWS) {
 			return searchedShowsData?.searchedShows;
 		}
 
-		if (searchResultsType === ESearchResultsType.PEOPLE) {
+		if (searchResultsType === EContent.PEOPLE) {
 			return searchedPeopleData?.searchedPeople;
 		}
 	};
 
 	const getSearchResultType = () => {
-		if (searchResultsType === ESearchResultsType.MOVIES) {
-			return ESearchType.MOVIE;
-		} else if (searchResultsType === ESearchResultsType.SHOWS) {
-			return ESearchType.SHOW;
+		if (searchResultsType === EContent.MOVIES) {
+			return EContent.MOVIE;
+		} else if (searchResultsType === EContent.SHOWS) {
+			return EContent.SHOW;
 		} else {
-			return ESearchType.PERSON;
+			return EContent.PERSON;
 		}
 	};
 
@@ -100,13 +101,13 @@ const Search: NextPage = () => {
 				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
 				!_.isEmpty(searchedShowsData.searchedShows.results)
 			) {
-				setSearchResultsType(ESearchResultsType.SHOWS);
+				setSearchResultsType(EContent.SHOWS);
 			} else if (
 				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
 				_.isEmpty(searchedShowsData.searchedShows.results) &&
 				!_.isEmpty(searchedPeopleData.searchedPeople.results)
 			) {
-				setSearchResultsType(ESearchResultsType.PEOPLE);
+				setSearchResultsType(EContent.PEOPLE);
 			}
 
 			if (searchBarRef.current) {
@@ -150,12 +151,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() =>
-													setSearchResultsType(ESearchResultsType.MOVIES)
-												}
+												onClick={() => setSearchResultsType(EContent.MOVIES)}
 												style={{
 													borderBottom:
-														searchResultsType === ESearchResultsType.MOVIES
+														searchResultsType === EContent.MOVIES
 															? '1px solid black'
 															: undefined,
 												}}
@@ -169,12 +168,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() =>
-													setSearchResultsType(ESearchResultsType.SHOWS)
-												}
+												onClick={() => setSearchResultsType(EContent.SHOWS)}
 												style={{
 													borderBottom:
-														searchResultsType === ESearchResultsType.SHOWS
+														searchResultsType === EContent.SHOWS
 															? '1px solid black'
 															: undefined,
 												}}
@@ -188,12 +185,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() =>
-													setSearchResultsType(ESearchResultsType.PEOPLE)
-												}
+												onClick={() => setSearchResultsType(EContent.PEOPLE)}
 												style={{
 													borderBottom:
-														searchResultsType === ESearchResultsType.PEOPLE
+														searchResultsType === EContent.PEOPLE
 															? '1px solid black'
 															: undefined,
 												}}
@@ -224,9 +219,9 @@ const Search: NextPage = () => {
 							<Pagination
 								currPage={currPage}
 								totalItems={
-									searchResultsType === ESearchResultsType.MOVIES
+									searchResultsType === EContent.MOVIES
 										? searchedMoviesData.searchedMovies.total_results
-										: searchResultsType === ESearchResultsType.SHOWS
+										: searchResultsType === EContent.SHOWS
 										? searchedShowsData.searchedShows.total_results
 										: searchedPeopleData.searchedPeople.total_results
 								}

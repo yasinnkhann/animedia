@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ESearchType } from '@ts/enums';
+import { EContent } from '@ts/enums';
 import { IRelatedMedia } from '@ts/interfaces';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
@@ -45,7 +45,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	return (
 		<Link
 			href={getDetailsPageRoute(
-				isMovie ? ESearchType.MOVIE : ESearchType.SHOW,
+				isMovie ? EContent.MOVIE : EContent.SHOW,
 				item.id,
 				mediaTitle
 			)}
