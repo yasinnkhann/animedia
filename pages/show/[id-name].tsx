@@ -20,6 +20,7 @@ import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { getImage } from 'utils/getImage';
 import _ from 'lodash';
+import { ESearchResultsType } from '@ts/enums';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
@@ -681,6 +682,7 @@ const ShowDetails = () => {
 									name: show.name,
 									popularity: show.popularity,
 								}))}
+								mediaType={ESearchResultsType.SHOWS}
 							/>
 						</section>
 					)}
