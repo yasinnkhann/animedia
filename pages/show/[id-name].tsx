@@ -672,20 +672,21 @@ const ShowDetails = () => {
 							/>
 						</section>
 					)}
-					{!recShowsLoading && recShowsData?.recommendedShows.results && (
-						<section className='pb-4'>
-							<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
-							<RelatedHorizontalScroller
-								items={recShowsData.recommendedShows.results.map(show => ({
-									id: show.id,
-									poster_path: show.poster_path,
-									name: show.name,
-									popularity: show.popularity,
-								}))}
-								mediaType={ESearchResultsType.SHOWS}
-							/>
-						</section>
-					)}
+					{!recShowsLoading &&
+						!_.isEmpty(recShowsData?.recommendedShows.results) && (
+							<section className='pb-4'>
+								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
+								<RelatedHorizontalScroller
+									items={recShowsData!.recommendedShows.results.map(show => ({
+										id: show.id,
+										poster_path: show.poster_path,
+										name: show.name,
+										popularity: show.popularity,
+									}))}
+									mediaType={ESearchResultsType.SHOWS}
+								/>
+							</section>
+						)}
 				</section>
 			</main>
 		</>

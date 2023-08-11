@@ -13,17 +13,17 @@ import {
 interface Props {
 	item: IRelatedMedia;
 	dragging: boolean;
-	userMatchedMedia: UserShow[] | UserMovie[];
+	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
-const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
+const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
 
 	const getUserWatchStatus = () => {
 		//@ts-ignore
-		const dataFound = userMatchedMedia.find(
+		const dataFound = userMatchedMedias.find(
 			(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
 		);
 		if (dataFound?.status) {

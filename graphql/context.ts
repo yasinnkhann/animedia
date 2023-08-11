@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { redis } from '../lib/redis';
 import { Session } from 'next-auth';
-import type { GetServerSidePropsContext } from 'next';
 import { getSession } from 'next-auth/react';
+import type { GetServerSidePropsContext } from 'next';
 
 export type Context = {
 	prisma: PrismaClient;

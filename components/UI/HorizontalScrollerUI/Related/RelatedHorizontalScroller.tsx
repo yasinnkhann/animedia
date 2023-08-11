@@ -17,7 +17,7 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
-	const [userMatchedMedia, setUserMatchedMedia] = useState<
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
 		UserShow[] | UserMovie[]
 	>([]);
 
@@ -67,7 +67,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	};
 
 	useEffect(() => {
-		const matchedMedia: UserShow[] | UserMovie[] = [];
+		const matchedMedias: UserShow[] | UserMovie[] = [];
 
 		for (const item of items) {
 			const usersMedias =
@@ -79,11 +79,11 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 
 			for (const userData of usersMedias) {
 				if (userData?.id && item.id === parseInt(userData.id)) {
-					matchedMedia.push(userData as any);
+					matchedMedias.push(userData as any);
 				}
 			}
 		}
-		setUserMatchedMedia(matchedMedia);
+		setUserMatchedMedias(matchedMedias);
 	}, [usersShowsData?.usersShows, items, usersMoviesData?.usersMovies]);
 
 	return (
@@ -101,7 +101,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 					key={item.id}
 					item={item}
 					dragging={dragging}
-					userMatchedMedia={userMatchedMedia}
+					userMatchedMedias={userMatchedMedias}
 				/>
 			))}
 		</ScrollMenu>
