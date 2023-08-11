@@ -20,8 +20,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 	const getUserWatchStatus = () => {
 		//@ts-ignore
 		const dataFound = userMatchedMedia.find(
-			//@ts-ignore
-			data => parseInt(data.id!) === item.id
+			(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
 		);
 		if (dataFound?.status) {
 			switch (dataFound.status) {
