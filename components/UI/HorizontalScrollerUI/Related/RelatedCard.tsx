@@ -5,7 +5,6 @@ import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
-import _ from 'lodash';
 
 interface Props {
 	item: IRelatedMedia;
@@ -19,25 +18,23 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
 
 	const getUserWatchStatus = () => {
-		if (!_.isEmpty(userMatchedMedia)) {
+		//@ts-ignore
+		const dataFound = userMatchedMedia.find(
 			//@ts-ignore
-			const dataFound = userMatchedMedia.find(
-				//@ts-ignore
-				data => parseInt(data.id!) === item.id
-			);
-			if (dataFound?.status) {
-				switch (dataFound.status) {
-					case 'WATCHING':
-						return 'W';
-					case 'COMPLETED':
-						return 'C';
-					case 'PLAN_TO_WATCH':
-						return 'PW';
-					case 'ON_HOLD':
-						return 'OH';
-					default:
-						return 'D';
-				}
+			data => parseInt(data.id!) === item.id
+		);
+		if (dataFound?.status) {
+			switch (dataFound.status) {
+				case 'WATCHING':
+					return 'W';
+				case 'COMPLETED':
+					return 'C';
+				case 'PLAN_TO_WATCH':
+					return 'PW';
+				case 'ON_HOLD':
+					return 'OH';
+				default:
+					return 'D';
 			}
 		}
 	};

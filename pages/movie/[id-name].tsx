@@ -324,13 +324,13 @@ const MovieDetails = () => {
 
 				<section className='col-start-2 mt-4'>
 					{!moviesCastCrewLoading &&
-						!_.isEmpty(moviesCastCrewData?.moviesCastCrew?.cast) && (
+						moviesCastCrewData?.moviesCastCrew?.cast && (
 							<section>
 								<h3 className='mb-4 ml-8'>Cast</h3>
 								<MediaCastHorizontalScroller
 									items={
 										moviesCastCrewData?.moviesCastCrew?.cast
-											?.map(cast => ({
+											.map(cast => ({
 												id: cast!.id,
 												name: cast!.name,
 												character: cast!.character,

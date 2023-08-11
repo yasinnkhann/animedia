@@ -654,38 +654,36 @@ const ShowDetails = () => {
 							</section>
 						)}
 
-					{!showsCastCrewLoading &&
-						!_.isEmpty(showsCastCrewData?.showsCastCrew?.cast) && (
-							<section>
-								<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
-								<MediaCastHorizontalScroller
-									items={
-										showsCastCrewData?.showsCastCrew?.cast
-											?.map(cast => ({
-												id: cast!.id,
-												name: cast!.name,
-												character: cast!.character,
-												profile_path: cast!.profile_path,
-											}))
-											.slice(0, 20) as ICast[]
-									}
-								/>
-							</section>
-						)}
-					{!recShowsLoading &&
-						!_.isEmpty(recShowsData?.recommendedShows.results) && (
-							<section className='pb-4'>
-								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
-								<RelatedHorizontalScroller
-									items={recShowsData!.recommendedShows.results.map(show => ({
-										id: show.id,
-										poster_path: show.poster_path,
-										name: show.name,
-										popularity: show.popularity,
-									}))}
-								/>
-							</section>
-						)}
+					{!showsCastCrewLoading && showsCastCrewData?.showsCastCrew?.cast && (
+						<section>
+							<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
+							<MediaCastHorizontalScroller
+								items={
+									showsCastCrewData?.showsCastCrew?.cast
+										.map(cast => ({
+											id: cast!.id,
+											name: cast!.name,
+											character: cast!.character,
+											profile_path: cast!.profile_path,
+										}))
+										.slice(0, 20) as ICast[]
+								}
+							/>
+						</section>
+					)}
+					{!recShowsLoading && recShowsData?.recommendedShows.results && (
+						<section className='pb-4'>
+							<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
+							<RelatedHorizontalScroller
+								items={recShowsData.recommendedShows.results.map(show => ({
+									id: show.id,
+									poster_path: show.poster_path,
+									name: show.name,
+									popularity: show.popularity,
+								}))}
+							/>
+						</section>
+					)}
 				</section>
 			</main>
 		</>
