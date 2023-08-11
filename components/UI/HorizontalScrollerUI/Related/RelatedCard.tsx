@@ -4,7 +4,11 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
-import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import {
+	UserMovie,
+	UserShow,
+	WatchStatusTypes,
+} from 'graphql/generated/code-gen/graphql';
 
 interface Props {
 	item: IRelatedMedia;
@@ -24,13 +28,13 @@ const RelatedCard = ({ item, dragging, userMatchedMedia }: Props) => {
 		);
 		if (dataFound?.status) {
 			switch (dataFound.status) {
-				case 'WATCHING':
+				case WatchStatusTypes.Watching:
 					return 'W';
-				case 'COMPLETED':
+				case WatchStatusTypes.Completed:
 					return 'C';
-				case 'PLAN_TO_WATCH':
+				case WatchStatusTypes.PlanToWatch:
 					return 'PW';
-				case 'ON_HOLD':
+				case WatchStatusTypes.OnHold:
 					return 'OH';
 				default:
 					return 'D';
