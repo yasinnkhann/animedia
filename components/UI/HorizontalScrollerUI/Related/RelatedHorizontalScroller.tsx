@@ -69,22 +69,49 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	useEffect(() => {
 		const matchedMedias: UserShow[] | UserMovie[] = [];
 
-		for (const item of items) {
-			const usersMedias =
-				'title' in item
+		if (mediaType) {
+			const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
+			const userDataArr =
+				mediaType === EContent.MOVIES
 					? usersMoviesData?.usersMovies
 					: usersShowsData?.usersShows;
 
-			if (!usersMedias) return;
+			if (!userDataArr) return;
 
-			for (const userData of usersMedias) {
-				if (userData?.id && item.id === parseInt(userData.id)) {
-					matchedMedias.push(userData as any);
+			for (const userDataObj of userDataArr) {
+				if (userDataObj?.id) {
+					usersMediaDict.set(userDataObj.id, userDataObj);
+				}
+			}
+			for (const item of items) {
+				if (usersMediaDict.has(String(item.id))) {
+					matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+				}
+			}
+		} else {
+			for (const item of items) {
+				const userDataArr =
+					'title' in item
+						? usersMoviesData?.usersMovies
+						: usersShowsData?.usersShows;
+
+				if (!userDataArr) return;
+
+				for (const userDataObj of userDataArr) {
+					if (userDataObj?.id && item.id === parseInt(userDataObj.id)) {
+						matchedMedias.push(userDataObj as any);
+					}
 				}
 			}
 		}
+
 		setUserMatchedMedias(matchedMedias);
-	}, [usersShowsData?.usersShows, items, usersMoviesData?.usersMovies]);
+	}, [
+		usersShowsData?.usersShows,
+		usersMoviesData?.usersMovies,
+		items,
+		mediaType,
+	]);
 
 	return (
 		<ScrollMenu
