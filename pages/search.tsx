@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import { Circles } from 'react-loading-icons';
 import Pagination from 'components/Pagination';
@@ -10,6 +10,7 @@ import { EContent } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
+import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
 const Search: NextPage = () => {
@@ -22,6 +23,10 @@ const Search: NextPage = () => {
 	const [searchResultsType, setSearchResultsType] = useState<EContent>(
 		EContent.MOVIES
 	);
+
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
+		UserShow[] | UserMovie[]
+	>([]);
 
 	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
@@ -53,7 +58,23 @@ const Search: NextPage = () => {
 		}
 	);
 
-	const getSearchedTypeData = () => {
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
+		Queries.GET_USERS_SHOWS,
+		{
+			skip: searchResultsType !== EContent.SHOWS,
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
+		Queries.GET_USERS_MOVIES,
+		{
+			skip: searchResultsType !== EContent.MOVIES,
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	const getSearchedTypeData = useCallback(() => {
 		if (searchResultsType === EContent.MOVIES) {
 			return searchedMoviesData?.searchedMovies;
 		}
@@ -65,7 +86,12 @@ const Search: NextPage = () => {
 		if (searchResultsType === EContent.PEOPLE) {
 			return searchedPeopleData?.searchedPeople;
 		}
-	};
+	}, [
+		searchResultsType,
+		searchedMoviesData?.searchedMovies,
+		searchedPeopleData?.searchedPeople,
+		searchedShowsData?.searchedShows,
+	]);
 
 	const getSearchResultType = () => {
 		if (searchResultsType === EContent.MOVIES) {
@@ -122,6 +148,38 @@ const Search: NextPage = () => {
 		searchedPeopleData?.searchedPeople,
 	]);
 
+	useEffect(() => {
+		const matchedMedias: UserShow[] | UserMovie[] = [];
+
+		const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
+
+		const userDataArr =
+			searchResultsType === EContent.MOVIES
+				? usersMoviesData?.usersMovies
+				: searchResultsType === EContent.SHOWS
+				? usersShowsData?.usersShows
+				: null;
+
+		if (!userDataArr || !getSearchedTypeData()?.results) return;
+
+		for (const userDataObj of userDataArr) {
+			if (userDataObj?.id) {
+				usersMediaDict.set(userDataObj.id, userDataObj);
+			}
+		}
+		for (const item of getSearchedTypeData()!.results) {
+			if (usersMediaDict.has(String(item.id))) {
+				matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+			}
+		}
+
+		setUserMatchedMedias(matchedMedias);
+	}, [
+		usersShowsData?.usersShows,
+		usersMoviesData?.usersMovies,
+		searchResultsType,
+		getSearchedTypeData,
+	]);
 	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -208,6 +266,7 @@ const Search: NextPage = () => {
 												key={result.id}
 												result={result}
 												searchedResultType={getSearchResultType()}
+												userMatchedMedias={userMatchedMedias}
 											/>
 										))
 									) : (
