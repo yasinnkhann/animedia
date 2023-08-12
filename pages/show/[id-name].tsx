@@ -648,7 +648,7 @@ const ShowDetails = () => {
 								<h3 className='mb-4 ml-8'>Episodes</h3>
 								<EpisodeDetailsHorizontalScroller
 									seasons={showDetailsData.showDetails.seasons.filter(
-										season => season?.season_number! > 0
+										season => season?.season_number && season.season_number > 0
 									)}
 									showId={showDetailsData.showDetails.id}
 								/>
