@@ -9,17 +9,42 @@ import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
 import {
 	MovieResult,
 	ShowResult,
+	UserMovie,
+	UserShow,
+	WatchStatusTypes,
 } from '../../../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	item: MovieResult | ShowResult;
 	dragging: Boolean;
+	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
-const HomeCard = ({ item, dragging }: Props) => {
+const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	const isMovie = 'title' in item;
 
 	const mediaTitle = isMovie ? item.title : item.name;
+
+	const getUserWatchStatus = () => {
+		//@ts-ignore
+		const dataFound = userMatchedMedias.find(
+			(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
+		);
+		if (dataFound?.status) {
+			switch (dataFound.status) {
+				case WatchStatusTypes.Watching:
+					return 'W';
+				case WatchStatusTypes.Completed:
+					return 'C';
+				case WatchStatusTypes.PlanToWatch:
+					return 'PW';
+				case WatchStatusTypes.OnHold:
+					return 'OH';
+				default:
+					return 'D';
+			}
+		}
+	};
 
 	return (
 		<Link
@@ -43,6 +68,25 @@ const HomeCard = ({ item, dragging }: Props) => {
 							layout='fill'
 							priority
 						/>
+						{getUserWatchStatus() && (
+							<div
+								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
+									getUserWatchStatus() === 'W'
+										? 'bg-green-500'
+										: getUserWatchStatus() === 'C'
+										? 'bg-yellow-500'
+										: getUserWatchStatus() === 'PW'
+										? 'bg-blue-500'
+										: getUserWatchStatus() === 'OH'
+										? 'bg-orange-500'
+										: getUserWatchStatus() === 'D'
+										? 'bg-red-500'
+										: ''
+								} text-base text-white`}
+							>
+								{getUserWatchStatus()}
+							</div>
+						)}
 					</div>
 
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>

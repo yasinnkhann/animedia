@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import HomeCard from './HomeCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
@@ -6,7 +6,11 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import {
 	MovieResult,
 	ShowResult,
+	UserMovie,
+	UserShow,
 } from '../../../../graphql/generated/code-gen/graphql';
+import { useQuery } from '@apollo/client';
+import * as Queries from '../../../../graphql/queries';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -15,6 +19,26 @@ interface Props {
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
+		UserShow[] | UserMovie[]
+	>([]);
+
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
+		Queries.GET_USERS_SHOWS,
+		{
+			skip: 'title' in items[0],
+			fetchPolicy: 'network-only',
+		}
+	);
+
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
+		Queries.GET_USERS_MOVIES,
+		{
+			skip: 'name' in items[0],
+			fetchPolicy: 'network-only',
+		}
+	);
+
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -44,6 +68,32 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 		}
 	};
 
+	useEffect(() => {
+		const matchedMedias: UserShow[] | UserMovie[] = [];
+
+		const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
+
+		const userDataArr =
+			'title' in items[0]
+				? usersMoviesData?.usersMovies
+				: usersShowsData?.usersShows;
+
+		if (!userDataArr) return;
+
+		for (const userDataObj of userDataArr) {
+			if (userDataObj?.id) {
+				usersMediaDict.set(userDataObj.id, userDataObj);
+			}
+		}
+		for (const item of items) {
+			if (usersMediaDict.has(String(item.id))) {
+				matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+			}
+		}
+
+		setUserMatchedMedias(matchedMedias);
+	}, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items]);
+
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
@@ -55,7 +105,12 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[26rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<HomeCard key={item.id} item={item} dragging={dragging} />
+				<HomeCard
+					key={item.id}
+					item={item}
+					dragging={dragging}
+					userMatchedMedias={userMatchedMedias}
+				/>
 			))}
 		</ScrollMenu>
 	);
