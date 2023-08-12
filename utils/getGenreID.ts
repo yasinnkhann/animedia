@@ -1,9 +1,9 @@
 import { BASE_URL } from './constants';
+import { NexusGenEnums } from '../graphql/generated/nexus-typegen/index';
 import {
-	NexusGenObjects,
-	NexusGenEnums,
-} from '../graphql/generated/nexus-typegen/index';
-
+	MovieDetailsGenre,
+	ShowDetailsGenre,
+} from '../graphql/generated/code-gen/graphql';
 /*
 MOVIE
 Action          28
@@ -47,9 +47,7 @@ War & Politics      10768
 Western             37
 */
 
-type TGenreObj =
-	| NexusGenObjects['MovieDetailsGenre']
-	| NexusGenObjects['ShowDetailsGenre'];
+type TGenreObj = MovieDetailsGenre | ShowDetailsGenre;
 
 export const GET_GENRE_ID = async (
 	genreName: NexusGenEnums['MovieGenreTypes'] | NexusGenEnums['ShowGenreTypes'],
