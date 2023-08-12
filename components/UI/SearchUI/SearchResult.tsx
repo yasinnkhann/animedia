@@ -1,4 +1,3 @@
-import React from 'react';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import Image from 'next/image';
@@ -9,6 +8,7 @@ import {
 	MovieResult,
 	ShowResult,
 	PersonResult,
+	Maybe,
 } from '../../../graphql/generated/code-gen/graphql';
 
 interface Props {
@@ -19,86 +19,68 @@ interface Props {
 const SearchResult = ({ result, searchedResultType }: Props) => {
 	const mediaTitle = 'title' in result ? result.title : result.name;
 
+	const renderImage = (
+		imagePath: Maybe<string> | undefined,
+		altText: string
+	) => (
+		<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
+			<Image
+				className='rounded-lg'
+				src={getImage(imagePath)}
+				alt={altText}
+				layout='fill'
+				priority
+			/>
+		</div>
+	);
+
+	const renderMediaDetails = (
+		releaseDate: Maybe<string> | undefined,
+		overview: string
+	) => (
+		<div className='p-4'>
+			<h3 className='cursor-pointer'>{mediaTitle}</h3>
+			<p>{releaseDate ? formatDate(releaseDate) : 'Date Not Available'}</p>
+			<p>
+				{overview.split(' ').length > 50
+					? `${overview.split(' ').slice(0, 50).join(' ')}...`
+					: overview}
+			</p>
+		</div>
+	);
+
+	const renderPersonDetails = () => (
+		<div className='p-4'>
+			<h3 className='cursor-pointer'>{mediaTitle}</h3>
+		</div>
+	);
+
 	const renderSearchResult = () => {
-		let searchResult;
 		if (searchedResultType === EContent.MOVIE) {
-			searchResult = result as MovieResult;
+			const searchResult = result as MovieResult;
 			return (
 				<>
-					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
-						<Image
-							className='rounded-lg'
-							src={getImage(searchResult.poster_path)}
-							alt={searchResult.title}
-							layout='fill'
-							priority
-						/>
-					</div>
-					<div className='p-4'>
-						<h3 className='cursor-pointer'>{searchResult.title}</h3>
-						<p>
-							{searchResult.release_date
-								? formatDate(searchResult.release_date)
-								: 'Release Date Not Available'}
-						</p>
-						<p>
-							{searchResult.overview.split(' ').length > 50
-								? `${searchResult.overview
-										.split(' ')
-										.slice(0, 50)
-										.join(' ')}...`
-								: searchResult.overview}
-						</p>
-					</div>
+					{renderImage(searchResult.poster_path, searchResult.title)}
+					{renderMediaDetails(searchResult.release_date, searchResult.overview)}
 				</>
 			);
 		} else if (searchedResultType === EContent.SHOW) {
-			searchResult = result as ShowResult;
+			const searchResult = result as ShowResult;
 			return (
 				<>
-					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
-						<Image
-							className='rounded-lg'
-							src={getImage(searchResult.poster_path)}
-							alt={searchResult.name}
-							layout='fill'
-							priority
-						/>
-					</div>
-					<div className='p-4'>
-						<h3 className='cursor-pointer'>{searchResult.name}</h3>
-						<p>
-							{searchResult.first_air_date
-								? formatDate(searchResult.first_air_date)
-								: 'First Air Date Not Available'}
-						</p>
-						<p>
-							{searchResult.overview.split(' ').length > 50
-								? `${searchResult.overview
-										.split(' ')
-										.slice(0, 50)
-										.join(' ')}...`
-								: searchResult.overview}
-						</p>
-					</div>
+					{renderImage(searchResult.poster_path, searchResult.name)}
+					{renderMediaDetails(
+						searchResult.first_air_date,
+						searchResult.overview
+					)}
 				</>
 			);
 		} else {
-			searchResult = result as PersonResult;
+			const searchResult = result as PersonResult;
 			return (
 				<>
-					<div className='relative w-[5rem] min-w-[5rem] cursor-pointer'>
-						<Image
-							className='rounded-lg'
-							src={getImage(searchResult.profile_path)}
-							alt={searchResult.name}
-							layout='fill'
-							priority
-						/>
-					</div>
-					<div className='p-4'>
-						<h3 className='cursor-pointer'>{searchResult.name}</h3>
-					</div>
+					{renderImage(searchResult.profile_path, searchResult.name)}
+					{renderPersonDetails()}
 				</>
 			);
 		}
@@ -110,7 +92,7 @@ const SearchResult = ({ result, searchedResultType }: Props) => {
 			passHref
 		>
 			<a className='text-inherit no-underline'>
-				<section className='my-4 mr-16 flex h-[8rem] rounded-lg border'>
+				<section className='my-4 mr-16 flex h-[10rem] rounded-lg border'>
 					{renderSearchResult()}
 				</section>
 			</a>
