@@ -9,11 +9,12 @@ import {
 	PopularShowsByGenreQuery,
 	TopRatedShowsByGenreQuery,
 } from 'graphql/generated/code-gen/graphql';
-import { NexusGenObjects } from '../../../graphql/generated/nexus-typegen';
+import {
+	MovieResult,
+	ShowResult,
+} from '../../../graphql/generated/code-gen/graphql';
 
-export type THomeHorizontalScrollerData =
-	| NexusGenObjects['MoviesRes']['results']
-	| NexusGenObjects['ShowsRes']['results'];
+export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
 export type TStatusParam =
 	| 'watching'
