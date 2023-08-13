@@ -4,6 +4,7 @@ import {
 	MovieDetailsGenre,
 	ShowDetailsGenre,
 } from '../graphql/generated/code-gen/graphql';
+
 /*
 MOVIE
 Action          28

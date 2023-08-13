@@ -18,8 +18,8 @@ import { formatDate } from '../../utils/formatDate';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
-import _ from 'lodash';
 import { EContent } from '@ts/enums';
+import _ from 'lodash';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();

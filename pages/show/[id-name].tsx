@@ -19,8 +19,8 @@ import { formatDate } from '../../utils/formatDate';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { getImage } from 'utils/getImage';
-import _ from 'lodash';
 import { EContent } from '@ts/enums';
+import _ from 'lodash';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
