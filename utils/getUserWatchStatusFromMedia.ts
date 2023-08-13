@@ -4,7 +4,7 @@ import {
 	WatchStatusTypes,
 } from 'graphql/generated/code-gen/graphql';
 
-export const getUserWatchStatus = (
+export const getUserWatchStatusFromMedia = (
 	userMatchedMedias: UserShow[] | UserMovie[],
 	item: {
 		id: number;

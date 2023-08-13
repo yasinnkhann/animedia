@@ -12,7 +12,7 @@ import {
 	UserMovie,
 	UserShow,
 } from '../../../../graphql/generated/code-gen/graphql';
-import { getUserWatchStatus } from 'utils/getUserWatchStatus';
+import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: MovieResult | ShowResult;
@@ -25,7 +25,10 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	const mediaTitle = isMovie ? item.title : item.name;
 
-	const userWatchStatus = getUserWatchStatus(userMatchedMedias, item);
+	const userWatchStatusFromMedia = getUserWatchStatusFromMedia(
+		userMatchedMedias,
+		item
+	);
 
 	return (
 		<Link
@@ -49,23 +52,23 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 							layout='fill'
 							priority
 						/>
-						{userWatchStatus && (
+						{userWatchStatusFromMedia && (
 							<div
 								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
-									userWatchStatus === 'W'
+									userWatchStatusFromMedia === 'W'
 										? 'bg-green-500'
-										: userWatchStatus === 'C'
+										: userWatchStatusFromMedia === 'C'
 										? 'bg-yellow-500'
-										: userWatchStatus === 'PW'
+										: userWatchStatusFromMedia === 'PW'
 										? 'bg-blue-500'
-										: userWatchStatus === 'OH'
+										: userWatchStatusFromMedia === 'OH'
 										? 'bg-orange-500'
-										: userWatchStatus === 'D'
+										: userWatchStatusFromMedia === 'D'
 										? 'bg-red-500'
 										: ''
 								} text-base text-white`}
 							>
-								{userWatchStatus}
+								{userWatchStatusFromMedia}
 							</div>
 						)}
 					</div>

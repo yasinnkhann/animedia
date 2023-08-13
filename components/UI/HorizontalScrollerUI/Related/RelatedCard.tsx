@@ -5,7 +5,7 @@ import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
-import { getUserWatchStatus } from 'utils/getUserWatchStatus';
+import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: IRelatedMedia;
@@ -18,7 +18,10 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
 
-	const userWatchStatus = getUserWatchStatus(userMatchedMedias, item);
+	const userWatchStatusFromMedia = getUserWatchStatusFromMedia(
+		userMatchedMedias,
+		item
+	);
 
 	return (
 		<Link
@@ -41,23 +44,23 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 							alt={mediaTitle}
 							layout='fill'
 						/>
-						{userWatchStatus && (
+						{userWatchStatusFromMedia && (
 							<div
 								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
-									userWatchStatus === 'W'
+									userWatchStatusFromMedia === 'W'
 										? 'bg-green-500'
-										: userWatchStatus === 'C'
+										: userWatchStatusFromMedia === 'C'
 										? 'bg-yellow-500'
-										: userWatchStatus === 'PW'
+										: userWatchStatusFromMedia === 'PW'
 										? 'bg-blue-500'
-										: userWatchStatus === 'OH'
+										: userWatchStatusFromMedia === 'OH'
 										? 'bg-orange-500'
-										: userWatchStatus === 'D'
+										: userWatchStatusFromMedia === 'D'
 										? 'bg-red-500'
 										: ''
 								} text-base text-white`}
 							>
-								{userWatchStatus}
+								{userWatchStatusFromMedia}
 							</div>
 						)}
 					</div>
