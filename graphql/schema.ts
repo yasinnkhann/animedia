@@ -1,3 +1,4 @@
+/*
 import { makeSchema, asNexusMethod, connectionPlugin } from 'nexus';
 import { join } from 'path';
 import { applyMiddleware } from 'graphql-middleware';
@@ -41,3 +42,10 @@ export const baseSchema = makeSchema({
 });
 
 export const schema = applyMiddleware(baseSchema, permissions);
+*/
+
+import { builder } from './builder';
+
+import './models/User';
+
+export const schema = builder.toSchema({});
