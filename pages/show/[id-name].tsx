@@ -655,23 +655,24 @@ const ShowDetails = () => {
 							</section>
 						)}
 
-					{!showsCastCrewLoading && showsCastCrewData?.showsCastCrew?.cast && (
-						<section>
-							<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
-							<MediaCastHorizontalScroller
-								items={
-									showsCastCrewData?.showsCastCrew?.cast
-										.map(cast => ({
-											id: cast!.id,
-											name: cast!.name,
-											character: cast!.character,
-											profile_path: cast!.profile_path,
-										}))
-										.slice(0, 20) as ICast[]
-								}
-							/>
-						</section>
-					)}
+					{!showsCastCrewLoading &&
+						!_.isEmpty(showsCastCrewData?.showsCastCrew?.cast) && (
+							<section>
+								<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
+								<MediaCastHorizontalScroller
+									items={
+										showsCastCrewData!.showsCastCrew
+											?.cast!.map(cast => ({
+												id: cast!.id,
+												name: cast!.name,
+												character: cast!.character,
+												profile_path: cast!.profile_path,
+											}))
+											.slice(0, 20) as ICast[]
+									}
+								/>
+							</section>
+						)}
 					{!recShowsLoading &&
 						!_.isEmpty(recShowsData?.recommendedShows.results) && (
 							<section className='pb-4'>
