@@ -77,8 +77,8 @@ model Movie {
   name   String
   status WatchStatus
   rating Int?
-  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String      @map("user_id")
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([id, userId])
   @@index([userId])
@@ -90,8 +90,8 @@ model Show {
   current_episode Int         @default(0)
   status          WatchStatus
   rating          Int?
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String      @map("user_id")
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([id, userId])
   @@index([userId])

@@ -30,3 +30,18 @@ export const builder = new SchemaBuilder<{
 builder.addScalarType('Date', DateTimeResolver, {});
 builder.addScalarType('BigInt', BigIntResolver, {});
 builder.addScalarType('JSON', JSONResolver, {});
+
+export const WatchStatusTypes = builder.enumType('WatchStatusTypes', {
+	values: [
+		'NOT_WATCHING',
+		'WATCHING',
+		'PLAN_TO_WATCH',
+		'COMPLETED',
+		'ON_HOLD',
+		'DROPPED',
+	] as const,
+});
+
+export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
+	values: ['day', 'week'],
+});

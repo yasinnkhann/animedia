@@ -1,5 +1,18 @@
 import { builder } from '../builder';
 import { prisma } from '../../lib/prisma';
+import { WatchStatusTypes } from '../builder';
+
+builder.prismaObject('Movie', {
+	fields: t => ({
+		id: t.exposeID('id'),
+		name: t.exposeString('name', { nullable: true }),
+		status: t.field({
+			type: WatchStatusTypes,
+			resolve: parent => parent.status,
+		}),
+		rating: t.exposeInt('rating', { nullable: true }),
+	}),
+});
 
 builder.prismaObject('User', {
 	fields: t => ({

@@ -6,3 +6,12 @@ export enum EContent {
 	SHOW = 'show',
 	PERSON = 'person',
 }
+
+export enum EWatchStatusTypes {
+	NOT_WATCHING = 'NOT_WATCHING',
+	WATCHING = 'WATCHING',
+	PLAN_TO_WATCH = 'PLAN_TO_WATCH',
+	COMPLETED = 'COMPLETED',
+	ON_HOLD = 'ON_HOLD',
+	DROPPED = 'DROPPED',
+}
