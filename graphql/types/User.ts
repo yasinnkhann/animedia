@@ -72,7 +72,76 @@ export const UserRes = objectType({
 	},
 });
 
-export const User = extendType({
+export const RegisteredUserRes = objectType({
+	name: 'RegisteredUserRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('createdUser', {
+			type: 'UserRes',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
+export const RedisRes = objectType({
+	name: 'RedisRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('successMsg', {
+			type: 'String',
+		});
+		t.field('token', {
+			type: 'String',
+		});
+		t.field('userId', {
+			type: 'String',
+		});
+	},
+});
+
+export const AccountVerifiedRes = objectType({
+	name: 'AccountVerifiedRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('id', {
+			type: 'String',
+		});
+		t.field('emailVerified', {
+			type: 'DateTime',
+		});
+	},
+});
+
+export const NodeRes = objectType({
+	name: 'NodeRes',
+	definition(t) {
+		t.field('error', {
+			type: 'String',
+		});
+		t.field('successMsg', {
+			type: 'String',
+		});
+		t.field('ok', {
+			type: 'Boolean',
+		});
+		t.field('statusCode', {
+			type: 'Int',
+		});
+	},
+});
+
+export const UserQueries = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('user', {
@@ -90,12 +159,6 @@ export const User = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UsersMovie = extendType({
-	type: 'Query',
-	definition(t) {
 		t.field('usersMovie', {
 			type: 'UserMovie',
 			args: {
@@ -112,12 +175,6 @@ export const UsersMovie = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UsersShow = extendType({
-	type: 'Query',
-	definition(t) {
 		t.field('usersShow', {
 			type: 'UserShow',
 			args: {
@@ -134,12 +191,6 @@ export const UsersShow = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UsersMovies = extendType({
-	type: 'Query',
-	definition(t) {
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
@@ -155,12 +206,6 @@ export const UsersMovies = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UsersShows = extendType({
-	type: 'Query',
-	definition(t) {
 		t.list.field('usersShows', {
 			type: 'UserShow',
 			resolve: async (_parent, _args, ctx) => {
@@ -176,10 +221,121 @@ export const UsersShows = extendType({
 				});
 			},
 		});
+		t.field('checkEmailVerificationToken', {
+			type: 'RedisRes',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) {
+					return {
+						error: 'Email Verification Not Found.',
+						successMsg: null,
+						token: null,
+						userId: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Valid EMAIL VERIFICATION.',
+					token,
+					userId,
+				};
+			},
+		});
+		t.field('accountVerified', {
+			type: 'AccountVerifiedRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			// @ts-ignore
+			resolve: async (_parent, { email }, ctx) => {
+				const acct = await ctx.prisma.user.findUnique({
+					where: { email },
+					select: { id: true, emailVerified: true },
+				});
+
+				if (!acct) {
+					return {
+						error: 'Account Not Found',
+						id: null,
+						emailVerified: null,
+					};
+				}
+
+				if (acct.id && !acct.emailVerified) {
+					return {
+						error: 'Account Not Verified',
+						id: acct.id,
+						emailVerified: null,
+					};
+				}
+
+				if (acct.id && acct.emailVerified) {
+					return {
+						error: null,
+						id: acct.id,
+						emailVerified: acct.emailVerified,
+					};
+				}
+			},
+		});
+		t.field('emailFromRedisToken', {
+			type: 'String',
+			args: {
+				token: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) return null;
+
+				const user = await ctx.prisma.user.findUnique({
+					where: { id: userId },
+					select: { email: true },
+				});
+
+				if (!user) return null;
+
+				return user.email;
+			},
+		});
+		t.field('checkRetryEmailVerificationLimit', {
+			type: 'RedisRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				const limitFound: string | null = await ctx.redis.get(
+					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+				);
+
+				if (!limitFound) {
+					return {
+						error: null,
+						successMsg: 'Retry Email Verification Limit Not Found',
+						token: null,
+					};
+				}
+
+				return {
+					error: null,
+					successMsg: 'Retry Email Verification Limit Found',
+					token: limitFound,
+				};
+			},
+		});
 	},
 });
 
-export const AddMovie = extendType({
+export const UserMutations = extendType({
 	type: 'Mutation',
 	definition(t) {
 		t.field('addMovie', {
@@ -204,12 +360,6 @@ export const AddMovie = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const AddShow = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('addShow', {
 			type: 'UserShow',
 			args: {
@@ -238,12 +388,6 @@ export const AddShow = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UpdateMovie = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('updateMovie', {
 			type: 'UserMovie',
 			args: {
@@ -266,12 +410,6 @@ export const UpdateMovie = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const UpdateShow = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('updateShow', {
 			type: 'UserShow',
 			args: {
@@ -300,12 +438,6 @@ export const UpdateShow = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const DeleteMovie = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('deleteMovie', {
 			type: 'UserMovie',
 			args: {
@@ -322,12 +454,6 @@ export const DeleteMovie = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const DeleteShow = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('deleteShow', {
 			type: 'UserShow',
 			args: {
@@ -344,30 +470,6 @@ export const DeleteShow = extendType({
 				});
 			},
 		});
-	},
-});
-
-export const RegisteredUserRes = objectType({
-	name: 'RegisteredUserRes',
-	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('createdUser', {
-			type: 'UserRes',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
-		});
-	},
-});
-
-export const RegisterUser = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('registerUser', {
 			type: 'RegisteredUserRes',
 			args: {
@@ -409,63 +511,6 @@ export const RegisterUser = extendType({
 				}
 			},
 		});
-	},
-});
-
-export const RedisRes = objectType({
-	name: 'RedisRes',
-	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('successMsg', {
-			type: 'String',
-		});
-		t.field('token', {
-			type: 'String',
-		});
-		t.field('userId', {
-			type: 'String',
-		});
-	},
-});
-
-export const CheckEmailVerificationToken = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('checkEmailVerificationToken', {
-			type: 'RedisRes',
-			args: {
-				token: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
-				);
-
-				if (!userId) {
-					return {
-						error: 'Email Verification Not Found.',
-						successMsg: null,
-						token: null,
-						userId: null,
-					};
-				}
-
-				return {
-					error: null,
-					successMsg: 'Valid EMAIL VERIFICATION.',
-					token,
-					userId,
-				};
-			},
-		});
-	},
-});
-
-export const WriteEmailVerificationToken = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('writeEmailVerificationToken', {
 			type: 'RedisRes',
 			args: {
@@ -503,12 +548,6 @@ export const WriteEmailVerificationToken = extendType({
 				};
 			},
 		});
-	},
-});
-
-export const DeleteEmailVerificationToken = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('deleteEmailVerificationToken', {
 			type: 'RedisRes',
 			args: {
@@ -536,12 +575,6 @@ export const DeleteEmailVerificationToken = extendType({
 				};
 			},
 		});
-	},
-});
-
-export const VerifyUserEmail = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('verifyUserEmail', {
 			type: 'Int',
 			args: {
@@ -560,129 +593,6 @@ export const VerifyUserEmail = extendType({
 				return 200;
 			},
 		});
-	},
-});
-
-export const AccountVerifiedRes = objectType({
-	name: 'AccountVerifiedRes',
-	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('id', {
-			type: 'String',
-		});
-		t.field('emailVerified', {
-			type: 'DateTime',
-		});
-	},
-});
-
-export const AccountVerified = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('accountVerified', {
-			type: 'AccountVerifiedRes',
-			args: {
-				email: nonNull(stringArg()),
-			},
-			// @ts-ignore
-			resolve: async (_parent, { email }, ctx) => {
-				const acct = await ctx.prisma.user.findUnique({
-					where: { email },
-					select: { id: true, emailVerified: true },
-				});
-
-				if (!acct) {
-					return {
-						error: 'Account Not Found',
-						id: null,
-						emailVerified: null,
-					};
-				}
-
-				if (acct.id && !acct.emailVerified) {
-					return {
-						error: 'Account Not Verified',
-						id: acct.id,
-						emailVerified: null,
-					};
-				}
-
-				if (acct.id && acct.emailVerified) {
-					return {
-						error: null,
-						id: acct.id,
-						emailVerified: acct.emailVerified,
-					};
-				}
-			},
-		});
-	},
-});
-
-export const EmailFromRedisToken = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('emailFromRedisToken', {
-			type: 'String',
-			args: {
-				token: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
-				);
-
-				if (!userId) return null;
-
-				const user = await ctx.prisma.user.findUnique({
-					where: { id: userId },
-					select: { email: true },
-				});
-
-				if (!user) return null;
-
-				return user.email;
-			},
-		});
-	},
-});
-
-export const CheckRetryEmailVerificationLimit = extendType({
-	type: 'Query',
-	definition(t) {
-		t.field('checkRetryEmailVerificationLimit', {
-			type: 'RedisRes',
-			args: {
-				email: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { email }, ctx) => {
-				const limitFound: string | null = await ctx.redis.get(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
-				);
-
-				if (!limitFound) {
-					return {
-						error: null,
-						successMsg: 'Retry Email Verification Limit Not Found',
-						token: null,
-					};
-				}
-
-				return {
-					error: null,
-					successMsg: 'Retry Email Verification Limit Found',
-					token: limitFound,
-				};
-			},
-		});
-	},
-});
-
-export const WriteRetryEmailVerificationLimit = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('writeRetryEmailVerificationLimit', {
 			type: 'RedisRes',
 			args: {
@@ -711,30 +621,6 @@ export const WriteRetryEmailVerificationLimit = extendType({
 				};
 			},
 		});
-	},
-});
-
-export const NodeRes = objectType({
-	name: 'NodeRes',
-	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('successMsg', {
-			type: 'String',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
-		});
-	},
-});
-
-export const SendVerificationEmail = extendType({
-	type: 'Mutation',
-	definition(t) {
 		t.field('sendVerificationEmail', {
 			type: 'NodeRes',
 			args: {
