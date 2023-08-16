@@ -1,5 +1,4 @@
 import { builder } from '../builder';
-import { prisma } from '../../lib/prisma';
 import { WatchStatusTypes } from '../builder';
 
 builder.prismaObject('Movie', {
@@ -14,33 +13,54 @@ builder.prismaObject('Movie', {
 	}),
 });
 
+builder.prismaObject('Show', {
+	fields: t => ({
+		id: t.exposeID('id'),
+		name: t.exposeString('name', { nullable: true }),
+		status: t.field({
+			type: WatchStatusTypes,
+			resolve: parent => parent.status,
+		}),
+		rating: t.exposeInt('rating', { nullable: true }),
+		currentEpisode: t.exposeInt('current_episode'),
+	}),
+});
+
 builder.prismaObject('User', {
 	fields: t => ({
 		id: t.exposeID('id'),
 		name: t.exposeString('name', { nullable: true }),
 		email: t.exposeString('email', { nullable: true }),
+		password: t.exposeString('password', { nullable: true }),
+		image: t.exposeString('image', { nullable: true }),
 		createdAt: t.expose('created_at', { type: 'Date' }),
 		emailVerified: t.expose('emailVerified', { type: 'Date', nullable: true }),
-		image: t.exposeString('image', { nullable: true }),
-		password: t.exposeString('password', { nullable: true }),
-		// accounts: t.relation('accounts'),
-		// sessions: t.relation('sessions'),
-		// movies: t.relation('movies'),
-		// shows: t.relation('shows'),
+		movies: t.relation('movies'),
+		shows: t.relation('shows'),
 	}),
 });
 
-builder.queryField('users', t =>
-	t.prismaField({
-		type: ['User'],
-		resolve: async (query, root, args, ctx, info) => {
-			return prisma.user.findMany({ ...query });
-		},
-	})
-);
-
 builder.queryType({
 	fields: t => ({
+		users: t.prismaField({
+			type: ['User'],
+			resolve: async (query, _parent, _args, ctx) => {
+				return await ctx.prisma.user.findMany({ ...query });
+			},
+		}),
+		// user: t.prismaField({
+		// 	type: 'User',
+		// 	resolve: async (query, _parent, _args, ctx) => {
+		// 		return await ctx.prisma.user.findUnique({
+		// 			...query,
+		// 			where: { id: ctx.session!.user?.id! },
+		// 			include: {
+		// 				movies: true,
+		// 				shows: true,
+		// 			},
+		// 		});
+		// 	},
+		// }),
 		hello: t.string({
 			args: {
 				name: t.arg.string(),
