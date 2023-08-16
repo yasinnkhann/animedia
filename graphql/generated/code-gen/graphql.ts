@@ -482,7 +482,6 @@ export type Query = {
   checkRetryEmailVerificationLimit?: Maybe<RedisRes>;
   emailFromRedisToken?: Maybe<Scalars['String']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
-  id?: Maybe<Scalars['Int']>;
   movieDetails: MovieDetailsRes;
   movieReviews: MovieReviewsRes;
   moviesCastCrew?: Maybe<MoviesCastCrewRes>;

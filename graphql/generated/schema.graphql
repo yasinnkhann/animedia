@@ -375,7 +375,6 @@ type Query {
   checkRetryEmailVerificationLimit(email: String!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetailsRes
-  id: Int
   movieDetails(movieDetailsId: Int!): MovieDetailsRes!
   movieReviews(id: Int!, page: Int): MovieReviewsRes!
   moviesCastCrew(movieId: Int!): MoviesCastCrewRes
