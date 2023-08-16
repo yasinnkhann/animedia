@@ -49,30 +49,6 @@ export const PeopleRes = objectType({
 	},
 });
 
-export const PopularPeople = extendType({
-	type: 'Query',
-	definition(t) {
-		t.nonNull.field('popularPeople', {
-			type: 'PeopleRes',
-			args: {
-				page: intArg(),
-			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/person/popular?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${page ?? 1}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-	},
-});
-
 export const PersonDetailsRes = objectType({
 	name: 'PersonDetailsRes',
 	definition(t) {
@@ -90,57 +66,6 @@ export const PersonDetailsRes = objectType({
 		t.string('place_of_birth');
 		t.float('popularity');
 		t.string('profile_path');
-	},
-});
-
-export const PersonDetails = extendType({
-	type: 'Query',
-	definition(t) {
-		t.nonNull.field('personDetails', {
-			type: 'PersonDetailsRes',
-			args: {
-				personDetailsId: nonNull(intArg()),
-			},
-			resolve: async (_parent, { personDetailsId }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
-							.API_KEY!}&language=en-US&page=1`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-	},
-});
-
-export const SearchedPeople = extendType({
-	type: 'Query',
-	definition(t) {
-		t.nonNull.field('searchedPeople', {
-			type: 'PeopleRes',
-			args: {
-				q: nonNull(stringArg()),
-				page: intArg(),
-			},
-			resolve: async (_parent, { q, page }) => {
-				q = q.split(' ').join('+');
-				try {
-					const res = await fetch(
-						`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
-							page ?? 1
-						}&query=${q}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
 	},
 });
 
@@ -200,31 +125,6 @@ export const PersonsKnownForMovieRes = objectType({
 		t.nonNull.list.field('crew', {
 			type: 'PersonsKnownForMovieCrew',
 		});
-	},
-});
-
-export const PersonsKnownForMovie = extendType({
-	type: 'Query',
-	definition(t) {
-		t.int('id'),
-			t.nonNull.field('personsKnownForMovieRes', {
-				type: 'PersonsKnownForMovieRes',
-				args: {
-					personsKnownForMovieResId: nonNull(intArg()),
-				},
-				resolve: async (_parent, { personsKnownForMovieResId }) => {
-					try {
-						const res = await fetch(
-							`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
-								.env.API_KEY!}&language=en-US`
-						);
-						const data = await res.json();
-						return data;
-					} catch (err) {
-						console.error(err);
-					}
-				},
-			});
 	},
 });
 
@@ -288,27 +188,101 @@ export const PersonsKnownForShowRes = objectType({
 	},
 });
 
-export const PersonsKnownForShow = extendType({
+export const PopularQueries = extendType({
 	type: 'Query',
 	definition(t) {
-		t.int('id'),
-			t.nonNull.field('personsKnownForShowRes', {
-				type: 'PersonsKnownForShowRes',
-				args: {
-					personsKnownForShowResId: nonNull(intArg()),
-				},
-				resolve: async (_parent, { personsKnownForShowResId }) => {
-					try {
-						const res = await fetch(
-							`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
-								.env.API_KEY!}&language=en-US`
-						);
-						const data = await res.json();
-						return data;
-					} catch (err) {
-						console.error(err);
-					}
-				},
-			});
+		t.nonNull.field('popularPeople', {
+			type: 'PeopleRes',
+			args: {
+				page: intArg(),
+			},
+			resolve: async (_parent, { page }) => {
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/popular?api_key=${process.env
+							.API_KEY!}&language=en-US&page=${page ?? 1}`
+					);
+					const data = await res.json();
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('personDetails', {
+			type: 'PersonDetailsRes',
+			args: {
+				personDetailsId: nonNull(intArg()),
+			},
+			resolve: async (_parent, { personDetailsId }) => {
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
+							.API_KEY!}&language=en-US&page=1`
+					);
+					const data = await res.json();
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('searchedPeople', {
+			type: 'PeopleRes',
+			args: {
+				q: nonNull(stringArg()),
+				page: intArg(),
+			},
+			resolve: async (_parent, { q, page }) => {
+				q = q.split(' ').join('+');
+				try {
+					const res = await fetch(
+						`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
+							page ?? 1
+						}&query=${q}`
+					);
+					const data = await res.json();
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('personsKnownForMovieRes', {
+			type: 'PersonsKnownForMovieRes',
+			args: {
+				personsKnownForMovieResId: nonNull(intArg()),
+			},
+			resolve: async (_parent, { personsKnownForMovieResId }) => {
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
+							.env.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('personsKnownForShowRes', {
+			type: 'PersonsKnownForShowRes',
+			args: {
+				personsKnownForShowResId: nonNull(intArg()),
+			},
+			resolve: async (_parent, { personsKnownForShowResId }) => {
+				try {
+					const res = await fetch(
+						`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
+							.env.API_KEY!}&language=en-US`
+					);
+					const data = await res.json();
+					return data;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
 	},
 });
