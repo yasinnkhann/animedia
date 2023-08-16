@@ -1889,6 +1889,9 @@ export interface NexusGenArgTypes {
       page?: number | null; // Int
       timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
     }
+    user: { // args
+      id: string; // ID!
+    }
     usersMovie: { // args
       movieId: string; // String!
     }

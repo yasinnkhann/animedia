@@ -77,9 +77,12 @@ export const User = extendType({
 	definition(t) {
 		t.field('user', {
 			type: 'UserRes',
-			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.user.findUnique({
-					where: { id: ctx.session!.user?.id! },
+			args: {
+				id: nonNull(idArg()),
+			},
+			resolve: async (_parent, { id }, ctx) => {
+				return await ctx.prisma.user.findUniqueOrThrow({
+					where: { id },
 					include: {
 						movies: true,
 						shows: true,

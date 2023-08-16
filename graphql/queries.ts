@@ -724,8 +724,8 @@ export const SEARCHED_PEOPLE = graphql(`
 `);
 
 export const GET_USER = graphql(`
-	query User {
-		user {
+	query User($userId: ID!) {
+		user(id: $userId) {
 			id
 			name
 			email

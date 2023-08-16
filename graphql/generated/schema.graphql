@@ -404,7 +404,7 @@ type Query {
   topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
   trendingMovies(page: Int, timeWindow: TimeWindowTypes!): MoviesRes!
   trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
-  user: UserRes
+  user(id: ID!): UserRes
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]
   usersShow(showId: String!): UserShow
