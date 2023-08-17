@@ -1,5 +1,6 @@
 import { builder } from '../builder';
 import { WatchStatusTypes } from '../builder';
+import { RegisteredUserRes } from '../../models/entities';
 
 builder.prismaObject('Movie', {
 	fields: t => ({
@@ -40,10 +41,10 @@ builder.prismaObject('User', {
 	}),
 });
 
-// builder.objectType('User', {
-// 	description: 'Long necks, cool patterns, taller than you.',
-// 	fields: t => ({}),
-// });
+builder.objectType(RegisteredUserRes, {
+	name: 'RegisteredUserRes',
+	fields: t => ({}),
+});
 
 builder.queryType({
 	fields: t => ({

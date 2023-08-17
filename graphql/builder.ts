@@ -1,13 +1,13 @@
 import SchemaBuilder from '@pothos/core';
+import PrismaPlugin from '@pothos/plugin-prisma';
+import type PrismaTypes from '@pothos/plugin-prisma/generated';
+import { prisma } from '../lib/prisma';
+import { Context } from './context';
 import {
 	DateTimeResolver,
 	BigIntResolver,
 	JSONResolver,
 } from 'graphql-scalars';
-import PrismaPlugin from '@pothos/plugin-prisma';
-import type PrismaTypes from '@pothos/plugin-prisma/generated';
-import { prisma } from '../lib/prisma';
-import { Context } from './context';
 
 export const builder = new SchemaBuilder<{
 	Context: Context;
@@ -24,6 +24,7 @@ export const builder = new SchemaBuilder<{
 	plugins: [PrismaPlugin],
 	prisma: {
 		client: prisma,
+		onUnusedQuery: process.env.NODE_ENV === 'production' ? null : 'warn',
 	},
 });
 
