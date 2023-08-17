@@ -4,7 +4,7 @@ import { WatchStatusTypes } from '../builder';
 builder.prismaObject('Movie', {
 	fields: t => ({
 		id: t.exposeID('id'),
-		name: t.exposeString('name', { nullable: true }),
+		name: t.exposeString('name'),
 		status: t.field({
 			type: WatchStatusTypes,
 			resolve: parent => parent.status,
@@ -16,7 +16,7 @@ builder.prismaObject('Movie', {
 builder.prismaObject('Show', {
 	fields: t => ({
 		id: t.exposeID('id'),
-		name: t.exposeString('name', { nullable: true }),
+		name: t.exposeString('name'),
 		status: t.field({
 			type: WatchStatusTypes,
 			resolve: parent => parent.status,
@@ -40,27 +40,35 @@ builder.prismaObject('User', {
 	}),
 });
 
+// builder.objectType('User', {
+// 	description: 'Long necks, cool patterns, taller than you.',
+// 	fields: t => ({}),
+// });
+
 builder.queryType({
 	fields: t => ({
-		users: t.prismaField({
-			type: ['User'],
-			resolve: async (query, _parent, _args, ctx) => {
-				return await ctx.prisma.user.findMany({ ...query });
-			},
-		}),
-		// user: t.prismaField({
-		// 	type: 'User',
+		// users: t.prismaField({
+		// 	type: ['User'],
 		// 	resolve: async (query, _parent, _args, ctx) => {
-		// 		return await ctx.prisma.user.findUnique({
-		// 			...query,
-		// 			where: { id: ctx.session!.user?.id! },
-		// 			include: {
-		// 				movies: true,
-		// 				shows: true,
-		// 			},
-		// 		});
+		// 		return await ctx.prisma.user.findMany({ ...query });
 		// 	},
 		// }),
+		user: t.prismaField({
+			type: 'User',
+			args: {
+				id: t.arg.id(),
+			},
+			resolve: async (query, _parent, { id }, ctx) => {
+				return await ctx.prisma.user.findUniqueOrThrow({
+					...query,
+					where: { id: id as string },
+					include: {
+						movies: true,
+						shows: true,
+					},
+				});
+			},
+		}),
 		hello: t.string({
 			args: {
 				name: t.arg.string(),
