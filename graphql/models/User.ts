@@ -2,7 +2,7 @@ import { builder } from '../builder';
 import { WatchStatusTypes } from '../builder';
 import {
 	AccountVerifiedRes,
-	NodeRes,
+	HttpRes,
 	RedisRes,
 	RegisteredUserRes,
 } from '../../models/entities';
@@ -56,8 +56,8 @@ builder.objectType(RegisteredUserRes, {
 		error: t.exposeString('error', { nullable: true }),
 		createdUser: t.prismaField({
 			type: 'User',
-			resolve: (_query, parent) => parent.createdUser,
 			nullable: true,
+			resolve: (_query, root) => root.createdUser,
 		}),
 		ok: t.exposeBoolean('ok'),
 		statusCode: t.exposeInt('statusCode'),
@@ -83,8 +83,8 @@ builder.objectType(AccountVerifiedRes, {
 	}),
 });
 
-builder.objectType(NodeRes, {
-	name: 'NodeRes',
+builder.objectType(HttpRes, {
+	name: 'HttpRes',
 	fields: t => ({
 		error: t.exposeString('error', { nullable: true }),
 		successMsg: t.exposeString('successMsg', { nullable: true }),
@@ -98,7 +98,7 @@ builder.queryType({
 		user: t.prismaField({
 			type: 'User',
 			args: {
-				id: t.arg.id({ required: true }),
+				id: t.arg.id(),
 			},
 			resolve: async (query, _root, { id }, ctx) => {
 				return await ctx.prisma.user.findUniqueOrThrow({
@@ -114,7 +114,7 @@ builder.queryType({
 		usersMovie: t.prismaField({
 			type: 'Movie',
 			args: {
-				movieId: t.arg.id({ required: true }),
+				movieId: t.arg.id(),
 			},
 			resolve: async (query, _root, { movieId }, ctx) => {
 				return await ctx.prisma.movie.findUniqueOrThrow({
@@ -131,7 +131,7 @@ builder.queryType({
 		usersShow: t.prismaField({
 			type: 'Show',
 			args: {
-				showId: t.arg.id({ required: true }),
+				showId: t.arg.id(),
 			},
 			resolve: async (query, _root, { showId }, ctx) => {
 				return await ctx.prisma.show.findUniqueOrThrow({
@@ -180,7 +180,7 @@ builder.queryType({
 		checkEmailVerificationToken: t.field({
 			type: RedisRes,
 			args: {
-				token: t.arg.string({ required: true }),
+				token: t.arg.string(),
 			},
 			resolve: async (_root, { token }, ctx) => {
 				const userId = await ctx.redis.get(
@@ -202,7 +202,7 @@ builder.queryType({
 		accountVerified: t.field({
 			type: AccountVerifiedRes,
 			args: {
-				email: t.arg.string({ required: true }),
+				email: t.arg.string(),
 			},
 			resolve: async (_root, { email }, ctx) => {
 				const acct = await ctx.prisma.user.findUnique({
@@ -222,10 +222,10 @@ builder.queryType({
 			},
 		}),
 		emailFromRedisToken: t.string({
-			args: {
-				token: t.arg.string({ required: true }),
-			},
 			nullable: true,
+			args: {
+				token: t.arg.string(),
+			},
 			resolve: async (_root, { token }, ctx) => {
 				const userId = await ctx.redis.get(
 					`${EMAIL_VERIFICATION_PREFIX}-${token}`
@@ -246,7 +246,7 @@ builder.queryType({
 		checkRetryEmailVerificationLimit: t.field({
 			type: RedisRes,
 			args: {
-				email: t.arg.string({ required: true }),
+				email: t.arg.string(),
 			},
 			resolve: async (_root, { email }, ctx) => {
 				const limitFound = await ctx.redis.get(
@@ -270,13 +270,47 @@ builder.queryType({
 		}),
 		hello: t.string({
 			args: {
-				name: t.arg.string(),
+				name: t.arg.string({ required: false }),
 			},
 			resolve: (_root, { name }) => `hello, ${name || 'World'}`,
 		}),
 		currentDate: t.field({
 			type: 'Date',
 			resolve: () => new Date(),
+		}),
+	}),
+});
+
+builder.mutationType({
+	fields: t => ({
+		addMovie: t.field({
+			type: HttpRes,
+			args: {
+				movieId: t.arg.id(),
+				movieName: t.arg.string(),
+				watchStatus: t.arg({
+					type: WatchStatusTypes,
+				}),
+			},
+			resolve: async (_root, { movieId, movieName, watchStatus }, ctx) => {
+				try {
+					await ctx.prisma.user.update({
+						where: { id: ctx.session!.user?.id! },
+						data: {
+							shows: {
+								create: {
+									id: movieId as string,
+									name: movieName,
+									status: watchStatus,
+								},
+							},
+						},
+					});
+					return new HttpRes(null, 'Movie added', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not add movie', null, false, 400);
+				}
+			},
 		}),
 	}),
 });

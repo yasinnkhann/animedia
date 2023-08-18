@@ -20,12 +20,14 @@ export const builder = new SchemaBuilder<{
 		};
 	};
 	PrismaTypes: PrismaTypes;
+	DefaultInputFieldRequiredness: true;
 }>({
 	plugins: [PrismaPlugin],
 	prisma: {
 		client: prisma,
 		onUnusedQuery: process.env.NODE_ENV === 'production' ? null : 'warn',
 	},
+	defaultInputFieldRequiredness: true,
 });
 
 builder.addScalarType('Date', DateTimeResolver, {});

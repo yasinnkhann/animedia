@@ -26,7 +26,7 @@ export class AccountVerifiedRes {
 	) {}
 }
 
-export class NodeRes {
+export class HttpRes {
 	constructor(
 		public error: string | null,
 		public successMsg: string | null,
