@@ -1,6 +1,11 @@
 import { builder } from '../builder';
 import { WatchStatusTypes } from '../builder';
-import { RegisteredUserRes } from '../../models/entities';
+import {
+	AccountVerifiedRes,
+	NodeRes,
+	RedisRes,
+	RegisteredUserRes,
+} from '../../models/entities';
 
 builder.prismaObject('Movie', {
 	fields: t => ({
@@ -43,21 +48,53 @@ builder.prismaObject('User', {
 
 builder.objectType(RegisteredUserRes, {
 	name: 'RegisteredUserRes',
-	fields: t => ({}),
+	fields: t => ({
+		error: t.exposeString('error', { nullable: true }),
+		createdUser: t.prismaField({
+			type: 'User',
+			resolve: (_query, parent) => parent.createdUser,
+			nullable: true,
+		}),
+		ok: t.exposeBoolean('ok'),
+		statusCode: t.exposeInt('statusCode'),
+	}),
+});
+
+builder.objectType(RedisRes, {
+	name: 'RedisRes',
+	fields: t => ({
+		error: t.exposeString('error', { nullable: true }),
+		successMsg: t.exposeString('successMsg', { nullable: true }),
+		token: t.exposeString('token', { nullable: true }),
+		userId: t.exposeID('userId', { nullable: true }),
+	}),
+});
+
+builder.objectType(AccountVerifiedRes, {
+	name: 'AccountVerifiedRes',
+	fields: t => ({
+		error: t.exposeString('error', { nullable: true }),
+		id: t.exposeID('id', { nullable: true }),
+		emailVerified: t.expose('emailVerified', { type: 'Date', nullable: true }),
+	}),
+});
+
+builder.objectType(NodeRes, {
+	name: 'NodeRes',
+	fields: t => ({
+		error: t.exposeString('error', { nullable: true }),
+		successMsg: t.exposeString('successMsg', { nullable: true }),
+		ok: t.exposeBoolean('ok'),
+		statusCode: t.exposeInt('statusCode'),
+	}),
 });
 
 builder.queryType({
 	fields: t => ({
-		// users: t.prismaField({
-		// 	type: ['User'],
-		// 	resolve: async (query, _parent, _args, ctx) => {
-		// 		return await ctx.prisma.user.findMany({ ...query });
-		// 	},
-		// }),
 		user: t.prismaField({
 			type: 'User',
 			args: {
-				id: t.arg.id(),
+				id: t.arg.id({ required: true }),
 			},
 			resolve: async (query, _parent, { id }, ctx) => {
 				return await ctx.prisma.user.findUniqueOrThrow({
@@ -66,6 +103,23 @@ builder.queryType({
 					include: {
 						movies: true,
 						shows: true,
+					},
+				});
+			},
+		}),
+		usersMovie: t.prismaField({
+			type: 'Movie',
+			args: {
+				movieId: t.arg.id({ required: true }),
+			},
+			resolve: async (query, _parent, { movieId }, ctx) => {
+				return await ctx.prisma.movie.findUniqueOrThrow({
+					...query,
+					where: {
+						id_userId: {
+							id: movieId as string,
+							userId: ctx.session!.user?.id!,
+						},
 					},
 				});
 			},
