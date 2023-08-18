@@ -297,7 +297,7 @@ builder.mutationType({
 					await ctx.prisma.user.update({
 						where: { id: ctx.session!.user?.id! },
 						data: {
-							shows: {
+							movies: {
 								create: {
 									id: movieId as string,
 									name: movieName,
@@ -309,6 +309,147 @@ builder.mutationType({
 					return new HttpRes(null, 'Movie added', true, 200);
 				} catch (err) {
 					return new HttpRes('Could not add movie', null, false, 400);
+				}
+			},
+		}),
+		addShow: t.field({
+			type: HttpRes,
+			args: {
+				showId: t.arg.id(),
+				showName: t.arg.string(),
+				watchStatus: t.arg({
+					type: WatchStatusTypes,
+				}),
+				currentEpisode: t.arg.int({ required: false }),
+			},
+			resolve: async (
+				_root,
+				{ showId, showName, watchStatus, currentEpisode },
+				ctx
+			) => {
+				try {
+					await ctx.prisma.user.update({
+						where: { id: ctx.session!.user?.id! },
+						data: {
+							shows: {
+								create: {
+									id: showId as string,
+									name: showName,
+									status: watchStatus,
+									current_episode: currentEpisode ?? undefined,
+								},
+							},
+						},
+					});
+					return new HttpRes(null, 'Show added', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not add show', null, false, 400);
+				}
+			},
+		}),
+		updateMovie: t.field({
+			type: HttpRes,
+			args: {
+				movieId: t.arg.id(),
+				watchStatus: t.arg({
+					type: WatchStatusTypes,
+				}),
+				movieRating: t.arg.int({ required: false }),
+			},
+			resolve: async (_root, { movieId, watchStatus, movieRating }, ctx) => {
+				try {
+					await ctx.prisma.movie.update({
+						where: {
+							id_userId: {
+								id: movieId as string,
+								userId: ctx.session!.user?.id!,
+							},
+						},
+						data: {
+							status: watchStatus,
+							rating: movieRating ? movieRating : null,
+						},
+					});
+					return new HttpRes(null, 'Movie updated', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not update movie', null, false, 400);
+				}
+			},
+		}),
+		updateShow: t.field({
+			type: HttpRes,
+			args: {
+				showId: t.arg.id(),
+				watchStatus: t.arg({
+					type: WatchStatusTypes,
+				}),
+				showRating: t.arg.int({ required: false }),
+				currentEpisode: t.arg.int({ required: false }),
+			},
+			resolve: async (
+				_root,
+				{ showId, watchStatus, showRating, currentEpisode },
+				ctx
+			) => {
+				try {
+					await ctx.prisma.show.update({
+						where: {
+							id_userId: {
+								id: showId as string,
+								userId: ctx.session!.user?.id!,
+							},
+						},
+						data: {
+							status: watchStatus,
+							rating: showRating ? showRating : null,
+							current_episode: currentEpisode ?? undefined,
+						},
+					});
+					return new HttpRes(null, 'Show updated', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not update show', null, false, 400);
+				}
+			},
+		}),
+		deleteMovie: t.field({
+			type: HttpRes,
+			args: {
+				movieId: t.arg.id(),
+			},
+			resolve: async (_root, { movieId }, ctx) => {
+				try {
+					await ctx.prisma.movie.delete({
+						where: {
+							id_userId: {
+								id: movieId as string,
+								userId: ctx.session?.user?.id!,
+							},
+						},
+					});
+					return new HttpRes(null, 'Movie deleted', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not delete movie', null, false, 400);
+				}
+			},
+		}),
+		deleteShow: t.field({
+			type: HttpRes,
+			args: {
+				showId: t.arg.id(),
+			},
+			resolve: async (_root, { showId }, ctx) => {
+				try {
+					await ctx.prisma.show.delete({
+						where: {
+							id_userId: {
+								id: showId as string,
+								userId: ctx.session?.user?.id!,
+							},
+						},
+					});
+					return new HttpRes(null, 'Show deleted', true, 200);
+				} catch (err) {
+					return new HttpRes('Could not delete show', null, false, 400);
 				}
 			},
 		}),
