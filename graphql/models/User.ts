@@ -6,6 +6,10 @@ import {
 	RedisRes,
 	RegisteredUserRes,
 } from '../../models/entities';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/constants';
 
 builder.prismaObject('Movie', {
 	fields: t => ({
@@ -13,7 +17,7 @@ builder.prismaObject('Movie', {
 		name: t.exposeString('name'),
 		status: t.field({
 			type: WatchStatusTypes,
-			resolve: parent => parent.status,
+			resolve: root => root.status,
 		}),
 		rating: t.exposeInt('rating', { nullable: true }),
 	}),
@@ -25,7 +29,7 @@ builder.prismaObject('Show', {
 		name: t.exposeString('name'),
 		status: t.field({
 			type: WatchStatusTypes,
-			resolve: parent => parent.status,
+			resolve: root => root.status,
 		}),
 		rating: t.exposeInt('rating', { nullable: true }),
 		currentEpisode: t.exposeInt('current_episode'),
@@ -96,7 +100,7 @@ builder.queryType({
 			args: {
 				id: t.arg.id({ required: true }),
 			},
-			resolve: async (query, _parent, { id }, ctx) => {
+			resolve: async (query, _root, { id }, ctx) => {
 				return await ctx.prisma.user.findUniqueOrThrow({
 					...query,
 					where: { id: id as string },
@@ -112,7 +116,7 @@ builder.queryType({
 			args: {
 				movieId: t.arg.id({ required: true }),
 			},
-			resolve: async (query, _parent, { movieId }, ctx) => {
+			resolve: async (query, _root, { movieId }, ctx) => {
 				return await ctx.prisma.movie.findUniqueOrThrow({
 					...query,
 					where: {
@@ -124,11 +128,103 @@ builder.queryType({
 				});
 			},
 		}),
+		usersShow: t.prismaField({
+			type: 'Show',
+			args: {
+				showId: t.arg.id({ required: true }),
+			},
+			resolve: async (query, _root, { showId }, ctx) => {
+				return await ctx.prisma.show.findUniqueOrThrow({
+					...query,
+					where: {
+						id_userId: {
+							id: showId as string,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		}),
+		usersMovies: t.prismaField({
+			type: ['Movie'],
+			resolve: async (query, _root, _args, ctx) => {
+				return await ctx.prisma.movie.findMany({
+					...query,
+					where: {
+						userId: ctx.session?.user?.id!,
+					},
+					orderBy: [
+						{
+							name: 'asc',
+						},
+					],
+				});
+			},
+		}),
+		usersShows: t.prismaField({
+			type: ['Show'],
+			resolve: async (query, _root, _args, ctx) => {
+				return await ctx.prisma.show.findMany({
+					...query,
+					where: {
+						userId: ctx.session?.user?.id!,
+					},
+					orderBy: [
+						{
+							name: 'asc',
+						},
+					],
+				});
+			},
+		}),
+		checkEmailVerificationToken: t.field({
+			type: RedisRes,
+			args: {
+				token: t.arg.string({ required: true }),
+			},
+			resolve: async (_root, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) {
+					return new RedisRes(
+						'Email Verification Not Found.',
+						null,
+						null,
+						null
+					);
+				}
+
+				return new RedisRes(null, 'Valid EMAIL VERIFICATION.', token, userId);
+			},
+		}),
+		accountVerified: t.field({
+			type: AccountVerifiedRes,
+			args: {
+				email: t.arg.string({ required: true }),
+			},
+			resolve: async (_root, { email }, ctx) => {
+				const acct = await ctx.prisma.user.findUnique({
+					where: { email },
+					select: { id: true, emailVerified: true },
+				});
+
+				if (acct?.id && !acct.emailVerified) {
+					return new AccountVerifiedRes('Account Not Verified', acct.id, null);
+				}
+
+				if (acct?.id && acct.emailVerified) {
+					return new AccountVerifiedRes(null, acct.id, acct.emailVerified);
+				}
+				return new AccountVerifiedRes('Account Not Found', null, null);
+			},
+		}),
 		hello: t.string({
 			args: {
 				name: t.arg.string(),
 			},
-			resolve: (_parent, { name }) => `hello, ${name || 'World'}`,
+			resolve: (_root, { name }) => `hello, ${name || 'World'}`,
 		}),
 		currentDate: t.field({
 			type: 'Date',

@@ -2,8 +2,8 @@ import type PrismaTypes from '@pothos/plugin-prisma/generated';
 
 export class RegisteredUserRes {
 	constructor(
-		public error: string,
-		public createdUser: PrismaTypes['User']['Shape'],
+		public error: string | null,
+		public createdUser: PrismaTypes['User']['Shape'] | null,
 		public ok: boolean,
 		public statusCode: number
 	) {}
@@ -11,25 +11,25 @@ export class RegisteredUserRes {
 
 export class RedisRes {
 	constructor(
-		public error: string,
-		public successMsg: string,
-		public token: string,
-		public userId: string
+		public error: string | null,
+		public successMsg: string | null,
+		public token: string | null,
+		public userId: string | null
 	) {}
 }
 
 export class AccountVerifiedRes {
 	constructor(
-		public error: string,
-		public id: string,
-		public emailVerified: Date
+		public error: string | null,
+		public id: string | null,
+		public emailVerified: Date | null
 	) {}
 }
 
 export class NodeRes {
 	constructor(
-		public error: string,
-		public successMsg: string,
+		public error: string | null,
+		public successMsg: string | null,
 		public ok: boolean,
 		public statusCode: number
 	) {}
