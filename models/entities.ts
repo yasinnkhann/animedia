@@ -14,7 +14,7 @@ export class RedisRes {
 		public error: string | null,
 		public successMsg: string | null,
 		public token: string | null,
-		public userId: string | null
+		public userId?: string | null
 	) {}
 }
 

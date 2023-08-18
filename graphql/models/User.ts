@@ -217,7 +217,55 @@ builder.queryType({
 				if (acct?.id && acct.emailVerified) {
 					return new AccountVerifiedRes(null, acct.id, acct.emailVerified);
 				}
+
 				return new AccountVerifiedRes('Account Not Found', null, null);
+			},
+		}),
+		emailFromRedisToken: t.string({
+			args: {
+				token: t.arg.string({ required: true }),
+			},
+			nullable: true,
+			resolve: async (_root, { token }, ctx) => {
+				const userId = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+				);
+
+				if (!userId) return null;
+
+				const user = await ctx.prisma.user.findUnique({
+					where: { id: userId },
+					select: { email: true },
+				});
+
+				if (!user?.email) return null;
+
+				return user.email;
+			},
+		}),
+		checkRetryEmailVerificationLimit: t.field({
+			type: RedisRes,
+			args: {
+				email: t.arg.string({ required: true }),
+			},
+			resolve: async (_root, { email }, ctx) => {
+				const limitFound = await ctx.redis.get(
+					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+				);
+
+				if (!limitFound) {
+					return new RedisRes(
+						'Retry Email Verification Limit Not Found',
+						null,
+						null
+					);
+				}
+
+				return new RedisRes(
+					null,
+					'Retry Email Verification Limit Found',
+					limitFound
+				);
 			},
 		}),
 		hello: t.string({
