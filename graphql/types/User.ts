@@ -253,22 +253,13 @@ export const UserQueries = extendType({
 			args: {
 				email: nonNull(stringArg()),
 			},
-			// @ts-ignore
 			resolve: async (_parent, { email }, ctx) => {
 				const acct = await ctx.prisma.user.findUnique({
 					where: { email },
 					select: { id: true, emailVerified: true },
 				});
 
-				if (!acct) {
-					return {
-						error: 'Account Not Found',
-						id: null,
-						emailVerified: null,
-					};
-				}
-
-				if (acct.id && !acct.emailVerified) {
+				if (acct?.id && !acct.emailVerified) {
 					return {
 						error: 'Account Not Verified',
 						id: acct.id,
@@ -276,13 +267,19 @@ export const UserQueries = extendType({
 					};
 				}
 
-				if (acct.id && acct.emailVerified) {
+				if (acct?.id && acct.emailVerified) {
 					return {
 						error: null,
 						id: acct.id,
 						emailVerified: acct.emailVerified,
 					};
 				}
+
+				return {
+					error: 'Account Not Found',
+					id: null,
+					emailVerified: null,
+				};
 			},
 		});
 		t.field('emailFromRedisToken', {
