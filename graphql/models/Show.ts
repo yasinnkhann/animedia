@@ -1,12 +1,38 @@
 import { builder } from '../builder';
 import {
+	ShowDetailsCountry,
 	ShowDetailsCreatedBy,
 	ShowDetailsGenre,
 	ShowDetailsLastEpToAir,
 	ShowDetailsNetwork,
+	ShowDetailsNextEpToAir,
+	ShowDetailsProdCompany,
+	ShowDetailsSeason,
+	ShowDetailsSpokenLang,
 	ShowResult,
 	ShowsRes,
 } from 'models/entities';
+
+const ShowGenreTypes = builder.enumType('ShowGenreTypes', {
+	values: [
+		'Action_AMPERSAND_Adventure',
+		'Animation',
+		'Comedy',
+		'Crime',
+		'Documentary',
+		'Drama',
+		'Family',
+		'Kids',
+		'Mystery',
+		'News',
+		'Reality',
+		'SciDASHFi_AMPERSAND_Fantasy',
+		'Soap',
+		'Talk',
+		'War_AMPERSAND_Politics',
+		'Western',
+	] as const,
+});
 
 builder.objectType(ShowResult, {
 	name: 'ShowResult',
@@ -81,5 +107,63 @@ builder.objectType(ShowDetailsNetwork, {
 		name: t.exposeString('name'),
 		logo_path: t.exposeString('logo_path', { nullable: true }),
 		origin_country: t.exposeString('origin_country'),
+	}),
+});
+
+builder.objectType(ShowDetailsProdCompany, {
+	name: 'ShowDetailsProdCompany',
+	fields: t => ({
+		id: t.exposeID('id'),
+		logo_path: t.exposeString('logo_path', { nullable: true }),
+		name: t.exposeString('name'),
+		origin_country: t.exposeString('origin_country'),
+	}),
+});
+
+builder.objectType(ShowDetailsCountry, {
+	name: 'ShowDetailsCountry',
+	fields: t => ({
+		iso_3166_1: t.exposeString('iso_3166_1'),
+		name: t.exposeString('name'),
+	}),
+});
+
+builder.objectType(ShowDetailsSeason, {
+	name: 'ShowDetailsSeason',
+	fields: t => ({
+		air_date: t.exposeString('air_date', { nullable: true }),
+		episode_count: t.exposeInt('episode_count'),
+		id: t.exposeID('id'),
+		name: t.exposeString('name'),
+		overview: t.exposeString('overview'),
+		poster_path: t.exposeString('poster_path', { nullable: true }),
+		season_number: t.exposeInt('season_number'),
+	}),
+});
+
+builder.objectType(ShowDetailsSpokenLang, {
+	name: 'ShowDetailsSpokenLang',
+	fields: t => ({
+		english_name: t.exposeString('english_name'),
+		iso_639_1: t.exposeString('iso_639_1'),
+		name: t.exposeString('name'),
+	}),
+});
+
+builder.objectType(ShowDetailsNextEpToAir, {
+	name: 'ShowDetailsNextEpToAir',
+	fields: t => ({
+		air_date: t.exposeString('air_date', { nullable: true }),
+		episode_count: t.exposeInt('episode_number'),
+		id: t.exposeID('id'),
+		name: t.exposeString('name'),
+		overview: t.exposeString('overview'),
+		production_code: t.exposeString('production_code'),
+		runtime: t.exposeInt('runtime', { nullable: true }),
+		season_number: t.exposeInt('season_number'),
+		show_id: t.exposeID('show_id'),
+		still_path: t.exposeString('still_path', { nullable: true }),
+		vote_average: t.exposeFloat('vote_average'),
+		vote_count: t.exposeInt('vote_count'),
 	}),
 });

@@ -1,4 +1,4 @@
-import { MovieGenreTypes, TimeWindowTypes, builder } from '../builder';
+import { builder, TimeWindowTypes } from '../builder';
 import { BASE_URL } from 'utils/constants';
 import { GET_KEYWORD_ID } from 'utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
@@ -20,6 +20,30 @@ import {
 	MoviesCrewModel,
 	MoviesCastCrewRes,
 } from '../../models/entities';
+
+const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
+	values: [
+		'Action',
+		'Adventure',
+		'Animation',
+		'Comedy',
+		'Crime',
+		'Documentary',
+		'Drama',
+		'Family',
+		'Fantasy',
+		'History',
+		'Horror',
+		'Music',
+		'Mystery',
+		'Romance',
+		'Science_Fiction',
+		'TV_Movie',
+		'Thriller',
+		'War',
+		'Western',
+	] as const,
+});
 
 builder.objectType(MovieResult, {
 	name: 'MovieResult',

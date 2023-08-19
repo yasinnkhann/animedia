@@ -1,4 +1,4 @@
-import { builder, WatchStatusTypes } from '../builder';
+import { builder } from '../builder';
 import { v4 } from 'uuid';
 import { hash } from 'bcryptjs';
 import nodemailer, { Transport, TransportOptions } from 'nodemailer';
@@ -13,6 +13,17 @@ import {
 	RedisRes,
 	RegisteredUserRes,
 } from '../../models/entities';
+
+const WatchStatusTypes = builder.enumType('WatchStatusTypes', {
+	values: [
+		'NOT_WATCHING',
+		'WATCHING',
+		'PLAN_TO_WATCH',
+		'COMPLETED',
+		'ON_HOLD',
+		'DROPPED',
+	] as const,
+});
 
 builder.prismaObject('Movie', {
 	fields: t => ({

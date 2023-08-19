@@ -267,3 +267,53 @@ export class ShowDetailsNetwork {
 		public origin_country: string
 	) {}
 }
+
+export class ShowDetailsProdCompany {
+	constructor(
+		public id: number,
+		public logo_path: string | null,
+		public name: string,
+		public origin_country: string
+	) {}
+}
+
+export class ShowDetailsCountry {
+	constructor(public iso_3166_1: string, public name: string) {}
+}
+
+export class ShowDetailsSeason {
+	constructor(
+		public air_date: string | null,
+		public episode_count: number,
+		public id: number,
+		public name: string,
+		public overview: string,
+		public poster_path: string | null,
+		public season_number: number
+	) {}
+}
+
+export class ShowDetailsSpokenLang {
+	constructor(
+		public english_name: string,
+		public iso_639_1: string,
+		public name: string
+	) {}
+}
+
+export class ShowDetailsNextEpToAir {
+	constructor(
+		public air_date: string | null,
+		public episode_number: number,
+		public id: number,
+		public name: string,
+		public overview: string,
+		public production_code: string,
+		public runtime: number | null,
+		public season_number: number,
+		public show_id: number,
+		public still_path: string | null,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}

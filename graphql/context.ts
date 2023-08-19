@@ -4,10 +4,11 @@ import { redis } from '../lib/redis';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 import type { GetServerSidePropsContext } from 'next';
+import type { Redis } from 'ioredis';
 
 export type Context = {
 	prisma: PrismaClient;
-	redis: typeof redis;
+	redis: Redis;
 	session: Session | null;
 	req: GetServerSidePropsContext['req'];
 	res: GetServerSidePropsContext['res'];

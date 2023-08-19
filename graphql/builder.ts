@@ -34,62 +34,6 @@ builder.addScalarType('Date', DateTimeResolver, {});
 builder.addScalarType('BigInt', BigIntResolver, {});
 builder.addScalarType('JSON', JSONResolver, {});
 
-export const WatchStatusTypes = builder.enumType('WatchStatusTypes', {
-	values: [
-		'NOT_WATCHING',
-		'WATCHING',
-		'PLAN_TO_WATCH',
-		'COMPLETED',
-		'ON_HOLD',
-		'DROPPED',
-	] as const,
-});
-
-export const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
-	values: [
-		'Action',
-		'Adventure',
-		'Animation',
-		'Comedy',
-		'Crime',
-		'Documentary',
-		'Drama',
-		'Family',
-		'Fantasy',
-		'History',
-		'Horror',
-		'Music',
-		'Mystery',
-		'Romance',
-		'Science_Fiction',
-		'TV_Movie',
-		'Thriller',
-		'War',
-		'Western',
-	] as const,
-});
-
-export const ShowGenreTypes = builder.enumType('ShowGenreTypes', {
-	values: [
-		'Action_AMPERSAND_Adventure',
-		'Animation',
-		'Comedy',
-		'Crime',
-		'Documentary',
-		'Drama',
-		'Family',
-		'Kids',
-		'Mystery',
-		'News',
-		'Reality',
-		'SciDASHFi_AMPERSAND_Fantasy',
-		'Soap',
-		'Talk',
-		'War_AMPERSAND_Politics',
-		'Western',
-	] as const,
-});
-
 export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
 	values: ['day', 'week'] as const,
 });
