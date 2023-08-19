@@ -7,9 +7,12 @@ import {
 	ShowDetailsNetwork,
 	ShowDetailsNextEpToAir,
 	ShowDetailsProdCompany,
+	ShowDetailsRes,
 	ShowDetailsSeason,
 	ShowDetailsSpokenLang,
 	ShowResult,
+	ShowReviewAuthorDetails,
+	ShowReviewResult,
 	ShowsRes,
 } from 'models/entities';
 
@@ -165,5 +168,84 @@ builder.objectType(ShowDetailsNextEpToAir, {
 		still_path: t.exposeString('still_path', { nullable: true }),
 		vote_average: t.exposeFloat('vote_average'),
 		vote_count: t.exposeInt('vote_count'),
+	}),
+});
+
+builder.objectType(ShowDetailsRes, {
+	name: 'ShowDetailsRes',
+	fields: t => ({
+		adult: t.exposeBoolean('adult'),
+		backdrop_path: t.exposeString('backdrop_path', { nullable: true }),
+		created_by: t.expose('created_by', { type: [ShowDetailsCreatedBy] }),
+		episode_run_time: t.exposeIntList('episode_run_time'),
+		first_air_date: t.exposeString('first_air_date', { nullable: true }),
+		genres: t.expose('genres', { type: [ShowDetailsGenre] }),
+		homepage: t.exposeString('homepage'),
+		id: t.exposeID('id'),
+		in_production: t.exposeBoolean('in_production'),
+		languages: t.exposeStringList('languages'),
+		last_air_date: t.exposeString('last_air_date', { nullable: true }),
+		last_episode_to_air: t.expose('last_episode_to_air', {
+			type: ShowDetailsLastEpToAir,
+			nullable: true,
+		}),
+		name: t.exposeString('name'),
+		next_episode_to_air: t.expose('next_episode_to_air', {
+			type: ShowDetailsNextEpToAir,
+			nullable: true,
+		}),
+		networks: t.expose('networks', {
+			type: [ShowDetailsNetwork],
+		}),
+		number_of_episodes: t.exposeInt('number_of_episodes'),
+		number_of_seasons: t.exposeInt('number_of_seasons'),
+		origin_country: t.exposeStringList('origin_country'),
+		original_language: t.exposeString('original_language'),
+		original_name: t.exposeString('original_name'),
+		overview: t.exposeString('overview'),
+		popularity: t.exposeFloat('popularity'),
+		poster_path: t.exposeString('poster_path', { nullable: true }),
+		production_companies: t.expose('production_companies', {
+			type: [ShowDetailsProdCompany],
+		}),
+		production_countries: t.expose('production_countries', {
+			type: [ShowDetailsCountry],
+		}),
+		seasons: t.expose('seasons', {
+			type: [ShowDetailsSeason],
+		}),
+		spoken_languages: t.expose('spoken_languages', {
+			type: [ShowDetailsSpokenLang],
+		}),
+		status: t.exposeString('status'),
+		tagline: t.exposeString('tagline'),
+		type: t.exposeString('type'),
+		vote_average: t.exposeFloat('vote_average'),
+		vote_count: t.exposeInt('vote_count'),
+	}),
+});
+
+builder.objectType(ShowReviewAuthorDetails, {
+	name: 'ShowReviewAuthorDetails',
+	fields: t => ({
+		name: t.exposeString('name'),
+		username: t.exposeString('username'),
+		avatar_path: t.exposeString('avatar_path', { nullable: true }),
+		rating: t.exposeFloat('rating', { nullable: true }),
+	}),
+});
+
+builder.objectType(ShowReviewResult, {
+	name: 'ShowReviewResult',
+	fields: t => ({
+		author: t.exposeString('author'),
+		author_details: t.expose('author_details', {
+			type: ShowReviewAuthorDetails,
+		}),
+		content: t.exposeString('content'),
+		created_at: t.exposeString('created_at'),
+		id: t.exposeID('id'),
+		updated_at: t.exposeString('updated_at'),
+		url: t.exposeString('url'),
 	}),
 });

@@ -317,3 +317,61 @@ export class ShowDetailsNextEpToAir {
 		public vote_count: number
 	) {}
 }
+
+export class ShowDetailsRes {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public created_by: ShowDetailsCreatedBy[],
+		public episode_run_time: number[],
+		public first_air_date: string | null,
+		public genres: ShowDetailsGenre[],
+		public homepage: string,
+		public id: number,
+		public in_production: boolean,
+		public languages: string[],
+		public last_air_date: string | null,
+		public last_episode_to_air: ShowDetailsLastEpToAir | null,
+		public name: string,
+		public next_episode_to_air: ShowDetailsNextEpToAir | null,
+		public networks: ShowDetailsNetwork[],
+		public number_of_episodes: number,
+		public number_of_seasons: number,
+		public origin_country: string[],
+		public original_language: string,
+		public original_name: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public production_companies: ShowDetailsProdCompany[],
+		public production_countries: ShowDetailsCountry[],
+		public seasons: ShowDetailsSeason[],
+		public spoken_languages: ShowDetailsSpokenLang[],
+		public status: string,
+		public tagline: string,
+		public type: string,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}
+
+export class ShowReviewAuthorDetails {
+	constructor(
+		public name: string,
+		public username: string,
+		public avatar_path: string | null,
+		public rating: number | null
+	) {}
+}
+
+export class ShowReviewResult {
+	constructor(
+		public author: string,
+		public author_details: ShowReviewAuthorDetails,
+		public content: string,
+		public created_at: string,
+		public id: string,
+		public updated_at: string,
+		public url: string
+	) {}
+}
