@@ -40,7 +40,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 						userId: verificationEmailData.userId!,
 					},
 				});
-
+				// FIX THIS LATER
 				if (updatedUserVerificationRes.data?.verifyUserEmail === 200) {
 					const deleteRes = await deleteEmailVerificationToken({
 						variables: {

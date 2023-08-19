@@ -13,7 +13,7 @@ export class RedisRes {
 	constructor(
 		public error: string | null,
 		public successMsg: string | null,
-		public token: string | null,
+		public token?: string | null,
 		public userId?: string | null
 	) {}
 }
