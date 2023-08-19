@@ -1,4 +1,4 @@
-import { TimeWindowTypes, builder } from '../builder';
+import { MovieGenreTypes, TimeWindowTypes, builder } from '../builder';
 import {
 	MovieResult,
 	MoviesRes,
@@ -19,6 +19,7 @@ import {
 import { BASE_URL } from 'utils/constants';
 import { GET_KEYWORD_ID } from 'utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
+import { GET_GENRE_ID } from 'utils/getGenreID';
 
 builder.objectType(MovieResult, {
 	name: 'MovieResult',
@@ -371,6 +372,126 @@ builder.queryFields(t => ({
 				const res = await fetch(
 					`${BASE_URL}/movie/top_rated?api_key=${process.env
 						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	recommendedMovies: t.field({
+		type: MoviesRes,
+		args: {
+			recommendedMoviesId: t.arg.id(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { recommendedMoviesId, page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process
+						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	movieReviews: t.field({
+		type: MovieReviewsRes,
+		args: {
+			id: t.arg.id(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { id, page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/${id}/reviews?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	moviesInTheatres: t.field({
+		type: MoviesInTheatresRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/now_playing?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	popularMoviesByGenre: t.field({
+		type: MoviesRes,
+		args: {
+			genre: t.arg({ type: MovieGenreTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { genre, page }) => {
+			try {
+				const genreID = await GET_GENRE_ID(genre, 'movie');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/movie?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=popularity.desc`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	topRatedMoviesByGenre: t.field({
+		type: MoviesRes,
+		args: {
+			genre: t.arg({ type: MovieGenreTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { genre, page }) => {
+			try {
+				const genreID = await GET_GENRE_ID(genre, 'movie');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/movie?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	moviesCastCrew: t.field({
+		type: MoviesCastCrewRes,
+		args: {
+			movieId: t.arg.int(),
+		},
+		resolve: async (_root, { movieId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/${movieId}/casts?api_key=${process.env
+						.API_KEY!}&language=en-US`
 				);
 				const data = await res.json();
 				return data;
