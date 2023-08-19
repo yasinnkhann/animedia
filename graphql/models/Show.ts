@@ -1,5 +1,6 @@
 import { builder } from '../builder';
 import {
+	EpisodeDetailsRes,
 	ShowDetailsCountry,
 	ShowDetailsCreatedBy,
 	ShowDetailsGenre,
@@ -12,7 +13,11 @@ import {
 	ShowDetailsSpokenLang,
 	ShowResult,
 	ShowReviewAuthorDetails,
+	ShowReviewRes,
 	ShowReviewResult,
+	ShowsCastCrewRes,
+	ShowsCastModel,
+	ShowsCrewModel,
 	ShowsRes,
 } from 'models/entities';
 
@@ -247,5 +252,93 @@ builder.objectType(ShowReviewResult, {
 		id: t.exposeID('id'),
 		updated_at: t.exposeString('updated_at'),
 		url: t.exposeString('url'),
+	}),
+});
+
+builder.objectType(ShowReviewRes, {
+	name: 'ShowReviewRes',
+	fields: t => ({
+		id: t.exposeID('id'),
+		page: t.exposeInt('page'),
+		total_pages: t.exposeInt('total_pages'),
+		total_results: t.exposeInt('total_results'),
+		results: t.expose('results', {
+			type: [ShowReviewResult],
+		}),
+	}),
+});
+
+builder.objectType(ShowsCastModel, {
+	name: 'ShowsCastModel',
+	fields: t => ({
+		adult: t.exposeBoolean('adult', { nullable: true }),
+		gender: t.exposeInt('gender', { nullable: true }),
+		id: t.exposeID('id', { nullable: true }),
+		known_for_department: t.exposeString('known_for_department', {
+			nullable: true,
+		}),
+		name: t.exposeString('name', { nullable: true }),
+		original_name: t.exposeString('original_name', { nullable: true }),
+		popularity: t.exposeFloat('popularity', { nullable: true }),
+		profile_path: t.exposeString('profile_path', { nullable: true }),
+		character: t.exposeString('character', { nullable: true }),
+		credit_id: t.exposeID('credit_id', { nullable: true }),
+		order: t.exposeInt('order', { nullable: true }),
+	}),
+});
+
+builder.objectType(ShowsCrewModel, {
+	name: 'ShowsCrewModel',
+	fields: t => ({
+		adult: t.exposeBoolean('adult', { nullable: true }),
+		gender: t.exposeInt('gender', { nullable: true }),
+		id: t.exposeID('id', { nullable: true }),
+		known_for_department: t.exposeString('known_for_department', {
+			nullable: true,
+		}),
+		name: t.exposeString('name', { nullable: true }),
+		original_name: t.exposeString('original_name', { nullable: true }),
+		popularity: t.exposeFloat('popularity', { nullable: true }),
+		profile_path: t.exposeString('profile_path', { nullable: true }),
+		credit_id: t.exposeID('credit_id', { nullable: true }),
+		department: t.exposeString('department', { nullable: true }),
+		job: t.exposeString('job', { nullable: true }),
+	}),
+});
+
+builder.objectType(ShowsCastCrewRes, {
+	name: 'ShowsCastCrewRes',
+	fields: t => ({
+		id: t.exposeID('id', { nullable: true }),
+		cast: t.expose('cast', {
+			type: [ShowsCastModel],
+			nullable: true,
+		}),
+		crew: t.expose('crew', {
+			type: [ShowsCrewModel],
+			nullable: true,
+		}),
+	}),
+});
+
+builder.objectType(EpisodeDetailsRes, {
+	name: 'EpisodeDetailsRes',
+	fields: t => ({
+		air_date: t.exposeString('air_date', { nullable: true }),
+		crew: t.expose('crew', { type: [ShowsCrewModel], nullable: true }),
+		episode_number: t.exposeInt('episode_number', { nullable: true }),
+		guest_stars: t.expose('guest_stars', {
+			type: [ShowsCastModel],
+			nullable: true,
+		}),
+		name: t.exposeString('name', { nullable: true }),
+		overview: t.exposeString('overview', { nullable: true }),
+		id: t.exposeID('id', { nullable: true }),
+		production_code: t.exposeString('production_code', { nullable: true }),
+		runtime: t.exposeInt('runtime', { nullable: true }),
+		season_number: t.exposeInt('season_number', { nullable: true }),
+		still_path: t.exposeString('still_path', { nullable: true }),
+		vote_average: t.exposeFloat('vote_average', { nullable: true }),
+		vote_count: t.exposeInt('vote_count', { nullable: true }),
 	}),
 });

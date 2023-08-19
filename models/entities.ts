@@ -375,3 +375,71 @@ export class ShowReviewResult {
 		public url: string
 	) {}
 }
+
+export class ShowReviewRes {
+	constructor(
+		public id: number,
+		public page: number,
+		public total_pages: number,
+		public total_results: number,
+		public results: ShowReviewResult[]
+	) {}
+}
+
+export class ShowsCastModel {
+	constructor(
+		public adult: boolean | null,
+		public gender: number | null,
+		public id: number | null,
+		public known_for_department: string | null,
+		public name: string | null,
+		public original_name: string | null,
+		public popularity: number | null,
+		public profile_path: string | null,
+		public character: string | null,
+		public credit_id: string | null,
+		public order: number | null
+	) {}
+}
+
+export class ShowsCrewModel {
+	constructor(
+		public adult: boolean | null,
+		public gender: number | null,
+		public id: number | null,
+		public known_for_department: string | null,
+		public name: string | null,
+		public original_name: string | null,
+		public popularity: number | null,
+		public profile_path: string | null,
+		public credit_id: string | null,
+		public department: string | null,
+		public job: string | null
+	) {}
+}
+
+export class ShowsCastCrewRes {
+	constructor(
+		public id: number | null,
+		public cast: ShowsCastModel[] | null,
+		public crew: ShowsCrewModel[] | null
+	) {}
+}
+
+export class EpisodeDetailsRes {
+	constructor(
+		public air_date: string | null,
+		public crew: ShowsCrewModel[] | null,
+		public episode_number: number,
+		public guest_stars: ShowsCastModel[] | null,
+		public name: string,
+		public overview: string,
+		public id: number,
+		public production_code: string,
+		public runtime: number,
+		public season_number: number,
+		public still_path: string | null,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}
