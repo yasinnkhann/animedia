@@ -114,3 +114,89 @@ export class MovieDetailsRes {
 		public vote_count: number
 	) {}
 }
+
+export class MovieReviewAuthorDetails {
+	constructor(
+		public name: string,
+		public username: string,
+		public avatar_path: string | null,
+		public rating: number | null
+	) {}
+}
+
+export class MovieReviewsResult {
+	constructor(
+		public author: string,
+		public author_details: MovieReviewAuthorDetails,
+		public content: string,
+		public created_at: string,
+		public id: string,
+		public updated_at: string,
+		public url: string
+	) {}
+}
+
+export class MovieReviewsRes {
+	constructor(
+		public id: number,
+		public page: number,
+		public total_pages: number,
+		public total_results: number,
+		public results: MovieReviewsResult[]
+	) {}
+}
+
+export class TheatreDates {
+	constructor(public maximum: string, public minimum: string) {}
+}
+
+export class MoviesInTheatresRes {
+	constructor(
+		public dates: TheatreDates,
+		public page: string,
+		public total_pages: number,
+		public total_results: number,
+		public results: MovieResult[]
+	) {}
+}
+
+export class MoviesCastModel {
+	constructor(
+		public adult: boolean | null,
+		public gender: number | null,
+		public id: number | null,
+		public known_for_department: string | null,
+		public name: string | null,
+		public original_name: string | null,
+		public popularity: number | null,
+		public profile_path: string | null,
+		public cast_id: number | null,
+		public character: string | null,
+		public credit_id: string | null,
+		public order: number | null
+	) {}
+}
+
+export class MoviesCrewModel {
+	constructor(
+		public adult: boolean | null,
+		public gender: number | null,
+		public id: number | null,
+		public known_for_department: string | null,
+		public name: string | null,
+		public original_name: string | null,
+		public popularity: number | null,
+		public profile_path: string | null,
+		public credit_id: string | null,
+		public department: string | null,
+		public job: string | null
+	) {}
+}
+
+export class MoviesCastCrewRes {
+	constructor(
+		public id: number,
+		public cast: MoviesCastModel[],
+		public crew: MoviesCrewModel[]
+	) {}
+}
