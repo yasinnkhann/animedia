@@ -69,6 +69,27 @@ export const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
 	] as const,
 });
 
+export const ShowGenreTypes = builder.enumType('ShowGenreTypes', {
+	values: [
+		'Action_AMPERSAND_Adventure',
+		'Animation',
+		'Comedy',
+		'Crime',
+		'Documentary',
+		'Drama',
+		'Family',
+		'Kids',
+		'Mystery',
+		'News',
+		'Reality',
+		'SciDASHFi_AMPERSAND_Fantasy',
+		'Soap',
+		'Talk',
+		'War_AMPERSAND_Politics',
+		'Western',
+	] as const,
+});
+
 export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
 	values: ['day', 'week'] as const,
 });

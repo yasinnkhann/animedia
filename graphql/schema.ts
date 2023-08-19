@@ -48,5 +48,6 @@ import { builder } from './builder';
 
 import './models/User';
 import './models/Movie';
+import './models/Show';
 
 export const schema = builder.toSchema({});
