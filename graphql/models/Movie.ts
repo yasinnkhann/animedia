@@ -261,8 +261,8 @@ builder.objectType(MoviesCastCrewRes, {
 	}),
 });
 
-builder.queryField('popularMovies', t =>
-	t.field({
+builder.queryFields(t => ({
+	popularMovies: t.field({
 		type: MoviesRes,
 		args: {
 			page: t.arg.int({ required: false }),
@@ -279,11 +279,8 @@ builder.queryField('popularMovies', t =>
 				console.error(err);
 			}
 		},
-	})
-);
-
-builder.queryField('searchedMovies', t =>
-	t.field({
+	}),
+	searchedMovies: t.field({
 		type: MoviesRes,
 		args: {
 			q: t.arg.string(),
@@ -302,5 +299,5 @@ builder.queryField('searchedMovies', t =>
 				console.error(err);
 			}
 		},
-	})
-);
+	}),
+}));

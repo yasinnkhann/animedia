@@ -87,3 +87,5 @@ builder.queryType({
 		}),
 	}),
 });
+
+builder.mutationType({});

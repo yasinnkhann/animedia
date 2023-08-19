@@ -97,8 +97,8 @@ builder.objectType(HttpRes, {
 	}),
 });
 
-builder.queryField('user', t =>
-	t.prismaField({
+builder.queryFields(t => ({
+	user: t.prismaField({
 		type: 'User',
 		args: {
 			id: t.arg.id(),
@@ -113,11 +113,8 @@ builder.queryField('user', t =>
 				},
 			});
 		},
-	})
-);
-
-builder.queryField('usersMovie', t =>
-	t.prismaField({
+	}),
+	usersMovie: t.prismaField({
 		type: 'Movie',
 		args: {
 			movieId: t.arg.id(),
@@ -133,11 +130,8 @@ builder.queryField('usersMovie', t =>
 				},
 			});
 		},
-	})
-);
-
-builder.queryField('usersShow', t =>
-	t.prismaField({
+	}),
+	usersShow: t.prismaField({
 		type: 'Show',
 		args: {
 			showId: t.arg.id(),
@@ -153,11 +147,8 @@ builder.queryField('usersShow', t =>
 				},
 			});
 		},
-	})
-);
-
-builder.queryField('usersMovies', t =>
-	t.prismaField({
+	}),
+	usersMovies: t.prismaField({
 		type: ['Movie'],
 		resolve: async (query, _root, _args, ctx) => {
 			return await ctx.prisma.movie.findMany({
@@ -172,11 +163,8 @@ builder.queryField('usersMovies', t =>
 				],
 			});
 		},
-	})
-);
-
-builder.queryField('usersShows', t =>
-	t.prismaField({
+	}),
+	usersShows: t.prismaField({
 		type: ['Show'],
 		resolve: async (query, _root, _args, ctx) => {
 			return await ctx.prisma.show.findMany({
@@ -191,11 +179,8 @@ builder.queryField('usersShows', t =>
 				],
 			});
 		},
-	})
-);
-
-builder.queryField('checkEmailVerificationToken', t =>
-	t.field({
+	}),
+	checkEmailVerificationToken: t.field({
 		type: RedisRes,
 		args: {
 			token: t.arg.string(),
@@ -211,11 +196,8 @@ builder.queryField('checkEmailVerificationToken', t =>
 
 			return new RedisRes(null, 'Valid EMAIL VERIFICATION.', token, userId);
 		},
-	})
-);
-
-builder.queryField('accountVerified', t =>
-	t.field({
+	}),
+	accountVerified: t.field({
 		type: AccountVerifiedRes,
 		args: {
 			email: t.arg.string(),
@@ -236,11 +218,8 @@ builder.queryField('accountVerified', t =>
 
 			return new AccountVerifiedRes('Account Not Found', null, null);
 		},
-	})
-);
-
-builder.queryField('emailFromRedisToken', t =>
-	t.string({
+	}),
+	emailFromRedisToken: t.string({
 		nullable: true,
 		args: {
 			token: t.arg.string(),
@@ -261,11 +240,8 @@ builder.queryField('emailFromRedisToken', t =>
 
 			return user.email;
 		},
-	})
-);
-
-builder.queryField('checkRetryEmailVerificationLimit', t =>
-	t.field({
+	}),
+	checkRetryEmailVerificationLimit: t.field({
 		type: RedisRes,
 		args: {
 			email: t.arg.string(),
@@ -289,368 +265,366 @@ builder.queryField('checkRetryEmailVerificationLimit', t =>
 				limitFound
 			);
 		},
-	})
-);
-
-builder.mutationType({
-	fields: t => ({
-		addMovie: t.field({
-			type: HttpRes,
-			args: {
-				movieId: t.arg.id(),
-				movieName: t.arg.string(),
-				watchStatus: t.arg({
-					type: WatchStatusTypes,
-				}),
-			},
-			resolve: async (_root, { movieId, movieName, watchStatus }, ctx) => {
-				try {
-					await ctx.prisma.user.update({
-						where: { id: ctx.session!.user?.id! },
-						data: {
-							movies: {
-								create: {
-									id: movieId as string,
-									name: movieName,
-									status: watchStatus,
-								},
-							},
-						},
-					});
-					return new HttpRes(null, 'Movie added', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not add movie', null, false, 400);
-				}
-			},
-		}),
-		addShow: t.field({
-			type: HttpRes,
-			args: {
-				showId: t.arg.id(),
-				showName: t.arg.string(),
-				watchStatus: t.arg({
-					type: WatchStatusTypes,
-				}),
-				currentEpisode: t.arg.int({ required: false }),
-			},
-			resolve: async (
-				_root,
-				{ showId, showName, watchStatus, currentEpisode },
-				ctx
-			) => {
-				try {
-					await ctx.prisma.user.update({
-						where: { id: ctx.session!.user?.id! },
-						data: {
-							shows: {
-								create: {
-									id: showId as string,
-									name: showName,
-									status: watchStatus,
-									current_episode: currentEpisode ?? undefined,
-								},
-							},
-						},
-					});
-					return new HttpRes(null, 'Show added', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not add show', null, false, 400);
-				}
-			},
-		}),
-		updateMovie: t.field({
-			type: HttpRes,
-			args: {
-				movieId: t.arg.id(),
-				watchStatus: t.arg({
-					type: WatchStatusTypes,
-				}),
-				movieRating: t.arg.int({ required: false }),
-			},
-			resolve: async (_root, { movieId, watchStatus, movieRating }, ctx) => {
-				try {
-					await ctx.prisma.movie.update({
-						where: {
-							id_userId: {
-								id: movieId as string,
-								userId: ctx.session!.user?.id!,
-							},
-						},
-						data: {
-							status: watchStatus,
-							rating: movieRating ? movieRating : null,
-						},
-					});
-					return new HttpRes(null, 'Movie updated', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not update movie', null, false, 400);
-				}
-			},
-		}),
-		updateShow: t.field({
-			type: HttpRes,
-			args: {
-				showId: t.arg.id(),
-				watchStatus: t.arg({
-					type: WatchStatusTypes,
-				}),
-				showRating: t.arg.int({ required: false }),
-				currentEpisode: t.arg.int({ required: false }),
-			},
-			resolve: async (
-				_root,
-				{ showId, watchStatus, showRating, currentEpisode },
-				ctx
-			) => {
-				try {
-					await ctx.prisma.show.update({
-						where: {
-							id_userId: {
-								id: showId as string,
-								userId: ctx.session!.user?.id!,
-							},
-						},
-						data: {
-							status: watchStatus,
-							rating: showRating ? showRating : null,
-							current_episode: currentEpisode ?? undefined,
-						},
-					});
-					return new HttpRes(null, 'Show updated', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not update show', null, false, 400);
-				}
-			},
-		}),
-		deleteMovie: t.field({
-			type: HttpRes,
-			args: {
-				movieId: t.arg.id(),
-			},
-			resolve: async (_root, { movieId }, ctx) => {
-				try {
-					await ctx.prisma.movie.delete({
-						where: {
-							id_userId: {
-								id: movieId as string,
-								userId: ctx.session?.user?.id!,
-							},
-						},
-					});
-					return new HttpRes(null, 'Movie deleted', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not delete movie', null, false, 400);
-				}
-			},
-		}),
-		deleteShow: t.field({
-			type: HttpRes,
-			args: {
-				showId: t.arg.id(),
-			},
-			resolve: async (_root, { showId }, ctx) => {
-				try {
-					await ctx.prisma.show.delete({
-						where: {
-							id_userId: {
-								id: showId as string,
-								userId: ctx.session?.user?.id!,
-							},
-						},
-					});
-					return new HttpRes(null, 'Show deleted', true, 200);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes('Could not delete show', null, false, 400);
-				}
-			},
-		}),
-		registerUser: t.field({
-			type: RegisteredUserRes,
-			args: {
-				name: t.arg.string(),
-				email: t.arg.string(),
-				password: t.arg.string(),
-			},
-			resolve: async (_root, { name, email, password }, ctx) => {
-				try {
-					const existingUser = await ctx.prisma.user.findUnique({
-						where: { email },
-					});
-
-					if (existingUser) {
-						return new RegisteredUserRes(
-							'Email Already Exists',
-							null,
-							false,
-							422
-						);
-					}
-					const newUser = await ctx.prisma.user.create({
-						data: { name, email, password: await hash(password, 12) },
-					});
-					return new RegisteredUserRes(null, newUser, true, 201);
-				} catch (err) {
-					console.error(err);
-					return new RegisteredUserRes(
-						'Error while registering user',
-						null,
-						false,
-						500
-					);
-				}
-			},
-		}),
-		writeEmailVerificationToken: t.field({
-			type: RedisRes,
-			args: {
-				email: t.arg.string(),
-			},
-			resolve: async (_root, { email }, ctx) => {
-				const user = await ctx.prisma.user.findUnique({
-					where: { email },
-					select: { id: true },
-				});
-
-				if (!user) {
-					return new RedisRes('User not found', null, null, null);
-				}
-
-				const token = v4();
-
-				await ctx.redis.set(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`,
-					user.id,
-					'EX',
-					1000 * 60 * 60 * 24 * 3 // 3 days
-				);
-
-				return new RedisRes(
-					null,
-					'Email Verification Token Added',
-					token,
-					user.id
-				);
-			},
-		}),
-		deleteEmailVerificationToken: t.field({
-			type: RedisRes,
-			args: {
-				token: t.arg.string(),
-			},
-			resolve: async (_root, { token }, ctx) => {
-				const deletedEmailVerification = await ctx.redis.del(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
-				);
-
-				if (!deletedEmailVerification) {
-					return new RedisRes('Unable to delete email verification', null);
-				}
-
-				return new RedisRes(null, 'Successfully deleted email verification');
-			},
-		}),
-		verifyUserEmail: t.field({
-			type: HttpRes,
-			args: {
-				userId: t.arg.id(),
-			},
-			resolve: async (_root, { userId }, ctx) => {
-				const verifiedUserEmail = await ctx.prisma.user.update({
-					where: { id: userId as string },
-					data: {
-						emailVerified: new Date(),
-					},
-				});
-
-				if (!verifiedUserEmail) {
-					return new HttpRes('Error verifying email', null, false, 404);
-				}
-
-				return new HttpRes(null, 'Email is verified', true, 200);
-			},
-		}),
-		writeRetryEmailVerificationLimit: t.field({
-			type: RedisRes,
-			args: {
-				email: t.arg.string(),
-			},
-			resolve: async (_root, { email }, ctx) => {
-				let currNum = await ctx.redis.get(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
-				);
-
-				if (!currNum) {
-					currNum = '0';
-				}
-
-				await ctx.redis.set(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`,
-					(+currNum + 1).toString(),
-					'EX',
-					1000 * 60 * 60 * 24 * 1 // 1 day
-				);
-
-				return new RedisRes(
-					null,
-					'Retry Email Verification Limit Added',
-					(+currNum + 1).toString()
-				);
-			},
-		}),
-		sendVerificationEmail: t.field({
-			type: HttpRes,
-			args: {
-				recipientEmail: t.arg.string(),
-				subject: t.arg.string(),
-				text: t.arg.string(),
-				html: t.arg.string(),
-			},
-			resolve: async (_root, { recipientEmail, subject, text, html }, ctx) => {
-				if (!isValidEmail(recipientEmail)) {
-					return new HttpRes(
-						'Please provide a valid email address',
-						null,
-						false,
-						400
-					);
-				}
-
-				const transporter = nodemailer.createTransport({
-					host: process.env.EMAIL_SERVER_HOST,
-					port: process.env.EMAIL_SERVER_PORT,
-					secure: false, // true for 465, false for other ports
-					auth: {
-						user: process.env.EMAIL_SERVER_USER,
-						pass: process.env.EMAIL_SERVER_PASSWORD,
-					},
-				} as TransportOptions | Transport<unknown>);
-
-				try {
-					await transporter.sendMail({
-						from: process.env.EMAIL_FROM, // verified sender email
-						to: recipientEmail, // recipient email
-						subject, // Subject line
-						text, // plain text body
-						html, // html body
-					});
-
-					return new HttpRes(null, 'EMAIL VERIFICATION SENT!', true, 201);
-				} catch (err) {
-					console.error(err);
-					return new HttpRes(
-						'Error while sending verification email',
-						null,
-						false,
-						500
-					);
-				}
-			},
-		}),
 	}),
-});
+}));
+
+builder.mutationFields(t => ({
+	addMovie: t.field({
+		type: HttpRes,
+		args: {
+			movieId: t.arg.id(),
+			movieName: t.arg.string(),
+			watchStatus: t.arg({
+				type: WatchStatusTypes,
+			}),
+		},
+		resolve: async (_root, { movieId, movieName, watchStatus }, ctx) => {
+			try {
+				await ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id! },
+					data: {
+						movies: {
+							create: {
+								id: movieId as string,
+								name: movieName,
+								status: watchStatus,
+							},
+						},
+					},
+				});
+				return new HttpRes(null, 'Movie added', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not add movie', null, false, 400);
+			}
+		},
+	}),
+	addShow: t.field({
+		type: HttpRes,
+		args: {
+			showId: t.arg.id(),
+			showName: t.arg.string(),
+			watchStatus: t.arg({
+				type: WatchStatusTypes,
+			}),
+			currentEpisode: t.arg.int({ required: false }),
+		},
+		resolve: async (
+			_root,
+			{ showId, showName, watchStatus, currentEpisode },
+			ctx
+		) => {
+			try {
+				await ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id! },
+					data: {
+						shows: {
+							create: {
+								id: showId as string,
+								name: showName,
+								status: watchStatus,
+								current_episode: currentEpisode ?? undefined,
+							},
+						},
+					},
+				});
+				return new HttpRes(null, 'Show added', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not add show', null, false, 400);
+			}
+		},
+	}),
+	updateMovie: t.field({
+		type: HttpRes,
+		args: {
+			movieId: t.arg.id(),
+			watchStatus: t.arg({
+				type: WatchStatusTypes,
+			}),
+			movieRating: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { movieId, watchStatus, movieRating }, ctx) => {
+			try {
+				await ctx.prisma.movie.update({
+					where: {
+						id_userId: {
+							id: movieId as string,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+					data: {
+						status: watchStatus,
+						rating: movieRating ? movieRating : null,
+					},
+				});
+				return new HttpRes(null, 'Movie updated', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not update movie', null, false, 400);
+			}
+		},
+	}),
+	updateShow: t.field({
+		type: HttpRes,
+		args: {
+			showId: t.arg.id(),
+			watchStatus: t.arg({
+				type: WatchStatusTypes,
+			}),
+			showRating: t.arg.int({ required: false }),
+			currentEpisode: t.arg.int({ required: false }),
+		},
+		resolve: async (
+			_root,
+			{ showId, watchStatus, showRating, currentEpisode },
+			ctx
+		) => {
+			try {
+				await ctx.prisma.show.update({
+					where: {
+						id_userId: {
+							id: showId as string,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+					data: {
+						status: watchStatus,
+						rating: showRating ? showRating : null,
+						current_episode: currentEpisode ?? undefined,
+					},
+				});
+				return new HttpRes(null, 'Show updated', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not update show', null, false, 400);
+			}
+		},
+	}),
+	deleteMovie: t.field({
+		type: HttpRes,
+		args: {
+			movieId: t.arg.id(),
+		},
+		resolve: async (_root, { movieId }, ctx) => {
+			try {
+				await ctx.prisma.movie.delete({
+					where: {
+						id_userId: {
+							id: movieId as string,
+							userId: ctx.session?.user?.id!,
+						},
+					},
+				});
+				return new HttpRes(null, 'Movie deleted', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not delete movie', null, false, 400);
+			}
+		},
+	}),
+	deleteShow: t.field({
+		type: HttpRes,
+		args: {
+			showId: t.arg.id(),
+		},
+		resolve: async (_root, { showId }, ctx) => {
+			try {
+				await ctx.prisma.show.delete({
+					where: {
+						id_userId: {
+							id: showId as string,
+							userId: ctx.session?.user?.id!,
+						},
+					},
+				});
+				return new HttpRes(null, 'Show deleted', true, 200);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes('Could not delete show', null, false, 400);
+			}
+		},
+	}),
+	registerUser: t.field({
+		type: RegisteredUserRes,
+		args: {
+			name: t.arg.string(),
+			email: t.arg.string(),
+			password: t.arg.string(),
+		},
+		resolve: async (_root, { name, email, password }, ctx) => {
+			try {
+				const existingUser = await ctx.prisma.user.findUnique({
+					where: { email },
+				});
+
+				if (existingUser) {
+					return new RegisteredUserRes(
+						'Email Already Exists',
+						null,
+						false,
+						422
+					);
+				}
+				const newUser = await ctx.prisma.user.create({
+					data: { name, email, password: await hash(password, 12) },
+				});
+				return new RegisteredUserRes(null, newUser, true, 201);
+			} catch (err) {
+				console.error(err);
+				return new RegisteredUserRes(
+					'Error while registering user',
+					null,
+					false,
+					500
+				);
+			}
+		},
+	}),
+	writeEmailVerificationToken: t.field({
+		type: RedisRes,
+		args: {
+			email: t.arg.string(),
+		},
+		resolve: async (_root, { email }, ctx) => {
+			const user = await ctx.prisma.user.findUnique({
+				where: { email },
+				select: { id: true },
+			});
+
+			if (!user) {
+				return new RedisRes('User not found', null, null, null);
+			}
+
+			const token = v4();
+
+			await ctx.redis.set(
+				`${EMAIL_VERIFICATION_PREFIX}-${token}`,
+				user.id,
+				'EX',
+				1000 * 60 * 60 * 24 * 3 // 3 days
+			);
+
+			return new RedisRes(
+				null,
+				'Email Verification Token Added',
+				token,
+				user.id
+			);
+		},
+	}),
+	deleteEmailVerificationToken: t.field({
+		type: RedisRes,
+		args: {
+			token: t.arg.string(),
+		},
+		resolve: async (_root, { token }, ctx) => {
+			const deletedEmailVerification = await ctx.redis.del(
+				`${EMAIL_VERIFICATION_PREFIX}-${token}`
+			);
+
+			if (!deletedEmailVerification) {
+				return new RedisRes('Unable to delete email verification', null);
+			}
+
+			return new RedisRes(null, 'Successfully deleted email verification');
+		},
+	}),
+	verifyUserEmail: t.field({
+		type: HttpRes,
+		args: {
+			userId: t.arg.id(),
+		},
+		resolve: async (_root, { userId }, ctx) => {
+			const verifiedUserEmail = await ctx.prisma.user.update({
+				where: { id: userId as string },
+				data: {
+					emailVerified: new Date(),
+				},
+			});
+
+			if (!verifiedUserEmail) {
+				return new HttpRes('Error verifying email', null, false, 404);
+			}
+
+			return new HttpRes(null, 'Email is verified', true, 200);
+		},
+	}),
+	writeRetryEmailVerificationLimit: t.field({
+		type: RedisRes,
+		args: {
+			email: t.arg.string(),
+		},
+		resolve: async (_root, { email }, ctx) => {
+			let currNum = await ctx.redis.get(
+				`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+			);
+
+			if (!currNum) {
+				currNum = '0';
+			}
+
+			await ctx.redis.set(
+				`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`,
+				(+currNum + 1).toString(),
+				'EX',
+				1000 * 60 * 60 * 24 * 1 // 1 day
+			);
+
+			return new RedisRes(
+				null,
+				'Retry Email Verification Limit Added',
+				(+currNum + 1).toString()
+			);
+		},
+	}),
+	sendVerificationEmail: t.field({
+		type: HttpRes,
+		args: {
+			recipientEmail: t.arg.string(),
+			subject: t.arg.string(),
+			text: t.arg.string(),
+			html: t.arg.string(),
+		},
+		resolve: async (_root, { recipientEmail, subject, text, html }) => {
+			if (!isValidEmail(recipientEmail)) {
+				return new HttpRes(
+					'Please provide a valid email address',
+					null,
+					false,
+					400
+				);
+			}
+
+			const transporter = nodemailer.createTransport({
+				host: process.env.EMAIL_SERVER_HOST,
+				port: process.env.EMAIL_SERVER_PORT,
+				secure: false, // true for 465, false for other ports
+				auth: {
+					user: process.env.EMAIL_SERVER_USER,
+					pass: process.env.EMAIL_SERVER_PASSWORD,
+				},
+			} as TransportOptions | Transport<unknown>);
+
+			try {
+				await transporter.sendMail({
+					from: process.env.EMAIL_FROM, // verified sender email
+					to: recipientEmail, // recipient email
+					subject, // Subject line
+					text, // plain text body
+					html, // html body
+				});
+
+				return new HttpRes(null, 'EMAIL VERIFICATION SENT!', true, 201);
+			} catch (err) {
+				console.error(err);
+				return new HttpRes(
+					'Error while sending verification email',
+					null,
+					false,
+					500
+				);
+			}
+		},
+	}),
+}));
