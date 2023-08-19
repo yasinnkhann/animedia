@@ -47,5 +47,6 @@ export const schema = applyMiddleware(baseSchema, permissions);
 import { builder } from './builder';
 
 import './models/User';
+import './models/Movie';
 
 export const schema = builder.toSchema({});

@@ -34,3 +34,43 @@ export class HttpRes {
 		public statusCode: number
 	) {}
 }
+export class MovieResult {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genre_ids: number[],
+		public id: number,
+		public original_language: string,
+		public original_title: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public release_date: string | null,
+		public title: string,
+		public video: boolean,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}
+
+export class MoviesRes {
+	constructor(
+		public page: number,
+		public total_pages: number,
+		public total_results: number,
+		public results: MovieResult[]
+	) {}
+}
+
+export class MovieDetailsGenre {
+	constructor(public id: number, public name: string) {}
+}
+
+export class MovieDetailsProdCompany {
+	constructor(
+		public id: number,
+		public logo_path: string | null,
+		public name: string,
+		public origin_country: string
+	) {}
+}

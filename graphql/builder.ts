@@ -45,6 +45,30 @@ export const WatchStatusTypes = builder.enumType('WatchStatusTypes', {
 	] as const,
 });
 
+export const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
+	values: [
+		'Action',
+		'Adventure',
+		'Animation',
+		'Comedy',
+		'Crime',
+		'Documentary',
+		'Drama',
+		'Family',
+		'Fantasy',
+		'History',
+		'Horror',
+		'Music',
+		'Mystery',
+		'Romance',
+		'Science_Fiction',
+		'TV_Movie',
+		'Thriller',
+		'War',
+		'Western',
+	] as const,
+});
+
 export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
 	values: ['day', 'week'],
 });
