@@ -1,4 +1,8 @@
 import { MovieGenreTypes, TimeWindowTypes, builder } from '../builder';
+import { BASE_URL } from 'utils/constants';
+import { GET_KEYWORD_ID } from 'utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
+import { GET_GENRE_ID } from 'utils/getGenreID';
 import {
 	MovieResult,
 	MoviesRes,
@@ -16,17 +20,13 @@ import {
 	MoviesCrewModel,
 	MoviesCastCrewRes,
 } from '../../models/entities';
-import { BASE_URL } from 'utils/constants';
-import { GET_KEYWORD_ID } from 'utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
-import { GET_GENRE_ID } from 'utils/getGenreID';
 
 builder.objectType(MovieResult, {
 	name: 'MovieResult',
 	fields: t => ({
 		adult: t.exposeBoolean('adult'),
 		backdrop_path: t.exposeString('backdrop_path', { nullable: true }),
-		genre_ids: t.exposeIntList('genre_ids'),
+		genre_ids: t.exposeIDList('genre_ids'),
 		id: t.exposeID('id'),
 		original_language: t.exposeString('original_language'),
 		original_title: t.exposeString('original_title'),
@@ -94,7 +94,7 @@ builder.objectType(MovieDetailsRes, {
 		genres: t.expose('genres', { type: [MovieDetailsGenre] }),
 		homepage: t.exposeString('homepage'),
 		id: t.exposeID('id'),
-		imdb_id: t.exposeString('imdb_id', { nullable: true }),
+		imdb_id: t.exposeID('imdb_id', { nullable: true }),
 		original_language: t.exposeString('original_language'),
 		original_title: t.exposeString('original_title'),
 		overview: t.exposeString('overview'),
@@ -306,7 +306,7 @@ builder.queryFields(t => ({
 	movieDetails: t.field({
 		type: MovieDetailsRes,
 		args: {
-			movieDetailsId: t.arg.int(),
+			movieDetailsId: t.arg.id(),
 		},
 		resolve: async (_root, { movieDetailsId }) => {
 			try {
@@ -485,7 +485,7 @@ builder.queryFields(t => ({
 	moviesCastCrew: t.field({
 		type: MoviesCastCrewRes,
 		args: {
-			movieId: t.arg.int(),
+			movieId: t.arg.id(),
 		},
 		resolve: async (_root, { movieId }) => {
 			try {

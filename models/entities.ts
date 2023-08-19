@@ -218,3 +218,52 @@ export class ShowResult {
 		public vote_count: number
 	) {}
 }
+
+export class ShowsRes {
+	constructor(
+		public page: number,
+		public total_pages: number,
+		public total_results: number,
+		public results: ShowResult[]
+	) {}
+}
+
+export class ShowDetailsCreatedBy {
+	constructor(
+		public id: number | null,
+		public credit_id: string | null,
+		public name: string | null,
+		public gender: number | null,
+		public profile_path: string | null
+	) {}
+}
+
+export class ShowDetailsGenre {
+	constructor(public id: number, public name: string) {}
+}
+
+export class ShowDetailsLastEpToAir {
+	constructor(
+		public air_date: string | null,
+		public episode_number: number,
+		public id: number,
+		public name: string,
+		public overview: string,
+		public production_code: string,
+		public runtime: number | null,
+		public season_number: number,
+		public show_id: number,
+		public still_path: string | null,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}
+
+export class ShowDetailsNetwork {
+	constructor(
+		public id: number,
+		public name: string,
+		public logo_path: string | null,
+		public origin_country: string
+	) {}
+}

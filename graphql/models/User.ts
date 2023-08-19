@@ -1,19 +1,18 @@
-import { builder } from '../builder';
-import { WatchStatusTypes } from '../builder';
+import { builder, WatchStatusTypes } from '../builder';
 import { v4 } from 'uuid';
 import { hash } from 'bcryptjs';
 import nodemailer, { Transport, TransportOptions } from 'nodemailer';
 import { isValidEmail } from '../../utils/isValidEmail';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/constants';
 import {
 	AccountVerifiedRes,
 	HttpRes,
 	RedisRes,
 	RegisteredUserRes,
 } from '../../models/entities';
-import {
-	EMAIL_VERIFICATION_PREFIX,
-	RETRY_EMAIL_VERIFICATION_PREFIX,
-} from 'utils/constants';
 
 builder.prismaObject('Movie', {
 	fields: t => ({
