@@ -70,7 +70,7 @@ export const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
 });
 
 export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
-	values: ['day', 'week'],
+	values: ['day', 'week'] as const,
 });
 
 builder.queryType({

@@ -1,4 +1,4 @@
-import { builder } from '../builder';
+import { TimeWindowTypes, builder } from '../builder';
 import {
 	MovieResult,
 	MoviesRes,
@@ -17,6 +17,8 @@ import {
 	MoviesCastCrewRes,
 } from '../../models/entities';
 import { BASE_URL } from 'utils/constants';
+import { GET_KEYWORD_ID } from 'utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
 
 builder.objectType(MovieResult, {
 	name: 'MovieResult',
@@ -292,6 +294,83 @@ builder.queryFields(t => ({
 				const res = await fetch(
 					`${BASE_URL}/search/movie?api_key=${process.env
 						.API_KEY!}&language=en-US&query=${q}&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	movieDetails: t.field({
+		type: MovieDetailsRes,
+		args: {
+			movieDetailsId: t.arg.int(),
+		},
+		resolve: async (_root, { movieDetailsId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/${movieDetailsId}?api_key=${process.env
+						.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	popularAnimeMovies: t.field({
+		type: MoviesRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const keywordID = await GET_KEYWORD_ID('anime');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/movie?api_key=${process.env
+						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
+						page ?? 1
+					}&with_keywords=${keywordID}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	trendingMovies: t.field({
+		type: MoviesRes,
+		args: {
+			timeWindow: t.arg({ type: TimeWindowTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { timeWindow, page }) => {
+			try {
+				const trendingMovies = await GET_TRENDING_MEDIA(
+					'movie',
+					timeWindow,
+					page
+				);
+				return trendingMovies;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	topRatedMovies: t.field({
+		type: MoviesRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/top_rated?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
 				);
 				const data = await res.json();
 				return data;

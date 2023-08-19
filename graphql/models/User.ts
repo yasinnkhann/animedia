@@ -106,7 +106,7 @@ builder.queryFields(t => ({
 		resolve: async (query, _root, { id }, ctx) => {
 			return await ctx.prisma.user.findUniqueOrThrow({
 				...query,
-				where: { id: id as string },
+				where: { id: typeof id === 'number' ? id.toString() : id },
 				include: {
 					movies: true,
 					shows: true,
@@ -124,7 +124,7 @@ builder.queryFields(t => ({
 				...query,
 				where: {
 					id_userId: {
-						id: movieId as string,
+						id: typeof movieId === 'number' ? movieId.toString() : movieId,
 						userId: ctx.session!.user?.id!,
 					},
 				},
@@ -141,7 +141,7 @@ builder.queryFields(t => ({
 				...query,
 				where: {
 					id_userId: {
-						id: showId as string,
+						id: typeof showId === 'number' ? showId.toString() : showId,
 						userId: ctx.session!.user?.id!,
 					},
 				},
@@ -285,7 +285,7 @@ builder.mutationFields(t => ({
 					data: {
 						movies: {
 							create: {
-								id: movieId as string,
+								id: typeof movieId === 'number' ? movieId.toString() : movieId,
 								name: movieName,
 								status: watchStatus,
 							},
@@ -320,7 +320,7 @@ builder.mutationFields(t => ({
 					data: {
 						shows: {
 							create: {
-								id: showId as string,
+								id: typeof showId === 'number' ? showId.toString() : showId,
 								name: showName,
 								status: watchStatus,
 								current_episode: currentEpisode ?? undefined,
@@ -349,7 +349,7 @@ builder.mutationFields(t => ({
 				await ctx.prisma.movie.update({
 					where: {
 						id_userId: {
-							id: movieId as string,
+							id: typeof movieId === 'number' ? movieId.toString() : movieId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
@@ -384,7 +384,7 @@ builder.mutationFields(t => ({
 				await ctx.prisma.show.update({
 					where: {
 						id_userId: {
-							id: showId as string,
+							id: typeof showId === 'number' ? showId.toString() : showId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
@@ -411,7 +411,7 @@ builder.mutationFields(t => ({
 				await ctx.prisma.movie.delete({
 					where: {
 						id_userId: {
-							id: movieId as string,
+							id: typeof movieId === 'number' ? movieId.toString() : movieId,
 							userId: ctx.session?.user?.id!,
 						},
 					},
@@ -433,7 +433,7 @@ builder.mutationFields(t => ({
 				await ctx.prisma.show.delete({
 					where: {
 						id_userId: {
-							id: showId as string,
+							id: typeof showId === 'number' ? showId.toString() : showId,
 							userId: ctx.session?.user?.id!,
 						},
 					},
@@ -537,7 +537,7 @@ builder.mutationFields(t => ({
 		},
 		resolve: async (_root, { userId }, ctx) => {
 			const verifiedUserEmail = await ctx.prisma.user.update({
-				where: { id: userId as string },
+				where: { id: typeof userId === 'number' ? userId.toString() : userId },
 				data: {
 					emailVerified: new Date(),
 				},
