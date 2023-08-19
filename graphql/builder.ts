@@ -72,3 +72,18 @@ export const MovieGenreTypes = builder.enumType('MovieGenreTypes', {
 export const TimeWindowTypes = builder.enumType('TimeWindowTypes', {
 	values: ['day', 'week'],
 });
+
+builder.queryType({
+	fields: t => ({
+		hello: t.string({
+			args: {
+				name: t.arg.string({ required: false }),
+			},
+			resolve: (_root, { name }) => `hello, ${name || 'World'}`,
+		}),
+		currentDate: t.field({
+			type: 'Date',
+			resolve: () => new Date(),
+		}),
+	}),
+});

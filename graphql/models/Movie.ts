@@ -16,6 +16,7 @@ import {
 	MoviesCrewModel,
 	MoviesCastCrewRes,
 } from '../../models/entities';
+import { BASE_URL } from 'utils/constants';
 
 builder.objectType(MovieResult, {
 	name: 'MovieResult',
@@ -259,3 +260,47 @@ builder.objectType(MoviesCastCrewRes, {
 		}),
 	}),
 });
+
+builder.queryField('popularMovies', t =>
+	t.field({
+		type: MoviesRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/movie/popular?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	})
+);
+
+builder.queryField('searchedMovies', t =>
+	t.field({
+		type: MoviesRes,
+		args: {
+			q: t.arg.string(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { q, page }) => {
+			q = q.split(' ').join('+');
+			try {
+				const res = await fetch(
+					`${BASE_URL}/search/movie?api_key=${process.env
+						.API_KEY!}&language=en-US&query=${q}&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	})
+);
