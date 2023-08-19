@@ -74,3 +74,43 @@ export class MovieDetailsProdCompany {
 		public origin_country: string
 	) {}
 }
+
+export class MovieDetailsProdCountry {
+	constructor(public iso_3166_1: string, public name: string) {}
+}
+
+export class MovieDetailsSpokenLang {
+	constructor(
+		public english_name: string,
+		public iso_639_1: string,
+		public name: string
+	) {}
+}
+
+export class MovieDetailsRes {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genres: MovieDetailsGenre[],
+		public homepage: string,
+		public id: number,
+		public imdb_id: string | null,
+		public original_language: string,
+		public original_title: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public production_companies: MovieDetailsProdCompany[],
+		public production_countries: MovieDetailsProdCountry[],
+		public release_date: string | null,
+		public revenue: bigint | null,
+		public runtime: number | null,
+		public spoken_languages: MovieDetailsSpokenLang[],
+		public status: string,
+		public tagline: string,
+		public title: string,
+		public video: boolean | null,
+		public vote_average: number,
+		public vote_count: number
+	) {}
+}
