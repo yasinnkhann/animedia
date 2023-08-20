@@ -25,7 +25,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
 	const [deleteMovie] = useMutation(Mutations.DELETE_MOVIE, {
 		variables: {
-			movieId: String(myMovie.id),
+			movieId: myMovie.id,
 		},
 		refetchQueries: () => [
 			{

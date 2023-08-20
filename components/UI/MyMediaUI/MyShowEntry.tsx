@@ -26,7 +26,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
 	const [deleteShow] = useMutation(Mutations.DELETE_SHOW, {
 		variables: {
-			showId: String(myShow.id),
+			showId: myShow.id,
 		},
 		refetchQueries: () => [
 			{

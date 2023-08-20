@@ -3,7 +3,6 @@ import MovieCastCard from './MediaCastCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
-import { useRouter } from 'next/router';
 import { ICast } from '@ts/interfaces';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -13,8 +12,6 @@ interface Props {
 }
 
 const MediaCastHorizontalScroller = ({ items }: Props) => {
-	const router = useRouter();
-
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =

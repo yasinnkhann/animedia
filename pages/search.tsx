@@ -168,8 +168,8 @@ const Search: NextPage = () => {
 			}
 		}
 		for (const item of getSearchedTypeData()!.results) {
-			if (usersMediaDict.has(String(item.id))) {
-				matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+			if (usersMediaDict.has(item.id)) {
+				matchedMedias.push(usersMediaDict.get(item.id) as any);
 			}
 		}
 

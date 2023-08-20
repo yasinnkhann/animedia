@@ -57,7 +57,7 @@ const VerificationEmailSent = ({
 	const handleResendLink = async () => {
 		if (
 			checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
-				?.token === String(3)
+				?.token === '3'
 		) {
 			setReachedLimit(true);
 			return;

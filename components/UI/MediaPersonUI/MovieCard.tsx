@@ -23,7 +23,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 		Queries.GET_USERS_MOVIE,
 		{
 			variables: {
-				movieId: String(movie.id),
+				movieId: movie.id,
 			},
 		}
 	);

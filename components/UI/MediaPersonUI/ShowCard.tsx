@@ -23,7 +23,7 @@ const ShowCard = ({ show, rank }: Props) => {
 		Queries.GET_USERS_SHOW,
 		{
 			variables: {
-				showId: String(show.id),
+				showId: show.id,
 			},
 		}
 	);
