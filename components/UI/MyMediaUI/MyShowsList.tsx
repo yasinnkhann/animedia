@@ -1,11 +1,11 @@
 import React from 'react';
 import MyShowEntry from './MyShowEntry';
 import { TStatusParam } from '@ts/types';
-import { UserShow } from 'graphql/generated/code-gen/graphql';
+import { Show } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
 	status: TStatusParam;
-	myShows: UserShow[];
+	myShows: Show[];
 }
 
 const MyShowsList = ({ status, myShows }: Props) => {

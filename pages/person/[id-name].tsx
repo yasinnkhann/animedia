@@ -17,7 +17,7 @@ import _ from 'lodash';
 
 const PersonDetails = () => {
 	const router = useRouter();
-	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
 	const { data: personDetailsData, loading: personDetailsLoading } = useQuery(
 		Queries.PERSON_DETAILS,
@@ -50,7 +50,7 @@ const PersonDetails = () => {
 	);
 
 	const memoMappedMedia = useMemo(() => {
-		const uniqueMovies: Set<number> = new Set();
+		const uniqueMovies: Set<string> = new Set();
 
 		const mappedMoviesCast: IRelatedMedia[] = [];
 
@@ -68,7 +68,7 @@ const PersonDetails = () => {
 			}
 		}
 
-		const uniqueShows: Set<number> = new Set();
+		const uniqueShows: Set<string> = new Set();
 
 		const mappedShowsCast: IRelatedMedia[] = [];
 

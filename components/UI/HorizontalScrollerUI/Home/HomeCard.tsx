@@ -9,15 +9,15 @@ import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
 import {
 	MovieResult,
 	ShowResult,
-	UserMovie,
-	UserShow,
+	Movie,
+	Show,
 } from '../../../../graphql/generated/code-gen/graphql';
 import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: MovieResult | ShowResult;
 	dragging: Boolean;
-	userMatchedMedias: UserShow[] | UserMovie[];
+	userMatchedMedias: Movie[] | Show[];
 }
 
 const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {

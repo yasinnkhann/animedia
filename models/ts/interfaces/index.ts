@@ -2,12 +2,12 @@ import { EContent } from '../enums/index';
 
 export interface IHorizontalScrollerItemClickInfo {
 	mediaType: EContent;
-	id: number;
+	id: string;
 	title: string;
 }
 
 export interface IRelatedMedia {
-	id: number;
+	id: string;
 	poster_path: string | undefined | null;
 	title?: string;
 	name?: string;
@@ -15,14 +15,14 @@ export interface IRelatedMedia {
 }
 
 export interface ICast {
-	id: number;
+	id: string;
 	name: string;
 	character: string;
 	profile_path: string | null;
 }
 
 export interface IEPDetails {
-	showId: number;
+	showId: string;
 	season: number;
 	episode: number;
 }

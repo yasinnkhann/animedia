@@ -166,7 +166,7 @@ builder.objectType(ShowDetailsNextEpToAir, {
 	name: 'ShowDetailsNextEpToAir',
 	fields: t => ({
 		air_date: t.exposeString('air_date', { nullable: true }),
-		episode_count: t.exposeInt('episode_number'),
+		episode_number: t.exposeInt('episode_number'),
 		id: t.exposeID('id'),
 		name: t.exposeString('name'),
 		overview: t.exposeString('overview'),

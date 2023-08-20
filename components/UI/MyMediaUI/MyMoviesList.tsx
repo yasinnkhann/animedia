@@ -1,11 +1,11 @@
 import React from 'react';
 import MyMovieEntry from './MyMovieEntry';
 import { TStatusParam } from '@ts/types';
-import { UserMovie } from 'graphql/generated/code-gen/graphql';
+import { Movie } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
 	status: TStatusParam;
-	myMovies: UserMovie[];
+	myMovies: Movie[];
 }
 
 const MyMoviesList = ({ status, myMovies }: Props) => {

@@ -9,15 +9,15 @@ import {
 	ShowResult,
 	PersonResult,
 	Maybe,
-	UserShow,
-	UserMovie,
+	Show,
+	Movie,
 } from '../../../graphql/generated/code-gen/graphql';
 import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult;
 	searchedResultType: EContent;
-	userMatchedMedias: UserShow[] | UserMovie[];
+	userMatchedMedias: Show[] | Movie[];
 }
 
 const SearchResult = ({

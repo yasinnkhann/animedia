@@ -53,7 +53,7 @@ type TGenreObj = MovieDetailsGenre | ShowDetailsGenre;
 export const GET_GENRE_ID = async (
 	genreName: NexusGenEnums['MovieGenreTypes'] | NexusGenEnums['ShowGenreTypes'],
 	mediaType: 'movie' | 'tv'
-): Promise<number> => {
+): Promise<string> => {
 	const parsedGenreName = genreName
 		.replace(/_/gi, ' ')
 		.replace(/AMPERSAND/gi, '&')

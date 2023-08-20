@@ -11,10 +11,10 @@ export const ADD_MOVIE = graphql(`
 			movieName: $movieName
 			watchStatus: $watchStatus
 		) {
-			id
-			name
-			status
-			rating
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -30,10 +30,10 @@ export const UPDATE_MOVIE = graphql(`
 			watchStatus: $watchStatus
 			movieRating: $movieRating
 		) {
-			id
-			name
-			status
-			rating
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -41,10 +41,10 @@ export const UPDATE_MOVIE = graphql(`
 export const DELETE_MOVIE = graphql(`
 	mutation DeletedMovie($movieId: ID!) {
 		deleteMovie(movieId: $movieId) {
-			id
-			name
-			status
-			rating
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -62,11 +62,10 @@ export const ADD_SHOW = graphql(`
 			watchStatus: $watchStatus
 			currentEpisode: $currentEpisode
 		) {
-			id
-			name
-			status
-			rating
-			current_episode
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -84,11 +83,10 @@ export const UPDATE_SHOW = graphql(`
 			showRating: $showRating
 			currentEpisode: $currentEpisode
 		) {
-			id
-			name
-			status
-			rating
-			current_episode
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -96,11 +94,10 @@ export const UPDATE_SHOW = graphql(`
 export const DELETE_SHOW = graphql(`
 	mutation DeletedShow($showId: ID!) {
 		deleteShow(showId: $showId) {
-			id
-			name
-			status
-			rating
-			current_episode
+			error
+			ok
+			statusCode
+			successMsg
 		}
 	}
 `);
@@ -129,7 +126,12 @@ export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
 
 export const VERIFY_USER_EMAIL = graphql(`
 	mutation VerifyUserEmail($userId: ID!) {
-		verifyUserEmail(userId: $userId)
+		verifyUserEmail(userId: $userId) {
+			error
+			ok
+			statusCode
+			successMsg
+		}
 	}
 `);
 
@@ -175,7 +177,7 @@ export const REGISTER_USER = graphql(`
 				email
 				password
 				image
-				created_at
+				createdAt
 				emailVerified
 				movies {
 					id
@@ -188,7 +190,7 @@ export const REGISTER_USER = graphql(`
 					name
 					status
 					rating
-					current_episode
+					currentEpisode
 				}
 			}
 			ok

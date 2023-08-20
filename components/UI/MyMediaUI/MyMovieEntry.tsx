@@ -7,19 +7,19 @@ import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
-import { UserMovie } from 'graphql/generated/code-gen/graphql';
+import { Movie } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 
 interface Props {
-	myMovie: UserMovie;
+	myMovie: Movie;
 	count: number;
 }
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const { data: movieData } = useQuery(Queries.MOVIE_DETAILS, {
 		variables: {
-			movieDetailsId: Number(myMovie.id),
+			movieDetailsId: myMovie.id,
 		},
 	});
 
@@ -45,7 +45,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<Link
 					href={getDetailsPageRoute(
 						EContent.MOVIE,
-						Number(myMovie.id),
+						myMovie.id,
 						myMovie.name as string
 					)}
 					passHref
@@ -67,7 +67,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 					<Link
 						href={getDetailsPageRoute(
 							EContent.MOVIE,
-							Number(myMovie.id),
+							myMovie.id,
 							myMovie.name as string
 						)}
 						passHref

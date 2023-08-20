@@ -6,7 +6,7 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../../graphql/queries';
-import { UserShow, UserMovie } from 'graphql/generated/code-gen/graphql';
+import { Movie, Show } from 'graphql/generated/code-gen/graphql';
 import { EContent } from '@ts/enums';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -17,9 +17,9 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<
-		UserShow[] | UserMovie[]
-	>([]);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<Movie[] | Show[]>(
+		[]
+	);
 
 	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
 		Queries.GET_USERS_SHOWS,
@@ -67,10 +67,10 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	};
 
 	useEffect(() => {
-		const matchedMedias: UserShow[] | UserMovie[] = [];
+		const matchedMedias: Movie[] | Show[] = [];
 
 		if (mediaType) {
-			const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
+			const usersMediaDict: Map<string, Movie | Show> = new Map();
 			const userDataArr =
 				mediaType === EContent.MOVIES
 					? usersMoviesData?.usersMovies
@@ -98,7 +98,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 				if (!userDataArr) return;
 
 				for (const userDataObj of userDataArr) {
-					if (userDataObj?.id && item.id === parseInt(userDataObj.id)) {
+					if (userDataObj?.id && item.id === userDataObj.id) {
 						matchedMedias.push(userDataObj as any);
 					}
 				}

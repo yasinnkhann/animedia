@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
-import { UserShow, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import { Show, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -22,7 +22,7 @@ const Status = () => {
 		}
 	);
 
-	const [myShows, setMyShows] = useState<UserShow[]>([]);
+	const [myShows, setMyShows] = useState<Show[]>([]);
 
 	useEffect(() => {
 		if (status && status !== 'loading' && router.query.status) {
@@ -50,7 +50,7 @@ const Status = () => {
 				const showsFiltered = usersShowsData.usersShows.filter(
 					show => show?.status === status
 				);
-				setMyShows(showsFiltered as UserShow[]);
+				setMyShows(showsFiltered as Show[]);
 			}
 		}
 	}, [router, session, status, usersShowsData?.usersShows]);

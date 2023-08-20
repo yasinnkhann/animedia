@@ -1,5 +1,5 @@
-import { BASE_URL } from 'utils/constants';
 import { builder } from '../builder';
+import { BASE_URL } from 'utils/constants';
 import {
 	KnownForResult,
 	PeopleRes,
@@ -214,7 +214,7 @@ builder.queryFields(t => ({
 	personDetails: t.field({
 		type: PersonDetailsRes,
 		args: {
-			personDetailsId: t.arg.int(),
+			personDetailsId: t.arg.id(),
 		},
 		resolve: async (_root, { personDetailsId }) => {
 			try {
@@ -253,7 +253,7 @@ builder.queryFields(t => ({
 	personsKnownForMovieRes: t.field({
 		type: PersonsKnownForMovieRes,
 		args: {
-			personsKnownForMovieResId: t.arg.int(),
+			personsKnownForMovieResId: t.arg.id(),
 		},
 		resolve: async (_root, { personsKnownForMovieResId }) => {
 			try {
@@ -271,7 +271,7 @@ builder.queryFields(t => ({
 	personsKnownForShowRes: t.field({
 		type: PersonsKnownForShowRes,
 		args: {
-			personsKnownForShowResId: t.arg.int(),
+			personsKnownForShowResId: t.arg.id(),
 		},
 		resolve: async (_root, { personsKnownForShowResId }) => {
 			try {

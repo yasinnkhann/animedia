@@ -7,20 +7,20 @@ import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
-import { UserShow } from 'graphql/generated/code-gen/graphql';
+import { Show } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import Link from 'next/link';
 
 interface Props {
-	myShow: UserShow;
+	myShow: Show;
 	count: number;
 }
 
 const MyShowEntry = ({ myShow, count }: Props) => {
 	const { data: showData } = useQuery(Queries.SHOW_DETAILS, {
 		variables: {
-			showDetailsId: Number(myShow.id),
+			showDetailsId: myShow.id,
 		},
 	});
 
@@ -46,7 +46,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<Link
 					href={getDetailsPageRoute(
 						EContent.SHOW,
-						Number(myShow.id),
+						myShow.id,
 						myShow.name as string
 					)}
 					passHref
@@ -67,7 +67,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 					<Link
 						href={getDetailsPageRoute(
 							EContent.SHOW,
-							Number(myShow.id),
+							myShow.id,
 							myShow.name as string
 						)}
 						passHref
@@ -92,10 +92,10 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<p className='text-lg'>
 					{myShow.status === WatchStatusTypes.PlanToWatch
 						? 0
-						: myShow.current_episode}
+						: myShow.currentEpisode}
 					/
 					{myShow.status === WatchStatusTypes.Completed
-						? myShow.current_episode
+						? myShow.currentEpisode
 						: showData?.showDetails?.number_of_episodes}
 				</p>
 			</td>

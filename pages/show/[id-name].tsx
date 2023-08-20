@@ -38,12 +38,12 @@ const ShowDetails = () => {
 
 	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
 
-	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
 	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(
 		Queries.SHOW_DETAILS,
 		{
-			skip: isNaN(id),
+			skip: !id,
 			variables: {
 				showDetailsId: id,
 			},
@@ -213,7 +213,7 @@ const ShowDetails = () => {
 					variables: {
 						showId: String(showId),
 						watchStatus: value as WatchStatusTypes,
-						currentEpisode: usersShow?.current_episode ?? 0,
+						currentEpisode: usersShow?.currentEpisode ?? 0,
 						showRating: usersShow?.rating ?? null,
 					},
 				});
@@ -258,7 +258,7 @@ const ShowDetails = () => {
 
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (/[\D]/gi.test(e.target.value)) {
-			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
+			setCurrEp(String(usersShowData?.usersShow?.currentEpisode) ?? '0');
 
 			e.target.selectionStart = 1;
 		} else {
@@ -297,7 +297,7 @@ const ShowDetails = () => {
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (e.target.value === '' || +e.target.value > currTotalEpCount) {
-			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
+			setCurrEp(String(usersShowData?.usersShow?.currentEpisode) ?? '0');
 		} else {
 			if (
 				watchStatus === WatchStatusTypes.Watching &&
@@ -406,10 +406,10 @@ const ShowDetails = () => {
 				usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching
 			);
 			setRating(usersShowData.usersShow.rating ?? '');
-			setCurrEp(String(usersShowData.usersShow.current_episode ?? 0));
+			setCurrEp(String(usersShowData.usersShow.currentEpisode ?? 0));
 
 			if (
-				usersShowData.usersShow.current_episode === currTotalEpCount &&
+				usersShowData.usersShow.currentEpisode === currTotalEpCount &&
 				usersShowData.usersShow.status === WatchStatusTypes.Watching
 			) {
 				setWatchStatus(WatchStatusTypes.Completed);
@@ -422,8 +422,8 @@ const ShowDetails = () => {
 					},
 				});
 			} else if (
-				usersShowData.usersShow.current_episode &&
-				usersShowData.usersShow.current_episode < currTotalEpCount &&
+				usersShowData.usersShow.currentEpisode &&
+				usersShowData.usersShow.currentEpisode < currTotalEpCount &&
 				usersShowData.usersShow.status === WatchStatusTypes.Completed
 			) {
 				setWatchStatus(WatchStatusTypes.Watching);
@@ -432,7 +432,7 @@ const ShowDetails = () => {
 						showId: String(showDetailsData.showDetails.id),
 						showRating: usersShowData.usersShow.rating ?? null,
 						watchStatus: WatchStatusTypes.Watching,
-						currentEpisode: usersShowData.usersShow.current_episode,
+						currentEpisode: usersShowData.usersShow.currentEpisode,
 					},
 				});
 			}

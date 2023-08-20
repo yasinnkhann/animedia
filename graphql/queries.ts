@@ -53,7 +53,7 @@ export const SEARCHED_MOVIES = graphql(`
 `);
 
 export const MOVIE_DETAILS = graphql(`
-	query getMovieDetails($movieDetailsId: Int!) {
+	query getMovieDetails($movieDetailsId: ID!) {
 		movieDetails(movieDetailsId: $movieDetailsId) {
 			adult
 			backdrop_path
@@ -176,7 +176,7 @@ export const TOP_RATED_MOVIES = graphql(`
 `);
 
 export const RECOMMENDED_MOVIES = graphql(`
-	query RecommendedMovies($recommendedMoviesId: Int!, $page: Int) {
+	query RecommendedMovies($recommendedMoviesId: ID!, $page: Int) {
 		recommendedMovies(recommendedMoviesId: $recommendedMoviesId, page: $page) {
 			page
 			total_pages
@@ -202,7 +202,7 @@ export const RECOMMENDED_MOVIES = graphql(`
 `);
 
 export const MOVIE_REVIEWS = graphql(`
-	query MovieReviews($movieReviewsId: Int!, $page: Int) {
+	query MovieReviews($movieReviewsId: ID!, $page: Int) {
 		movieReviews(id: $movieReviewsId, page: $page) {
 			id
 			page
@@ -359,15 +359,15 @@ export const SEARCHED_SHOWS = graphql(`
 `);
 
 export const SHOW_DETAILS = graphql(`
-	query getShowDetails($showDetailsId: Int!) {
+	query getShowDetails($showDetailsId: ID!) {
 		showDetails(showDetailsId: $showDetailsId) {
 			adult
 			backdrop_path
 			created_by {
-				id
 				credit_id
-				name
 				gender
+				id
+				name
 				profile_path
 			}
 			episode_run_time
@@ -398,9 +398,23 @@ export const SHOW_DETAILS = graphql(`
 			name
 			networks {
 				id
-				name
 				logo_path
+				name
 				origin_country
+			}
+			next_episode_to_air {
+				air_date
+				episode_number
+				id
+				name
+				overview
+				production_code
+				runtime
+				season_number
+				show_id
+				still_path
+				vote_average
+				vote_count
 			}
 			number_of_episodes
 			number_of_seasons
@@ -439,20 +453,6 @@ export const SHOW_DETAILS = graphql(`
 			type
 			vote_average
 			vote_count
-			next_episode_to_air {
-				air_date
-				episode_number
-				id
-				name
-				overview
-				production_code
-				runtime
-				season_number
-				show_id
-				still_path
-				vote_average
-				vote_count
-			}
 		}
 	}
 `);
@@ -533,7 +533,7 @@ export const TOP_RATED_SHOWS = graphql(`
 `);
 
 export const RECOMMENDED_SHOWS = graphql(`
-	query RecommendedShows($recommendedShowsId: Int!, $page: Int) {
+	query RecommendedShows($recommendedShowsId: ID!, $page: Int) {
 		recommendedShows(recommendedShowsId: $recommendedShowsId, page: $page) {
 			page
 			total_pages
@@ -558,19 +558,17 @@ export const RECOMMENDED_SHOWS = graphql(`
 `);
 
 export const SHOW_REVIEWS = graphql(`
-	query ShowReviews($showReviewsId: Int!, $page: Int) {
-		showReviews(id: $showReviewsId, page: $page) {
+	query ShowReviews($showId: ID!, $page: Int) {
+		showReviews(showId: $showId, page: $page) {
 			id
 			page
-			total_pages
-			total_results
 			results {
 				author
 				author_details {
-					name
-					username
 					avatar_path
+					name
 					rating
+					username
 				}
 				content
 				created_at
@@ -578,6 +576,8 @@ export const SHOW_REVIEWS = graphql(`
 				updated_at
 				url
 			}
+			total_pages
+			total_results
 		}
 	}
 `);
@@ -668,7 +668,7 @@ export const POPULAR_PEOPLE = graphql(`
 `);
 
 export const PERSON_DETAILS = graphql(`
-	query PersonDetails($personDetailsId: Int!) {
+	query PersonDetails($personDetailsId: ID!) {
 		personDetails(personDetailsId: $personDetailsId) {
 			adult
 			also_known_as
@@ -741,14 +741,14 @@ export const GET_USER = graphql(`
 				name
 				status
 				rating
-				current_episode
+				currentEpisode
 			}
 		}
 	}
 `);
 
 export const GET_USERS_MOVIE = graphql(`
-	query UsersMovie($movieId: String!) {
+	query UsersMovie($movieId: ID!) {
 		usersMovie(movieId: $movieId) {
 			id
 			name
@@ -770,13 +770,13 @@ export const GET_USERS_MOVIES = graphql(`
 `);
 
 export const GET_USERS_SHOW = graphql(`
-	query UsersShow($showId: String!) {
+	query UsersShow($showId: ID!) {
 		usersShow(showId: $showId) {
 			id
 			name
 			status
 			rating
-			current_episode
+			currentEpisode
 		}
 	}
 `);
@@ -788,13 +788,13 @@ export const GET_USERS_SHOWS = graphql(`
 			name
 			status
 			rating
-			current_episode
+			currentEpisode
 		}
 	}
 `);
 
 export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
-	query PersonsKnownForMovieRes($personsKnownForMovieResId: Int!) {
+	query PersonsKnownForMovieRes($personsKnownForMovieResId: ID!) {
 		personsKnownForMovieRes(
 			personsKnownForMovieResId: $personsKnownForMovieResId
 		) {
@@ -842,7 +842,7 @@ export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
 `);
 
 export const GET_PERSONS_KNOWN_FOR_SHOWS = graphql(`
-	query PersonsKnownForShowRes($personsKnownForShowResId: Int!) {
+	query PersonsKnownForShowRes($personsKnownForShowResId: ID!) {
 		personsKnownForShowRes(
 			personsKnownForShowResId: $personsKnownForShowResId
 		) {
@@ -891,7 +891,7 @@ export const GET_PERSONS_KNOWN_FOR_SHOWS = graphql(`
 `);
 
 export const GET_SHOWS_CAST_CREW = graphql(`
-	query ShowsCastCrew($showId: Int!) {
+	query ShowsCastCrew($showId: ID!) {
 		showsCastCrew(showId: $showId) {
 			id
 			cast {
@@ -925,7 +925,7 @@ export const GET_SHOWS_CAST_CREW = graphql(`
 `);
 
 export const GET_MOVIES_CAST_CREW = graphql(`
-	query MoviesCastCrew($movieId: Int!) {
+	query MoviesCastCrew($movieId: ID!) {
 		moviesCastCrew(movieId: $movieId) {
 			id
 			cast {
@@ -960,7 +960,7 @@ export const GET_MOVIES_CAST_CREW = graphql(`
 `);
 
 export const GET_EPISODE_DETAILS = graphql(`
-	query EpisodeDetails($showId: Int!, $seasonNum: Int!, $episodeNum: Int!) {
+	query EpisodeDetails($showId: ID!, $seasonNum: Int!, $episodeNum: Int!) {
 		episodeDetails(
 			showId: $showId
 			seasonNum: $seasonNum

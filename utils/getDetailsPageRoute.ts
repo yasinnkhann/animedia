@@ -4,7 +4,7 @@ import unidecode from 'unidecode';
 
 export const getDetailsPageRoute = (
 	mediaType: EContent,
-	id: number,
+	id: string,
 	title: string
 ) => {
 	const cleanTitle = unidecode(title)
