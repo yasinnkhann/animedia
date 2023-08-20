@@ -1,4 +1,5 @@
-import { builder } from '../builder';
+import { BASE_URL } from 'utils/constants';
+import { builder, TimeWindowTypes } from '../builder';
 import {
 	EpisodeDetailsRes,
 	ShowDetailsCountry,
@@ -20,6 +21,9 @@ import {
 	ShowsCrewModel,
 	ShowsRes,
 } from 'models/entities';
+import { GET_KEYWORD_ID } from 'utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
+import { GET_GENRE_ID } from 'utils/getGenreID';
 
 const ShowGenreTypes = builder.enumType('ShowGenreTypes', {
 	values: [
@@ -342,3 +346,235 @@ builder.objectType(EpisodeDetailsRes, {
 		vote_count: t.exposeInt('vote_count', { nullable: true }),
 	}),
 });
+
+builder.queryFields(t => ({
+	popularShows: t.field({
+		type: ShowsRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/popular?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	searchedShows: t.field({
+		type: ShowsRes,
+		args: {
+			q: t.arg.string(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { q, page }) => {
+			q = q.split(' ').join('+');
+			try {
+				const res = await fetch(
+					`${BASE_URL}/search/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	showDetails: t.field({
+		type: ShowDetailsRes,
+		args: {
+			showDetailsId: t.arg.id(),
+		},
+		resolve: async (_root, { showDetailsId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/${showDetailsId}?api_key=${process.env
+						.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	popularAnimeShows: t.field({
+		type: ShowsRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const keywordID = await GET_KEYWORD_ID('anime');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
+						page ?? 1
+					}&with_keywords=${keywordID}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	trendingShows: t.field({
+		type: ShowsRes,
+		args: {
+			timeWindow: t.arg({ type: TimeWindowTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { timeWindow, page }) => {
+			const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow, page);
+			return trendingMovies;
+		},
+	}),
+	topRatedShows: t.field({
+		type: ShowsRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/top_rated?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	recommendedShows: t.field({
+		type: ShowsRes,
+		args: {
+			recommendedShowsId: t.arg.id(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { recommendedShowsId, page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process
+						.env.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	showReviews: t.field({
+		type: ShowReviewRes,
+		args: {
+			showId: t.arg.id(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { showId, page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/${showId}/reviews?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	popularShowsByGenre: t.field({
+		type: ShowsRes,
+		args: {
+			genre: t.arg({ type: ShowGenreTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { genre, page }) => {
+			try {
+				const genreID = await GET_GENRE_ID(genre, 'tv');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=popularity.desc`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	topRatedShowsByGenre: t.field({
+		type: ShowsRes,
+		args: {
+			genre: t.arg({ type: ShowGenreTypes }),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { genre, page }) => {
+			try {
+				const genreID = await GET_GENRE_ID(genre, 'tv');
+
+				const res = await fetch(
+					`${BASE_URL}/discover/tv?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${
+						page ?? 1
+					}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	showsCastCrew: t.field({
+		type: ShowsCastCrewRes,
+		args: {
+			showId: t.arg.id(),
+		},
+		resolve: async (_root, { showId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/${showId}/credits?api_key=${process.env
+						.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	episodeDetails: t.field({
+		type: EpisodeDetailsRes,
+		args: {
+			showId: t.arg.id(),
+			seasonNum: t.arg.int(),
+			episodeNum: t.arg.int(),
+		},
+		resolve: async (_root, { showId, seasonNum, episodeNum }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process
+						.env.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+}));
