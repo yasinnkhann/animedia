@@ -6,7 +6,7 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../../graphql/queries';
-import { Movie, Show } from 'graphql/generated/code-gen/graphql';
+import { UsersMovie, UsersShow } from 'graphql/generated/code-gen/graphql';
 import { EContent } from '@ts/enums';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -17,9 +17,9 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<Movie[] | Show[]>(
-		[]
-	);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
+		UsersMovie[] | UsersShow[]
+	>([]);
 
 	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
 		Queries.GET_USERS_SHOWS,
@@ -67,10 +67,10 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	};
 
 	useEffect(() => {
-		const matchedMedias: Movie[] | Show[] = [];
+		const matchedMedias: UsersMovie[] | UsersShow[] = [];
 
 		if (mediaType) {
-			const usersMediaDict: Map<string, Movie | Show> = new Map();
+			const usersMediaDict: Map<string, UsersMovie | UsersShow> = new Map();
 			const userDataArr =
 				mediaType === EContent.MOVIES
 					? usersMoviesData?.usersMovies

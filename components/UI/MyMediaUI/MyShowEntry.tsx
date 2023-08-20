@@ -7,13 +7,13 @@ import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
-import { Show } from 'graphql/generated/code-gen/graphql';
+import { UsersShow } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import Link from 'next/link';
 
 interface Props {
-	myShow: Show;
+	myShow: UsersShow;
 	count: number;
 }
 

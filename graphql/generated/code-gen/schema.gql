@@ -59,13 +59,6 @@ type KnownForResult {
   vote_count: Int
 }
 
-type Movie {
-  id: ID!
-  name: String!
-  rating: Int
-  status: WatchStatusTypes!
-}
-
 type MovieDetailsGenre {
   id: ID!
   name: String!
@@ -409,10 +402,10 @@ type Query {
   trendingMovies(page: Int, timeWindow: TimeWindowTypes!): MoviesRes!
   trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
   user(id: ID!): User!
-  usersMovie(movieId: ID!): Movie!
-  usersMovies: [Movie!]!
-  usersShow(showId: ID!): Show!
-  usersShows: [Show!]!
+  usersMovie(movieId: ID!): UsersMovie!
+  usersMovies: [UsersMovie!]!
+  usersShow(showId: ID!): UsersShow!
+  usersShows: [UsersShow!]!
 }
 
 type RedisRes {
@@ -427,14 +420,6 @@ type RegisteredUserRes {
   error: String
   ok: Boolean!
   statusCode: Int!
-}
-
-type Show {
-  currentEpisode: Int!
-  id: ID!
-  name: String!
-  rating: Int
-  status: WatchStatusTypes!
 }
 
 type ShowDetailsCountry {
@@ -667,10 +652,25 @@ type User {
   emailVerified: Date
   id: ID!
   image: String
-  movies: [Movie!]!
+  movies: [UsersMovie!]!
   name: String
   password: String
-  shows: [Show!]!
+  shows: [UsersShow!]!
+}
+
+type UsersMovie {
+  id: ID!
+  name: String!
+  rating: Int
+  status: WatchStatusTypes!
+}
+
+type UsersShow {
+  currentEpisode: Int!
+  id: ID!
+  name: String!
+  rating: Int
+  status: WatchStatusTypes!
 }
 
 enum WatchStatusTypes {

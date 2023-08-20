@@ -8,7 +8,10 @@ import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
-import { Movie, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import {
+	UsersMovie,
+	WatchStatusTypes,
+} from 'graphql/generated/code-gen/graphql';
 
 const Status = () => {
 	const { data: session, status } = useSession();
@@ -22,7 +25,7 @@ const Status = () => {
 		}
 	);
 
-	const [myMovies, setMyMovies] = useState<Movie[]>([]);
+	const [myMovies, setMyMovies] = useState<UsersMovie[]>([]);
 
 	useEffect(() => {
 		if (status && status !== 'loading' && router.query.status) {
@@ -50,7 +53,7 @@ const Status = () => {
 				const moviesFiltered = usersMoviesData.usersMovies.filter(
 					movie => movie?.status === status
 				);
-				setMyMovies(moviesFiltered as Movie[]);
+				setMyMovies(moviesFiltered as UsersMovie[]);
 			}
 		}
 	}, [router, session, status, usersMoviesData]);

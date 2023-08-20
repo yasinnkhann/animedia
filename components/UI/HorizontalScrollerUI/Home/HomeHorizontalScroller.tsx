@@ -6,8 +6,8 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import {
 	MovieResult,
 	ShowResult,
-	Movie,
-	Show,
+	UsersMovie,
+	UsersShow,
 } from '../../../../graphql/generated/code-gen/graphql';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../../graphql/queries';
@@ -19,9 +19,9 @@ interface Props {
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<Movie[] | Show[]>(
-		[]
-	);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
+		UsersMovie[] | UsersShow[]
+	>([]);
 
 	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
 		Queries.GET_USERS_SHOWS,
@@ -69,9 +69,9 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 	};
 
 	useEffect(() => {
-		const matchedMedias: Movie[] | Show[] = [];
+		const matchedMedias: UsersMovie[] | UsersShow[] = [];
 
-		const usersMediaDict: Map<string, Movie | Show> = new Map();
+		const usersMediaDict: Map<string, UsersMovie | UsersShow> = new Map();
 
 		const userDataArr =
 			'title' in items[0]

@@ -1,11 +1,11 @@
 import {
-	Movie,
-	Show,
+	UsersMovie,
+	UsersShow,
 	WatchStatusTypes,
 } from 'graphql/generated/code-gen/graphql';
 
 export const getUserWatchStatusFromMedia = (
-	userMatchedMedias: Movie[] | Show[],
+	userMatchedMedias: UsersMovie[] | UsersShow[],
 	item: {
 		id: string;
 		[key: string]: any;
@@ -13,7 +13,7 @@ export const getUserWatchStatusFromMedia = (
 ) => {
 	//@ts-ignore
 	const dataFound = userMatchedMedias.find(
-		(data: Movie | Show) => data.id! === item.id
+		(data: UsersMovie | UsersShow) => data.id! === item.id
 	);
 	if (dataFound?.status) {
 		switch (dataFound.status) {

@@ -4,13 +4,13 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
-import { Movie, Show } from 'graphql/generated/code-gen/graphql';
+import { UsersMovie, UsersShow } from 'graphql/generated/code-gen/graphql';
 import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: IRelatedMedia;
 	dragging: boolean;
-	userMatchedMedias: Movie[] | Show[];
+	userMatchedMedias: UsersMovie[] | UsersShow[];
 }
 
 const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {

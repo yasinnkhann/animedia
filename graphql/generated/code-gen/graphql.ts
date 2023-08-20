@@ -72,14 +72,6 @@ export type KnownForResult = {
   vote_count?: Maybe<Scalars['Int']['output']>;
 };
 
-export type Movie = {
-  __typename?: 'Movie';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  rating?: Maybe<Scalars['Int']['output']>;
-  status: WatchStatusTypes;
-};
-
 export type MovieDetailsGenre = {
   __typename?: 'MovieDetailsGenre';
   id: Scalars['ID']['output'];
@@ -523,10 +515,10 @@ export type Query = {
   trendingMovies: MoviesRes;
   trendingShows: ShowsRes;
   user: User;
-  usersMovie: Movie;
-  usersMovies: Array<Movie>;
-  usersShow: Show;
-  usersShows: Array<Show>;
+  usersMovie: UsersMovie;
+  usersMovies: Array<UsersMovie>;
+  usersShow: UsersShow;
+  usersShows: Array<UsersShow>;
 };
 
 
@@ -743,15 +735,6 @@ export type RegisteredUserRes = {
   error?: Maybe<Scalars['String']['output']>;
   ok: Scalars['Boolean']['output'];
   statusCode: Scalars['Int']['output'];
-};
-
-export type Show = {
-  __typename?: 'Show';
-  currentEpisode: Scalars['Int']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  rating?: Maybe<Scalars['Int']['output']>;
-  status: WatchStatusTypes;
 };
 
 export type ShowDetailsCountry = {
@@ -1004,10 +987,27 @@ export type User = {
   emailVerified?: Maybe<Scalars['Date']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
-  movies: Array<Movie>;
+  movies: Array<UsersMovie>;
   name?: Maybe<Scalars['String']['output']>;
   password?: Maybe<Scalars['String']['output']>;
-  shows: Array<Show>;
+  shows: Array<UsersShow>;
+};
+
+export type UsersMovie = {
+  __typename?: 'UsersMovie';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  rating?: Maybe<Scalars['Int']['output']>;
+  status: WatchStatusTypes;
+};
+
+export type UsersShow = {
+  __typename?: 'UsersShow';
+  currentEpisode: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  rating?: Maybe<Scalars['Int']['output']>;
+  status: WatchStatusTypes;
 };
 
 export enum WatchStatusTypes {
@@ -1116,7 +1116,7 @@ export type RegisterUserMutationVariables = Exact<{
 }>;
 
 
-export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'RegisteredUserRes', error?: string | null, ok: boolean, statusCode: number, createdUser?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, password?: string | null, image?: string | null, createdAt: any, emailVerified?: any | null, movies: Array<{ __typename?: 'Movie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'Show', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } | null } };
+export type RegisterUserMutation = { __typename?: 'Mutation', registerUser: { __typename?: 'RegisteredUserRes', error?: string | null, ok: boolean, statusCode: number, createdUser?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, password?: string | null, image?: string | null, createdAt: any, emailVerified?: any | null, movies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } | null } };
 
 export type PopularMoviesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1304,31 +1304,31 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null, movies: Array<{ __typename?: 'Movie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'Show', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null, movies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } };
 
 export type UsersMovieQueryVariables = Exact<{
   movieId: Scalars['ID']['input'];
 }>;
 
 
-export type UsersMovieQuery = { __typename?: 'Query', usersMovie: { __typename?: 'Movie', id: string, name: string, status: WatchStatusTypes, rating?: number | null } };
+export type UsersMovieQuery = { __typename?: 'Query', usersMovie: { __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null } };
 
 export type UsersMoviesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersMoviesQuery = { __typename?: 'Query', usersMovies: Array<{ __typename?: 'Movie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }> };
+export type UsersMoviesQuery = { __typename?: 'Query', usersMovies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }> };
 
 export type UsersShowQueryVariables = Exact<{
   showId: Scalars['ID']['input'];
 }>;
 
 
-export type UsersShowQuery = { __typename?: 'Query', usersShow: { __typename?: 'Show', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number } };
+export type UsersShowQuery = { __typename?: 'Query', usersShow: { __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number } };
 
 export type UsersShowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersShowsQuery = { __typename?: 'Query', usersShows: Array<{ __typename?: 'Show', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> };
+export type UsersShowsQuery = { __typename?: 'Query', usersShows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> };
 
 export type PersonsKnownForMovieResQueryVariables = Exact<{
   personsKnownForMovieResId: Scalars['ID']['input'];

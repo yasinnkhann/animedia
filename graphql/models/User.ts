@@ -26,6 +26,7 @@ const WatchStatusTypes = builder.enumType('WatchStatusTypes', {
 });
 
 builder.prismaObject('Movie', {
+	name: 'UsersMovie',
 	fields: t => ({
 		id: t.exposeID('id'),
 		name: t.exposeString('name'),
@@ -38,6 +39,7 @@ builder.prismaObject('Movie', {
 });
 
 builder.prismaObject('Show', {
+	name: 'UsersShow',
 	fields: t => ({
 		id: t.exposeID('id'),
 		name: t.exposeString('name'),

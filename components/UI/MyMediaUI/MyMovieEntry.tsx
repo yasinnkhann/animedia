@@ -7,12 +7,12 @@ import { formatDate } from '../../../utils/formatDate';
 import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
-import { Movie } from 'graphql/generated/code-gen/graphql';
+import { UsersMovie } from 'graphql/generated/code-gen/graphql';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 
 interface Props {
-	myMovie: Movie;
+	myMovie: UsersMovie;
 	count: number;
 }
 

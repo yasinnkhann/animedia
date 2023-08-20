@@ -10,7 +10,7 @@ import { EContent } from '@ts/enums';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
-import { Movie, Show } from 'graphql/generated/code-gen/graphql';
+import { UsersMovie, UsersShow } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
 const Search: NextPage = () => {
@@ -24,9 +24,9 @@ const Search: NextPage = () => {
 		EContent.MOVIES
 	);
 
-	const [userMatchedMedias, setUserMatchedMedias] = useState<Show[] | Movie[]>(
-		[]
-	);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<
+		UsersMovie[] | UsersShow[]
+	>([]);
 
 	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
@@ -149,9 +149,9 @@ const Search: NextPage = () => {
 	]);
 
 	useEffect(() => {
-		const matchedMedias: Show[] | Movie[] = [];
+		const matchedMedias: UsersMovie[] | UsersShow[] = [];
 
-		const usersMediaDict: Map<string, Show | Movie> = new Map();
+		const usersMediaDict: Map<string, UsersMovie | UsersShow> = new Map();
 
 		const userDataArr =
 			searchResultsType === EContent.MOVIES
