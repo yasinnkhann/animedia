@@ -403,9 +403,9 @@ type Query {
   trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
   user(id: ID!): User
   usersMovie(movieId: ID!): UsersMovie
-  usersMovies: [UsersMovie!]!
+  usersMovies: [UsersMovie!]
   usersShow(showId: ID!): UsersShow
-  usersShows: [UsersShow!]!
+  usersShows: [UsersShow!]
 }
 
 type RedisRes {

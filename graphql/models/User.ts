@@ -165,6 +165,7 @@ builder.queryFields(t => ({
 	}),
 	usersMovies: t.prismaField({
 		type: ['Movie'],
+		nullable: true,
 		resolve: async (query, _root, _args, ctx) => {
 			return await ctx.prisma.movie.findMany({
 				...query,
@@ -181,6 +182,7 @@ builder.queryFields(t => ({
 	}),
 	usersShows: t.prismaField({
 		type: ['Show'],
+		nullable: true,
 		resolve: async (query, _root, _args, ctx) => {
 			return await ctx.prisma.show.findMany({
 				...query,

@@ -3,14 +3,14 @@ import HomeCard from './HomeCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
+import { useQuery } from '@apollo/client';
+import * as Queries from '../../../../graphql/queries';
 import {
 	MovieResult,
 	ShowResult,
 	UsersMovie,
 	UsersShow,
 } from '../../../../graphql/generated/code-gen/graphql';
-import { useQuery } from '@apollo/client';
-import * as Queries from '../../../../graphql/queries';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 

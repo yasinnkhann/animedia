@@ -6,13 +6,13 @@ import RoundProgressBar from '../../../RoundProgressBar';
 import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
+import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 import {
 	MovieResult,
 	ShowResult,
 	UsersMovie,
 	UsersShow,
 } from '../../../../graphql/generated/code-gen/graphql';
-import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: MovieResult | ShowResult;

@@ -516,9 +516,9 @@ export type Query = {
   trendingShows: ShowsRes;
   user?: Maybe<User>;
   usersMovie?: Maybe<UsersMovie>;
-  usersMovies: Array<UsersMovie>;
+  usersMovies?: Maybe<Array<UsersMovie>>;
   usersShow?: Maybe<UsersShow>;
-  usersShows: Array<UsersShow>;
+  usersShows?: Maybe<Array<UsersShow>>;
 };
 
 
@@ -1316,7 +1316,7 @@ export type UsersMovieQuery = { __typename?: 'Query', usersMovie?: { __typename?
 export type UsersMoviesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersMoviesQuery = { __typename?: 'Query', usersMovies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }> };
+export type UsersMoviesQuery = { __typename?: 'Query', usersMovies?: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }> | null };
 
 export type UsersShowQueryVariables = Exact<{
   showId: Scalars['ID']['input'];
@@ -1328,7 +1328,7 @@ export type UsersShowQuery = { __typename?: 'Query', usersShow?: { __typename?: 
 export type UsersShowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersShowsQuery = { __typename?: 'Query', usersShows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> };
+export type UsersShowsQuery = { __typename?: 'Query', usersShows?: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> | null };
 
 export type PersonsKnownForMovieResQueryVariables = Exact<{
   personsKnownForMovieResId: Scalars['ID']['input'];
