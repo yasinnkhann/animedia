@@ -49,7 +49,7 @@ const MovieDetails = () => {
 		{
 			skip: !movieDetailsData?.movieDetails.id,
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
+				movieId: movieDetailsData?.movieDetails.id!,
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -79,7 +79,7 @@ const MovieDetails = () => {
 		Mutations.ADD_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
+				movieId: movieDetailsData?.movieDetails.id!,
 				movieName: movieDetailsData?.movieDetails.title!,
 				watchStatus,
 			},
@@ -87,7 +87,7 @@ const MovieDetails = () => {
 				{
 					query: Queries.GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails.id!),
+						movieId: movieDetailsData?.movieDetails.id!,
 					},
 				},
 				'UsersMovie',
@@ -99,7 +99,7 @@ const MovieDetails = () => {
 		Mutations.UPDATE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails?.id!),
+				movieId: movieDetailsData?.movieDetails?.id!,
 				watchStatus,
 				movieRating: typeof rating === 'number' ? rating : null,
 			},
@@ -107,7 +107,7 @@ const MovieDetails = () => {
 				{
 					query: Queries.GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId: movieDetailsData?.movieDetails?.id!,
 					},
 				},
 				'UsersMovie',
@@ -119,13 +119,13 @@ const MovieDetails = () => {
 		Mutations.DELETE_MOVIE,
 		{
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
+				movieId: movieDetailsData?.movieDetails.id!,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.GET_USERS_MOVIE,
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails.id!),
+						movieId: movieDetailsData?.movieDetails.id!,
 					},
 				},
 				'UsersMovie',
@@ -145,13 +145,13 @@ const MovieDetails = () => {
 			if ((value as WatchStatusTypes) === WatchStatusTypes.NotWatching) {
 				deleteMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId: movieDetailsData?.movieDetails?.id!,
 					},
 				});
 			} else if ((value as WatchStatusTypes) === WatchStatusTypes.PlanToWatch) {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId: movieDetailsData?.movieDetails?.id!,
 						watchStatus: value as WatchStatusTypes,
 						movieRating: null,
 					},
@@ -159,7 +159,7 @@ const MovieDetails = () => {
 			} else {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId: movieDetailsData?.movieDetails?.id!,
 						watchStatus: value as WatchStatusTypes,
 						movieRating: usersMovieData.usersMovie?.rating ?? null,
 					},
@@ -168,7 +168,7 @@ const MovieDetails = () => {
 		} else {
 			addMovie({
 				variables: {
-					movieId: String(movieDetailsData?.movieDetails?.id!),
+					movieId: movieDetailsData?.movieDetails?.id!,
 					movieName: movieDetailsData?.movieDetails?.title!,
 					watchStatus: value as WatchStatusTypes,
 				},
@@ -182,7 +182,7 @@ const MovieDetails = () => {
 
 		updateMovie({
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails!.id!),
+				movieId: movieDetailsData?.movieDetails!.id!,
 				movieRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 			},

@@ -56,7 +56,7 @@ const ShowDetails = () => {
 		{
 			skip: !showDetailsData?.showDetails.id,
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails?.id!,
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -86,7 +86,7 @@ const ShowDetails = () => {
 		Mutations.ADD_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails?.id!,
 				showName: showDetailsData?.showDetails?.name!,
 				watchStatus,
 				currentEpisode: Number(currEp),
@@ -95,7 +95,7 @@ const ShowDetails = () => {
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails?.id!,
 					},
 				},
 				'UsersShow',
@@ -107,7 +107,7 @@ const ShowDetails = () => {
 		Mutations.UPDATE_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails.id!),
+				showId: showDetailsData?.showDetails.id!,
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
 				currentEpisode: Number(currEp),
@@ -116,7 +116,7 @@ const ShowDetails = () => {
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails?.id!,
 					},
 				},
 				'UsersShow',
@@ -128,13 +128,13 @@ const ShowDetails = () => {
 		Mutations.DELETE_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails?.id!,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails?.id!,
 					},
 				},
 				'UsersShow',
@@ -188,12 +188,12 @@ const ShowDetails = () => {
 		if (usersShow) {
 			if (value === WatchStatusTypes.NotWatching) {
 				deleteShow({
-					variables: { showId: String(showId) },
+					variables: { showId },
 				});
 			} else if (value === WatchStatusTypes.PlanToWatch) {
 				updateShow({
 					variables: {
-						showId: String(showId),
+						showId,
 						watchStatus: WatchStatusTypes.PlanToWatch,
 						currentEpisode: 0,
 						showRating: null,
@@ -202,7 +202,7 @@ const ShowDetails = () => {
 			} else if (value === WatchStatusTypes.Completed) {
 				updateShow({
 					variables: {
-						showId: String(showId),
+						showId,
 						watchStatus: WatchStatusTypes.Completed,
 						currentEpisode: currTotalEpCount ?? 0,
 						showRating: usersShow?.rating ?? null,
@@ -211,7 +211,7 @@ const ShowDetails = () => {
 			} else {
 				updateShow({
 					variables: {
-						showId: String(showId),
+						showId,
 						watchStatus: value as WatchStatusTypes,
 						currentEpisode: usersShow?.currentEpisode ?? 0,
 						showRating: usersShow?.rating ?? null,
@@ -222,7 +222,7 @@ const ShowDetails = () => {
 			if (value === WatchStatusTypes.Completed) {
 				addShow({
 					variables: {
-						showId: String(showId),
+						showId,
 						showName: showDetailsData?.showDetails?.name!,
 						watchStatus: value as WatchStatusTypes,
 						currentEpisode: currTotalEpCount,
@@ -231,7 +231,7 @@ const ShowDetails = () => {
 			} else {
 				addShow({
 					variables: {
-						showId: String(showId),
+						showId,
 						showName: showDetailsData?.showDetails?.name!,
 						watchStatus: value as WatchStatusTypes,
 						currentEpisode: Number(currEp),
@@ -248,7 +248,7 @@ const ShowDetails = () => {
 
 		updateShow({
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails?.id!,
 				showRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 				currentEpisode: Number(currEp),
@@ -275,7 +275,7 @@ const ShowDetails = () => {
 
 			updateShow({
 				variables: {
-					showId: String(showDetailsData?.showDetails?.id),
+					showId: showDetailsData?.showDetails?.id!,
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: WatchStatusTypes.Completed,
 					currentEpisode: currTotalEpCount,
@@ -287,7 +287,7 @@ const ShowDetails = () => {
 
 		updateShow({
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id),
+				showId: showDetailsData?.showDetails?.id!,
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
 				currentEpisode: Number(currEp),
@@ -307,7 +307,7 @@ const ShowDetails = () => {
 
 				updateShow({
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id),
+						showId: showDetailsData?.showDetails?.id!,
 						showRating: typeof rating === 'string' ? null : rating,
 						watchStatus: WatchStatusTypes.Completed,
 						currentEpisode: currTotalEpCount,
@@ -318,7 +318,7 @@ const ShowDetails = () => {
 			}
 			updateShow({
 				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
+					showId: showDetailsData?.showDetails?.id!,
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus,
 					currentEpisode: Number(currEp),
@@ -331,7 +331,7 @@ const ShowDetails = () => {
 		const prevEp = +currEp;
 
 		const updateShowVariables = {
-			showId: String(showDetailsData?.showDetails?.id!),
+			showId: showDetailsData?.showDetails?.id!,
 			showRating: typeof rating === 'string' ? null : rating,
 			currentEpisode: prevEp + 1,
 		};
@@ -415,7 +415,7 @@ const ShowDetails = () => {
 				setWatchStatus(WatchStatusTypes.Completed);
 				updateShow({
 					variables: {
-						showId: String(showDetailsData.showDetails.id),
+						showId: showDetailsData.showDetails.id,
 						showRating: usersShowData.usersShow.rating ?? null,
 						watchStatus: WatchStatusTypes.Completed,
 						currentEpisode: currTotalEpCount,
@@ -429,7 +429,7 @@ const ShowDetails = () => {
 				setWatchStatus(WatchStatusTypes.Watching);
 				updateShow({
 					variables: {
-						showId: String(showDetailsData.showDetails.id),
+						showId: showDetailsData.showDetails.id,
 						showRating: usersShowData.usersShow.rating ?? null,
 						watchStatus: WatchStatusTypes.Watching,
 						currentEpisode: usersShowData.usersShow.currentEpisode,
