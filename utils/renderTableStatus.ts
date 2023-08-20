@@ -1,8 +1,6 @@
-import { NexusGenEnums } from '../graphql/generated/nexus-typegen';
+import { WatchStatusTypes } from '../graphql/generated/code-gen/graphql';
 
-export const renderTableStatus = (
-	status: NexusGenEnums['WatchStatusTypes']
-) => {
+export const renderTableStatus = (status: WatchStatusTypes) => {
 	switch (status) {
 		case 'WATCHING':
 			return 'Watching';

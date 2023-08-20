@@ -468,7 +468,7 @@ builder.queryFields(t => ({
 		},
 		resolve: async (_root, { genre, page }) => {
 			try {
-				const genreID = await GET_GENRE_ID(genre, 'movie');
+				const genreID = await GET_GENRE_ID(genre as any, 'movie');
 
 				const res = await fetch(
 					`${BASE_URL}/discover/movie?api_key=${process.env
@@ -491,7 +491,7 @@ builder.queryFields(t => ({
 		},
 		resolve: async (_root, { genre, page }) => {
 			try {
-				const genreID = await GET_GENRE_ID(genre, 'movie');
+				const genreID = await GET_GENRE_ID(genre as any, 'movie');
 
 				const res = await fetch(
 					`${BASE_URL}/discover/movie?api_key=${process.env
