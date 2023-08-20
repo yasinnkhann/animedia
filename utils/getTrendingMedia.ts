@@ -1,6 +1,6 @@
 import { BASE_URL } from './constants';
 
-export const GET_TRENDING_MEDIA = async (
+export const getTrendingMedia = async (
 	mediaType: 'all' | 'movie' | 'tv' | 'person',
 	timeWindow: 'day' | 'week',
 	pageNum: number | null | undefined

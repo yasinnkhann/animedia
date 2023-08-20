@@ -1,6 +1,6 @@
 import { BASE_URL } from './constants';
 
-export const GET_KEYWORD_ID = async (q: string) => {
+export const getKeywordId = async (q: string) => {
 	q = q.split(' ').join('+');
 
 	const res = await fetch(

@@ -51,7 +51,7 @@ Western             37
 
 type TGenreObj = MovieDetailsGenre | ShowDetailsGenre;
 
-export const GET_GENRE_ID = async (
+export const getGenreId = async (
 	genreName: MovieGenreTypes | ShowGenreTypes,
 	mediaType: 'movie' | 'tv'
 ): Promise<string> => {

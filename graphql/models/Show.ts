@@ -1,8 +1,8 @@
 import { builder, TimeWindowTypes } from '../builder';
 import { BASE_URL } from 'utils/constants';
-import { GET_KEYWORD_ID } from 'utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
-import { GET_GENRE_ID } from 'utils/getGenreID';
+import { getKeywordId } from 'utils/getkeywordID';
+import { getTrendingMedia } from 'utils/getTrendingMedia';
+import { getGenreId } from 'utils/getGenreID';
 import {
 	EpisodeDetailsRes,
 	ShowDetailsCountry,
@@ -411,7 +411,7 @@ builder.queryFields(t => ({
 		},
 		resolve: async (_root, { page }) => {
 			try {
-				const keywordID = await GET_KEYWORD_ID('anime');
+				const keywordID = await getKeywordId('anime');
 
 				const res = await fetch(
 					`${BASE_URL}/discover/tv?api_key=${process.env
@@ -433,7 +433,7 @@ builder.queryFields(t => ({
 			page: t.arg.int({ required: false }),
 		},
 		resolve: async (_root, { timeWindow, page }) => {
-			const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow, page);
+			const trendingMovies = await getTrendingMedia('tv', timeWindow, page);
 			return trendingMovies;
 		},
 	}),
@@ -501,7 +501,7 @@ builder.queryFields(t => ({
 		},
 		resolve: async (_root, { genre, page }) => {
 			try {
-				const genreID = await GET_GENRE_ID(genre as any, 'tv');
+				const genreID = await getGenreId(genre as any, 'tv');
 
 				const res = await fetch(
 					`${BASE_URL}/discover/tv?api_key=${process.env
@@ -524,7 +524,7 @@ builder.queryFields(t => ({
 		},
 		resolve: async (_root, { genre, page }) => {
 			try {
-				const genreID = await GET_GENRE_ID(genre as any, 'tv');
+				const genreID = await getGenreId(genre as any, 'tv');
 
 				const res = await fetch(
 					`${BASE_URL}/discover/tv?api_key=${process.env
