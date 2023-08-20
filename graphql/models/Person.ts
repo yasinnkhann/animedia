@@ -1,3 +1,4 @@
+import { BASE_URL } from 'utils/constants';
 import { builder } from '../builder';
 import {
 	KnownForResult,
@@ -190,3 +191,99 @@ builder.objectType(PersonsKnownForShowRes, {
 		crew: t.expose('crew', { type: [PersonsKnownForShowCrew] }),
 	}),
 });
+
+builder.queryFields(t => ({
+	popularPeople: t.field({
+		type: PeopleRes,
+		args: {
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { page }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/person/popular?api_key=${process.env
+						.API_KEY!}&language=en-US&page=${page ?? 1}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	personDetails: t.field({
+		type: PersonDetailsRes,
+		args: {
+			personDetailsId: t.arg.int(),
+		},
+		resolve: async (_root, { personDetailsId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/person/${personDetailsId}?api_key=${process.env
+						.API_KEY!}&language=en-US&page=1`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	searchedPeople: t.field({
+		type: PeopleRes,
+		args: {
+			q: t.arg.string(),
+			page: t.arg.int({ required: false }),
+		},
+		resolve: async (_root, { q, page }) => {
+			q = q.split(' ').join('+');
+			try {
+				const res = await fetch(
+					`${BASE_URL}/search/person?api_key=${process.env.API_KEY!}&page=${
+						page ?? 1
+					}&query=${q}`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	personsKnownForMovieRes: t.field({
+		type: PersonsKnownForMovieRes,
+		args: {
+			personsKnownForMovieResId: t.arg.int(),
+		},
+		resolve: async (_root, { personsKnownForMovieResId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process
+						.env.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+	personsKnownForShowRes: t.field({
+		type: PersonsKnownForShowRes,
+		args: {
+			personsKnownForShowResId: t.arg.int(),
+		},
+		resolve: async (_root, { personsKnownForShowResId }) => {
+			try {
+				const res = await fetch(
+					`${BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process
+						.env.API_KEY!}&language=en-US`
+				);
+				const data = await res.json();
+				return data;
+			} catch (err) {
+				console.error(err);
+			}
+		},
+	}),
+}));
