@@ -22,7 +22,7 @@ builder.objectType(KnownForResult, {
 });
 
 builder.objectType(PersonResult, {
-	name: 'KnownForResult',
+	name: 'PersonResult',
 	fields: t => ({
 		adult: t.exposeBoolean('adult'),
 		gender: t.exposeInt('gender'),
