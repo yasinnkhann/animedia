@@ -1,5 +1,8 @@
-import { BASE_URL } from 'utils/constants';
 import { builder, TimeWindowTypes } from '../builder';
+import { BASE_URL } from 'utils/constants';
+import { GET_KEYWORD_ID } from 'utils/getkeywordID';
+import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
+import { GET_GENRE_ID } from 'utils/getGenreID';
 import {
 	EpisodeDetailsRes,
 	ShowDetailsCountry,
@@ -21,9 +24,6 @@ import {
 	ShowsCrewModel,
 	ShowsRes,
 } from 'models/entities';
-import { GET_KEYWORD_ID } from 'utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from 'utils/getTrendingMedia';
-import { GET_GENRE_ID } from 'utils/getGenreID';
 
 const ShowGenreTypes = builder.enumType('ShowGenreTypes', {
 	values: [

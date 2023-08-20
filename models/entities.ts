@@ -443,3 +443,44 @@ export class EpisodeDetailsRes {
 		public vote_count: number
 	) {}
 }
+
+export class KnownForResult {
+	constructor(
+		public adult: boolean | null,
+		public backdrop_path: string | null,
+		public genre_ids: number[] | null,
+		public id: number | null,
+		public media_type: string | null,
+		public original_language: string | null,
+		public original_title: string | null,
+		public overview: string | null,
+		public poster_path: string | null,
+		public release_date: string | null,
+		public title: string | null,
+		public video: boolean | null,
+		public vote_average: number | null,
+		public vote_count: number | null
+	) {}
+}
+
+export class PersonResult {
+	constructor(
+		public adult: boolean,
+		public gender: number,
+		public id: number,
+		public known_for: KnownForResult[],
+		public known_for_department: string | null,
+		public name: string,
+		public popularity: number,
+		public profile_path: string | null
+	) {}
+}
+
+export class PeopleRes {
+	constructor(
+		public page: number,
+		public total_pages: number,
+		public total_results: number,
+		public results: PersonResult[]
+	) {}
+}
