@@ -484,3 +484,127 @@ export class PeopleRes {
 		public results: PersonResult[]
 	) {}
 }
+
+export class PersonDetailsRes {
+	constructor(
+		public adult: boolean | null,
+		public also_known_as: string[] | null,
+		public biography: string | null,
+		public birthday: string | null,
+		public deathday: string | null,
+		public gender: number | null,
+		public homepage: string | null,
+		public id: number,
+		public imdb_id: string | null,
+		public known_for_department: string | null,
+		public name: string | null,
+		public place_of_birth: string | null,
+		public popularity: number | null,
+		public profile_path: string | null
+	) {}
+}
+
+export class PersonsKnownForMovieCast {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genre_ids: number[],
+		public id: number,
+		public original_language: string,
+		public original_title: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public release_date: string | null,
+		public title: string,
+		public video: boolean,
+		public vote_average: number,
+		public vote_count: number,
+		public character: string | null,
+		public credit_id: string | null,
+		public order: number | null
+	) {}
+}
+
+export class PersonsKnownForMovieCrew {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genre_ids: number[],
+		public id: number,
+		public original_language: string,
+		public original_title: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public release_date: string | null,
+		public title: string,
+		public video: boolean,
+		public vote_average: number,
+		public vote_count: number,
+		public credit_id: string | null,
+		public department: string | null,
+		public job: string | null
+	) {}
+}
+
+export class PersonsKnownForMovieRes {
+	constructor(
+		public id: number,
+		public cast: PersonsKnownForMovieCast[],
+		public crew: PersonsKnownForMovieCrew[]
+	) {}
+}
+
+export class PersonsKnownForShowCast {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genre_ids: number[],
+		public id: number,
+		public origin_country: string[],
+		public original_language: string,
+		public original_name: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public first_air_date: string | null,
+		public name: string,
+		public vote_average: number,
+		public vote_count: number,
+		public character: string | null,
+		public credit_id: string | null,
+		public episode_count: number | null
+	) {}
+}
+
+export class PersonsKnownForShowCrew {
+	constructor(
+		public adult: boolean,
+		public backdrop_path: string | null,
+		public genre_ids: number[],
+		public id: number,
+		public origin_country: string[],
+		public original_language: string,
+		public original_name: string,
+		public overview: string,
+		public popularity: number,
+		public poster_path: string | null,
+		public first_air_date: string | null,
+		public name: string,
+		public vote_average: number,
+		public vote_count: number,
+		public credit_id: string | null,
+		public department: string | null,
+		public episode_count: number | null,
+		public job: string | null
+	) {}
+}
+
+export class PersonsKnownForShowRes {
+	constructor(
+		public id: number,
+		public cast: PersonsKnownForShowCast[],
+		public crew: PersonsKnownForShowCrew[]
+	) {}
+}
