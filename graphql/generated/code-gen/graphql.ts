@@ -514,10 +514,10 @@ export type Query = {
   topRatedShowsByGenre: ShowsRes;
   trendingMovies: MoviesRes;
   trendingShows: ShowsRes;
-  user: User;
-  usersMovie: UsersMovie;
+  user?: Maybe<User>;
+  usersMovie?: Maybe<UsersMovie>;
   usersMovies: Array<UsersMovie>;
-  usersShow: UsersShow;
+  usersShow?: Maybe<UsersShow>;
   usersShows: Array<UsersShow>;
 };
 
@@ -1304,14 +1304,14 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null, movies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } };
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, name?: string | null, email?: string | null, image?: string | null, movies: Array<{ __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null }>, shows: Array<{ __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number }> } | null };
 
 export type UsersMovieQueryVariables = Exact<{
   movieId: Scalars['ID']['input'];
 }>;
 
 
-export type UsersMovieQuery = { __typename?: 'Query', usersMovie: { __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null } };
+export type UsersMovieQuery = { __typename?: 'Query', usersMovie?: { __typename?: 'UsersMovie', id: string, name: string, status: WatchStatusTypes, rating?: number | null } | null };
 
 export type UsersMoviesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1323,7 +1323,7 @@ export type UsersShowQueryVariables = Exact<{
 }>;
 
 
-export type UsersShowQuery = { __typename?: 'Query', usersShow: { __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number } };
+export type UsersShowQuery = { __typename?: 'Query', usersShow?: { __typename?: 'UsersShow', id: string, name: string, status: WatchStatusTypes, rating?: number | null, currentEpisode: number } | null };
 
 export type UsersShowsQueryVariables = Exact<{ [key: string]: never; }>;
 

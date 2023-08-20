@@ -25,8 +25,10 @@ export const getUserWatchStatusFromMedia = (
 				return 'PW';
 			case WatchStatusTypes.OnHold:
 				return 'OH';
-			default:
+			case WatchStatusTypes.Dropped:
 				return 'D';
+			default:
+				return 'NW';
 		}
 	}
 };

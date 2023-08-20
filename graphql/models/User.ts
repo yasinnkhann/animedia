@@ -112,11 +112,12 @@ builder.objectType(HttpRes, {
 builder.queryFields(t => ({
 	user: t.prismaField({
 		type: 'User',
+		nullable: true,
 		args: {
 			id: t.arg.id(),
 		},
 		resolve: async (query, _root, { id }, ctx) => {
-			return await ctx.prisma.user.findUniqueOrThrow({
+			return await ctx.prisma.user.findUnique({
 				...query,
 				where: { id: typeof id === 'number' ? id.toString() : id },
 				include: {
@@ -128,11 +129,12 @@ builder.queryFields(t => ({
 	}),
 	usersMovie: t.prismaField({
 		type: 'Movie',
+		nullable: true,
 		args: {
 			movieId: t.arg.id(),
 		},
 		resolve: async (query, _root, { movieId }, ctx) => {
-			return await ctx.prisma.movie.findUniqueOrThrow({
+			return await ctx.prisma.movie.findUnique({
 				...query,
 				where: {
 					id_userId: {
@@ -145,11 +147,12 @@ builder.queryFields(t => ({
 	}),
 	usersShow: t.prismaField({
 		type: 'Show',
+		nullable: true,
 		args: {
 			showId: t.arg.id(),
 		},
 		resolve: async (query, _root, { showId }, ctx) => {
-			return await ctx.prisma.show.findUniqueOrThrow({
+			return await ctx.prisma.show.findUnique({
 				...query,
 				where: {
 					id_userId: {
