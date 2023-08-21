@@ -1,5 +1,5 @@
 import { BASE_URL } from '../../utils/constants';
-import { GET_KEYWORD_ID } from '../../utils/getkeywordID';
+import { getKeywordId } from '../../utils/getkeywordID';
 import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
 import { GET_GENRE_ID } from '../../utils/getGenreID';
 import { timeWindowTypes } from '../models/enums';
@@ -317,7 +317,7 @@ export const MovieQueries = extendType({
 			},
 			resolve: async (_parent, { page }) => {
 				try {
-					const keywordID = await GET_KEYWORD_ID('anime');
+					const keywordID = await getKeywordId('anime');
 
 					const res = await fetch(
 						`${BASE_URL}/discover/movie?api_key=${process.env
