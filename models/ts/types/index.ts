@@ -8,11 +8,9 @@ import {
 	TopRatedMoviesByGenreQuery,
 	PopularShowsByGenreQuery,
 	TopRatedShowsByGenreQuery,
-} from 'graphql/generated/code-gen/graphql';
-import {
 	MovieResult,
 	ShowResult,
-} from '../../../graphql/generated/code-gen/graphql';
+} from 'graphql/generated/code-gen/graphql';
 
 export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 

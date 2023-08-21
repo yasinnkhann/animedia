@@ -2,13 +2,13 @@ import Head from 'next/head';
 import Link from 'next/link';
 import * as Mutations from '../../graphql/mutations';
 import { useState } from 'react';
-import { CLIENT_BASE_URL } from '../../utils/constants';
+import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import { registerValidate } from '../../lib/nextAuth/account-validate';
-import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
+import { CLIENT_BASE_URL } from '../../utils/constants';
 
 export default function Register() {
 	const [showPW, setShowPW] = useState({
