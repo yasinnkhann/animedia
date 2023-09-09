@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "yarn run prisma generate && NODE_OPTIONS='--inspect' next dev",
+		"dev": "yarn run generate:prisma && NODE_OPTIONS='--inspect' next dev",
 		"build": "yarn run generate:prisma && next build",
 		"start": "next start",
 		"studio": "npx prisma studio",
