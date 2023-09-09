@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "yarn run prisma generate && NODE_OPTIONS='--inspect' next dev",
-		"build": "yarn run generate:prisma && next build",
+		"build": "next build",
 		"start": "next start",
 		"studio": "npx prisma studio",
 		"generate:prisma": "prisma generate",
