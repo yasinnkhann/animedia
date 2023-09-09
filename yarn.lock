@@ -65,10 +65,10 @@
     resize-observer-polyfill "^1.5.1"
     throttle-debounce "^5.0.0"
 
-"@apollo/client@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.8.1.tgz#a1e3045a5fb276c08e38f7b5f930551d79741257"
-  integrity sha512-JGGj/9bdoLEqzatRikDeN8etseY5qeFAY0vSAx/Pd0ePNsaflKzHx6V2NZ0NsGkInq+9IXXX3RLVDf0EotizMA==
+"@apollo/client@^3.8.3":
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.8.3.tgz#7cd23307bbc788a0a9eda51e6a76f32db8282933"
+  integrity sha512-mK86JM6hCpMEBGDgdO9U8ZYS8r9lPjXE1tVGpJMdSFUsIcXpmEfHUAbbFpPtYmxn8Qa7XsYy0dwDaDhpf4UUPw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/context" "^0.7.3"
@@ -2567,17 +2567,17 @@
     tslib "^2.4.1"
     webcrypto-core "^1.7.4"
 
-"@pothos/core@^3.33.0":
-  version "3.33.0"
-  resolved "https://registry.yarnpkg.com/@pothos/core/-/core-3.33.0.tgz#575b8fc8c7f2adb19ea021fce96bba619a73c052"
-  integrity sha512-qg6LMEqFwqO9c9S6X2bXBtd2fRFnVHzPtEJMkOPuPgtOkosEpd6eGvBQP5NSzewOiIF3lXIyb5X8ncOoMvlUSw==
+"@pothos/core@^3.34.0":
+  version "3.34.0"
+  resolved "https://registry.yarnpkg.com/@pothos/core/-/core-3.34.0.tgz#fd2e6f0f4e5bb1197a5eab8b93758414c0b87705"
+  integrity sha512-NBSPcezpASgWxZJrDWGe/hlxs2Wxugde0trX8FFZHy/EJhkjXZ0kVBKzl9sUnxcJ6pd4+FkhPQt9kQdAGS+a6A==
 
-"@pothos/plugin-prisma@^3.57.0":
-  version "3.57.0"
-  resolved "https://registry.yarnpkg.com/@pothos/plugin-prisma/-/plugin-prisma-3.57.0.tgz#051cc1a430f1263f8b35ebac2bc0dbd2c836409e"
-  integrity sha512-TMR7f3vx+2OjqKB6o096QL+w6k2aUY5a2P+aujyJptUPsN2i6OobnSePH7iXxL/2tsObdZvRhM51r7VOBZqatw==
+"@pothos/plugin-prisma@^3.59.1":
+  version "3.59.1"
+  resolved "https://registry.yarnpkg.com/@pothos/plugin-prisma/-/plugin-prisma-3.59.1.tgz#2630b4cdb06d559a099374b621908ee2cedf5329"
+  integrity sha512-38pJQJR4LfpW3ow/IX+vG7CD4JRzGGmVSWUUb3nvqE92foy9AmnN7y/CXLc2ofh3O9vvKqJ2dwL8Wg8kPQ7ucA==
   dependencies:
-    "@prisma/generator-helper" "^5.0.0"
+    "@prisma/generator-helper" "^5.2.0"
 
 "@prisma/client@^5.2.0":
   version "5.2.0"
@@ -2586,10 +2586,10 @@
   dependencies:
     "@prisma/engines-version" "5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
 
-"@prisma/debug@5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-5.1.1.tgz#c7142699107cdf2d8939f0c139142ef7651e74c7"
-  integrity sha512-R9e2Tn8f+ujVjwn6ne1YkXY35BXzUmxJbGsmD1c8RAZ/NXgbYktEFAwIkOZn5H5zRfY2VDSBvGI6TFpnOu50cg==
+"@prisma/debug@5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-5.2.0.tgz#f41ee6eeab024dc91e31db0d109fad21efff17bd"
+  integrity sha512-dOrNOA8B65l3dCp2r3gn5A5dbMXNbEixO3JAaMWiS2q03qMU3/R9oNv86H2c1i3GSwQglH5gjwpkA9olp/+h1A==
   dependencies:
     "@types/debug" "4.1.8"
     debug "4.3.4"
@@ -2605,12 +2605,12 @@
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-5.2.0.tgz#e5dff48eb324c8137393933292d44ea5c3bc2ce7"
   integrity sha512-dT7FOLUCdZmq+AunLqB1Iz+ZH/IIS1Fz2THmKZQ6aFONrQD/BQ5ecJ7g2wGS2OgyUFf4OaLam6/bxmgdOBDqig==
 
-"@prisma/generator-helper@^5.0.0":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-5.1.1.tgz#aa16d63262b6b12554ea921d2885450cb6708de5"
-  integrity sha512-Qk9iiVk4JZQYZrYsc1Wx9fXFFnS1AH4T7WyLxCIFnX/end0K5tOK75Qxv6mjZAHE0XUGrzoTlZUkbSDVYz/CvQ==
+"@prisma/generator-helper@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-5.2.0.tgz#bed2ec27b9c453da542ab69ca6d1c97f0237ff9b"
+  integrity sha512-jju+nGe8IgwDhs412sx6PSk5efkuoBqHOJSqbRBb9Y/fMfeDRGLVdwia8Hj+PKmd/YXrqFgBd4NDeFxeCcVVqw==
   dependencies:
-    "@prisma/debug" "5.1.1"
+    "@prisma/debug" "5.2.0"
     "@types/cross-spawn" "6.0.2"
     cross-spawn "7.0.3"
     kleur "4.1.5"
@@ -3269,10 +3269,10 @@ apollo-reporting-protobuf@^3.4.0:
   dependencies:
     "@apollo/protobufjs" "1.2.6"
 
-apollo-server-core@^3.12.0:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-3.12.0.tgz#8aa2a7329ce6fe1823290c45168c749db01548df"
-  integrity sha512-hq7iH6Cgldgmnjs9FVSZeKWRpi0/ZR+iJ1arzeD2VXGxxgk1mAm/cz1Tx0TYgegZI+FvvrRl0UhKEx7sLnIxIg==
+apollo-server-core@^3.12.1:
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-3.12.1.tgz#ba255c37345db29c48a2e0c064c519a8d62eb5af"
+  integrity sha512-9SF5WAkkV0FZQ2HVUWI9Jada1U0jg7e8NCN9EklbtvaCeUlOLyXyM+KCWuZ7+dqHxjshbtcwylPHutt3uzoNkw==
   dependencies:
     "@apollo/utils.keyvaluecache" "^1.0.1"
     "@apollo/utils.logger" "^1.0.0"
@@ -3310,13 +3310,13 @@ apollo-server-errors@^3.3.1:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-3.3.1.tgz#ba5c00cdaa33d4cbd09779f8cb6f47475d1cd655"
   integrity sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==
 
-apollo-server-micro@^3.12.0:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-3.12.0.tgz#34c9c4987df8a51c2ee21520ea48227102e602de"
-  integrity sha512-Ddq+a82QezaG6fgsiQONTB/8gZ8nEqpoYcIRVKeyffh4OryLb6UMziKcXOvy2AlTyQmvWmGAVCbjFRGmDCQEhQ==
+apollo-server-micro@^3.12.1:
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/apollo-server-micro/-/apollo-server-micro-3.12.1.tgz#8145eb7d6c04d75e6a6bfa859b64d5de2189685b"
+  integrity sha512-KOcc0RlCVa7u6ZLekjeQGK9x7uhNaCWo8SqQtBkgZ4KC6C6vDaCCf/3btbjse/x2Xcb+YX9Oix0V/cBI0gdn0g==
   dependencies:
     "@hapi/accept" "^5.0.2"
-    apollo-server-core "^3.12.0"
+    apollo-server-core "^3.12.1"
     apollo-server-types "^3.8.0"
     type-is "^1.6.18"
 
