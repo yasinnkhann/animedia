@@ -220,7 +220,7 @@ const MovieDetails = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
-				<section className='aspect-w-16 aspect-h-16 relative mx-4 mt-4'>
+				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={getImage(movieDetailsData.movieDetails.poster_path)}
