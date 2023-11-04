@@ -46,7 +46,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 						/>
 						{userWatchStatusFromMedia && (
 							<div
-								className={`absolute top-0 right-0 flex h-7 w-7 items-center justify-center ${
+								className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${
 									userWatchStatusFromMedia === 'W'
 										? 'bg-green-500'
 										: userWatchStatusFromMedia === 'C'

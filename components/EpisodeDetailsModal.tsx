@@ -43,7 +43,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 					ref={contentRef}
 				>
 					<h2 className='mt-4 text-center'>{episodeDetails.name}</h2>
-					<div className='mb-8 mt-8 mr-16 flex items-center justify-end'>
+					<div className='mb-8 mr-16 mt-8 flex items-center justify-end'>
 						<div className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={+episodeDetails.vote_average!.toFixed(1) * 10}
@@ -113,7 +113,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 						)}
 					</section>
 
-					<button className='absolute top-2 right-2' onClick={closeModal}>
+					<button className='absolute right-2 top-2' onClick={closeModal}>
 						<GrClose size={25} />
 					</button>
 				</section>

@@ -104,7 +104,7 @@ const VerificationEmailSent = ({
 					</p>
 					<div className='mt-8 flex flex-col items-center'>
 						<button
-							className='rounded bg-blue-500 py-2 px-4 text-white'
+							className='rounded bg-blue-500 px-4 py-2 text-white'
 							onClick={handleResendLink}
 						>
 							{isResending ? 'Resending Link...' : 'Resend Link'}
