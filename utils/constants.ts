@@ -7,10 +7,7 @@ export const CLIENT_BASE_URL =
 		? 'https://animedia.vercel.app'
 		: 'http://localhost:3000';
 
-export const SERVER_BASE_URL =
-	process.env.NODE_ENV === 'production'
-		? 'https://animedia.vercel.app/api/graphql'
-		: 'http://localhost:3000/api/graphql';
+export const SERVER_BASE_URL = `${CLIENT_BASE_URL}/api/graphql`;
 
 export const RESULTS_PER_PAGE = 20;
 
