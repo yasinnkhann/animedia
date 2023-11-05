@@ -1,8 +1,6 @@
-import React from 'react';
 import Image from 'next/image';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import { EContent } from '@ts/enums';
-import { getImage } from 'utils/getImage';
 import Link from 'next/link';
 import { PersonResult } from '../../../graphql/generated/code-gen/graphql';
 
@@ -14,7 +12,11 @@ interface Props {
 const PersonCard = ({ person }: Props) => {
 	return (
 		<Link
-			href={getDetailsPageRoute(EContent.PERSON, person.id, person.name)}
+			href={CommonMethods.getDetailsPageRoute(
+				EContent.PERSON,
+				person.id,
+				person.name
+			)}
 			passHref
 		>
 			<a className='text-inherit no-underline'>
@@ -22,7 +24,7 @@ const PersonCard = ({ person }: Props) => {
 					<div className='relative h-[20rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
-							src={getImage(person.profile_path)}
+							src={CommonMethods.getImage(person.profile_path)}
 							alt={person.name}
 							layout='fill'
 						/>

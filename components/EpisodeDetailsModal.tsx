@@ -1,10 +1,9 @@
 import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { GrClose } from 'react-icons/gr';
-import { formatDate } from '../utils/formatDate';
+import { CommonMethods } from 'utils/CommonMethods';
 import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
-import { getImage } from 'utils/getImage';
 import { EpisodeDetailsRes } from '../graphql/generated/code-gen/graphql';
 
 interface Props {
@@ -85,7 +84,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 								<p>
 									<span className='font-bold'>Air Date: </span>
 									{episodeDetails.air_date ? (
-										<p>{formatDate(episodeDetails.air_date)}</p>
+										<p>{CommonMethods.formatDate(episodeDetails.air_date)}</p>
 									) : (
 										<i>Air Date Not Available</i>
 									)}
@@ -96,7 +95,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 						<section>
 							<Image
 								className='rounded-lg'
-								src={getImage(episodeDetails.still_path)}
+								src={CommonMethods.getImage(episodeDetails.still_path)}
 								alt={episodeDetails.name ?? undefined}
 								height={200}
 								width={300}

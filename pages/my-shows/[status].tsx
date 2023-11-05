@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import MyShowsList from 'components/UI/MyMediaUI/MyShowsList';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { statusParams } from 'utils/statusParams';
+import { CommonMethods } from 'utils/CommonMethods';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
@@ -26,7 +26,10 @@ const Status = () => {
 
 	useEffect(() => {
 		if (status && status !== 'loading' && router.query.status) {
-			if (!session || !statusParams.has(router.query.status as string)) {
+			if (
+				!session ||
+				!CommonMethods.statusParams.has(router.query.status as string)
+			) {
 				router.replace('/');
 				return;
 			}
@@ -67,7 +70,10 @@ const Status = () => {
 		);
 	}
 
-	if (!statusParams.has(router.query.status as string) || !session) {
+	if (
+		!CommonMethods.statusParams.has(router.query.status as string) ||
+		!session
+	) {
 		router.replace('/');
 		return;
 	}

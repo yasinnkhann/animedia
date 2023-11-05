@@ -1,4 +1,3 @@
-import React from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';

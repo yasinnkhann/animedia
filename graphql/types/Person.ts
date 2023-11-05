@@ -1,5 +1,5 @@
-import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
 import { BASE_URL } from '../../utils/constants';
+import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
 
 export const KnownForResult = objectType({
 	name: 'KnownForResult',

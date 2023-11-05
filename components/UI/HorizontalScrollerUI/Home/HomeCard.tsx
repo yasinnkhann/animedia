@@ -1,18 +1,14 @@
-import React from 'react';
 import Image from 'next/image';
-import { EContent } from '@ts/enums';
-import { formatDate } from '../../../../utils/formatDate';
-import RoundProgressBar from '../../../RoundProgressBar';
-import { getImage } from 'utils/getImage';
 import Link from 'next/link';
-import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
+import RoundProgressBar from '../../../RoundProgressBar';
+import { EContent } from '@ts/enums';
+import { CommonMethods } from '../../../../utils/CommonMethods';
 import {
 	MovieResult,
 	ShowResult,
 	UserMovie,
 	UserShow,
 } from '../../../../graphql/generated/code-gen/graphql';
-import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: MovieResult | ShowResult;
@@ -25,14 +21,14 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	const mediaTitle = isMovie ? item.title : item.name;
 
-	const userWatchStatusFromMedia = getUserWatchStatusFromMedia(
+	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
 		item
 	);
 
 	return (
 		<Link
-			href={getDetailsPageRoute(
+			href={CommonMethods.getDetailsPageRoute(
 				isMovie ? EContent.MOVIE : EContent.SHOW,
 				item.id,
 				mediaTitle
@@ -47,7 +43,7 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={getImage(item.poster_path)}
+							src={CommonMethods.getImage(item.poster_path)}
 							alt={mediaTitle}
 							layout='fill'
 							priority
@@ -87,10 +83,10 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 						<p className='m-0 p-0 text-sm'>
 							{isMovie
 								? item.release_date
-									? formatDate(item.release_date)
+									? CommonMethods.formatDate(item.release_date)
 									: 'Release Date Not Available'
 								: item.first_air_date
-								? formatDate(item.first_air_date)
+								? CommonMethods.formatDate(item.first_air_date)
 								: 'First Air Date Not Available'}
 						</p>
 					</div>

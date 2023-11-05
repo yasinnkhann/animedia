@@ -1,7 +1,5 @@
 import { BASE_URL } from '../../utils/constants';
-import { getKeywordId } from '../../utils/getkeywordID';
-import { GET_TRENDING_MEDIA } from '../../utils/getTrendingMedia';
-import { GET_GENRE_ID } from '../../utils/getGenreID';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { timeWindowTypes } from 'graphql/models/enums';
 import {
 	objectType,
@@ -401,7 +399,7 @@ export const ShowQueries = extendType({
 			},
 			resolve: async (_parent, { page }) => {
 				try {
-					const keywordID = await getKeywordId('anime');
+					const keywordID = await CommonMethods.getKeywordId('anime');
 
 					const res = await fetch(
 						`${BASE_URL}/discover/tv?api_key=${process.env
@@ -425,7 +423,11 @@ export const ShowQueries = extendType({
 				page: intArg(),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
-				const trendingMovies = await GET_TRENDING_MEDIA('tv', timeWindow, page);
+				const trendingMovies = await CommonMethods.getTrendingMedia(
+					'tv',
+					timeWindow,
+					page
+				);
 				return trendingMovies;
 			},
 		});
@@ -495,7 +497,7 @@ export const ShowQueries = extendType({
 			},
 			resolve: async (_parent, { genre, page }) => {
 				try {
-					const genreID = await GET_GENRE_ID(genre, 'tv');
+					const genreID = await CommonMethods.getGenreID(genre, 'tv');
 
 					const res = await fetch(
 						`${BASE_URL}/discover/tv?api_key=${process.env
@@ -520,7 +522,7 @@ export const ShowQueries = extendType({
 			},
 			resolve: async (_parent, { genre, page }) => {
 				try {
-					const genreID = await GET_GENRE_ID(genre, 'tv');
+					const genreID = await CommonMethods.getGenreID(genre, 'tv');
 
 					const res = await fetch(
 						`${BASE_URL}/discover/tv?api_key=${process.env

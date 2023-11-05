@@ -1,8 +1,6 @@
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
 import Image from 'next/image';
-import { formatDate } from '../../../utils/formatDate';
-import { getImage } from 'utils/getImage';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import Link from 'next/link';
 import {
 	MovieResult,
@@ -12,7 +10,6 @@ import {
 	UserShow,
 	UserMovie,
 } from '../../../graphql/generated/code-gen/graphql';
-import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult;
@@ -27,7 +24,7 @@ const SearchResult = ({
 }: Props) => {
 	const mediaTitle = 'title' in result ? result.title : result.name;
 
-	const userWatchStatusFromMedia = getUserWatchStatusFromMedia(
+	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
 		result
 	);
@@ -39,7 +36,7 @@ const SearchResult = ({
 		<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
 			<Image
 				className='rounded-lg'
-				src={getImage(imagePath)}
+				src={CommonMethods.getImage(imagePath)}
 				alt={altText}
 				layout='fill'
 				priority
@@ -72,7 +69,11 @@ const SearchResult = ({
 	) => (
 		<div className='p-4'>
 			<h3 className='cursor-pointer'>{mediaTitle}</h3>
-			<p>{releaseDate ? formatDate(releaseDate) : 'Date Not Available'}</p>
+			<p>
+				{releaseDate
+					? CommonMethods.formatDate(releaseDate)
+					: 'Date Not Available'}
+			</p>
 			<p>
 				{overview.split(' ').length > 50
 					? `${overview.split(' ').slice(0, 50).join(' ')}...`
@@ -120,7 +121,11 @@ const SearchResult = ({
 
 	return (
 		<Link
-			href={getDetailsPageRoute(searchedResultType, result.id, mediaTitle)}
+			href={CommonMethods.getDetailsPageRoute(
+				searchedResultType,
+				result.id,
+				mediaTitle
+			)}
 			passHref
 		>
 			<a className='text-inherit no-underline'>

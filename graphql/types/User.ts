@@ -10,7 +10,7 @@ import {
 } from 'nexus';
 import { hash } from 'bcryptjs';
 import nodemailer, { Transport, TransportOptions } from 'nodemailer';
-import { isValidEmail } from '../../utils/isValidEmail';
+import { CommonMethods } from '../../utils/CommonMethods';
 import {
 	EMAIL_VERIFICATION_PREFIX,
 	RETRY_EMAIL_VERIFICATION_PREFIX,
@@ -627,7 +627,7 @@ export const UserMutations = extendType({
 				html: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { recipientEmail, subject, text, html }) => {
-				if (!isValidEmail(recipientEmail)) {
+				if (!CommonMethods.isValidEmail(recipientEmail)) {
 					return {
 						error: 'Please provide a valid email address',
 						successMsg: null,

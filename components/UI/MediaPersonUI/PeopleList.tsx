@@ -1,4 +1,3 @@
-import React from 'react';
 import PersonCard from './PersonCard';
 import { RESULTS_PER_PAGE } from '../../../utils/constants';
 import { PeopleRes } from '../../../graphql/generated/code-gen/graphql';

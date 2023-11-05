@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/Home/HomeHorizontalScroller';

@@ -5,14 +5,13 @@ import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';
-import { formatDate } from '../../utils/formatDate';
+import { CommonMethods } from '../../utils/CommonMethods';
 import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
-import { getImage } from 'utils/getImage';
 import _ from 'lodash';
 
 const PersonDetails = () => {
@@ -129,7 +128,9 @@ const PersonDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={getImage(personDetailsData.personDetails.profile_path)}
+						src={CommonMethods.getImage(
+							personDetailsData.personDetails.profile_path
+						)}
 						alt={personDetailsData.personDetails.name ?? undefined}
 						layout='fill'
 					/>
@@ -162,7 +163,9 @@ const PersonDetails = () => {
 					<h4 className='mt-4'>Date of Birth</h4>
 					<p className='ml-1'>
 						{personDetailsData.personDetails.birthday
-							? `${formatDate(personDetailsData.personDetails.birthday)}${
+							? `${CommonMethods.formatDate(
+									personDetailsData.personDetails.birthday
+							  )}${
 									!personDetailsData.personDetails.deathday
 										? ` (${getAge(
 												personDetailsData.personDetails.birthday
@@ -180,7 +183,7 @@ const PersonDetails = () => {
 					{personDetailsData.personDetails.deathday && (
 						<>
 							<h4 className='mt-4'>Date of Death</h4>
-							<p className='ml-1'>{`${formatDate(
+							<p className='ml-1'>{`${CommonMethods.formatDate(
 								personDetailsData.personDetails.deathday
 							)}${
 								personDetailsData.personDetails.birthday &&

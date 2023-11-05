@@ -1,4 +1,3 @@
-import React from 'react';
 import MovieCastCard from './MediaCastCard';
 import { useDrag } from '../../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';

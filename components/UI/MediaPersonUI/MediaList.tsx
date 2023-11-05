@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
 import { RESULTS_PER_PAGE } from '../../../utils/constants';

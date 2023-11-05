@@ -14,10 +14,9 @@ import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
-import { formatDate } from '../../utils/formatDate';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
-import { getImage } from 'utils/getImage';
 import { EContent } from '@ts/enums';
 import _ from 'lodash';
 
@@ -223,7 +222,9 @@ const MovieDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={getImage(movieDetailsData.movieDetails.poster_path)}
+						src={CommonMethods.getImage(
+							movieDetailsData.movieDetails.poster_path
+						)}
 						alt={movieDetailsData.movieDetails.title ?? undefined}
 						layout='fill'
 					/>
@@ -296,7 +297,9 @@ const MovieDetails = () => {
 					<h4 className='mt-4'>Release Date</h4>
 					{movieDetailsData.movieDetails.release_date ? (
 						<p className='ml-1'>
-							{formatDate(movieDetailsData.movieDetails.release_date)}
+							{CommonMethods.formatDate(
+								movieDetailsData.movieDetails.release_date
+							)}
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>

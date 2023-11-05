@@ -1,15 +1,12 @@
-import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../../graphql/queries';
 import * as Mutations from '../../../graphql/mutations';
-import { formatDate } from '../../../utils/formatDate';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserMovie } from 'graphql/generated/code-gen/graphql';
-import { getImage } from 'utils/getImage';
-import Link from 'next/link';
 
 interface Props {
 	myMovie: UserMovie;
@@ -43,7 +40,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
-					href={getDetailsPageRoute(
+					href={CommonMethods.getDetailsPageRoute(
 						EContent.MOVIE,
 						Number(myMovie.id),
 						myMovie.name as string
@@ -54,7 +51,9 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={getImage(movieData?.movieDetails?.poster_path)}
+								src={CommonMethods.getImage(
+									movieData?.movieDetails?.poster_path
+								)}
 								priority
 								alt={movieData?.movieDetails?.title}
 								layout='fill'
@@ -65,7 +64,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
 				<section className='col-start-2 pl-4'>
 					<Link
-						href={getDetailsPageRoute(
+						href={CommonMethods.getDetailsPageRoute(
 							EContent.MOVIE,
 							Number(myMovie.id),
 							myMovie.name as string
@@ -78,7 +77,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 					</Link>
 					<p>
 						{movieData?.movieDetails?.release_date
-							? formatDate(movieData.movieDetails?.release_date)
+							? CommonMethods.formatDate(movieData.movieDetails?.release_date)
 							: 'Release Date Not Available'}
 					</p>
 				</section>

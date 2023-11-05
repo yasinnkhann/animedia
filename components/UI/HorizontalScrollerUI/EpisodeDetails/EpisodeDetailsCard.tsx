@@ -4,7 +4,7 @@ import * as Queries from '../../../../graphql/queries';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
 import { useQuery } from '@apollo/client';
-import { getImage } from 'utils/getImage';
+import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {
 	item: IEPDetails;
@@ -37,7 +37,9 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg object-contain'
-							src={getImage(epDetailsCardData.episodeDetails.still_path)}
+							src={CommonMethods.getImage(
+								epDetailsCardData.episodeDetails.still_path
+							)}
 							alt={epDetailsCardData.episodeDetails.name ?? undefined}
 							layout='fill'
 						/>

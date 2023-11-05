@@ -1,11 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { EContent } from '@ts/enums';
 import { IRelatedMedia } from '@ts/interfaces';
-import { getImage } from 'utils/getImage';
-import Link from 'next/link';
-import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
+import { CommonMethods } from 'utils/CommonMethods';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
-import { getUserWatchStatusFromMedia } from 'utils/getUserWatchStatusFromMedia';
 
 interface Props {
 	item: IRelatedMedia;
@@ -18,14 +16,14 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
 
-	const userWatchStatusFromMedia = getUserWatchStatusFromMedia(
+	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
 		item
 	);
 
 	return (
 		<Link
-			href={getDetailsPageRoute(
+			href={CommonMethods.getDetailsPageRoute(
 				isMovie ? EContent.MOVIE : EContent.SHOW,
 				item.id,
 				mediaTitle
@@ -40,7 +38,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={getImage(item.poster_path)}
+							src={CommonMethods.getImage(item.poster_path)}
 							alt={mediaTitle}
 							layout='fill'
 						/>

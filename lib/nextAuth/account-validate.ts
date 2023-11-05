@@ -1,4 +1,4 @@
-import { isValidEmail } from '../../utils/isValidEmail';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { ILogin, IRegister } from '@ts/interfaces';
 import _ from 'lodash';
 
@@ -21,7 +21,7 @@ function validateEmail(email: string) {
 
 	if (!email) {
 		errors.push('Email Required!');
-	} else if (!isValidEmail(email)) {
+	} else if (!CommonMethods.isValidEmail(email)) {
 		errors.push('Invalid Email!');
 	}
 

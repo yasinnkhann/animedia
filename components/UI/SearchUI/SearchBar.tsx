@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect, RefObject } from 'react';
+import { forwardRef, useState, useEffect, RefObject } from 'react';
 import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 export function useDrag() {
 	const [clicked, setClicked] = useState(false);

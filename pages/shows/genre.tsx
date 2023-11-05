@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Pagination from 'components/Pagination';
@@ -7,7 +7,7 @@ import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { TypedDocumentNode, useQuery } from '@apollo/client';
 import { RESULTS_PER_PAGE } from 'utils/constants';
-import { unParseSpecialChars } from '../../utils/unParseSpecialChars';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { Circles } from 'react-loading-icons';
 import {
 	SORT_BY_OPTIONS,
@@ -145,7 +145,7 @@ const Genre = () => {
 									sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE
 										? 'Popular'
 										: 'Top-Rated'
-								} ${unParseSpecialChars(showGenreType)} Shows`}
+								} ${CommonMethods.unParseSpecialChars(showGenreType)} Shows`}
 								genrePage
 							/>
 							<Pagination

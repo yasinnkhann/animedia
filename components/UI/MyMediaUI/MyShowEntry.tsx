@@ -3,12 +3,10 @@ import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../../graphql/queries';
 import * as Mutations from '../../../graphql/mutations';
-import { formatDate } from '../../../utils/formatDate';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserShow } from 'graphql/generated/code-gen/graphql';
-import { getImage } from 'utils/getImage';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import Link from 'next/link';
 
@@ -44,7 +42,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
-					href={getDetailsPageRoute(
+					href={CommonMethods.getDetailsPageRoute(
 						EContent.SHOW,
 						Number(myShow.id),
 						myShow.name as string
@@ -55,7 +53,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={getImage(showData?.showDetails?.poster_path)}
+								src={CommonMethods.getImage(showData?.showDetails?.poster_path)}
 								priority
 								alt={showData?.showDetails?.name}
 								layout='fill'
@@ -65,7 +63,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				</Link>
 				<section className='col-start-2 pl-4'>
 					<Link
-						href={getDetailsPageRoute(
+						href={CommonMethods.getDetailsPageRoute(
 							EContent.SHOW,
 							Number(myShow.id),
 							myShow.name as string
@@ -78,7 +76,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 					</Link>
 					<p>
 						{showData?.showDetails?.first_air_date
-							? formatDate(showData.showDetails?.first_air_date)
+							? CommonMethods.formatDate(showData.showDetails?.first_air_date)
 							: 'First Air Date Not Available'}
 					</p>
 				</section>

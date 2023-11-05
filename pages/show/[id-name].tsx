@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -15,10 +15,9 @@ import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
-import { formatDate } from '../../utils/formatDate';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
-import { getImage } from 'utils/getImage';
 import { EContent } from '@ts/enums';
 import _ from 'lodash';
 
@@ -468,7 +467,9 @@ const ShowDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={getImage(showDetailsData.showDetails.poster_path)}
+						src={CommonMethods.getImage(
+							showDetailsData.showDetails.poster_path
+						)}
 						alt={showDetailsData.showDetails.name}
 						layout='fill'
 					/>
@@ -568,7 +569,9 @@ const ShowDetails = () => {
 					<h4 className='mt-4'>First Air Date</h4>
 					{showDetailsData.showDetails.first_air_date ? (
 						<p className='ml-1'>
-							{formatDate(showDetailsData.showDetails.first_air_date)}
+							{CommonMethods.formatDate(
+								showDetailsData.showDetails.first_air_date
+							)}
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>
@@ -582,7 +585,7 @@ const ShowDetails = () => {
 								Episode{' '}
 								{showDetailsData.showDetails.last_episode_to_air.episode_number}
 								<br />
-								{formatDate(
+								{CommonMethods.formatDate(
 									showDetailsData.showDetails.last_episode_to_air.air_date!
 								)}
 							</p>
@@ -605,7 +608,7 @@ const ShowDetails = () => {
 										?.episode_number
 								}
 								<br />
-								{formatDate(
+								{CommonMethods.formatDate(
 									showDetailsData.showDetails.next_episode_to_air.air_date!
 								)}
 							</p>

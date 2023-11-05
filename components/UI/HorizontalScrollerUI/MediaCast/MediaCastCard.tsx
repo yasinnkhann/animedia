@@ -1,10 +1,8 @@
-import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
 import { EContent } from '@ts/enums';
-import { getImage } from 'utils/getImage';
-import Link from 'next/link';
-import { getDetailsPageRoute } from 'utils/getDetailsPageRoute';
+import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {
 	item: ICast;
@@ -14,7 +12,11 @@ interface Props {
 const MediaCastCard = ({ item, dragging }: Props) => {
 	return (
 		<Link
-			href={getDetailsPageRoute(EContent.PERSON, item.id, item.name)}
+			href={CommonMethods.getDetailsPageRoute(
+				EContent.PERSON,
+				item.id,
+				item.name
+			)}
 			passHref
 		>
 			<a
@@ -25,7 +27,7 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={getImage(item.profile_path)}
+							src={CommonMethods.getImage(item.profile_path)}
 							alt={item.name}
 							layout='fill'
 						/>

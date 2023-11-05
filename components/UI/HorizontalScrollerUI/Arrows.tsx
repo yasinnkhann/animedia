@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 

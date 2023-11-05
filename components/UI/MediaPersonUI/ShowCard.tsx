@@ -1,15 +1,11 @@
-import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import * as Queries from '../../../graphql/queries';
-import { getDetailsPageRoute } from '../../../utils/getDetailsPageRoute';
 import { EContent } from '@ts/enums';
-import { formatDate } from '../../../utils/formatDate';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
-import { renderTableStatus } from '../../../utils/renderTableStatus';
 import { useQuery } from '@apollo/client';
 import { ShowResult } from 'graphql/generated/code-gen/graphql';
-import { getImage } from 'utils/getImage';
-import Link from 'next/link';
 
 interface Props {
 	show: ShowResult;
@@ -36,14 +32,18 @@ const ShowCard = ({ show, rank }: Props) => {
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
-					href={getDetailsPageRoute(EContent.SHOW, show.id, show.name)}
+					href={CommonMethods.getDetailsPageRoute(
+						EContent.SHOW,
+						show.id,
+						show.name
+					)}
 					passHref
 				>
 					<a className='text-inherit no-underline'>
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={getImage(show.poster_path)}
+								src={CommonMethods.getImage(show.poster_path)}
 								alt={show.name}
 								layout='fill'
 							/>
@@ -53,7 +53,11 @@ const ShowCard = ({ show, rank }: Props) => {
 
 				<section className='col-start-2 pl-4'>
 					<Link
-						href={getDetailsPageRoute(EContent.SHOW, show.id, show.name)}
+						href={CommonMethods.getDetailsPageRoute(
+							EContent.SHOW,
+							show.id,
+							show.name
+						)}
 						passHref
 					>
 						<a className='text-inherit no-underline'>
@@ -62,7 +66,7 @@ const ShowCard = ({ show, rank }: Props) => {
 					</Link>
 					<p>
 						{show.first_air_date
-							? formatDate(show.first_air_date)
+							? CommonMethods.formatDate(show.first_air_date)
 							: 'First Air Date Not Available'}
 					</p>
 				</section>
@@ -84,7 +88,9 @@ const ShowCard = ({ show, rank }: Props) => {
 					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
 						<p>
 							{usersShowData?.usersShow?.status
-								? renderTableStatus(usersShowData.usersShow.status)
+								? CommonMethods.renderTableStatus(
+										usersShowData.usersShow.status
+								  )
 								: 'N/A'}
 						</p>
 					</td>

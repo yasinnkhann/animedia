@@ -1,4 +1,3 @@
-import React from 'react';
 import MyShowEntry from './MyShowEntry';
 import { TStatusParam } from '@ts/types';
 import { UserShow } from 'graphql/generated/code-gen/graphql';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import Layout from '../components/Layout';
 import { ApolloProvider } from '@apollo/client';

@@ -6,7 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 import { compare } from 'bcryptjs';
-import { isValidEmail } from '../../../utils/isValidEmail';
+import { CommonMethods } from '../../../utils/CommonMethods';
 
 const cookiesPolicy =
 	process.env.NODE_ENV === 'development'
@@ -56,7 +56,10 @@ export const authOptions: NextAuthOptions = {
 				password: { label: 'Password', type: 'password' },
 			},
 			authorize: async (credentials, _req) => {
-				if (!isValidEmail(credentials?.email) || !credentials?.password) {
+				if (
+					!CommonMethods.isValidEmail(credentials?.email) ||
+					!credentials?.password
+				) {
 					return;
 				}
 				// check user existence
