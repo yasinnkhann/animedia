@@ -1,5 +1,6 @@
 import moment from 'moment';
 import unidecode from 'unidecode';
+import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
 import { EContent } from '@ts/enums';
 import { NexusGenEnums } from '../graphql/generated/nexus-typegen/index';
@@ -104,7 +105,6 @@ export class CommonMethods {
 			}
 			return genreObj.id;
 		} catch (err) {
-			console.error('An error occurred:', err);
 			throw err;
 		}
 	};
@@ -118,14 +118,21 @@ export class CommonMethods {
 	};
 
 	public static getKeywordId = async (q: string) => {
+		type TKeywordObj = MovieDetailsGenre | ShowDetailsGenre;
 		q = q.split(' ').join('+');
 
-		const res = await fetch(
-			`${BASE_URL}/search/keyword?api_key=${process.env.API_KEY!}&query=${q}`
-		);
-		const data = await res.json();
-
-		return data.results[0].id;
+		try {
+			const res = await fetch(
+				`${BASE_URL}/search/keyword?api_key=${process.env.API_KEY!}&query=${q}`
+			);
+			const { results }: { results: TKeywordObj[] } = await res.json();
+			if (_.isEmpty(results)) {
+				throw new Error('No Keyword Results Found.');
+			}
+			return results[0].id;
+		} catch (err) {
+			throw err;
+		}
 	};
 
 	public static getTrendingMedia = async (
@@ -133,27 +140,30 @@ export class CommonMethods {
 		timeWindow: 'day' | 'week',
 		pageNum: number | null | undefined
 	) => {
-		const res = await fetch(
-			`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env
-				.API_KEY!}&language=en-US&page=${pageNum ?? 1}`
-		);
+		try {
+			const res = await fetch(
+				`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env
+					.API_KEY!}&language=en-US&page=${pageNum ?? 1}`
+			);
+			const data = await res.json();
 
-		const data = await res.json();
-
-		return data;
+			return data;
+		} catch (err) {
+			throw err;
+		}
 	};
 
 	public static getUserWatchStatusFromMedia = (
-		userMatchedMedias: UserShow[] | UserMovie[],
+		userMatchedMedias: (UserShow | UserMovie)[],
 		item: {
 			id: number;
 			[key: string]: any;
 		}
 	) => {
-		//@ts-ignore
 		const dataFound = userMatchedMedias.find(
 			(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
 		);
+
 		if (dataFound?.status) {
 			switch (dataFound.status) {
 				case WatchStatusTypes.Watching:
@@ -169,6 +179,33 @@ export class CommonMethods {
 			}
 		}
 	};
+
+	// public static getUserWatchStatusFromMedia = (
+	// 	userMatchedMedias: UserShow[] | UserMovie[],
+	// 	item: {
+	// 		id: number;
+	// 		[key: string]: any;
+	// 	}
+	// ) => {
+	// 	//@ts-ignore
+	// 	const dataFound = userMatchedMedias.find(
+	// 		(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
+	// 	);
+	// 	if (dataFound?.status) {
+	// 		switch (dataFound.status) {
+	// 			case WatchStatusTypes.Watching:
+	// 				return 'W';
+	// 			case WatchStatusTypes.Completed:
+	// 				return 'C';
+	// 			case WatchStatusTypes.PlanToWatch:
+	// 				return 'PW';
+	// 			case WatchStatusTypes.OnHold:
+	// 				return 'OH';
+	// 			default:
+	// 				return 'D';
+	// 		}
+	// 	}
+	// };
 
 	public static isValidEmail = (email = '') => {
 		const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
