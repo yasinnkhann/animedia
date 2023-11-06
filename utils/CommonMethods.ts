@@ -88,17 +88,25 @@ export class CommonMethods {
 			.replace(/AMPERSAND/gi, '&')
 			.replace(/DASH/gi, '-');
 
-		const res = await fetch(
-			`${BASE_URL}/genre/${mediaType}/list?api_key=${process.env
-				.API_KEY!}&language=en-US`
-		);
-		const { genres } = await res.json();
+		try {
+			const res = await fetch(
+				`${BASE_URL}/genre/${mediaType}/list?api_key=${process.env
+					.API_KEY!}&language=en-US`
+			);
+			const { genres }: { genres: TGenreObj[] } = await res.json();
 
-		const genreObj = (genres as TGenreObj[]).find(
-			genreObj => genreObj.name === parsedGenreName
-		);
+			const genreObj = genres.find(
+				genreObj => genreObj.name === parsedGenreName
+			);
 
-		return genreObj!.id;
+			if (!genreObj?.id) {
+				throw new Error('No Genre ID Found.');
+			}
+			return genreObj.id;
+		} catch (err) {
+			console.error('An error occurred:', err);
+			throw err;
+		}
 	};
 
 	public static getImage = (imagePath: string | null | undefined) => {
