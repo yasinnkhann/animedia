@@ -180,33 +180,6 @@ export class CommonMethods {
 		}
 	};
 
-	// public static getUserWatchStatusFromMedia = (
-	// 	userMatchedMedias: UserShow[] | UserMovie[],
-	// 	item: {
-	// 		id: number;
-	// 		[key: string]: any;
-	// 	}
-	// ) => {
-	// 	//@ts-ignore
-	// 	const dataFound = userMatchedMedias.find(
-	// 		(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
-	// 	);
-	// 	if (dataFound?.status) {
-	// 		switch (dataFound.status) {
-	// 			case WatchStatusTypes.Watching:
-	// 				return 'W';
-	// 			case WatchStatusTypes.Completed:
-	// 				return 'C';
-	// 			case WatchStatusTypes.PlanToWatch:
-	// 				return 'PW';
-	// 			case WatchStatusTypes.OnHold:
-	// 				return 'OH';
-	// 			default:
-	// 				return 'D';
-	// 		}
-	// 	}
-	// };
-
 	public static isValidEmail = (email = '') => {
 		const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
