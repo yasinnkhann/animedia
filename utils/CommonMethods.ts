@@ -3,7 +3,6 @@ import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
 import { EContent } from '@ts/enums';
-import { NexusGenEnums } from '../graphql/generated/nexus-typegen/index';
 import { CLIENT_BASE_URL, BASE_IMG_URL, BASE_URL } from '../utils/constants';
 import {
 	MovieDetailsGenre,
@@ -11,6 +10,8 @@ import {
 	UserShow,
 	UserMovie,
 	WatchStatusTypes,
+	MovieGenreTypes,
+	ShowGenreTypes,
 } from '../graphql/generated/code-gen/graphql';
 
 export class CommonMethods {
@@ -77,9 +78,7 @@ export class CommonMethods {
   */
 
 	public static getGenreID = async (
-		genreName:
-			| NexusGenEnums['MovieGenreTypes']
-			| NexusGenEnums['ShowGenreTypes'],
+		genreName: `${MovieGenreTypes}` | `${ShowGenreTypes}`,
 		mediaType: 'movie' | 'tv'
 	): Promise<number> => {
 		type TGenreObj = MovieDetailsGenre | ShowDetailsGenre;
@@ -186,9 +185,7 @@ export class CommonMethods {
 		return emailRegex.test(email);
 	};
 
-	public static renderTableStatus = (
-		status: NexusGenEnums['WatchStatusTypes']
-	) => {
+	public static renderTableStatus = (status: WatchStatusTypes) => {
 		switch (status) {
 			case 'WATCHING':
 				return 'Watching';

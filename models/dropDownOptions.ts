@@ -1,4 +1,8 @@
-import { NexusGenEnums } from 'graphql/generated/nexus-typegen';
+import {
+	MovieGenreTypes,
+	ShowGenreTypes,
+	WatchStatusTypes,
+} from '../graphql/generated/code-gen/graphql';
 
 export const SORT_BY_OPTIONS = [
 	{
@@ -12,168 +16,168 @@ export const SORT_BY_OPTIONS = [
 ];
 
 export const MOVIE_GENRE_TYPE_OPTIONS: {
-	value: NexusGenEnums['MovieGenreTypes'];
+	value: MovieGenreTypes;
 	text: string;
 }[] = [
 	{
-		value: 'Action',
+		value: MovieGenreTypes.Action,
 		text: 'Action',
 	},
 	{
-		value: 'Adventure',
+		value: MovieGenreTypes.Adventure,
 		text: 'Adventure',
 	},
 	{
-		value: 'Animation',
+		value: MovieGenreTypes.Animation,
 		text: 'Animation',
 	},
 	{
-		value: 'Comedy',
+		value: MovieGenreTypes.Comedy,
 		text: 'Comedy',
 	},
 	{
-		value: 'Crime',
+		value: MovieGenreTypes.Crime,
 		text: 'Crime',
 	},
 	{
-		value: 'Documentary',
+		value: MovieGenreTypes.Documentary,
 		text: 'Documentary',
 	},
 	{
-		value: 'Drama',
+		value: MovieGenreTypes.Drama,
 		text: 'Drama',
 	},
 	{
-		value: 'Family',
+		value: MovieGenreTypes.Family,
 		text: 'Family',
 	},
 	{
-		value: 'Fantasy',
+		value: MovieGenreTypes.Fantasy,
 		text: 'Fantasy',
 	},
 	{
-		value: 'History',
+		value: MovieGenreTypes.History,
 		text: 'History',
 	},
 	{
-		value: 'Horror',
+		value: MovieGenreTypes.Horror,
 		text: 'Horror',
 	},
 	{
-		value: 'Music',
+		value: MovieGenreTypes.Music,
 		text: 'Music',
 	},
 	{
-		value: 'Mystery',
+		value: MovieGenreTypes.Mystery,
 		text: 'Mystery',
 	},
 	{
-		value: 'Romance',
+		value: MovieGenreTypes.Romance,
 		text: 'Romance',
 	},
 	{
-		value: 'Science_Fiction',
+		value: MovieGenreTypes.ScienceFiction,
 		text: 'Science Fiction',
 	},
 	{
-		value: 'TV_Movie',
+		value: MovieGenreTypes.TvMovie,
 		text: 'TV Movie',
 	},
 	{
-		value: 'Thriller',
+		value: MovieGenreTypes.Thriller,
 		text: 'Thriller',
 	},
 	{
-		value: 'War',
+		value: MovieGenreTypes.War,
 		text: 'War',
 	},
 	{
-		value: 'Western',
+		value: MovieGenreTypes.Western,
 		text: 'Western',
 	},
 ];
 
 export const SHOW_GENRE_TYPE_OPTIONS: {
-	value: NexusGenEnums['ShowGenreTypes'];
+	value: ShowGenreTypes;
 	text: string;
 }[] = [
 	{
-		value: 'Action_AMPERSAND_Adventure',
+		value: ShowGenreTypes.ActionAmpersandAdventure,
 		text: 'Action & Adventure',
 	},
 
 	{
-		value: 'Animation',
+		value: ShowGenreTypes.Animation,
 		text: 'Animation',
 	},
 
 	{
-		value: 'Comedy',
+		value: ShowGenreTypes.Comedy,
 		text: 'Comedy',
 	},
 
 	{
-		value: 'Crime',
+		value: ShowGenreTypes.Crime,
 		text: 'Crime',
 	},
 
 	{
-		value: 'Documentary',
+		value: ShowGenreTypes.Documentary,
 		text: 'Documentary',
 	},
 
 	{
-		value: 'Drama',
+		value: ShowGenreTypes.Drama,
 		text: 'Drama',
 	},
 
 	{
-		value: 'Family',
+		value: ShowGenreTypes.Family,
 		text: 'Family',
 	},
 
 	{
-		value: 'Kids',
+		value: ShowGenreTypes.Kids,
 		text: 'Kids',
 	},
 
 	{
-		value: 'Mystery',
+		value: ShowGenreTypes.Mystery,
 		text: 'Mystery',
 	},
 
 	{
-		value: 'News',
+		value: ShowGenreTypes.News,
 		text: 'News',
 	},
 
 	{
-		value: 'Reality',
+		value: ShowGenreTypes.Reality,
 		text: 'Reality',
 	},
 
 	{
-		value: 'SciDASHFi_AMPERSAND_Fantasy',
+		value: ShowGenreTypes.SciDashFiAmpersandFantasy,
 		text: 'Sci-Fi & Fantasy',
 	},
 
 	{
-		value: 'Soap',
+		value: ShowGenreTypes.Soap,
 		text: 'Soap',
 	},
 
 	{
-		value: 'Talk',
+		value: ShowGenreTypes.Talk,
 		text: 'Talk',
 	},
 
 	{
-		value: 'War_AMPERSAND_Politics',
+		value: ShowGenreTypes.WarAmpersandPolitics,
 		text: 'War & Politics',
 	},
 
 	{
-		value: 'Western',
+		value: ShowGenreTypes.Western,
 		text: 'Western',
 	},
 ];
@@ -294,31 +298,31 @@ export const ratingOptions = [
 ];
 
 export const watchStatusOptions: {
-	value: NexusGenEnums['WatchStatusTypes'];
+	value: WatchStatusTypes;
 	text: string;
 }[] = [
 	{
-		value: 'NOT_WATCHING',
+		value: WatchStatusTypes.NotWatching,
 		text: 'Not Watching',
 	},
 	{
-		value: 'WATCHING',
+		value: WatchStatusTypes.Watching,
 		text: 'Watching',
 	},
 	{
-		value: 'PLAN_TO_WATCH',
+		value: WatchStatusTypes.PlanToWatch,
 		text: 'Plan to Watch',
 	},
 	{
-		value: 'COMPLETED',
+		value: WatchStatusTypes.Completed,
 		text: 'Completed',
 	},
 	{
-		value: 'ON_HOLD',
+		value: WatchStatusTypes.OnHold,
 		text: 'On Hold',
 	},
 	{
-		value: 'DROPPED',
+		value: WatchStatusTypes.Dropped,
 		text: 'Dropped',
 	},
 ];
