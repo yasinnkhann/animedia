@@ -47,6 +47,20 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 								className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
 									userWatchStatusFromMedia
 								)} text-base text-white`}
+
+								// className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${
+								// 	userWatchStatusFromMedia === 'W'
+								// 		? 'bg-green-500'
+								// 		: userWatchStatusFromMedia === 'C'
+								// 		? 'bg-yellow-500'
+								// 		: userWatchStatusFromMedia === 'PW'
+								// 		? 'bg-blue-500'
+								// 		: userWatchStatusFromMedia === 'OH'
+								// 		? 'bg-orange-500'
+								// 		: userWatchStatusFromMedia === 'D'
+								// 		? 'bg-red-500'
+								// 		: ''
+								// } text-base text-white`}
 							>
 								{userWatchStatusFromMedia}
 							</div>
