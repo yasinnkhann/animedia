@@ -177,6 +177,8 @@ export class CommonMethods {
 					return 'D';
 			}
 		}
+
+		return undefined;
 	};
 
 	public static isValidEmail = (email = '') => {
@@ -210,5 +212,24 @@ export class CommonMethods {
 
 	public static unParseSpecialChars = (str: string) => {
 		return str.replace(/DASH/gi, '-').replace(/_ampersand_/gi, ' & ');
+	};
+
+	public static getWatchStatusBackgroundColor = (
+		watchStatus: ReturnType<typeof CommonMethods.getUserWatchStatusFromMedia>
+	) => {
+		switch (watchStatus) {
+			case 'W':
+				return 'bg-green-500';
+			case 'C':
+				return 'bg-yellow-500';
+			case 'PW':
+				return 'bg-blue-500';
+			case 'OH':
+				return 'bg-orange-500';
+			case 'D':
+				return 'bg-red-500';
+			default:
+				return '';
+		}
 	};
 }
