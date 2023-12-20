@@ -21,6 +21,11 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		const [searchResults, setSearchResults] = useState<any[]>([]);
 
+		const [hideDropDownSearchResults, setHideShowDropDownSearchResults] =
+			useState(false);
+
+		const [showNoResultsFound, setShowNoResultsFound] = useState(false);
+
 		const { data: searchedMoviesData, loading: searchedMoviesLoading } =
 			useQuery(Queries.SEARCHED_MOVIES, {
 				variables: {
@@ -55,7 +60,11 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 					searchedPeopleData?.searchedPeople
 				) {
 					const movieResults = searchedMoviesData.searchedMovies.results.map(
-						movie => ({ id: movie.id, movieTitle: movie.title })
+						movie => ({
+							id: movie.id,
+							releaseDate: movie.release_date,
+							movieTitle: movie.title,
+						})
 					);
 					const showsResults = searchedShowsData.searchedShows.results.map(
 						show => ({ id: show.id, showName: show.name })
@@ -95,6 +104,14 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			}
 		}, [isSearchBtnClicked, ref]);
 
+		useEffect(() => {
+			(async () => {
+				await CommonMethods.wait(2000);
+				setHideShowDropDownSearchResults(_.isEmpty(searchQuery));
+				setShowNoResultsFound(_.isEmpty(searchResults));
+			})();
+		}, [searchQuery, searchResults]);
+
 		console.log(searchResults);
 
 		return (
@@ -115,31 +132,28 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				>
 					<FaSearch />
 				</button>
-				{!_.isEmpty(searchQuery) && (
+				{!hideDropDownSearchResults && !showNoResultsFound ? (
 					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-						{!_.isEmpty(searchResults) ? (
-							searchResults.map(result => (
-								<div
-									key={result.id}
-									className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
-								>
-									<span className='text-white'>
-										{result.movieTitle || result.showName || result.personName}{' '}
-										||{' '}
-									</span>
-									<span className='text-sm text-gray-300'>
-										{result.movieTitle
-											? CommonMethods.toTitleCase(EContent.MOVIE)
-											: result.showName
-											? CommonMethods.toTitleCase(EContent.SHOW)
-											: CommonMethods.toTitleCase(EContent.PERSON)}
-									</span>
-								</div>
-							))
-						) : (
-							<span className='text-sm text-gray-300'>No results</span>
-						)}
+						{searchResults.map(result => (
+							<div
+								key={result.id}
+								className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+							>
+								<span className='text-white'>
+									{result.movieTitle || result.showName || result.personName} ||{' '}
+								</span>
+								<span className='text-sm text-gray-300'>
+									{result.movieTitle
+										? CommonMethods.toTitleCase(EContent.MOVIE)
+										: result.showName
+										? CommonMethods.toTitleCase(EContent.SHOW)
+										: CommonMethods.toTitleCase(EContent.PERSON)}
+								</span>
+							</div>
+						))}
 					</div>
+				) : (
+					<span className='text-sm text-gray-300'>No results</span>
 				)}
 			</form>
 		);

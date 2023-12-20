@@ -242,4 +242,8 @@ export class CommonMethods {
 		titleCase = titleCase.slice(0, -1);
 		return titleCase;
 	};
+
+	public static wait = async (ms: number) => {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	};
 }
