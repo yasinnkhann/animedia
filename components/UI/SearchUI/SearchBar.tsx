@@ -132,28 +132,31 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				>
 					<FaSearch />
 				</button>
-				{!hideDropDownSearchResults && !showNoResultsFound ? (
+				{!hideDropDownSearchResults && (
 					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-						{searchResults.map(result => (
-							<div
-								key={result.id}
-								className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
-							>
-								<span className='text-white'>
-									{result.movieTitle || result.showName || result.personName} ||{' '}
-								</span>
-								<span className='text-sm text-gray-300'>
-									{result.movieTitle
-										? CommonMethods.toTitleCase(EContent.MOVIE)
-										: result.showName
-										? CommonMethods.toTitleCase(EContent.SHOW)
-										: CommonMethods.toTitleCase(EContent.PERSON)}
-								</span>
-							</div>
-						))}
+						{!showNoResultsFound &&
+							searchResults.map(result => (
+								<div
+									key={result.id}
+									className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+								>
+									<span className='text-white'>
+										{result.movieTitle || result.showName || result.personName}{' '}
+										||{' '}
+									</span>
+									<span className='text-sm text-gray-300'>
+										{result.movieTitle
+											? CommonMethods.toTitleCase(EContent.MOVIE)
+											: result.showName
+											? CommonMethods.toTitleCase(EContent.SHOW)
+											: CommonMethods.toTitleCase(EContent.PERSON)}
+									</span>
+								</div>
+							))}
+						{showNoResultsFound && (
+							<span className='text-sm text-white'>No results found</span>
+						)}
 					</div>
-				) : (
-					<span className='text-sm text-gray-300'>No results</span>
 				)}
 			</form>
 		);
