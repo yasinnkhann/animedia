@@ -232,4 +232,14 @@ export class CommonMethods {
 				return '';
 		}
 	};
+
+	public static toTitleCase = (str: string) => {
+		let titleCase = '';
+
+		for (const word of str.split(' ')) {
+			titleCase += word[0].toUpperCase() + word.slice(1) + ' ';
+		}
+		titleCase = titleCase.slice(0, -1);
+		return titleCase;
+	};
 }

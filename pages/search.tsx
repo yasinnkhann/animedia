@@ -151,7 +151,7 @@ const Search: NextPage = () => {
 	useEffect(() => {
 		const matchedMedias: UserShow[] | UserMovie[] = [];
 
-		const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
+		const usersMediaMap: Map<string, UserShow | UserMovie> = new Map();
 
 		const userDataArr =
 			searchResultsType === EContent.MOVIES
@@ -164,12 +164,12 @@ const Search: NextPage = () => {
 
 		for (const userDataObj of userDataArr) {
 			if (userDataObj?.id) {
-				usersMediaDict.set(userDataObj.id, userDataObj);
+				usersMediaMap.set(userDataObj.id, userDataObj);
 			}
 		}
 		for (const item of getSearchedTypeData()!.results) {
-			if (usersMediaDict.has(String(item.id))) {
-				matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+			if (usersMediaMap.has(String(item.id))) {
+				matchedMedias.push(usersMediaMap.get(String(item.id)) as any);
 			}
 		}
 

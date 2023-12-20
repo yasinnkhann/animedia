@@ -1,7 +1,12 @@
 import { forwardRef, useState, useEffect, RefObject } from 'react';
+import { CommonMethods } from 'utils/CommonMethods';
+import { EContent } from '@ts/enums';
 import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
 import { useDebounce } from 'hooks/useDebounce';
+import { useQuery } from '@apollo/client';
+import * as Queries from '../../../graphql/queries';
+import _ from 'lodash';
 
 interface Props {
 	closeSearch?: () => void;
@@ -14,7 +19,65 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		const [searchQuery, setSearchQuery] = useState('');
 
-		// useDebounce(() => alert(searchQuery), 3000, [searchQuery]);
+		const [searchResults, setSearchResults] = useState<any[]>([]);
+
+		const { data: searchedMoviesData, loading: searchedMoviesLoading } =
+			useQuery(Queries.SEARCHED_MOVIES, {
+				variables: {
+					q: searchQuery,
+				},
+				// skip: _.isEmpty(searchQuery),
+			});
+
+		const { data: searchedShowsData, loading: searchedShowsLoading } = useQuery(
+			Queries.SEARCHED_SHOWS,
+			{
+				variables: {
+					q: searchQuery,
+				},
+				// skip: _.isEmpty(searchQuery),
+			}
+		);
+
+		const { data: searchedPeopleData, loading: searchedPeopleLoading } =
+			useQuery(Queries.SEARCHED_PEOPLE, {
+				variables: {
+					q: searchQuery,
+				},
+				// skip: _.isEmpty(searchQuery),
+			});
+
+		useDebounce(
+			() => {
+				if (
+					searchedMoviesData?.searchedMovies &&
+					searchedShowsData?.searchedShows &&
+					searchedPeopleData?.searchedPeople
+				) {
+					const movieResults = searchedMoviesData.searchedMovies.results.map(
+						movie => ({ id: movie.id, movieTitle: movie.title })
+					);
+					const showsResults = searchedShowsData.searchedShows.results.map(
+						show => ({ id: show.id, showName: show.name })
+					);
+					const peopleResults = searchedPeopleData.searchedPeople.results.map(
+						person => ({ id: person.id, personName: person.name })
+					);
+					setSearchResults([
+						...movieResults,
+						...showsResults,
+						...peopleResults,
+					]);
+				}
+			},
+			3000,
+			[
+				searchQuery,
+				searchedMoviesData?.searchedMovies,
+				searchedShowsData?.searchedShows,
+				searchedPeopleData?.searchedPeople,
+			]
+		);
 
 		const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
@@ -31,6 +94,8 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				(ref as RefObject<HTMLButtonElement>).current?.focus();
 			}
 		}, [isSearchBtnClicked, ref]);
+
+		console.log(searchResults);
 
 		return (
 			<form
@@ -50,7 +115,32 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				>
 					<FaSearch />
 				</button>
-				{/* <div className='h-9 w-[calc(100%-2rem)] bg-gray-500'>Howdy</div> */}
+				{!_.isEmpty(searchQuery) && (
+					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
+						{!_.isEmpty(searchResults) ? (
+							searchResults.map(result => (
+								<div
+									key={result.id}
+									className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+								>
+									<span className='text-white'>
+										{result.movieTitle || result.showName || result.personName}{' '}
+										||{' '}
+									</span>
+									<span className='text-sm text-gray-300'>
+										{result.movieTitle
+											? CommonMethods.toTitleCase(EContent.MOVIE)
+											: result.showName
+											? CommonMethods.toTitleCase(EContent.SHOW)
+											: CommonMethods.toTitleCase(EContent.PERSON)}
+									</span>
+								</div>
+							))
+						) : (
+							<span className='text-sm text-gray-300'>No results</span>
+						)}
+					</div>
+				)}
 			</form>
 		);
 	}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Head from 'next/head';
 import SearchBar from '../components/UI/SearchUI/SearchBar';
 import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/Home/HomeHorizontalScroller';
@@ -45,6 +45,8 @@ const Home: NextPage = () => {
 	const [trendingTimeWindow, setTrendingTimeWindow] = useState<TimeWindowTypes>(
 		TimeWindowTypes.Day
 	);
+
+	const searchBarRef = useRef<HTMLInputElement>(null);
 
 	const { data: whatsPopularData, loading: whatsPopularLoading } = useQuery(
 		whatsPopularQueryType
@@ -128,7 +130,7 @@ const Home: NextPage = () => {
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				{allDataLoaded && (
 					<div>
-						<SearchBar />
+						<SearchBar ref={searchBarRef} />
 						<section className='mt-4'>
 							<section className='ml-[3rem] flex w-full items-end'>
 								<div>
