@@ -16,7 +16,12 @@ import {
 
 export class CommonMethods {
 	public static formatDate = (dateStr: string) => {
-		return moment(dateStr).format('MMM Do, YYYY');
+		const formattedDate = moment(dateStr).format('MMM Do, YYYY');
+		if (formattedDate === 'Invalid date') {
+			return undefined;
+		} else {
+			return formattedDate;
+		}
 	};
 
 	public static getDetailsPageRoute = (

@@ -60,8 +60,8 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 					const movieResults = searchedMoviesData.searchedMovies.results.map(
 						movie => ({
 							id: movie.id,
-							releaseDate: movie.release_date,
 							movieTitle: movie.title,
+							releaseDate: movie.release_date,
 						})
 					);
 
@@ -144,12 +144,20 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 										{result.movieTitle || result.showName || result.personName}{' '}
 										||{' '}
 									</span>
-									<span className='text-sm text-gray-300'>
+									<span className='text-gray-300'>
+										{' '}
 										{result.movieTitle
 											? CommonMethods.toTitleCase(EContent.MOVIE)
 											: result.showName
 											? CommonMethods.toTitleCase(EContent.SHOW)
 											: CommonMethods.toTitleCase(EContent.PERSON)}
+									</span>
+									<span className='float-right text-white'>
+										{result.movieTitle
+											? CommonMethods.formatDate(result.releaseDate)
+											: result.showName
+											? CommonMethods.formatDate(result.firstAirDate)
+											: result.knownForDepartment}
 									</span>
 								</div>
 							))}
