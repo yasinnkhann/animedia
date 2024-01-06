@@ -139,6 +139,21 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 								<div
 									key={result.id}
 									className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+									onClick={() => {
+										router.push(
+											CommonMethods.getDetailsPageRoute(
+												result.movieTitle
+													? EContent.MOVIE
+													: result.showName
+													? EContent.SHOW
+													: EContent.PERSON,
+												result.id,
+												result.movieTitle ||
+													result.showName ||
+													result.personName
+											)
+										);
+									}}
 								>
 									<span className='text-white'>
 										{result.movieTitle || result.showName || result.personName}{' '}
