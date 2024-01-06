@@ -153,6 +153,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 													result.personName
 											)
 										);
+										if (closeSearch) {
+											closeSearch();
+										}
 									}}
 								>
 									<span className='text-white'>
