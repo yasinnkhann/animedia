@@ -21,10 +21,8 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		const [searchResults, setSearchResults] = useState<any[]>([]);
 
-		const [hideDropDownSearchResults, setHideShowDropDownSearchResults] =
+		const [showDropDownSearchResults, setShowDropDownSearchResults] =
 			useState(false);
-
-		const [showNoResultsFound, setShowNoResultsFound] = useState(false);
 
 		const { data: searchedMoviesData, loading: searchedMoviesLoading } =
 			useQuery(Queries.SEARCHED_MOVIES, {
@@ -78,8 +76,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 						...peopleResults,
 					]);
 				}
+				setShowDropDownSearchResults(!_.isEmpty(searchQuery));
 			},
-			3000,
+			_.isEmpty(searchQuery) ? 0 : 2000,
 			[
 				searchQuery,
 				searchedMoviesData?.searchedMovies,
@@ -104,16 +103,6 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			}
 		}, [isSearchBtnClicked, ref]);
 
-		useEffect(() => {
-			(async () => {
-				await CommonMethods.wait(2000);
-				setHideShowDropDownSearchResults(_.isEmpty(searchQuery));
-				setShowNoResultsFound(_.isEmpty(searchResults));
-			})();
-		}, [searchQuery, searchResults]);
-
-		console.log(searchResults);
-
 		return (
 			<form
 				className='relative flex w-full flex-col items-center justify-center'
@@ -132,9 +121,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				>
 					<FaSearch />
 				</button>
-				{!hideDropDownSearchResults && (
+				{showDropDownSearchResults && (
 					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-						{!showNoResultsFound &&
+						{!_.isEmpty(searchResults) &&
 							searchResults.map(result => (
 								<div
 									key={result.id}
@@ -153,7 +142,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 									</span>
 								</div>
 							))}
-						{showNoResultsFound && (
+						{_.isEmpty(searchResults) && (
 							<span className='text-sm text-white'>No results found</span>
 						)}
 					</div>
