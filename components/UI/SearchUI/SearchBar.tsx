@@ -29,7 +29,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				variables: {
 					q: searchQuery,
 				},
-				// skip: _.isEmpty(searchQuery),
+				skip: _.isEmpty(searchQuery),
 			});
 
 		const { data: searchedShowsData, loading: searchedShowsLoading } = useQuery(
@@ -38,7 +38,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				variables: {
 					q: searchQuery,
 				},
-				// skip: _.isEmpty(searchQuery),
+				skip: _.isEmpty(searchQuery),
 			}
 		);
 
@@ -47,7 +47,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				variables: {
 					q: searchQuery,
 				},
-				// skip: _.isEmpty(searchQuery),
+				skip: _.isEmpty(searchQuery),
 			});
 
 		useDebounce(
@@ -64,12 +64,23 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 							movieTitle: movie.title,
 						})
 					);
+
 					const showsResults = searchedShowsData.searchedShows.results.map(
-						show => ({ id: show.id, showName: show.name })
+						show => ({
+							id: show.id,
+							showName: show.name,
+							firstAirDate: show.first_air_date,
+						})
 					);
+
 					const peopleResults = searchedPeopleData.searchedPeople.results.map(
-						person => ({ id: person.id, personName: person.name })
+						person => ({
+							id: person.id,
+							personName: person.name,
+							knownForDepartment: person.known_for_department,
+						})
 					);
+
 					setSearchResults([
 						...movieResults,
 						...showsResults,
