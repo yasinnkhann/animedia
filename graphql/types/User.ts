@@ -639,7 +639,7 @@ export const UserMutations = extendType({
 				const transporter = nodemailer.createTransport({
 					host: process.env.EMAIL_SERVER_HOST,
 					port: process.env.EMAIL_SERVER_PORT,
-					secure: false, // true for 465, false for other ports
+					secure: Number(process.env.EMAIL_SERVER_PORT as string) === 465, // true for 465, false for other ports
 					auth: {
 						user: process.env.EMAIL_SERVER_USER,
 						pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -648,11 +648,11 @@ export const UserMutations = extendType({
 
 				try {
 					await transporter.sendMail({
-						from: process.env.EMAIL_FROM, // verified sender email
-						to: recipientEmail, // recipient email
-						subject, // Subject line
-						text, // plain text body
-						html, // html body
+						from: process.env.EMAIL_FROM,
+						to: recipientEmail,
+						subject,
+						text,
+						html,
 					});
 
 					return {

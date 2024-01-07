@@ -77,7 +77,7 @@ export default function Register() {
 						variables: {
 							recipientEmail: email,
 							subject: 'Email Verification Link',
-							text: 'This is the text',
+							text: 'Click the link below to verify your email.',
 							html: `<a href="${CLIENT_BASE_URL}/verification-email/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}">Verify Email</a>`,
 						},
 					});
