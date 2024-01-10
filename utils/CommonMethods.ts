@@ -15,8 +15,12 @@ import {
 } from '../graphql/generated/code-gen/graphql';
 
 export class CommonMethods {
-	public static formatDate = (dateStr: string) => {
+	public static formatDate = (dateStr: string | null | undefined) => {
+		if (dateStr === undefined) {
+			return undefined;
+		}
 		const formattedDate = moment(dateStr).format('MMM Do, YYYY');
+
 		if (formattedDate === 'Invalid date') {
 			return undefined;
 		} else {

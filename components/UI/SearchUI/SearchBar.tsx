@@ -13,13 +13,37 @@ interface Props {
 	isSearchBtnClicked?: boolean;
 }
 
+type NullablePartial<T, K extends keyof T> = {
+	[P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
+};
+
+type SearchItem = {
+	id: number;
+	movieTitle?: string;
+	showName?: string;
+	releaseDate?: string;
+	firstAirDate?: string;
+	personName?: string;
+	knownForDepartment?: string;
+};
+
+type PartialSearchItem = NullablePartial<
+	SearchItem,
+	| 'movieTitle'
+	| 'showName'
+	| 'releaseDate'
+	| 'firstAirDate'
+	| 'personName'
+	| 'knownForDepartment'
+>;
+
 const SearchBar = forwardRef<HTMLInputElement, Props>(
 	({ closeSearch, isSearchBtnClicked }, ref) => {
 		const router = useRouter();
 
 		const [searchQuery, setSearchQuery] = useState('');
 
-		const [searchResults, setSearchResults] = useState<any[]>([]);
+		const [searchResults, setSearchResults] = useState<PartialSearchItem[]>([]);
 
 		const [showDropDownSearchResults, setShowDropDownSearchResults] =
 			useState(false);
@@ -148,9 +172,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 													? EContent.SHOW
 													: EContent.PERSON,
 												result.id,
-												result.movieTitle ||
+												(result.movieTitle ||
 													result.showName ||
-													result.personName
+													result.personName) as string
 											)
 										);
 										if (closeSearch) {
