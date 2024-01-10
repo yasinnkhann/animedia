@@ -138,7 +138,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 							searchResults.map(result => (
 								<div
 									key={result.id}
-									className='mb-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+									className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
 									onClick={() => {
 										router.push(
 											CommonMethods.getDetailsPageRoute(
