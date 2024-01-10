@@ -14,6 +14,10 @@ import {
 	ShowResult,
 } from '../../../graphql/generated/code-gen/graphql';
 
+export type NullablePartial<T, K extends keyof T> = {
+	[P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
+};
+
 export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
 export type TStatusParam =
@@ -43,3 +47,21 @@ export type TMoviesGenreData =
 export type TShowsGenreData =
 	| PopularShowsByGenreQuery['popularShowsByGenre']
 	| TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
+
+export type TDropDownSearchResult = NullablePartial<
+	{
+		id: number;
+		movieTitle?: string;
+		showName?: string;
+		releaseDate?: string;
+		firstAirDate?: string;
+		personName?: string;
+		knownForDepartment?: string;
+	},
+	| 'movieTitle'
+	| 'showName'
+	| 'releaseDate'
+	| 'firstAirDate'
+	| 'personName'
+	| 'knownForDepartment'
+>;

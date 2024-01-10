@@ -1,6 +1,7 @@
 import { forwardRef, useState, useEffect, RefObject } from 'react';
 import { CommonMethods } from 'utils/CommonMethods';
 import { EContent } from '@ts/enums';
+import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
 import { useDebounce } from 'hooks/useDebounce';
@@ -13,37 +14,15 @@ interface Props {
 	isSearchBtnClicked?: boolean;
 }
 
-type NullablePartial<T, K extends keyof T> = {
-	[P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
-};
-
-type SearchItem = {
-	id: number;
-	movieTitle?: string;
-	showName?: string;
-	releaseDate?: string;
-	firstAirDate?: string;
-	personName?: string;
-	knownForDepartment?: string;
-};
-
-type PartialSearchItem = NullablePartial<
-	SearchItem,
-	| 'movieTitle'
-	| 'showName'
-	| 'releaseDate'
-	| 'firstAirDate'
-	| 'personName'
-	| 'knownForDepartment'
->;
-
 const SearchBar = forwardRef<HTMLInputElement, Props>(
 	({ closeSearch, isSearchBtnClicked }, ref) => {
 		const router = useRouter();
 
 		const [searchQuery, setSearchQuery] = useState('');
 
-		const [searchResults, setSearchResults] = useState<PartialSearchItem[]>([]);
+		const [dropDownSearchResults, setDropDownSearchResults] = useState<
+			TDropDownSearchResult[]
+		>([]);
 
 		const [showDropDownSearchResults, setShowDropDownSearchResults] =
 			useState(false);
@@ -105,7 +84,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 						})
 					);
 
-					setSearchResults([
+					setDropDownSearchResults([
 						...movieResults,
 						...showsResults,
 						...peopleResults,
@@ -158,8 +137,8 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				</button>
 				{showDropDownSearchResults && (
 					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-						{!_.isEmpty(searchResults) &&
-							searchResults.map(result => (
+						{!_.isEmpty(dropDownSearchResults) &&
+							dropDownSearchResults.map(result => (
 								<div
 									key={result.id}
 									className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
@@ -203,7 +182,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 									</span>
 								</div>
 							))}
-						{_.isEmpty(searchResults) && (
+						{_.isEmpty(dropDownSearchResults) && (
 							<span className='text-sm text-white'>No results found</span>
 						)}
 					</div>
