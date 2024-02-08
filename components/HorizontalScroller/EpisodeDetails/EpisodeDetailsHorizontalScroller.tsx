@@ -1,9 +1,9 @@
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { useDrag } from '../../../../hooks/useDrag';
+import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IEPDetails } from '@ts/interfaces';
-import { ShowDetailsRes } from '../../../../graphql/generated/code-gen/graphql';
+import { ShowDetailsRes } from '../../../graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 

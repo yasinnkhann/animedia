@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import Head from 'next/head';
-import SearchBar from '../components/UI/SearchUI/SearchBar';
-import HomeHorizontalScroller from '../components/UI/HorizontalScrollerUI/Home/HomeHorizontalScroller';
+import SearchBar from '../components/Search/SearchBar';
+import HomeHorizontalScroller from '../components/HorizontalScroller/Home/HomeHorizontalScroller';
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode, useQuery } from '@apollo/client';

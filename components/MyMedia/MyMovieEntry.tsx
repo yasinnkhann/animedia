@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsFillTrashFill } from 'react-icons/bs';
-import * as Queries from '../../../graphql/queries';
-import * as Mutations from '../../../graphql/mutations';
-import { CommonMethods } from '../../../utils/CommonMethods';
+import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserMovie } from 'graphql/generated/code-gen/graphql';

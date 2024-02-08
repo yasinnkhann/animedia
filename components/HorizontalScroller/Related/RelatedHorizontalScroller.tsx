@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import RelatedCard from './RelatedCard';
-import { useDrag } from '../../../../hooks/useDrag';
+import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
-import * as Queries from '../../../../graphql/queries';
+import * as Queries from '../../../graphql/queries';
 import { UserShow, UserMovie } from 'graphql/generated/code-gen/graphql';
 import { EContent } from '@ts/enums';
 

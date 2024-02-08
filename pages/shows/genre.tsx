@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Pagination from 'components/Pagination';
-import MediaList from 'components/UI/MediaPersonUI/MediaList';
+import MediaList from 'components/MediaPerson/MediaList';
 import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { TypedDocumentNode, useQuery } from '@apollo/client';

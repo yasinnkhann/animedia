@@ -52,15 +52,15 @@ export type TDropDownSearchResult = NullablePartial<
 	{
 		id: number;
 		movieTitle?: string;
-		showName?: string;
 		releaseDate?: string;
+		showName?: string;
 		firstAirDate?: string;
 		personName?: string;
 		knownForDepartment?: string;
 	},
 	| 'movieTitle'
-	| 'showName'
 	| 'releaseDate'
+	| 'showName'
 	| 'firstAirDate'
 	| 'personName'
 	| 'knownForDepartment'

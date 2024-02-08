@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
 import { useDebounce } from 'hooks/useDebounce';
 import { useQuery } from '@apollo/client';
-import * as Queries from '../../../graphql/queries';
+import * as Queries from '../../graphql/queries';
 import _ from 'lodash';
 
 interface Props {

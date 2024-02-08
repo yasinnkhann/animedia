@@ -1,6 +1,6 @@
 import PersonCard from './PersonCard';
-import { RESULTS_PER_PAGE } from '../../../utils/constants';
-import { PeopleRes } from '../../../graphql/generated/code-gen/graphql';
+import { RESULTS_PER_PAGE } from '../../utils/constants';
+import { PeopleRes } from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	peopleData: PeopleRes;

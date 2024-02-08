@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import * as Queries from '../../graphql/queries';
-import MyMoviesList from 'components/UI/MyMediaUI/MyMoviesList';
+import MyMoviesList from 'components/MyMedia/MyMoviesList';
 import { Circles } from 'react-loading-icons';
 import { CommonMethods } from 'utils/CommonMethods';
 import { useRouter } from 'next/router';

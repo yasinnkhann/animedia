@@ -1,41 +1,40 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import * as Queries from '../../../graphql/queries';
+import * as Queries from '../../graphql/queries';
 import { EContent } from '@ts/enums';
-import { CommonMethods } from '../../../utils/CommonMethods';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
-import { ShowResult } from 'graphql/generated/code-gen/graphql';
+import { MovieResult } from 'graphql/generated/code-gen/graphql';
 
 interface Props {
-	show: ShowResult;
+	movie: MovieResult;
 	rank: number;
 }
 
-const ShowCard = ({ show, rank }: Props) => {
+const MovieCard = ({ movie, rank }: Props) => {
 	const { data: session } = useSession();
 
-	const { data: usersShowData, loading: usersShowLoading } = useQuery(
-		Queries.GET_USERS_SHOW,
+	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
+		Queries.GET_USERS_MOVIE,
 		{
 			variables: {
-				showId: String(show.id),
+				movieId: String(movie.id),
 			},
 		}
 	);
 
 	return (
-		<tr className='border'>
+		<tr className='border-2'>
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{rank}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute(
-						EContent.SHOW,
-						show.id,
-						show.name
+						EContent.MOVIE,
+						movie.id,
+						movie.title
 					)}
 					passHref
 				>
@@ -43,53 +42,54 @@ const ShowCard = ({ show, rank }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getImage(show.poster_path)}
-								alt={show.name}
+								src={CommonMethods.getImage(movie.poster_path)}
+								alt={movie.title}
 								layout='fill'
 							/>
 						</section>
 					</a>
 				</Link>
-
 				<section className='col-start-2 pl-4'>
 					<Link
 						href={CommonMethods.getDetailsPageRoute(
-							EContent.SHOW,
-							show.id,
-							show.name
+							EContent.MOVIE,
+							movie.id,
+							movie.title
 						)}
 						passHref
 					>
 						<a className='text-inherit no-underline'>
-							<h3 className='cursor-pointer'>{show.name}</h3>
+							<h3 className='cursor-pointer'>{movie.title}</h3>
 						</a>
 					</Link>
+
 					<p>
-						{show.first_air_date
-							? CommonMethods.formatDate(show.first_air_date)
-							: 'First Air Date Not Available'}
+						{movie.release_date
+							? CommonMethods.formatDate(movie.release_date)
+							: 'Release Date Not Available'}
 					</p>
 				</section>
 			</td>
 
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
-				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
+				<p className='text-base'>{movie.vote_average.toFixed(1)}</p>
 			</td>
 
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
 						<p>
-							{usersShowData?.usersShow?.rating
-								? usersShowData.usersShow.rating
+							{usersMovieData?.usersMovie?.rating
+								? usersMovieData.usersMovie.rating
 								: 'N/A'}
 						</p>
 					</td>
+
 					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
 						<p>
-							{usersShowData?.usersShow?.status
+							{usersMovieData?.usersMovie?.status
 								? CommonMethods.renderTableStatus(
-										usersShowData.usersShow.status
+										usersMovieData.usersMovie.status
 								  )
 								: 'N/A'}
 						</p>
@@ -100,4 +100,4 @@ const ShowCard = ({ show, rank }: Props) => {
 	);
 };
 
-export default ShowCard;
+export default MovieCard;

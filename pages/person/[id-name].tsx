@@ -6,7 +6,7 @@ import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from '../../utils/CommonMethods';
-import RelatedHorizontalScroller from '../../components/UI/HorizontalScrollerUI/Related/RelatedHorizontalScroller';
+import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,

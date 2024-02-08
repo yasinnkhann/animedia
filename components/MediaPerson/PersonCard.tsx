@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { CommonMethods } from '../../../utils/CommonMethods';
+import { CommonMethods } from '../../utils/CommonMethods';
 import { EContent } from '@ts/enums';
 import Link from 'next/link';
-import { PersonResult } from '../../../graphql/generated/code-gen/graphql';
+import { PersonResult } from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	person: PersonResult;

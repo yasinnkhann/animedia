@@ -7,7 +7,7 @@ import { AiFillHome } from 'react-icons/ai';
 import { BiLogIn } from 'react-icons/bi';
 import { TbSearch } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
-import SearchBar from '../components/UI/SearchUI/SearchBar';
+import SearchBar from './Search/SearchBar';
 import { motion } from 'framer-motion';
 import {
 	MY_MEDIA_ITEMS,

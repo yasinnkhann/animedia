@@ -1,5 +1,5 @@
 import MovieCastCard from './MediaCastCard';
-import { useDrag } from '../../../../hooks/useDrag';
+import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { ICast } from '@ts/interfaces';

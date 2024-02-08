@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import RoundProgressBar from '../../../RoundProgressBar';
+import RoundProgressBar from '../../RoundProgressBar';
 import { EContent } from '@ts/enums';
-import { CommonMethods } from '../../../../utils/CommonMethods';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import {
 	MovieResult,
 	ShowResult,
 	UserMovie,
 	UserShow,
-} from '../../../../graphql/generated/code-gen/graphql';
+} from '../../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	item: MovieResult | ShowResult;

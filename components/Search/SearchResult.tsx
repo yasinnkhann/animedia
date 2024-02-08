@@ -1,6 +1,6 @@
 import { EContent } from '@ts/enums';
 import Image from 'next/image';
-import { CommonMethods } from '../../../utils/CommonMethods';
+import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
 import {
 	MovieResult,
@@ -9,7 +9,7 @@ import {
 	Maybe,
 	UserShow,
 	UserMovie,
-} from '../../../graphql/generated/code-gen/graphql';
+} from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult;

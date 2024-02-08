@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import * as Queries from '../../../../graphql/queries';
+import * as Queries from '../../../graphql/queries';
 import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
 import { useQuery } from '@apollo/client';

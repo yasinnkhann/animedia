@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Pagination from 'components/Pagination';
-import PeopleList from 'components/UI/MediaPersonUI/PeopleList';
+import PeopleList from 'components/MediaPerson/PeopleList';
 import * as Queries from '../../graphql/queries';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { Circles } from 'react-loading-icons';

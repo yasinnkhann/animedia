@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import MyShowsList from 'components/UI/MyMediaUI/MyShowsList';
+import MyShowsList from 'components/MyMedia/MyShowsList';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { CommonMethods } from 'utils/CommonMethods';
