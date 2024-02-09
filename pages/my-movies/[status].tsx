@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import * as Queries from '../../graphql/queries';
-import MyMoviesList from 'components/MyMedia/MyMoviesList';
+import MyMediaList from 'components/MyMedia/MyMediaList';
 import { Circles } from 'react-loading-icons';
 import { CommonMethods } from 'utils/CommonMethods';
 import { useRouter } from 'next/router';
@@ -91,9 +91,10 @@ const Status = () => {
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				<MyMoviesList
+				<MyMediaList
 					status={router.query.status as TStatusParam}
-					myMovies={myMovies}
+					myMedias={myMovies}
+					mediaType='MOVIES'
 				/>
 			</main>
 		</>
