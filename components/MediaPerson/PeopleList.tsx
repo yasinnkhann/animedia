@@ -7,7 +7,7 @@ interface Props {
 	pageNum: number;
 }
 
-const MediaList = ({ peopleData, pageNum }: Props) => {
+const PeopleList = ({ peopleData, pageNum }: Props) => {
 	return (
 		<section className='mb-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
 			{peopleData.results.map((person, idx) => (
@@ -22,4 +22,4 @@ const MediaList = ({ peopleData, pageNum }: Props) => {
 	);
 };
 
-export default MediaList;
+export default PeopleList;
