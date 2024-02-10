@@ -44,3 +44,7 @@
 		@apply text-blue-500 underline;
 	}
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
+}

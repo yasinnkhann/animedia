@@ -32,7 +32,7 @@ class MyDocument extends Document {
 						rel='stylesheet'
 					/>
 				</Head>
-				<body className={pageProps.hideScrollBar ? 'scrollbar-hide' : ''}>
+				<body className={pageProps.hideScrollBar ? 'hide-scrollbar' : ''}>
 					<Main />
 					<NextScript />
 				</body>

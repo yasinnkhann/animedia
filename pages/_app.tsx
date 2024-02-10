@@ -13,7 +13,7 @@ function MyApp({
 	pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session; hideScrollBar: string }>) {
 	useEffect(() => {
-		document.body.className = pageProps.hideScrollBar ? 'scrollbar-hide' : '';
+		document.body.className = pageProps.hideScrollBar ? 'hide-scrollbar' : '';
 	});
 
 	return (
