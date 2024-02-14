@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../graphql/queries';

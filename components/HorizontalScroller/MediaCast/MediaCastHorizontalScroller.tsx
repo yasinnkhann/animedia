@@ -1,4 +1,4 @@
-import MovieCastCard from './MediaCastCard';
+import MediaCastCard from './MediaCastCard';
 import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
@@ -51,7 +51,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 			scrollContainerClassName='!h-[23rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
-				<MovieCastCard key={item.id} item={item} dragging={dragging} />
+				<MediaCastCard key={item.id} item={item} dragging={dragging} />
 			))}
 		</ScrollMenu>
 	);

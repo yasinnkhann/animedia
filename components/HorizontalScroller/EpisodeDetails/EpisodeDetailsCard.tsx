@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import Image from 'next/image';
-import * as Queries from '../../../graphql/queries';
-import { IEPDetails } from '@ts/interfaces';
 import EpisodeDetailsModal from 'components/EpisodeDetailsModal';
+import * as Queries from '../../../graphql/queries';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
+import { IEPDetails } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {

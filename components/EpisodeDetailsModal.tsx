@@ -1,9 +1,9 @@
-import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { GrClose } from 'react-icons/gr';
-import { CommonMethods } from 'utils/CommonMethods';
 import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
+import { Fragment, useEffect, useRef } from 'react';
+import { CommonMethods } from 'utils/CommonMethods';
+import { GrClose } from 'react-icons/gr';
 import { EpisodeDetailsRes } from '../graphql/generated/code-gen/graphql';
 
 interface Props {
