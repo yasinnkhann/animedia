@@ -43,6 +43,12 @@
 	a {
 		@apply text-blue-500 underline;
 	}
+
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 }
 
 .hide-scrollbar::-webkit-scrollbar {

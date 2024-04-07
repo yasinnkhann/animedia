@@ -19,6 +19,8 @@ import { CommonMethods } from '../../utils/CommonMethods';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { EContent } from '@ts/enums';
+import { FaPlus } from 'react-icons/fa';
+import { IoMdArrowDropdown } from 'react-icons/io';
 import _ from 'lodash';
 
 const ShowDetails = () => {
@@ -256,12 +258,20 @@ const ShowDetails = () => {
 	};
 
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (/[\D]/gi.test(e.target.value)) {
-			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
+		const { value } = e.target;
 
+		if (/[\D]/gi.test(value)) {
+			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
 			e.target.selectionStart = 1;
 		} else {
-			setCurrEp(e.target.value);
+			if (
+				+value > currTotalEpCount ||
+				value.startsWith('00') ||
+				(value.startsWith('0') && /[1-9]/.test(value.slice(1)))
+			) {
+				return;
+			}
+			setCurrEp(value);
 		}
 	};
 
@@ -295,34 +305,39 @@ const ShowDetails = () => {
 	};
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-		if (e.target.value === '' || +e.target.value > currTotalEpCount) {
-			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
-		} else {
-			if (
-				watchStatus === WatchStatusTypes.Watching &&
-				+e.target.value === currTotalEpCount
-			) {
-				setWatchStatus(WatchStatusTypes.Completed);
-
-				updateShow({
-					variables: {
-						showId: String(showDetailsData?.showDetails?.id),
-						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode: currTotalEpCount,
-					},
-				});
-
+		if (usersShowData?.usersShow?.id) {
+			if (usersShowData.usersShow.current_episode === e.target.valueAsNumber) {
 				return;
 			}
-			updateShow({
-				variables: {
-					showId: String(showDetailsData?.showDetails?.id!),
-					showRating: typeof rating === 'string' ? null : rating,
-					watchStatus,
-					currentEpisode: Number(currEp),
-				},
-			});
+			if (e.target.value === '' || +e.target.value > currTotalEpCount) {
+				setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
+			} else {
+				if (
+					watchStatus === WatchStatusTypes.Watching &&
+					+e.target.value === currTotalEpCount
+				) {
+					setWatchStatus(WatchStatusTypes.Completed);
+
+					updateShow({
+						variables: {
+							showId: String(showDetailsData?.showDetails?.id),
+							showRating: typeof rating === 'string' ? null : rating,
+							watchStatus: WatchStatusTypes.Completed,
+							currentEpisode: currTotalEpCount,
+						},
+					});
+
+					return;
+				}
+				updateShow({
+					variables: {
+						showId: String(showDetailsData?.showDetails?.id!),
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus,
+						currentEpisode: Number(currEp),
+					},
+				});
+			}
 		}
 	};
 
@@ -490,64 +505,70 @@ const ShowDetails = () => {
 					</section>
 
 					{status === 'authenticated' && session && (
-						<section className='my-4 flex h-[1.5rem]'>
-							<select
-								className='h-full rounded outline-none'
-								value={watchStatus}
-								onChange={handleChangeWatchStatus}
-								disabled={isDBPending}
-							>
-								{watchStatusOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
+						<section className='my-4 flex items-center space-x-4'>
+							<div className='relative'>
+								<select
+									className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+									value={watchStatus}
+									onChange={handleChangeWatchStatus}
+									disabled={isDBPending}
+								>
+									{watchStatusOptions.map(option => (
+										<option key={option.value} value={option.value}>
+											{option.text}
+										</option>
+									))}
+								</select>
+								<IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+							</div>
 
-							<select
-								className='mx-4'
-								value={rating}
-								onChange={handleChangeRating}
-								disabled={
-									watchStatus === 'NOT_WATCHING' ||
-									watchStatus === 'PLAN_TO_WATCH' ||
-									isDBPending
-								}
-							>
-								{ratingOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
-
-							<form
-								className='border border-gray-200 bg-white'
-								onSubmit={handleEpisodeSubmit}
-							>
-								<span>Episodes:</span>
-								<input
-									className='w-12 text-right focus:outline-none'
-									type='text'
-									value={currEp}
-									onChange={handleEpisodeChange}
-									onFocus={e => (e.target.selectionStart = 1)}
+							<div className='relative'>
+								<select
+									className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+									value={rating}
+									onChange={handleChangeRating}
 									disabled={
 										watchStatus === 'NOT_WATCHING' ||
 										watchStatus === 'PLAN_TO_WATCH' ||
 										isDBPending
 									}
+								>
+									{ratingOptions.map(option => (
+										<option key={option.value} value={option.value}>
+											{option.text}
+										</option>
+									))}
+								</select>
+								<IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+							</div>
+
+							<form
+								className='flex items-center rounded border border-gray-300'
+								onSubmit={handleEpisodeSubmit}
+							>
+								<span className='px-3 text-gray-700'>Episodes:</span>
+								<input
+									className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+									type='text'
+									value={currEp}
+									onChange={handleEpisodeChange}
+									onFocus={e => (e.target.selectionStart = 1)}
 									onBlur={handleEpisodeOnBlur}
+									disabled={
+										watchStatus === 'NOT_WATCHING' ||
+										watchStatus === 'PLAN_TO_WATCH' ||
+										isDBPending
+									}
 								/>
-								<span>/</span>
-								<span>{currTotalEpCount}</span>
+								<span className='px-1 text-gray-700'>/</span>{' '}
+								<span className='px-1 text-gray-700'>{currTotalEpCount}</span>
 								<button
-									className='mx-1 text-blue-500'
+									className='cursor-pointer px-4 py-2 text-gray-700 focus:outline-none hover:bg-gray-100'
 									onClick={handleIncrementBtn}
 									type='button'
 									disabled={+currEp >= currTotalEpCount || isDBPending}
 								>
-									+
+									<FaPlus className='text-blue-500' />
 								</button>
 							</form>
 						</section>
