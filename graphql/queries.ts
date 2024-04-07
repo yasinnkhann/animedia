@@ -53,7 +53,7 @@ export const SEARCHED_MOVIES = graphql(`
 `);
 
 export const MOVIE_DETAILS = graphql(`
-	query getMovieDetails($movieDetailsId: Int!) {
+	query getMovieDetails($movieDetailsId: ID!) {
 		movieDetails(movieDetailsId: $movieDetailsId) {
 			adult
 			backdrop_path
@@ -176,7 +176,7 @@ export const TOP_RATED_MOVIES = graphql(`
 `);
 
 export const RECOMMENDED_MOVIES = graphql(`
-	query RecommendedMovies($recommendedMoviesId: Int!, $page: Int) {
+	query RecommendedMovies($recommendedMoviesId: ID!, $page: Int) {
 		recommendedMovies(recommendedMoviesId: $recommendedMoviesId, page: $page) {
 			page
 			total_pages
@@ -202,7 +202,7 @@ export const RECOMMENDED_MOVIES = graphql(`
 `);
 
 export const MOVIE_REVIEWS = graphql(`
-	query MovieReviews($movieReviewsId: Int!, $page: Int) {
+	query MovieReviews($movieReviewsId: ID!, $page: Int) {
 		movieReviews(id: $movieReviewsId, page: $page) {
 			id
 			page
@@ -359,7 +359,7 @@ export const SEARCHED_SHOWS = graphql(`
 `);
 
 export const SHOW_DETAILS = graphql(`
-	query getShowDetails($showDetailsId: Int!) {
+	query getShowDetails($showDetailsId: ID!) {
 		showDetails(showDetailsId: $showDetailsId) {
 			adult
 			backdrop_path
@@ -533,7 +533,7 @@ export const TOP_RATED_SHOWS = graphql(`
 `);
 
 export const RECOMMENDED_SHOWS = graphql(`
-	query RecommendedShows($recommendedShowsId: Int!, $page: Int) {
+	query RecommendedShows($recommendedShowsId: ID!, $page: Int) {
 		recommendedShows(recommendedShowsId: $recommendedShowsId, page: $page) {
 			page
 			total_pages
@@ -558,7 +558,7 @@ export const RECOMMENDED_SHOWS = graphql(`
 `);
 
 export const SHOW_REVIEWS = graphql(`
-	query ShowReviews($showReviewsId: Int!, $page: Int) {
+	query ShowReviews($showReviewsId: ID!, $page: Int) {
 		showReviews(id: $showReviewsId, page: $page) {
 			id
 			page
@@ -668,7 +668,7 @@ export const POPULAR_PEOPLE = graphql(`
 `);
 
 export const PERSON_DETAILS = graphql(`
-	query PersonDetails($personDetailsId: Int!) {
+	query PersonDetails($personDetailsId: ID!) {
 		personDetails(personDetailsId: $personDetailsId) {
 			adult
 			also_known_as
@@ -794,7 +794,7 @@ export const GET_USERS_SHOWS = graphql(`
 `);
 
 export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
-	query PersonsKnownForMovieRes($personsKnownForMovieResId: Int!) {
+	query PersonsKnownForMovieRes($personsKnownForMovieResId: ID!) {
 		personsKnownForMovieRes(
 			personsKnownForMovieResId: $personsKnownForMovieResId
 		) {
@@ -842,7 +842,7 @@ export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
 `);
 
 export const GET_PERSONS_KNOWN_FOR_SHOWS = graphql(`
-	query PersonsKnownForShowRes($personsKnownForShowResId: Int!) {
+	query PersonsKnownForShowRes($personsKnownForShowResId: ID!) {
 		personsKnownForShowRes(
 			personsKnownForShowResId: $personsKnownForShowResId
 		) {
@@ -891,7 +891,7 @@ export const GET_PERSONS_KNOWN_FOR_SHOWS = graphql(`
 `);
 
 export const GET_SHOWS_CAST_CREW = graphql(`
-	query ShowsCastCrew($showId: Int!) {
+	query ShowsCastCrew($showId: ID!) {
 		showsCastCrew(showId: $showId) {
 			id
 			cast {
@@ -925,7 +925,7 @@ export const GET_SHOWS_CAST_CREW = graphql(`
 `);
 
 export const GET_MOVIES_CAST_CREW = graphql(`
-	query MoviesCastCrew($movieId: Int!) {
+	query MoviesCastCrew($movieId: ID!) {
 		moviesCastCrew(movieId: $movieId) {
 			id
 			cast {
@@ -960,7 +960,7 @@ export const GET_MOVIES_CAST_CREW = graphql(`
 `);
 
 export const GET_EPISODE_DETAILS = graphql(`
-	query EpisodeDetails($showId: Int!, $seasonNum: Int!, $episodeNum: Int!) {
+	query EpisodeDetails($showId: ID!, $seasonNum: Int!, $episodeNum: Int!) {
 		episodeDetails(
 			showId: $showId
 			seasonNum: $seasonNum

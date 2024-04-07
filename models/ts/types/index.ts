@@ -50,7 +50,7 @@ export type TShowsGenreData =
 
 export type TDropDownSearchResult = NullablePartial<
 	{
-		id: number;
+		id: string;
 		movieTitle?: string;
 		releaseDate?: string;
 		showName?: string;

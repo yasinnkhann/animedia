@@ -37,12 +37,12 @@ const ShowDetails = () => {
 
 	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
 
-	const id = Number((router.query?.['id-name'] as string)?.split('-')[0]);
+	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
 	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(
 		Queries.SHOW_DETAILS,
 		{
-			skip: isNaN(id),
+			skip: !id,
 			variables: {
 				showDetailsId: id,
 			},

@@ -9,7 +9,7 @@ type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
 	seasons: ShowDetailsRes['seasons'];
-	showId: number;
+	showId: string;
 }
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {

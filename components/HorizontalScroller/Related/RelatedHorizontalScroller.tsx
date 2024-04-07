@@ -98,7 +98,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 				if (!userDataArr) return;
 
 				for (const userDataObj of userDataArr) {
-					if (userDataObj?.id && item.id === parseInt(userDataObj.id)) {
+					if (userDataObj?.id && item.id === userDataObj.id) {
 						matchedMedias.push(userDataObj as any);
 					}
 				}

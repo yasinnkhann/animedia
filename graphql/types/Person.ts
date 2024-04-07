@@ -1,13 +1,20 @@
 import { BASE_URL } from '../../utils/constants';
-import { objectType, extendType, nonNull, intArg, stringArg } from 'nexus';
+import {
+	objectType,
+	extendType,
+	nonNull,
+	intArg,
+	stringArg,
+	idArg,
+} from 'nexus';
 
 export const KnownForResult = objectType({
 	name: 'KnownForResult',
 	definition(t) {
 		t.boolean('adult');
 		t.string('backdrop_path');
-		t.list.int('genre_ids');
-		t.int('id');
+		t.list.id('genre_ids');
+		t.id('id');
 		t.string('media_type');
 		t.string('original_language');
 		t.string('original_title');
@@ -26,7 +33,7 @@ export const PersonResult = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.nonNull.int('gender');
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.list.field('known_for', {
 			type: nonNull('KnownForResult'),
 		});
@@ -59,8 +66,8 @@ export const PersonDetailsRes = objectType({
 		t.string('deathday');
 		t.int('gender');
 		t.string('homepage');
-		t.nonNull.int('id');
-		t.string('imdb_id');
+		t.nonNull.id('id');
+		t.id('imdb_id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('place_of_birth');
@@ -74,8 +81,8 @@ export const PersonsKnownForMovieCast = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.string('backdrop_path');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
@@ -97,8 +104,8 @@ export const PersonsKnownForMovieCrew = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.string('backdrop_path');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
@@ -118,7 +125,7 @@ export const PersonsKnownForMovieCrew = objectType({
 export const PersonsKnownForMovieRes = objectType({
 	name: 'PersonsKnownForMovieRes',
 	definition(t) {
-		t.int('id'),
+		t.id('id'),
 			t.nonNull.list.field('cast', {
 				type: 'PersonsKnownForMovieCast',
 			});
@@ -133,8 +140,8 @@ export const PersonsKnownForShowCast = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.string('backdrop_path');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.list.string('origin_country');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_name');
@@ -156,8 +163,8 @@ export const PersonsKnownForShowCrew = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.string('backdrop_path');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.list.string('origin_country');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_name');
@@ -178,7 +185,7 @@ export const PersonsKnownForShowCrew = objectType({
 export const PersonsKnownForShowRes = objectType({
 	name: 'PersonsKnownForShowRes',
 	definition(t) {
-		t.int('id'),
+		t.id('id'),
 			t.nonNull.list.field('cast', {
 				type: 'PersonsKnownForShowCast',
 			});
@@ -212,7 +219,7 @@ export const PopularQueries = extendType({
 		t.nonNull.field('personDetails', {
 			type: 'PersonDetailsRes',
 			args: {
-				personDetailsId: nonNull(intArg()),
+				personDetailsId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { personDetailsId }) => {
 				try {
@@ -251,7 +258,7 @@ export const PopularQueries = extendType({
 		t.nonNull.field('personsKnownForMovieRes', {
 			type: 'PersonsKnownForMovieRes',
 			args: {
-				personsKnownForMovieResId: nonNull(intArg()),
+				personsKnownForMovieResId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { personsKnownForMovieResId }) => {
 				try {
@@ -269,7 +276,7 @@ export const PopularQueries = extendType({
 		t.nonNull.field('personsKnownForShowRes', {
 			type: 'PersonsKnownForShowRes',
 			args: {
-				personsKnownForShowResId: nonNull(intArg()),
+				personsKnownForShowResId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { personsKnownForShowResId }) => {
 				try {

@@ -16,13 +16,13 @@ interface Props {
 const MyMovieEntry = ({ myMovie, count }: Props) => {
 	const { data: movieData } = useQuery(Queries.MOVIE_DETAILS, {
 		variables: {
-			movieDetailsId: Number(myMovie.id),
+			movieDetailsId: myMovie.id!,
 		},
 	});
 
 	const [deleteMovie] = useMutation(Mutations.DELETE_MOVIE, {
 		variables: {
-			movieId: String(myMovie.id),
+			movieId: myMovie.id!,
 		},
 		refetchQueries: () => [
 			{
@@ -42,7 +42,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<Link
 					href={CommonMethods.getDetailsPageRoute(
 						EContent.MOVIE,
-						Number(myMovie.id),
+						myMovie.id!,
 						myMovie.name as string
 					)}
 					passHref
@@ -66,7 +66,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 					<Link
 						href={CommonMethods.getDetailsPageRoute(
 							EContent.MOVIE,
-							Number(myMovie.id),
+							myMovie.id!,
 							myMovie.name as string
 						)}
 						passHref

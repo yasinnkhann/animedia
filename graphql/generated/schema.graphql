@@ -23,7 +23,7 @@ type EpisodeDetailsRes {
   crew: [ShowsCrewModel]
   episode_number: Int
   guest_stars: [ShowsCastModel]
-  id: Int
+  id: ID
   name: String
   overview: String
   production_code: String
@@ -42,8 +42,8 @@ scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publicati
 type KnownForResult {
   adult: Boolean
   backdrop_path: String
-  genre_ids: [Int]
-  id: Int
+  genre_ids: [ID]
+  id: ID
   media_type: String
   original_language: String
   original_title: String
@@ -57,12 +57,12 @@ type KnownForResult {
 }
 
 type MovieDetailsGenre {
-  id: Int!
+  id: ID!
   name: String!
 }
 
 type MovieDetailsProdCompany {
-  id: Int!
+  id: ID!
   logo_path: String
   name: String!
   origin_country: String!
@@ -78,8 +78,8 @@ type MovieDetailsRes {
   backdrop_path: String
   genres: [MovieDetailsGenre!]!
   homepage: String!
-  id: Int!
-  imdb_id: String
+  id: ID!
+  imdb_id: ID
   original_language: String!
   original_title: String!
   overview: String!
@@ -130,8 +130,8 @@ enum MovieGenreTypes {
 type MovieResult {
   adult: Boolean!
   backdrop_path: String
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   original_language: String!
   original_title: String!
   overview: String!
@@ -152,7 +152,7 @@ type MovieReviewAuthorDetails {
 }
 
 type MovieReviewsRes {
-  id: Int!
+  id: ID!
   page: Int!
   results: [MovieReviewsResult]!
   total_pages: Int!
@@ -164,7 +164,7 @@ type MovieReviewsResult {
   author_details: MovieReviewAuthorDetails!
   content: String!
   created_at: String!
-  id: String!
+  id: ID!
   updated_at: String!
   url: String!
 }
@@ -172,16 +172,16 @@ type MovieReviewsResult {
 type MoviesCastCrewRes {
   cast: [MoviesCastModel]
   crew: [MoviesCrewModel]
-  id: Int
+  id: ID
 }
 
 type MoviesCastModel {
   adult: Boolean
-  cast_id: Int
+  cast_id: ID
   character: String
-  credit_id: String
+  credit_id: ID
   gender: Int
-  id: Int
+  id: ID
   known_for_department: String
   name: String
   order: Int
@@ -192,10 +192,10 @@ type MoviesCastModel {
 
 type MoviesCrewModel {
   adult: Boolean
-  credit_id: String
+  credit_id: ID
   department: String
   gender: Int
-  id: Int
+  id: ID
   job: String
   known_for_department: String
   name: String
@@ -256,8 +256,8 @@ type PersonDetailsRes {
   deathday: String
   gender: Int
   homepage: String
-  id: Int!
-  imdb_id: String
+  id: ID!
+  imdb_id: ID
   known_for_department: String
   name: String
   place_of_birth: String
@@ -268,7 +268,7 @@ type PersonDetailsRes {
 type PersonResult {
   adult: Boolean!
   gender: Int!
-  id: Int!
+  id: ID!
   known_for: [KnownForResult!]!
   known_for_department: String
   name: String!
@@ -281,8 +281,8 @@ type PersonsKnownForMovieCast {
   backdrop_path: String
   character: String
   credit_id: ID
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   order: Int
   original_language: String!
   original_title: String!
@@ -301,8 +301,8 @@ type PersonsKnownForMovieCrew {
   backdrop_path: String
   credit_id: ID
   department: String
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   job: String
   original_language: String!
   original_title: String!
@@ -319,7 +319,7 @@ type PersonsKnownForMovieCrew {
 type PersonsKnownForMovieRes {
   cast: [PersonsKnownForMovieCast]!
   crew: [PersonsKnownForMovieCrew]!
-  id: Int
+  id: ID
 }
 
 type PersonsKnownForShowCast {
@@ -329,8 +329,8 @@ type PersonsKnownForShowCast {
   credit_id: ID
   episode_count: Int
   first_air_date: String
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   name: String!
   origin_country: [String]!
   original_language: String!
@@ -349,8 +349,8 @@ type PersonsKnownForShowCrew {
   department: String
   episode_count: Int
   first_air_date: String
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   job: String
   name: String!
   origin_country: [String]!
@@ -366,7 +366,7 @@ type PersonsKnownForShowCrew {
 type PersonsKnownForShowRes {
   cast: [PersonsKnownForShowCast]!
   crew: [PersonsKnownForShowCrew]!
-  id: Int
+  id: ID
 }
 
 type Query {
@@ -374,14 +374,14 @@ type Query {
   checkEmailVerificationToken(token: String!): RedisRes
   checkRetryEmailVerificationLimit(email: String!): RedisRes
   emailFromRedisToken(token: String!): String
-  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: Int!): EpisodeDetailsRes
-  movieDetails(movieDetailsId: Int!): MovieDetailsRes!
-  movieReviews(id: Int!, page: Int): MovieReviewsRes!
-  moviesCastCrew(movieId: Int!): MoviesCastCrewRes
+  episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
+  movieDetails(movieDetailsId: ID!): MovieDetailsRes!
+  movieReviews(id: ID!, page: Int): MovieReviewsRes!
+  moviesCastCrew(movieId: ID!): MoviesCastCrewRes
   moviesInTheatres(page: Int): MoviesInTheatresRes!
-  personDetails(personDetailsId: Int!): PersonDetailsRes!
-  personsKnownForMovieRes(personsKnownForMovieResId: Int!): PersonsKnownForMovieRes!
-  personsKnownForShowRes(personsKnownForShowResId: Int!): PersonsKnownForShowRes!
+  personDetails(personDetailsId: ID!): PersonDetailsRes!
+  personsKnownForMovieRes(personsKnownForMovieResId: ID!): PersonsKnownForMovieRes!
+  personsKnownForShowRes(personsKnownForShowResId: ID!): PersonsKnownForShowRes!
   popularAnimeMovies(page: Int): MoviesRes!
   popularAnimeShows(page: Int): ShowsRes!
   popularMovies(page: Int): MoviesRes!
@@ -389,14 +389,14 @@ type Query {
   popularPeople(page: Int): PeopleRes!
   popularShows(page: Int): ShowsRes!
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
-  recommendedMovies(page: Int, recommendedMoviesId: Int!): MoviesRes!
-  recommendedShows(page: Int, recommendedShowsId: Int!): ShowsRes!
+  recommendedMovies(page: Int, recommendedMoviesId: ID!): MoviesRes!
+  recommendedShows(page: Int, recommendedShowsId: ID!): ShowsRes!
   searchedMovies(page: Int, q: String!): MoviesRes!
   searchedPeople(page: Int, q: String!): PeopleRes!
   searchedShows(page: Int, q: String!): ShowsRes!
-  showDetails(showDetailsId: Int!): ShowDetailsRes!
-  showReviews(id: Int!, page: Int): ShowReviewRes!
-  showsCastCrew(showId: Int!): ShowsCastCrewRes
+  showDetails(showDetailsId: ID!): ShowDetailsRes!
+  showReviews(id: ID!, page: Int): ShowReviewRes!
+  showsCastCrew(showId: ID!): ShowsCastCrewRes
   topRatedMovies(page: Int): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
   topRatedShows(page: Int): ShowsRes!
@@ -430,35 +430,35 @@ type ShowDetailsCountry {
 }
 
 type ShowDetailsCreatedBy {
-  credit_id: String
+  credit_id: ID
   gender: Int
-  id: Int
+  id: ID
   name: String
   profile_path: String
 }
 
 type ShowDetailsGenre {
-  id: Int!
+  id: ID!
   name: String!
 }
 
 type ShowDetailsLastEpToAir {
   air_date: String
   episode_number: Int!
-  id: Int!
+  id: ID!
   name: String!
   overview: String!
   production_code: String!
   runtime: Int
   season_number: Int!
-  show_id: Int!
+  show_id: ID!
   still_path: String
   vote_average: Float!
   vote_count: Int!
 }
 
 type ShowDetailsNetwork {
-  id: Int!
+  id: ID!
   logo_path: String
   name: String!
   origin_country: String!
@@ -467,20 +467,20 @@ type ShowDetailsNetwork {
 type ShowDetailsNextEpToAir {
   air_date: String
   episode_number: Int!
-  id: Int!
+  id: ID!
   name: String!
   overview: String!
   production_code: String!
   runtime: Int
   season_number: Int!
-  show_id: Int!
+  show_id: ID!
   still_path: String
   vote_average: Float!
   vote_count: Int!
 }
 
 type ShowDetailsProdCompany {
-  id: Int!
+  id: ID!
   logo_path: String
   name: String!
   origin_country: String!
@@ -494,7 +494,7 @@ type ShowDetailsRes {
   first_air_date: String
   genres: [ShowDetailsGenre!]!
   homepage: String!
-  id: Int!
+  id: ID!
   in_production: Boolean!
   languages: [String]!
   last_air_date: String
@@ -524,7 +524,7 @@ type ShowDetailsRes {
 type ShowDetailsSeason {
   air_date: String
   episode_count: Int!
-  id: Int!
+  id: ID!
   name: String!
   overview: String!
   poster_path: String
@@ -559,8 +559,8 @@ enum ShowGenreTypes {
 type ShowResult {
   backdrop_path: String
   first_air_date: String
-  genre_ids: [Int]!
-  id: Int!
+  genre_ids: [ID]!
+  id: ID!
   name: String!
   origin_country: [String]!
   original_language: String!
@@ -580,7 +580,7 @@ type ShowReviewAuthorDetails {
 }
 
 type ShowReviewRes {
-  id: Int!
+  id: ID!
   page: Int!
   results: [ShowReviewResult]!
   total_pages: Int!
@@ -592,7 +592,7 @@ type ShowReviewResult {
   author_details: ShowReviewAuthorDetails!
   content: String!
   created_at: String!
-  id: String!
+  id: ID!
   updated_at: String!
   url: String!
 }
@@ -600,15 +600,15 @@ type ShowReviewResult {
 type ShowsCastCrewRes {
   cast: [ShowsCastModel]
   crew: [ShowsCrewModel]
-  id: Int
+  id: ID
 }
 
 type ShowsCastModel {
   adult: Boolean
   character: String
-  credit_id: String
+  credit_id: ID
   gender: Int
-  id: Int
+  id: ID
   known_for_department: String
   name: String
   order: Int
@@ -619,10 +619,10 @@ type ShowsCastModel {
 
 type ShowsCrewModel {
   adult: Boolean
-  credit_id: String
+  credit_id: ID
   department: String
   gender: Int
-  id: Int
+  id: ID
   job: String
   known_for_department: String
   name: String

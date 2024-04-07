@@ -17,13 +17,13 @@ interface Props {
 const MyShowEntry = ({ myShow, count }: Props) => {
 	const { data: showData } = useQuery(Queries.SHOW_DETAILS, {
 		variables: {
-			showDetailsId: Number(myShow.id),
+			showDetailsId: myShow.id!,
 		},
 	});
 
 	const [deleteShow] = useMutation(Mutations.DELETE_SHOW, {
 		variables: {
-			showId: String(myShow.id),
+			showId: myShow.id!,
 		},
 		refetchQueries: () => [
 			{
@@ -43,8 +43,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 				<Link
 					href={CommonMethods.getDetailsPageRoute(
 						EContent.SHOW,
-						Number(myShow.id),
-						myShow.name as string
+						myShow.id!,
+						myShow.name!
 					)}
 					passHref
 				>
@@ -64,8 +64,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 					<Link
 						href={CommonMethods.getDetailsPageRoute(
 							EContent.SHOW,
-							Number(myShow.id),
-							myShow.name as string
+							myShow.id!,
+							myShow.name!
 						)}
 						passHref
 					>

@@ -9,6 +9,7 @@ import {
 	intArg,
 	enumType,
 	arg,
+	idArg,
 } from 'nexus';
 
 export const MovieGenreTypes = enumType({
@@ -41,8 +42,8 @@ export const MovieResult = objectType({
 	definition(t) {
 		t.nonNull.boolean('adult');
 		t.string('backdrop_path');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
@@ -71,7 +72,7 @@ export const MoviesRes = objectType({
 export const MovieDetailsGenre = objectType({
 	name: 'MovieDetailsGenre',
 	definition(t) {
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 	},
 });
@@ -79,7 +80,7 @@ export const MovieDetailsGenre = objectType({
 export const MovieDetailsProdCompany = objectType({
 	name: 'MovieDetailsProdCompany',
 	definition(t) {
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.string('logo_path');
 		t.nonNull.string('name');
 		t.nonNull.string('origin_country');
@@ -112,8 +113,8 @@ export const MovieDetailsRes = objectType({
 			type: nonNull('MovieDetailsGenre'),
 		});
 		t.nonNull.string('homepage');
-		t.nonNull.int('id');
-		t.string('imdb_id');
+		t.nonNull.id('id');
+		t.id('imdb_id');
 		t.nonNull.string('original_language');
 		t.nonNull.string('original_title');
 		t.nonNull.string('overview');
@@ -159,7 +160,7 @@ export const MovieReviewsResult = objectType({
 		});
 		t.nonNull.string('content');
 		t.nonNull.string('created_at');
-		t.nonNull.string('id');
+		t.nonNull.id('id');
 		t.nonNull.string('updated_at');
 		t.nonNull.string('url');
 	},
@@ -168,7 +169,7 @@ export const MovieReviewsResult = objectType({
 export const MovieReviewsRes = objectType({
 	name: 'MovieReviewsRes',
 	definition(t) {
-		t.nonNull.int('id'),
+		t.nonNull.id('id'),
 			t.nonNull.int('page'),
 			t.nonNull.int('total_pages'),
 			t.nonNull.int('total_results');
@@ -206,15 +207,15 @@ export const MoviesCastModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.int('id');
+		t.id('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
 		t.float('popularity');
 		t.string('profile_path');
-		t.int('cast_id');
+		t.id('cast_id');
 		t.string('character');
-		t.string('credit_id');
+		t.id('credit_id');
 		t.int('order');
 	},
 });
@@ -224,13 +225,13 @@ export const MoviesCrewModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.int('id');
+		t.id('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
 		t.float('popularity');
 		t.string('profile_path');
-		t.string('credit_id');
+		t.id('credit_id');
 		t.string('department');
 		t.string('job');
 	},
@@ -239,7 +240,7 @@ export const MoviesCrewModel = objectType({
 export const MoviesCastCrewRes = objectType({
 	name: 'MoviesCastCrewRes',
 	definition(t) {
-		t.int('id');
+		t.id('id');
 		t.list.field('cast', {
 			type: 'MoviesCastModel',
 		});
@@ -293,7 +294,7 @@ export const MovieQueries = extendType({
 		t.nonNull.field('movieDetails', {
 			type: 'MovieDetailsRes',
 			args: {
-				movieDetailsId: nonNull(intArg()),
+				movieDetailsId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { movieDetailsId }) => {
 				try {
@@ -372,7 +373,7 @@ export const MovieQueries = extendType({
 		t.nonNull.field('recommendedMovies', {
 			type: 'MoviesRes',
 			args: {
-				recommendedMoviesId: nonNull(intArg()),
+				recommendedMoviesId: nonNull(idArg()),
 				page: intArg(),
 			},
 			resolve: async (_parent, { recommendedMoviesId, page }) => {
@@ -391,7 +392,7 @@ export const MovieQueries = extendType({
 		t.nonNull.field('movieReviews', {
 			type: 'MovieReviewsRes',
 			args: {
-				id: nonNull(intArg()),
+				id: nonNull(idArg()),
 				page: intArg(),
 			},
 			resolve: async (_parent, { id, page }) => {
@@ -478,7 +479,7 @@ export const MovieQueries = extendType({
 		t.field('moviesCastCrew', {
 			type: 'MoviesCastCrewRes',
 			args: {
-				movieId: nonNull(intArg()),
+				movieId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { movieId }) => {
 				try {

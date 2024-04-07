@@ -9,6 +9,7 @@ import {
 	intArg,
 	enumType,
 	arg,
+	idArg,
 } from 'nexus';
 
 export const ShowGenreTypes = enumType({
@@ -38,8 +39,8 @@ export const ShowResult = objectType({
 	definition(t) {
 		t.string('backdrop_path');
 		t.string('first_air_date');
-		t.nonNull.list.int('genre_ids');
-		t.nonNull.int('id');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 		t.nonNull.list.string('origin_country');
 		t.nonNull.string('original_language');
@@ -67,8 +68,8 @@ export const ShowsRes = objectType({
 export const ShowDetailsCreatedBy = objectType({
 	name: 'ShowDetailsCreatedBy',
 	definition(t) {
-		t.int('id');
-		t.string('credit_id');
+		t.id('id');
+		t.id('credit_id');
 		t.string('name');
 		t.int('gender');
 		t.string('profile_path');
@@ -78,7 +79,7 @@ export const ShowDetailsCreatedBy = objectType({
 export const ShowDetailsGenre = objectType({
 	name: 'ShowDetailsGenre',
 	definition(t) {
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 	},
 });
@@ -88,13 +89,13 @@ export const ShowDetailsLastEpToAir = objectType({
 	definition(t) {
 		t.string('air_date');
 		t.nonNull.int('episode_number');
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
 		t.nonNull.string('production_code');
 		t.int('runtime');
 		t.nonNull.int('season_number');
-		t.nonNull.int('show_id');
+		t.nonNull.id('show_id');
 		t.string('still_path');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
@@ -104,7 +105,7 @@ export const ShowDetailsLastEpToAir = objectType({
 export const ShowDetailsNetwork = objectType({
 	name: 'ShowDetailsNetwork',
 	definition(t) {
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 		t.string('logo_path');
 		t.nonNull.string('origin_country');
@@ -114,7 +115,7 @@ export const ShowDetailsNetwork = objectType({
 export const ShowDetailsProdCompany = objectType({
 	name: 'ShowDetailsProdCompany',
 	definition(t) {
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.string('logo_path');
 		t.nonNull.string('name');
 		t.nonNull.string('origin_country');
@@ -134,7 +135,7 @@ export const ShowDetailsSeason = objectType({
 	definition(t) {
 		t.string('air_date');
 		t.nonNull.int('episode_count');
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
 		t.string('poster_path');
@@ -156,13 +157,13 @@ export const ShowDetailsNextEpToAir = objectType({
 	definition(t) {
 		t.string('air_date');
 		t.nonNull.int('episode_number');
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.string('name');
 		t.nonNull.string('overview');
 		t.nonNull.string('production_code');
 		t.int('runtime');
 		t.nonNull.int('season_number');
-		t.nonNull.int('show_id');
+		t.nonNull.id('show_id');
 		t.string('still_path');
 		t.nonNull.float('vote_average');
 		t.nonNull.int('vote_count');
@@ -183,7 +184,7 @@ export const ShowDetailsRes = objectType({
 			type: nonNull('ShowDetailsGenre'),
 		});
 		t.nonNull.string('homepage');
-		t.nonNull.int('id');
+		t.nonNull.id('id');
 		t.nonNull.boolean('in_production');
 		t.nonNull.list.string('languages');
 		t.string('last_air_date');
@@ -244,7 +245,7 @@ export const ShowReviewResult = objectType({
 		});
 		t.nonNull.string('content');
 		t.nonNull.string('created_at');
-		t.nonNull.string('id');
+		t.nonNull.id('id');
 		t.nonNull.string('updated_at');
 		t.nonNull.string('url');
 	},
@@ -253,7 +254,7 @@ export const ShowReviewResult = objectType({
 export const ShowReviewRes = objectType({
 	name: 'ShowReviewRes',
 	definition(t) {
-		t.nonNull.int('id'),
+		t.nonNull.id('id'),
 			t.nonNull.int('page'),
 			t.nonNull.int('total_pages'),
 			t.nonNull.int('total_results');
@@ -268,14 +269,14 @@ export const ShowsCastModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.int('id');
+		t.id('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
 		t.float('popularity');
 		t.string('profile_path');
 		t.string('character');
-		t.string('credit_id');
+		t.id('credit_id');
 		t.int('order');
 	},
 });
@@ -285,13 +286,13 @@ export const ShowsCrewModel = objectType({
 	definition(t) {
 		t.boolean('adult');
 		t.int('gender');
-		t.int('id');
+		t.id('id');
 		t.string('known_for_department');
 		t.string('name');
 		t.string('original_name');
 		t.float('popularity');
 		t.string('profile_path');
-		t.string('credit_id');
+		t.id('credit_id');
 		t.string('department');
 		t.string('job');
 	},
@@ -300,7 +301,7 @@ export const ShowsCrewModel = objectType({
 export const ShowsCastCrewRes = objectType({
 	name: 'ShowsCastCrewRes',
 	definition(t) {
-		t.int('id');
+		t.id('id');
 		t.list.field('cast', {
 			type: 'ShowsCastModel',
 		});
@@ -323,7 +324,7 @@ export const EpisodeDetailsRes = objectType({
 		});
 		t.string('name');
 		t.string('overview');
-		t.int('id');
+		t.id('id');
 		t.string('production_code');
 		t.int('runtime');
 		t.int('season_number');
@@ -377,7 +378,7 @@ export const ShowQueries = extendType({
 		t.nonNull.field('showDetails', {
 			type: 'ShowDetailsRes',
 			args: {
-				showDetailsId: nonNull(intArg()),
+				showDetailsId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { showDetailsId }) => {
 				try {
@@ -452,7 +453,7 @@ export const ShowQueries = extendType({
 		t.nonNull.field('recommendedShows', {
 			type: 'ShowsRes',
 			args: {
-				recommendedShowsId: nonNull(intArg()),
+				recommendedShowsId: nonNull(idArg()),
 				page: intArg(),
 			},
 			resolve: async (_parent, { recommendedShowsId, page }) => {
@@ -471,7 +472,7 @@ export const ShowQueries = extendType({
 		t.nonNull.field('showReviews', {
 			type: 'ShowReviewRes',
 			args: {
-				id: nonNull(intArg()),
+				id: nonNull(idArg()),
 				page: intArg(),
 			},
 			resolve: async (_parent, { id, page }) => {
@@ -540,7 +541,7 @@ export const ShowQueries = extendType({
 		t.field('showsCastCrew', {
 			type: 'ShowsCastCrewRes',
 			args: {
-				showId: nonNull(intArg()),
+				showId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { showId }) => {
 				try {
@@ -558,7 +559,7 @@ export const ShowQueries = extendType({
 		t.field('episodeDetails', {
 			type: 'EpisodeDetailsRes',
 			args: {
-				showId: nonNull(intArg()),
+				showId: nonNull(idArg()),
 				seasonNum: nonNull(intArg()),
 				episodeNum: nonNull(intArg()),
 			},

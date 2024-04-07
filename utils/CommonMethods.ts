@@ -30,7 +30,7 @@ export class CommonMethods {
 
 	public static getDetailsPageRoute = (
 		mediaType: EContent,
-		id: number,
+		id: string,
 		title: string
 	) => {
 		const cleanTitle = unidecode(title)
@@ -111,7 +111,7 @@ export class CommonMethods {
 			if (!genreObj?.id) {
 				throw new Error('No Genre ID Found.');
 			}
-			return genreObj.id;
+			return +genreObj.id;
 		} catch (err) {
 			throw err;
 		}
@@ -164,12 +164,12 @@ export class CommonMethods {
 	public static getUserWatchStatusFromMedia = (
 		userMatchedMedias: (UserShow | UserMovie)[],
 		item: {
-			id: number;
+			id: string;
 			[key: string]: any;
 		}
 	) => {
 		const dataFound = userMatchedMedias.find(
-			(data: UserShow | UserMovie) => parseInt(data.id!) === item.id
+			(data: UserShow | UserMovie) => data.id! === item.id
 		);
 
 		if (dataFound?.status) {
