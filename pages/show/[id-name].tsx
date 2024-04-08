@@ -25,6 +25,7 @@ import _ from 'lodash';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
+
 	const router = useRouter();
 
 	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
@@ -38,6 +39,9 @@ const ShowDetails = () => {
 	const [currTotalEpCount, setCurrTotalEpCount] = useState<number>(0);
 
 	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
+
+	const [totalEpCountGathered, setTotalEpCountGathered] =
+		useState<boolean>(false);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
@@ -175,6 +179,7 @@ const ShowDetails = () => {
 		}
 		setCurrTotalEpCount(totalEpCount);
 		setCurrTotalSeasonCount(totalSeasonCount);
+		setTotalEpCountGathered(true);
 	}, [
 		showDetailsData?.showDetails.number_of_episodes,
 		showDetailsData?.showDetails.number_of_seasons,
@@ -326,7 +331,6 @@ const ShowDetails = () => {
 							currentEpisode: currTotalEpCount,
 						},
 					});
-
 					return;
 				}
 				updateShow({
@@ -424,7 +428,8 @@ const ShowDetails = () => {
 
 			if (
 				usersShowData.usersShow.current_episode === currTotalEpCount &&
-				usersShowData.usersShow.status === WatchStatusTypes.Watching
+				usersShowData.usersShow.status === WatchStatusTypes.Watching &&
+				totalEpCountGathered
 			) {
 				setWatchStatus(WatchStatusTypes.Completed);
 				updateShow({
