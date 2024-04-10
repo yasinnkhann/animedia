@@ -165,7 +165,7 @@ export const UserQueries = extendType({
 				movieId: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { movieId }, ctx) => {
-				return await ctx.prisma.movie.findUnique({
+				return await ctx.prisma.movies.findUnique({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -181,7 +181,7 @@ export const UserQueries = extendType({
 				showId: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { showId }, ctx) => {
-				return await ctx.prisma.show.findUnique({
+				return await ctx.prisma.shows.findUnique({
 					where: {
 						id_userId: {
 							id: showId,
@@ -194,7 +194,7 @@ export const UserQueries = extendType({
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.movie.findMany({
+				return await ctx.prisma.movies.findMany({
 					where: {
 						userId: ctx.session?.user?.id!,
 					},
@@ -209,7 +209,7 @@ export const UserQueries = extendType({
 		t.list.field('usersShows', {
 			type: 'UserShow',
 			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.show.findMany({
+				return await ctx.prisma.shows.findMany({
 					where: {
 						userId: ctx.session?.user?.id,
 					},
@@ -393,7 +393,7 @@ export const UserMutations = extendType({
 				movieRating: intArg(),
 			},
 			resolve: async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
-				return await ctx.prisma.movie.update({
+				return await ctx.prisma.movies.update({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -420,7 +420,7 @@ export const UserMutations = extendType({
 				{ showId, watchStatus, showRating, currentEpisode },
 				ctx
 			) => {
-				return await ctx.prisma.show.update({
+				return await ctx.prisma.shows.update({
 					where: {
 						id_userId: {
 							id: showId,
@@ -441,7 +441,7 @@ export const UserMutations = extendType({
 				movieId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { movieId }, ctx) => {
-				return await ctx.prisma.movie.delete({
+				return await ctx.prisma.movies.delete({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -457,7 +457,7 @@ export const UserMutations = extendType({
 				showId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { showId }, ctx) => {
-				return await ctx.prisma.show.delete({
+				return await ctx.prisma.shows.delete({
 					where: {
 						id_userId: {
 							id: showId,

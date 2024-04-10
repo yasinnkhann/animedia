@@ -54,27 +54,28 @@ CREATE TABLE `VerificationToken` (
   CHARSET utf8mb4,
   COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE `Movie` (
-	`id` varchar(191) NOT NULL,
-	`name` varchar(191) NOT NULL,
-	`status` enum('NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED') NOT NULL,
-	`rating` int,
-	`user_id` varchar(191) NOT NULL,
-	PRIMARY KEY (`id`, `user_id`),
-	KEY `Movie_user_id_idx` (`user_id`)
+CREATE TABLE `Movies` (
+`id` varchar(191) NOT NULL,
+`name` varchar(191) NOT NULL,
+`status` enum('NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED') NOT NULL,
+`rating` int,
+`user_id` varchar(191) NOT NULL,
+PRIMARY KEY (`id`, `user_id`),
+KEY `Movie_user_id_idx` (`user_id`)
 ) ENGINE InnoDB,
-  CHARSET utf8mb4,
-  COLLATE utf8mb4_unicode_ci;
+CHARSET utf8mb4,
+COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE `Show` (
-	`id` varchar(191) NOT NULL,
-	`name` varchar(191) NOT NULL,
-	`current_episode` int NOT NULL DEFAULT '0',
-	`status` enum('NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED') NOT NULL,
-	`rating` int,
-	`user_id` varchar(191) NOT NULL,
-	PRIMARY KEY (`id`, `user_id`),
-	KEY `Show_user_id_idx` (`user_id`)
+
+CREATE TABLE `Shows` (
+`id` varchar(191) NOT NULL,
+`name` varchar(191) NOT NULL,
+`current_episode` int NOT NULL DEFAULT '0',
+`status` enum('NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED') NOT NULL,
+`rating` int,
+`user_id` varchar(191) NOT NULL,
+PRIMARY KEY (`id`, `user_id`),
+KEY `Show_user_id_idx` (`user_id`)
 ) ENGINE InnoDB,
-  CHARSET utf8mb4,
-  COLLATE utf8mb4_unicode_ci;
+CHARSET utf8mb4,
+COLLATE utf8mb4_unicode_ci;
