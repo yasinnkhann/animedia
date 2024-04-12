@@ -1,0 +1,7 @@
+# Supabase
+.branches
+.temp
+.env
+.dump-data.sql
+./migrations
+.seed.sql
