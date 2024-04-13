@@ -11,6 +11,8 @@
 	"rules": {
 		"@typescript-eslint/no-unused-vars": "warn",
 		"@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-		"no-constant-binary-expression": "off"
+		"no-constant-binary-expression": "off",
+		"no-useless-catch": "off",
+		"@typescript-eslint/no-explicit-any": "off"
 	}
 }

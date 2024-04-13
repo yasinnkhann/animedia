@@ -35,7 +35,7 @@ export class CommonMethods {
 	) => {
 		const cleanTitle = unidecode(title)
 			.toLowerCase()
-			.replace(/[^a-z0-9\/☆ -]/gi, '')
+			.replace(/[^a-z0-9/☆ -]/gi, '')
 			.replace(/\s+/g, '-')
 			.replace(/-{2,}/g, '-')
 			.trim();
