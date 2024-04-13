@@ -43,3 +43,4 @@ supabase/dump-data.sql
 supabase/.branches
 supabase/.temp
 supabase/seed.sql
+supabase/dump-schema.sql

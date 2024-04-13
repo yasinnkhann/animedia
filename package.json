@@ -10,7 +10,7 @@
 		"generate:prisma": "prisma generate",
 		"connect:dev-supabase": "supabase start",
 		"disconnect:dev-supabase": "supabase stop",
-		"migrate:prod-to-local": "supabase db dump --data-only > supabase/dump-data.sql",
+		"migrate:prod-to-local": "supabase db dump > supabase/dump-schema.sql && supabase db dump --data-only > supabase/dump-data.sql",
 		"codegen": "graphql-codegen --watch",
 		"lint": "next lint",
 		"prepare": "husky install"
