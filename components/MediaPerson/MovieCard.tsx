@@ -90,7 +90,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 							{usersMovieData?.usersMovie?.status
 								? CommonMethods.renderTableStatus(
 										usersMovieData.usersMovie.status
-								  )
+									)
 								: 'N/A'}
 						</p>
 					</td>

@@ -90,7 +90,7 @@ const ShowCard = ({ show, rank }: Props) => {
 							{usersShowData?.usersShow?.status
 								? CommonMethods.renderTableStatus(
 										usersShowData.usersShow.status
-								  )
+									)
 								: 'N/A'}
 						</p>
 					</td>

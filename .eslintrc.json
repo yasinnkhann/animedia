@@ -1,8 +1,16 @@
 {
-	"extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"],
-	"plugins": ["prettier"],
+	"extends": [
+		"next/core-web-vitals",
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:prettier/recommended"
+	],
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
+	"root": true,
 	"rules": {
-		"prettier/prettier": "warn",
-		"no-console": "off"
+		"@typescript-eslint/no-unused-vars": "warn",
+		"@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+		"no-constant-binary-expression": "off"
 	}
 }

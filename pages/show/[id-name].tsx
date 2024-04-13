@@ -464,6 +464,7 @@ const ShowDetails = () => {
 		currTotalEpCount,
 		getCurrTotalSeasonAndEpCount,
 		showDetailsData?.showDetails,
+		totalEpCountGathered,
 		updateShow,
 		usersShowData?.usersShow,
 		usersShowLoading,
@@ -568,7 +569,7 @@ const ShowDetails = () => {
 								<span className='px-1 text-gray-700'>/</span>{' '}
 								<span className='px-1 text-gray-700'>{currTotalEpCount}</span>
 								<button
-									className='cursor-pointer px-4 py-2 text-gray-700 focus:outline-none hover:bg-gray-100'
+									className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
 									onClick={handleIncrementBtn}
 									type='button'
 									disabled={+currEp >= currTotalEpCount || isDBPending}
