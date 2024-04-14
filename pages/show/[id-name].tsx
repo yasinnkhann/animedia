@@ -61,7 +61,7 @@ const ShowDetails = () => {
 		{
 			skip: !showDetailsData?.showDetails.id,
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails?.id!,
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -187,63 +187,70 @@ const ShowDetails = () => {
 	]);
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		if (
+			!showDetailsData?.showDetails.id ||
+			!showDetailsData?.showDetails.name
+		) {
+			return;
+		}
+
 		const { value } = e.target;
-		const showId = showDetailsData?.showDetails?.id!;
+		const showId = showDetailsData.showDetails.id;
 		const usersShow = usersShowData?.usersShow;
+
+		const showVariables = {
+			showId,
+			watchStatus: value as WatchStatusTypes,
+			currentEpisode: 0,
+			showRating: null,
+		};
 
 		if (usersShow) {
 			if (value === WatchStatusTypes.NotWatching) {
-				deleteShow({
-					variables: { showId: String(showId) },
+				deleteShow({ variables: { showId: showVariables.showId } });
+			} else if (
+				value === WatchStatusTypes.Watching &&
+				usersShow.status === WatchStatusTypes.Completed
+			) {
+				updateShow({
+					variables: {
+						...showVariables,
+						currentEpisode: currTotalEpCount - 1,
+					},
 				});
 			} else if (value === WatchStatusTypes.PlanToWatch) {
 				updateShow({
 					variables: {
-						showId: String(showId),
+						...showVariables,
 						watchStatus: WatchStatusTypes.PlanToWatch,
-						currentEpisode: 0,
-						showRating: null,
 					},
 				});
 			} else if (value === WatchStatusTypes.Completed) {
 				updateShow({
 					variables: {
-						showId: String(showId),
+						...showVariables,
 						watchStatus: WatchStatusTypes.Completed,
-						currentEpisode: currTotalEpCount ?? 0,
-						showRating: usersShow?.rating ?? null,
+						currentEpisode: currTotalEpCount,
+						showRating: usersShow.rating ?? null,
 					},
 				});
 			} else {
 				updateShow({
 					variables: {
-						showId: String(showId),
-						watchStatus: value as WatchStatusTypes,
-						currentEpisode: usersShow?.current_episode ?? 0,
-						showRating: usersShow?.rating ?? null,
+						...showVariables,
+						currentEpisode: usersShow.current_episode ?? 0,
+						showRating: usersShow.rating ?? null,
 					},
 				});
 			}
 		} else {
-			if (value === WatchStatusTypes.Completed) {
-				addShow({
-					variables: {
-						showId: String(showId),
-						showName: showDetailsData?.showDetails?.name!,
-						watchStatus: value as WatchStatusTypes,
-						currentEpisode: currTotalEpCount,
-					},
-				});
-			} else {
-				addShow({
-					variables: {
-						showId: String(showId),
-						showName: showDetailsData?.showDetails?.name!,
-						watchStatus: value as WatchStatusTypes,
-						currentEpisode: Number(currEp),
-					},
-				});
-			}
+			const addShowVariables = {
+				...showVariables,
+				showName: showDetailsData.showDetails.name,
+				currentEpisode:
+					value === WatchStatusTypes.Completed ? currTotalEpCount : +currEp,
+			};
+			addShow({ variables: addShowVariables });
 		}
 	};
 
@@ -252,9 +259,11 @@ const ShowDetails = () => {
 
 		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
 
+		if (!showDetailsData?.showDetails.id) return;
+
 		updateShow({
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: String(showDetailsData.showDetails.id),
 				showRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 				currentEpisode: Number(currEp),
@@ -295,7 +304,6 @@ const ShowDetails = () => {
 					currentEpisode: currTotalEpCount,
 				},
 			});
-
 			return;
 		}
 
@@ -310,46 +318,71 @@ const ShowDetails = () => {
 	};
 
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-		if (usersShowData?.usersShow?.id) {
-			if (usersShowData.usersShow.current_episode === e.target.valueAsNumber) {
-				return;
-			}
-			if (e.target.value === '' || +e.target.value > currTotalEpCount) {
-				setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
-			} else {
+		if (showDetailsData?.showDetails?.id) {
+			if (usersShowData?.usersShow?.id) {
 				if (
-					watchStatus === WatchStatusTypes.Watching &&
-					+e.target.value === currTotalEpCount
+					usersShowData.usersShow.current_episode === e.target.valueAsNumber
 				) {
-					setWatchStatus(WatchStatusTypes.Completed);
-
-					updateShow({
-						variables: {
-							showId: String(showDetailsData?.showDetails?.id),
-							showRating: typeof rating === 'string' ? null : rating,
-							watchStatus: WatchStatusTypes.Completed,
-							currentEpisode: currTotalEpCount,
-						},
-					});
 					return;
 				}
-				updateShow({
-					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
-						showRating: typeof rating === 'string' ? null : rating,
-						watchStatus,
-						currentEpisode: Number(currEp),
-					},
-				});
+				if (e.target.value === '' || +e.target.value > currTotalEpCount) {
+					setCurrEp(String(usersShowData?.usersShow.current_episode) ?? '0');
+				} else {
+					if (
+						watchStatus === WatchStatusTypes.Watching &&
+						+e.target.value === currTotalEpCount
+					) {
+						setWatchStatus(WatchStatusTypes.Completed);
+
+						updateShow({
+							variables: {
+								showId: showDetailsData.showDetails.id,
+								showRating: typeof rating === 'string' ? null : rating,
+								watchStatus: WatchStatusTypes.Completed,
+								currentEpisode: currTotalEpCount,
+							},
+						});
+						return;
+					}
+					updateShow({
+						variables: {
+							showId: showDetailsData.showDetails.id,
+							showRating: typeof rating === 'string' ? null : rating,
+							watchStatus,
+							currentEpisode: +currEp,
+						},
+					});
+				}
+			} else {
+				if (e.target.value !== '' && +e.target.value <= currTotalEpCount) {
+					addShow({
+						variables: {
+							showId: showDetailsData.showDetails.id,
+							showName: showDetailsData.showDetails.name,
+							watchStatus:
+								e.target.valueAsNumber === currTotalEpCount
+									? WatchStatusTypes.Completed
+									: WatchStatusTypes.Watching,
+							currentEpisode: +currEp,
+						},
+					});
+				}
 			}
 		}
 	};
 
 	const handleIncrementBtn = () => {
+		if (
+			!showDetailsData?.showDetails.id ||
+			!showDetailsData?.showDetails.name
+		) {
+			return;
+		}
+
 		const prevEp = +currEp;
 
 		const updateShowVariables = {
-			showId: String(showDetailsData?.showDetails?.id!),
+			showId: String(showDetailsData.showDetails.id),
 			showRating: typeof rating === 'string' ? null : rating,
 			currentEpisode: prevEp + 1,
 		};
@@ -359,7 +392,7 @@ const ShowDetails = () => {
 				addShow({
 					variables: {
 						...updateShowVariables,
-						showName: showDetailsData?.showDetails?.name!,
+						showName: showDetailsData.showDetails.name,
 						watchStatus: WatchStatusTypes.Watching,
 					},
 				});
@@ -560,11 +593,7 @@ const ShowDetails = () => {
 									onChange={handleEpisodeChange}
 									onFocus={e => (e.target.selectionStart = 1)}
 									onBlur={handleEpisodeOnBlur}
-									disabled={
-										watchStatus === 'NOT_WATCHING' ||
-										watchStatus === 'PLAN_TO_WATCH' ||
-										isDBPending
-									}
+									disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
 								/>
 								<span className='px-1 text-gray-700'>/</span>{' '}
 								<span className='px-1 text-gray-700'>{currTotalEpCount}</span>
