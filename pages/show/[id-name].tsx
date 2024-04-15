@@ -32,7 +32,7 @@ const ShowDetails = () => {
 		WatchStatusTypes.NotWatching
 	);
 
-	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
+	const [rating, setRating] = useState<number>(ratingOptions[0].value);
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
@@ -61,7 +61,7 @@ const ShowDetails = () => {
 		{
 			skip: !showDetailsData?.showDetails.id,
 			variables: {
-				showId: showDetailsData?.showDetails?.id!,
+				showId: showDetailsData?.showDetails.id!,
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -70,9 +70,9 @@ const ShowDetails = () => {
 	const { data: recShowsData, loading: recShowsLoading } = useQuery(
 		Queries.RECOMMENDED_SHOWS,
 		{
-			skip: !showDetailsData?.showDetails?.id,
+			skip: !showDetailsData?.showDetails.id,
 			variables: {
-				recommendedShowsId: showDetailsData?.showDetails?.id!,
+				recommendedShowsId: showDetailsData?.showDetails.id!,
 			},
 		}
 	);
@@ -80,9 +80,9 @@ const ShowDetails = () => {
 	const { data: showsCastCrewData, loading: showsCastCrewLoading } = useQuery(
 		Queries.GET_SHOWS_CAST_CREW,
 		{
-			skip: !showDetailsData?.showDetails?.id,
+			skip: !showDetailsData?.showDetails.id,
 			variables: {
-				showId: showDetailsData?.showDetails?.id!,
+				showId: showDetailsData?.showDetails.id!,
 			},
 		}
 	);
@@ -91,16 +91,16 @@ const ShowDetails = () => {
 		Mutations.ADD_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
-				showName: showDetailsData?.showDetails?.name!,
+				showId: showDetailsData?.showDetails.id!,
+				showName: showDetailsData?.showDetails.name!,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				currentEpisode: +currEp,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails.id!,
 					},
 				},
 				'UsersShow',
@@ -112,16 +112,16 @@ const ShowDetails = () => {
 		Mutations.UPDATE_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails.id!),
+				showId: showDetailsData?.showDetails.id!,
 				watchStatus,
 				showRating: typeof rating === 'number' ? rating : null,
-				currentEpisode: Number(currEp),
+				currentEpisode: +currEp,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails.id!,
 					},
 				},
 				'UsersShow',
@@ -133,13 +133,13 @@ const ShowDetails = () => {
 		Mutations.DELETE_SHOW,
 		{
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id!),
+				showId: showDetailsData?.showDetails.id!,
 			},
 			refetchQueries: () => [
 				{
 					query: Queries.GET_USERS_SHOW,
 					variables: {
-						showId: String(showDetailsData?.showDetails?.id!),
+						showId: showDetailsData?.showDetails.id!,
 					},
 				},
 				'UsersShow',
@@ -257,16 +257,16 @@ const ShowDetails = () => {
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 
-		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
+		setRating(+value);
 
 		if (!showDetailsData?.showDetails.id) return;
 
 		updateShow({
 			variables: {
 				showId: String(showDetailsData.showDetails.id),
-				showRating: isNaN(parseInt(value)) ? null : parseInt(value),
+				showRating: +value,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				currentEpisode: +currEp,
 			},
 		});
 	};
@@ -312,7 +312,7 @@ const ShowDetails = () => {
 				showId: String(showDetailsData?.showDetails?.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
-				currentEpisode: Number(currEp),
+				currentEpisode: +currEp,
 			},
 		});
 	};
@@ -456,7 +456,7 @@ const ShowDetails = () => {
 			setWatchStatus(
 				usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching
 			);
-			setRating(usersShowData.usersShow.rating ?? '');
+			setRating(usersShowData.usersShow.rating ?? 0);
 			setCurrEp(String(usersShowData.usersShow.current_episode ?? 0));
 
 			if (
@@ -490,7 +490,7 @@ const ShowDetails = () => {
 			}
 		} else {
 			setWatchStatus(WatchStatusTypes.NotWatching);
-			setRating('');
+			setRating(0);
 			setCurrEp('0');
 		}
 	}, [

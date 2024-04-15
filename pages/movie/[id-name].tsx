@@ -28,7 +28,7 @@ const MovieDetails = () => {
 		WatchStatusTypes.NotWatching
 	);
 
-	const [rating, setRating] = useState<string | number>(ratingOptions[0].value);
+	const [rating, setRating] = useState<number>(ratingOptions[0].value);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
@@ -177,7 +177,7 @@ const MovieDetails = () => {
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		setRating(isNaN(parseInt(value)) ? '' : parseInt(value));
+		setRating(+value);
 
 		updateMovie({
 			variables: {
@@ -189,14 +189,14 @@ const MovieDetails = () => {
 	};
 
 	useEffect(() => {
-		if (!usersMovieLoading) {
-			if (usersMovieData?.usersMovie) {
-				setWatchStatus(usersMovieData?.usersMovie?.status!);
-				setRating(usersMovieData?.usersMovie?.rating ?? '');
-			} else {
-				setWatchStatus(WatchStatusTypes.NotWatching);
-				setRating('');
-			}
+		if (usersMovieLoading) return;
+
+		if (usersMovieData?.usersMovie?.status) {
+			setWatchStatus(usersMovieData.usersMovie.status);
+			setRating(usersMovieData.usersMovie.rating ?? 0);
+		} else {
+			setWatchStatus(WatchStatusTypes.NotWatching);
+			setRating(0);
 		}
 	}, [usersMovieData, usersMovieLoading]);
 
