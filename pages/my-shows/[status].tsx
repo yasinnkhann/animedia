@@ -35,7 +35,7 @@ const Status = () => {
 			}
 
 			if (usersShowsData?.usersShows) {
-				let statusParam = router.query.status;
+				const statusParam = router.query.status;
 				let status: WatchStatusTypes;
 
 				if (statusParam === 'watching') {

@@ -21,8 +21,8 @@ const RoundProgressBar = ({ percentageVal }: Props) => {
 						percentageVal >= 70
 							? 'rgba(0, 255, 30, 0.502)'
 							: percentageVal >= 50
-							? 'rgba(255, 255, 30, 0.8)'
-							: 'rgba(255, 0, 30, 0.8)',
+								? 'rgba(255, 255, 30, 0.8)'
+								: 'rgba(255, 0, 30, 0.8)',
 					// Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
 					strokeLinecap: 'butt',
 					// Customize transition animation

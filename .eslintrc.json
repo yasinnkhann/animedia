@@ -13,6 +13,7 @@
 		"@typescript-eslint/no-non-null-asserted-optional-chain": "off",
 		"no-constant-binary-expression": "off",
 		"no-useless-catch": "off",
-		"@typescript-eslint/no-explicit-any": "off"
+		"@typescript-eslint/no-explicit-any": "off",
+		"no-constant-condition": "off"
 	}
 }

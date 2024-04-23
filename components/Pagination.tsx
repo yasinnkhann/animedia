@@ -26,7 +26,7 @@ const Pagination = ({
 		maxPageNum,
 	});
 
-	let lastPage = paginationRange![paginationRange!.length - 1];
+	const lastPage = paginationRange![paginationRange!.length - 1];
 
 	useEffect(() => {
 		if (typeof lastPage === 'number' && currPage > lastPage) {

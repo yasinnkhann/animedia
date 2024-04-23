@@ -38,7 +38,7 @@ const Status = () => {
 			}
 
 			if (usersMoviesData?.usersMovies) {
-				let statusParam = router.query.status as TStatusParam;
+				const statusParam = router.query.status as TStatusParam;
 				let status: WatchStatusTypes;
 
 				if (statusParam === 'watching') {

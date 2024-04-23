@@ -157,8 +157,8 @@ const Search: NextPage = () => {
 			searchResultsType === EContent.MOVIES
 				? usersMoviesData?.usersMovies
 				: searchResultsType === EContent.SHOWS
-				? usersShowsData?.usersShows
-				: null;
+					? usersShowsData?.usersShows
+					: null;
 
 		if (!userDataArr || !getSearchedTypeData()?.results) return;
 
@@ -281,8 +281,8 @@ const Search: NextPage = () => {
 									searchResultsType === EContent.MOVIES
 										? searchedMoviesData.searchedMovies.total_results
 										: searchResultsType === EContent.SHOWS
-										? searchedShowsData.searchedShows.total_results
-										: searchedPeopleData.searchedPeople.total_results
+											? searchedShowsData.searchedShows.total_results
+											: searchedPeopleData.searchedPeople.total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>

@@ -20,7 +20,7 @@ const cookiesPolicy =
 						secure: true,
 					},
 				},
-		  }
+			}
 		: {};
 
 export const authOptions: NextAuthOptions = {

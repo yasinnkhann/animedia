@@ -62,23 +62,23 @@ const Home: NextPage = () => {
 	);
 
 	// Preparing the queries
-	const {} = useQuery(Queries.POPULAR_SHOWS);
+	useQuery(Queries.POPULAR_SHOWS);
 
-	const {} = useQuery(Queries.MOVIES_IN_THEATRES);
+	useQuery(Queries.MOVIES_IN_THEATRES);
 
-	const {} = useQuery(Queries.TRENDING_MOVIES, {
+	useQuery(Queries.TRENDING_MOVIES, {
 		variables: {
 			timeWindow: TimeWindowTypes.Week,
 		},
 	});
 
-	const {} = useQuery(Queries.TRENDING_SHOWS, {
+	useQuery(Queries.TRENDING_SHOWS, {
 		variables: {
 			timeWindow: TimeWindowTypes.Day,
 		},
 	});
 
-	const {} = useQuery(Queries.TRENDING_SHOWS, {
+	useQuery(Queries.TRENDING_SHOWS, {
 		variables: {
 			timeWindow: TimeWindowTypes.Week,
 		},

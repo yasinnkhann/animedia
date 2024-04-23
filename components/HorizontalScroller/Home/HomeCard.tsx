@@ -12,7 +12,7 @@ import {
 
 interface Props {
 	item: MovieResult | ShowResult;
-	dragging: Boolean;
+	dragging: boolean;
 	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
@@ -76,8 +76,8 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 									? CommonMethods.formatDate(item.release_date)
 									: 'Release Date Not Available'
 								: item.first_air_date
-								? CommonMethods.formatDate(item.first_air_date)
-								: 'First Air Date Not Available'}
+									? CommonMethods.formatDate(item.first_air_date)
+									: 'First Air Date Not Available'}
 						</p>
 					</div>
 				</section>

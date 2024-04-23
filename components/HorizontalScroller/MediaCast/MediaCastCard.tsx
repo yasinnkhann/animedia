@@ -6,7 +6,7 @@ import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {
 	item: ICast;
-	dragging: Boolean;
+	dragging: boolean;
 }
 
 const MediaCastCard = ({ item, dragging }: Props) => {

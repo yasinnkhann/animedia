@@ -157,21 +157,21 @@ const PersonDetails = () => {
 						{personDetailsData.personDetails.gender === 1
 							? 'Female'
 							: personDetailsData.personDetails.gender === 2
-							? 'Male'
-							: 'Unknown'}
+								? 'Male'
+								: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Date of Birth</h4>
 					<p className='ml-1'>
 						{personDetailsData.personDetails.birthday
 							? `${CommonMethods.formatDate(
 									personDetailsData.personDetails.birthday
-							  )}${
+								)}${
 									!personDetailsData.personDetails.deathday
 										? ` (${getAge(
 												personDetailsData.personDetails.birthday
-										  )} years old)`
+											)} years old)`
 										: ''
-							  }`
+								}`
 							: 'Unknown'}
 					</p>
 					<h4 className='mt-4'>Born In</h4>

@@ -130,7 +130,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 					onChange={e => setSearchQuery(e.target.value)}
 				/>
 				<button
-					className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-gray-700 transition-all focus:text-black focus:outline-none hover:scale-125 hover:cursor-pointer hover:text-black'
+					className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-gray-700 transition-all hover:scale-125 hover:cursor-pointer hover:text-black focus:text-black focus:outline-none'
 					type='submit'
 				>
 					<FaSearch />
@@ -148,8 +148,8 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 												result.movieTitle
 													? EContent.MOVIE
 													: result.showName
-													? EContent.SHOW
-													: EContent.PERSON,
+														? EContent.SHOW
+														: EContent.PERSON,
 												result.id,
 												(result.movieTitle ||
 													result.showName ||
@@ -170,15 +170,15 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 										{result.movieTitle
 											? CommonMethods.toTitleCase(EContent.MOVIE)
 											: result.showName
-											? CommonMethods.toTitleCase(EContent.SHOW)
-											: CommonMethods.toTitleCase(EContent.PERSON)}
+												? CommonMethods.toTitleCase(EContent.SHOW)
+												: CommonMethods.toTitleCase(EContent.PERSON)}
 									</span>
 									<span className='float-right text-white'>
 										{result.movieTitle
 											? CommonMethods.formatDate(result.releaseDate)
 											: result.showName
-											? CommonMethods.formatDate(result.firstAirDate)
-											: result.knownForDepartment}
+												? CommonMethods.formatDate(result.firstAirDate)
+												: result.knownForDepartment}
 									</span>
 								</div>
 							))}
