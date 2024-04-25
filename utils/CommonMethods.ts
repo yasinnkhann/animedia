@@ -252,7 +252,11 @@ export class CommonMethods {
 		return titleCase;
 	};
 
-	public static wait = async (ms: number) => {
-		return new Promise(resolve => setTimeout(resolve, ms));
+	public static sleep = async (ms: number) => {
+		return await new Promise<void>(resolve => {
+			setTimeout(() => {
+				resolve();
+			}, ms);
+		});
 	};
 }
