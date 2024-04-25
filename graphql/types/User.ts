@@ -8,7 +8,7 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
-import { hash } from 'bcryptjs';
+import { hash } from 'argon2';
 import nodemailer, { Transport, TransportOptions } from 'nodemailer';
 import { CommonMethods } from '../../utils/CommonMethods';
 import {
@@ -489,7 +489,7 @@ export const UserMutations = extendType({
 						};
 					}
 					const newUser = await ctx.prisma.user.create({
-						data: { name, email, password: await hash(password, 12) },
+						data: { name, email, password: await hash(password) },
 					});
 					return {
 						error: null,
@@ -636,25 +636,45 @@ export const UserMutations = extendType({
 					};
 				}
 
-				const transporter = nodemailer.createTransport({
-					host: process.env.EMAIL_SERVER_HOST,
-					port: process.env.EMAIL_SERVER_PORT,
-					secure: Number(process.env.EMAIL_SERVER_PORT as string) === 465, // true for 465, false for other ports
-					auth: {
-						user: process.env.EMAIL_SERVER_USER,
-						pass: process.env.EMAIL_SERVER_PASSWORD,
-					},
-				} as TransportOptions | Transport<unknown>);
-
 				try {
-					await transporter.sendMail({
-						from: process.env.EMAIL_FROM,
-						to: recipientEmail,
-						subject,
-						text,
-						html,
-					});
-
+					if (process.env.NODE_ENV === 'development') {
+						nodemailer.createTestAccount(async (err, account) => {
+							const transporter = nodemailer.createTransport({
+								host: 'smtp.ethereal.email',
+								port: 587,
+								secure: false, // true for 465, false for other ports
+								auth: {
+									user: account.user, // generated ethereal user
+									pass: account.pass, // generated ethereal password
+								},
+							});
+							const info = await transporter.sendMail({
+								from: process.env.EMAIL_FROM,
+								to: recipientEmail,
+								subject,
+								text,
+								html,
+							});
+							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
+						});
+					} else if (process.env.NODE_ENV === 'production') {
+						const transporter = nodemailer.createTransport({
+							host: process.env.EMAIL_SERVER_HOST,
+							port: process.env.EMAIL_SERVER_PORT,
+							secure: Number(process.env.EMAIL_SERVER_PORT as string) === 465, // true for 465, false for other ports
+							auth: {
+								user: process.env.EMAIL_SERVER_USER,
+								pass: process.env.EMAIL_SERVER_PASSWORD,
+							},
+						} as TransportOptions | Transport<unknown>);
+						await transporter.sendMail({
+							from: process.env.EMAIL_FROM,
+							to: recipientEmail,
+							subject,
+							text,
+							html,
+						});
+					}
 					return {
 						error: null,
 						successMsg: 'EMAIL VERIFICATION SENT!',

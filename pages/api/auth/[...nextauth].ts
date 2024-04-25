@@ -5,28 +5,12 @@ import DiscordProvider from 'next-auth/providers/discord';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
-import { compare } from 'bcryptjs';
+import { verify } from 'argon2';
 import { CommonMethods } from '../../../utils/CommonMethods';
-
-const cookiesPolicy =
-	process.env.NODE_ENV === 'development'
-		? {
-				sessionToken: {
-					name: `_Secure_next-auth.session-token`,
-					options: {
-						httpOnly: true,
-						sameSite: 'None',
-						path: '/',
-						secure: true,
-					},
-				},
-			}
-		: {};
 
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
 	debug: process.env.NODE_ENV === 'development',
-	cookies: cookiesPolicy,
 	secret: process.env.NEXTAUTH_SECRET,
 
 	providers: [
@@ -62,27 +46,27 @@ export const authOptions: NextAuthOptions = {
 				) {
 					return;
 				}
-				// check user existence
-				const result: any = await prisma.user.findUnique({
-					where: { email: credentials.email },
-				});
+				try {
+					// check user existence
+					const result: any = await prisma.user.findUnique({
+						where: { email: credentials.email },
+					});
 
-				if (!result) {
-					return;
+					if (!result) return;
+
+					const checkPassword = await verify(
+						result.password,
+						credentials.password
+					);
+
+					// incorrect credentials
+					if (!checkPassword || result.email !== credentials.email) {
+						return;
+					}
+					return result;
+				} catch (err) {
+					console.error(err);
 				}
-
-				// compare()
-				const checkPassword = await compare(
-					credentials.password,
-					result.password
-				);
-
-				// incorrect password
-				if (!checkPassword || result.email !== credentials.email) {
-					return;
-				}
-
-				return result;
 			},
 		}),
 	],
@@ -96,21 +80,21 @@ export const authOptions: NextAuthOptions = {
 	},
 
 	callbacks: {
-		signIn: async ({ user, account, profile, email, credentials }) => {
+		signIn: async _info => {
 			return true;
 		},
 
 		// Getting the JWT token from API response
 		jwt: async ({ token, user, account, profile, isNewUser }) => {
-			// console.log('PROFILE IN JWT: ', profile);
-			// console.log('account IN JWT: ', account);
-			// console.log('IS NEW USER IN JWT CB: ', !!isNewUser);
+			console.log('PROFILE IN JWT: ', profile);
+			console.log('account IN JWT: ', account);
+			console.log('IS NEW USER IN JWT CB: ', !!isNewUser);
 			if (user) {
 				token.jwt = (user as any)?.access_token;
 				token.user = user;
 				(token.user as any).provider = account?.provider;
-				// console.log('USER IN JWT CB: ', user);
-				// console.log('TOKEN IN JWT CB: ', token);
+				console.log('USER IN JWT CB: ', user);
+				console.log('TOKEN IN JWT CB: ', token);
 
 				if ((profile as any)?.email_verified && user?.id) {
 					const isEmailVerifiedUpdated = await prisma.user.findUnique({
@@ -147,8 +131,8 @@ export const authOptions: NextAuthOptions = {
 
 			(session as any).jwt = token.jwt;
 			(session as any).user = token.user;
-			// console.log('TOKEN IN SESSION CB: ', token);
-			// console.log('SESSION IN SESSION CB: ', session);
+			console.log('TOKEN IN SESSION CB: ', token);
+			console.log('SESSION IN SESSION CB: ', session);
 
 			return Promise.resolve(session);
 		},
