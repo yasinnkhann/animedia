@@ -9,6 +9,9 @@ import { useFormik } from 'formik';
 import { registerValidate } from '../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
+import { ErrorRes } from '../../graphql/generated/code-gen/graphql';
+
+import _ from 'lodash';
 
 export default function Register() {
 	const [showPW, setShowPW] = useState({
@@ -29,9 +32,7 @@ export default function Register() {
 		onSubmit,
 	});
 
-	const [registerErr, setRegisterErr] = useState<{ error: null | string }>({
-		error: null,
-	});
+	const [registerErrs, setRegisterErrs] = useState<ErrorRes[]>([]);
 
 	const [registerUser] = useMutation(Mutations.REGISTER_USER);
 
@@ -69,7 +70,7 @@ export default function Register() {
 
 				if (
 					!writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
-						?.error &&
+						?.errors &&
 					writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
 						?.token
 				) {
@@ -82,7 +83,7 @@ export default function Register() {
 						},
 					});
 
-					if (sendVerificationEmailRes.data?.sendVerificationEmail?.ok) {
+					if (!sendVerificationEmailRes.data?.sendVerificationEmail?.errors) {
 						router.push(
 							`/verification-email-sent/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}`
 						);
@@ -91,8 +92,14 @@ export default function Register() {
 					}
 				}
 			}
-			if (registerUserRes.data?.registerUser?.error) {
-				setRegisterErr({ error: registerUserRes.data.registerUser.error });
+			if (
+				registerUserRes.data?.registerUser?.errors?.length &&
+				registerUserRes.data.registerUser.errors.length > 0
+			) {
+				const filteredErrors = registerUserRes.data.registerUser.errors.filter(
+					(error): error is ErrorRes => error !== null
+				);
+				setRegisterErrs(filteredErrors);
 			}
 		} catch (err) {
 			console.error(err);
@@ -234,9 +241,11 @@ export default function Register() {
 					</div>
 				</form>
 
-				{registerErr.error && (
-					<span className='text-center text-rose-500'>{registerErr.error}</span>
-				)}
+				{registerErrs.map((err, idx) => (
+					<span key={idx} className='text-center text-rose-500'>
+						{err.message}
+					</span>
+				))}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>Have an account? </p>

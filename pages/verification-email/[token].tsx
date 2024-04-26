@@ -48,7 +48,7 @@ const VerificationEmail = ({ verificationEmailData }: Props) => {
 						},
 					});
 
-					if (deleteRes.data?.deleteEmailVerificationToken?.successMsg) {
+					if (!deleteRes.data?.deleteEmailVerificationToken?.errors) {
 						setVerified(true);
 					}
 				}
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
 	const data = res.checkEmailVerificationToken;
 
-	if (data?.error) {
+	if (data?.errors?.length) {
 		return {
 			redirect: {
 				destination: '/',

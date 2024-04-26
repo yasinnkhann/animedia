@@ -53,7 +53,7 @@ const PersonDetails = () => {
 
 		const mappedMoviesCast: IRelatedMedia[] = [];
 
-		for (const castObj of knownForMoviesData?.personsKnownForMovieRes?.cast ??
+		for (const castObj of knownForMoviesData?.personsKnownForMovie?.cast ??
 			[]) {
 			if (!uniqueMovies.has(castObj!.id)) {
 				uniqueMovies.add(castObj!.id);
@@ -71,8 +71,7 @@ const PersonDetails = () => {
 
 		const mappedShowsCast: IRelatedMedia[] = [];
 
-		for (const castObj of knownForShowsData?.personsKnownForShowRes?.cast ??
-			[]) {
+		for (const castObj of knownForShowsData?.personsKnownForShow?.cast ?? []) {
 			if (
 				!uniqueShows.has(castObj!.id) &&
 				castObj!.episode_count! > KNOWN_FOR_MIN_EP_COUNT

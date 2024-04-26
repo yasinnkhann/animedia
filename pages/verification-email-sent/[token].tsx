@@ -57,7 +57,7 @@ const VerificationEmailSent = ({
 	const handleResendLink = async () => {
 		if (
 			checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
-				?.token === String(3)
+				?.token === String(5)
 		) {
 			setReachedLimit(true);
 			return;
@@ -140,7 +140,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		}
 	);
 
-	if (hasTokenRes.checkEmailVerificationToken?.error) {
+	if (hasTokenRes.checkEmailVerificationToken?.errors?.length) {
 		return {
 			redirect: {
 				destination: '/',

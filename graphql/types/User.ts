@@ -1,4 +1,12 @@
 import { v4 } from 'uuid';
+import { hash } from 'argon2';
+import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { CommonMethods } from '../../utils/CommonMethods';
+import {
+	EMAIL_VERIFICATION_PREFIX,
+	RETRY_EMAIL_VERIFICATION_PREFIX,
+} from 'utils/constants';
 import {
 	objectType,
 	extendType,
@@ -8,13 +16,6 @@ import {
 	intArg,
 	enumType,
 } from 'nexus';
-import { hash } from 'argon2';
-import nodemailer, { Transport, TransportOptions } from 'nodemailer';
-import { CommonMethods } from '../../utils/CommonMethods';
-import {
-	EMAIL_VERIFICATION_PREFIX,
-	RETRY_EMAIL_VERIFICATION_PREFIX,
-} from 'utils/constants';
 
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
@@ -53,16 +54,16 @@ export const UserShow = objectType({
 	},
 });
 
-export const UserRes = objectType({
-	name: 'UserRes',
+export const User = objectType({
+	name: 'User',
 	definition(t) {
 		t.id('id');
 		t.string('name');
 		t.string('email');
-		t.string('password');
-		t.string('image');
-		t.date('created_at');
 		t.date('emailVerified');
+		t.string('image');
+		t.string('password');
+		t.date('created_at');
 		t.list.field('movies', {
 			type: 'UserMovie',
 		});
@@ -72,20 +73,21 @@ export const UserRes = objectType({
 	},
 });
 
+export const ErrorRes = objectType({
+	name: 'ErrorRes',
+	definition(t) {
+		t.nonNull.string('message');
+	},
+});
+
 export const RegisteredUserRes = objectType({
 	name: 'RegisteredUserRes',
 	definition(t) {
-		t.field('error', {
-			type: 'String',
+		t.list.field('errors', {
+			type: 'ErrorRes',
 		});
 		t.field('createdUser', {
-			type: 'UserRes',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
+			type: 'User',
 		});
 	},
 });
@@ -93,11 +95,8 @@ export const RegisteredUserRes = objectType({
 export const RedisRes = objectType({
 	name: 'RedisRes',
 	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('successMsg', {
-			type: 'String',
+		t.list.nullable.field('errors', {
+			type: 'ErrorRes',
 		});
 		t.field('token', {
 			type: 'String',
@@ -111,8 +110,8 @@ export const RedisRes = objectType({
 export const AccountVerifiedRes = objectType({
 	name: 'AccountVerifiedRes',
 	definition(t) {
-		t.field('error', {
-			type: 'String',
+		t.list.nullable.field('errors', {
+			type: 'ErrorRes',
 		});
 		t.field('id', {
 			type: 'String',
@@ -126,17 +125,8 @@ export const AccountVerifiedRes = objectType({
 export const NodeRes = objectType({
 	name: 'NodeRes',
 	definition(t) {
-		t.field('error', {
-			type: 'String',
-		});
-		t.field('successMsg', {
-			type: 'String',
-		});
-		t.field('ok', {
-			type: 'Boolean',
-		});
-		t.field('statusCode', {
-			type: 'Int',
+		t.list.nullable.field('errors', {
+			type: 'ErrorRes',
 		});
 	},
 });
@@ -145,7 +135,7 @@ export const UserQueries = extendType({
 	type: 'Query',
 	definition(t) {
 		t.field('user', {
-			type: 'UserRes',
+			type: 'User',
 			args: {
 				id: nonNull(idArg()),
 			},
@@ -233,16 +223,14 @@ export const UserQueries = extendType({
 
 				if (!userId) {
 					return {
-						error: 'Email Verification Not Found.',
-						successMsg: null,
+						errors: [{ message: 'Email Verification Not Found.' }],
 						token: null,
 						userId: null,
 					};
 				}
 
 				return {
-					error: null,
-					successMsg: 'Valid EMAIL VERIFICATION.',
+					errors: null,
 					token,
 					userId,
 				};
@@ -261,7 +249,7 @@ export const UserQueries = extendType({
 
 				if (acct?.id && !acct.emailVerified) {
 					return {
-						error: 'Account Not Verified',
+						errors: [{ message: 'Account Not Verified' }],
 						id: acct.id,
 						emailVerified: null,
 					};
@@ -269,14 +257,14 @@ export const UserQueries = extendType({
 
 				if (acct?.id && acct.emailVerified) {
 					return {
-						error: null,
+						errors: null,
 						id: acct.id,
 						emailVerified: acct.emailVerified,
 					};
 				}
 
 				return {
-					error: 'Account Not Found',
+					errors: [{ message: 'Account Not Found' }],
 					id: null,
 					emailVerified: null,
 				};
@@ -316,15 +304,15 @@ export const UserQueries = extendType({
 
 				if (!limitFound) {
 					return {
-						error: null,
-						successMsg: 'Retry Email Verification Limit Not Found',
+						errors: null,
 						token: null,
+						userId: null,
 					};
 				}
 
 				return {
-					error: null,
-					successMsg: 'Retry Email Verification Limit Found',
+					errors: null,
+					userId: null,
 					token: limitFound,
 				};
 			},
@@ -482,28 +470,22 @@ export const UserMutations = extendType({
 
 					if (existingUser) {
 						return {
-							error: 'Email Already Exists',
+							errors: [{ message: 'Email Already Exists' }],
 							createdUser: null,
-							ok: false,
-							statusCode: 422,
 						};
 					}
 					const newUser = await ctx.prisma.user.create({
 						data: { name, email, password: await hash(password) },
 					});
 					return {
-						error: null,
+						errors: null,
 						createdUser: newUser,
-						ok: true,
-						statusCode: 201,
 					};
 				} catch (err) {
 					console.error(err);
 					return {
-						error: `ERROR ${err}`,
+						errors: [{ message: 'Error while trying to register user' }],
 						createdUser: null,
-						ok: false,
-						statusCode: 500,
 					};
 				}
 			},
@@ -521,8 +503,7 @@ export const UserMutations = extendType({
 
 				if (!user) {
 					return {
-						error: 'User not found.',
-						successMsg: null,
+						errors: [{ message: 'User not found.' }],
 						token: null,
 						userId: null,
 					};
@@ -538,8 +519,7 @@ export const UserMutations = extendType({
 				);
 
 				return {
-					error: null,
-					successMsg: 'Email Verification Token Added',
+					errors: null,
 					token,
 					userId: user.id,
 				};
@@ -557,16 +537,14 @@ export const UserMutations = extendType({
 
 				if (!deletedEmailVerification) {
 					return {
-						error: 'Unable to delete email verification.',
-						successMsg: null,
+						errors: [{ message: 'Unable to delete email verification.' }],
 						token: null,
 						userId: null,
 					};
 				}
 
 				return {
-					error: null,
-					successMsg: 'Successfully deleted email verification.',
+					errors: null,
 					token: null,
 					userId: null,
 				};
@@ -608,12 +586,11 @@ export const UserMutations = extendType({
 					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`,
 					(+currNum + 1).toString(),
 					'EX',
-					1000 * 60 * 60 * 24 * 1 // 1 day
+					1000 * 60 * 60 * 24 * 3 // 3 days
 				);
 
 				return {
-					error: null,
-					successMsg: 'Retry Email Verification Limit Added',
+					errors: null,
 					token: (+currNum + 1).toString(),
 				};
 			},
@@ -629,25 +606,27 @@ export const UserMutations = extendType({
 			resolve: async (_parent, { recipientEmail, subject, text, html }) => {
 				if (!CommonMethods.isValidEmail(recipientEmail)) {
 					return {
-						error: 'Please provide a valid email address',
-						successMsg: null,
-						ok: false,
-						statusCode: 400,
+						errors: [{ message: 'Please provide a valid email address' }],
 					};
 				}
 
 				try {
+					let transporterConfig: SMTPTransport.Options = {};
+
 					if (process.env.NODE_ENV === 'development') {
-						nodemailer.createTestAccount(async (err, account) => {
-							const transporter = nodemailer.createTransport({
+						nodemailer.createTestAccount(async (_err, account) => {
+							transporterConfig = {
 								host: 'smtp.ethereal.email',
 								port: 587,
-								secure: false, // true for 465, false for other ports
+								secure: false,
 								auth: {
-									user: account.user, // generated ethereal user
-									pass: account.pass, // generated ethereal password
+									user: account.user,
+									pass: account.pass,
 								},
-							});
+							};
+
+							const transporter = nodemailer.createTransport(transporterConfig);
+
 							const info = await transporter.sendMail({
 								from: process.env.EMAIL_FROM,
 								to: recipientEmail,
@@ -655,18 +634,20 @@ export const UserMutations = extendType({
 								text,
 								html,
 							});
+
 							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
 						});
 					} else if (process.env.NODE_ENV === 'production') {
-						const transporter = nodemailer.createTransport({
+						transporterConfig = {
 							host: process.env.EMAIL_SERVER_HOST,
-							port: process.env.EMAIL_SERVER_PORT,
-							secure: Number(process.env.EMAIL_SERVER_PORT as string) === 465, // true for 465, false for other ports
+							port: Number(process.env.EMAIL_SERVER_PORT as string),
+							secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // true for 465, false for other ports
 							auth: {
 								user: process.env.EMAIL_SERVER_USER,
 								pass: process.env.EMAIL_SERVER_PASSWORD,
 							},
-						} as TransportOptions | Transport<unknown>);
+						};
+						const transporter = nodemailer.createTransport(transporterConfig);
 						await transporter.sendMail({
 							from: process.env.EMAIL_FROM,
 							to: recipientEmail,
@@ -675,19 +656,14 @@ export const UserMutations = extendType({
 							html,
 						});
 					}
+
 					return {
-						error: null,
-						successMsg: 'EMAIL VERIFICATION SENT!',
-						ok: true,
-						statusCode: 201,
+						errors: null,
 					};
 				} catch (err) {
 					console.error(err);
 					return {
-						error: `ERROR ${err}`,
-						successMsg: null,
-						ok: false,
-						statusCode: 500,
+						errors: [{ message: 'Error while sending verification email' }],
 					};
 				}
 			},

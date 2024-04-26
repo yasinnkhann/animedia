@@ -15,15 +15,14 @@ import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
+import { ErrorRes } from 'graphql/generated/code-gen/graphql';
 
 export default function Login({
 	providers,
 	csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [showPW, setShowPW] = useState(false);
-	const [acctVerifiedErr, setAcctVerifiedErr] = useState<{
-		error: null | string;
-	}>({ error: null });
+	const [acctVerifiedErrs, setAcctVerifiedErrs] = useState<ErrorRes[]>([]);
 
 	const router = useRouter();
 
@@ -48,10 +47,15 @@ export default function Login({
 	async function onSubmit() {
 		const { email, password } = formik.values;
 
-		if (fetchAccountVerifiedData?.accountVerified?.error) {
-			setAcctVerifiedErr({
-				error: fetchAccountVerifiedData?.accountVerified?.error,
-			});
+		if (
+			fetchAccountVerifiedData?.accountVerified?.errors?.length &&
+			fetchAccountVerifiedData.accountVerified.errors.length > 0
+		) {
+			const filteredErrors =
+				fetchAccountVerifiedData.accountVerified.errors.filter(
+					(error): error is ErrorRes => error !== null
+				);
+			setAcctVerifiedErrs(filteredErrors);
 			return;
 		}
 
@@ -63,9 +67,7 @@ export default function Login({
 		});
 
 		if (status?.ok) {
-			setAcctVerifiedErr({
-				error: null,
-			});
+			setAcctVerifiedErrs([]);
 			router.push(status.url!);
 		}
 	}
@@ -192,11 +194,11 @@ export default function Login({
 					</section>
 				</form>
 
-				{acctVerifiedErr.error && (
-					<span className='text-center text-rose-500'>
-						{acctVerifiedErr.error}
+				{acctVerifiedErrs.map((err, idx) => (
+					<span key={idx} className='text-center text-rose-500'>
+						{err.message}
 					</span>
-				)}
+				))}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>

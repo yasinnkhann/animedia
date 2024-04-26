@@ -794,8 +794,8 @@ export const GET_USERS_SHOWS = graphql(`
 `);
 
 export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
-	query PersonsKnownForMovieRes($personsKnownForMovieResId: ID!) {
-		personsKnownForMovieRes(
+	query PersonsKnownForMovie($personsKnownForMovieResId: ID!) {
+		personsKnownForMovie(
 			personsKnownForMovieResId: $personsKnownForMovieResId
 		) {
 			id
@@ -842,10 +842,8 @@ export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
 `);
 
 export const GET_PERSONS_KNOWN_FOR_SHOWS = graphql(`
-	query PersonsKnownForShowRes($personsKnownForShowResId: ID!) {
-		personsKnownForShowRes(
-			personsKnownForShowResId: $personsKnownForShowResId
-		) {
+	query PersonsKnownForShow($personsKnownForShowResId: ID!) {
+		personsKnownForShow(personsKnownForShowResId: $personsKnownForShowResId) {
 			id
 			cast {
 				adult
@@ -1010,8 +1008,9 @@ export const GET_EPISODE_DETAILS = graphql(`
 export const CHECK_EMAIL_VERIFICATION_TOKEN = graphql(`
 	query CheckEmailVerificationToken($token: String!) {
 		checkEmailVerificationToken(token: $token) {
-			error
-			successMsg
+			errors {
+				message
+			}
 			token
 			userId
 		}
@@ -1021,7 +1020,9 @@ export const CHECK_EMAIL_VERIFICATION_TOKEN = graphql(`
 export const ACCOUNT_VERIFIED = graphql(`
 	query AccountVerified($email: String!) {
 		accountVerified(email: $email) {
-			error
+			errors {
+				message
+			}
 			id
 			emailVerified
 		}
@@ -1037,8 +1038,9 @@ export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 export const CHECK_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
 	query CheckRetryEmailVerificationLimit($email: String!) {
 		checkRetryEmailVerificationLimit(email: $email) {
-			error
-			successMsg
+			errors {
+				message
+			}
 			token
 			userId
 		}

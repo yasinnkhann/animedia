@@ -108,8 +108,9 @@ export const DELETE_SHOW = graphql(`
 export const WRITE_EMAIL_VERIFICATION_TOKEN = graphql(`
 	mutation WriteEmailVerificationToken($email: String!) {
 		writeEmailVerificationToken(email: $email) {
-			error
-			successMsg
+			errors {
+				message
+			}
 			token
 			userId
 		}
@@ -119,8 +120,9 @@ export const WRITE_EMAIL_VERIFICATION_TOKEN = graphql(`
 export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
 	mutation DeleteEmailVerificationToken($token: String!) {
 		deleteEmailVerificationToken(token: $token) {
-			error
-			successMsg
+			errors {
+				message
+			}
 			token
 			userId
 		}
@@ -136,8 +138,9 @@ export const VERIFY_USER_EMAIL = graphql(`
 export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
 	mutation Mutation($email: String!) {
 		writeRetryEmailVerificationLimit(email: $email) {
-			error
-			successMsg
+			errors {
+				message
+			}
 			token
 			userId
 		}
@@ -157,10 +160,9 @@ export const SEND_VERIFICATION_EMAIL = graphql(`
 			text: $text
 			html: $html
 		) {
-			error
-			successMsg
-			ok
-			statusCode
+			errors {
+				message
+			}
 		}
 	}
 `);
@@ -168,7 +170,9 @@ export const SEND_VERIFICATION_EMAIL = graphql(`
 export const REGISTER_USER = graphql(`
 	mutation RegisterUser($name: String!, $email: String!, $password: String!) {
 		registerUser(name: $name, email: $email, password: $password) {
-			error
+			errors {
+				message
+			}
 			createdUser {
 				id
 				name
@@ -191,8 +195,6 @@ export const REGISTER_USER = graphql(`
 					current_episode
 				}
 			}
-			ok
-			statusCode
 		}
 	}
 `);
