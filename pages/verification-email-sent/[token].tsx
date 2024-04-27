@@ -56,18 +56,14 @@ const VerificationEmailSent = ({
 
 	const handleResendLink = async () => {
 		if (
+			process.env.NODE_ENV === 'production' &&
 			checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
-				?.token === String(5)
+				?.token === String(2)
 		) {
 			setReachedLimit(true);
 			return;
 		}
 		setIsResending(true);
-		await writeRetryEmailVerificationToken({
-			variables: {
-				email,
-			},
-		});
 
 		const writtenTokenRes = await writeEmailVerificationToken({
 			variables: {

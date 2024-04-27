@@ -17,4 +17,4 @@ export const KNOWN_FOR_CARDS_LIMIT = 20;
 
 export const EMAIL_VERIFICATION_PREFIX = 'email-verification';
 
-export const RETRY_EMAIL_VERIFICATION_PREFIX = 'retry-email-verification';
+export const VERIFICATION_EMAIL_COUNT_PREFIX = 'retry-email-verification';

@@ -9,7 +9,7 @@
 	"plugins": ["@typescript-eslint"],
 	"root": true,
 	"rules": {
-		// "@typescript-eslint/ban-types": "off",
+		"prettier/prettier": ["warn"],
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
 			{

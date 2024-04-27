@@ -5,7 +5,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { CommonMethods } from '../../utils/CommonMethods';
 import {
 	EMAIL_VERIFICATION_PREFIX,
-	RETRY_EMAIL_VERIFICATION_PREFIX,
+	VERIFICATION_EMAIL_COUNT_PREFIX,
 } from 'utils/constants';
 import {
 	objectType,
@@ -218,7 +218,7 @@ export const UserQueries = extendType({
 			},
 			resolve: async (_parent, { token }, ctx) => {
 				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+					`${EMAIL_VERIFICATION_PREFIX}:${token}`
 				);
 
 				if (!userId) {
@@ -277,7 +277,7 @@ export const UserQueries = extendType({
 			},
 			resolve: async (_parent, { token }, ctx) => {
 				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+					`${EMAIL_VERIFICATION_PREFIX}:${token}`
 				);
 
 				if (!userId) return null;
@@ -299,7 +299,7 @@ export const UserQueries = extendType({
 			},
 			resolve: async (_parent, { email }, ctx) => {
 				const limitFound: string | null = await ctx.redis.get(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
 				);
 
 				if (!limitFound) {
@@ -509,13 +509,28 @@ export const UserMutations = extendType({
 					};
 				}
 
+				// ?delete previous email verification if exists
+
 				const token = v4();
 
 				await ctx.redis.set(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`,
+					`${EMAIL_VERIFICATION_PREFIX}:${token}`,
 					user.id,
 					'EX',
-					1000 * 60 * 60 * 24 * 3 // 3 days
+					60 * 60 * 24 * 3 // 3 days
+				);
+
+				const verificationEmailCount = await ctx.redis.get(
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
+				);
+
+				await ctx.redis.set(
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`,
+					!verificationEmailCount
+						? '1'
+						: (+verificationEmailCount + 1).toString(),
+					'EX',
+					60 * 60 * 24 * 3 // 3 days
 				);
 
 				return {
@@ -532,7 +547,7 @@ export const UserMutations = extendType({
 			},
 			resolve: async (_parent, { token }, ctx) => {
 				const deletedEmailVerification = await ctx.redis.del(
-					`${EMAIL_VERIFICATION_PREFIX}-${token}`
+					`${EMAIL_VERIFICATION_PREFIX}:${token}`
 				);
 
 				if (!deletedEmailVerification) {
@@ -575,7 +590,7 @@ export const UserMutations = extendType({
 			},
 			resolve: async (_parent, { email }, ctx) => {
 				let currNum = await ctx.redis.get(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
 				);
 
 				if (!currNum) {
@@ -583,10 +598,10 @@ export const UserMutations = extendType({
 				}
 
 				await ctx.redis.set(
-					`${RETRY_EMAIL_VERIFICATION_PREFIX}-${email}`,
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`,
 					(+currNum + 1).toString(),
 					'EX',
-					1000 * 60 * 60 * 24 * 3 // 3 days
+					60 * 60 * 24 * 3 // 3 days
 				);
 
 				return {
