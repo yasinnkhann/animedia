@@ -1034,15 +1034,3 @@ export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 		emailFromRedisToken(token: $token)
 	}
 `);
-
-export const CHECK_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
-	query CheckRetryEmailVerificationLimit($email: String!) {
-		checkRetryEmailVerificationLimit(email: $email) {
-			errors {
-				message
-			}
-			token
-			userId
-		}
-	}
-`);

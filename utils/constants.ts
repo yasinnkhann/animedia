@@ -18,3 +18,7 @@ export const KNOWN_FOR_CARDS_LIMIT = 20;
 export const EMAIL_VERIFICATION_PREFIX = 'email-verification';
 
 export const VERIFICATION_EMAIL_COUNT_PREFIX = 'retry-email-verification-count';
+
+export const VERIFICATION_EMAIL_COUNT_LIMIT = 5;
+
+export const REDIS_EXPIRATION_LIMIT = 60 * 60 * 24 * 3; // 3 days

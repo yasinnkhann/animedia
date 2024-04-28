@@ -6,7 +6,7 @@ import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../utils/constants';
 import * as Queries from '../graphql/queries';
 import * as Mutations from '../graphql/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import _ from 'lodash';
 import { RedisRes } from 'graphql/generated/code-gen/graphql';
 
@@ -15,41 +15,31 @@ interface Props {
 }
 
 const VerificationEmailSent = ({ verifiedData }: Props) => {
-	const [isResending, setIsResending] = useState(false);
-	const [reachedLimit, setReachedLimit] = useState(false);
+	const [errors, setErrors] = useState<RedisRes['errors']>(verifiedData.errors);
 
-	// maybe we can move into send email mutation
-	const { data: checkRetryEmailVerificationLimitData } = useQuery(
-		Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
-		{
-			variables: {
-				email: verifiedData.userId!,
-			},
-		}
-	);
+	const [isResending, setIsResending] = useState(false);
 
 	const [sendVerificationEmail] = useMutation(
 		Mutations.SEND_VERIFICATION_EMAIL
 	);
 
 	const handleResendLink = async () => {
-		// if (
-		// 	process.env.NODE_ENV === 'production' &&
-		// 	checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
-		// 		?.token === String(2)
-		// ) {
-		// 	setReachedLimit(true);
-		// 	return;
-		// }
 		setIsResending(true);
-
-		await sendVerificationEmail({
-			variables: {
-				userId: verifiedData.userId!,
-			},
-		});
-
-		setIsResending(false);
+		try {
+			const sendVerificationEmailRes = await sendVerificationEmail({
+				variables: {
+					userId: verifiedData.userId!,
+				},
+			});
+			setErrors(
+				sendVerificationEmailRes.data?.sendVerificationEmail?.errors ?? [
+					{ message: 'Error ocurred while resending link.' },
+				]
+			);
+			setIsResending(false);
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	return (
@@ -76,12 +66,12 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 								<Oval className='mt-8' stroke='#00b3ff' />
 							</div>
 						)}
-						{reachedLimit && (
-							<p className='mt-8 text-red-500'>
-								You have reached the limit of verification emails. Please wait
-								24 hours to try again.
-							</p>
-						)}
+						{!_.isEmpty(errors) &&
+							errors.map((err, idx) => (
+								<div key={idx} className='flex flex-col'>
+									<p className='mt-8 text-red-500'>{err.message}</p>
+								</div>
+							))}
 					</div>
 				</section>
 			</main>

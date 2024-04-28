@@ -5,6 +5,8 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import {
 	CLIENT_BASE_URL,
 	EMAIL_VERIFICATION_PREFIX,
+	REDIS_EXPIRATION_LIMIT,
+	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 } from 'utils/constants';
 import {
@@ -295,32 +297,6 @@ export const UserQueries = extendType({
 				return user.email;
 			},
 		});
-
-		t.field('checkRetryEmailVerificationLimit', {
-			type: 'RedisRes',
-			args: {
-				email: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { email }, ctx) => {
-				const limitFound: string | null = await ctx.redis.get(
-					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
-				);
-
-				if (!limitFound) {
-					return {
-						errors: [],
-						token: null,
-						userId: null,
-					};
-				}
-
-				return {
-					errors: [],
-					userId: null,
-					token: limitFound,
-				};
-			},
-		});
 	},
 });
 
@@ -563,34 +539,6 @@ export const UserMutations = extendType({
 			},
 		});
 
-		t.field('writeRetryEmailVerificationLimit', {
-			type: 'RedisRes',
-			args: {
-				email: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { email }, ctx) => {
-				let currNum = await ctx.redis.get(
-					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
-				);
-
-				if (!currNum) {
-					currNum = '0';
-				}
-
-				await ctx.redis.set(
-					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`,
-					(+currNum + 1).toString(),
-					'EX',
-					60 * 60 * 24 * 3 // 3 days
-				);
-
-				return {
-					errors: [],
-					token: (+currNum + 1).toString(),
-				};
-			},
-		});
-
 		t.field('sendVerificationEmail', {
 			type: 'RedisRes',
 			args: {
@@ -598,6 +546,28 @@ export const UserMutations = extendType({
 			},
 			resolve: async (_parent, { userId }, ctx) => {
 				try {
+					const verificationEmailCountRes = await ctx.redis.get(
+						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`
+					);
+
+					const verificationEmailCount = +(verificationEmailCountRes ?? '0');
+
+					if (
+						process.env.NODE_ENV === 'production' &&
+						verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT
+					) {
+						return {
+							errors: [
+								{
+									message:
+										'You have reached the limit of verification emails. Please wait 24 hours to try again.',
+								},
+							],
+							token: null,
+							userId: null,
+						};
+					}
+
 					const user = await ctx.prisma.user.findUnique({
 						where: { id: userId },
 						select: { email: true },
@@ -619,20 +589,14 @@ export const UserMutations = extendType({
 						`${EMAIL_VERIFICATION_PREFIX}:${userId}`,
 						token,
 						'EX',
-						60 * 60 * 24 * 3 // 3 days
-					);
-
-					const verificationEmailCount = await ctx.redis.get(
-						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`
+						REDIS_EXPIRATION_LIMIT
 					);
 
 					await ctx.redis.set(
 						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`,
-						!verificationEmailCount
-							? '1'
-							: (+verificationEmailCount + 1).toString(),
+						(verificationEmailCount + 1).toString(),
 						'EX',
-						60 * 60 * 24 * 3 // 3 days
+						REDIS_EXPIRATION_LIMIT
 					);
 
 					let transporterConfig: SMTPTransport.Options = {};

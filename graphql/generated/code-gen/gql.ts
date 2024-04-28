@@ -21,7 +21,6 @@ const documents = {
     "\n\tmutation DeletedShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.DeletedShowDocument,
     "\n\tmutation DeleteEmailVerificationToken($token: String!) {\n\t\tdeleteEmailVerificationToken(token: $token) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.DeleteEmailVerificationTokenDocument,
     "\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n": types.VerifyUserEmailDocument,
-    "\n\tmutation Mutation($email: String!) {\n\t\twriteRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.MutationDocument,
     "\n\tmutation SendVerificationEmail($userId: ID!) {\n\t\tsendVerificationEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.SendVerificationEmailDocument,
     "\n\tmutation RegisterUser($name: String!, $email: String!, $password: String!) {\n\t\tregisterUser(name: $name, email: $email, password: $password) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tcreatedUser {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\temail\n\t\t\t\tpassword\n\t\t\t\timage\n\t\t\t\tcreated_at\n\t\t\t\temailVerified\n\t\t\t\tmovies {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t}\n\t\t\t\tshows {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t\tcurrent_episode\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.RegisterUserDocument,
     "\n\tquery PopularMovies($page: Int) {\n\t\tpopularMovies(page: $page) {\n\t\t\tpage\n\t\t\ttotal_pages\n\t\t\ttotal_results\n\t\t\tresults {\n\t\t\t\tadult\n\t\t\t\tbackdrop_path\n\t\t\t\tgenre_ids\n\t\t\t\tid\n\t\t\t\toriginal_language\n\t\t\t\toriginal_title\n\t\t\t\toverview\n\t\t\t\tpopularity\n\t\t\t\tposter_path\n\t\t\t\trelease_date\n\t\t\t\ttitle\n\t\t\t\tvideo\n\t\t\t\tvote_average\n\t\t\t\tvote_count\n\t\t\t}\n\t\t}\n\t}\n": types.PopularMoviesDocument,
@@ -61,7 +60,6 @@ const documents = {
     "\n\tquery CheckEmailVerificationToken($token: String!, $userId: ID!) {\n\t\tcheckEmailVerificationToken(token: $token, userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckEmailVerificationTokenDocument,
     "\n\tquery AccountVerified($email: String!) {\n\t\taccountVerified(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tid\n\t\t\temailVerified\n\t\t}\n\t}\n": types.AccountVerifiedDocument,
     "\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n": types.EmailFromRedisTokenDocument,
-    "\n\tquery CheckRetryEmailVerificationLimit($email: String!) {\n\t\tcheckRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckRetryEmailVerificationLimitDocument,
 };
 
 /**
@@ -110,10 +108,6 @@ export function graphql(source: "\n\tmutation DeleteEmailVerificationToken($toke
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tmutation Mutation($email: String!) {\n\t\twriteRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation Mutation($email: String!) {\n\t\twriteRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -270,10 +264,6 @@ export function graphql(source: "\n\tquery AccountVerified($email: String!) {\n\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n"): (typeof documents)["\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tquery CheckRetryEmailVerificationLimit($email: String!) {\n\t\tcheckRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery CheckRetryEmailVerificationLimit($email: String!) {\n\t\tcheckRetryEmailVerificationLimit(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -128,18 +128,6 @@ export const VERIFY_USER_EMAIL = graphql(`
 	}
 `);
 
-export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
-	mutation Mutation($email: String!) {
-		writeRetryEmailVerificationLimit(email: $email) {
-			errors {
-				message
-			}
-			token
-			userId
-		}
-	}
-`);
-
 export const SEND_VERIFICATION_EMAIL = graphql(`
 	mutation SendVerificationEmail($userId: ID!) {
 		sendVerificationEmail(userId: $userId) {

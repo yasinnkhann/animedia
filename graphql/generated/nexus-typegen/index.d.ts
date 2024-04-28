@@ -766,7 +766,6 @@ export interface NexusGenFieldTypes {
     updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     verifyUserEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    writeRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -890,7 +889,6 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
     checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-    checkRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
@@ -1321,7 +1319,6 @@ export interface NexusGenFieldTypeNames {
     updateMovie: 'UserMovie'
     updateShow: 'UserShow'
     verifyUserEmail: 'RedisRes'
-    writeRetryEmailVerificationLimit: 'RedisRes'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1445,7 +1442,6 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     accountVerified: 'AccountVerifiedRes'
     checkEmailVerificationToken: 'RedisRes'
-    checkRetryEmailVerificationLimit: 'RedisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
     movieDetails: 'MovieDetailsRes'
@@ -1742,9 +1738,6 @@ export interface NexusGenArgTypes {
     verifyUserEmail: { // args
       userId: string; // ID!
     }
-    writeRetryEmailVerificationLimit: { // args
-      email: string; // String!
-    }
   }
   Query: {
     accountVerified: { // args
@@ -1753,9 +1746,6 @@ export interface NexusGenArgTypes {
     checkEmailVerificationToken: { // args
       token: string; // String!
       userId: string; // ID!
-    }
-    checkRetryEmailVerificationLimit: { // args
-      email: string; // String!
     }
     emailFromRedisToken: { // args
       token: string; // String!
