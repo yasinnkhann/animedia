@@ -141,8 +141,8 @@ export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
 `);
 
 export const SEND_VERIFICATION_EMAIL = graphql(`
-	mutation SendVerificationEmail($recipientEmail: String!) {
-		sendVerificationEmail(recipientEmail: $recipientEmail) {
+	mutation SendVerificationEmail($userId: ID!) {
+		sendVerificationEmail(userId: $userId) {
 			errors {
 				message
 			}

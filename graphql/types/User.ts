@@ -594,16 +594,16 @@ export const UserMutations = extendType({
 		t.field('sendVerificationEmail', {
 			type: 'RedisRes',
 			args: {
-				recipientEmail: nonNull(stringArg()),
+				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { recipientEmail }, ctx) => {
+			resolve: async (_parent, { userId }, ctx) => {
 				try {
 					const user = await ctx.prisma.user.findUnique({
-						where: { email: recipientEmail },
-						select: { id: true },
+						where: { id: userId },
+						select: { email: true },
 					});
 
-					if (!user) {
+					if (!user?.email) {
 						return {
 							errors: [{ message: 'Could not find user with that email' }],
 							token: null,
@@ -611,23 +611,23 @@ export const UserMutations = extendType({
 						};
 					}
 
-					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${user.id}`);
+					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${userId}`);
 
 					const token = v4();
 
 					await ctx.redis.set(
-						`${EMAIL_VERIFICATION_PREFIX}:${user.id}`,
+						`${EMAIL_VERIFICATION_PREFIX}:${userId}`,
 						token,
 						'EX',
 						60 * 60 * 24 * 3 // 3 days
 					);
 
 					const verificationEmailCount = await ctx.redis.get(
-						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${user.id}`
+						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`
 					);
 
 					await ctx.redis.set(
-						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${user.id}`,
+						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`,
 						!verificationEmailCount
 							? '1'
 							: (+verificationEmailCount + 1).toString(),
@@ -638,10 +638,10 @@ export const UserMutations = extendType({
 					let transporterConfig: SMTPTransport.Options = {};
 					const payload: Mail.Options = {
 						from: process.env.EMAIL_FROM,
-						to: recipientEmail,
+						to: user.email,
 						subject: 'Email Verification Link',
 						text: 'Click the link below to verify your email.',
-						html: `<a href="${CLIENT_BASE_URL}/verification-email?uid=${user.id}&token=${token}">Verify Email</a>`,
+						html: `<a href="${CLIENT_BASE_URL}/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
 					};
 
 					if (process.env.NODE_ENV === 'development') {
@@ -679,7 +679,7 @@ export const UserMutations = extendType({
 					return {
 						errors: [],
 						token,
-						userId: user.id,
+						userId: userId,
 					};
 				} catch (err) {
 					console.error(err);

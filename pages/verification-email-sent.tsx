@@ -33,20 +33,19 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 	);
 
 	const handleResendLink = async () => {
-		if (
-			process.env.NODE_ENV === 'production' &&
-			checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
-				?.token === String(2)
-		) {
-			setReachedLimit(true);
-			return;
-		}
+		// if (
+		// 	process.env.NODE_ENV === 'production' &&
+		// 	checkRetryEmailVerificationLimitData?.checkRetryEmailVerificationLimit
+		// 		?.token === String(2)
+		// ) {
+		// 	setReachedLimit(true);
+		// 	return;
+		// }
 		setIsResending(true);
 
 		await sendVerificationEmail({
 			variables: {
-				//! FIX
-				recipientEmail: 'email',
+				userId: verifiedData.userId!,
 			},
 		});
 

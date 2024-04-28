@@ -50,10 +50,10 @@ export default function Register() {
 				},
 			});
 
-			if (registerUserRes.data?.registerUser?.createdUser?.email) {
+			if (registerUserRes.data?.registerUser?.createdUser?.id) {
 				const sendVerificationEmailRes = await sendVerificationEmail({
 					variables: {
-						recipientEmail: registerUserRes.data.registerUser.createdUser.email,
+						userId: registerUserRes.data.registerUser.createdUser.id,
 					},
 				});
 				if (

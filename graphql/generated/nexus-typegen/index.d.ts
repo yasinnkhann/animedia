@@ -1726,7 +1726,7 @@ export interface NexusGenArgTypes {
       password: string; // String!
     }
     sendVerificationEmail: { // args
-      recipientEmail: string; // String!
+      userId: string; // ID!
     }
     updateMovie: { // args
       movieId: string; // ID!
