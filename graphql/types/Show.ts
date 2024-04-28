@@ -355,6 +355,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('searchedShows', {
 			type: 'ShowsRes',
 			args: {
@@ -375,6 +376,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('showDetails', {
 			type: 'ShowDetailsRes',
 			args: {
@@ -393,6 +395,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('popularAnimeShows', {
 			type: 'ShowsRes',
 			args: {
@@ -415,6 +418,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('trendingShows', {
 			type: 'ShowsRes',
 			args: {
@@ -432,6 +436,7 @@ export const ShowQueries = extendType({
 				return trendingMovies;
 			},
 		});
+
 		t.nonNull.field('topRatedShows', {
 			type: 'ShowsRes',
 			args: {
@@ -450,6 +455,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('recommendedShows', {
 			type: 'ShowsRes',
 			args: {
@@ -469,6 +475,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('showReviews', {
 			type: 'ShowReviewRes',
 			args: {
@@ -488,6 +495,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('popularShowsByGenre', {
 			type: 'ShowsRes',
 			args: {
@@ -513,6 +521,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('topRatedShowsByGenre', {
 			type: 'ShowsRes',
 			args: {
@@ -538,6 +547,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.field('showsCastCrew', {
 			type: 'ShowsCastCrewRes',
 			args: {
@@ -556,6 +566,7 @@ export const ShowQueries = extendType({
 				}
 			},
 		});
+
 		t.field('episodeDetails', {
 			type: 'EpisodeDetailsRes',
 			args: {

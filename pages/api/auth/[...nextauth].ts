@@ -15,18 +15,18 @@ export const authOptions: NextAuthOptions = {
 
 	providers: [
 		GoogleProvider({
-			clientId: process.env.GOOGLE_CLIENT_ID as string,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+			clientId: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 		}),
 
 		FacebookProvider({
-			clientId: process.env.FACEBOOK_CLIENT_ID as string,
-			clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+			clientId: process.env.FACEBOOK_CLIENT_ID,
+			clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
 		}),
 
 		DiscordProvider({
-			clientId: process.env.DISCORD_CLIENT_ID as string,
-			clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+			clientId: process.env.DISCORD_CLIENT_ID,
+			clientSecret: process.env.DISCORD_CLIENT_SECRET,
 		}),
 
 		CredentialsProvider({
@@ -47,7 +47,6 @@ export const authOptions: NextAuthOptions = {
 					return;
 				}
 				try {
-					// check user existence
 					const result: any = await prisma.user.findUnique({
 						where: { email: credentials.email },
 					});
@@ -59,7 +58,6 @@ export const authOptions: NextAuthOptions = {
 						credentials.password
 					);
 
-					// incorrect credentials
 					if (!checkPassword || result.email !== credentials.email) {
 						return;
 					}

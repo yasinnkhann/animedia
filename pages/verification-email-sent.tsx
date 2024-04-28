@@ -2,51 +2,29 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { Oval } from 'react-loading-icons';
 import { GetServerSideProps } from 'next';
-import { InferGetServerSidePropsType } from 'next';
-import { CLIENT_BASE_URL } from '../../utils/constants';
 import { request } from 'graphql-request';
-import { SERVER_BASE_URL } from '../../utils/constants';
-import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
+import { SERVER_BASE_URL } from '../utils/constants';
+import * as Queries from '../graphql/queries';
+import * as Mutations from '../graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
+import _ from 'lodash';
+import { RedisRes } from 'graphql/generated/code-gen/graphql';
 
-const VerificationEmailSent = ({
-	token,
-	email,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+interface Props {
+	verifiedData: RedisRes;
+}
+
+const VerificationEmailSent = ({ verifiedData }: Props) => {
 	const [isResending, setIsResending] = useState(false);
 	const [reachedLimit, setReachedLimit] = useState(false);
 
-	const [writeEmailVerificationToken] = useMutation(
-		Mutations.WRITE_EMAIL_VERIFICATION_TOKEN,
-		{
-			variables: {
-				email,
-			},
-		}
-	);
-
+	// maybe we can move into send email mutation
 	const { data: checkRetryEmailVerificationLimitData } = useQuery(
 		Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
 		{
 			variables: {
-				email,
+				email: verifiedData.userId!,
 			},
-		}
-	);
-
-	const [writeRetryEmailVerificationToken] = useMutation(
-		Mutations.WRITE_RETRY_EMAIL_VERIFICATION_LIMIT,
-		{
-			variables: {
-				email,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.CHECK_RETRY_EMAIL_VERIFICATION_LIMIT,
-				},
-				'CheckRetryEmailVerificationLimit',
-			],
 		}
 	);
 
@@ -65,21 +43,10 @@ const VerificationEmailSent = ({
 		}
 		setIsResending(true);
 
-		const writtenTokenRes = await writeEmailVerificationToken({
-			variables: {
-				email,
-			},
-		});
-
-		if (!writtenTokenRes.data?.writeEmailVerificationToken?.token)
-			throw new Error('No Token');
-
 		await sendVerificationEmail({
 			variables: {
-				recipientEmail: email,
-				subject: 'Email Verification Link',
-				text: 'This is the text',
-				html: `<a href="${CLIENT_BASE_URL}/verification-email/${writtenTokenRes.data.writeEmailVerificationToken.token}">Verify Email</a>`,
+				//! FIX
+				recipientEmail: 'email',
 			},
 		});
 
@@ -126,36 +93,20 @@ const VerificationEmailSent = ({
 export default VerificationEmailSent;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-	const token = ctx.params?.token as string;
+	const { uid, token } = ctx.query;
 
-	const hasTokenRes = await request(
+	const verifyTokenRes = await request(
 		SERVER_BASE_URL,
 		Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
 		{
-			token,
+			token: token as string,
+			userId: uid as string,
 		}
 	);
 
-	if (hasTokenRes.checkEmailVerificationToken?.errors?.length) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
+	const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
 
-	const emailRes = await request(
-		SERVER_BASE_URL,
-		Queries.EMAIL_FROM_REDIS_TOKEN,
-		{
-			token,
-		}
-	);
-
-	const email = emailRes.emailFromRedisToken;
-
-	if (!email) {
+	if (!verifyTokenData || !_.isEmpty(verifyTokenData.errors)) {
 		return {
 			redirect: {
 				destination: '/',
@@ -165,6 +116,8 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	}
 
 	return {
-		props: { token, email },
+		props: {
+			verifiedData: verifyTokenData,
+		},
 	};
 };

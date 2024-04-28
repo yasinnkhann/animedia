@@ -216,6 +216,7 @@ export const PopularQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('personDetails', {
 			type: 'PersonDetailsRes',
 			args: {
@@ -234,6 +235,7 @@ export const PopularQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('searchedPeople', {
 			type: 'PeopleRes',
 			args: {
@@ -255,6 +257,7 @@ export const PopularQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('personsKnownForMovie', {
 			type: 'PersonsKnownForMovieRes',
 			args: {
@@ -273,6 +276,7 @@ export const PopularQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('personsKnownForShow', {
 			type: 'PersonsKnownForShowRes',
 			args: {

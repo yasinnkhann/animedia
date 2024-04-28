@@ -4,7 +4,7 @@
 
 type AccountVerifiedRes {
   emailVerified: DateTime
-  errors: [ErrorRes]
+  errors: [ErrorRes!]!
   id: String
 }
 
@@ -230,16 +230,11 @@ type Mutation {
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
   registerUser(email: String!, name: String!, password: String!): RegisteredUserRes
-  sendVerificationEmail(html: String!, recipientEmail: String!, subject: String!, text: String!): NodeRes
+  sendVerificationEmail(recipientEmail: String!): RedisRes
   updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
-  verifyUserEmail(userId: ID!): Int
-  writeEmailVerificationToken(email: String!): RedisRes
+  verifyUserEmail(userId: ID!): RedisRes
   writeRetryEmailVerificationLimit(email: String!): RedisRes
-}
-
-type NodeRes {
-  errors: [ErrorRes]
 }
 
 type PeopleRes {
@@ -372,7 +367,7 @@ type PersonsKnownForShowRes {
 
 type Query {
   accountVerified(email: String!): AccountVerifiedRes
-  checkEmailVerificationToken(token: String!): RedisRes
+  checkEmailVerificationToken(token: String!, userId: ID!): RedisRes
   checkRetryEmailVerificationLimit(email: String!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
@@ -412,14 +407,14 @@ type Query {
 }
 
 type RedisRes {
-  errors: [ErrorRes]
+  errors: [ErrorRes!]!
   token: String
   userId: String
 }
 
 type RegisteredUserRes {
   createdUser: User
-  errors: [ErrorRes]
+  errors: [ErrorRes!]!
 }
 
 type ShowDetailsCountry {

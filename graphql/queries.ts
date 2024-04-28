@@ -1006,8 +1006,8 @@ export const GET_EPISODE_DETAILS = graphql(`
 `);
 
 export const CHECK_EMAIL_VERIFICATION_TOKEN = graphql(`
-	query CheckEmailVerificationToken($token: String!) {
-		checkEmailVerificationToken(token: $token) {
+	query CheckEmailVerificationToken($token: String!, $userId: ID!) {
+		checkEmailVerificationToken(token: $token, userId: $userId) {
 			errors {
 				message
 			}

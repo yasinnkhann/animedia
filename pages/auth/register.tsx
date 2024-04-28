@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import * as Mutations from '../../graphql/mutations';
 import { useState } from 'react';
-import { CLIENT_BASE_URL } from '../../utils/constants';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
@@ -36,15 +35,6 @@ export default function Register() {
 
 	const [registerUser] = useMutation(Mutations.REGISTER_USER);
 
-	const [writeEmailVerificationToken] = useMutation(
-		Mutations.WRITE_EMAIL_VERIFICATION_TOKEN,
-		{
-			variables: {
-				email: formik.values.email,
-			},
-		}
-	);
-
 	const [sendVerificationEmail] = useMutation(
 		Mutations.SEND_VERIFICATION_EMAIL
 	);
@@ -60,46 +50,28 @@ export default function Register() {
 				},
 			});
 
-			if (registerUserRes?.data?.registerUser?.createdUser) {
-				const writeEmailVerificationTokenRes =
-					await writeEmailVerificationToken({
-						variables: {
-							email: formik.values.email,
-						},
-					});
-
+			if (registerUserRes.data?.registerUser?.createdUser?.email) {
+				const sendVerificationEmailRes = await sendVerificationEmail({
+					variables: {
+						recipientEmail: registerUserRes.data.registerUser.createdUser.email,
+					},
+				});
 				if (
-					!writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
-						?.errors &&
-					writeEmailVerificationTokenRes.data?.writeEmailVerificationToken
-						?.token
+					sendVerificationEmailRes.data?.sendVerificationEmail?.userId &&
+					sendVerificationEmailRes.data?.sendVerificationEmail?.token
 				) {
-					const sendVerificationEmailRes = await sendVerificationEmail({
-						variables: {
-							recipientEmail: email,
-							subject: 'Email Verification Link',
-							text: 'Click the link below to verify your email.',
-							html: `<a href="${CLIENT_BASE_URL}/verification-email/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}">Verify Email</a>`,
-						},
-					});
-
-					if (!sendVerificationEmailRes.data?.sendVerificationEmail?.errors) {
-						router.push(
-							`/verification-email-sent/${writeEmailVerificationTokenRes.data.writeEmailVerificationToken.token}`
-						);
-					} else {
-						throw new Error('Could not send verification email');
-					}
+					router.push(
+						`/verification-email-sent?uid=${sendVerificationEmailRes.data.sendVerificationEmail.userId}&token=${sendVerificationEmailRes.data.sendVerificationEmail.token}`
+					);
+				} else {
+					throw new Error('Could not send verification email');
 				}
 			}
 			if (
-				registerUserRes.data?.registerUser?.errors?.length &&
-				registerUserRes.data.registerUser.errors.length > 0
+				registerUserRes.data?.registerUser &&
+				!_.isEmpty(registerUserRes.data.registerUser.errors)
 			) {
-				const filteredErrors = registerUserRes.data.registerUser.errors.filter(
-					(error): error is ErrorRes => error !== null
-				);
-				setRegisterErrs(filteredErrors);
+				setRegisterErrs(registerUserRes.data.registerUser.errors);
 			}
 		} catch (err) {
 			console.error(err);
@@ -241,11 +213,13 @@ export default function Register() {
 					</div>
 				</form>
 
-				{registerErrs.map((err, idx) => (
-					<span key={idx} className='text-center text-rose-500'>
-						{err.message}
-					</span>
-				))}
+				<div className='flex flex-col'>
+					{registerErrs.map((err, idx) => (
+						<span key={idx} className='text-center text-rose-500'>
+							{err.message}
+						</span>
+					))}
+				</div>
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>Have an account? </p>

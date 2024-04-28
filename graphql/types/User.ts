@@ -2,8 +2,8 @@ import { v4 } from 'uuid';
 import { hash } from 'argon2';
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { CommonMethods } from '../../utils/CommonMethods';
 import {
+	CLIENT_BASE_URL,
 	EMAIL_VERIFICATION_PREFIX,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 } from 'utils/constants';
@@ -15,7 +15,9 @@ import {
 	idArg,
 	intArg,
 	enumType,
+	list,
 } from 'nexus';
+import Mail from 'nodemailer/lib/mailer';
 
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
@@ -83,8 +85,8 @@ export const ErrorRes = objectType({
 export const RegisteredUserRes = objectType({
 	name: 'RegisteredUserRes',
 	definition(t) {
-		t.list.field('errors', {
-			type: 'ErrorRes',
+		t.nonNull.list.field('errors', {
+			type: nonNull('ErrorRes'),
 		});
 		t.field('createdUser', {
 			type: 'User',
@@ -95,8 +97,8 @@ export const RegisteredUserRes = objectType({
 export const RedisRes = objectType({
 	name: 'RedisRes',
 	definition(t) {
-		t.list.nullable.field('errors', {
-			type: 'ErrorRes',
+		t.field('errors', {
+			type: nonNull(list(nonNull('ErrorRes'))),
 		});
 		t.field('token', {
 			type: 'String',
@@ -110,23 +112,14 @@ export const RedisRes = objectType({
 export const AccountVerifiedRes = objectType({
 	name: 'AccountVerifiedRes',
 	definition(t) {
-		t.list.nullable.field('errors', {
-			type: 'ErrorRes',
+		t.nonNull.field('errors', {
+			type: nonNull(list(nonNull('ErrorRes'))),
 		});
 		t.field('id', {
 			type: 'String',
 		});
 		t.field('emailVerified', {
 			type: 'DateTime',
-		});
-	},
-});
-
-export const NodeRes = objectType({
-	name: 'NodeRes',
-	definition(t) {
-		t.list.nullable.field('errors', {
-			type: 'ErrorRes',
 		});
 	},
 });
@@ -149,6 +142,7 @@ export const UserQueries = extendType({
 				});
 			},
 		});
+
 		t.field('usersMovie', {
 			type: 'UserMovie',
 			args: {
@@ -165,6 +159,7 @@ export const UserQueries = extendType({
 				});
 			},
 		});
+
 		t.field('usersShow', {
 			type: 'UserShow',
 			args: {
@@ -181,6 +176,7 @@ export const UserQueries = extendType({
 				});
 			},
 		});
+
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
@@ -196,6 +192,7 @@ export const UserQueries = extendType({
 				});
 			},
 		});
+
 		t.list.field('usersShows', {
 			type: 'UserShow',
 			resolve: async (_parent, _args, ctx) => {
@@ -211,17 +208,19 @@ export const UserQueries = extendType({
 				});
 			},
 		});
+
 		t.field('checkEmailVerificationToken', {
 			type: 'RedisRes',
 			args: {
 				token: nonNull(stringArg()),
+				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}:${token}`
+			resolve: async (_parent, { token, userId }, ctx) => {
+				const tokenStored = await ctx.redis.get(
+					`${EMAIL_VERIFICATION_PREFIX}:${userId}`
 				);
 
-				if (!userId) {
+				if (token !== tokenStored) {
 					return {
 						errors: [{ message: 'Email Verification Not Found.' }],
 						token: null,
@@ -230,12 +229,13 @@ export const UserQueries = extendType({
 				}
 
 				return {
-					errors: null,
-					token,
+					errors: [],
+					token: tokenStored,
 					userId,
 				};
 			},
 		});
+
 		t.field('accountVerified', {
 			type: 'AccountVerifiedRes',
 			args: {
@@ -247,20 +247,22 @@ export const UserQueries = extendType({
 					select: { id: true, emailVerified: true },
 				});
 
-				if (acct?.id && !acct.emailVerified) {
-					return {
-						errors: [{ message: 'Account Not Verified' }],
-						id: acct.id,
-						emailVerified: null,
-					};
-				}
-
-				if (acct?.id && acct.emailVerified) {
-					return {
-						errors: null,
-						id: acct.id,
-						emailVerified: acct.emailVerified,
-					};
+				if (acct?.id) {
+					if (!acct.emailVerified) {
+						return {
+							errors: [{ message: 'Account Not Verified' }],
+							id: acct.id,
+							emailVerified: null,
+						};
+					} else {
+						if (acct?.id && acct.emailVerified) {
+							return {
+								errors: [],
+								id: acct.id,
+								emailVerified: acct.emailVerified,
+							};
+						}
+					}
 				}
 
 				return {
@@ -270,6 +272,7 @@ export const UserQueries = extendType({
 				};
 			},
 		});
+
 		t.field('emailFromRedisToken', {
 			type: 'String',
 			args: {
@@ -292,6 +295,7 @@ export const UserQueries = extendType({
 				return user.email;
 			},
 		});
+
 		t.field('checkRetryEmailVerificationLimit', {
 			type: 'RedisRes',
 			args: {
@@ -304,14 +308,14 @@ export const UserQueries = extendType({
 
 				if (!limitFound) {
 					return {
-						errors: null,
+						errors: [],
 						token: null,
 						userId: null,
 					};
 				}
 
 				return {
-					errors: null,
+					errors: [],
 					userId: null,
 					token: limitFound,
 				};
@@ -345,6 +349,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('addShow', {
 			type: 'UserShow',
 			args: {
@@ -373,6 +378,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('updateMovie', {
 			type: 'UserMovie',
 			args: {
@@ -395,6 +401,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('updateShow', {
 			type: 'UserShow',
 			args: {
@@ -423,6 +430,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('deleteMovie', {
 			type: 'UserMovie',
 			args: {
@@ -439,6 +447,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('deleteShow', {
 			type: 'UserShow',
 			args: {
@@ -455,6 +464,7 @@ export const UserMutations = extendType({
 				});
 			},
 		});
+
 		t.field('registerUser', {
 			type: 'RegisteredUserRes',
 			args: {
@@ -478,7 +488,7 @@ export const UserMutations = extendType({
 						data: { name, email, password: await hash(password) },
 					});
 					return {
-						errors: null,
+						errors: [],
 						createdUser: newUser,
 					};
 				} catch (err) {
@@ -490,56 +500,7 @@ export const UserMutations = extendType({
 				}
 			},
 		});
-		t.field('writeEmailVerificationToken', {
-			type: 'RedisRes',
-			args: {
-				email: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { email }, ctx) => {
-				const user = await ctx.prisma.user.findUnique({
-					where: { email },
-					select: { id: true },
-				});
 
-				if (!user) {
-					return {
-						errors: [{ message: 'User not found.' }],
-						token: null,
-						userId: null,
-					};
-				}
-
-				// ?delete previous email verification if exists
-
-				const token = v4();
-
-				await ctx.redis.set(
-					`${EMAIL_VERIFICATION_PREFIX}:${token}`,
-					user.id,
-					'EX',
-					60 * 60 * 24 * 3 // 3 days
-				);
-
-				const verificationEmailCount = await ctx.redis.get(
-					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`
-				);
-
-				await ctx.redis.set(
-					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${email}`,
-					!verificationEmailCount
-						? '1'
-						: (+verificationEmailCount + 1).toString(),
-					'EX',
-					60 * 60 * 24 * 3 // 3 days
-				);
-
-				return {
-					errors: null,
-					token,
-					userId: user.id,
-				};
-			},
-		});
 		t.field('deleteEmailVerificationToken', {
 			type: 'RedisRes',
 			args: {
@@ -559,30 +520,49 @@ export const UserMutations = extendType({
 				}
 
 				return {
-					errors: null,
+					errors: [],
 					token: null,
 					userId: null,
 				};
 			},
 		});
+
 		t.field('verifyUserEmail', {
-			type: 'Int',
+			type: 'RedisRes',
 			args: {
 				userId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { userId }, ctx) => {
-				const verifiedUserEmail = await ctx.prisma.user.update({
-					where: { id: userId },
-					data: {
-						emailVerified: new Date(),
-					},
-				});
+				try {
+					await ctx.prisma.user.update({
+						where: { id: userId },
+						data: {
+							emailVerified: new Date(),
+						},
+					});
 
-				if (!verifiedUserEmail) return 404;
+					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${userId}`);
 
-				return 200;
+					await ctx.redis.del(`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`);
+
+					return {
+						errors: [],
+						token: null,
+						userId,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						errors: [
+							{ message: `Error occurred while verifying user's email` },
+						],
+						token: null,
+						userId: null,
+					};
+				}
 			},
 		});
+
 		t.field('writeRetryEmailVerificationLimit', {
 			type: 'RedisRes',
 			args: {
@@ -605,28 +585,64 @@ export const UserMutations = extendType({
 				);
 
 				return {
-					errors: null,
+					errors: [],
 					token: (+currNum + 1).toString(),
 				};
 			},
 		});
+
 		t.field('sendVerificationEmail', {
-			type: 'NodeRes',
+			type: 'RedisRes',
 			args: {
 				recipientEmail: nonNull(stringArg()),
-				subject: nonNull(stringArg()),
-				text: nonNull(stringArg()),
-				html: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { recipientEmail, subject, text, html }) => {
-				if (!CommonMethods.isValidEmail(recipientEmail)) {
-					return {
-						errors: [{ message: 'Please provide a valid email address' }],
-					};
-				}
-
+			resolve: async (_parent, { recipientEmail }, ctx) => {
 				try {
+					const user = await ctx.prisma.user.findUnique({
+						where: { email: recipientEmail },
+						select: { id: true },
+					});
+
+					if (!user) {
+						return {
+							errors: [{ message: 'Could not find user with that email' }],
+							token: null,
+							userId: null,
+						};
+					}
+
+					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${user.id}`);
+
+					const token = v4();
+
+					await ctx.redis.set(
+						`${EMAIL_VERIFICATION_PREFIX}:${user.id}`,
+						token,
+						'EX',
+						60 * 60 * 24 * 3 // 3 days
+					);
+
+					const verificationEmailCount = await ctx.redis.get(
+						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${user.id}`
+					);
+
+					await ctx.redis.set(
+						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${user.id}`,
+						!verificationEmailCount
+							? '1'
+							: (+verificationEmailCount + 1).toString(),
+						'EX',
+						60 * 60 * 24 * 3 // 3 days
+					);
+
 					let transporterConfig: SMTPTransport.Options = {};
+					const payload: Mail.Options = {
+						from: process.env.EMAIL_FROM,
+						to: recipientEmail,
+						subject: 'Email Verification Link',
+						text: 'Click the link below to verify your email.',
+						html: `<a href="${CLIENT_BASE_URL}/verification-email?uid=${user.id}&token=${token}">Verify Email</a>`,
+					};
 
 					if (process.env.NODE_ENV === 'development') {
 						nodemailer.createTestAccount(async (_err, account) => {
@@ -642,20 +658,14 @@ export const UserMutations = extendType({
 
 							const transporter = nodemailer.createTransport(transporterConfig);
 
-							const info = await transporter.sendMail({
-								from: process.env.EMAIL_FROM,
-								to: recipientEmail,
-								subject,
-								text,
-								html,
-							});
+							const info = await transporter.sendMail(payload);
 
 							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
 						});
 					} else if (process.env.NODE_ENV === 'production') {
 						transporterConfig = {
 							host: process.env.EMAIL_SERVER_HOST,
-							port: Number(process.env.EMAIL_SERVER_PORT as string),
+							port: Number(process.env.EMAIL_SERVER_PORT),
 							secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // true for 465, false for other ports
 							auth: {
 								user: process.env.EMAIL_SERVER_USER,
@@ -663,17 +673,13 @@ export const UserMutations = extendType({
 							},
 						};
 						const transporter = nodemailer.createTransport(transporterConfig);
-						await transporter.sendMail({
-							from: process.env.EMAIL_FROM,
-							to: recipientEmail,
-							subject,
-							text,
-							html,
-						});
+						await transporter.sendMail(payload);
 					}
 
 					return {
-						errors: null,
+						errors: [],
+						token,
+						userId: user.id,
 					};
 				} catch (err) {
 					console.error(err);

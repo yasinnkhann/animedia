@@ -77,7 +77,7 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   AccountVerifiedRes: { // root type
     emailVerified?: NexusGenScalars['DateTime'] | null; // DateTime
-    errors?: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     id?: string | null; // String
   }
   EpisodeDetailsRes: { // root type
@@ -242,9 +242,6 @@ export interface NexusGenObjects {
     total_results: number; // Int!
   }
   Mutation: {};
-  NodeRes: { // root type
-    errors?: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
-  }
   PeopleRes: { // root type
     page: number; // Int!
     results: NexusGenRootTypes['PersonResult'][]; // [PersonResult!]!
@@ -366,13 +363,13 @@ export interface NexusGenObjects {
   }
   Query: {};
   RedisRes: { // root type
-    errors?: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     token?: string | null; // String
     userId?: string | null; // String
   }
   RegisteredUserRes: { // root type
     createdUser?: NexusGenRootTypes['User'] | null; // User
-    errors?: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
   }
   ShowDetailsCountry: { // root type
     iso_3166_1: string; // String!
@@ -594,7 +591,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   AccountVerifiedRes: { // field return type
     emailVerified: NexusGenScalars['DateTime'] | null; // DateTime
-    errors: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     id: string | null; // String
   }
   EpisodeDetailsRes: { // field return type
@@ -765,15 +762,11 @@ export interface NexusGenFieldTypes {
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
-    sendVerificationEmail: NexusGenRootTypes['NodeRes'] | null; // NodeRes
+    sendVerificationEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    verifyUserEmail: number | null; // Int
-    writeEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    verifyUserEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     writeRetryEmailVerificationLimit: NexusGenRootTypes['RedisRes'] | null; // RedisRes
-  }
-  NodeRes: { // field return type
-    errors: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
   }
   PeopleRes: { // field return type
     page: number; // Int!
@@ -935,13 +928,13 @@ export interface NexusGenFieldTypes {
     usersShows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
   RedisRes: { // field return type
-    errors: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     token: string | null; // String
     userId: string | null; // String
   }
   RegisteredUserRes: { // field return type
     createdUser: NexusGenRootTypes['User'] | null; // User
-    errors: Array<NexusGenRootTypes['ErrorRes'] | null> | null; // [ErrorRes]
+    errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -1324,15 +1317,11 @@ export interface NexusGenFieldTypeNames {
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     registerUser: 'RegisteredUserRes'
-    sendVerificationEmail: 'NodeRes'
+    sendVerificationEmail: 'RedisRes'
     updateMovie: 'UserMovie'
     updateShow: 'UserShow'
-    verifyUserEmail: 'Int'
-    writeEmailVerificationToken: 'RedisRes'
+    verifyUserEmail: 'RedisRes'
     writeRetryEmailVerificationLimit: 'RedisRes'
-  }
-  NodeRes: { // field return type name
-    errors: 'ErrorRes'
   }
   PeopleRes: { // field return type name
     page: 'Int'
@@ -1737,10 +1726,7 @@ export interface NexusGenArgTypes {
       password: string; // String!
     }
     sendVerificationEmail: { // args
-      html: string; // String!
       recipientEmail: string; // String!
-      subject: string; // String!
-      text: string; // String!
     }
     updateMovie: { // args
       movieId: string; // ID!
@@ -1756,9 +1742,6 @@ export interface NexusGenArgTypes {
     verifyUserEmail: { // args
       userId: string; // ID!
     }
-    writeEmailVerificationToken: { // args
-      email: string; // String!
-    }
     writeRetryEmailVerificationLimit: { // args
       email: string; // String!
     }
@@ -1769,6 +1752,7 @@ export interface NexusGenArgTypes {
     }
     checkEmailVerificationToken: { // args
       token: string; // String!
+      userId: string; // ID!
     }
     checkRetryEmailVerificationLimit: { // args
       email: string; // String!

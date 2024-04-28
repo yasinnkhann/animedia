@@ -271,6 +271,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('searchedMovies', {
 			type: 'MoviesRes',
 			args: {
@@ -291,6 +292,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('movieDetails', {
 			type: 'MovieDetailsRes',
 			args: {
@@ -309,6 +311,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('popularAnimeMovies', {
 			type: 'MoviesRes',
 			args: {
@@ -331,6 +334,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('trendingMovies', {
 			type: 'MoviesRes',
 			args: {
@@ -352,6 +356,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('topRatedMovies', {
 			type: 'MoviesRes',
 			args: {
@@ -370,6 +375,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('recommendedMovies', {
 			type: 'MoviesRes',
 			args: {
@@ -389,6 +395,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('movieReviews', {
 			type: 'MovieReviewsRes',
 			args: {
@@ -408,6 +415,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('moviesInTheatres', {
 			type: 'MoviesInTheatresRes',
 			args: {
@@ -426,6 +434,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('popularMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
@@ -451,6 +460,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.nonNull.field('topRatedMoviesByGenre', {
 			type: 'MoviesRes',
 			args: {
@@ -476,6 +486,7 @@ export const MovieQueries = extendType({
 				}
 			},
 		});
+
 		t.field('moviesCastCrew', {
 			type: 'MoviesCastCrewRes',
 			args: {

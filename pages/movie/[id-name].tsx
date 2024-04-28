@@ -328,13 +328,14 @@ const MovieDetails = () => {
 
 				<section className='col-start-2 mt-4'>
 					{!moviesCastCrewLoading &&
-						!_.isEmpty(moviesCastCrewData?.moviesCastCrew?.cast) && (
+						moviesCastCrewData?.moviesCastCrew &&
+						!_.isEmpty(moviesCastCrewData.moviesCastCrew.cast) && (
 							<section>
 								<h3 className='mb-4 ml-8'>Cast</h3>
 								<MediaCastHorizontalScroller
 									items={
-										moviesCastCrewData!.moviesCastCrew
-											?.cast!.map(cast => ({
+										moviesCastCrewData.moviesCastCrew
+											.cast!.map(cast => ({
 												id: cast!.id,
 												name: cast!.name,
 												character: cast!.character,
@@ -347,18 +348,17 @@ const MovieDetails = () => {
 						)}
 
 					{!recMoviesLoading &&
-						!_.isEmpty(recMoviesData?.recommendedMovies?.results) && (
+						recMoviesData?.recommendedMovies &&
+						!_.isEmpty(recMoviesData.recommendedMovies.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
 								<RelatedHorizontalScroller
-									items={recMoviesData!.recommendedMovies.results.map(
-										movie => ({
-											id: movie.id,
-											poster_path: movie.poster_path,
-											title: movie.title,
-											popularity: movie.popularity,
-										})
-									)}
+									items={recMoviesData.recommendedMovies.results.map(movie => ({
+										id: movie.id,
+										poster_path: movie.poster_path,
+										title: movie.title,
+										popularity: movie.popularity,
+									}))}
 									mediaType={EContent.MOVIES}
 								/>
 							</section>

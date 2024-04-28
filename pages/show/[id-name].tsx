@@ -715,12 +715,13 @@ const ShowDetails = () => {
 						)}
 
 					{!showsCastCrewLoading &&
-						!_.isEmpty(showsCastCrewData?.showsCastCrew?.cast) && (
+						showsCastCrewData?.showsCastCrew &&
+						!_.isEmpty(showsCastCrewData.showsCastCrew.cast) && (
 							<section>
 								<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
 								<MediaCastHorizontalScroller
 									items={
-										showsCastCrewData!.showsCastCrew
+										showsCastCrewData.showsCastCrew
 											?.cast!.map(cast => ({
 												id: cast!.id,
 												name: cast!.name,
@@ -733,11 +734,12 @@ const ShowDetails = () => {
 							</section>
 						)}
 					{!recShowsLoading &&
-						!_.isEmpty(recShowsData?.recommendedShows.results) && (
+						recShowsData?.recommendedShows &&
+						!_.isEmpty(recShowsData.recommendedShows.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
 								<RelatedHorizontalScroller
-									items={recShowsData!.recommendedShows.results.map(show => ({
+									items={recShowsData.recommendedShows.results.map(show => ({
 										id: show.id,
 										poster_path: show.poster_path,
 										name: show.name,

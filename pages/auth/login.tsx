@@ -16,6 +16,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
 import { ErrorRes } from 'graphql/generated/code-gen/graphql';
+import _ from 'lodash';
 
 export default function Login({
 	providers,
@@ -48,14 +49,10 @@ export default function Login({
 		const { email, password } = formik.values;
 
 		if (
-			fetchAccountVerifiedData?.accountVerified?.errors?.length &&
-			fetchAccountVerifiedData.accountVerified.errors.length > 0
+			fetchAccountVerifiedData?.accountVerified &&
+			!_.isEmpty(fetchAccountVerifiedData.accountVerified.errors)
 		) {
-			const filteredErrors =
-				fetchAccountVerifiedData.accountVerified.errors.filter(
-					(error): error is ErrorRes => error !== null
-				);
-			setAcctVerifiedErrs(filteredErrors);
+			setAcctVerifiedErrs(fetchAccountVerifiedData.accountVerified.errors);
 			return;
 		}
 
@@ -194,11 +191,13 @@ export default function Login({
 					</section>
 				</form>
 
-				{acctVerifiedErrs.map((err, idx) => (
-					<span key={idx} className='text-center text-rose-500'>
-						{err.message}
-					</span>
-				))}
+				<div className='flex flex-col'>
+					{acctVerifiedErrs.map((err, idx) => (
+						<span key={idx} className='text-center text-rose-500'>
+							{err.message}
+						</span>
+					))}
+				</div>
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>

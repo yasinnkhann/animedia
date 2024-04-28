@@ -16,6 +16,10 @@ export const bigIntScalar = asNexusMethod(GraphQLBigInt, 'bigint');
 export const baseSchema = makeSchema({
 	types: [allTypes, dateScalar, jsonScalar, bigIntScalar],
 	plugins: [connectionPlugin()],
+	nonNullDefaults: {
+		input: false,
+		output: false,
+	},
 	outputs: {
 		typegen: join(
 			process.cwd(),

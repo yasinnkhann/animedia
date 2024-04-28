@@ -105,18 +105,6 @@ export const DELETE_SHOW = graphql(`
 	}
 `);
 
-export const WRITE_EMAIL_VERIFICATION_TOKEN = graphql(`
-	mutation WriteEmailVerificationToken($email: String!) {
-		writeEmailVerificationToken(email: $email) {
-			errors {
-				message
-			}
-			token
-			userId
-		}
-	}
-`);
-
 export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
 	mutation DeleteEmailVerificationToken($token: String!) {
 		deleteEmailVerificationToken(token: $token) {
@@ -131,7 +119,12 @@ export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
 
 export const VERIFY_USER_EMAIL = graphql(`
 	mutation VerifyUserEmail($userId: ID!) {
-		verifyUserEmail(userId: $userId)
+		verifyUserEmail(userId: $userId) {
+			errors {
+				message
+			}
+			userId
+		}
 	}
 `);
 
@@ -148,21 +141,13 @@ export const WRITE_RETRY_EMAIL_VERIFICATION_LIMIT = graphql(`
 `);
 
 export const SEND_VERIFICATION_EMAIL = graphql(`
-	mutation SendVerificationEmail(
-		$recipientEmail: String!
-		$subject: String!
-		$text: String!
-		$html: String!
-	) {
-		sendVerificationEmail(
-			recipientEmail: $recipientEmail
-			subject: $subject
-			text: $text
-			html: $html
-		) {
+	mutation SendVerificationEmail($recipientEmail: String!) {
+		sendVerificationEmail(recipientEmail: $recipientEmail) {
 			errors {
 				message
 			}
+			token
+			userId
 		}
 	}
 `);
