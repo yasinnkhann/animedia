@@ -1,4 +1,4 @@
-import { DefaultSession } from 'next-auth';
+import { DefaultSession, type Account, Profile, JWT } from 'next-auth';
 
 declare module 'next-auth' {
 	/**
@@ -7,6 +7,11 @@ declare module 'next-auth' {
 	interface Session {
 		user?: {
 			id: string;
+			created_at: Date;
+			emailVerified: Date | null;
+			password: string | null;
 		} & DefaultSession['user'];
+		account?: Account;
+		profile?: Profile;
 	}
 }
