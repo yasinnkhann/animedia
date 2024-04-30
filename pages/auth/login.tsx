@@ -75,7 +75,7 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-3/4 flex-col gap-10'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-1/2 flex-col gap-10'>
 				<div>
 					<h1 className='py-4 text-4xl font-bold text-gray-800'>Login</h1>
 				</div>
@@ -144,13 +144,13 @@ export default function Login({
 					</div>
 
 					<section className='flex flex-col justify-center'>
-						<div className='flex justify-center'>
+						<div className='w-full justify-center'>
 							<button
-								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
+								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('google', { callbackUrl: '/' })}
 							>
-								<div className='flex w-[50%] items-center justify-center'>
+								<div className='flex items-center justify-center'>
 									<div className='mr-3'>
 										<GoogleIcon aria-label='Google Icon' />
 									</div>
@@ -159,13 +159,13 @@ export default function Login({
 							</button>
 						</div>
 
-						<div className='flex justify-center'>
+						<div className='w-full justify-center'>
 							<button
-								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
+								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('facebook', { callbackUrl: '/' })}
 							>
-								<div className='flex w-[50%] items-center justify-center'>
+								<div className='flex items-center justify-center'>
 									<div className='mr-3'>
 										<FacebookIcon aria-label='Facebook Icon' />
 									</div>
@@ -174,13 +174,13 @@ export default function Login({
 							</button>
 						</div>
 
-						<div className='flex justify-center'>
+						<div className='w-full justify-center'>
 							<button
-								className='flex w-1/2 justify-center gap-2 border py-3 hover:bg-gray-200'
+								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
 								type='button'
 								onClick={() => signIn('discord', { callbackUrl: '/' })}
 							>
-								<div className='flex w-[50%] items-center justify-center'>
+								<div className='flex items-center justify-center'>
 									<div className='mr-3'>
 										<DiscordIcon aria-label='Twitter Icon' />
 									</div>
@@ -191,19 +191,24 @@ export default function Login({
 					</section>
 				</form>
 
-				<div className='flex flex-col'>
-					{acctVerifiedErrs.map((err, idx) => (
-						<span key={idx} className='text-center text-rose-500'>
-							{err.message}
-						</span>
-					))}
-				</div>
+				{acctVerifiedErrs.length > 0 && (
+					<div className='flex flex-col'>
+						{acctVerifiedErrs.map((err, idx) => (
+							<span key={idx} className='text-center text-rose-500'>
+								{err.message}
+							</span>
+						))}
+					</div>
+				)}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>
 						Don&apos;t have an account yet?{' '}
 					</p>
 					<Link href='/auth/register'>Register</Link>
+
+					<p className='text-center text-gray-400 '>Forgot your password? </p>
+					<Link href='/auth/forgot-password'>Click here</Link>
 				</div>
 			</main>
 		</>

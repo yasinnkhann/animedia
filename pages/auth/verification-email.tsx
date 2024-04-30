@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import * as Queries from '../graphql/queries';
-import * as Mutations from '../graphql/mutations';
+import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
-import { SERVER_BASE_URL } from '../utils/constants';
-import { useMutation } from '@apollo/client';
+import { SERVER_BASE_URL } from '../../utils/constants';
 import { RedisRes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
@@ -14,7 +11,7 @@ interface Props {
 	verifiedData: RedisRes;
 }
 
-const VerificationEmail = ({ verifiedData }: Props) => {
+const VerificationEmail = (_props: Props) => {
 	return (
 		<>
 			<Head>

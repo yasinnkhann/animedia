@@ -1,11 +1,12 @@
 import { useState } from 'react';
+
 import Head from 'next/head';
 import { Oval } from 'react-loading-icons';
 import { GetServerSideProps } from 'next';
 import { request } from 'graphql-request';
-import { SERVER_BASE_URL } from '../utils/constants';
-import * as Queries from '../graphql/queries';
-import * as Mutations from '../graphql/mutations';
+import { SERVER_BASE_URL } from '../../utils/constants';
+import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
 import { useMutation } from '@apollo/client';
 import _ from 'lodash';
 import { RedisRes } from 'graphql/generated/code-gen/graphql';

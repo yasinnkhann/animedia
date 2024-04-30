@@ -606,7 +606,7 @@ export const UserMutations = extendType({
 						to: user.email,
 						subject: 'Email Verification Link',
 						text: 'Click the link below to verify your email.',
-						html: `<a href="${CLIENT_BASE_URL}/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
+						html: `<a href="${CLIENT_BASE_URL}/auth/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
 					};
 
 					if (!__prod__) {

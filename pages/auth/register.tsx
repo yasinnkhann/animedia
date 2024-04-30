@@ -9,7 +9,6 @@ import { registerValidate } from '../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
 import { ErrorRes } from '../../graphql/generated/code-gen/graphql';
-
 import _ from 'lodash';
 
 export default function Register() {
@@ -61,7 +60,7 @@ export default function Register() {
 					sendVerificationEmailRes.data?.sendVerificationEmail?.token
 				) {
 					router.push(
-						`/verification-email-sent?uid=${sendVerificationEmailRes.data.sendVerificationEmail.userId}&token=${sendVerificationEmailRes.data.sendVerificationEmail.token}`
+						`/auth/verification-email-sent?uid=${sendVerificationEmailRes.data.sendVerificationEmail.userId}&token=${sendVerificationEmailRes.data.sendVerificationEmail.token}`
 					);
 				} else {
 					throw new Error('Could not send verification email');
@@ -213,13 +212,15 @@ export default function Register() {
 					</div>
 				</form>
 
-				<div className='flex flex-col'>
-					{registerErrs.map((err, idx) => (
-						<span key={idx} className='text-center text-rose-500'>
-							{err.message}
-						</span>
-					))}
-				</div>
+				{registerErrs.length > 0 && (
+					<div className='flex flex-col'>
+						{registerErrs.map((err, idx) => (
+							<span key={idx} className='text-center text-rose-500'>
+								{err.message}
+							</span>
+						))}
+					</div>
+				)}
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 '>Have an account? </p>
