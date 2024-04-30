@@ -83,18 +83,9 @@ export const authOptions: NextAuthOptions = {
 		},
 
 		// Getting the JWT token from API response
-		jwt: async ({ token, user, account, profile, isNewUser }) => {
-			// console.log('PROFILE IN JWT: ', profile);
-			// console.log('account IN JWT: ', account);
-			// console.log('IS NEW USER IN JWT CB: ', !!isNewUser);
+		jwt: async ({ token, user, account, profile }) => {
 			if (user) {
-				token.jwt = (user as any)?.access_token;
-				token.user = user;
-				(token.user as any).provider = account?.provider;
-				// console.log('USER IN JWT CB: ', user);
-				// console.log('TOKEN IN JWT CB: ', token);
-
-				if ((profile as any)?.email_verified && user?.id) {
+				if ((profile as any)?.email_verified && user.id) {
 					const isEmailVerifiedUpdated = await prisma.user.findUnique({
 						where: { id: user.id },
 						select: { emailVerified: true },
@@ -109,6 +100,15 @@ export const authOptions: NextAuthOptions = {
 						});
 					}
 				}
+				token.user = user;
+			}
+
+			if (account) {
+				token.account = account;
+			}
+
+			if (profile) {
+				token.profile = profile;
 			}
 
 			return Promise.resolve(token);
@@ -127,10 +127,9 @@ export const authOptions: NextAuthOptions = {
 				}
 			}
 
-			(session as any).jwt = token.jwt;
 			(session as any).user = token.user;
-			// console.log('TOKEN IN SESSION CB: ', token);
-			// console.log('SESSION IN SESSION CB: ', session);
+			(session as any).account = token.account;
+			(session as any).profile = token.profile;
 
 			return Promise.resolve(session);
 		},
