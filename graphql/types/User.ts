@@ -8,6 +8,7 @@ import {
 	REDIS_EXPIRATION_LIMIT,
 	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
+	__prod__,
 } from 'utils/constants';
 import {
 	objectType,
@@ -553,7 +554,7 @@ export const UserMutations = extendType({
 					const verificationEmailCount = +(verificationEmailCountRes ?? '0');
 
 					if (
-						process.env.NODE_ENV === 'production' &&
+						__prod__ &&
 						verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT
 					) {
 						return {
@@ -608,7 +609,7 @@ export const UserMutations = extendType({
 						html: `<a href="${CLIENT_BASE_URL}/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
 					};
 
-					if (process.env.NODE_ENV === 'development') {
+					if (!__prod__) {
 						nodemailer.createTestAccount(async (_err, account) => {
 							transporterConfig = {
 								host: 'smtp.ethereal.email',
@@ -626,7 +627,7 @@ export const UserMutations = extendType({
 
 							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
 						});
-					} else if (process.env.NODE_ENV === 'production') {
+					} else if (__prod__) {
 						transporterConfig = {
 							host: process.env.EMAIL_SERVER_HOST,
 							port: Number(process.env.EMAIL_SERVER_PORT),

@@ -7,10 +7,11 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/prisma';
 import { verify } from 'argon2';
 import { CommonMethods } from '../../../utils/CommonMethods';
+import { __prod__ } from 'utils/constants';
 
 export const authOptions: NextAuthOptions = {
 	adapter: PrismaAdapter(prisma),
-	debug: process.env.NODE_ENV === 'development',
+	debug: !__prod__,
 	secret: process.env.NEXTAUTH_SECRET,
 
 	providers: [
