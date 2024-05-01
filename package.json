@@ -51,7 +51,6 @@
 		"react-loading-icons": "^1.1.0",
 		"tinycolor2": "^1.6.0",
 		"unidecode": "^0.1.8",
-		"uuid": "^9.0.1",
 		"yarn": "^1.22.21"
 	},
 	"devDependencies": {
@@ -72,7 +71,6 @@
 		"@types/react-dom": "^18.0.10",
 		"@types/tinycolor2": "^1.4.3",
 		"@types/unidecode": "^0.1.1",
-		"@types/uuid": "^9.0.0",
 		"@typescript-eslint/eslint-plugin": "^6.4.0",
 		"@typescript-eslint/parser": "^7.6.0",
 		"autoprefixer": "^10.4.11",

@@ -20,6 +20,14 @@ export const EMAIL_VERIFICATION_PREFIX = 'email-verification';
 
 export const VERIFICATION_EMAIL_COUNT_PREFIX = 'retry-email-verification-count';
 
-export const VERIFICATION_EMAIL_COUNT_LIMIT = 5;
+export const VERIFICATION_EMAIL_COUNT_LIMIT = 10;
 
-export const REDIS_EXPIRATION_LIMIT = 60 * 60 * 24 * 3; // 3 days
+export const REDIS_KEYS = [
+	EMAIL_VERIFICATION_PREFIX,
+	VERIFICATION_EMAIL_COUNT_PREFIX,
+] as const;
+
+export const REDIS_MAP: Record<(typeof REDIS_KEYS)[number], number> = {
+	[VERIFICATION_EMAIL_COUNT_PREFIX]: 60 * 60 * 24,
+	[EMAIL_VERIFICATION_PREFIX]: 60 * 60 * 24 * 3,
+};

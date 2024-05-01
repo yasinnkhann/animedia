@@ -1,11 +1,10 @@
-import { v4 } from 'uuid';
 import { hash } from 'argon2';
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import {
 	CLIENT_BASE_URL,
 	EMAIL_VERIFICATION_PREFIX,
-	REDIS_EXPIRATION_LIMIT,
+	REDIS_MAP,
 	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 	__prod__,
@@ -584,20 +583,20 @@ export const UserMutations = extendType({
 
 					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${userId}`);
 
-					const token = v4();
+					const token = crypto.randomUUID();
 
 					await ctx.redis.set(
 						`${EMAIL_VERIFICATION_PREFIX}:${userId}`,
 						token,
 						'EX',
-						REDIS_EXPIRATION_LIMIT
+						REDIS_MAP[EMAIL_VERIFICATION_PREFIX]
 					);
 
 					await ctx.redis.set(
 						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`,
 						(verificationEmailCount + 1).toString(),
 						'EX',
-						REDIS_EXPIRATION_LIMIT
+						REDIS_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
 					);
 
 					let transporterConfig: SMTPTransport.Options = {};
@@ -644,12 +643,82 @@ export const UserMutations = extendType({
 					return {
 						errors: [],
 						token,
-						userId: userId,
+						userId,
 					};
 				} catch (err) {
 					console.error(err);
 					return {
 						errors: [{ message: 'Error while sending verification email' }],
+					};
+				}
+			},
+		});
+
+		t.field('sendForgotPasswordEmail', {
+			type: 'RedisRes',
+			args: {
+				email: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { email }, ctx) => {
+				try {
+					const user = await ctx.prisma.user.findUnique({
+						where: { email },
+					});
+
+					if (!user?.email) {
+						return {
+							errors: ['No user found with that email'],
+							token: null,
+							userId: null,
+						};
+					}
+
+					const token = crypto.randomUUID();
+
+					let transporterConfig: SMTPTransport.Options = {};
+					const payload: Mail.Options = {
+						from: process.env.EMAIL_FROM,
+						to: user.email,
+						subject: 'Forgot Password Link',
+						text: 'Click the link below to create a new password.',
+						html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+					};
+
+					if (!__prod__) {
+						nodemailer.createTestAccount(async (_err, account) => {
+							transporterConfig = {
+								host: 'smtp.ethereal.email',
+								port: 587,
+								secure: false,
+								auth: {
+									user: account.user,
+									pass: account.pass,
+								},
+							};
+
+							const transporter = nodemailer.createTransport(transporterConfig);
+
+							const info = await transporter.sendMail(payload);
+
+							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
+						});
+					} else if (__prod__) {
+						transporterConfig = {
+							host: process.env.EMAIL_SERVER_HOST,
+							port: Number(process.env.EMAIL_SERVER_PORT),
+							secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // true for 465, false for other ports
+							auth: {
+								user: process.env.EMAIL_SERVER_USER,
+								pass: process.env.EMAIL_SERVER_PASSWORD,
+							},
+						};
+						const transporter = nodemailer.createTransport(transporterConfig);
+						await transporter.sendMail(payload);
+					}
+				} catch (err) {
+					console.error(err);
+					return {
+						errors: [{ message: 'Error while sending forgot password email' }],
 					};
 				}
 			},
