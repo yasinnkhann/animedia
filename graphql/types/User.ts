@@ -600,6 +600,7 @@ export const UserMutations = extendType({
 					);
 
 					let transporterConfig: SMTPTransport.Options = {};
+
 					const payload: Mail.Options = {
 						from: process.env.EMAIL_FROM,
 						to: user.email,
@@ -628,12 +629,12 @@ export const UserMutations = extendType({
 						});
 					} else if (__prod__) {
 						transporterConfig = {
-							host: process.env.EMAIL_SERVER_HOST,
-							port: Number(process.env.EMAIL_SERVER_PORT),
-							secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // true for 465, false for other ports
+							host: process.env.TURBO_SMTP_HOST,
+							port: Number(process.env.TURBO_SMTP_PORT),
+							secure: Number(process.env.TURBO_SMTP_PORT) === 465,
 							auth: {
-								user: process.env.EMAIL_SERVER_USER,
-								pass: process.env.EMAIL_SERVER_PASSWORD,
+								user: process.env.TURBO_SMTP_USERNAME,
+								pass: process.env.TURBO_SMTP_PASSWORD,
 							},
 						};
 						const transporter = nodemailer.createTransport(transporterConfig);
@@ -660,67 +661,66 @@ export const UserMutations = extendType({
 				email: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { email }, ctx) => {
-				try {
-					const user = await ctx.prisma.user.findUnique({
-						where: { email },
-					});
+				const user = await ctx.prisma.user.findUnique({
+					where: { email },
+				});
 
-					if (!user?.email) {
-						return {
-							errors: ['No user found with that email'],
-							token: null,
-							userId: null,
-						};
-					}
-
-					const token = crypto.randomUUID();
-
-					let transporterConfig: SMTPTransport.Options = {};
-					const payload: Mail.Options = {
-						from: process.env.EMAIL_FROM,
-						to: user.email,
-						subject: 'Forgot Password Link',
-						text: 'Click the link below to create a new password.',
-						html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
-					};
-
-					if (!__prod__) {
-						nodemailer.createTestAccount(async (_err, account) => {
-							transporterConfig = {
-								host: 'smtp.ethereal.email',
-								port: 587,
-								secure: false,
-								auth: {
-									user: account.user,
-									pass: account.pass,
-								},
-							};
-
-							const transporter = nodemailer.createTransport(transporterConfig);
-
-							const info = await transporter.sendMail(payload);
-
-							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
-						});
-					} else if (__prod__) {
-						transporterConfig = {
-							host: process.env.EMAIL_SERVER_HOST,
-							port: Number(process.env.EMAIL_SERVER_PORT),
-							secure: Number(process.env.EMAIL_SERVER_PORT) === 465, // true for 465, false for other ports
-							auth: {
-								user: process.env.EMAIL_SERVER_USER,
-								pass: process.env.EMAIL_SERVER_PASSWORD,
-							},
-						};
-						const transporter = nodemailer.createTransport(transporterConfig);
-						await transporter.sendMail(payload);
-					}
-				} catch (err) {
-					console.error(err);
+				if (!user?.email) {
 					return {
-						errors: [{ message: 'Error while sending forgot password email' }],
+						errors: [{ message: 'No user found with that email' }],
+						token: null,
+						userId: null,
 					};
 				}
+
+				const token = crypto.randomUUID();
+
+				let transporterConfig: SMTPTransport.Options = {};
+
+				const payload: Mail.Options = {
+					from: process.env.EMAIL_FROM,
+					to: user.email,
+					subject: 'Forgot Password Link',
+					text: 'Click the link below to create a new password.',
+					html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+				};
+
+				if (!__prod__) {
+					nodemailer.createTestAccount(async (_err, account) => {
+						transporterConfig = {
+							host: 'smtp.ethereal.email',
+							port: 587,
+							secure: false,
+							auth: {
+								user: account.user,
+								pass: account.pass,
+							},
+						};
+
+						const transporter = nodemailer.createTransport(transporterConfig);
+
+						const info = await transporter.sendMail(payload);
+
+						console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
+					});
+				} else if (__prod__) {
+					transporterConfig = {
+						host: process.env.TURBO_SMTP_HOST,
+						port: Number(process.env.TURBO_SMTP_PORT),
+						secure: Number(process.env.TURBO_SMTP_PORT) === 465,
+						auth: {
+							user: process.env.TURBO_SMTP_USERNAME,
+							pass: process.env.TURBO_SMTP_API_KEY,
+						},
+					};
+					const transporter = nodemailer.createTransport(transporterConfig);
+					await transporter.sendMail(payload);
+				}
+				return {
+					errors: [{ message: 'Error while sending forgot password email' }],
+					token: null,
+					userId: null,
+				};
 			},
 		});
 	},

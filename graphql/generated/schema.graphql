@@ -230,6 +230,7 @@ type Mutation {
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
   registerUser(email: String!, name: String!, password: String!): RegisteredUserRes
+  sendForgotPasswordEmail(email: String!): RedisRes
   sendVerificationEmail(userId: ID!): RedisRes
   updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow

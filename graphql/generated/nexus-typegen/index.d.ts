@@ -762,6 +762,7 @@ export interface NexusGenFieldTypes {
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
+    sendForgotPasswordEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     sendVerificationEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
@@ -1315,6 +1316,7 @@ export interface NexusGenFieldTypeNames {
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     registerUser: 'RegisteredUserRes'
+    sendForgotPasswordEmail: 'RedisRes'
     sendVerificationEmail: 'RedisRes'
     updateMovie: 'UserMovie'
     updateShow: 'UserShow'
@@ -1720,6 +1722,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
       name: string; // String!
       password: string; // String!
+    }
+    sendForgotPasswordEmail: { // args
+      email: string; // String!
     }
     sendVerificationEmail: { // args
       userId: string; // ID!

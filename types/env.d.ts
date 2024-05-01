@@ -15,11 +15,13 @@ declare global {
 			FACEBOOK_CLIENT_SECRET: string;
 			DISCORD_CLIENT_ID: string;
 			DISCORD_CLIENT_SECRET: string;
-			EMAIL_SERVER_HOST: string;
-			EMAIL_SERVER_PORT: string;
+			TURBO_SMTP_HOST: string;
+			TURBO_SMTP_PORT: string;
 			EMAIL_FROM: string;
-			EMAIL_SERVER_USER: string;
-			EMAIL_SERVER_PASSWORD: string;
+			TURBO_SMTP_USERNAME: string;
+			TURBO_SMTP_API_KEY: string;
+			TURBO_SMTP_SECRET: string;
+			TURBO_SMTP_PASSWORD: string;
 			REDIS_HOST: string;
 			REDIS_PORT: string;
 			REDIS_PASSWORD: string;
