@@ -75,140 +75,105 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-1/2 flex-col gap-10'>
-				<div>
-					<h1 className='py-4 text-4xl font-bold text-gray-800'>Login</h1>
-				</div>
-
-				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					{formik.errors.email && formik.touched.email && (
-						<span className='text-rose-500'>{formik.errors.email}</span>
-					)}
-
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.email && formik.touched.email
-								? 'border-rose-600'
-								: ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('email')}
-							type='email'
-							name='email'
-							placeholder='Email'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span className='flex items-center px-4'>
-							<HiAtSymbol size={25} />
-						</span>
+			<main className='flex min-h-screen items-center justify-center bg-gray-100'>
+				<div className='w-full max-w-md rounded-md p-8'>
+					<div className='mb-6 flex items-center justify-center'>
+						<h1 className='text-4xl font-bold text-gray-800'>Animedia</h1>
 					</div>
 
-					{formik.errors.password && formik.touched.password && (
-						<span className='text-rose-500'>{formik.errors.password}</span>
-					)}
+					<form className='flex flex-col gap-4' onSubmit={formik.handleSubmit}>
+						<div className='relative'>
+							<input
+								{...formik.getFieldProps('email')}
+								type='email'
+								name='email'
+								placeholder='Email'
+								className='w-full rounded-lg border py-3 pl-10 pr-4 focus:border-blue-500 focus:outline-none'
+							/>
+						</div>
 
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.password && formik.touched.password
-								? 'border-rose-600'
-								: ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('password')}
-							type={`${showPW ? 'text' : 'password'}`}
-							name='password'
-							placeholder='Password'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span
-							className='flex cursor-pointer items-center px-4'
-							onClick={() => setShowPW(!showPW)}
-						>
-							{showPW ? (
-								<BsFillEyeFill size={25} />
-							) : (
-								<BsFillEyeSlashFill size={25} />
-							)}
-						</span>
-					</div>
+						<div className='relative'>
+							<input
+								{...formik.getFieldProps('password')}
+								type={showPW ? 'text' : 'password'}
+								name='password'
+								placeholder='Password'
+								className='w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none'
+							/>
+							<div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
+								<button
+									type='button'
+									onClick={() => setShowPW(!showPW)}
+									className='text-gray-500 hover:text-blue-500 focus:outline-none'
+								>
+									{showPW ? (
+										<BsFillEyeSlashFill size={24} />
+									) : (
+										<BsFillEyeFill size={24} />
+									)}
+								</button>
+							</div>
+						</div>
 
-					<div>
 						<button
-							className='w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-lg text-gray-50'
+							className='rounded-lg bg-blue-500 py-3 font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none'
 							type='submit'
 						>
 							Login
 						</button>
+					</form>
+
+					<div className='mt-4 flex flex-col gap-4'>
+						<button
+							className='flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-3 font-semibold hover:bg-gray-100 focus:outline-none'
+							type='button'
+							onClick={() => signIn('google', { callbackUrl: '/' })}
+						>
+							<GoogleIcon aria-label='Google Icon' />
+							<span>Sign in with Google</span>
+						</button>
+
+						<button
+							className='flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-3 font-semibold hover:bg-gray-100 focus:outline-none'
+							type='button'
+							onClick={() => signIn('facebook', { callbackUrl: '/' })}
+						>
+							<FacebookIcon aria-label='Facebook Icon' />
+							<span>Sign in with Facebook</span>
+						</button>
+
+						<button
+							className='flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-3 font-semibold hover:bg-gray-100 focus:outline-none'
+							type='button'
+							onClick={() => signIn('discord', { callbackUrl: '/' })}
+						>
+							<DiscordIcon aria-label='Twitter Icon' />
+							<span>Sign in with Discord</span>
+						</button>
 					</div>
 
-					<section className='flex flex-col justify-center'>
-						<div className='w-full justify-center'>
-							<button
-								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
-								type='button'
-								onClick={() => signIn('google', { callbackUrl: '/' })}
-							>
-								<div className='flex items-center justify-center'>
-									<div className='mr-3'>
-										<GoogleIcon aria-label='Google Icon' />
-									</div>
-									<p>Sign in with Google</p>
-								</div>
-							</button>
+					{acctVerifiedErrs.length > 0 && (
+						<div className='mt-4 flex flex-col'>
+							{acctVerifiedErrs.map((err, idx) => (
+								<span key={idx} className='text-center text-red-500'>
+									{err.message}
+								</span>
+							))}
 						</div>
+					)}
 
-						<div className='w-full justify-center'>
-							<button
-								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
-								type='button'
-								onClick={() => signIn('facebook', { callbackUrl: '/' })}
-							>
-								<div className='flex items-center justify-center'>
-									<div className='mr-3'>
-										<FacebookIcon aria-label='Facebook Icon' />
-									</div>
-									<p>Sign in with Facebook</p>
-								</div>
-							</button>
-						</div>
-
-						<div className='w-full justify-center'>
-							<button
-								className='flex w-full justify-center gap-2 border py-3 hover:bg-gray-200'
-								type='button'
-								onClick={() => signIn('discord', { callbackUrl: '/' })}
-							>
-								<div className='flex items-center justify-center'>
-									<div className='mr-3'>
-										<DiscordIcon aria-label='Twitter Icon' />
-									</div>
-									<p>Sign in with Discord</p>
-								</div>
-							</button>
-						</div>
-					</section>
-				</form>
-
-				{acctVerifiedErrs.length > 0 && (
-					<div className='flex flex-col'>
-						{acctVerifiedErrs.map((err, idx) => (
-							<span key={idx} className='text-center text-rose-500'>
-								{err.message}
-							</span>
-						))}
+					<div className='mt-8 flex flex-col items-center'>
+						<Link href='/auth/register'>
+							<a className='mb-2 text-center text-gray-600 hover:text-blue-500'>
+								Don&apos;t have an account?
+							</a>
+						</Link>
+						<Link href='/auth/forgot-password'>
+							<a className='text-center text-gray-600 hover:text-blue-500'>
+								Forgot your password?
+							</a>
+						</Link>
 					</div>
-				)}
-
-				<div className='flex flex-col items-center'>
-					<p className='text-center text-gray-400 '>
-						Don&apos;t have an account yet?{' '}
-					</p>
-					<Link href='/auth/register'>Register</Link>
-
-					<p className='text-center text-gray-400 '>Forgot your password? </p>
-					<Link href='/auth/forgot-password'>Click here</Link>
 				</div>
 			</main>
 		</>
