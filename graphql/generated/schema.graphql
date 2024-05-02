@@ -226,7 +226,6 @@ type MoviesRes {
 type Mutation {
   addMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
   addShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
-  deleteEmailVerificationToken(token: String!): RedisRes
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
   registerUser(email: String!, name: String!, password: String!): RegisteredUserRes
@@ -368,6 +367,7 @@ type PersonsKnownForShowRes {
 type Query {
   accountVerified(email: String!): AccountVerifiedRes
   checkEmailVerificationToken(token: String!, userId: ID!): RedisRes
+  checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!

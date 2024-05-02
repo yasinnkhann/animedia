@@ -33,18 +33,54 @@ export default VerificationEmail;
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { uid, token } = ctx.query;
 
-	const verifyTokenRes = await request(
-		SERVER_BASE_URL,
-		Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-		{
-			token: token as string,
-			userId: uid as string,
+	try {
+		const verifyTokenRes = await request(
+			SERVER_BASE_URL,
+			Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
+			{
+				token: token as string,
+				userId: uid as string,
+			}
+		);
+
+		const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
+
+		if (!verifyTokenData?.userId || !_.isEmpty(verifyTokenData.errors)) {
+			return {
+				redirect: {
+					destination: '/',
+					permanent: false,
+				},
+			};
 		}
-	);
 
-	const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
+		const verifyUserEmailRes = await request(
+			SERVER_BASE_URL,
+			Mutations.VERIFY_USER_EMAIL,
+			{
+				userId: verifyTokenData.userId,
+			}
+		);
 
-	if (!verifyTokenData?.userId || !_.isEmpty(verifyTokenData.errors)) {
+		if (
+			!verifyUserEmailRes.verifyUserEmail ||
+			!_.isEmpty(verifyUserEmailRes.verifyUserEmail?.errors)
+		) {
+			return {
+				redirect: {
+					destination: '/',
+					permanent: false,
+				},
+			};
+		}
+
+		return {
+			props: {
+				verifiedData: verifyTokenData,
+			},
+		};
+	} catch (err) {
+		console.error(err);
 		return {
 			redirect: {
 				destination: '/',
@@ -52,30 +88,4 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 			},
 		};
 	}
-
-	const verifyUserEmailRes = await request(
-		SERVER_BASE_URL,
-		Mutations.VERIFY_USER_EMAIL,
-		{
-			userId: verifyTokenData.userId,
-		}
-	);
-
-	if (
-		!verifyUserEmailRes.verifyUserEmail ||
-		!_.isEmpty(verifyUserEmailRes.verifyUserEmail?.errors)
-	) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
-
-	return {
-		props: {
-			verifiedData: verifyTokenData,
-		},
-	};
 };

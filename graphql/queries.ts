@@ -1017,6 +1017,18 @@ export const CHECK_EMAIL_VERIFICATION_TOKEN = graphql(`
 	}
 `);
 
+export const CHECK_FORGOT_PASSWORD_TOKEN = graphql(`
+	query CheckForgotPasswordToken($token: String!, $userId: ID!) {
+		checkForgotPasswordToken(token: $token, userId: $userId) {
+			errors {
+				message
+			}
+			token
+			userId
+		}
+	}
+`);
+
 export const ACCOUNT_VERIFIED = graphql(`
 	query AccountVerified($email: String!) {
 		accountVerified(email: $email) {

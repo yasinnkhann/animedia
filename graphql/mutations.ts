@@ -105,18 +105,6 @@ export const DELETE_SHOW = graphql(`
 	}
 `);
 
-export const DELETE_EMAIL_VERIFICATION_TOKEN = graphql(`
-	mutation DeleteEmailVerificationToken($token: String!) {
-		deleteEmailVerificationToken(token: $token) {
-			errors {
-				message
-			}
-			token
-			userId
-		}
-	}
-`);
-
 export const VERIFY_USER_EMAIL = graphql(`
 	mutation VerifyUserEmail($userId: ID!) {
 		verifyUserEmail(userId: $userId) {
@@ -168,6 +156,18 @@ export const REGISTER_USER = graphql(`
 					current_episode
 				}
 			}
+		}
+	}
+`);
+
+export const SEND_FORGOT_PASSWORD_EMAIL = graphql(`
+	mutation SendForgotPasswordEmail($email: String!) {
+		sendForgotPasswordEmail(email: $email) {
+			errors {
+				message
+			}
+			token
+			userId
 		}
 	}
 `);

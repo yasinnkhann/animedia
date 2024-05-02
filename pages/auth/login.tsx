@@ -62,9 +62,9 @@ export default function Login({
 			callbackUrl: '/',
 		});
 
-		if (status?.ok) {
+		if (status?.ok && status.url) {
 			setAcctVerifiedErrs([]);
-			router.push(status.url!);
+			router.push(status.url);
 		}
 	}
 

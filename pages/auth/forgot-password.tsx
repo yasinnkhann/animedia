@@ -1,19 +1,48 @@
-import { useFormik } from 'formik';
-import { loginValidate } from 'lib/nextAuth/account-validate';
 import Head from 'next/head';
+import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { useFormik } from 'formik';
+import { forgotPasswordValidate } from 'lib/nextAuth/account-validate';
+import * as Mutations from '../../graphql/mutations';
+import { Oval } from 'react-loading-icons';
+import _, { divide } from 'lodash';
 
-const ForgotPassword: React.FC = () => {
+const ForgotPassword = () => {
+	const [sentForgotPasswordEmail, setSentForgotPasswordEmail] =
+		useState<boolean>(false);
+
+	const [sendForgotPasswordEmail, { loading }] = useMutation(
+		Mutations.SEND_FORGOT_PASSWORD_EMAIL
+	);
+
 	const formik = useFormik({
 		initialValues: {
 			email: '',
-			password: '',
 		},
-		validate: loginValidate,
+		validate: forgotPasswordValidate,
 		onSubmit,
 	});
 
 	async function onSubmit() {
 		const { email } = formik.values;
+		try {
+			const sendForgotPasswordEmailRes = await sendForgotPasswordEmail({
+				variables: {
+					email,
+				},
+			});
+
+			if (
+				sendForgotPasswordEmailRes.data?.sendForgotPasswordEmail &&
+				_.isEmpty(
+					sendForgotPasswordEmailRes.data.sendForgotPasswordEmail.errors
+				)
+			) {
+				setSentForgotPasswordEmail(true);
+			}
+		} catch (err) {
+			console.error(err);
+		}
 	}
 	return (
 		<>
@@ -40,6 +69,7 @@ const ForgotPassword: React.FC = () => {
 										Email address
 									</label>
 									<input
+										{...formik.getFieldProps('email')}
 										type='email'
 										name='email'
 										required
@@ -48,7 +78,15 @@ const ForgotPassword: React.FC = () => {
 									/>
 								</div>
 							</div>
-
+							{loading ? (
+								<div className='flex justify-center'>
+									<Oval stroke='#00b3ff' />
+								</div>
+							) : (
+								<p className='text-center text-green-600'>
+									Reset link has been sent
+								</p>
+							)}
 							<div>
 								<button
 									type='submit'
@@ -57,6 +95,15 @@ const ForgotPassword: React.FC = () => {
 									Send reset link
 								</button>
 							</div>
+							{sentForgotPasswordEmail && (
+								<div>
+									<p className='text-center'>
+										If the email address exists on our system, a reset link has
+										been sent there. Please check to click on the link and enter
+										your new password.
+									</p>
+								</div>
+							)}
 						</form>
 					</div>
 				</section>

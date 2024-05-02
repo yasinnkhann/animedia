@@ -1,11 +1,14 @@
 import { hash } from 'argon2';
 import {
 	CLIENT_BASE_URL,
-	EMAIL_VERIFICATION_PREFIX,
+	VERIFICATION_EMAIL_PREFIX,
 	REDIS_MAP,
 	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 	__prod__,
+	FORGOT_PASSWORD_EMAIL_COUNT_PREFIX,
+	FORGOT_PASSWORD_EMAIL_COUNT_LIMIT,
+	FORGOT_PASSWORD_EMAIL_PREFIX,
 } from 'utils/constants';
 import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
@@ -105,12 +108,39 @@ export const UserQueries = extendType({
 			},
 			resolve: async (_parent, { token, userId }, ctx) => {
 				const tokenStored = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}:${userId}`
+					`${VERIFICATION_EMAIL_PREFIX}:${userId}`
 				);
 
 				if (token !== tokenStored) {
 					return {
-						errors: [{ message: 'Email Verification Not Found.' }],
+						errors: [{ message: 'Email verification token not found.' }],
+						token: null,
+						userId: null,
+					};
+				}
+
+				return {
+					errors: [],
+					token: tokenStored,
+					userId,
+				};
+			},
+		});
+
+		t.field('checkForgotPasswordToken', {
+			type: 'RedisRes',
+			args: {
+				token: nonNull(stringArg()),
+				userId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { token, userId }, ctx) => {
+				const tokenStored = await ctx.redis.get(
+					`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`
+				);
+
+				if (token !== tokenStored) {
+					return {
+						errors: [{ message: 'Forgot password token not found.' }],
 						token: null,
 						userId: null,
 					};
@@ -168,7 +198,7 @@ export const UserQueries = extendType({
 			},
 			resolve: async (_parent, { token }, ctx) => {
 				const userId = await ctx.redis.get(
-					`${EMAIL_VERIFICATION_PREFIX}:${token}`
+					`${VERIFICATION_EMAIL_PREFIX}:${token}`
 				);
 
 				if (!userId) return null;
@@ -363,32 +393,6 @@ export const UserMutations = extendType({
 			},
 		});
 
-		t.field('deleteEmailVerificationToken', {
-			type: 'RedisRes',
-			args: {
-				token: nonNull(stringArg()),
-			},
-			resolve: async (_parent, { token }, ctx) => {
-				const deletedEmailVerification = await ctx.redis.del(
-					`${EMAIL_VERIFICATION_PREFIX}:${token}`
-				);
-
-				if (!deletedEmailVerification) {
-					return {
-						errors: [{ message: 'Unable to delete email verification.' }],
-						token: null,
-						userId: null,
-					};
-				}
-
-				return {
-					errors: [],
-					token: null,
-					userId: null,
-				};
-			},
-		});
-
 		t.field('verifyUserEmail', {
 			type: 'RedisRes',
 			args: {
@@ -403,7 +407,7 @@ export const UserMutations = extendType({
 						},
 					});
 
-					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${userId}`);
+					await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
 
 					await ctx.redis.del(`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`);
 
@@ -432,6 +436,19 @@ export const UserMutations = extendType({
 			},
 			resolve: async (_parent, { userId }, ctx) => {
 				try {
+					const user = await ctx.prisma.user.findUnique({
+						where: { id: userId },
+						select: { email: true },
+					});
+
+					if (!user?.email) {
+						return {
+							errors: [{ message: 'Could not find user with that email' }],
+							token: null,
+							userId: null,
+						};
+					}
+
 					const verificationEmailCountRes = await ctx.redis.get(
 						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`
 					);
@@ -454,28 +471,15 @@ export const UserMutations = extendType({
 						};
 					}
 
-					const user = await ctx.prisma.user.findUnique({
-						where: { id: userId },
-						select: { email: true },
-					});
-
-					if (!user?.email) {
-						return {
-							errors: [{ message: 'Could not find user with that email' }],
-							token: null,
-							userId: null,
-						};
-					}
-
-					await ctx.redis.del(`${EMAIL_VERIFICATION_PREFIX}:${userId}`);
+					await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
 
 					const token = crypto.randomUUID();
 
 					await ctx.redis.set(
-						`${EMAIL_VERIFICATION_PREFIX}:${userId}`,
+						`${VERIFICATION_EMAIL_PREFIX}:${userId}`,
 						token,
 						'EX',
-						REDIS_MAP[EMAIL_VERIFICATION_PREFIX]
+						REDIS_MAP[VERIFICATION_EMAIL_PREFIX]
 					);
 
 					await ctx.redis.set(
@@ -515,35 +519,84 @@ export const UserMutations = extendType({
 				email: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { email }, ctx) => {
-				const user = await ctx.prisma.user.findUnique({
-					where: { email },
-				});
+				try {
+					const user = await ctx.prisma.user.findUnique({
+						where: { email },
+					});
 
-				if (!user?.email) {
+					if (!user?.email) {
+						return {
+							errors: [{ message: 'No user found with that email' }],
+							token: null,
+							userId: null,
+						};
+					}
+
+					const forgotPasswordEmailCountRes = await ctx.redis.get(
+						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`
+					);
+
+					const forgotPasswordEmailCount = +(
+						forgotPasswordEmailCountRes ?? '0'
+					);
+
+					if (
+						__prod__ &&
+						forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT
+					) {
+						return {
+							errors: [
+								{
+									message:
+										'You have reached the limit of forgot password emails. Please wait 24 hours to try again.',
+								},
+							],
+							token: null,
+							userId: null,
+						};
+					}
+
+					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`);
+
+					const token = crypto.randomUUID();
+
+					await ctx.redis.set(
+						`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`,
+						token,
+						'EX',
+						REDIS_MAP[FORGOT_PASSWORD_EMAIL_PREFIX]
+					);
+
+					await ctx.redis.set(
+						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`,
+						(forgotPasswordEmailCount + 1).toString(),
+						'EX',
+						REDIS_MAP[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]
+					);
+
+					const payload: Mail.Options = {
+						from: process.env.EMAIL_FROM,
+						to: user.email,
+						subject: 'Forgot Password Link',
+						text: 'Click the link below to create a new password.',
+						html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+					};
+
+					await sendEmail(payload);
+
 					return {
-						errors: [{ message: 'No user found with that email' }],
+						errors: [],
+						token,
+						userId: user.id,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						errors: [{ message: 'Error while sending forgot password email' }],
 						token: null,
 						userId: null,
 					};
 				}
-
-				const token = crypto.randomUUID();
-
-				const payload: Mail.Options = {
-					from: process.env.EMAIL_FROM,
-					to: user.email,
-					subject: 'Forgot Password Link',
-					text: 'Click the link below to create a new password.',
-					html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
-				};
-
-				await sendEmail(payload);
-
-				return {
-					errors: [{ message: 'Error while sending forgot password email' }],
-					token: null,
-					userId: null,
-				};
 			},
 		});
 	},

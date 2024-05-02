@@ -79,3 +79,12 @@ export const registerValidate = async (values: IRegister) => {
 
 	return errors;
 };
+
+export const forgotPasswordValidate = (values: { email: string }) => {
+	const errors: Partial<Omit<ILogin, 'password'>> = {};
+	const emailErrors = validateEmail(values.email);
+	if (!_.isEmpty(emailErrors)) {
+		errors.email = emailErrors[0];
+	}
+	return errors;
+};

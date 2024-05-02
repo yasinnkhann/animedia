@@ -18,14 +18,11 @@ interface Props {
 const VerificationEmailSent = ({ verifiedData }: Props) => {
 	const [errors, setErrors] = useState<RedisRes['errors']>(verifiedData.errors);
 
-	const [isResending, setIsResending] = useState(false);
-
-	const [sendVerificationEmail] = useMutation(
+	const [sendVerificationEmail, { loading }] = useMutation(
 		Mutations.SEND_VERIFICATION_EMAIL
 	);
 
 	const handleResendLink = async () => {
-		setIsResending(true);
 		try {
 			const sendVerificationEmailRes = await sendVerificationEmail({
 				variables: {
@@ -37,7 +34,6 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 					{ message: 'Error ocurred while resending link.' },
 				]
 			);
-			setIsResending(false);
 		} catch (err) {
 			console.error(err);
 		}
@@ -60,11 +56,11 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 							className='rounded bg-blue-500 px-4 py-2 text-white'
 							onClick={handleResendLink}
 						>
-							{isResending ? 'Resending Link...' : 'Resend Link'}
+							{loading ? 'Resending Link...' : 'Resend Link'}
 						</button>
-						{isResending && (
+						{loading && (
 							<div>
-								<Oval className='mt-8' stroke='#00b3ff' />
+								<Oval className='mt-4' stroke='#00b3ff' />
 							</div>
 						)}
 						{!_.isEmpty(errors) &&
@@ -85,18 +81,34 @@ export default VerificationEmailSent;
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { uid, token } = ctx.query;
 
-	const verifyTokenRes = await request(
-		SERVER_BASE_URL,
-		Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-		{
-			token: token as string,
-			userId: uid as string,
+	try {
+		const verifyTokenRes = await request(
+			SERVER_BASE_URL,
+			Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
+			{
+				token: token as string,
+				userId: uid as string,
+			}
+		);
+
+		const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
+
+		if (!verifyTokenData || !_.isEmpty(verifyTokenData.errors)) {
+			return {
+				redirect: {
+					destination: '/',
+					permanent: false,
+				},
+			};
 		}
-	);
 
-	const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
-
-	if (!verifyTokenData || !_.isEmpty(verifyTokenData.errors)) {
+		return {
+			props: {
+				verifiedData: verifyTokenData,
+			},
+		};
+	} catch (err) {
+		console.error(err);
 		return {
 			redirect: {
 				destination: '/',
@@ -104,10 +116,4 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 			},
 		};
 	}
-
-	return {
-		props: {
-			verifiedData: verifyTokenData,
-		},
-	};
 };

@@ -758,7 +758,6 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
-    deleteEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
@@ -890,6 +889,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
     checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    checkForgotPasswordToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
@@ -1312,7 +1312,6 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addMovie: 'UserMovie'
     addShow: 'UserShow'
-    deleteEmailVerificationToken: 'RedisRes'
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     registerUser: 'RegisteredUserRes'
@@ -1444,6 +1443,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     accountVerified: 'AccountVerifiedRes'
     checkEmailVerificationToken: 'RedisRes'
+    checkForgotPasswordToken: 'RedisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
     movieDetails: 'MovieDetailsRes'
@@ -1709,9 +1709,6 @@ export interface NexusGenArgTypes {
       showName: string; // String!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
     }
-    deleteEmailVerificationToken: { // args
-      token: string; // String!
-    }
     deleteMovie: { // args
       movieId: string; // ID!
     }
@@ -1749,6 +1746,10 @@ export interface NexusGenArgTypes {
       email: string; // String!
     }
     checkEmailVerificationToken: { // args
+      token: string; // String!
+      userId: string; // ID!
+    }
+    checkForgotPasswordToken: { // args
       token: string; // String!
       userId: string; // ID!
     }
