@@ -2,7 +2,7 @@ import { makeSchema, asNexusMethod, connectionPlugin } from 'nexus';
 import { join } from 'path';
 import { applyMiddleware } from 'graphql-middleware';
 import { permissions } from './permissions';
-import * as allTypes from './types';
+import * as allTypes from './resolvers';
 import {
 	DateTimeResolver,
 	JSONObjectResolver,

@@ -1,39 +1,314 @@
-import { BASE_URL } from '../../utils/constants';
-import { CommonMethods } from '../../utils/CommonMethods';
-import { timeWindowTypes } from 'graphql/models/enums';
-import {
-	objectType,
-	extendType,
-	nonNull,
-	stringArg,
-	intArg,
-	enumType,
-	arg,
-	idArg,
-} from 'nexus';
+import { list, nonNull, objectType } from 'nexus';
 
-export const ShowGenreTypes = enumType({
-	name: 'ShowGenreTypes',
-	members: [
-		'Action_AMPERSAND_Adventure',
-		'Animation',
-		'Comedy',
-		'Crime',
-		'Documentary',
-		'Drama',
-		'Family',
-		'Kids',
-		'Mystery',
-		'News',
-		'Reality',
-		'SciDASHFi_AMPERSAND_Fantasy',
-		'Soap',
-		'Talk',
-		'War_AMPERSAND_Politics',
-		'Western',
-	],
+// User
+export const UserMovie = objectType({
+	name: 'UserMovie',
+	definition(t) {
+		t.id('id');
+		t.string('name');
+		t.field('status', {
+			type: 'WatchStatusTypes',
+		});
+		t.int('rating');
+	},
 });
 
+export const UserShow = objectType({
+	name: 'UserShow',
+	definition(t) {
+		t.id('id');
+		t.string('name');
+		t.field('status', {
+			type: 'WatchStatusTypes',
+		});
+		t.int('rating');
+		t.int('current_episode');
+	},
+});
+
+export const User = objectType({
+	name: 'User',
+	definition(t) {
+		t.id('id');
+		t.string('name');
+		t.string('email');
+		t.date('emailVerified');
+		t.string('image');
+		t.string('password');
+		t.date('created_at');
+		t.list.field('movies', {
+			type: 'UserMovie',
+		});
+		t.list.field('shows', {
+			type: 'UserShow',
+		});
+	},
+});
+
+export const ErrorRes = objectType({
+	name: 'ErrorRes',
+	definition(t) {
+		t.nonNull.string('message');
+	},
+});
+
+export const RegisteredUserRes = objectType({
+	name: 'RegisteredUserRes',
+	definition(t) {
+		t.nonNull.list.field('errors', {
+			type: nonNull('ErrorRes'),
+		});
+		t.field('createdUser', {
+			type: 'User',
+		});
+	},
+});
+
+export const RedisRes = objectType({
+	name: 'RedisRes',
+	definition(t) {
+		t.field('errors', {
+			type: nonNull(list(nonNull('ErrorRes'))),
+		});
+		t.field('token', {
+			type: 'String',
+		});
+		t.field('userId', {
+			type: 'String',
+		});
+	},
+});
+
+export const AccountVerifiedRes = objectType({
+	name: 'AccountVerifiedRes',
+	definition(t) {
+		t.nonNull.field('errors', {
+			type: nonNull(list(nonNull('ErrorRes'))),
+		});
+		t.field('id', {
+			type: 'String',
+		});
+		t.field('emailVerified', {
+			type: 'DateTime',
+		});
+	},
+});
+
+// Movie
+export const MovieResult = objectType({
+	name: 'MovieResult',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.id('genre_ids');
+		t.nonNull.id('id');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_title');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.string('release_date');
+		t.nonNull.string('title');
+		t.nonNull.boolean('video');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+	},
+});
+
+export const MoviesRes = objectType({
+	name: 'MoviesRes',
+	definition(t) {
+		t.nonNull.int('page');
+		t.nonNull.int('total_pages');
+		t.nonNull.int('total_results');
+		t.nonNull.list.field('results', {
+			type: nonNull('MovieResult'),
+		});
+	},
+});
+
+export const MovieDetailsGenre = objectType({
+	name: 'MovieDetailsGenre',
+	definition(t) {
+		t.nonNull.id('id');
+		t.nonNull.string('name');
+	},
+});
+
+export const MovieDetailsProdCompany = objectType({
+	name: 'MovieDetailsProdCompany',
+	definition(t) {
+		t.nonNull.id('id');
+		t.string('logo_path');
+		t.nonNull.string('name');
+		t.nonNull.string('origin_country');
+	},
+});
+
+export const MovieDetailsProdCountry = objectType({
+	name: 'MovieDetailsProdCountry',
+	definition(t) {
+		t.nonNull.string('iso_3166_1');
+		t.nonNull.string('name');
+	},
+});
+
+export const MovieDetailsSpokenLang = objectType({
+	name: 'MovieDetailsSpokenLang',
+	definition(t) {
+		t.nonNull.string('english_name');
+		t.nonNull.string('iso_639_1');
+		t.nonNull.string('name');
+	},
+});
+
+export const MovieDetailsRes = objectType({
+	name: 'MovieDetailsRes',
+	definition(t) {
+		t.nonNull.boolean('adult');
+		t.string('backdrop_path');
+		t.nonNull.list.field('genres', {
+			type: nonNull('MovieDetailsGenre'),
+		});
+		t.nonNull.string('homepage');
+		t.nonNull.id('id');
+		t.id('imdb_id');
+		t.nonNull.string('original_language');
+		t.nonNull.string('original_title');
+		t.nonNull.string('overview');
+		t.nonNull.float('popularity');
+		t.string('poster_path');
+		t.nonNull.list.field('production_companies', {
+			type: 'MovieDetailsProdCompany',
+		});
+		t.nonNull.list.field('production_countries', {
+			type: 'MovieDetailsProdCountry',
+		});
+		t.string('release_date');
+		t.bigint('revenue');
+		t.int('runtime');
+		t.nonNull.list.field('spoken_languages', {
+			type: 'MovieDetailsSpokenLang',
+		});
+		t.nonNull.string('status');
+		t.nonNull.string('tagline');
+		t.nonNull.string('title');
+		t.boolean('video');
+		t.nonNull.float('vote_average');
+		t.nonNull.int('vote_count');
+	},
+});
+
+export const MovieReviewAuthorDetails = objectType({
+	name: 'MovieReviewAuthorDetails',
+	definition(t) {
+		t.nonNull.string('name');
+		t.nonNull.string('username');
+		t.string('avatar_path');
+		t.float('rating');
+	},
+});
+
+export const MovieReviewsResult = objectType({
+	name: 'MovieReviewsResult',
+	definition(t) {
+		t.nonNull.string('author');
+		t.nonNull.field('author_details', {
+			type: 'MovieReviewAuthorDetails',
+		});
+		t.nonNull.string('content');
+		t.nonNull.string('created_at');
+		t.nonNull.id('id');
+		t.nonNull.string('updated_at');
+		t.nonNull.string('url');
+	},
+});
+
+export const MovieReviewsRes = objectType({
+	name: 'MovieReviewsRes',
+	definition(t) {
+		t.nonNull.id('id'),
+			t.nonNull.int('page'),
+			t.nonNull.int('total_pages'),
+			t.nonNull.int('total_results');
+		t.nonNull.list.field('results', {
+			type: 'MovieReviewsResult',
+		});
+	},
+});
+
+export const TheatreDates = objectType({
+	name: 'TheatreDates',
+	definition(t) {
+		t.nonNull.string('maximum');
+		t.nonNull.string('minimum');
+	},
+});
+
+export const MoviesInTheatresRes = objectType({
+	name: 'MoviesInTheatresRes',
+	definition(t) {
+		t.nonNull.field('dates', {
+			type: 'TheatreDates',
+		});
+		t.nonNull.string('page');
+		t.nonNull.int('total_pages');
+		t.nonNull.int('total_results');
+		t.nonNull.list.field('results', {
+			type: 'MovieResult',
+		});
+	},
+});
+
+export const MoviesCastModel = objectType({
+	name: 'MoviesCastModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.id('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.id('cast_id');
+		t.string('character');
+		t.id('credit_id');
+		t.int('order');
+	},
+});
+
+export const MoviesCrewModel = objectType({
+	name: 'MoviesCrewModel',
+	definition(t) {
+		t.boolean('adult');
+		t.int('gender');
+		t.id('id');
+		t.string('known_for_department');
+		t.string('name');
+		t.string('original_name');
+		t.float('popularity');
+		t.string('profile_path');
+		t.id('credit_id');
+		t.string('department');
+		t.string('job');
+	},
+});
+
+export const MoviesCastCrewRes = objectType({
+	name: 'MoviesCastCrewRes',
+	definition(t) {
+		t.id('id');
+		t.list.field('cast', {
+			type: 'MoviesCastModel',
+		});
+		t.list.field('crew', {
+			type: 'MoviesCrewModel',
+		});
+	},
+});
+
+// Show
 export const ShowResult = objectType({
 	name: 'ShowResult',
 	definition(t) {
@@ -331,261 +606,5 @@ export const EpisodeDetailsRes = objectType({
 		t.string('still_path');
 		t.float('vote_average');
 		t.int('vote_count');
-	},
-});
-
-export const ShowQueries = extendType({
-	type: 'Query',
-	definition(t) {
-		t.nonNull.field('popularShows', {
-			type: 'ShowsRes',
-			args: {
-				page: intArg(),
-			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/popular?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${page ?? 1}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('searchedShows', {
-			type: 'ShowsRes',
-			args: {
-				q: nonNull(stringArg()),
-				page: intArg(),
-			},
-			resolve: async (_parent, { q, page }) => {
-				q = q.split(' ').join('+');
-				try {
-					const res = await fetch(
-						`${BASE_URL}/search/tv?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${page ?? 1}&query=${q}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('showDetails', {
-			type: 'ShowDetailsRes',
-			args: {
-				showDetailsId: nonNull(idArg()),
-			},
-			resolve: async (_parent, { showDetailsId }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/${showDetailsId}?api_key=${process.env
-							.API_KEY!}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('popularAnimeShows', {
-			type: 'ShowsRes',
-			args: {
-				page: intArg(),
-			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const keywordID = await CommonMethods.getKeywordId('anime');
-
-					const res = await fetch(
-						`${BASE_URL}/discover/tv?api_key=${process.env
-							.API_KEY!}&language=en-US&sort_by=popularity.desc&page=${
-							page ?? 1
-						}&with_keywords=${keywordID}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('trendingShows', {
-			type: 'ShowsRes',
-			args: {
-				timeWindow: arg({
-					type: nonNull(timeWindowTypes),
-				}),
-				page: intArg(),
-			},
-			resolve: async (_parent, { timeWindow, page }) => {
-				const trendingMovies = await CommonMethods.getTrendingMedia(
-					'tv',
-					timeWindow,
-					page
-				);
-				return trendingMovies;
-			},
-		});
-
-		t.nonNull.field('topRatedShows', {
-			type: 'ShowsRes',
-			args: {
-				page: intArg(),
-			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/top_rated?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${page ?? 1}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('recommendedShows', {
-			type: 'ShowsRes',
-			args: {
-				recommendedShowsId: nonNull(idArg()),
-				page: intArg(),
-			},
-			resolve: async (_parent, { recommendedShowsId, page }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process
-							.env.API_KEY!}&language=en-US&page=${page ?? 1}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('showReviews', {
-			type: 'ShowReviewRes',
-			args: {
-				id: nonNull(idArg()),
-				page: intArg(),
-			},
-			resolve: async (_parent, { id, page }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/${id}/reviews?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${page ?? 1}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('popularShowsByGenre', {
-			type: 'ShowsRes',
-			args: {
-				genre: arg({
-					type: nonNull(ShowGenreTypes),
-				}),
-				page: intArg(),
-			},
-			resolve: async (_parent, { genre, page }) => {
-				try {
-					const genreID = await CommonMethods.getGenreID(genre, 'tv');
-
-					const res = await fetch(
-						`${BASE_URL}/discover/tv?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${
-							page ?? 1
-						}&with_genres=${genreID}&sort_by=popularity.desc`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.nonNull.field('topRatedShowsByGenre', {
-			type: 'ShowsRes',
-			args: {
-				genre: arg({
-					type: nonNull(ShowGenreTypes),
-				}),
-				page: intArg(),
-			},
-			resolve: async (_parent, { genre, page }) => {
-				try {
-					const genreID = await CommonMethods.getGenreID(genre, 'tv');
-
-					const res = await fetch(
-						`${BASE_URL}/discover/tv?api_key=${process.env
-							.API_KEY!}&language=en-US&page=${
-							page ?? 1
-						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.field('showsCastCrew', {
-			type: 'ShowsCastCrewRes',
-			args: {
-				showId: nonNull(idArg()),
-			},
-			resolve: async (_parent, { showId }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/${showId}/credits?api_key=${process.env
-							.API_KEY!}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-
-		t.field('episodeDetails', {
-			type: 'EpisodeDetailsRes',
-			args: {
-				showId: nonNull(idArg()),
-				seasonNum: nonNull(intArg()),
-				episodeNum: nonNull(intArg()),
-			},
-			resolve: async (_parent, { showId, seasonNum, episodeNum }) => {
-				try {
-					const res = await fetch(
-						`${BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process
-							.env.API_KEY!}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
 	},
 });

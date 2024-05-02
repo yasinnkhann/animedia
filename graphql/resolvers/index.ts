@@ -1,3 +1,4 @@
+export * from '../models/objects';
 export * from './Movie';
 export * from './Show';
 export * from './Person';

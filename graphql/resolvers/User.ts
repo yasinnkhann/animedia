@@ -1,6 +1,4 @@
 import { hash } from 'argon2';
-import nodemailer from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import {
 	CLIENT_BASE_URL,
 	EMAIL_VERIFICATION_PREFIX,
@@ -9,122 +7,10 @@ import {
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 	__prod__,
 } from 'utils/constants';
-import {
-	objectType,
-	extendType,
-	stringArg,
-	nonNull,
-	idArg,
-	intArg,
-	enumType,
-	list,
-} from 'nexus';
+import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
+import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
-
-export const WatchStatusTypes = enumType({
-	name: 'WatchStatusTypes',
-	members: [
-		'NOT_WATCHING',
-		'WATCHING',
-		'PLAN_TO_WATCH',
-		'COMPLETED',
-		'ON_HOLD',
-		'DROPPED',
-	],
-});
-
-export const UserMovie = objectType({
-	name: 'UserMovie',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.field('status', {
-			type: 'WatchStatusTypes',
-		});
-		t.int('rating');
-	},
-});
-
-export const UserShow = objectType({
-	name: 'UserShow',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.field('status', {
-			type: 'WatchStatusTypes',
-		});
-		t.int('rating');
-		t.int('current_episode');
-	},
-});
-
-export const User = objectType({
-	name: 'User',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.string('email');
-		t.date('emailVerified');
-		t.string('image');
-		t.string('password');
-		t.date('created_at');
-		t.list.field('movies', {
-			type: 'UserMovie',
-		});
-		t.list.field('shows', {
-			type: 'UserShow',
-		});
-	},
-});
-
-export const ErrorRes = objectType({
-	name: 'ErrorRes',
-	definition(t) {
-		t.nonNull.string('message');
-	},
-});
-
-export const RegisteredUserRes = objectType({
-	name: 'RegisteredUserRes',
-	definition(t) {
-		t.nonNull.list.field('errors', {
-			type: nonNull('ErrorRes'),
-		});
-		t.field('createdUser', {
-			type: 'User',
-		});
-	},
-});
-
-export const RedisRes = objectType({
-	name: 'RedisRes',
-	definition(t) {
-		t.field('errors', {
-			type: nonNull(list(nonNull('ErrorRes'))),
-		});
-		t.field('token', {
-			type: 'String',
-		});
-		t.field('userId', {
-			type: 'String',
-		});
-	},
-});
-
-export const AccountVerifiedRes = objectType({
-	name: 'AccountVerifiedRes',
-	definition(t) {
-		t.nonNull.field('errors', {
-			type: nonNull(list(nonNull('ErrorRes'))),
-		});
-		t.field('id', {
-			type: 'String',
-		});
-		t.field('emailVerified', {
-			type: 'DateTime',
-		});
-	},
-});
+import { sendEmail } from 'graphql/utils';
 
 export const UserQueries = extendType({
 	type: 'Query',
@@ -599,8 +485,6 @@ export const UserMutations = extendType({
 						REDIS_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
 					);
 
-					let transporterConfig: SMTPTransport.Options = {};
-
 					const payload: Mail.Options = {
 						from: process.env.EMAIL_FROM,
 						to: user.email,
@@ -609,37 +493,7 @@ export const UserMutations = extendType({
 						html: `<a href="${CLIENT_BASE_URL}/auth/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
 					};
 
-					if (!__prod__) {
-						nodemailer.createTestAccount(async (_err, account) => {
-							transporterConfig = {
-								host: 'smtp.ethereal.email',
-								port: 587,
-								secure: false,
-								auth: {
-									user: account.user,
-									pass: account.pass,
-								},
-							};
-
-							const transporter = nodemailer.createTransport(transporterConfig);
-
-							const info = await transporter.sendMail(payload);
-
-							console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
-						});
-					} else if (__prod__) {
-						transporterConfig = {
-							host: process.env.TURBO_SMTP_HOST,
-							port: Number(process.env.TURBO_SMTP_PORT),
-							secure: Number(process.env.TURBO_SMTP_PORT) === 465,
-							auth: {
-								user: process.env.TURBO_SMTP_USERNAME,
-								pass: process.env.TURBO_SMTP_PASSWORD,
-							},
-						};
-						const transporter = nodemailer.createTransport(transporterConfig);
-						await transporter.sendMail(payload);
-					}
+					await sendEmail(payload);
 
 					return {
 						errors: [],
@@ -675,8 +529,6 @@ export const UserMutations = extendType({
 
 				const token = crypto.randomUUID();
 
-				let transporterConfig: SMTPTransport.Options = {};
-
 				const payload: Mail.Options = {
 					from: process.env.EMAIL_FROM,
 					to: user.email,
@@ -685,37 +537,8 @@ export const UserMutations = extendType({
 					html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
 				};
 
-				if (!__prod__) {
-					nodemailer.createTestAccount(async (_err, account) => {
-						transporterConfig = {
-							host: 'smtp.ethereal.email',
-							port: 587,
-							secure: false,
-							auth: {
-								user: account.user,
-								pass: account.pass,
-							},
-						};
+				await sendEmail(payload);
 
-						const transporter = nodemailer.createTransport(transporterConfig);
-
-						const info = await transporter.sendMail(payload);
-
-						console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
-					});
-				} else if (__prod__) {
-					transporterConfig = {
-						host: process.env.TURBO_SMTP_HOST,
-						port: Number(process.env.TURBO_SMTP_PORT),
-						secure: Number(process.env.TURBO_SMTP_PORT) === 465,
-						auth: {
-							user: process.env.TURBO_SMTP_USERNAME,
-							pass: process.env.TURBO_SMTP_API_KEY,
-						},
-					};
-					const transporter = nodemailer.createTransport(transporterConfig);
-					await transporter.sendMail(payload);
-				}
 				return {
 					errors: [{ message: 'Error while sending forgot password email' }],
 					token: null,
