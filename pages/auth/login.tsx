@@ -7,7 +7,6 @@ import FacebookIcon from '../../assets/facebook-icon.svg';
 import DiscordIcon from '../../assets/discord-icon.svg';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { HiAtSymbol } from 'react-icons/hi';
 import { getProviders, signIn } from 'next-auth/react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -75,7 +74,7 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='flex min-h-screen items-center justify-center bg-gray-100'>
+			<main className='mt-[calc(var(--header-height-mobile)+1rem)] flex items-center justify-center bg-gray-100'>
 				<div className='w-full max-w-md rounded-md p-8'>
 					<div className='mb-6 flex items-center justify-center'>
 						<h1 className='text-4xl font-bold text-gray-800'>Animedia</h1>

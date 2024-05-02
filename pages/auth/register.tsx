@@ -82,151 +82,327 @@ export default function Register() {
 			<Head>
 				<title>Register</title>
 			</Head>
+			<>
+				<Head>
+					<title>Register</title>
+				</Head>
+				<main className='mt-[calc(var(--header-height-mobile)+1rem)] flex items-center justify-center bg-gray-100'>
+					<div className='relative w-full max-w-md rounded-md p-8'>
+						<div className='mb-6 flex items-center justify-center'>
+							<h1 className='text-4xl font-bold text-gray-800'>Register</h1>
+						</div>
 
-			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-3/4 flex-col gap-10'>
-				<div>
-					<h1 className='py-4 text-4xl font-bold text-gray-800'>Register</h1>
-				</div>
-
-				<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
-					{formik.errors.name && formik.touched.name && (
-						<span className='text-rose-500'>{formik.errors.name}</span>
-					)}
-
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.name && formik.touched.name ? 'border-rose-600' : ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('name')}
-							type='text'
-							name='name'
-							placeholder='Name'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span className='icon flex items-center px-4'>
-							<HiOutlineUser size={25} />
-						</span>
-					</div>
-
-					{formik.errors.email && formik.touched.email && (
-						<span className='text-rose-500'>{formik.errors.email}</span>
-					)}
-
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.email && formik.touched.email
-								? 'border-rose-600'
-								: ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('email')}
-							type='email'
-							name='email'
-							placeholder='Email'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span className='icon flex items-center px-4'>
-							<HiAtSymbol size={25} />
-						</span>
-					</div>
-
-					{formik.errors.password && formik.touched.password && (
-						<span className='text-rose-500'>{formik.errors.password}</span>
-					)}
-
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.password && formik.touched.password
-								? 'border-rose-600'
-								: ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('password')}
-							type={`${showPW.password ? 'text' : 'password'}`}
-							name='password'
-							placeholder='Password'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span
-							className='icon flex cursor-pointer items-center px-4'
-							onClick={() =>
-								setShowPW({ ...showPW, password: !showPW.password })
-							}
+						<form
+							className='flex flex-col gap-5'
+							onSubmit={formik.handleSubmit}
 						>
-							{showPW.password ? (
-								<BsFillEyeFill size={25} />
-							) : (
-								<BsFillEyeSlashFill size={25} />
-							)}
-						</span>
+							{/* Name Input */}
+							<div className='relative'>
+								<input
+									{...formik.getFieldProps('name')}
+									type='text'
+									name='name'
+									placeholder='Name'
+									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
+										formik.errors.name && formik.touched.name
+											? 'border-rose-600'
+											: ''
+									}`}
+								/>
+								<span className='icon absolute right-3 top-1/2 -translate-y-1/2'>
+									<HiOutlineUser size={25} />
+								</span>
+								{formik.errors.name && formik.touched.name && (
+									<span className='ml-2 text-red-500'>
+										{' '}
+										{formik.errors.name}
+									</span>
+								)}
+							</div>
+
+							{/* Email Input */}
+							<div className='relative'>
+								<input
+									{...formik.getFieldProps('email')}
+									type='email'
+									name='email'
+									placeholder='Email'
+									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
+										formik.errors.email && formik.touched.email
+											? 'border-rose-600'
+											: ''
+									}`}
+								/>
+								<span className='icon absolute right-3 top-1/2 -translate-y-1/2'>
+									<HiAtSymbol size={25} />
+								</span>
+								{formik.errors.email && formik.touched.email && (
+									<span className='ml-2 text-red-500'>
+										{' '}
+										{formik.errors.email}
+									</span>
+								)}
+							</div>
+
+							{/* Password Input */}
+							<div className='relative'>
+								<input
+									{...formik.getFieldProps('password')}
+									type={`${showPW.password ? 'text' : 'password'}`}
+									name='password'
+									placeholder='Password'
+									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
+										formik.errors.password && formik.touched.password
+											? 'border-rose-600'
+											: ''
+									}`}
+								/>
+								<span className='icon absolute right-3 top-1/2 -translate-y-1/2'>
+									<button
+										type='button'
+										onClick={() =>
+											setShowPW({ ...showPW, password: !showPW.password })
+										}
+										className='text-gray-500 hover:text-blue-500 focus:outline-none'
+									>
+										{showPW.password ? (
+											<BsFillEyeSlashFill size={25} />
+										) : (
+											<BsFillEyeFill size={25} />
+										)}
+									</button>
+								</span>
+								{formik.errors.password && formik.touched.password && (
+									<span className='ml-2 text-red-500'>
+										{' '}
+										{formik.errors.password}
+									</span>
+								)}
+							</div>
+
+							{/* Confirm Password Input */}
+							<div className='relative'>
+								<input
+									{...formik.getFieldProps('confirmPassword')}
+									type={`${showPW.confirmPassword ? 'text' : 'password'}`}
+									name='confirmPassword'
+									placeholder='Confirm Password'
+									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
+										formik.errors.confirmPassword &&
+										formik.touched.confirmPassword
+											? 'border-rose-600'
+											: ''
+									}`}
+								/>
+								<span className='icon absolute right-3 top-1/2 -translate-y-1/2'>
+									<button
+										type='button'
+										onClick={() =>
+											setShowPW({
+												...showPW,
+												confirmPassword: !showPW.confirmPassword,
+											})
+										}
+										className='text-gray-500 hover:text-blue-500 focus:outline-none'
+									>
+										{showPW.confirmPassword ? (
+											<BsFillEyeSlashFill size={25} />
+										) : (
+											<BsFillEyeFill size={25} />
+										)}
+									</button>
+								</span>
+								{formik.errors.confirmPassword &&
+									formik.touched.confirmPassword && (
+										<span className='ml-2 text-red-500'>
+											{' '}
+											{formik.errors.confirmPassword}
+										</span>
+									)}
+							</div>
+
+							{/* Submit Button */}
+							<button
+								type='submit'
+								className='w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none'
+							>
+								Sign Up
+							</button>
+						</form>
+
+						{/* Error Messages */}
+						{registerErrs.length > 0 && (
+							<div className='absolute bottom-full left-0 w-full'>
+								<div className='flex flex-col'>
+									{registerErrs.map((err, idx) => (
+										<span key={idx} className='ml-4 text-center text-red-500'>
+											{err.message}
+										</span>
+									))}
+								</div>
+							</div>
+						)}
+
+						{/* Login Link */}
+						<div className='flex flex-col items-center'>
+							<p className='text-center text-gray-400'>Have an account?</p>
+							<Link href='/auth/login'>
+								<a className='text-blue-500 hover:underline'>Login</a>
+							</Link>
+						</div>
+					</div>
+				</main>
+			</>
+
+			{/* <main className='mt-[calc(var(--header-height-mobile)+1rem)] flex items-center justify-center bg-gray-100'>
+				<div className='w-full max-w-md rounded-md p-8'>
+					<div className='mb-6 flex items-center justify-center'>
+						<h1 className='text-4xl font-bold text-gray-800'>Animedia</h1>
 					</div>
 
-					{formik.errors.confirmPassword && formik.touched.confirmPassword && (
-						<span className='text-rose-500'>
-							{formik.errors.confirmPassword}
-						</span>
-					)}
+					<form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
+						{formik.errors.name && formik.touched.name && (
+							<span className='text-rose-500'>{formik.errors.name}</span>
+						)}
 
-					<div
-						className={`relative flex h-[2.5rem] rounded-xl border ${
-							formik.errors.confirmPassword && formik.touched.confirmPassword
-								? 'border-rose-600'
-								: ''
-						}`}
-					>
-						<input
-							{...formik.getFieldProps('confirmPassword')}
-							type={`${showPW.confirmPassword ? 'text' : 'password'}`}
-							name='confirmPassword'
-							placeholder='Confirm Password'
-							className='w-full border-none bg-inherit pl-4 outline-none'
-						/>
-						<span
-							className='icon flex cursor-pointer items-center px-4'
-							onClick={() =>
-								setShowPW({
-									...showPW,
-									confirmPassword: !showPW.confirmPassword,
-								})
-							}
+						<div
+							className={`relative flex h-[2.5rem] rounded-xl border ${
+								formik.errors.name && formik.touched.name
+									? 'border-rose-600'
+									: ''
+							}`}
 						>
-							{showPW.confirmPassword ? (
-								<BsFillEyeFill size={25} />
-							) : (
-								<BsFillEyeSlashFill size={25} />
-							)}
-						</span>
-					</div>
-
-					<div>
-						<button
-							type='submit'
-							className='w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-lg text-gray-50'
-						>
-							Sign Up
-						</button>
-					</div>
-				</form>
-
-				{registerErrs.length > 0 && (
-					<div className='flex flex-col'>
-						{registerErrs.map((err, idx) => (
-							<span key={idx} className='text-center text-rose-500'>
-								{err.message}
+							<input
+								{...formik.getFieldProps('name')}
+								type='text'
+								name='name'
+								placeholder='Name'
+								className='w-full border-none bg-inherit pl-4 outline-none'
+							/>
+							<span className='icon flex items-center px-4'>
+								<HiOutlineUser size={25} />
 							</span>
-						))}
-					</div>
-				)}
+						</div>
 
-				<div className='flex flex-col items-center'>
-					<p className='text-center text-gray-400 '>Have an account? </p>
-					<Link href='/auth/login'>Login</Link>
+						{formik.errors.email && formik.touched.email && (
+							<span className='text-rose-500'>{formik.errors.email}</span>
+						)}
+
+						<div
+							className={`relative flex h-[2.5rem] rounded-xl border ${
+								formik.errors.email && formik.touched.email
+									? 'border-rose-600'
+									: ''
+							}`}
+						>
+							<input
+								{...formik.getFieldProps('email')}
+								type='email'
+								name='email'
+								placeholder='Email'
+								className='w-full border-none bg-inherit pl-4 outline-none'
+							/>
+							<span className='icon flex items-center px-4'>
+								<HiAtSymbol size={25} />
+							</span>
+						</div>
+
+						{formik.errors.password && formik.touched.password && (
+							<span className='text-rose-500'>{formik.errors.password}</span>
+						)}
+
+						<div
+							className={`relative flex h-[2.5rem] rounded-xl border ${
+								formik.errors.password && formik.touched.password
+									? 'border-rose-600'
+									: ''
+							}`}
+						>
+							<input
+								{...formik.getFieldProps('password')}
+								type={`${showPW.password ? 'text' : 'password'}`}
+								name='password'
+								placeholder='Password'
+								className='w-full border-none bg-inherit pl-4 outline-none'
+							/>
+							<span
+								className='icon flex cursor-pointer items-center px-4'
+								onClick={() =>
+									setShowPW({ ...showPW, password: !showPW.password })
+								}
+							>
+								{showPW.password ? (
+									<BsFillEyeFill size={25} />
+								) : (
+									<BsFillEyeSlashFill size={25} />
+								)}
+							</span>
+						</div>
+
+						{formik.errors.confirmPassword &&
+							formik.touched.confirmPassword && (
+								<span className='text-rose-500'>
+									{formik.errors.confirmPassword}
+								</span>
+							)}
+
+						<div
+							className={`relative flex h-[2.5rem] rounded-xl border ${
+								formik.errors.confirmPassword && formik.touched.confirmPassword
+									? 'border-rose-600'
+									: ''
+							}`}
+						>
+							<input
+								{...formik.getFieldProps('confirmPassword')}
+								type={`${showPW.confirmPassword ? 'text' : 'password'}`}
+								name='confirmPassword'
+								placeholder='Confirm Password'
+								className='w-full border-none bg-inherit pl-4 outline-none'
+							/>
+							<span
+								className='icon flex cursor-pointer items-center px-4'
+								onClick={() =>
+									setShowPW({
+										...showPW,
+										confirmPassword: !showPW.confirmPassword,
+									})
+								}
+							>
+								{showPW.confirmPassword ? (
+									<BsFillEyeFill size={25} />
+								) : (
+									<BsFillEyeSlashFill size={25} />
+								)}
+							</span>
+						</div>
+
+						<div>
+							<button
+								type='submit'
+								className='w-full rounded-md bg-gradient-to-r from-blue-500 to-indigo-500 py-3 text-lg text-gray-50'
+							>
+								Sign Up
+							</button>
+						</div>
+					</form>
+
+					{registerErrs.length > 0 && (
+						<div className='flex flex-col'>
+							{registerErrs.map((err, idx) => (
+								<span key={idx} className='text-center text-rose-500'>
+									{err.message}
+								</span>
+							))}
+						</div>
+					)}
+
+					<div className='flex flex-col items-center'>
+						<p className='text-center text-gray-400 '>Have an account? </p>
+						<Link href='/auth/login'>Login</Link>
+					</div>
 				</div>
-			</main>
+			</main> */}
 		</>
 	);
 }
