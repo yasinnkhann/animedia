@@ -1,6 +1,5 @@
 import { BASE_URL } from '../../utils/constants';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { ShowGenreTypes, timeWindowTypes } from 'graphql/models/enums';
 import { extendType, nonNull, stringArg, intArg, arg, idArg } from 'nexus';
 
 export const ShowQueries = extendType({
@@ -92,7 +91,7 @@ export const ShowQueries = extendType({
 			type: 'ShowsRes',
 			args: {
 				timeWindow: arg({
-					type: nonNull(timeWindowTypes),
+					type: nonNull('TimeWindowTypes'),
 				}),
 				page: intArg(),
 			},
@@ -169,7 +168,7 @@ export const ShowQueries = extendType({
 			type: 'ShowsRes',
 			args: {
 				genre: arg({
-					type: nonNull(ShowGenreTypes),
+					type: nonNull('ShowGenreTypes'),
 				}),
 				page: intArg(),
 			},
@@ -195,7 +194,7 @@ export const ShowQueries = extendType({
 			type: 'ShowsRes',
 			args: {
 				genre: arg({
-					type: nonNull(ShowGenreTypes),
+					type: nonNull('ShowGenreTypes'),
 				}),
 				page: intArg(),
 			},

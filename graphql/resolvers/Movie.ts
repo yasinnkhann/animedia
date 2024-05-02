@@ -1,6 +1,5 @@
 import { BASE_URL } from '../../utils/constants';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { MovieGenreTypes, timeWindowTypes } from '../models/enums';
 import { extendType, nonNull, stringArg, intArg, arg, idArg } from 'nexus';
 
 export const MovieQueries = extendType({
@@ -92,7 +91,7 @@ export const MovieQueries = extendType({
 			type: 'MoviesRes',
 			args: {
 				timeWindow: arg({
-					type: nonNull(timeWindowTypes),
+					type: nonNull('TimeWindowTypes'),
 				}),
 				page: intArg(),
 			},
@@ -192,7 +191,7 @@ export const MovieQueries = extendType({
 			type: 'MoviesRes',
 			args: {
 				genre: arg({
-					type: nonNull(MovieGenreTypes),
+					type: nonNull('MovieGenreTypes'),
 				}),
 				page: intArg(),
 			},
@@ -218,7 +217,7 @@ export const MovieQueries = extendType({
 			type: 'MoviesRes',
 			args: {
 				genre: arg({
-					type: nonNull(MovieGenreTypes),
+					type: nonNull('MovieGenreTypes'),
 				}),
 				page: intArg(),
 			},

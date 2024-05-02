@@ -1,610 +1,575 @@
 import { list, nonNull, objectType } from 'nexus';
 
-// User
-export const UserMovie = objectType({
-	name: 'UserMovie',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.field('status', {
-			type: 'WatchStatusTypes',
-		});
-		t.int('rating');
-	},
-});
+export const UserObj = {
+	UserMovie: objectType({
+		name: 'UserMovie',
+		definition(t) {
+			t.id('id');
+			t.string('name');
+			t.field('status', {
+				type: 'WatchStatusTypes',
+			});
+			t.int('rating');
+		},
+	}),
+	UserShow: objectType({
+		name: 'UserShow',
+		definition(t) {
+			t.id('id');
+			t.string('name');
+			t.field('status', {
+				type: 'WatchStatusTypes',
+			});
+			t.int('rating');
+			t.int('current_episode');
+		},
+	}),
+	User: objectType({
+		name: 'User',
+		definition(t) {
+			t.id('id');
+			t.string('name');
+			t.string('email');
+			t.date('emailVerified');
+			t.string('image');
+			t.string('password');
+			t.date('created_at');
+			t.list.field('movies', {
+				type: 'UserMovie',
+			});
+			t.list.field('shows', {
+				type: 'UserShow',
+			});
+		},
+	}),
+	ErrorRes: objectType({
+		name: 'ErrorRes',
+		definition(t) {
+			t.nonNull.string('message');
+		},
+	}),
+	RegisteredUserRes: objectType({
+		name: 'RegisteredUserRes',
+		definition(t) {
+			t.nonNull.list.field('errors', {
+				type: nonNull('ErrorRes'),
+			});
+			t.field('createdUser', {
+				type: 'User',
+			});
+		},
+	}),
+	RedisRes: objectType({
+		name: 'RedisRes',
+		definition(t) {
+			t.field('errors', {
+				type: nonNull(list(nonNull('ErrorRes'))),
+			});
+			t.field('token', {
+				type: 'String',
+			});
+			t.field('userId', {
+				type: 'String',
+			});
+		},
+	}),
+	AccountVerifiedRes: objectType({
+		name: 'AccountVerifiedRes',
+		definition(t) {
+			t.nonNull.field('errors', {
+				type: nonNull(list(nonNull('ErrorRes'))),
+			});
+			t.field('id', {
+				type: 'String',
+			});
+			t.field('emailVerified', {
+				type: 'DateTime',
+			});
+		},
+	}),
+};
 
-export const UserShow = objectType({
-	name: 'UserShow',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.field('status', {
-			type: 'WatchStatusTypes',
-		});
-		t.int('rating');
-		t.int('current_episode');
-	},
-});
-
-export const User = objectType({
-	name: 'User',
-	definition(t) {
-		t.id('id');
-		t.string('name');
-		t.string('email');
-		t.date('emailVerified');
-		t.string('image');
-		t.string('password');
-		t.date('created_at');
-		t.list.field('movies', {
-			type: 'UserMovie',
-		});
-		t.list.field('shows', {
-			type: 'UserShow',
-		});
-	},
-});
-
-export const ErrorRes = objectType({
-	name: 'ErrorRes',
-	definition(t) {
-		t.nonNull.string('message');
-	},
-});
-
-export const RegisteredUserRes = objectType({
-	name: 'RegisteredUserRes',
-	definition(t) {
-		t.nonNull.list.field('errors', {
-			type: nonNull('ErrorRes'),
-		});
-		t.field('createdUser', {
-			type: 'User',
-		});
-	},
-});
-
-export const RedisRes = objectType({
-	name: 'RedisRes',
-	definition(t) {
-		t.field('errors', {
-			type: nonNull(list(nonNull('ErrorRes'))),
-		});
-		t.field('token', {
-			type: 'String',
-		});
-		t.field('userId', {
-			type: 'String',
-		});
-	},
-});
-
-export const AccountVerifiedRes = objectType({
-	name: 'AccountVerifiedRes',
-	definition(t) {
-		t.nonNull.field('errors', {
-			type: nonNull(list(nonNull('ErrorRes'))),
-		});
-		t.field('id', {
-			type: 'String',
-		});
-		t.field('emailVerified', {
-			type: 'DateTime',
-		});
-	},
-});
-
-// Movie
-export const MovieResult = objectType({
-	name: 'MovieResult',
-	definition(t) {
-		t.nonNull.boolean('adult');
-		t.string('backdrop_path');
-		t.nonNull.list.id('genre_ids');
-		t.nonNull.id('id');
-		t.nonNull.string('original_language');
-		t.nonNull.string('original_title');
-		t.nonNull.string('overview');
-		t.nonNull.float('popularity');
-		t.string('poster_path');
-		t.string('release_date');
-		t.nonNull.string('title');
-		t.nonNull.boolean('video');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const MoviesRes = objectType({
-	name: 'MoviesRes',
-	definition(t) {
-		t.nonNull.int('page');
-		t.nonNull.int('total_pages');
-		t.nonNull.int('total_results');
-		t.nonNull.list.field('results', {
-			type: nonNull('MovieResult'),
-		});
-	},
-});
-
-export const MovieDetailsGenre = objectType({
-	name: 'MovieDetailsGenre',
-	definition(t) {
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-	},
-});
-
-export const MovieDetailsProdCompany = objectType({
-	name: 'MovieDetailsProdCompany',
-	definition(t) {
-		t.nonNull.id('id');
-		t.string('logo_path');
-		t.nonNull.string('name');
-		t.nonNull.string('origin_country');
-	},
-});
-
-export const MovieDetailsProdCountry = objectType({
-	name: 'MovieDetailsProdCountry',
-	definition(t) {
-		t.nonNull.string('iso_3166_1');
-		t.nonNull.string('name');
-	},
-});
-
-export const MovieDetailsSpokenLang = objectType({
-	name: 'MovieDetailsSpokenLang',
-	definition(t) {
-		t.nonNull.string('english_name');
-		t.nonNull.string('iso_639_1');
-		t.nonNull.string('name');
-	},
-});
-
-export const MovieDetailsRes = objectType({
-	name: 'MovieDetailsRes',
-	definition(t) {
-		t.nonNull.boolean('adult');
-		t.string('backdrop_path');
-		t.nonNull.list.field('genres', {
-			type: nonNull('MovieDetailsGenre'),
-		});
-		t.nonNull.string('homepage');
-		t.nonNull.id('id');
-		t.id('imdb_id');
-		t.nonNull.string('original_language');
-		t.nonNull.string('original_title');
-		t.nonNull.string('overview');
-		t.nonNull.float('popularity');
-		t.string('poster_path');
-		t.nonNull.list.field('production_companies', {
-			type: 'MovieDetailsProdCompany',
-		});
-		t.nonNull.list.field('production_countries', {
-			type: 'MovieDetailsProdCountry',
-		});
-		t.string('release_date');
-		t.bigint('revenue');
-		t.int('runtime');
-		t.nonNull.list.field('spoken_languages', {
-			type: 'MovieDetailsSpokenLang',
-		});
-		t.nonNull.string('status');
-		t.nonNull.string('tagline');
-		t.nonNull.string('title');
-		t.boolean('video');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const MovieReviewAuthorDetails = objectType({
-	name: 'MovieReviewAuthorDetails',
-	definition(t) {
-		t.nonNull.string('name');
-		t.nonNull.string('username');
-		t.string('avatar_path');
-		t.float('rating');
-	},
-});
-
-export const MovieReviewsResult = objectType({
-	name: 'MovieReviewsResult',
-	definition(t) {
-		t.nonNull.string('author');
-		t.nonNull.field('author_details', {
-			type: 'MovieReviewAuthorDetails',
-		});
-		t.nonNull.string('content');
-		t.nonNull.string('created_at');
-		t.nonNull.id('id');
-		t.nonNull.string('updated_at');
-		t.nonNull.string('url');
-	},
-});
-
-export const MovieReviewsRes = objectType({
-	name: 'MovieReviewsRes',
-	definition(t) {
-		t.nonNull.id('id'),
-			t.nonNull.int('page'),
-			t.nonNull.int('total_pages'),
+export const MovieObj = {
+	MovieResult: objectType({
+		name: 'MovieResult',
+		definition(t) {
+			t.nonNull.boolean('adult');
+			t.string('backdrop_path');
+			t.nonNull.list.id('genre_ids');
+			t.nonNull.id('id');
+			t.nonNull.string('original_language');
+			t.nonNull.string('original_title');
+			t.nonNull.string('overview');
+			t.nonNull.float('popularity');
+			t.string('poster_path');
+			t.string('release_date');
+			t.nonNull.string('title');
+			t.nonNull.boolean('video');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	MoviesRes: objectType({
+		name: 'MoviesRes',
+		definition(t) {
+			t.nonNull.int('page');
+			t.nonNull.int('total_pages');
 			t.nonNull.int('total_results');
-		t.nonNull.list.field('results', {
-			type: 'MovieReviewsResult',
-		});
-	},
-});
-
-export const TheatreDates = objectType({
-	name: 'TheatreDates',
-	definition(t) {
-		t.nonNull.string('maximum');
-		t.nonNull.string('minimum');
-	},
-});
-
-export const MoviesInTheatresRes = objectType({
-	name: 'MoviesInTheatresRes',
-	definition(t) {
-		t.nonNull.field('dates', {
-			type: 'TheatreDates',
-		});
-		t.nonNull.string('page');
-		t.nonNull.int('total_pages');
-		t.nonNull.int('total_results');
-		t.nonNull.list.field('results', {
-			type: 'MovieResult',
-		});
-	},
-});
-
-export const MoviesCastModel = objectType({
-	name: 'MoviesCastModel',
-	definition(t) {
-		t.boolean('adult');
-		t.int('gender');
-		t.id('id');
-		t.string('known_for_department');
-		t.string('name');
-		t.string('original_name');
-		t.float('popularity');
-		t.string('profile_path');
-		t.id('cast_id');
-		t.string('character');
-		t.id('credit_id');
-		t.int('order');
-	},
-});
-
-export const MoviesCrewModel = objectType({
-	name: 'MoviesCrewModel',
-	definition(t) {
-		t.boolean('adult');
-		t.int('gender');
-		t.id('id');
-		t.string('known_for_department');
-		t.string('name');
-		t.string('original_name');
-		t.float('popularity');
-		t.string('profile_path');
-		t.id('credit_id');
-		t.string('department');
-		t.string('job');
-	},
-});
-
-export const MoviesCastCrewRes = objectType({
-	name: 'MoviesCastCrewRes',
-	definition(t) {
-		t.id('id');
-		t.list.field('cast', {
-			type: 'MoviesCastModel',
-		});
-		t.list.field('crew', {
-			type: 'MoviesCrewModel',
-		});
-	},
-});
-
-// Show
-export const ShowResult = objectType({
-	name: 'ShowResult',
-	definition(t) {
-		t.string('backdrop_path');
-		t.string('first_air_date');
-		t.nonNull.list.id('genre_ids');
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-		t.nonNull.list.string('origin_country');
-		t.nonNull.string('original_language');
-		t.nonNull.string('original_name');
-		t.nonNull.string('overview');
-		t.nonNull.float('popularity');
-		t.string('poster_path');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const ShowsRes = objectType({
-	name: 'ShowsRes',
-	definition(t) {
-		t.nonNull.int('page');
-		t.nonNull.int('total_pages');
-		t.nonNull.int('total_results');
-		t.nonNull.list.field('results', {
-			type: nonNull('ShowResult'),
-		});
-	},
-});
-
-export const ShowDetailsCreatedBy = objectType({
-	name: 'ShowDetailsCreatedBy',
-	definition(t) {
-		t.id('id');
-		t.id('credit_id');
-		t.string('name');
-		t.int('gender');
-		t.string('profile_path');
-	},
-});
-
-export const ShowDetailsGenre = objectType({
-	name: 'ShowDetailsGenre',
-	definition(t) {
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-	},
-});
-
-export const ShowDetailsLastEpToAir = objectType({
-	name: 'ShowDetailsLastEpToAir',
-	definition(t) {
-		t.string('air_date');
-		t.nonNull.int('episode_number');
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-		t.nonNull.string('overview');
-		t.nonNull.string('production_code');
-		t.int('runtime');
-		t.nonNull.int('season_number');
-		t.nonNull.id('show_id');
-		t.string('still_path');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const ShowDetailsNetwork = objectType({
-	name: 'ShowDetailsNetwork',
-	definition(t) {
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-		t.string('logo_path');
-		t.nonNull.string('origin_country');
-	},
-});
-
-export const ShowDetailsProdCompany = objectType({
-	name: 'ShowDetailsProdCompany',
-	definition(t) {
-		t.nonNull.id('id');
-		t.string('logo_path');
-		t.nonNull.string('name');
-		t.nonNull.string('origin_country');
-	},
-});
-
-export const ShowDetailsCountry = objectType({
-	name: 'ShowDetailsCountry',
-	definition(t) {
-		t.nonNull.string('iso_3166_1');
-		t.nonNull.string('name');
-	},
-});
-
-export const ShowDetailsSeason = objectType({
-	name: 'ShowDetailsSeason',
-	definition(t) {
-		t.string('air_date');
-		t.nonNull.int('episode_count');
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-		t.nonNull.string('overview');
-		t.string('poster_path');
-		t.nonNull.int('season_number');
-	},
-});
-
-export const ShowDetailsSpokenLang = objectType({
-	name: 'ShowDetailsSpokenLang',
-	definition(t) {
-		t.nonNull.string('english_name');
-		t.nonNull.string('iso_639_1');
-		t.nonNull.string('name');
-	},
-});
-
-export const ShowDetailsNextEpToAir = objectType({
-	name: 'ShowDetailsNextEpToAir',
-	definition(t) {
-		t.string('air_date');
-		t.nonNull.int('episode_number');
-		t.nonNull.id('id');
-		t.nonNull.string('name');
-		t.nonNull.string('overview');
-		t.nonNull.string('production_code');
-		t.int('runtime');
-		t.nonNull.int('season_number');
-		t.nonNull.id('show_id');
-		t.string('still_path');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const ShowDetailsRes = objectType({
-	name: 'ShowDetailsRes',
-	definition(t) {
-		t.nonNull.boolean('adult');
-		t.string('backdrop_path');
-		t.nonNull.list.field('created_by', {
-			type: 'ShowDetailsCreatedBy',
-		});
-		t.nonNull.list.int('episode_run_time');
-		t.string('first_air_date');
-		t.nonNull.list.field('genres', {
-			type: nonNull('ShowDetailsGenre'),
-		});
-		t.nonNull.string('homepage');
-		t.nonNull.id('id');
-		t.nonNull.boolean('in_production');
-		t.nonNull.list.string('languages');
-		t.string('last_air_date');
-		t.field('last_episode_to_air', {
-			type: 'ShowDetailsLastEpToAir',
-		});
-		t.nonNull.string('name');
-		t.field('next_episode_to_air', {
-			type: 'ShowDetailsNextEpToAir',
-		});
-		t.nonNull.list.field('networks', {
-			type: nonNull('ShowDetailsNetwork'),
-		});
-		t.nonNull.int('number_of_episodes');
-		t.nonNull.int('number_of_seasons');
-		t.nonNull.list.string('origin_country');
-		t.nonNull.string('original_language');
-		t.nonNull.string('original_name');
-		t.nonNull.string('overview');
-		t.nonNull.float('popularity');
-		t.string('poster_path');
-		t.nonNull.list.field('production_companies', {
-			type: 'ShowDetailsProdCompany',
-		});
-		t.nonNull.list.field('production_countries', {
-			type: 'ShowDetailsCountry',
-		});
-		t.nonNull.list.field('seasons', {
-			type: 'ShowDetailsSeason',
-		});
-		t.nonNull.list.field('spoken_languages', {
-			type: 'ShowDetailsSpokenLang',
-		});
-		t.nonNull.string('status');
-		t.nonNull.string('tagline');
-		t.nonNull.string('type');
-		t.nonNull.float('vote_average');
-		t.nonNull.int('vote_count');
-	},
-});
-
-export const ShowReviewAuthorDetails = objectType({
-	name: 'ShowReviewAuthorDetails',
-	definition(t) {
-		t.nonNull.string('name');
-		t.nonNull.string('username');
-		t.string('avatar_path');
-		t.float('rating');
-	},
-});
-
-export const ShowReviewResult = objectType({
-	name: 'ShowReviewResult',
-	definition(t) {
-		t.nonNull.string('author');
-		t.nonNull.field('author_details', {
-			type: 'ShowReviewAuthorDetails',
-		});
-		t.nonNull.string('content');
-		t.nonNull.string('created_at');
-		t.nonNull.id('id');
-		t.nonNull.string('updated_at');
-		t.nonNull.string('url');
-	},
-});
-
-export const ShowReviewRes = objectType({
-	name: 'ShowReviewRes',
-	definition(t) {
-		t.nonNull.id('id'),
-			t.nonNull.int('page'),
-			t.nonNull.int('total_pages'),
+			t.nonNull.list.field('results', {
+				type: nonNull('MovieResult'),
+			});
+		},
+	}),
+	MovieDetailsGenre: objectType({
+		name: 'MovieDetailsGenre',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+		},
+	}),
+	MovieDetailsProdCompany: objectType({
+		name: 'MovieDetailsProdCompany',
+		definition(t) {
+			t.nonNull.id('id');
+			t.string('logo_path');
+			t.nonNull.string('name');
+			t.nonNull.string('origin_country');
+		},
+	}),
+	MovieDetailsProdCountry: objectType({
+		name: 'MovieDetailsProdCountry',
+		definition(t) {
+			t.nonNull.string('iso_3166_1');
+			t.nonNull.string('name');
+		},
+	}),
+	MovieDetailsSpokenLang: objectType({
+		name: 'MovieDetailsSpokenLang',
+		definition(t) {
+			t.nonNull.string('english_name');
+			t.nonNull.string('iso_639_1');
+			t.nonNull.string('name');
+		},
+	}),
+	MovieDetailsRes: objectType({
+		name: 'MovieDetailsRes',
+		definition(t) {
+			t.nonNull.boolean('adult');
+			t.string('backdrop_path');
+			t.nonNull.list.field('genres', {
+				type: nonNull('MovieDetailsGenre'),
+			});
+			t.nonNull.string('homepage');
+			t.nonNull.id('id');
+			t.id('imdb_id');
+			t.nonNull.string('original_language');
+			t.nonNull.string('original_title');
+			t.nonNull.string('overview');
+			t.nonNull.float('popularity');
+			t.string('poster_path');
+			t.nonNull.list.field('production_companies', {
+				type: 'MovieDetailsProdCompany',
+			});
+			t.nonNull.list.field('production_countries', {
+				type: 'MovieDetailsProdCountry',
+			});
+			t.string('release_date');
+			t.bigint('revenue');
+			t.int('runtime');
+			t.nonNull.list.field('spoken_languages', {
+				type: 'MovieDetailsSpokenLang',
+			});
+			t.nonNull.string('status');
+			t.nonNull.string('tagline');
+			t.nonNull.string('title');
+			t.boolean('video');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	MovieReviewAuthorDetails: objectType({
+		name: 'MovieReviewAuthorDetails',
+		definition(t) {
+			t.nonNull.string('name');
+			t.nonNull.string('username');
+			t.string('avatar_path');
+			t.float('rating');
+		},
+	}),
+	MovieReviewsResult: objectType({
+		name: 'MovieReviewsResult',
+		definition(t) {
+			t.nonNull.string('author');
+			t.nonNull.field('author_details', {
+				type: 'MovieReviewAuthorDetails',
+			});
+			t.nonNull.string('content');
+			t.nonNull.string('created_at');
+			t.nonNull.id('id');
+			t.nonNull.string('updated_at');
+			t.nonNull.string('url');
+		},
+	}),
+	MovieReviewsRes: objectType({
+		name: 'MovieReviewsRes',
+		definition(t) {
+			t.nonNull.id('id'),
+				t.nonNull.int('page'),
+				t.nonNull.int('total_pages'),
+				t.nonNull.int('total_results');
+			t.nonNull.list.field('results', {
+				type: 'MovieReviewsResult',
+			});
+		},
+	}),
+	TheatreDates: objectType({
+		name: 'TheatreDates',
+		definition(t) {
+			t.nonNull.string('maximum');
+			t.nonNull.string('minimum');
+		},
+	}),
+	MoviesInTheatresRes: objectType({
+		name: 'MoviesInTheatresRes',
+		definition(t) {
+			t.nonNull.field('dates', {
+				type: 'TheatreDates',
+			});
+			t.nonNull.string('page');
+			t.nonNull.int('total_pages');
 			t.nonNull.int('total_results');
-		t.nonNull.list.field('results', {
-			type: 'ShowReviewResult',
-		});
-	},
-});
+			t.nonNull.list.field('results', {
+				type: 'MovieResult',
+			});
+		},
+	}),
+	MoviesCastModel: objectType({
+		name: 'MoviesCastModel',
+		definition(t) {
+			t.boolean('adult');
+			t.int('gender');
+			t.id('id');
+			t.string('known_for_department');
+			t.string('name');
+			t.string('original_name');
+			t.float('popularity');
+			t.string('profile_path');
+			t.id('cast_id');
+			t.string('character');
+			t.id('credit_id');
+			t.int('order');
+		},
+	}),
+	MoviesCrewModel: objectType({
+		name: 'MoviesCrewModel',
+		definition(t) {
+			t.boolean('adult');
+			t.int('gender');
+			t.id('id');
+			t.string('known_for_department');
+			t.string('name');
+			t.string('original_name');
+			t.float('popularity');
+			t.string('profile_path');
+			t.id('credit_id');
+			t.string('department');
+			t.string('job');
+		},
+	}),
+	MoviesCastCrewRes: objectType({
+		name: 'MoviesCastCrewRes',
+		definition(t) {
+			t.id('id');
+			t.list.field('cast', {
+				type: 'MoviesCastModel',
+			});
+			t.list.field('crew', {
+				type: 'MoviesCrewModel',
+			});
+		},
+	}),
+};
 
-export const ShowsCastModel = objectType({
-	name: 'ShowsCastModel',
-	definition(t) {
-		t.boolean('adult');
-		t.int('gender');
-		t.id('id');
-		t.string('known_for_department');
-		t.string('name');
-		t.string('original_name');
-		t.float('popularity');
-		t.string('profile_path');
-		t.string('character');
-		t.id('credit_id');
-		t.int('order');
-	},
-});
-
-export const ShowsCrewModel = objectType({
-	name: 'ShowsCrewModel',
-	definition(t) {
-		t.boolean('adult');
-		t.int('gender');
-		t.id('id');
-		t.string('known_for_department');
-		t.string('name');
-		t.string('original_name');
-		t.float('popularity');
-		t.string('profile_path');
-		t.id('credit_id');
-		t.string('department');
-		t.string('job');
-	},
-});
-
-export const ShowsCastCrewRes = objectType({
-	name: 'ShowsCastCrewRes',
-	definition(t) {
-		t.id('id');
-		t.list.field('cast', {
-			type: 'ShowsCastModel',
-		});
-		t.list.field('crew', {
-			type: 'ShowsCrewModel',
-		});
-	},
-});
-
-export const EpisodeDetailsRes = objectType({
-	name: 'EpisodeDetailsRes',
-	definition(t) {
-		t.string('air_date');
-		t.list.field('crew', {
-			type: 'ShowsCrewModel',
-		});
-		t.int('episode_number');
-		t.list.field('guest_stars', {
-			type: 'ShowsCastModel',
-		});
-		t.string('name');
-		t.string('overview');
-		t.id('id');
-		t.string('production_code');
-		t.int('runtime');
-		t.int('season_number');
-		t.string('still_path');
-		t.float('vote_average');
-		t.int('vote_count');
-	},
-});
+export const ShowObj = {
+	ShowResult: objectType({
+		name: 'ShowResult',
+		definition(t) {
+			t.string('backdrop_path');
+			t.string('first_air_date');
+			t.nonNull.list.id('genre_ids');
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.list.string('origin_country');
+			t.nonNull.string('original_language');
+			t.nonNull.string('original_name');
+			t.nonNull.string('overview');
+			t.nonNull.float('popularity');
+			t.string('poster_path');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	ShowsRes: objectType({
+		name: 'ShowsRes',
+		definition(t) {
+			t.nonNull.int('page');
+			t.nonNull.int('total_pages');
+			t.nonNull.int('total_results');
+			t.nonNull.list.field('results', {
+				type: nonNull('ShowResult'),
+			});
+		},
+	}),
+	ShowDetailsCreatedBy: objectType({
+		name: 'ShowDetailsCreatedBy',
+		definition(t) {
+			t.id('id');
+			t.id('credit_id');
+			t.string('name');
+			t.int('gender');
+			t.string('profile_path');
+		},
+	}),
+	ShowDetailsGenre: objectType({
+		name: 'ShowDetailsGenre',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+		},
+	}),
+	ShowDetailsLastEpToAir: objectType({
+		name: 'ShowDetailsLastEpToAir',
+		definition(t) {
+			t.string('air_date');
+			t.nonNull.int('episode_number');
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.string('overview');
+			t.nonNull.string('production_code');
+			t.int('runtime');
+			t.nonNull.int('season_number');
+			t.nonNull.id('show_id');
+			t.string('still_path');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	ShowDetailsNetwork: objectType({
+		name: 'ShowDetailsNetwork',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.string('logo_path');
+			t.nonNull.string('origin_country');
+		},
+	}),
+	ShowDetailsProdCompany: objectType({
+		name: 'ShowDetailsProdCompany',
+		definition(t) {
+			t.nonNull.id('id');
+			t.string('logo_path');
+			t.nonNull.string('name');
+			t.nonNull.string('origin_country');
+		},
+	}),
+	ShowDetailsCountry: objectType({
+		name: 'ShowDetailsCountry',
+		definition(t) {
+			t.nonNull.string('iso_3166_1');
+			t.nonNull.string('name');
+		},
+	}),
+	ShowDetailsSeason: objectType({
+		name: 'ShowDetailsSeason',
+		definition(t) {
+			t.string('air_date');
+			t.nonNull.int('episode_count');
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.string('overview');
+			t.string('poster_path');
+			t.nonNull.int('season_number');
+		},
+	}),
+	ShowDetailsSpokenLang: objectType({
+		name: 'ShowDetailsSpokenLang',
+		definition(t) {
+			t.nonNull.string('english_name');
+			t.nonNull.string('iso_639_1');
+			t.nonNull.string('name');
+		},
+	}),
+	ShowDetailsNextEpToAir: objectType({
+		name: 'ShowDetailsNextEpToAir',
+		definition(t) {
+			t.string('air_date');
+			t.nonNull.int('episode_number');
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.string('overview');
+			t.nonNull.string('production_code');
+			t.int('runtime');
+			t.nonNull.int('season_number');
+			t.nonNull.id('show_id');
+			t.string('still_path');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	ShowDetailsRes: objectType({
+		name: 'ShowDetailsRes',
+		definition(t) {
+			t.nonNull.boolean('adult');
+			t.string('backdrop_path');
+			t.nonNull.list.field('created_by', {
+				type: 'ShowDetailsCreatedBy',
+			});
+			t.nonNull.list.int('episode_run_time');
+			t.string('first_air_date');
+			t.nonNull.list.field('genres', {
+				type: nonNull('ShowDetailsGenre'),
+			});
+			t.nonNull.string('homepage');
+			t.nonNull.id('id');
+			t.nonNull.boolean('in_production');
+			t.nonNull.list.string('languages');
+			t.string('last_air_date');
+			t.field('last_episode_to_air', {
+				type: 'ShowDetailsLastEpToAir',
+			});
+			t.nonNull.string('name');
+			t.field('next_episode_to_air', {
+				type: 'ShowDetailsNextEpToAir',
+			});
+			t.nonNull.list.field('networks', {
+				type: nonNull('ShowDetailsNetwork'),
+			});
+			t.nonNull.int('number_of_episodes');
+			t.nonNull.int('number_of_seasons');
+			t.nonNull.list.string('origin_country');
+			t.nonNull.string('original_language');
+			t.nonNull.string('original_name');
+			t.nonNull.string('overview');
+			t.nonNull.float('popularity');
+			t.string('poster_path');
+			t.nonNull.list.field('production_companies', {
+				type: 'ShowDetailsProdCompany',
+			});
+			t.nonNull.list.field('production_countries', {
+				type: 'ShowDetailsCountry',
+			});
+			t.nonNull.list.field('seasons', {
+				type: 'ShowDetailsSeason',
+			});
+			t.nonNull.list.field('spoken_languages', {
+				type: 'ShowDetailsSpokenLang',
+			});
+			t.nonNull.string('status');
+			t.nonNull.string('tagline');
+			t.nonNull.string('type');
+			t.nonNull.float('vote_average');
+			t.nonNull.int('vote_count');
+		},
+	}),
+	ShowReviewAuthorDetails: objectType({
+		name: 'ShowReviewAuthorDetails',
+		definition(t) {
+			t.nonNull.string('name');
+			t.nonNull.string('username');
+			t.string('avatar_path');
+			t.float('rating');
+		},
+	}),
+	ShowReviewResult: objectType({
+		name: 'ShowReviewResult',
+		definition(t) {
+			t.nonNull.string('author');
+			t.nonNull.field('author_details', {
+				type: 'ShowReviewAuthorDetails',
+			});
+			t.nonNull.string('content');
+			t.nonNull.string('created_at');
+			t.nonNull.id('id');
+			t.nonNull.string('updated_at');
+			t.nonNull.string('url');
+		},
+	}),
+	ShowReviewRes: objectType({
+		name: 'ShowReviewRes',
+		definition(t) {
+			t.nonNull.id('id'),
+				t.nonNull.int('page'),
+				t.nonNull.int('total_pages'),
+				t.nonNull.int('total_results');
+			t.nonNull.list.field('results', {
+				type: 'ShowReviewResult',
+			});
+		},
+	}),
+	ShowsCastModel: objectType({
+		name: 'ShowsCastModel',
+		definition(t) {
+			t.boolean('adult');
+			t.int('gender');
+			t.id('id');
+			t.string('known_for_department');
+			t.string('name');
+			t.string('original_name');
+			t.float('popularity');
+			t.string('profile_path');
+			t.string('character');
+			t.id('credit_id');
+			t.int('order');
+		},
+	}),
+	ShowsCrewModel: objectType({
+		name: 'ShowsCrewModel',
+		definition(t) {
+			t.boolean('adult');
+			t.int('gender');
+			t.id('id');
+			t.string('known_for_department');
+			t.string('name');
+			t.string('original_name');
+			t.float('popularity');
+			t.string('profile_path');
+			t.id('credit_id');
+			t.string('department');
+			t.string('job');
+		},
+	}),
+	ShowsCastCrewRes: objectType({
+		name: 'ShowsCastCrewRes',
+		definition(t) {
+			t.id('id');
+			t.list.field('cast', {
+				type: 'ShowsCastModel',
+			});
+			t.list.field('crew', {
+				type: 'ShowsCrewModel',
+			});
+		},
+	}),
+	EpisodeDetailsRes: objectType({
+		name: 'EpisodeDetailsRes',
+		definition(t) {
+			t.string('air_date');
+			t.list.field('crew', {
+				type: 'ShowsCrewModel',
+			});
+			t.int('episode_number');
+			t.list.field('guest_stars', {
+				type: 'ShowsCastModel',
+			});
+			t.string('name');
+			t.string('overview');
+			t.id('id');
+			t.string('production_code');
+			t.int('runtime');
+			t.int('season_number');
+			t.string('still_path');
+			t.float('vote_average');
+			t.int('vote_count');
+		},
+	}),
+};
