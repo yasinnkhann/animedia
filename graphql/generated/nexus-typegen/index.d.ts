@@ -758,6 +758,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
+    changePassword: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
@@ -1312,6 +1313,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addMovie: 'UserMovie'
     addShow: 'UserShow'
+    changePassword: 'RedisRes'
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     registerUser: 'RegisteredUserRes'
@@ -1708,6 +1710,10 @@ export interface NexusGenArgTypes {
       showId: string; // ID!
       showName: string; // String!
       watchStatus: NexusGenEnums['WatchStatusTypes']; // WatchStatusTypes!
+    }
+    changePassword: { // args
+      newPassword: string; // String!
+      userId: string; // ID!
     }
     deleteMovie: { // args
       movieId: string; // ID!

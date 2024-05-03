@@ -88,3 +88,12 @@ export const forgotPasswordValidate = (values: { email: string }) => {
 	}
 	return errors;
 };
+
+export const newPasswordValidate = (values: { newPassword: string }) => {
+	const errors: Partial<typeof values> = {};
+	const newPasswordErrors = validatePassword(values.newPassword);
+	if (!_.isEmpty(newPasswordErrors)) {
+		errors.newPassword = newPasswordErrors[0];
+	}
+	return errors;
+};

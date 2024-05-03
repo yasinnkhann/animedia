@@ -5,13 +5,15 @@ import { useFormik } from 'formik';
 import { forgotPasswordValidate } from 'lib/nextAuth/account-validate';
 import * as Mutations from '../../graphql/mutations';
 import { Oval } from 'react-loading-icons';
-import _, { divide } from 'lodash';
+import { RedisRes } from 'graphql/generated/code-gen/graphql';
+import _ from 'lodash';
 
 const ForgotPassword = () => {
-	const [sentForgotPasswordEmail, setSentForgotPasswordEmail] =
-		useState<boolean>(false);
+	const [forgotPasswordEmailErrs, setForgotPasswordEmailErrs] = useState<
+		RedisRes['errors']
+	>([]);
 
-	const [sendForgotPasswordEmail, { loading }] = useMutation(
+	const [sendForgotPasswordEmail, { loading, data }] = useMutation(
 		Mutations.SEND_FORGOT_PASSWORD_EMAIL
 	);
 
@@ -34,11 +36,13 @@ const ForgotPassword = () => {
 
 			if (
 				sendForgotPasswordEmailRes.data?.sendForgotPasswordEmail &&
-				_.isEmpty(
+				!_.isEmpty(
 					sendForgotPasswordEmailRes.data.sendForgotPasswordEmail.errors
 				)
 			) {
-				setSentForgotPasswordEmail(true);
+				setForgotPasswordEmailErrs(
+					sendForgotPasswordEmailRes.data.sendForgotPasswordEmail.errors
+				);
 			}
 		} catch (err) {
 			console.error(err);
@@ -57,9 +61,10 @@ const ForgotPassword = () => {
 							<h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
 								Forgot your password?
 							</h2>
+
 							<p className='mt-8 text-center text-sm text-gray-600'>
-								Enter your email address and well send you a link to reset your
-								password.
+								Enter your email address and we&apos;ll send you a link to reset
+								your password.
 							</p>
 						</div>
 						<form className='space-y-6' onSubmit={formik.handleSubmit}>
@@ -78,15 +83,7 @@ const ForgotPassword = () => {
 									/>
 								</div>
 							</div>
-							{loading ? (
-								<div className='flex justify-center'>
-									<Oval stroke='#00b3ff' />
-								</div>
-							) : (
-								<p className='text-center text-green-600'>
-									Reset link has been sent
-								</p>
-							)}
+
 							<div>
 								<button
 									type='submit'
@@ -95,15 +92,39 @@ const ForgotPassword = () => {
 									Send reset link
 								</button>
 							</div>
-							{sentForgotPasswordEmail && (
-								<div>
-									<p className='text-center'>
-										If the email address exists on our system, a reset link has
-										been sent there. Please check to click on the link and enter
-										your new password.
-									</p>
+
+							{loading && !data && (
+								<div className='flex justify-center'>
+									<Oval stroke='#00b3ff' />
 								</div>
 							)}
+
+							{!loading &&
+								data &&
+								_.isEmpty(data?.sendForgotPasswordEmail?.errors) && (
+									<p className='text-center text-green-600'>
+										Reset link has been sent
+									</p>
+								)}
+
+							{!loading &&
+								!_.isEmpty(data?.sendForgotPasswordEmail?.errors) &&
+								data?.sendForgotPasswordEmail?.errors.map((err, idx) => (
+									<div key={idx} className='flex flex-col items-center'>
+										<p className='text-red-500'>{err.message}</p>
+									</div>
+								))}
+
+							{!loading &&
+								data &&
+								_.isEmpty(data?.sendForgotPasswordEmail?.errors) && (
+									<div>
+										<p className='text-center'>
+											Please check your email to click the link and enter your
+											new password.
+										</p>
+									</div>
+								)}
 						</form>
 					</div>
 				</section>

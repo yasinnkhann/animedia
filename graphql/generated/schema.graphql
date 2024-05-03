@@ -226,6 +226,7 @@ type MoviesRes {
 type Mutation {
   addMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
   addShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
+  changePassword(newPassword: String!, userId: ID!): RedisRes
   deleteMovie(movieId: ID!): UserMovie
   deleteShow(showId: ID!): UserShow
   registerUser(email: String!, name: String!, password: String!): RegisteredUserRes

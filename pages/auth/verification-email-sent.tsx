@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import Head from 'next/head';
 import { Oval } from 'react-loading-icons';
 import { GetServerSideProps } from 'next';
@@ -16,7 +15,8 @@ interface Props {
 }
 
 const VerificationEmailSent = ({ verifiedData }: Props) => {
-	const [errors, setErrors] = useState<RedisRes['errors']>(verifiedData.errors);
+	const [verificationEmailSentErrors, setVerificationEmailSentErrors] =
+		useState<RedisRes['errors']>([]);
 
 	const [sendVerificationEmail, { loading }] = useMutation(
 		Mutations.SEND_VERIFICATION_EMAIL
@@ -29,7 +29,7 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 					userId: verifiedData.userId!,
 				},
 			});
-			setErrors(
+			setVerificationEmailSentErrors(
 				sendVerificationEmailRes.data?.sendVerificationEmail?.errors ?? [
 					{ message: 'Error ocurred while resending link.' },
 				]
@@ -63,8 +63,8 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 								<Oval className='mt-4' stroke='#00b3ff' />
 							</div>
 						)}
-						{!_.isEmpty(errors) &&
-							errors.map((err, idx) => (
+						{!_.isEmpty(verificationEmailSentErrors) &&
+							verificationEmailSentErrors.map((err, idx) => (
 								<div key={idx} className='flex flex-col'>
 									<p className='mt-8 text-red-500'>{err.message}</p>
 								</div>

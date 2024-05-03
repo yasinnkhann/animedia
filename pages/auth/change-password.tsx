@@ -1,16 +1,51 @@
+import Head from 'next/head';
 import request from 'graphql-request';
 import { GetServerSideProps } from 'next';
 import { SERVER_BASE_URL } from 'utils/constants';
 import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
 import _ from 'lodash';
-import Head from 'next/head';
 import { RedisRes } from 'graphql/generated/code-gen/graphql';
+import { Oval } from 'react-loading-icons';
+import { useFormik } from 'formik';
+import { newPasswordValidate } from 'lib/nextAuth/account-validate';
+import { useMutation } from '@apollo/client';
+import { useState } from 'react';
 
 interface Props {
 	verifiedData: RedisRes;
 }
 
-const NewPassword = (_props: Props) => {
+const ChangePassword = ({ verifiedData }: Props) => {
+	const [changePasswordErrors, setChangePasswordErrors] = useState<
+		RedisRes['errors']
+	>([]);
+
+	const formik = useFormik({
+		initialValues: {
+			newPassword: '',
+		},
+		validate: newPasswordValidate,
+		onSubmit,
+	});
+
+	const [changePassword, { loading }] = useMutation(Mutations.CHANGE_PASSWORD);
+
+	async function onSubmit() {
+		const { newPassword } = formik.values;
+
+		const changePasswordRes = await changePassword({
+			variables: { userId: verifiedData.userId!, newPassword },
+		});
+
+		if (
+			changePasswordRes.data?.changePassword &&
+			!_.isEmpty(changePasswordRes.data.changePassword.errors)
+		) {
+			setChangePasswordErrors(changePasswordRes.data.changePassword.errors);
+		}
+	}
+
 	return (
 		<>
 			<Head>
@@ -22,11 +57,10 @@ const NewPassword = (_props: Props) => {
 					<div className='w-full max-w-lg space-y-8'>
 						<div>
 							<h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
-								Forgot your password?
+								New Password
 							</h2>
 							<p className='mt-8 text-center text-sm text-gray-600'>
-								Enter your email address and well send you a link to reset your
-								password.
+								Please enter your new password.
 							</p>
 						</div>
 						<form className='space-y-6'>
@@ -36,28 +70,36 @@ const NewPassword = (_props: Props) => {
 										Email address
 									</label>
 									<input
-										// {...formik.getFieldProps('email')}
-										type='email'
-										name='email'
+										{...formik.getFieldProps('newPassword')}
+										type='password'
+										name='password'
 										required
-										placeholder='Email address'
+										placeholder='Password'
 										className='relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
 									/>
 								</div>
 							</div>
-							{/* {loading && (
-								<div className='flex justify-center'>
-									<Oval stroke='#00b3ff' />
-								</div>
-							)} */}
 							<div>
 								<button
 									type='submit'
 									className='group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
 								>
-									Send reset link
+									Change Password
 								</button>
 							</div>
+
+							{loading && (
+								<div className='flex justify-center'>
+									<Oval stroke='#00b3ff' />
+								</div>
+							)}
+
+							{!_.isEmpty(changePasswordErrors) &&
+								changePasswordErrors.map((err, idx) => (
+									<div key={idx} className='flex flex-col'>
+										<p className='mt-8 text-red-500'>{err.message}</p>
+									</div>
+								))}
 						</form>
 					</div>
 				</section>
@@ -66,7 +108,7 @@ const NewPassword = (_props: Props) => {
 	);
 };
 
-export default NewPassword;
+export default ChangePassword;
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { uid, token } = ctx.query;
@@ -100,11 +142,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		};
 	} catch (err) {
 		console.error(err);
+		// return {
+		// 	redirect: {
+		// 		destination: '/',
+		// 		permanent: false,
+		// 	},
+		// };
 		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
+			props: {},
 		};
 	}
 };

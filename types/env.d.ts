@@ -1,8 +1,8 @@
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
-			SUPABASE_DB_PASSWORD: string;
 			SUPABASE_REFERENCE_ID: string;
+			SUPABASE_DB_PASSWORD: string;
 			DATABASE_URL: string;
 			DIRECT_URL: string;
 			NEXTAUTH_URL: string;
@@ -17,11 +17,11 @@ declare global {
 			DISCORD_CLIENT_SECRET: string;
 			TURBO_SMTP_HOST: string;
 			TURBO_SMTP_PORT: string;
-			EMAIL_FROM: string;
 			TURBO_SMTP_USERNAME: string;
+			TURBO_SMTP_PASSWORD: string;
+			EMAIL_FROM: string;
 			TURBO_SMTP_API_KEY: string;
 			TURBO_SMTP_SECRET: string;
-			TURBO_SMTP_PASSWORD: string;
 			REDIS_HOST: string;
 			REDIS_PORT: string;
 			REDIS_PASSWORD: string;

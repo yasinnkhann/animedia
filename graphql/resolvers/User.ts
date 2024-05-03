@@ -1,19 +1,19 @@
 import { hash } from 'argon2';
+import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
+import { WatchStatusTypes } from 'graphql/models/enums';
+import Mail from 'nodemailer/lib/mailer';
+import { sendEmail } from 'graphql/utils';
 import {
+	__prod__,
 	CLIENT_BASE_URL,
 	VERIFICATION_EMAIL_PREFIX,
 	REDIS_MAP,
 	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
-	__prod__,
 	FORGOT_PASSWORD_EMAIL_COUNT_PREFIX,
 	FORGOT_PASSWORD_EMAIL_COUNT_LIMIT,
 	FORGOT_PASSWORD_EMAIL_PREFIX,
 } from 'utils/constants';
-import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
-import { WatchStatusTypes } from 'graphql/models/enums';
-import Mail from 'nodemailer/lib/mailer';
-import { sendEmail } from 'graphql/utils';
 
 export const UserQueries = extendType({
 	type: 'Query',
@@ -579,7 +579,7 @@ export const UserMutations = extendType({
 						to: user.email,
 						subject: 'Forgot Password Link',
 						text: 'Click the link below to create a new password.',
-						html: `<a href="${CLIENT_BASE_URL}/auth/new-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+						html: `<a href="${CLIENT_BASE_URL}/auth/change-password?uid=${user.id}&token=${token}">Verify Email</a>`,
 					};
 
 					await sendEmail(payload);
@@ -593,6 +593,43 @@ export const UserMutations = extendType({
 					console.error(err);
 					return {
 						errors: [{ message: 'Error while sending forgot password email' }],
+						token: null,
+						userId: null,
+					};
+				}
+			},
+		});
+
+		t.field('changePassword', {
+			type: 'RedisRes',
+			args: {
+				userId: nonNull(idArg()),
+				newPassword: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { userId, newPassword }, ctx) => {
+				try {
+					const hashedNewPassword = await hash(newPassword);
+
+					await ctx.prisma.user.update({
+						data: { password: hashedNewPassword },
+						where: { id: userId },
+					});
+
+					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`);
+
+					await ctx.redis.del(
+						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${userId}`
+					);
+
+					return {
+						errors: [],
+						token: null,
+						userId,
+					};
+				} catch (err) {
+					console.error(err);
+					return {
+						errors: [{ message: 'Error while changing new password.' }],
 						token: null,
 						userId: null,
 					};

@@ -4,14 +4,9 @@ import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { request } from 'graphql-request';
 import { SERVER_BASE_URL } from '../../utils/constants';
-import { RedisRes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
-interface Props {
-	verifiedData: RedisRes;
-}
-
-const VerificationEmail = (_props: Props) => {
+const VerificationEmail = () => {
 	return (
 		<>
 			<Head>
@@ -75,9 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		}
 
 		return {
-			props: {
-				verifiedData: verifyTokenData,
-			},
+			props: {},
 		};
 	} catch (err) {
 		console.error(err);
