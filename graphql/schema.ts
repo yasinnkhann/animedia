@@ -2,7 +2,7 @@ import { makeSchema, asNexusMethod, connectionPlugin } from 'nexus';
 import { join } from 'path';
 import { applyMiddleware } from 'graphql-middleware';
 import { permissions } from './permissions';
-import * as allTypes from './resolvers';
+import * as types from './types';
 import {
 	DateTimeResolver,
 	JSONObjectResolver,
@@ -14,7 +14,7 @@ export const jsonScalar = asNexusMethod(JSONObjectResolver, 'json');
 export const bigIntScalar = asNexusMethod(GraphQLBigInt, 'bigint');
 
 export const baseSchema = makeSchema({
-	types: [allTypes, dateScalar, jsonScalar, bigIntScalar],
+	types: [types, dateScalar, jsonScalar, bigIntScalar],
 	plugins: [connectionPlugin()],
 	nonNullDefaults: {
 		input: false,

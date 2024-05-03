@@ -10,7 +10,6 @@ import { Oval } from 'react-loading-icons';
 import { useFormik } from 'formik';
 import { newPasswordValidate } from 'lib/nextAuth/account-validate';
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
 
 interface Props {
 	verifiedData: RedisRes;
@@ -132,14 +131,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 		};
 	} catch (err) {
 		console.error(err);
-		// return {
-		// 	redirect: {
-		// 		destination: '/',
-		// 		permanent: false,
-		// 	},
-		// };
 		return {
-			props: {},
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
 		};
 	}
 };
