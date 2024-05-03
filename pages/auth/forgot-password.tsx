@@ -1,18 +1,12 @@
 import Head from 'next/head';
-import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useFormik } from 'formik';
 import { forgotPasswordValidate } from 'lib/nextAuth/account-validate';
 import * as Mutations from '../../graphql/mutations';
 import { Oval } from 'react-loading-icons';
-import { RedisRes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
 const ForgotPassword = () => {
-	const [forgotPasswordEmailErrs, setForgotPasswordEmailErrs] = useState<
-		RedisRes['errors']
-	>([]);
-
 	const [sendForgotPasswordEmail, { loading, data }] = useMutation(
 		Mutations.SEND_FORGOT_PASSWORD_EMAIL
 	);
@@ -28,26 +22,16 @@ const ForgotPassword = () => {
 	async function onSubmit() {
 		const { email } = formik.values;
 		try {
-			const sendForgotPasswordEmailRes = await sendForgotPasswordEmail({
+			await sendForgotPasswordEmail({
 				variables: {
 					email,
 				},
 			});
-
-			if (
-				sendForgotPasswordEmailRes.data?.sendForgotPasswordEmail &&
-				!_.isEmpty(
-					sendForgotPasswordEmailRes.data.sendForgotPasswordEmail.errors
-				)
-			) {
-				setForgotPasswordEmailErrs(
-					sendForgotPasswordEmailRes.data.sendForgotPasswordEmail.errors
-				);
-			}
 		} catch (err) {
 			console.error(err);
 		}
 	}
+	console.log(data);
 	return (
 		<>
 			<Head>
@@ -101,15 +85,16 @@ const ForgotPassword = () => {
 
 							{!loading &&
 								data &&
-								_.isEmpty(data?.sendForgotPasswordEmail?.errors) && (
+								_.isEmpty(data.sendForgotPasswordEmail?.errors) && (
 									<p className='text-center text-green-600'>
 										Reset link has been sent
 									</p>
 								)}
 
 							{!loading &&
-								!_.isEmpty(data?.sendForgotPasswordEmail?.errors) &&
-								data?.sendForgotPasswordEmail?.errors.map((err, idx) => (
+								data &&
+								!_.isEmpty(data.sendForgotPasswordEmail?.errors) &&
+								data.sendForgotPasswordEmail?.errors.map((err, idx) => (
 									<div key={idx} className='flex flex-col items-center'>
 										<p className='text-red-500'>{err.message}</p>
 									</div>
@@ -117,7 +102,7 @@ const ForgotPassword = () => {
 
 							{!loading &&
 								data &&
-								_.isEmpty(data?.sendForgotPasswordEmail?.errors) && (
+								_.isEmpty(data.sendForgotPasswordEmail?.errors) && (
 									<div>
 										<p className='text-center'>
 											Please check your email to click the link and enter your
