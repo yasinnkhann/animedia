@@ -38,11 +38,11 @@ const ForgotPassword = () => {
 				<title>Forgot your Password</title>
 			</Head>
 
-			<main className='mx-auto mt-[calc(var(--header-height-mobile)+1rem)] flex w-1/2 flex-col gap-10'>
-				<section className='flex items-center justify-center bg-gray-100 px-4 py-12 sm:px-6 lg:px-8'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile))] flex w-full items-center justify-center'>
+				<section className='mt-16 w-full max-w-md rounded-lg bg-white p-8 shadow-md'>
 					<div className='w-full max-w-lg space-y-8'>
 						<div>
-							<h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
+							<h2 className='text-center text-3xl font-extrabold text-gray-900'>
 								Forgot your password?
 							</h2>
 

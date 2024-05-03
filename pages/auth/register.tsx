@@ -83,8 +83,8 @@ export default function Register() {
 				<title>Register</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)] flex items-center justify-center bg-gray-100'>
-				<div className='relative w-full max-w-md rounded-md p-8'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile))] flex w-full items-center justify-center'>
+				<section className='mt-16 w-full max-w-md rounded-lg bg-white p-8 shadow-md'>
 					<div className='mb-6 flex items-center justify-center'>
 						<h1 className='text-4xl font-bold text-gray-800'>Register</h1>
 					</div>
@@ -238,7 +238,7 @@ export default function Register() {
 							</a>
 						</Link>
 					</div>
-				</div>
+				</section>
 			</main>
 		</>
 	);

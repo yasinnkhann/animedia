@@ -74,8 +74,8 @@ export default function Login({
 				<title>Login</title>
 			</Head>
 
-			<main className='mt-[calc(var(--header-height-mobile)+1rem)] flex items-center justify-center bg-gray-100'>
-				<div className='w-full max-w-md rounded-md p-8'>
+			<main className='mx-auto mt-[calc(var(--header-height-mobile))] flex w-full items-center justify-center'>
+				<section className='mt-8 w-full max-w-md rounded-lg bg-white p-8 shadow-md'>
 					<div className='mb-6 flex items-center justify-center'>
 						<h1 className='text-4xl font-bold text-gray-800'>Animedia</h1>
 					</div>
@@ -173,7 +173,7 @@ export default function Login({
 							</a>
 						</Link>
 					</div>
-				</div>
+				</section>
 			</main>
 		</>
 	);
