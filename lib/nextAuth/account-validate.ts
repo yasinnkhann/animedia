@@ -7,8 +7,8 @@ function validatePassword(password: string) {
 
 	if (!password) {
 		errors.push('Password Required!');
-	} else if (password.trim().length < 8 || password.trim().length > 20) {
-		errors.push('Password must be between 8 and 20 characters long!');
+	} else if (password.trim().length < 8) {
+		errors.push('Password must be at least 8 characters long!');
 	} else if (password.includes(' ')) {
 		errors.push('Password cannot contain spaces!');
 	}

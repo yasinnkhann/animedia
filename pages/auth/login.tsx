@@ -13,8 +13,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
-import { useQuery } from '@apollo/client';
-import { ErrorRes } from 'graphql/generated/code-gen/graphql';
+import { useLazyQuery } from '@apollo/client';
 import _ from 'lodash';
 
 export default function Login({
@@ -22,7 +21,6 @@ export default function Login({
 	csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [showPW, setShowPW] = useState(false);
-	const [acctVerifiedErrs, setAcctVerifiedErrs] = useState<ErrorRes[]>([]);
 
 	const router = useRouter();
 
@@ -35,23 +33,22 @@ export default function Login({
 		onSubmit,
 	});
 
-	const { data: fetchAccountVerifiedData } = useQuery(
-		Queries.ACCOUNT_VERIFIED,
-		{
-			variables: {
-				email: formik.values.email,
-			},
-		}
+	const [fetchAccountVerifiedData, { data, loading, error }] = useLazyQuery(
+		Queries.ACCOUNT_VERIFIED
 	);
 
 	async function onSubmit() {
 		const { email, password } = formik.values;
 
+		await fetchAccountVerifiedData({
+			variables: { email: formik.values.email },
+		});
+
 		if (
-			fetchAccountVerifiedData?.accountVerified &&
-			!_.isEmpty(fetchAccountVerifiedData.accountVerified.errors)
+			error ||
+			!data ||
+			(data.accountVerified && data.accountVerified.errors.length > 0)
 		) {
-			setAcctVerifiedErrs(fetchAccountVerifiedData.accountVerified.errors);
 			return;
 		}
 
@@ -63,7 +60,6 @@ export default function Login({
 		});
 
 		if (status?.ok && status.url) {
-			setAcctVerifiedErrs([]);
 			router.push(status.url);
 		}
 	}
@@ -151,17 +147,19 @@ export default function Login({
 						</button>
 					</div>
 
-					{acctVerifiedErrs.length > 0 && (
-						<div className='mt-4 flex flex-col'>
-							{acctVerifiedErrs.map((err, idx) => (
-								<span key={idx} className='text-center text-red-500'>
-									{err.message}
-								</span>
-							))}
-						</div>
-					)}
+					{data &&
+						data.accountVerified &&
+						data.accountVerified.errors.length > 0 && (
+							<div className='mt-4 flex flex-col'>
+								{data.accountVerified.errors.map((err, idx) => (
+									<span key={idx} className='text-center text-red-500'>
+										{err.message}
+									</span>
+								))}
+							</div>
+						)}
 
-					<div className='mt-8 flex flex-col items-center'>
+					<div className='mt-4 flex flex-col items-center'>
 						<Link href='/auth/register'>
 							<a className='mb-2 text-center text-gray-600 hover:text-blue-500'>
 								Don&apos;t have an account?
