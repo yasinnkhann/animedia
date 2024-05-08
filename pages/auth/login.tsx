@@ -8,40 +8,43 @@ import DiscordIcon from '../../assets/discord-icon.svg';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { getProviders, signIn } from 'next-auth/react';
-import { useFormik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
 import _ from 'lodash';
+import { toast } from 'react-hot-toast';
+import { ILogin } from '@ts/interfaces';
 
 export default function Login({
-	providers,
-	csrfToken,
+	_providers,
+	_csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const [showPW, setShowPW] = useState(false);
 
 	const router = useRouter();
 
-	const formik = useFormik({
-		initialValues: {
-			email: '',
-			password: '',
-		},
-		validate: loginValidate,
-		onSubmit,
-	});
-
-	const [fetchAccountVerifiedData, { data, loading, error }] = useLazyQuery(
+	const [fetchAccountVerifiedData, { data, error }] = useLazyQuery(
 		Queries.ACCOUNT_VERIFIED
 	);
 
-	async function onSubmit() {
-		const { email, password } = formik.values;
+	const notifyError = (error: string) => {
+		toast.error(error, {
+			position: 'bottom-center',
+			duration: 3000,
+		});
+	};
+
+	const handleSubmit = async (
+		values: ILogin,
+		_formikHelpers: FormikHelpers<ILogin>
+	) => {
+		const { email, password } = values;
 
 		await fetchAccountVerifiedData({
-			variables: { email: formik.values.email },
+			variables: { email },
 		});
 
 		if (
@@ -49,20 +52,21 @@ export default function Login({
 			!data ||
 			(data.accountVerified && data.accountVerified.errors.length > 0)
 		) {
+			notifyError('Failed to verify account.');
 			return;
 		}
 
 		const status = await signIn('credentials', {
 			redirect: false,
-			email: email,
-			password: password,
+			email,
+			password,
 			callbackUrl: '/',
 		});
 
 		if (status?.ok && status.url) {
 			router.push(status.url);
 		}
-	}
+	};
 
 	return (
 		<>
@@ -76,47 +80,57 @@ export default function Login({
 						<h1 className='text-4xl font-bold text-gray-800'>Animedia</h1>
 					</div>
 
-					<form className='flex flex-col gap-4' onSubmit={formik.handleSubmit}>
-						<div className='relative'>
-							<input
-								{...formik.getFieldProps('email')}
-								type='email'
-								name='email'
-								placeholder='Email'
-								className='w-full rounded-lg border py-3 pl-10 pr-4 focus:border-blue-500 focus:outline-none'
-							/>
-						</div>
+					<Formik
+						initialValues={{
+							email: '',
+							password: '',
+						}}
+						validate={loginValidate}
+						onSubmit={(values, formikHelpers) => {
+							handleSubmit(values, formikHelpers);
+						}}
+					>
+						{formikProps => (
+							<Form className='flex flex-col gap-4'>
+								<div className='relative'>
+									<Field
+										type='email'
+										name='email'
+										placeholder='Email'
+										className='w-full rounded-lg border py-3 pl-10 pr-4 focus:border-blue-500 focus:outline-none'
+									/>
+								</div>
+								<div className='relative'>
+									<Field
+										type={showPW ? 'text' : 'password'}
+										name='password'
+										placeholder='Password'
+										className='w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none'
+									/>
+									<div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
+										<button
+											type='button'
+											onClick={() => setShowPW(!showPW)}
+											className='text-gray-500 hover:text-blue-500 focus:outline-none'
+										>
+											{showPW ? (
+												<BsFillEyeSlashFill size={24} />
+											) : (
+												<BsFillEyeFill size={24} />
+											)}
+										</button>
+									</div>
+								</div>
 
-						<div className='relative'>
-							<input
-								{...formik.getFieldProps('password')}
-								type={showPW ? 'text' : 'password'}
-								name='password'
-								placeholder='Password'
-								className='w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none'
-							/>
-							<div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
 								<button
-									type='button'
-									onClick={() => setShowPW(!showPW)}
-									className='text-gray-500 hover:text-blue-500 focus:outline-none'
+									className='rounded-lg bg-blue-500 py-3 font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none'
+									type='submit'
 								>
-									{showPW ? (
-										<BsFillEyeSlashFill size={24} />
-									) : (
-										<BsFillEyeFill size={24} />
-									)}
+									Login
 								</button>
-							</div>
-						</div>
-
-						<button
-							className='rounded-lg bg-blue-500 py-3 font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none'
-							type='submit'
-						>
-							Login
-						</button>
-					</form>
+							</Form>
+						)}
+					</Formik>
 
 					<div className='mt-4 flex flex-col gap-4'>
 						<button
@@ -146,18 +160,6 @@ export default function Login({
 							<span>Sign in with Discord</span>
 						</button>
 					</div>
-
-					{data &&
-						data.accountVerified &&
-						data.accountVerified.errors.length > 0 && (
-							<div className='mt-4 flex flex-col'>
-								{data.accountVerified.errors.map((err, idx) => (
-									<span key={idx} className='text-center text-red-500'>
-										{err.message}
-									</span>
-								))}
-							</div>
-						)}
 
 					<div className='mt-4 flex flex-col items-center'>
 						<Link href='/auth/register'>
