@@ -17,12 +17,12 @@
 				"varsIgnorePattern": "^_",
 				"caughtErrorsIgnorePattern": "^_"
 			}
-		],
-		"@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-		"no-constant-binary-expression": "off",
-		"no-useless-catch": "off",
-		"@typescript-eslint/no-explicit-any": "off",
-		"no-constant-condition": "off",
-		"no-var": "off"
+		]
+		// "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
+		// "no-constant-binary-expression": "off",
+		// "no-useless-catch": "off",
+		// "@typescript-eslint/no-explicit-any": "off",
+		// "no-constant-condition": "off",
+		// "no-var": "off"
 	}
 }
