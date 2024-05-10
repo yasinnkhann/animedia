@@ -387,7 +387,7 @@ export const UserMutations = extendType({
 				} catch (err) {
 					console.error(err);
 					return {
-						errors: [{ message: 'Error while trying to register user' }],
+						errors: [{ message: getErrorMsg(err) }],
 						createdUser: null,
 					};
 				}
@@ -420,9 +420,7 @@ export const UserMutations = extendType({
 				} catch (err) {
 					console.error(err);
 					return {
-						errors: [
-							{ message: `Error occurred while verifying user's email` },
-						],
+						errors: [{ message: getErrorMsg(err) }],
 						token: null,
 						userId: null,
 					};
@@ -593,7 +591,7 @@ export const UserMutations = extendType({
 				} catch (err) {
 					console.error(err);
 					return {
-						errors: [{ message: 'Error while sending forgot password email' }],
+						errors: [{ message: getErrorMsg(err) }],
 						token: null,
 						userId: null,
 					};
@@ -630,7 +628,7 @@ export const UserMutations = extendType({
 				} catch (err) {
 					console.error(err);
 					return {
-						errors: [{ message: 'Error while changing new password.' }],
+						errors: [{ message: getErrorMsg(err) }],
 						token: null,
 						userId: null,
 					};
