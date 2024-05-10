@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import { v4 } from 'uuid';
 import { hash } from 'argon2';
 import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
@@ -472,7 +472,7 @@ export const UserMutations = extendType({
 
 					await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
 
-					const token = crypto.randomUUID();
+					const token = v4();
 
 					await ctx.redis.set(
 						`${VERIFICATION_EMAIL_PREFIX}:${userId}`,
@@ -557,7 +557,7 @@ export const UserMutations = extendType({
 
 					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`);
 
-					const token = crypto.randomUUID();
+					const token = v4();
 
 					await ctx.redis.set(
 						`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`,
