@@ -1,7 +1,7 @@
 import { graphql } from './generated/code-gen/gql';
 
-export const MOVIE_RESULT_FRAGMENT = graphql(`
-	fragment MovieResultFragment on MovieResult {
+export const MOVIE_RESULT = graphql(`
+	fragment MovieResult on MovieResult {
 		adult
 		backdrop_path
 		genre_ids
@@ -19,8 +19,8 @@ export const MOVIE_RESULT_FRAGMENT = graphql(`
 	}
 `);
 
-export const SHOW_RESULT_FRAGMENT = graphql(`
-	fragment ShowResultFragment on ShowResult {
+export const SHOW_RESULT = graphql(`
+	fragment ShowResult on ShowResult {
 		backdrop_path
 		first_air_date
 		genre_ids

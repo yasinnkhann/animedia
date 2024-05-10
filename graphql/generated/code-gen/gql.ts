@@ -13,6 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n\tfragment MovieResult on MovieResult {\n\t\tadult\n\t\tbackdrop_path\n\t\tgenre_ids\n\t\tid\n\t\toriginal_language\n\t\toriginal_title\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\trelease_date\n\t\ttitle\n\t\tvideo\n\t\tvote_average\n\t\tvote_count\n\t}\n": types.MovieResultFragmentDoc,
+    "\n\tfragment ShowResult on ShowResult {\n\t\tbackdrop_path\n\t\tfirst_air_date\n\t\tgenre_ids\n\t\tid\n\t\tname\n\t\torigin_country\n\t\toriginal_language\n\t\toriginal_name\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\tvote_average\n\t\tvote_count\n\t}\n": types.ShowResultFragmentDoc,
     "\n\tmutation AddedMovie(\n\t\t$movieId: ID!\n\t\t$movieName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t) {\n\t\taddMovie(\n\t\t\tmovieId: $movieId\n\t\t\tmovieName: $movieName\n\t\t\twatchStatus: $watchStatus\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.AddedMovieDocument,
     "\n\tmutation UpdatedMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UpdatedMovieDocument,
     "\n\tmutation DeletedMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.DeletedMovieDocument,
@@ -78,6 +80,14 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tfragment MovieResult on MovieResult {\n\t\tadult\n\t\tbackdrop_path\n\t\tgenre_ids\n\t\tid\n\t\toriginal_language\n\t\toriginal_title\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\trelease_date\n\t\ttitle\n\t\tvideo\n\t\tvote_average\n\t\tvote_count\n\t}\n"): (typeof documents)["\n\tfragment MovieResult on MovieResult {\n\t\tadult\n\t\tbackdrop_path\n\t\tgenre_ids\n\t\tid\n\t\toriginal_language\n\t\toriginal_title\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\trelease_date\n\t\ttitle\n\t\tvideo\n\t\tvote_average\n\t\tvote_count\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tfragment ShowResult on ShowResult {\n\t\tbackdrop_path\n\t\tfirst_air_date\n\t\tgenre_ids\n\t\tid\n\t\tname\n\t\torigin_country\n\t\toriginal_language\n\t\toriginal_name\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\tvote_average\n\t\tvote_count\n\t}\n"): (typeof documents)["\n\tfragment ShowResult on ShowResult {\n\t\tbackdrop_path\n\t\tfirst_air_date\n\t\tgenre_ids\n\t\tid\n\t\tname\n\t\torigin_country\n\t\toriginal_language\n\t\toriginal_name\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\tvote_average\n\t\tvote_count\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
