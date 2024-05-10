@@ -24,7 +24,7 @@ export const sendEmail = async (payload: Mail.Options) => {
 
 			console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
 		});
-	} else if (__prod__) {
+	} else {
 		transporterConfig = {
 			host: process.env.TURBO_SMTP_HOST,
 			port: Number(
