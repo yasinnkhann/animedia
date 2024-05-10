@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { hash } from 'argon2';
 import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
