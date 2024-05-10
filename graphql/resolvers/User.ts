@@ -2,7 +2,7 @@ import { hash } from 'argon2';
 import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
-import { sendEmail } from 'graphql/utils';
+import { getErrorMsg, sendEmail } from 'graphql/utils';
 import {
 	__prod__,
 	CLIENT_BASE_URL,
@@ -507,7 +507,7 @@ export const UserMutations = extendType({
 				} catch (err) {
 					console.error(err);
 					return {
-						errors: [{ message: 'Error while sending verification email' }],
+						errors: [{ message: getErrorMsg(err) }],
 					};
 				}
 			},

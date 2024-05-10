@@ -39,3 +39,13 @@ export const sendEmail = async (payload: Mail.Options) => {
 		await transporter.sendMail(payload);
 	}
 };
+
+export const getErrorMsg = (error: unknown) => {
+	if (error instanceof Error) {
+		return error.message;
+	} else if (typeof error === 'string') {
+		return error;
+	} else {
+		return JSON.stringify(error);
+	}
+};

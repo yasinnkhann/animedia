@@ -15,14 +15,11 @@ interface Props {
 const MovieCard = ({ movie, rank }: Props) => {
 	const { data: session } = useSession();
 
-	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
-		Queries.GET_USERS_MOVIE,
-		{
-			variables: {
-				movieId: String(movie.id),
-			},
-		}
-	);
+	const { data: usersMovieData } = useQuery(Queries.GET_USERS_MOVIE, {
+		variables: {
+			movieId: String(movie.id),
+		},
+	});
 
 	return (
 		<tr className='border-2'>

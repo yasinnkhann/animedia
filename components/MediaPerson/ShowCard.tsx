@@ -15,14 +15,11 @@ interface Props {
 const ShowCard = ({ show, rank }: Props) => {
 	const { data: session } = useSession();
 
-	const { data: usersShowData, loading: usersShowLoading } = useQuery(
-		Queries.GET_USERS_SHOW,
-		{
-			variables: {
-				showId: String(show.id),
-			},
-		}
-	);
+	const { data: usersShowData } = useQuery(Queries.GET_USERS_SHOW, {
+		variables: {
+			showId: String(show.id),
+		},
+	});
 
 	return (
 		<tr className='border'>
