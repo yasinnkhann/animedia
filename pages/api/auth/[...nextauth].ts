@@ -102,6 +102,7 @@ export const authOptions: NextAuthOptions = {
 					}
 				}
 				token.user = user;
+				delete (token.user as any).password;
 			}
 
 			if (account) {

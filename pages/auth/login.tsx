@@ -5,6 +5,7 @@ import * as Queries from '../../graphql/queries';
 import GoogleIcon from '../../assets/google-icon.svg';
 import FacebookIcon from '../../assets/facebook-icon.svg';
 import DiscordIcon from '../../assets/discord-icon.svg';
+import _ from 'lodash';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { getProviders, signIn } from 'next-auth/react';
@@ -14,9 +15,9 @@ import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
-import _ from 'lodash';
 import { toast } from 'react-hot-toast';
 import { ILogin } from '@ts/interfaces';
+import { ThreeDots } from 'react-loading-icons';
 
 export default function Login({
 	_providers,
@@ -26,7 +27,7 @@ export default function Login({
 
 	const router = useRouter();
 
-	const [fetchAccountVerifiedData, { data, error }] = useLazyQuery(
+	const [fetchAccountVerifiedData, { loading, error }] = useLazyQuery(
 		Queries.ACCOUNT_VERIFIED
 	);
 
@@ -43,15 +44,11 @@ export default function Login({
 	) => {
 		const { email, password } = values;
 
-		await fetchAccountVerifiedData({
+		const { data: { accountVerified } = {} } = await fetchAccountVerifiedData({
 			variables: { email },
 		});
 
-		if (
-			error ||
-			!data ||
-			(data.accountVerified && data.accountVerified.errors.length > 0)
-		) {
+		if (error || (accountVerified && accountVerified.errors.length > 0)) {
 			notifyError('Failed to verify account.');
 			return;
 		}
@@ -128,6 +125,11 @@ export default function Login({
 								>
 									Login
 								</button>
+								{loading && (
+									<div className='flex justify-center'>
+										<ThreeDots className='h-[2rem] w-[4rem]' stroke='#00b3ff' />
+									</div>
+								)}
 							</Form>
 						)}
 					</Formik>

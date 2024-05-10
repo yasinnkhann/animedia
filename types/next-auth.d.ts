@@ -9,7 +9,6 @@ declare module 'next-auth' {
 			id: string;
 			created_at: Date;
 			emailVerified: Date | null;
-			password: string | null;
 		} & DefaultSession['user'];
 		account?: Account;
 		profile?: Profile;
