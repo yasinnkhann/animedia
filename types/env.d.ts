@@ -16,7 +16,8 @@ declare global {
 			DISCORD_CLIENT_ID: string;
 			DISCORD_CLIENT_SECRET: string;
 			TURBO_SMTP_HOST: string;
-			TURBO_SMTP_PORT: string;
+			TURBO_SMTP_UNSECURE_PORT: string;
+			TURBO_SMTP_SECURE_PORT: string;
 			TURBO_SMTP_USERNAME: string;
 			TURBO_SMTP_PASSWORD: string;
 			EMAIL_FROM: string;
