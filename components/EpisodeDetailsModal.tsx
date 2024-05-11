@@ -96,16 +96,18 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 								</p>
 							</div>
 						</div>
-						<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
-							<div className='relative h-full'>
-								<Image
-									src={CommonMethods.getImage(episodeDetails.still_path)}
-									alt={episodeDetails.name ?? ''}
-									layout='fill'
-									className='object-cover'
-								/>
+						{episodeDetails.still_path && (
+							<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
+								<div className='relative h-full'>
+									<Image
+										src={CommonMethods.getImage(episodeDetails.still_path)}
+										alt={episodeDetails.name ?? ''}
+										layout='fill'
+										className='object-cover'
+									/>
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
 				</section>
 			</section>
