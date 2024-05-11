@@ -380,9 +380,13 @@ export const UserMutations = extendType({
 					const newUser = await ctx.prisma.user.create({
 						data: { name, email, password: await hash(password) },
 					});
+
+					const { password: _userPassword, ...createdUserWithoutPassword } =
+						newUser;
+
 					return {
 						errors: [],
-						createdUser: newUser,
+						createdUser: createdUserWithoutPassword,
 					};
 				} catch (err) {
 					console.error(err);
