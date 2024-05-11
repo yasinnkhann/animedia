@@ -74,7 +74,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 									<h4 className='font-semibold'>Runtime</h4>
 									<p>
 										{episodeDetails.runtime
-											? episodeDetails.runtime
+											? `${episodeDetails.runtime} min`
 											: 'Runtime Not Available'}
 									</p>
 								</div>
