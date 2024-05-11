@@ -26,7 +26,6 @@ const Modal = ({ children, closeModal }: Props) => {
 		closeModal();
 	};
 
-	console.log(children);
 	return (
 		<>
 			<section
