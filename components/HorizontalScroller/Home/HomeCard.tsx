@@ -62,7 +62,7 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
 						<div className='relative bottom-[1rem] left-4 h-[2.5rem] w-[2.5rem]'>
 							<RoundProgressBar
-								percentageVal={+item.vote_average.toFixed(1) * 10}
+								percentageVal={+(item.vote_average ?? 0).toFixed(1) * 10}
 							/>
 						</div>
 

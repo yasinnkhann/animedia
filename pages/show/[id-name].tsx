@@ -534,12 +534,14 @@ const ShowDetails = () => {
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={
-									+showDetailsData.showDetails.vote_average.toFixed(1) * 10
+									+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) *
+									10
 								}
 							/>
 						</section>
 						<p className='ml-[.5rem] text-base font-medium'>
-							{commaNumber(showDetailsData.showDetails.vote_count)} voted users
+							{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted
+							users
 						</p>
 					</section>
 
@@ -743,7 +745,7 @@ const ShowDetails = () => {
 										id: show.id,
 										poster_path: show.poster_path,
 										name: show.name,
-										popularity: show.popularity,
+										popularity: show.popularity ?? 0,
 									}))}
 									mediaType={EContent.SHOWS}
 								/>

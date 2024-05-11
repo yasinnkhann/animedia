@@ -235,7 +235,9 @@ const MovieDetails = () => {
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
 								percentageVal={
-									+movieDetailsData.movieDetails.vote_average.toFixed(1) * 10
+									+(movieDetailsData.movieDetails.vote_average ?? 0).toFixed(
+										1
+									) * 10
 								}
 							/>
 						</section>
@@ -357,7 +359,7 @@ const MovieDetails = () => {
 										id: movie.id,
 										poster_path: movie.poster_path,
 										title: movie.title,
-										popularity: movie.popularity,
+										popularity: movie.popularity ?? 0,
 									}))}
 									mediaType={EContent.MOVIES}
 								/>

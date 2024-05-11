@@ -70,7 +70,7 @@ const ShowCard = ({ show, rank }: Props) => {
 			</td>
 
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
-				<p className='text-base'>{show.vote_average.toFixed(1)}</p>
+				<p className='text-base'>{(show.vote_average ?? 0).toFixed(1)}</p>
 			</td>
 
 			{session && (
