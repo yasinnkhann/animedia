@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -13,10 +13,14 @@ import {
 } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
+import Modal from 'components/Modal';
 
 const PersonDetails = () => {
 	const router = useRouter();
+
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+
+	const [showFullDescription, setShowFullDescription] = useState(false);
 
 	const { data: personDetailsData, loading: personDetailsLoading } = useQuery(
 		Queries.PERSON_DETAILS,
@@ -138,11 +142,31 @@ const PersonDetails = () => {
 				<section className='pb-48'>
 					<h1>{personDetailsData.personDetails.name}</h1>
 					<h3 className='my-4'>Biography</h3>
-					<p>
-						{personDetailsData.personDetails.biography!.length > 0
-							? personDetailsData.personDetails.biography
-							: `We don't have a biography for ${personDetailsData.personDetails.name}.`}
-					</p>
+					<div>
+						{personDetailsData.personDetails.biography ? (
+							personDetailsData.personDetails.biography.split(' ').length <=
+							200 ? (
+								personDetailsData.personDetails.biography
+							) : (
+								<div>
+									<p>
+										{personDetailsData.personDetails.biography
+											.split(' ')
+											.slice(0, 200)
+											.join(' ') + '...'}
+									</p>
+									<button
+										className='mt-2 text-blue-500 underline'
+										onClick={() => setShowFullDescription(state => !state)}
+									>
+										{showFullDescription ? 'See Less' : 'See More'}
+									</button>
+								</div>
+							)
+						) : (
+							<i>No Bio Available</i>
+						)}
+					</div>
 				</section>
 
 				<section className='ml-8 mt-4'>
@@ -202,6 +226,13 @@ const PersonDetails = () => {
 					</section>
 				)}
 			</main>
+
+			{showFullDescription && (
+				<Modal closeModal={() => setShowFullDescription(false)}>
+					<h3 className='mb-4 text-xl font-semibold'>Biography</h3>
+					<p>{personDetailsData.personDetails.biography}</p>
+				</Modal>
+			)}
 		</>
 	);
 };
