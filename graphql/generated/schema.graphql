@@ -87,7 +87,7 @@ type MovieDetailsRes {
   original_language: String!
   original_title: String!
   overview: String!
-  popularity: Float!
+  popularity: Float
   poster_path: String
   production_companies: [MovieDetailsProdCompany]!
   production_countries: [MovieDetailsProdCountry]!
@@ -99,7 +99,7 @@ type MovieDetailsRes {
   tagline: String!
   title: String!
   video: Boolean
-  vote_average: Float!
+  vote_average: Float
   vote_count: Int!
 }
 
@@ -134,18 +134,18 @@ enum MovieGenreTypes {
 type MovieResult {
   adult: Boolean!
   backdrop_path: String
-  genre_ids: [ID]!
+  genre_ids: [ID]
   id: ID!
   original_language: String!
   original_title: String!
   overview: String!
-  popularity: Float!
+  popularity: Float
   poster_path: String
   release_date: String
   title: String!
-  video: Boolean!
-  vote_average: Float!
-  vote_count: Int!
+  video: Boolean
+  vote_average: Float
+  vote_count: Int
 }
 
 type MovieReviewAuthorDetails {
@@ -446,7 +446,7 @@ type ShowDetailsLastEpToAir {
   season_number: Int!
   show_id: ID!
   still_path: String
-  vote_average: Float!
+  vote_average: Float
   vote_count: Int!
 }
 
@@ -468,7 +468,7 @@ type ShowDetailsNextEpToAir {
   season_number: Int!
   show_id: ID!
   still_path: String
-  vote_average: Float!
+  vote_average: Float
   vote_count: Int!
 }
 
@@ -501,7 +501,7 @@ type ShowDetailsRes {
   original_language: String!
   original_name: String!
   overview: String!
-  popularity: Float!
+  popularity: Float
   poster_path: String
   production_companies: [ShowDetailsProdCompany]!
   production_countries: [ShowDetailsCountry]!
@@ -510,8 +510,8 @@ type ShowDetailsRes {
   status: String!
   tagline: String!
   type: String!
-  vote_average: Float!
-  vote_count: Int!
+  vote_average: Float
+  vote_count: Int
 }
 
 type ShowDetailsSeason {
@@ -552,16 +552,16 @@ enum ShowGenreTypes {
 type ShowResult {
   backdrop_path: String
   first_air_date: String
-  genre_ids: [ID]!
+  genre_ids: [ID]
   id: ID!
   name: String!
   origin_country: [String]!
   original_language: String!
   original_name: String!
   overview: String!
-  popularity: Float!
+  popularity: Float
   poster_path: String
-  vote_average: Float!
+  vote_average: Float
   vote_count: Int!
 }
 

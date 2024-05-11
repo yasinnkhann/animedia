@@ -95,18 +95,18 @@ export const MovieObj = {
 		definition(t) {
 			t.nonNull.boolean('adult');
 			t.string('backdrop_path');
-			t.nonNull.list.id('genre_ids');
+			t.list.id('genre_ids');
 			t.nonNull.id('id');
 			t.nonNull.string('original_language');
 			t.nonNull.string('original_title');
 			t.nonNull.string('overview');
-			t.nonNull.float('popularity');
+			t.float('popularity');
 			t.string('poster_path');
 			t.string('release_date');
 			t.nonNull.string('title');
-			t.nonNull.boolean('video');
-			t.nonNull.float('vote_average');
-			t.nonNull.int('vote_count');
+			t.boolean('video');
+			t.float('vote_average');
+			t.int('vote_count');
 		},
 	}),
 	MoviesRes: objectType({
@@ -165,7 +165,7 @@ export const MovieObj = {
 			t.nonNull.string('original_language');
 			t.nonNull.string('original_title');
 			t.nonNull.string('overview');
-			t.nonNull.float('popularity');
+			t.float('popularity');
 			t.string('poster_path');
 			t.nonNull.list.field('production_companies', {
 				type: 'MovieDetailsProdCompany',
@@ -183,7 +183,7 @@ export const MovieObj = {
 			t.nonNull.string('tagline');
 			t.nonNull.string('title');
 			t.boolean('video');
-			t.nonNull.float('vote_average');
+			t.float('vote_average');
 			t.nonNull.int('vote_count');
 		},
 	}),
@@ -296,16 +296,16 @@ export const ShowObj = {
 		definition(t) {
 			t.string('backdrop_path');
 			t.string('first_air_date');
-			t.nonNull.list.id('genre_ids');
+			t.list.id('genre_ids');
 			t.nonNull.id('id');
 			t.nonNull.string('name');
 			t.nonNull.list.string('origin_country');
 			t.nonNull.string('original_language');
 			t.nonNull.string('original_name');
 			t.nonNull.string('overview');
-			t.nonNull.float('popularity');
+			t.float('popularity');
 			t.string('poster_path');
-			t.nonNull.float('vote_average');
+			t.float('vote_average');
 			t.nonNull.int('vote_count');
 		},
 	}),
@@ -350,7 +350,7 @@ export const ShowObj = {
 			t.nonNull.int('season_number');
 			t.nonNull.id('show_id');
 			t.string('still_path');
-			t.nonNull.float('vote_average');
+			t.float('vote_average');
 			t.nonNull.int('vote_count');
 		},
 	}),
@@ -412,7 +412,7 @@ export const ShowObj = {
 			t.nonNull.int('season_number');
 			t.nonNull.id('show_id');
 			t.string('still_path');
-			t.nonNull.float('vote_average');
+			t.float('vote_average');
 			t.nonNull.int('vote_count');
 		},
 	}),
@@ -450,7 +450,7 @@ export const ShowObj = {
 			t.nonNull.string('original_language');
 			t.nonNull.string('original_name');
 			t.nonNull.string('overview');
-			t.nonNull.float('popularity');
+			t.float('popularity');
 			t.string('poster_path');
 			t.nonNull.list.field('production_companies', {
 				type: 'ShowDetailsProdCompany',
@@ -467,8 +467,8 @@ export const ShowObj = {
 			t.nonNull.string('status');
 			t.nonNull.string('tagline');
 			t.nonNull.string('type');
-			t.nonNull.float('vote_average');
-			t.nonNull.int('vote_count');
+			t.float('vote_average');
+			t.int('vote_count');
 		},
 	}),
 	ShowReviewAuthorDetails: objectType({

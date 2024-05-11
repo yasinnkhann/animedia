@@ -138,7 +138,7 @@ export interface NexusGenObjects {
     original_language: string; // String!
     original_title: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity?: number | null; // Float
     poster_path?: string | null; // String
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
@@ -150,7 +150,7 @@ export interface NexusGenObjects {
     tagline: string; // String!
     title: string; // String!
     video?: boolean | null; // Boolean
-    vote_average: number; // Float!
+    vote_average?: number | null; // Float
     vote_count: number; // Int!
   }
   MovieDetailsSpokenLang: { // root type
@@ -161,18 +161,18 @@ export interface NexusGenObjects {
   MovieResult: { // root type
     adult: boolean; // Boolean!
     backdrop_path?: string | null; // String
-    genre_ids: Array<string | null>; // [ID]!
+    genre_ids?: Array<string | null> | null; // [ID]
     id: string; // ID!
     original_language: string; // String!
     original_title: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity?: number | null; // Float
     poster_path?: string | null; // String
     release_date?: string | null; // String
     title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
+    video?: boolean | null; // Boolean
+    vote_average?: number | null; // Float
+    vote_count?: number | null; // Int
   }
   MovieReviewAuthorDetails: { // root type
     avatar_path?: string | null; // String
@@ -397,7 +397,7 @@ export interface NexusGenObjects {
     season_number: number; // Int!
     show_id: string; // ID!
     still_path?: string | null; // String
-    vote_average: number; // Float!
+    vote_average?: number | null; // Float
     vote_count: number; // Int!
   }
   ShowDetailsNetwork: { // root type
@@ -417,7 +417,7 @@ export interface NexusGenObjects {
     season_number: number; // Int!
     show_id: string; // ID!
     still_path?: string | null; // String
-    vote_average: number; // Float!
+    vote_average?: number | null; // Float
     vote_count: number; // Int!
   }
   ShowDetailsProdCompany: { // root type
@@ -448,7 +448,7 @@ export interface NexusGenObjects {
     original_language: string; // String!
     original_name: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity?: number | null; // Float
     poster_path?: string | null; // String
     production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
@@ -457,8 +457,8 @@ export interface NexusGenObjects {
     status: string; // String!
     tagline: string; // String!
     type: string; // String!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
+    vote_average?: number | null; // Float
+    vote_count?: number | null; // Int
   }
   ShowDetailsSeason: { // root type
     air_date?: string | null; // String
@@ -477,16 +477,16 @@ export interface NexusGenObjects {
   ShowResult: { // root type
     backdrop_path?: string | null; // String
     first_air_date?: string | null; // String
-    genre_ids: Array<string | null>; // [ID]!
+    genre_ids?: Array<string | null> | null; // [ID]
     id: string; // ID!
     name: string; // String!
     origin_country: Array<string | null>; // [String]!
     original_language: string; // String!
     original_name: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity?: number | null; // Float
     poster_path?: string | null; // String
-    vote_average: number; // Float!
+    vote_average?: number | null; // Float
     vote_count: number; // Int!
   }
   ShowReviewAuthorDetails: { // root type
@@ -652,7 +652,7 @@ export interface NexusGenFieldTypes {
     original_language: string; // String!
     original_title: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity: number | null; // Float
     poster_path: string | null; // String
     production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
@@ -664,7 +664,7 @@ export interface NexusGenFieldTypes {
     tagline: string; // String!
     title: string; // String!
     video: boolean | null; // Boolean
-    vote_average: number; // Float!
+    vote_average: number | null; // Float
     vote_count: number; // Int!
   }
   MovieDetailsSpokenLang: { // field return type
@@ -675,18 +675,18 @@ export interface NexusGenFieldTypes {
   MovieResult: { // field return type
     adult: boolean; // Boolean!
     backdrop_path: string | null; // String
-    genre_ids: Array<string | null>; // [ID]!
+    genre_ids: Array<string | null> | null; // [ID]
     id: string; // ID!
     original_language: string; // String!
     original_title: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity: number | null; // Float
     poster_path: string | null; // String
     release_date: string | null; // String
     title: string; // String!
-    video: boolean; // Boolean!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
+    video: boolean | null; // Boolean
+    vote_average: number | null; // Float
+    vote_count: number | null; // Int
   }
   MovieReviewAuthorDetails: { // field return type
     avatar_path: string | null; // String
@@ -962,7 +962,7 @@ export interface NexusGenFieldTypes {
     season_number: number; // Int!
     show_id: string; // ID!
     still_path: string | null; // String
-    vote_average: number; // Float!
+    vote_average: number | null; // Float
     vote_count: number; // Int!
   }
   ShowDetailsNetwork: { // field return type
@@ -982,7 +982,7 @@ export interface NexusGenFieldTypes {
     season_number: number; // Int!
     show_id: string; // ID!
     still_path: string | null; // String
-    vote_average: number; // Float!
+    vote_average: number | null; // Float
     vote_count: number; // Int!
   }
   ShowDetailsProdCompany: { // field return type
@@ -1013,7 +1013,7 @@ export interface NexusGenFieldTypes {
     original_language: string; // String!
     original_name: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity: number | null; // Float
     poster_path: string | null; // String
     production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
     production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
@@ -1022,8 +1022,8 @@ export interface NexusGenFieldTypes {
     status: string; // String!
     tagline: string; // String!
     type: string; // String!
-    vote_average: number; // Float!
-    vote_count: number; // Int!
+    vote_average: number | null; // Float
+    vote_count: number | null; // Int
   }
   ShowDetailsSeason: { // field return type
     air_date: string | null; // String
@@ -1042,16 +1042,16 @@ export interface NexusGenFieldTypes {
   ShowResult: { // field return type
     backdrop_path: string | null; // String
     first_air_date: string | null; // String
-    genre_ids: Array<string | null>; // [ID]!
+    genre_ids: Array<string | null> | null; // [ID]
     id: string; // ID!
     name: string; // String!
     origin_country: Array<string | null>; // [String]!
     original_language: string; // String!
     original_name: string; // String!
     overview: string; // String!
-    popularity: number; // Float!
+    popularity: number | null; // Float
     poster_path: string | null; // String
-    vote_average: number; // Float!
+    vote_average: number | null; // Float
     vote_count: number; // Int!
   }
   ShowReviewAuthorDetails: { // field return type
