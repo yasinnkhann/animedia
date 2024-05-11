@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import commaNumber from 'comma-number';
 import RoundProgressBar from './RoundProgressBar';
-import { Fragment, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { CommonMethods } from 'utils/CommonMethods';
 import { GrClose } from 'react-icons/gr';
 import { EpisodeDetailsRes } from '../graphql/generated/code-gen/graphql';
@@ -32,92 +32,84 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 	};
 
 	return (
-		<Fragment>
+		<>
 			<section
-				className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
 				onClick={handleClickOutside}
+				className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
 			>
 				<section
 					className='relative m-auto h-[85vh] w-[70vw] overflow-scroll	rounded bg-white p-4 scrollbar-hide'
 					ref={contentRef}
 				>
-					<h2 className='mt-4 text-center'>{episodeDetails.name}</h2>
-					<div className='mb-8 mr-16 mt-8 flex items-center justify-end'>
-						<div className='h-[5rem] w-[5rem]'>
-							<RoundProgressBar
-								percentageVal={+episodeDetails.vote_average!.toFixed(1) * 10}
-							/>
+					<div className='w-full rounded-lg bg-white'>
+						<div className='flex items-center justify-between border-b border-gray-300 px-6 py-4'>
+							<h2 className='text-lg font-semibold'>{episodeDetails.name}</h2>
+							<button onClick={closeModal}>
+								<GrClose className='h-6 w-6 text-gray-500 transition duration-300 hover:text-gray-700' />
+							</button>
 						</div>
-						<p className='ml-[.5rem] text-base font-medium'>
-							{commaNumber(episodeDetails.vote_count!)} voted users
-						</p>
+						<div className='p-6'>
+							<div className='flex items-center space-x-4'>
+								<div className='h-16 w-16'>
+									<RoundProgressBar
+										percentageVal={
+											+(episodeDetails.vote_average ?? 0).toFixed(1) * 10
+										}
+									/>
+								</div>
+								<p className='text-sm text-gray-600'>
+									{commaNumber(episodeDetails.vote_count ?? 0)} voted users
+								</p>
+							</div>
+							<div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-2'>
+								<div>
+									<h4 className='font-semibold'>Season</h4>
+									<p>{episodeDetails.season_number}</p>
+								</div>
+								<div>
+									<h4 className='font-semibold'>Episode</h4>
+									<p>{episodeDetails.episode_number}</p>
+								</div>
+								<div>
+									<h4 className='font-semibold'>Runtime</h4>
+									<p>
+										{episodeDetails.runtime
+											? episodeDetails.runtime
+											: 'Runtime Not Available'}
+									</p>
+								</div>
+								<div>
+									<h4 className='font-semibold'>Air Date</h4>
+									<p>
+										{episodeDetails.air_date
+											? CommonMethods.formatDate(episodeDetails.air_date)
+											: 'Air Date Not Available'}
+									</p>
+								</div>
+							</div>
+							<div className='mt-6'>
+								<h4 className='mb-2 font-semibold'>Description:</h4>
+								<p>
+									{episodeDetails.overview
+										? episodeDetails.overview
+										: 'No Description Available'}
+								</p>
+							</div>
+						</div>
+						<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
+							<div className='relative h-full'>
+								<Image
+									src={CommonMethods.getImage(episodeDetails.still_path)}
+									alt={episodeDetails.name ?? ''}
+									layout='fill'
+									className='object-cover'
+								/>
+							</div>
+						</div>
 					</div>
-
-					<section className='mt-16 flex justify-between'>
-						<section className='mb-4 flex flex-col justify-center'>
-							<div className='mt-2'>
-								<p>
-									<span className='font-bold'>Season: </span>
-									{episodeDetails.season_number}
-								</p>
-							</div>
-
-							<div className='mt-2'>
-								<p>
-									<span className='font-bold'>Episode: </span>
-									{episodeDetails.episode_number}
-								</p>
-							</div>
-
-							<div className='mt-2'>
-								<p>
-									<span className='font-bold'>Runtime: </span>
-									{episodeDetails.runtime ? (
-										<p>{episodeDetails.runtime}</p>
-									) : (
-										<i>Runtime Not Available.</i>
-									)}
-								</p>
-							</div>
-
-							<div className='mt-2'>
-								<p>
-									<span className='font-bold'>Air Date: </span>
-									{episodeDetails.air_date ? (
-										<p>{CommonMethods.formatDate(episodeDetails.air_date)}</p>
-									) : (
-										<i>Air Date Not Available</i>
-									)}
-								</p>
-							</div>
-						</section>
-
-						<section>
-							<Image
-								className='rounded-lg'
-								src={CommonMethods.getImage(episodeDetails.still_path)}
-								alt={episodeDetails.name ?? undefined}
-								height={200}
-								width={300}
-							/>
-						</section>
-					</section>
-
-					<section className='mt-4'>
-						<h5 className='mb-2 underline underline-offset-4'>Description:</h5>
-						{episodeDetails.overview ? (
-							<p>{episodeDetails.overview}</p>
-						) : (
-							<i>No Description Available.</i>
-						)}
-					</section>
-
-					<button className='absolute right-2 top-2' onClick={closeModal}>
-						<GrClose size={25} />
-					</button>
 				</section>
 			</section>
-		</Fragment>
+		</>
 	);
 };
 
