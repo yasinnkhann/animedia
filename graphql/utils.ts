@@ -11,7 +11,7 @@ export const sendEmail = async (payload: Mail.Options) => {
 			transporterConfig = {
 				host: 'smtp.ethereal.email',
 				port: +process.env.TURBO_SMTP_UNSECURE_PORT,
-				secure: transporterConfig.port === +process.env.TURBO_SMTP_SECURE_PORT,
+				secure: false,
 				auth: {
 					user: account.user,
 					pass: account.pass,
@@ -34,21 +34,7 @@ export const sendEmail = async (payload: Mail.Options) => {
 				pass: process.env.TURBO_SMTP_PASSWORD,
 			},
 		};
-		// transporterConfig = {
-		// 	host: process.env.TURBO_SMTP_HOST,
-		// 	port: Number(
-		// 		__prod__
-		// 			? process.env.TURBO_SMTP_SECURE_PORT
-		// 			: process.env.TURBO_SMTP_UNSECURE_PORT
-		// 	),
-		// 	secure:
-		// 		transporterConfig.port === Number(process.env.TURBO_SMTP_SECURE_PORT),
-		// 	auth: {
-		// 		user: process.env.TURBO_SMTP_USERNAME,
-		// 		pass: process.env.TURBO_SMTP_PASSWORD,
-		// 	},
-		// };
-		console.log('transporterConfig: ', transporterConfig);
+
 		const transporter = nodemailer.createTransport(transporterConfig);
 		await transporter.sendMail(payload);
 	}
