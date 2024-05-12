@@ -27,8 +27,8 @@ export const sendEmail = async (payload: Mail.Options) => {
 	} else {
 		transporterConfig = {
 			host: process.env.TURBO_SMTP_HOST,
-			port: 587,
-			secure: false,
+			port: 465,
+			secure: true,
 			auth: {
 				user: process.env.TURBO_SMTP_USERNAME,
 				pass: process.env.TURBO_SMTP_PASSWORD,
