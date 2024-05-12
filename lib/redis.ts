@@ -10,4 +10,4 @@ export const redis = __prod__
 	: new Redis();
 
 redis.on('connect', () => console.log('Redis Connected'));
-redis.on('error', error => console.log('Redis Error', error));
+redis.on('error', err => console.error('Redis Error:', err));
