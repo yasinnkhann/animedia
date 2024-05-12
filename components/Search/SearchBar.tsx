@@ -27,31 +27,26 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 		const [showDropDownSearchResults, setShowDropDownSearchResults] =
 			useState(false);
 
-		const { data: searchedMoviesData, loading: searchedMoviesLoading } =
-			useQuery(Queries.SEARCHED_MOVIES, {
-				variables: {
-					q: searchQuery,
-				},
-				skip: _.isEmpty(searchQuery),
-			});
+		const { data: searchedMoviesData } = useQuery(Queries.SEARCHED_MOVIES, {
+			variables: {
+				q: searchQuery,
+			},
+			skip: _.isEmpty(searchQuery),
+		});
 
-		const { data: searchedShowsData, loading: searchedShowsLoading } = useQuery(
-			Queries.SEARCHED_SHOWS,
-			{
-				variables: {
-					q: searchQuery,
-				},
-				skip: _.isEmpty(searchQuery),
-			}
-		);
+		const { data: searchedShowsData } = useQuery(Queries.SEARCHED_SHOWS, {
+			variables: {
+				q: searchQuery,
+			},
+			skip: _.isEmpty(searchQuery),
+		});
 
-		const { data: searchedPeopleData, loading: searchedPeopleLoading } =
-			useQuery(Queries.SEARCHED_PEOPLE, {
-				variables: {
-					q: searchQuery,
-				},
-				skip: _.isEmpty(searchQuery),
-			});
+		const { data: searchedPeopleData } = useQuery(Queries.SEARCHED_PEOPLE, {
+			variables: {
+				q: searchQuery,
+			},
+			skip: _.isEmpty(searchQuery),
+		});
 
 		useDebounce(
 			() => {
@@ -111,11 +106,34 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			router.push(`/search?q=${searchQuery.trim().split(' ').join('+')}`);
 		};
 
+		const handleDropdownResultsClick = (result: TDropDownSearchResult) => {
+			router.push(
+				CommonMethods.getDetailsPageRoute(
+					result.movieTitle
+						? EContent.MOVIE
+						: result.showName
+							? EContent.SHOW
+							: EContent.PERSON,
+					result.id,
+					(result.movieTitle || result.showName || result.personName) as string
+				)
+			);
+			if (closeSearch) closeSearch();
+		};
+
 		useEffect(() => {
 			if (isSearchBtnClicked) {
 				(ref as RefObject<HTMLButtonElement>).current?.focus();
 			}
-		}, [isSearchBtnClicked, ref]);
+
+			const close = (e: KeyboardEvent) => {
+				if (showDropDownSearchResults && e.key === 'Escape') {
+					setShowDropDownSearchResults(false);
+				}
+			};
+			window.addEventListener('keydown', close);
+			return () => window.removeEventListener('keydown', close);
+		}, [isSearchBtnClicked, ref, showDropDownSearchResults]);
 
 		return (
 			<form
@@ -142,24 +160,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 								<div
 									key={result.id}
 									className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
-									onClick={() => {
-										router.push(
-											CommonMethods.getDetailsPageRoute(
-												result.movieTitle
-													? EContent.MOVIE
-													: result.showName
-														? EContent.SHOW
-														: EContent.PERSON,
-												result.id,
-												(result.movieTitle ||
-													result.showName ||
-													result.personName) as string
-											)
-										);
-										if (closeSearch) {
-											closeSearch();
-										}
-									}}
+									onClick={() => handleDropdownResultsClick(result)}
 								>
 									<span className='text-white'>
 										{result.movieTitle || result.showName || result.personName}{' '}
