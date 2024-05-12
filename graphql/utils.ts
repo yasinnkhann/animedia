@@ -27,18 +27,27 @@ export const sendEmail = async (payload: Mail.Options) => {
 	} else {
 		transporterConfig = {
 			host: process.env.TURBO_SMTP_HOST,
-			port: Number(
-				__prod__
-					? process.env.TURBO_SMTP_SECURE_PORT
-					: process.env.TURBO_SMTP_UNSECURE_PORT
-			),
-			secure:
-				transporterConfig.port === Number(process.env.TURBO_SMTP_SECURE_PORT),
+			port: 25,
+			secure: false,
 			auth: {
 				user: process.env.TURBO_SMTP_USERNAME,
 				pass: process.env.TURBO_SMTP_PASSWORD,
 			},
 		};
+		// transporterConfig = {
+		// 	host: process.env.TURBO_SMTP_HOST,
+		// 	port: Number(
+		// 		__prod__
+		// 			? process.env.TURBO_SMTP_SECURE_PORT
+		// 			: process.env.TURBO_SMTP_UNSECURE_PORT
+		// 	),
+		// 	secure:
+		// 		transporterConfig.port === Number(process.env.TURBO_SMTP_SECURE_PORT),
+		// 	auth: {
+		// 		user: process.env.TURBO_SMTP_USERNAME,
+		// 		pass: process.env.TURBO_SMTP_PASSWORD,
+		// 	},
+		// };
 
 		const transporter = nodemailer.createTransport(transporterConfig);
 		await transporter.sendMail(payload);
