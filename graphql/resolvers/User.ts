@@ -8,7 +8,7 @@ import {
 	__prod__,
 	CLIENT_BASE_URL,
 	VERIFICATION_EMAIL_PREFIX,
-	REDIS_MAP,
+	REDIS_EXP_MAP,
 	VERIFICATION_EMAIL_COUNT_LIMIT,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 	FORGOT_PASSWORD_EMAIL_COUNT_PREFIX,
@@ -482,14 +482,14 @@ export const UserMutations = extendType({
 						`${VERIFICATION_EMAIL_PREFIX}:${userId}`,
 						token,
 						'EX',
-						REDIS_MAP[VERIFICATION_EMAIL_PREFIX]
+						REDIS_EXP_MAP[VERIFICATION_EMAIL_PREFIX]
 					);
 
 					await ctx.redis.set(
 						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`,
 						(verificationEmailCount + 1).toString(),
 						'EX',
-						REDIS_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
+						REDIS_EXP_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
 					);
 
 					const payload: Mail.Options = {
@@ -567,14 +567,14 @@ export const UserMutations = extendType({
 						`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`,
 						token,
 						'EX',
-						REDIS_MAP[FORGOT_PASSWORD_EMAIL_PREFIX]
+						REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_PREFIX]
 					);
 
 					await ctx.redis.set(
 						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`,
 						(forgotPasswordEmailCount + 1).toString(),
 						'EX',
-						REDIS_MAP[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]
+						REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]
 					);
 
 					const payload: Mail.Options = {

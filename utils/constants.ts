@@ -22,12 +22,11 @@ export const VERIFICATION_EMAIL_PREFIX = 'verification-email';
 
 export const FORGOT_PASSWORD_EMAIL_PREFIX = 'forgot-password-email';
 
-export const VERIFICATION_EMAIL_COUNT_PREFIX = 'retry-verification-email-count';
+export const VERIFICATION_EMAIL_COUNT_PREFIX = 'verification-email-count';
 
-export const FORGOT_PASSWORD_EMAIL_COUNT_PREFIX =
-	'retry-forgot-password-email-count';
+export const FORGOT_PASSWORD_EMAIL_COUNT_PREFIX = 'forgot-password-email-count';
 
-export const IGDB_ACCESS_TOKEN_PREFIX = 'access-token';
+export const IGDB_ACCESS_TOKEN_PREFIX = 'igdb-access-token';
 
 export const VERIFICATION_EMAIL_COUNT_LIMIT = 10;
 
@@ -42,7 +41,7 @@ export const REDIS_KEYS = [
 	FORGOT_PASSWORD_EMAIL_PREFIX,
 ] as const;
 
-export const REDIS_MAP: Record<(typeof REDIS_KEYS)[number], number> = {
+export const REDIS_EXP_MAP: Record<(typeof REDIS_KEYS)[number], number> = {
 	[VERIFICATION_EMAIL_COUNT_PREFIX]: 60 * 60 * 24,
 	[VERIFICATION_EMAIL_PREFIX]: 60 * 60 * 24 * 3,
 	[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]: 60 * 60 * 24,
