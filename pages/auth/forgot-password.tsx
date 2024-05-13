@@ -31,7 +31,6 @@ const ForgotPassword = () => {
 			console.error(err);
 		}
 	}
-	console.log(data);
 	return (
 		<>
 			<Head>

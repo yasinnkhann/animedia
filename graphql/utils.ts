@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { __prod__ } from 'utils/constants';
+import { IGDB_ACCESS_TOKEN_PREFIX, __prod__ } from 'utils/constants';
+import { redis } from '../lib/redis';
 
 export const sendEmail = async (payload: Mail.Options) => {
 	let transporterConfig: SMTPTransport.Options = {};
@@ -47,5 +48,52 @@ export const getErrorMsg = (error: unknown) => {
 		return error;
 	} else {
 		return JSON.stringify(error);
+	}
+};
+
+export const postIGDB = async (url: string, body = {}) => {
+	interface AccessTokenResponse {
+		access_token: string;
+		expires_in: number;
+		token_type: string;
+	}
+
+	try {
+		let accessToken = await redis.get('access-token');
+
+		if (accessToken === null) {
+			const accessTokenRes = await fetch(
+				`https://id.twitch.tv/oauth2/token?client_id=${process.env.IGDB_CLIENT_ID}&client_secret=${process.env.IGDB_CLIENT_SECRET}&grant_type=client_credentials`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			const accessTokenData: AccessTokenResponse = await accessTokenRes.json();
+			accessToken = accessTokenData.access_token;
+
+			await redis.set(
+				IGDB_ACCESS_TOKEN_PREFIX,
+				accessToken,
+				'EX',
+				accessTokenData.expires_in
+			);
+		}
+
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Client-ID': process.env.IGDB_CLIENT_ID,
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify(body),
+		});
+		return await response.json();
+	} catch (err) {
+		console.error(err);
 	}
 };

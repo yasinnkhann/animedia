@@ -38,6 +38,64 @@ type ErrorRes {
   message: String!
 }
 
+type GameRes {
+  age_ratings: [ID]
+  alternative_names: [ID]
+  artworks: [ID]
+  bundles: [ID]
+  category: ID
+  checksum: ID
+  collection: ID
+  collections: [ID]
+  cover: ID
+  created_at: DateTime
+  dlcs: [ID]
+  expanded_games: [ID]
+  expansions: [ID]
+  external_games: [ID]
+  first_release_date: BigInt
+  forks: [ID]
+  franchise: ID
+  franchises: [ID]
+  game_engines: [ID]
+  game_localizations: [ID]
+  game_modes: [ID]
+  genres: [ID]
+  hypes: Int
+  id: ID
+  involved_companies: [ID]
+  keywords: [ID]
+  language_supports: [ID]
+  multiplayer_modes: [ID]
+  name: String
+  parent_game: ID
+  platforms: [ID]
+  player_perspectives: [ID]
+  ports: [ID]
+  rating: Float
+  rating_count: Int
+  release_dates: [ID]
+  remakes: [ID]
+  remasters: [ID]
+  screenshots: [ID]
+  similar_games: [ID]
+  slug: String
+  standalone_expansions: [ID]
+  status: ID
+  storyline: String
+  summary: String
+  tags: [ID]
+  themes: [ID]
+  total_rating: Float
+  total_rating_count: Int
+  updated_at: DateTime
+  url: String
+  version_parent: ID
+  version_title: String
+  videos: [ID]
+  websites: [ID]
+}
+
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -371,6 +429,7 @@ type Query {
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
+  games(q: String!): [GameRes]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes

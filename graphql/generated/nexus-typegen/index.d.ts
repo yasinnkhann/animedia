@@ -98,6 +98,63 @@ export interface NexusGenObjects {
   ErrorRes: { // root type
     message: string; // String!
   }
+  GameRes: { // root type
+    age_ratings?: Array<string | null> | null; // [ID]
+    alternative_names?: Array<string | null> | null; // [ID]
+    artworks?: Array<string | null> | null; // [ID]
+    bundles?: Array<string | null> | null; // [ID]
+    category?: string | null; // ID
+    checksum?: string | null; // ID
+    collection?: string | null; // ID
+    collections?: Array<string | null> | null; // [ID]
+    cover?: string | null; // ID
+    created_at?: NexusGenScalars['DateTime'] | null; // DateTime
+    dlcs?: Array<string | null> | null; // [ID]
+    expanded_games?: Array<string | null> | null; // [ID]
+    expansions?: Array<string | null> | null; // [ID]
+    external_games?: Array<string | null> | null; // [ID]
+    first_release_date?: NexusGenScalars['BigInt'] | null; // BigInt
+    forks?: Array<string | null> | null; // [ID]
+    franchise?: string | null; // ID
+    franchises?: Array<string | null> | null; // [ID]
+    game_engines?: Array<string | null> | null; // [ID]
+    game_localizations?: Array<string | null> | null; // [ID]
+    game_modes?: Array<string | null> | null; // [ID]
+    genres?: Array<string | null> | null; // [ID]
+    hypes?: number | null; // Int
+    id?: string | null; // ID
+    involved_companies?: Array<string | null> | null; // [ID]
+    keywords?: Array<string | null> | null; // [ID]
+    language_supports?: Array<string | null> | null; // [ID]
+    multiplayer_modes?: Array<string | null> | null; // [ID]
+    name?: string | null; // String
+    parent_game?: string | null; // ID
+    platforms?: Array<string | null> | null; // [ID]
+    player_perspectives?: Array<string | null> | null; // [ID]
+    ports?: Array<string | null> | null; // [ID]
+    rating?: number | null; // Float
+    rating_count?: number | null; // Int
+    release_dates?: Array<string | null> | null; // [ID]
+    remakes?: Array<string | null> | null; // [ID]
+    remasters?: Array<string | null> | null; // [ID]
+    screenshots?: Array<string | null> | null; // [ID]
+    similar_games?: Array<string | null> | null; // [ID]
+    slug?: string | null; // String
+    standalone_expansions?: Array<string | null> | null; // [ID]
+    status?: string | null; // ID
+    storyline?: string | null; // String
+    summary?: string | null; // String
+    tags?: Array<string | null> | null; // [ID]
+    themes?: Array<string | null> | null; // [ID]
+    total_rating?: number | null; // Float
+    total_rating_count?: number | null; // Int
+    updated_at?: NexusGenScalars['DateTime'] | null; // DateTime
+    url?: string | null; // String
+    version_parent?: string | null; // ID
+    version_title?: string | null; // String
+    videos?: Array<string | null> | null; // [ID]
+    websites?: Array<string | null> | null; // [ID]
+  }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
     backdrop_path?: string | null; // String
@@ -612,6 +669,63 @@ export interface NexusGenFieldTypes {
   ErrorRes: { // field return type
     message: string; // String!
   }
+  GameRes: { // field return type
+    age_ratings: Array<string | null> | null; // [ID]
+    alternative_names: Array<string | null> | null; // [ID]
+    artworks: Array<string | null> | null; // [ID]
+    bundles: Array<string | null> | null; // [ID]
+    category: string | null; // ID
+    checksum: string | null; // ID
+    collection: string | null; // ID
+    collections: Array<string | null> | null; // [ID]
+    cover: string | null; // ID
+    created_at: NexusGenScalars['DateTime'] | null; // DateTime
+    dlcs: Array<string | null> | null; // [ID]
+    expanded_games: Array<string | null> | null; // [ID]
+    expansions: Array<string | null> | null; // [ID]
+    external_games: Array<string | null> | null; // [ID]
+    first_release_date: NexusGenScalars['BigInt'] | null; // BigInt
+    forks: Array<string | null> | null; // [ID]
+    franchise: string | null; // ID
+    franchises: Array<string | null> | null; // [ID]
+    game_engines: Array<string | null> | null; // [ID]
+    game_localizations: Array<string | null> | null; // [ID]
+    game_modes: Array<string | null> | null; // [ID]
+    genres: Array<string | null> | null; // [ID]
+    hypes: number | null; // Int
+    id: string | null; // ID
+    involved_companies: Array<string | null> | null; // [ID]
+    keywords: Array<string | null> | null; // [ID]
+    language_supports: Array<string | null> | null; // [ID]
+    multiplayer_modes: Array<string | null> | null; // [ID]
+    name: string | null; // String
+    parent_game: string | null; // ID
+    platforms: Array<string | null> | null; // [ID]
+    player_perspectives: Array<string | null> | null; // [ID]
+    ports: Array<string | null> | null; // [ID]
+    rating: number | null; // Float
+    rating_count: number | null; // Int
+    release_dates: Array<string | null> | null; // [ID]
+    remakes: Array<string | null> | null; // [ID]
+    remasters: Array<string | null> | null; // [ID]
+    screenshots: Array<string | null> | null; // [ID]
+    similar_games: Array<string | null> | null; // [ID]
+    slug: string | null; // String
+    standalone_expansions: Array<string | null> | null; // [ID]
+    status: string | null; // ID
+    storyline: string | null; // String
+    summary: string | null; // String
+    tags: Array<string | null> | null; // [ID]
+    themes: Array<string | null> | null; // [ID]
+    total_rating: number | null; // Float
+    total_rating_count: number | null; // Int
+    updated_at: NexusGenScalars['DateTime'] | null; // DateTime
+    url: string | null; // String
+    version_parent: string | null; // ID
+    version_title: string | null; // String
+    videos: Array<string | null> | null; // [ID]
+    websites: Array<string | null> | null; // [ID]
+  }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
     backdrop_path: string | null; // String
@@ -893,6 +1007,7 @@ export interface NexusGenFieldTypes {
     checkForgotPasswordToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
+    games: Array<NexusGenRootTypes['GameRes'] | null>; // [GameRes]!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1166,6 +1281,63 @@ export interface NexusGenFieldTypeNames {
   }
   ErrorRes: { // field return type name
     message: 'String'
+  }
+  GameRes: { // field return type name
+    age_ratings: 'ID'
+    alternative_names: 'ID'
+    artworks: 'ID'
+    bundles: 'ID'
+    category: 'ID'
+    checksum: 'ID'
+    collection: 'ID'
+    collections: 'ID'
+    cover: 'ID'
+    created_at: 'DateTime'
+    dlcs: 'ID'
+    expanded_games: 'ID'
+    expansions: 'ID'
+    external_games: 'ID'
+    first_release_date: 'BigInt'
+    forks: 'ID'
+    franchise: 'ID'
+    franchises: 'ID'
+    game_engines: 'ID'
+    game_localizations: 'ID'
+    game_modes: 'ID'
+    genres: 'ID'
+    hypes: 'Int'
+    id: 'ID'
+    involved_companies: 'ID'
+    keywords: 'ID'
+    language_supports: 'ID'
+    multiplayer_modes: 'ID'
+    name: 'String'
+    parent_game: 'ID'
+    platforms: 'ID'
+    player_perspectives: 'ID'
+    ports: 'ID'
+    rating: 'Float'
+    rating_count: 'Int'
+    release_dates: 'ID'
+    remakes: 'ID'
+    remasters: 'ID'
+    screenshots: 'ID'
+    similar_games: 'ID'
+    slug: 'String'
+    standalone_expansions: 'ID'
+    status: 'ID'
+    storyline: 'String'
+    summary: 'String'
+    tags: 'ID'
+    themes: 'ID'
+    total_rating: 'Float'
+    total_rating_count: 'Int'
+    updated_at: 'DateTime'
+    url: 'String'
+    version_parent: 'ID'
+    version_title: 'String'
+    videos: 'ID'
+    websites: 'ID'
   }
   KnownForResult: { // field return type name
     adult: 'Boolean'
@@ -1448,6 +1620,7 @@ export interface NexusGenFieldTypeNames {
     checkForgotPasswordToken: 'RedisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
+    games: 'GameRes'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'
@@ -1766,6 +1939,9 @@ export interface NexusGenArgTypes {
       episodeNum: number; // Int!
       seasonNum: number; // Int!
       showId: string; // ID!
+    }
+    games: { // args
+      q: string; // String!
     }
     movieDetails: { // args
       movieDetailsId: string; // ID!

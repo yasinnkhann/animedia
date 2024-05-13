@@ -3,7 +3,11 @@ import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
 import { TContent } from '@ts/types';
-import { CLIENT_BASE_URL, BASE_IMG_URL, BASE_URL } from '../utils/constants';
+import {
+	CLIENT_BASE_URL,
+	BASE_IMG_URL,
+	THE_MOVIE_DB_BASE_URL,
+} from '../utils/constants';
 import {
 	MovieDetailsGenre,
 	ShowDetailsGenre,
@@ -99,8 +103,7 @@ export class CommonMethods {
 
 		try {
 			const res = await fetch(
-				`${BASE_URL}/genre/${mediaType}/list?api_key=${process.env
-					.API_KEY!}&language=en-US`
+				`${THE_MOVIE_DB_BASE_URL}/genre/${mediaType}/list?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 			);
 			const { genres }: { genres: TGenreObj[] } = await res.json();
 
@@ -131,7 +134,7 @@ export class CommonMethods {
 
 		try {
 			const res = await fetch(
-				`${BASE_URL}/search/keyword?api_key=${process.env.API_KEY!}&query=${q}`
+				`${THE_MOVIE_DB_BASE_URL}/search/keyword?api_key=${process.env.THE_MOVIE_DB_API_KEY}&query=${q}`
 			);
 			const { results }: { results: TKeywordObj[] } = await res.json();
 			if (_.isEmpty(results)) {
@@ -150,8 +153,9 @@ export class CommonMethods {
 	) => {
 		try {
 			const res = await fetch(
-				`${BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env
-					.API_KEY!}&language=en-US&page=${pageNum ?? 1}`
+				`${THE_MOVIE_DB_BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${
+					process.env.THE_MOVIE_DB_API_KEY
+				}&language=en-US&page=${pageNum ?? 1}`
 			);
 			const data = await res.json();
 

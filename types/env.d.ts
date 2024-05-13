@@ -8,7 +8,9 @@ declare global {
 			NEXTAUTH_URL: string;
 			NEXTAUTH_SECRET: string;
 			JWT_SECRET: string;
-			API_KEY: string;
+			THE_MOVIE_DB_API_KEY: string;
+			IGDB_CLIENT_ID: string;
+			IGDB_CLIENT_SECRET: string;
 			GOOGLE_CLIENT_ID: string;
 			GOOGLE_CLIENT_SECRET: string;
 			FACEBOOK_CLIENT_ID: string;

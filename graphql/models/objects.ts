@@ -1,6 +1,6 @@
 import { list, nonNull, objectType } from 'nexus';
 
-export const UserObj = {
+export const UserObjects = {
 	UserMovie: objectType({
 		name: 'UserMovie',
 		definition(t) {
@@ -89,7 +89,7 @@ export const UserObj = {
 	}),
 };
 
-export const MovieObj = {
+export const MovieObjects = {
 	MovieResult: objectType({
 		name: 'MovieResult',
 		definition(t) {
@@ -290,7 +290,7 @@ export const MovieObj = {
 	}),
 };
 
-export const ShowObj = {
+export const ShowObjects = {
 	ShowResult: objectType({
 		name: 'ShowResult',
 		definition(t) {
@@ -570,6 +570,69 @@ export const ShowObj = {
 			t.string('still_path');
 			t.float('vote_average');
 			t.int('vote_count');
+		},
+	}),
+};
+
+export const GameObjects = {
+	GameRes: objectType({
+		name: 'GameRes',
+		definition(t) {
+			t.id('id');
+			t.list.id('age_ratings');
+			t.list.id('alternative_names');
+			t.list.id('artworks');
+			t.list.id('bundles');
+			t.id('category');
+			t.id('checksum');
+			t.id('collection');
+			t.list.id('collections');
+			t.id('cover');
+			t.date('created_at');
+			t.list.id('dlcs');
+			t.list.id('expanded_games');
+			t.list.id('expansions');
+			t.list.id('external_games');
+			t.bigint('first_release_date');
+			t.list.id('forks');
+			t.id('franchise');
+			t.list.id('franchises');
+			t.list.id('game_engines');
+			t.list.id('game_localizations');
+			t.list.id('game_modes');
+			t.list.id('genres');
+			t.int('hypes');
+			t.list.id('involved_companies');
+			t.list.id('keywords');
+			t.list.id('language_supports');
+			t.list.id('multiplayer_modes');
+			t.string('name');
+			t.id('parent_game');
+			t.list.id('platforms');
+			t.list.id('player_perspectives');
+			t.list.id('ports');
+			t.float('rating');
+			t.int('rating_count');
+			t.list.id('release_dates');
+			t.list.id('remakes');
+			t.list.id('remasters');
+			t.list.id('screenshots');
+			t.list.id('similar_games');
+			t.string('slug');
+			t.list.id('standalone_expansions');
+			t.id('status');
+			t.string('storyline');
+			t.string('summary');
+			t.list.id('tags');
+			t.list.id('themes');
+			t.float('total_rating');
+			t.int('total_rating_count');
+			t.date('updated_at');
+			t.string('url');
+			t.id('version_parent');
+			t.string('version_title');
+			t.list.id('videos');
+			t.list.id('websites');
 		},
 	}),
 };

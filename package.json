@@ -12,7 +12,7 @@
 		"disconnect:dev-supabase": "supabase stop",
 		"migrate:prod-to-local": "supabase db dump > supabase/dump-schema.sql && supabase db dump --data-only > supabase/dump-data.sql",
 		"codegen": "graphql-codegen --watch",
-		"gen-env": "gen-env-types .env -o types/env.d.ts -e .",
+		"gen-env-types": "gen-env-types .env -o types/env.d.ts -e .",
 		"lint": "next lint",
 		"prepare": "husky install"
 	},

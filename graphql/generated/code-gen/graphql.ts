@@ -51,6 +51,65 @@ export type ErrorRes = {
   message: Scalars['String']['output'];
 };
 
+export type GameRes = {
+  __typename?: 'GameRes';
+  age_ratings?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  alternative_names?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  artworks?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  bundles?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  category?: Maybe<Scalars['ID']['output']>;
+  checksum?: Maybe<Scalars['ID']['output']>;
+  collection?: Maybe<Scalars['ID']['output']>;
+  collections?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  cover?: Maybe<Scalars['ID']['output']>;
+  created_at?: Maybe<Scalars['DateTime']['output']>;
+  dlcs?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  expanded_games?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  expansions?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  external_games?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  first_release_date?: Maybe<Scalars['BigInt']['output']>;
+  forks?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  franchise?: Maybe<Scalars['ID']['output']>;
+  franchises?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  game_engines?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  game_localizations?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  game_modes?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  genres?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  hypes?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  involved_companies?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  keywords?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  language_supports?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  multiplayer_modes?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  name?: Maybe<Scalars['String']['output']>;
+  parent_game?: Maybe<Scalars['ID']['output']>;
+  platforms?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  player_perspectives?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  ports?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  rating?: Maybe<Scalars['Float']['output']>;
+  rating_count?: Maybe<Scalars['Int']['output']>;
+  release_dates?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  remakes?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  remasters?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  screenshots?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  similar_games?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  slug?: Maybe<Scalars['String']['output']>;
+  standalone_expansions?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  status?: Maybe<Scalars['ID']['output']>;
+  storyline?: Maybe<Scalars['String']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  tags?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  themes?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  total_rating?: Maybe<Scalars['Float']['output']>;
+  total_rating_count?: Maybe<Scalars['Int']['output']>;
+  updated_at?: Maybe<Scalars['DateTime']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+  version_parent?: Maybe<Scalars['ID']['output']>;
+  version_title?: Maybe<Scalars['String']['output']>;
+  videos?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  websites?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+};
+
 export type KnownForResult = {
   __typename?: 'KnownForResult';
   adult?: Maybe<Scalars['Boolean']['output']>;
@@ -473,6 +532,7 @@ export type Query = {
   checkForgotPasswordToken?: Maybe<RedisRes>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
+  games: Array<Maybe<GameRes>>;
   movieDetails: MovieDetailsRes;
   movieReviews: MovieReviewsRes;
   moviesCastCrew?: Maybe<MoviesCastCrewRes>;
@@ -535,6 +595,11 @@ export type QueryEpisodeDetailsArgs = {
   episodeNum: Scalars['Int']['input'];
   seasonNum: Scalars['Int']['input'];
   showId: Scalars['ID']['input'];
+};
+
+
+export type QueryGamesArgs = {
+  q: Scalars['String']['input'];
 };
 
 

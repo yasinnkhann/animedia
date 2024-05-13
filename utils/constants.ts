@@ -1,4 +1,6 @@
-export const BASE_URL = 'https://api.themoviedb.org/3';
+export const THE_MOVIE_DB_BASE_URL = 'https://api.themoviedb.org/3';
+
+export const IGDB_BASE_URL = 'https://api.igdb.com/v4';
 
 export const BASE_IMG_URL = 'https://image.tmdb.org/t/p/original';
 
@@ -25,6 +27,8 @@ export const VERIFICATION_EMAIL_COUNT_PREFIX = 'retry-verification-email-count';
 export const FORGOT_PASSWORD_EMAIL_COUNT_PREFIX =
 	'retry-forgot-password-email-count';
 
+export const IGDB_ACCESS_TOKEN_PREFIX = 'access-token';
+
 export const VERIFICATION_EMAIL_COUNT_LIMIT = 10;
 
 export const FORGOT_PASSWORD_EMAIL_COUNT_LIMIT = 10;
@@ -32,10 +36,10 @@ export const FORGOT_PASSWORD_EMAIL_COUNT_LIMIT = 10;
 export const MAX_BIO_WORD_LENGTH = 200;
 
 export const REDIS_KEYS = [
-	VERIFICATION_EMAIL_PREFIX,
 	VERIFICATION_EMAIL_COUNT_PREFIX,
-	FORGOT_PASSWORD_EMAIL_PREFIX,
+	VERIFICATION_EMAIL_PREFIX,
 	FORGOT_PASSWORD_EMAIL_COUNT_PREFIX,
+	FORGOT_PASSWORD_EMAIL_PREFIX,
 ] as const;
 
 export const REDIS_MAP: Record<(typeof REDIS_KEYS)[number], number> = {
