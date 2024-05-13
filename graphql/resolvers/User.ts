@@ -28,8 +28,8 @@ export const UserQueries = extendType({
 				return await ctx.prisma.user.findUniqueOrThrow({
 					where: { id },
 					include: {
-						movies: true,
-						shows: true,
+						movie: true,
+						show: true,
 					},
 				});
 			},
@@ -41,7 +41,7 @@ export const UserQueries = extendType({
 				movieId: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { movieId }, ctx) => {
-				return await ctx.prisma.movies.findUnique({
+				return await ctx.prisma.movie.findUnique({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -58,7 +58,7 @@ export const UserQueries = extendType({
 				showId: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { showId }, ctx) => {
-				return await ctx.prisma.shows.findUnique({
+				return await ctx.prisma.show.findUnique({
 					where: {
 						id_userId: {
 							id: showId,
@@ -72,7 +72,7 @@ export const UserQueries = extendType({
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.movies.findMany({
+				return await ctx.prisma.movie.findMany({
 					where: {
 						userId: ctx.session?.user?.id!,
 					},
@@ -88,7 +88,7 @@ export const UserQueries = extendType({
 		t.list.field('usersShows', {
 			type: 'UserShow',
 			resolve: async (_parent, _args, ctx) => {
-				return await ctx.prisma.shows.findMany({
+				return await ctx.prisma.show.findMany({
 					where: {
 						userId: ctx.session?.user?.id,
 					},
@@ -231,7 +231,7 @@ export const UserMutations = extendType({
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
-						movies: {
+						movie: {
 							create: {
 								id: movieId,
 								name: movieName,
@@ -259,7 +259,7 @@ export const UserMutations = extendType({
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
-						shows: {
+						show: {
 							create: {
 								id: showId,
 								name: showName,
@@ -280,7 +280,7 @@ export const UserMutations = extendType({
 				movieRating: intArg(),
 			},
 			resolve: async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
-				return await ctx.prisma.movies.update({
+				return await ctx.prisma.movie.update({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -308,7 +308,7 @@ export const UserMutations = extendType({
 				{ showId, watchStatus, showRating, currentEpisode },
 				ctx
 			) => {
-				return await ctx.prisma.shows.update({
+				return await ctx.prisma.show.update({
 					where: {
 						id_userId: {
 							id: showId,
@@ -330,7 +330,7 @@ export const UserMutations = extendType({
 				movieId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { movieId }, ctx) => {
-				return await ctx.prisma.movies.delete({
+				return await ctx.prisma.movie.delete({
 					where: {
 						id_userId: {
 							id: movieId,
@@ -347,7 +347,7 @@ export const UserMutations = extendType({
 				showId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { showId }, ctx) => {
-				return await ctx.prisma.shows.delete({
+				return await ctx.prisma.show.delete({
 					where: {
 						id_userId: {
 							id: showId,
