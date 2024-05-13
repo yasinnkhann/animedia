@@ -6,7 +6,7 @@ import SearchBar from '../components/Search/SearchBar';
 import SearchResult from '../components/Search/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
-import { EContent } from '@ts/enums';
+import { TContent } from '@ts/types';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
@@ -20,9 +20,8 @@ const Search: NextPage = () => {
 
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
-	const [searchResultsType, setSearchResultsType] = useState<EContent>(
-		EContent.MOVIES
-	);
+	const [searchResultsType, setSearchResultsType] =
+		useState<TContent>('movies');
 
 	const [userMatchedMedias, setUserMatchedMedias] = useState<
 		UserShow[] | UserMovie[]
@@ -58,32 +57,26 @@ const Search: NextPage = () => {
 		}
 	);
 
-	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
-		Queries.GET_USERS_SHOWS,
-		{
-			skip: searchResultsType !== EContent.SHOWS,
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
+		skip: searchResultsType !== 'shows',
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
-		Queries.GET_USERS_MOVIES,
-		{
-			skip: searchResultsType !== EContent.MOVIES,
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMoviesData } = useQuery(Queries.GET_USERS_MOVIES, {
+		skip: searchResultsType !== 'movies',
+		fetchPolicy: 'network-only',
+	});
 
 	const getSearchedTypeData = useCallback(() => {
-		if (searchResultsType === EContent.MOVIES) {
+		if (searchResultsType === 'movies') {
 			return searchedMoviesData?.searchedMovies;
 		}
 
-		if (searchResultsType === EContent.SHOWS) {
+		if (searchResultsType === 'shows') {
 			return searchedShowsData?.searchedShows;
 		}
 
-		if (searchResultsType === EContent.PEOPLE) {
+		if (searchResultsType === 'people') {
 			return searchedPeopleData?.searchedPeople;
 		}
 	}, [
@@ -94,12 +87,12 @@ const Search: NextPage = () => {
 	]);
 
 	const getSearchResultType = () => {
-		if (searchResultsType === EContent.MOVIES) {
-			return EContent.MOVIE;
-		} else if (searchResultsType === EContent.SHOWS) {
-			return EContent.SHOW;
+		if (searchResultsType === 'movies') {
+			return 'movie';
+		} else if (searchResultsType === 'shows') {
+			return 'show';
 		} else {
-			return EContent.PERSON;
+			return 'person';
 		}
 	};
 
@@ -127,13 +120,13 @@ const Search: NextPage = () => {
 				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
 				!_.isEmpty(searchedShowsData.searchedShows.results)
 			) {
-				setSearchResultsType(EContent.SHOWS);
+				setSearchResultsType('shows');
 			} else if (
 				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
 				_.isEmpty(searchedShowsData.searchedShows.results) &&
 				!_.isEmpty(searchedPeopleData.searchedPeople.results)
 			) {
-				setSearchResultsType(EContent.PEOPLE);
+				setSearchResultsType('people');
 			}
 
 			if (searchBarRef.current) {
@@ -154,9 +147,9 @@ const Search: NextPage = () => {
 		const usersMediaMap: Map<string, UserShow | UserMovie> = new Map();
 
 		const userDataArr =
-			searchResultsType === EContent.MOVIES
+			searchResultsType === 'movies'
 				? usersMoviesData?.usersMovies
-				: searchResultsType === EContent.SHOWS
+				: searchResultsType === 'shows'
 					? usersShowsData?.usersShows
 					: null;
 
@@ -209,10 +202,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() => setSearchResultsType(EContent.MOVIES)}
+												onClick={() => setSearchResultsType('movies')}
 												style={{
 													borderBottom:
-														searchResultsType === EContent.MOVIES
+														searchResultsType === 'movies'
 															? '1px solid black'
 															: undefined,
 												}}
@@ -226,10 +219,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() => setSearchResultsType(EContent.SHOWS)}
+												onClick={() => setSearchResultsType('shows')}
 												style={{
 													borderBottom:
-														searchResultsType === EContent.SHOWS
+														searchResultsType === 'shows'
 															? '1px solid black'
 															: undefined,
 												}}
@@ -243,10 +236,10 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
-												onClick={() => setSearchResultsType(EContent.PEOPLE)}
+												onClick={() => setSearchResultsType('people')}
 												style={{
 													borderBottom:
-														searchResultsType === EContent.PEOPLE
+														searchResultsType === 'people'
 															? '1px solid black'
 															: undefined,
 												}}
@@ -278,9 +271,9 @@ const Search: NextPage = () => {
 							<Pagination
 								currPage={currPage}
 								totalItems={
-									searchResultsType === EContent.MOVIES
+									searchResultsType === 'movies'
 										? searchedMoviesData.searchedMovies.total_results
-										: searchResultsType === EContent.SHOWS
+										: searchResultsType === 'shows'
 											? searchedShowsData.searchedShows.total_results
 											: searchedPeopleData.searchedPeople.total_results
 								}

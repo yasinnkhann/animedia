@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
-import { EContent } from '@ts/enums';
 import { CommonMethods } from '../../../utils/CommonMethods';
 import {
 	MovieResult,
@@ -29,7 +28,7 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	return (
 		<Link
 			href={CommonMethods.getDetailsPageRoute(
-				isMovie ? EContent.MOVIE : EContent.SHOW,
+				isMovie ? 'movie' : 'show',
 				item.id,
 				mediaTitle
 			)}

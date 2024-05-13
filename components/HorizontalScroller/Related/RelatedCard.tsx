@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { EContent } from '@ts/enums';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
@@ -24,7 +23,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	return (
 		<Link
 			href={CommonMethods.getDetailsPageRoute(
-				isMovie ? EContent.MOVIE : EContent.SHOW,
+				isMovie ? 'movie' : 'show',
 				item.id,
 				mediaTitle
 			)}

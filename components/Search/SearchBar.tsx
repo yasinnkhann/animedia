@@ -1,6 +1,5 @@
 import { forwardRef, useState, useEffect, RefObject } from 'react';
 import { CommonMethods } from 'utils/CommonMethods';
-import { EContent } from '@ts/enums';
 import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/router';
 import { FaSearch } from 'react-icons/fa';
@@ -109,11 +108,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 		const handleDropdownResultsClick = (result: TDropDownSearchResult) => {
 			router.push(
 				CommonMethods.getDetailsPageRoute(
-					result.movieTitle
-						? EContent.MOVIE
-						: result.showName
-							? EContent.SHOW
-							: EContent.PERSON,
+					result.movieTitle ? 'movie' : result.showName ? 'show' : 'person',
 					result.id,
 					(result.movieTitle || result.showName || result.personName) as string
 				)
@@ -169,10 +164,10 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 									<span className='text-gray-300'>
 										{' '}
 										{result.movieTitle
-											? CommonMethods.toTitleCase(EContent.MOVIE)
+											? CommonMethods.toTitleCase('movie')
 											: result.showName
-												? CommonMethods.toTitleCase(EContent.SHOW)
-												: CommonMethods.toTitleCase(EContent.PERSON)}
+												? CommonMethods.toTitleCase('show')
+												: CommonMethods.toTitleCase('person')}
 									</span>
 									<span className='float-right text-white'>
 										{result.movieTitle

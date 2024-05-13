@@ -2,7 +2,7 @@ import moment from 'moment';
 import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
-import { EContent } from '@ts/enums';
+import { TContent } from '@ts/types';
 import { CLIENT_BASE_URL, BASE_IMG_URL, BASE_URL } from '../utils/constants';
 import {
 	MovieDetailsGenre,
@@ -29,7 +29,7 @@ export class CommonMethods {
 	};
 
 	public static getDetailsPageRoute = (
-		mediaType: EContent,
+		mediaType: TContent,
 		id: string,
 		title: string
 	) => {

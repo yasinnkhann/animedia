@@ -17,7 +17,6 @@ import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
-import { EContent } from '@ts/enums';
 import _ from 'lodash';
 
 const MovieDetails = () => {
@@ -361,7 +360,7 @@ const MovieDetails = () => {
 										title: movie.title,
 										popularity: movie.popularity ?? 0,
 									}))}
-									mediaType={EContent.MOVIES}
+									mediaType={'movies'}
 								/>
 							</section>
 						)}

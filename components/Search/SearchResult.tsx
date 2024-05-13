@@ -1,4 +1,4 @@
-import { EContent } from '@ts/enums';
+import { TContent } from '@ts/types';
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ import {
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult;
-	searchedResultType: EContent;
+	searchedResultType: TContent;
 	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
@@ -79,7 +79,7 @@ const SearchResult = ({
 	);
 
 	const renderSearchResult = () => {
-		if (searchedResultType === EContent.MOVIE) {
+		if (searchedResultType === 'movie') {
 			const searchResult = result as MovieResult;
 			return (
 				<>
@@ -87,7 +87,7 @@ const SearchResult = ({
 					{renderMediaDetails(searchResult.release_date, searchResult.overview)}
 				</>
 			);
-		} else if (searchedResultType === EContent.SHOW) {
+		} else if (searchedResultType === 'show') {
 			const searchResult = result as ShowResult;
 			return (
 				<>

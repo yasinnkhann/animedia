@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { EContent } from '@ts/enums';
 import Link from 'next/link';
 import { PersonResult } from '../../graphql/generated/code-gen/graphql';
 
@@ -12,11 +11,7 @@ interface Props {
 const PersonCard = ({ person }: Props) => {
 	return (
 		<Link
-			href={CommonMethods.getDetailsPageRoute(
-				EContent.PERSON,
-				person.id,
-				person.name
-			)}
+			href={CommonMethods.getDetailsPageRoute('person', person.id, person.name)}
 			passHref
 		>
 			<a className='text-inherit no-underline'>

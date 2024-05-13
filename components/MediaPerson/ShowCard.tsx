@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
-import { EContent } from '@ts/enums';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
@@ -29,11 +28,7 @@ const ShowCard = ({ show, rank }: Props) => {
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
-					href={CommonMethods.getDetailsPageRoute(
-						EContent.SHOW,
-						show.id,
-						show.name
-					)}
+					href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
 					passHref
 				>
 					<a className='text-inherit no-underline'>
@@ -50,11 +45,7 @@ const ShowCard = ({ show, rank }: Props) => {
 
 				<section className='col-start-2 pl-4'>
 					<Link
-						href={CommonMethods.getDetailsPageRoute(
-							EContent.SHOW,
-							show.id,
-							show.name
-						)}
+						href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
 						passHref
 					>
 						<a className='text-inherit no-underline'>

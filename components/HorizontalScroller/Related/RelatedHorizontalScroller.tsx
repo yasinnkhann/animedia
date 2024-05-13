@@ -7,13 +7,14 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../../graphql/queries';
 import { UserShow, UserMovie } from 'graphql/generated/code-gen/graphql';
-import { EContent } from '@ts/enums';
+import { TContent } from '@ts/types';
+import { ExtractStrict } from '@ts/types';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
 	items: IRelatedMedia[];
-	mediaType?: EContent.MOVIES | EContent.SHOWS;
+	mediaType?: ExtractStrict<TContent, 'movies' | 'shows'>;
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
@@ -21,21 +22,15 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		UserShow[] | UserMovie[]
 	>([]);
 
-	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
-		Queries.GET_USERS_SHOWS,
-		{
-			skip: mediaType === EContent.MOVIES,
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
+		skip: mediaType === 'movies',
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
-		Queries.GET_USERS_MOVIES,
-		{
-			skip: mediaType === EContent.SHOWS,
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMoviesData } = useQuery(Queries.GET_USERS_MOVIES, {
+		skip: mediaType === 'shows',
+		fetchPolicy: 'network-only',
+	});
 
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
@@ -72,7 +67,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		if (mediaType) {
 			const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
 			const userDataArr =
-				mediaType === EContent.MOVIES
+				mediaType === 'movies'
 					? usersMoviesData?.usersMovies
 					: usersShowsData?.usersShows;
 

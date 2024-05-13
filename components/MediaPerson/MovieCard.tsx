@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
-import { EContent } from '@ts/enums';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
@@ -29,7 +28,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute(
-						EContent.MOVIE,
+						'movie',
 						movie.id,
 						movie.title
 					)}
@@ -49,7 +48,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 				<section className='col-start-2 pl-4'>
 					<Link
 						href={CommonMethods.getDetailsPageRoute(
-							EContent.MOVIE,
+							'movie',
 							movie.id,
 							movie.title
 						)}

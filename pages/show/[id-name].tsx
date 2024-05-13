@@ -18,7 +18,6 @@ import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
-import { EContent } from '@ts/enums';
 import { FaPlus } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import _ from 'lodash';
@@ -747,7 +746,7 @@ const ShowDetails = () => {
 										name: show.name,
 										popularity: show.popularity ?? 0,
 									}))}
-									mediaType={EContent.SHOWS}
+									mediaType={'shows'}
 								/>
 							</section>
 						)}

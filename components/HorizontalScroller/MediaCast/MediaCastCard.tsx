@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
-import { EContent } from '@ts/enums';
 import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {
@@ -12,11 +11,7 @@ interface Props {
 const MediaCastCard = ({ item, dragging }: Props) => {
 	return (
 		<Link
-			href={CommonMethods.getDetailsPageRoute(
-				EContent.PERSON,
-				item.id,
-				item.name
-			)}
+			href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)}
 			passHref
 		>
 			<a

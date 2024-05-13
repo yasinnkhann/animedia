@@ -1,7 +1,7 @@
-import { EContent } from '../enums/index';
+import { TContent } from './types';
 
 export interface IHorizontalScrollerItemClickInfo {
-	mediaType: EContent;
+	mediaType: TContent;
 	id: string;
 	title: string;
 }

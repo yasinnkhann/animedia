@@ -12,11 +12,13 @@ import {
 import {
 	MovieResult,
 	ShowResult,
-} from '../../../graphql/generated/code-gen/graphql';
+} from '../../graphql/generated/code-gen/graphql';
 
 export type NullablePartial<T, K extends keyof T> = {
 	[P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
 };
+
+export type ExtractStrict<T, U extends T> = U;
 
 export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
@@ -27,7 +29,7 @@ export type TStatusParam =
 	| 'dropped'
 	| 'plan-to-watch';
 
-export const searchResultsConst = ['movies', 'shows', 'people'] as const;
+const searchResultsConst = ['movies', 'shows', 'people'] as const;
 
 export type TSearchResults = (typeof searchResultsConst)[number];
 
@@ -65,3 +67,14 @@ export type TDropDownSearchResult = NullablePartial<
 	| 'personName'
 	| 'knownForDepartment'
 >;
+
+const contentConst = [
+	'movies',
+	'shows',
+	'people',
+	'movie',
+	'show',
+	'person',
+] as const;
+
+export type TContent = (typeof contentConst)[number];

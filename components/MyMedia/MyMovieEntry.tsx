@@ -4,7 +4,6 @@ import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { EContent } from '@ts/enums';
 import { useMutation, useQuery } from '@apollo/client';
 import { UserMovie } from 'graphql/generated/code-gen/graphql';
 
@@ -41,7 +40,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute(
-						EContent.MOVIE,
+						'movie',
 						myMovie.id!,
 						myMovie.name as string
 					)}
@@ -65,7 +64,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 				<section className='col-start-2 pl-4'>
 					<Link
 						href={CommonMethods.getDetailsPageRoute(
-							EContent.MOVIE,
+							'movie',
 							myMovie.id!,
 							myMovie.name as string
 						)}

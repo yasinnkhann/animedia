@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
-import { TStatusParam } from '@ts/types';
-import { EContent } from '@ts/enums';
+import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
@@ -8,7 +7,7 @@ import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 interface Props {
 	status: TStatusParam;
 	myMedias: UserMovie[] | UserShow[];
-	mediaType: Uppercase<EContent.MOVIES> | Uppercase<EContent.SHOWS>;
+	mediaType: Uppercase<ExtractStrict<TContent, 'movies' | 'shows'>>;
 }
 
 const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
