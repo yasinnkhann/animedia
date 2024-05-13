@@ -10,6 +10,7 @@ import RelatedHorizontalScroller from '../../components/HorizontalScroller/Relat
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
+	MAX_BIO_WORD_LENGTH,
 } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
@@ -145,14 +146,14 @@ const PersonDetails = () => {
 					<div>
 						{personDetailsData.personDetails.biography ? (
 							personDetailsData.personDetails.biography.split(' ').length <=
-							200 ? (
+							MAX_BIO_WORD_LENGTH ? (
 								personDetailsData.personDetails.biography
 							) : (
 								<div>
 									<p>
 										{personDetailsData.personDetails.biography
 											.split(' ')
-											.slice(0, 200)
+											.slice(0, MAX_BIO_WORD_LENGTH)
 											.join(' ') + '...'}
 									</p>
 									<button
