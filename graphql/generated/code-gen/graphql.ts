@@ -563,6 +563,7 @@ export type Query = {
   popularShowsByGenre: ShowsRes;
   recommendedMovies: MoviesRes;
   recommendedShows: ShowsRes;
+  searchCharacters: Array<Maybe<Character>>;
   searchGames: Array<Maybe<Game>>;
   searchedMovies: MoviesRes;
   searchedPeople: PeopleRes;
@@ -712,6 +713,12 @@ export type QueryRecommendedMoviesArgs = {
 export type QueryRecommendedShowsArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   recommendedShowsId: Scalars['ID']['input'];
+};
+
+
+export type QuerySearchCharactersArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  q: Scalars['String']['input'];
 };
 
 

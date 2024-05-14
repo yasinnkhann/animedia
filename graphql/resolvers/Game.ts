@@ -92,5 +92,23 @@ export const GameQueries = extendType({
 				}
 			},
 		});
+		t.nonNull.field('searchCharacters', {
+			type: list('Character'),
+			args: {
+				q: nonNull(stringArg()),
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { q, limit }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_URL}/characters`,
+						`fields *; limit ${limit}; search "${q}";`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
 	},
 });
