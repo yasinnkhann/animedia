@@ -39,10 +39,12 @@ export class CommonMethods {
 	) => {
 		const cleanTitle = unidecode(title)
 			.toLowerCase()
-			.replace(/[^a-z0-9/☆ -]/gi, '')
+			.replace(/[^\w\s'_]+/g, '-')
 			.replace(/\s+/g, '-')
+			.replace(/_+/g, '-')
 			.replace(/-{2,}/g, '-')
-			.trim();
+			.replace(/^-+|-+$/g, '')
+			.replace(/'/g, '');
 
 		return `${CLIENT_BASE_URL}/${mediaType}/${id}-${cleanTitle}`;
 	};
