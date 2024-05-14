@@ -545,6 +545,8 @@ export type Query = {
   checkForgotPasswordToken?: Maybe<RedisRes>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
+  game: Array<Maybe<Game>>;
+  gamesFromGenres: Array<Maybe<Game>>;
   movieDetails: MovieDetailsRes;
   movieReviews: MovieReviewsRes;
   moviesCastCrew?: Maybe<MoviesCastCrewRes>;
@@ -614,6 +616,17 @@ export type QueryEpisodeDetailsArgs = {
   episodeNum: Scalars['Int']['input'];
   seasonNum: Scalars['Int']['input'];
   showId: Scalars['ID']['input'];
+};
+
+
+export type QueryGameArgs = {
+  gameId: Scalars['ID']['input'];
+};
+
+
+export type QueryGamesFromGenresArgs = {
+  genreIds: Array<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 

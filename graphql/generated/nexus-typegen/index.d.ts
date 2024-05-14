@@ -1028,6 +1028,8 @@ export interface NexusGenFieldTypes {
     checkForgotPasswordToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
+    game: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
+    gamesFromGenres: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1653,6 +1655,8 @@ export interface NexusGenFieldTypeNames {
     checkForgotPasswordToken: 'RedisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
+    game: 'Game'
+    gamesFromGenres: 'Game'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'
@@ -1976,6 +1980,13 @@ export interface NexusGenArgTypes {
       episodeNum: number; // Int!
       seasonNum: number; // Int!
       showId: string; // ID!
+    }
+    game: { // args
+      gameId: string; // ID!
+    }
+    gamesFromGenres: { // args
+      genreIds: string[]; // [ID!]!
+      limit: number | null; // Int
     }
     movieDetails: { // args
       movieDetailsId: string; // ID!
