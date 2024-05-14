@@ -8,14 +8,12 @@ export const MovieQueries = extendType({
 		t.nonNull.field('popularMovies', {
 			type: 'MoviesRes',
 			args: {
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/movie/popular?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/movie/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -29,15 +27,13 @@ export const MovieQueries = extendType({
 			type: 'MoviesRes',
 			args: {
 				q: nonNull(stringArg()),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/search/movie?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&query=${q}&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/search/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&query=${q}&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -68,18 +64,14 @@ export const MovieQueries = extendType({
 		t.nonNull.field('popularAnimeMovies', {
 			type: 'MoviesRes',
 			args: {
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { page }) => {
 				try {
 					const keywordID = await CommonMethods.getKeywordId('anime');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&sort_by=popularity.desc&page=${
-							page ?? 1
-						}&with_keywords=${keywordID}`
+						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_keywords=${keywordID}`
 					);
 					const data = await res.json();
 					return data;
@@ -95,7 +87,7 @@ export const MovieQueries = extendType({
 				timeWindow: arg({
 					type: nonNull('TimeWindowTypes'),
 				}),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
 				try {
@@ -114,14 +106,12 @@ export const MovieQueries = extendType({
 		t.nonNull.field('topRatedMovies', {
 			type: 'MoviesRes',
 			args: {
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/movie/top_rated?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/movie/top_rated?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -135,14 +125,12 @@ export const MovieQueries = extendType({
 			type: 'MoviesRes',
 			args: {
 				recommendedMoviesId: nonNull(idArg()),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { recommendedMoviesId, page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -156,14 +144,12 @@ export const MovieQueries = extendType({
 			type: 'MovieReviewsRes',
 			args: {
 				id: nonNull(idArg()),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { id, page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/movie/${id}/reviews?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/movie/${id}/reviews?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -176,14 +162,12 @@ export const MovieQueries = extendType({
 		t.nonNull.field('moviesInTheatres', {
 			type: 'MoviesInTheatresRes',
 			args: {
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/movie/now_playing?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/movie/now_playing?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -199,18 +183,14 @@ export const MovieQueries = extendType({
 				genre: arg({
 					type: nonNull('MovieGenreTypes'),
 				}),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { genre, page }) => {
 				try {
 					const genreID = await CommonMethods.getGenreID(genre, 'movie');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${
-							page ?? 1
-						}&with_genres=${genreID}&sort_by=popularity.desc`
+						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=popularity.desc`
 					);
 					const data = await res.json();
 					return data;
@@ -226,18 +206,14 @@ export const MovieQueries = extendType({
 				genre: arg({
 					type: nonNull('MovieGenreTypes'),
 				}),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { genre, page }) => {
 				try {
 					const genreID = await CommonMethods.getGenreID(genre, 'movie');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${
-							page ?? 1
-						}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+						`${THE_MOVIE_DB_BASE_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 					);
 					const data = await res.json();
 					return data;

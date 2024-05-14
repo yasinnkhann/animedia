@@ -1941,6 +1941,7 @@ export interface NexusGenArgTypes {
       showId: string; // ID!
     }
     games: { // args
+      limit: number | null; // Int
       q: string; // String!
     }
     movieDetails: { // args
@@ -1948,13 +1949,13 @@ export interface NexusGenArgTypes {
     }
     movieReviews: { // args
       id: string; // ID!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     moviesCastCrew: { // args
       movieId: string; // ID!
     }
     moviesInTheatres: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     personDetails: { // args
       personDetailsId: string; // ID!
@@ -1966,46 +1967,46 @@ export interface NexusGenArgTypes {
       personsKnownForShowResId: string; // ID!
     }
     popularAnimeMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularAnimeShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularMoviesByGenre: { // args
       genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularPeople: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     popularShowsByGenre: { // args
       genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     recommendedMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       recommendedMoviesId: string; // ID!
     }
     recommendedShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       recommendedShowsId: string; // ID!
     }
     searchedMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       q: string; // String!
     }
     searchedPeople: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       q: string; // String!
     }
     searchedShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       q: string; // String!
     }
     showDetails: { // args
@@ -2013,31 +2014,31 @@ export interface NexusGenArgTypes {
     }
     showReviews: { // args
       id: string; // ID!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     showsCastCrew: { // args
       showId: string; // ID!
     }
     topRatedMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     topRatedMoviesByGenre: { // args
       genre: NexusGenEnums['MovieGenreTypes']; // MovieGenreTypes!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     topRatedShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     topRatedShowsByGenre: { // args
       genre: NexusGenEnums['ShowGenreTypes']; // ShowGenreTypes!
-      page?: number | null; // Int
+      page: number | null; // Int
     }
     trendingMovies: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
     }
     trendingShows: { // args
-      page?: number | null; // Int
+      page: number | null; // Int
       timeWindow: NexusGenEnums['TimeWindowTypes']; // TimeWindowTypes!
     }
     user: { // args

@@ -201,14 +201,12 @@ export const PopularQueries = extendType({
 		t.nonNull.field('popularPeople', {
 			type: 'PeopleRes',
 			args: {
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/person/popular?api_key=${
-							process.env.THE_MOVIE_DB_API_KEY
-						}&language=en-US&page=${page ?? 1}`
+						`${THE_MOVIE_DB_BASE_URL}/person/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -240,15 +238,13 @@ export const PopularQueries = extendType({
 			type: 'PeopleRes',
 			args: {
 				q: nonNull(stringArg()),
-				page: intArg(),
+				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { q, page }) => {
 				q = q.split(' ').join('+');
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/search/person?api_key=${process.env.THE_MOVIE_DB_API_KEY}&page=${
-							page ?? 1
-						}&query=${q}`
+						`${THE_MOVIE_DB_BASE_URL}/search/person?api_key=${process.env.THE_MOVIE_DB_API_KEY}&page=${page}&query=${q}`
 					);
 					const data = await res.json();
 					return data;

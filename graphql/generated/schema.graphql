@@ -429,35 +429,35 @@ type Query {
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  games(q: String!): [GameRes]!
+  games(limit: Int = 500, q: String!): [GameRes]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
-  movieReviews(id: ID!, page: Int): MovieReviewsRes!
+  movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes
-  moviesInTheatres(page: Int): MoviesInTheatresRes!
+  moviesInTheatres(page: Int = 1): MoviesInTheatresRes!
   personDetails(personDetailsId: ID!): PersonDetailsRes!
   personsKnownForMovie(personsKnownForMovieResId: ID!): PersonsKnownForMovieRes!
   personsKnownForShow(personsKnownForShowResId: ID!): PersonsKnownForShowRes!
-  popularAnimeMovies(page: Int): MoviesRes!
-  popularAnimeShows(page: Int): ShowsRes!
-  popularMovies(page: Int): MoviesRes!
-  popularMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
-  popularPeople(page: Int): PeopleRes!
-  popularShows(page: Int): ShowsRes!
-  popularShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
-  recommendedMovies(page: Int, recommendedMoviesId: ID!): MoviesRes!
-  recommendedShows(page: Int, recommendedShowsId: ID!): ShowsRes!
-  searchedMovies(page: Int, q: String!): MoviesRes!
-  searchedPeople(page: Int, q: String!): PeopleRes!
-  searchedShows(page: Int, q: String!): ShowsRes!
+  popularAnimeMovies(page: Int = 1): MoviesRes!
+  popularAnimeShows(page: Int = 1): ShowsRes!
+  popularMovies(page: Int = 1): MoviesRes!
+  popularMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
+  popularPeople(page: Int = 1): PeopleRes!
+  popularShows(page: Int = 1): ShowsRes!
+  popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
+  recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
+  recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
+  searchedMovies(page: Int = 1, q: String!): MoviesRes!
+  searchedPeople(page: Int = 1, q: String!): PeopleRes!
+  searchedShows(page: Int = 1, q: String!): ShowsRes!
   showDetails(showDetailsId: ID!): ShowDetailsRes!
-  showReviews(id: ID!, page: Int): ShowReviewRes!
+  showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
-  topRatedMovies(page: Int): MoviesRes!
-  topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int): MoviesRes!
-  topRatedShows(page: Int): ShowsRes!
-  topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int): ShowsRes!
-  trendingMovies(page: Int, timeWindow: TimeWindowTypes!): MoviesRes!
-  trendingShows(page: Int, timeWindow: TimeWindowTypes!): ShowsRes!
+  topRatedMovies(page: Int = 1): MoviesRes!
+  topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
+  topRatedShows(page: Int = 1): ShowsRes!
+  topRatedShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
+  trendingMovies(page: Int = 1, timeWindow: TimeWindowTypes!): MoviesRes!
+  trendingShows(page: Int = 1, timeWindow: TimeWindowTypes!): ShowsRes!
   user(id: ID!): User
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]

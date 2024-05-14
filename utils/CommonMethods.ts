@@ -151,13 +151,11 @@ export class CommonMethods {
 	public static getTrendingMedia = async (
 		mediaType: 'all' | 'movie' | 'tv' | 'person',
 		timeWindow: 'day' | 'week',
-		pageNum: number | null | undefined
+		pageNum: number | null
 	) => {
 		try {
 			const res = await fetch(
-				`${THE_MOVIE_DB_BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${
-					process.env.THE_MOVIE_DB_API_KEY
-				}&language=en-US&page=${pageNum ?? 1}`
+				`${THE_MOVIE_DB_BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${pageNum}`
 			);
 			const data = await res.json();
 

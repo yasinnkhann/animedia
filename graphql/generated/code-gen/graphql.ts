@@ -599,6 +599,7 @@ export type QueryEpisodeDetailsArgs = {
 
 
 export type QueryGamesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
   q: Scalars['String']['input'];
 };
 
