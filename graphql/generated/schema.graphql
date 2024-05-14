@@ -13,6 +13,17 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
+type Character {
+  checksum: String
+  created_at: DateTime
+  games: [ID]
+  id: ID
+  name: String
+  slug: String
+  updated_at: DateTime
+  url: String
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -38,7 +49,7 @@ type ErrorRes {
   message: String!
 }
 
-type GameRes {
+type Game {
   age_ratings: [ID]
   alternative_names: [ID]
   artworks: [ID]
@@ -425,11 +436,11 @@ type PersonsKnownForShowRes {
 
 type Query {
   accountVerified(email: String!): AccountVerifiedRes
+  characters(limit: Int = 500): [Character]!
   checkEmailVerificationToken(token: String!, userId: ID!): RedisRes
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  games(limit: Int = 500, q: String!): [GameRes]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes
@@ -446,12 +457,14 @@ type Query {
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
   recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
   recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
+  searchGames(limit: Int = 500, q: String!): [Game]!
   searchedMovies(page: Int = 1, q: String!): MoviesRes!
   searchedPeople(page: Int = 1, q: String!): PeopleRes!
   searchedShows(page: Int = 1, q: String!): ShowsRes!
   showDetails(showDetailsId: ID!): ShowDetailsRes!
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
+  topRatedGames(limit: Int = 500): [Game]!
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!

@@ -1,7 +1,7 @@
 import { list, nonNull, objectType } from 'nexus';
 
-export const UserObjects = {
-	UserMovie: objectType({
+export const userObjects = {
+	userMovie: objectType({
 		name: 'UserMovie',
 		definition(t) {
 			t.id('id');
@@ -12,7 +12,7 @@ export const UserObjects = {
 			t.int('rating');
 		},
 	}),
-	UserShow: objectType({
+	userShow: objectType({
 		name: 'UserShow',
 		definition(t) {
 			t.id('id');
@@ -24,7 +24,7 @@ export const UserObjects = {
 			t.int('current_episode');
 		},
 	}),
-	User: objectType({
+	user: objectType({
 		name: 'User',
 		definition(t) {
 			t.id('id');
@@ -42,13 +42,13 @@ export const UserObjects = {
 			});
 		},
 	}),
-	ErrorRes: objectType({
+	errorRes: objectType({
 		name: 'ErrorRes',
 		definition(t) {
 			t.nonNull.string('message');
 		},
 	}),
-	RegisteredUserRes: objectType({
+	registeredUserRes: objectType({
 		name: 'RegisteredUserRes',
 		definition(t) {
 			t.nonNull.list.field('errors', {
@@ -59,7 +59,7 @@ export const UserObjects = {
 			});
 		},
 	}),
-	RedisRes: objectType({
+	redisRes: objectType({
 		name: 'RedisRes',
 		definition(t) {
 			t.field('errors', {
@@ -73,7 +73,7 @@ export const UserObjects = {
 			});
 		},
 	}),
-	AccountVerifiedRes: objectType({
+	accountVerifiedRes: objectType({
 		name: 'AccountVerifiedRes',
 		definition(t) {
 			t.nonNull.field('errors', {
@@ -89,8 +89,8 @@ export const UserObjects = {
 	}),
 };
 
-export const MovieObjects = {
-	MovieResult: objectType({
+export const movieObjects = {
+	movieResult: objectType({
 		name: 'MovieResult',
 		definition(t) {
 			t.nonNull.boolean('adult');
@@ -109,7 +109,7 @@ export const MovieObjects = {
 			t.int('vote_count');
 		},
 	}),
-	MoviesRes: objectType({
+	moviesRes: objectType({
 		name: 'MoviesRes',
 		definition(t) {
 			t.nonNull.int('page');
@@ -120,14 +120,14 @@ export const MovieObjects = {
 			});
 		},
 	}),
-	MovieDetailsGenre: objectType({
+	movieDetailsGenre: objectType({
 		name: 'MovieDetailsGenre',
 		definition(t) {
 			t.nonNull.id('id');
 			t.nonNull.string('name');
 		},
 	}),
-	MovieDetailsProdCompany: objectType({
+	movieDetailsProdCompany: objectType({
 		name: 'MovieDetailsProdCompany',
 		definition(t) {
 			t.nonNull.id('id');
@@ -136,14 +136,14 @@ export const MovieObjects = {
 			t.nonNull.string('origin_country');
 		},
 	}),
-	MovieDetailsProdCountry: objectType({
+	movieDetailsProdCountry: objectType({
 		name: 'MovieDetailsProdCountry',
 		definition(t) {
 			t.nonNull.string('iso_3166_1');
 			t.nonNull.string('name');
 		},
 	}),
-	MovieDetailsSpokenLang: objectType({
+	movieDetailsSpokenLang: objectType({
 		name: 'MovieDetailsSpokenLang',
 		definition(t) {
 			t.nonNull.string('english_name');
@@ -151,7 +151,7 @@ export const MovieObjects = {
 			t.nonNull.string('name');
 		},
 	}),
-	MovieDetailsRes: objectType({
+	movieDetailsRes: objectType({
 		name: 'MovieDetailsRes',
 		definition(t) {
 			t.nonNull.boolean('adult');
@@ -187,7 +187,7 @@ export const MovieObjects = {
 			t.nonNull.int('vote_count');
 		},
 	}),
-	MovieReviewAuthorDetails: objectType({
+	movieReviewAuthorDetails: objectType({
 		name: 'MovieReviewAuthorDetails',
 		definition(t) {
 			t.nonNull.string('name');
@@ -196,7 +196,7 @@ export const MovieObjects = {
 			t.float('rating');
 		},
 	}),
-	MovieReviewsResult: objectType({
+	movieReviewsResult: objectType({
 		name: 'MovieReviewsResult',
 		definition(t) {
 			t.nonNull.string('author');
@@ -210,7 +210,7 @@ export const MovieObjects = {
 			t.nonNull.string('url');
 		},
 	}),
-	MovieReviewsRes: objectType({
+	movieReviewsRes: objectType({
 		name: 'MovieReviewsRes',
 		definition(t) {
 			t.nonNull.id('id'),
@@ -222,14 +222,14 @@ export const MovieObjects = {
 			});
 		},
 	}),
-	TheatreDates: objectType({
+	theatreDates: objectType({
 		name: 'TheatreDates',
 		definition(t) {
 			t.nonNull.string('maximum');
 			t.nonNull.string('minimum');
 		},
 	}),
-	MoviesInTheatresRes: objectType({
+	moviesInTheatresRes: objectType({
 		name: 'MoviesInTheatresRes',
 		definition(t) {
 			t.nonNull.field('dates', {
@@ -243,7 +243,7 @@ export const MovieObjects = {
 			});
 		},
 	}),
-	MoviesCastModel: objectType({
+	moviesCastModel: objectType({
 		name: 'MoviesCastModel',
 		definition(t) {
 			t.boolean('adult');
@@ -260,7 +260,7 @@ export const MovieObjects = {
 			t.int('order');
 		},
 	}),
-	MoviesCrewModel: objectType({
+	moviesCrewModel: objectType({
 		name: 'MoviesCrewModel',
 		definition(t) {
 			t.boolean('adult');
@@ -276,7 +276,7 @@ export const MovieObjects = {
 			t.string('job');
 		},
 	}),
-	MoviesCastCrewRes: objectType({
+	moviesCastCrewRes: objectType({
 		name: 'MoviesCastCrewRes',
 		definition(t) {
 			t.id('id');
@@ -290,8 +290,8 @@ export const MovieObjects = {
 	}),
 };
 
-export const ShowObjects = {
-	ShowResult: objectType({
+export const showObjects = {
+	showResult: objectType({
 		name: 'ShowResult',
 		definition(t) {
 			t.string('backdrop_path');
@@ -309,7 +309,7 @@ export const ShowObjects = {
 			t.nonNull.int('vote_count');
 		},
 	}),
-	ShowsRes: objectType({
+	showsRes: objectType({
 		name: 'ShowsRes',
 		definition(t) {
 			t.nonNull.int('page');
@@ -320,7 +320,7 @@ export const ShowObjects = {
 			});
 		},
 	}),
-	ShowDetailsCreatedBy: objectType({
+	showDetailsCreatedBy: objectType({
 		name: 'ShowDetailsCreatedBy',
 		definition(t) {
 			t.id('id');
@@ -330,14 +330,14 @@ export const ShowObjects = {
 			t.string('profile_path');
 		},
 	}),
-	ShowDetailsGenre: objectType({
+	showDetailsGenre: objectType({
 		name: 'ShowDetailsGenre',
 		definition(t) {
 			t.nonNull.id('id');
 			t.nonNull.string('name');
 		},
 	}),
-	ShowDetailsLastEpToAir: objectType({
+	showDetailsLastEpToAir: objectType({
 		name: 'ShowDetailsLastEpToAir',
 		definition(t) {
 			t.string('air_date');
@@ -354,7 +354,7 @@ export const ShowObjects = {
 			t.nonNull.int('vote_count');
 		},
 	}),
-	ShowDetailsNetwork: objectType({
+	showDetailsNetwork: objectType({
 		name: 'ShowDetailsNetwork',
 		definition(t) {
 			t.nonNull.id('id');
@@ -363,7 +363,7 @@ export const ShowObjects = {
 			t.nonNull.string('origin_country');
 		},
 	}),
-	ShowDetailsProdCompany: objectType({
+	showDetailsProdCompany: objectType({
 		name: 'ShowDetailsProdCompany',
 		definition(t) {
 			t.nonNull.id('id');
@@ -372,14 +372,14 @@ export const ShowObjects = {
 			t.nonNull.string('origin_country');
 		},
 	}),
-	ShowDetailsCountry: objectType({
+	showDetailsCountry: objectType({
 		name: 'ShowDetailsCountry',
 		definition(t) {
 			t.nonNull.string('iso_3166_1');
 			t.nonNull.string('name');
 		},
 	}),
-	ShowDetailsSeason: objectType({
+	showDetailsSeason: objectType({
 		name: 'ShowDetailsSeason',
 		definition(t) {
 			t.string('air_date');
@@ -391,7 +391,7 @@ export const ShowObjects = {
 			t.nonNull.int('season_number');
 		},
 	}),
-	ShowDetailsSpokenLang: objectType({
+	showDetailsSpokenLang: objectType({
 		name: 'ShowDetailsSpokenLang',
 		definition(t) {
 			t.nonNull.string('english_name');
@@ -399,7 +399,7 @@ export const ShowObjects = {
 			t.nonNull.string('name');
 		},
 	}),
-	ShowDetailsNextEpToAir: objectType({
+	showDetailsNextEpToAir: objectType({
 		name: 'ShowDetailsNextEpToAir',
 		definition(t) {
 			t.string('air_date');
@@ -416,7 +416,7 @@ export const ShowObjects = {
 			t.nonNull.int('vote_count');
 		},
 	}),
-	ShowDetailsRes: objectType({
+	showDetailsRes: objectType({
 		name: 'ShowDetailsRes',
 		definition(t) {
 			t.nonNull.boolean('adult');
@@ -471,7 +471,7 @@ export const ShowObjects = {
 			t.int('vote_count');
 		},
 	}),
-	ShowReviewAuthorDetails: objectType({
+	showReviewAuthorDetails: objectType({
 		name: 'ShowReviewAuthorDetails',
 		definition(t) {
 			t.nonNull.string('name');
@@ -480,7 +480,7 @@ export const ShowObjects = {
 			t.float('rating');
 		},
 	}),
-	ShowReviewResult: objectType({
+	showReviewResult: objectType({
 		name: 'ShowReviewResult',
 		definition(t) {
 			t.nonNull.string('author');
@@ -494,7 +494,7 @@ export const ShowObjects = {
 			t.nonNull.string('url');
 		},
 	}),
-	ShowReviewRes: objectType({
+	showReviewRes: objectType({
 		name: 'ShowReviewRes',
 		definition(t) {
 			t.nonNull.id('id'),
@@ -506,7 +506,7 @@ export const ShowObjects = {
 			});
 		},
 	}),
-	ShowsCastModel: objectType({
+	showsCastModel: objectType({
 		name: 'ShowsCastModel',
 		definition(t) {
 			t.boolean('adult');
@@ -522,7 +522,7 @@ export const ShowObjects = {
 			t.int('order');
 		},
 	}),
-	ShowsCrewModel: objectType({
+	showsCrewModel: objectType({
 		name: 'ShowsCrewModel',
 		definition(t) {
 			t.boolean('adult');
@@ -538,7 +538,7 @@ export const ShowObjects = {
 			t.string('job');
 		},
 	}),
-	ShowsCastCrewRes: objectType({
+	showsCastCrewRes: objectType({
 		name: 'ShowsCastCrewRes',
 		definition(t) {
 			t.id('id');
@@ -550,7 +550,7 @@ export const ShowObjects = {
 			});
 		},
 	}),
-	EpisodeDetailsRes: objectType({
+	episodeDetailsRes: objectType({
 		name: 'EpisodeDetailsRes',
 		definition(t) {
 			t.string('air_date');
@@ -574,9 +574,9 @@ export const ShowObjects = {
 	}),
 };
 
-export const GameObjects = {
-	GameRes: objectType({
-		name: 'GameRes',
+export const gameObjects = {
+	game: objectType({
+		name: 'Game',
 		definition(t) {
 			t.id('id');
 			t.list.id('age_ratings');
@@ -633,6 +633,19 @@ export const GameObjects = {
 			t.string('version_title');
 			t.list.id('videos');
 			t.list.id('websites');
+		},
+	}),
+	character: objectType({
+		name: 'Character',
+		definition(t) {
+			t.id('id');
+			t.date('created_at');
+			t.list.id('games');
+			t.string('name');
+			t.string('slug');
+			t.date('updated_at');
+			t.string('url');
+			t.string('checksum');
 		},
 	}),
 };

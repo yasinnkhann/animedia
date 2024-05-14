@@ -51,7 +51,7 @@ export const getErrorMsg = (error: unknown) => {
 	}
 };
 
-export const postIGDB = async (url: string, body = {}) => {
+export const postIGDB = async (url: string, body = '') => {
 	interface AccessTokenResponse {
 		access_token: string;
 		expires_in: number;
@@ -90,7 +90,7 @@ export const postIGDB = async (url: string, body = {}) => {
 				'Client-ID': process.env.IGDB_CLIENT_ID,
 				Authorization: `Bearer ${accessToken}`,
 			},
-			body: JSON.stringify(body),
+			body,
 		});
 		return await response.json();
 	} catch (err) {

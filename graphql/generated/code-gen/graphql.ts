@@ -29,6 +29,18 @@ export type AccountVerifiedRes = {
   id?: Maybe<Scalars['String']['output']>;
 };
 
+export type Character = {
+  __typename?: 'Character';
+  checksum?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['DateTime']['output']>;
+  games?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  updated_at?: Maybe<Scalars['DateTime']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
 export type EpisodeDetailsRes = {
   __typename?: 'EpisodeDetailsRes';
   air_date?: Maybe<Scalars['String']['output']>;
@@ -51,8 +63,8 @@ export type ErrorRes = {
   message: Scalars['String']['output'];
 };
 
-export type GameRes = {
-  __typename?: 'GameRes';
+export type Game = {
+  __typename?: 'Game';
   age_ratings?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
   alternative_names?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
   artworks?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
@@ -528,11 +540,11 @@ export type PersonsKnownForShowRes = {
 export type Query = {
   __typename?: 'Query';
   accountVerified?: Maybe<AccountVerifiedRes>;
+  characters: Array<Maybe<Character>>;
   checkEmailVerificationToken?: Maybe<RedisRes>;
   checkForgotPasswordToken?: Maybe<RedisRes>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
-  games: Array<Maybe<GameRes>>;
   movieDetails: MovieDetailsRes;
   movieReviews: MovieReviewsRes;
   moviesCastCrew?: Maybe<MoviesCastCrewRes>;
@@ -549,12 +561,14 @@ export type Query = {
   popularShowsByGenre: ShowsRes;
   recommendedMovies: MoviesRes;
   recommendedShows: ShowsRes;
+  searchGames: Array<Maybe<Game>>;
   searchedMovies: MoviesRes;
   searchedPeople: PeopleRes;
   searchedShows: ShowsRes;
   showDetails: ShowDetailsRes;
   showReviews: ShowReviewRes;
   showsCastCrew?: Maybe<ShowsCastCrewRes>;
+  topRatedGames: Array<Maybe<Game>>;
   topRatedMovies: MoviesRes;
   topRatedMoviesByGenre: MoviesRes;
   topRatedShows: ShowsRes;
@@ -571,6 +585,11 @@ export type Query = {
 
 export type QueryAccountVerifiedArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type QueryCharactersArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -595,12 +614,6 @@ export type QueryEpisodeDetailsArgs = {
   episodeNum: Scalars['Int']['input'];
   seasonNum: Scalars['Int']['input'];
   showId: Scalars['ID']['input'];
-};
-
-
-export type QueryGamesArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  q: Scalars['String']['input'];
 };
 
 
@@ -689,6 +702,12 @@ export type QueryRecommendedShowsArgs = {
 };
 
 
+export type QuerySearchGamesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  q: Scalars['String']['input'];
+};
+
+
 export type QuerySearchedMoviesArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   q: Scalars['String']['input'];
@@ -720,6 +739,11 @@ export type QueryShowReviewsArgs = {
 
 export type QueryShowsCastCrewArgs = {
   showId: Scalars['ID']['input'];
+};
+
+
+export type QueryTopRatedGamesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
