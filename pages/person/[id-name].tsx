@@ -1,20 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import Head from 'next/head';
+import _ from 'lodash';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from '../../utils/CommonMethods';
+import { useQuery } from '@apollo/client';
+import Modal from 'components/Modal';
 import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 	MAX_BIO_WORD_LENGTH,
 } from '../../utils/constants';
-import { useQuery } from '@apollo/client';
-import _ from 'lodash';
-import Modal from 'components/Modal';
 
 const PersonDetails = () => {
 	const router = useRouter();
@@ -60,14 +60,14 @@ const PersonDetails = () => {
 
 		for (const castObj of knownForMoviesData?.personsKnownForMovie?.cast ??
 			[]) {
-			if (!uniqueMovies.has(castObj!.id)) {
+			if (castObj && !uniqueMovies.has(castObj.id)) {
 				uniqueMovies.add(castObj!.id);
 
 				mappedMoviesCast.push({
-					id: castObj!.id,
-					poster_path: castObj!.poster_path,
-					title: castObj!.title,
-					popularity: castObj!.popularity,
+					id: castObj.id,
+					poster_path: castObj.poster_path,
+					title: castObj.title,
+					popularity: castObj.popularity,
 				});
 			}
 		}
@@ -78,23 +78,24 @@ const PersonDetails = () => {
 
 		for (const castObj of knownForShowsData?.personsKnownForShow?.cast ?? []) {
 			if (
-				!uniqueShows.has(castObj!.id) &&
-				castObj!.episode_count! > KNOWN_FOR_MIN_EP_COUNT
+				castObj &&
+				!uniqueShows.has(castObj.id) &&
+				(castObj.episode_count ?? 0) > KNOWN_FOR_MIN_EP_COUNT
 			) {
-				uniqueShows.add(castObj!.id);
+				uniqueShows.add(castObj.id);
 
 				mappedShowsCast.push({
-					id: castObj!.id,
-					poster_path: castObj!.poster_path,
-					name: castObj!.name,
-					popularity: castObj!.popularity,
+					id: castObj.id,
+					poster_path: castObj.poster_path,
+					name: castObj.name,
+					popularity: castObj.popularity,
 				});
 			}
 		}
 
 		return mappedMoviesCast
 			.concat(mappedShowsCast)
-			.sort((a, b) => b.popularity! - a.popularity!)
+			.sort((a, b) => b.popularity - a.popularity)
 			.slice(0, KNOWN_FOR_CARDS_LIMIT);
 	}, [knownForMoviesData, knownForShowsData]);
 
