@@ -9,15 +9,16 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { getProviders, signIn } from 'next-auth/react';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Field, Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { InferGetServerSidePropsType } from 'next';
 import { getCsrfToken } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
-import { toast } from 'react-hot-toast';
 import { ILogin } from '@ts/interfaces';
 import { ThreeDots } from 'react-loading-icons';
+import { CommonMethods } from 'utils/CommonMethods';
+import { ACCOUNT_NOT_FOUND_MESSAGE } from 'utils/constants';
 
 export default function Login({
 	_providers,
@@ -31,11 +32,19 @@ export default function Login({
 		Queries.ACCOUNT_VERIFIED
 	);
 
-	const notifyError = (error: string) => {
-		toast.error(error, {
-			position: 'bottom-center',
-			duration: 3000,
-		});
+	const handleSubmitBtnClick = (
+		formikErrors: FormikErrors<{
+			email: string;
+			password: string;
+		}>
+	) => {
+		if (formikErrors.email || formikErrors.password) {
+			CommonMethods.notifyError(
+				ACCOUNT_NOT_FOUND_MESSAGE,
+				'bottom-center',
+				3000
+			);
+		} else return;
 	};
 
 	const handleSubmit = async (
@@ -49,7 +58,11 @@ export default function Login({
 		});
 
 		if (error || (accountVerified && accountVerified.errors.length > 0)) {
-			notifyError('Failed to verify account.');
+			CommonMethods.notifyError(
+				ACCOUNT_NOT_FOUND_MESSAGE,
+				'bottom-center',
+				3000
+			);
 			return;
 		}
 
@@ -91,12 +104,12 @@ export default function Login({
 							<Form className='flex flex-col gap-4'>
 								<div className='relative'>
 									<Field
-										type='email'
 										name='email'
 										placeholder='Email'
 										className='w-full rounded-lg border py-3 pl-10 pr-4 focus:border-blue-500 focus:outline-none'
 									/>
 								</div>
+
 								<div className='relative'>
 									<Field
 										type={showPW ? 'text' : 'password'}
@@ -104,6 +117,7 @@ export default function Login({
 										placeholder='Password'
 										className='w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none'
 									/>
+
 									<div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
 										<button
 											type='button'
@@ -122,6 +136,7 @@ export default function Login({
 								<button
 									className='rounded-lg bg-blue-500 py-3 font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none'
 									type='submit'
+									onClick={() => handleSubmitBtnClick(formikProps.errors)}
 								>
 									Login
 								</button>

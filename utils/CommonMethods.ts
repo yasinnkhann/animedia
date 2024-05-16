@@ -17,6 +17,7 @@ import {
 	MovieGenreTypes,
 	ShowGenreTypes,
 } from '../graphql/generated/code-gen/graphql';
+import toast, { ToastPosition } from 'react-hot-toast';
 
 export class CommonMethods {
 	public static formatDate = (dateStr: string | null | undefined) => {
@@ -218,6 +219,17 @@ export class CommonMethods {
 			setTimeout(() => {
 				resolve();
 			}, ms);
+		});
+	};
+
+	public static notifyError = (
+		error: string,
+		position: ToastPosition,
+		duration: number
+	) => {
+		toast.error(error, {
+			position,
+			duration,
 		});
 	};
 }

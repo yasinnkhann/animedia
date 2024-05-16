@@ -116,7 +116,6 @@ export default function Register() {
 							<div className='relative'>
 								<input
 									{...formik.getFieldProps('email')}
-									type='email'
 									name='email'
 									placeholder='Email'
 									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
