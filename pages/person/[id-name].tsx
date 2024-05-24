@@ -133,7 +133,7 @@ const PersonDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getImage(
+						src={CommonMethods.getTheMovieDbImage(
 							personDetailsData.personDetails.profile_path
 						)}
 						alt={personDetailsData.personDetails.name ?? undefined}

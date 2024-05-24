@@ -1,4 +1,4 @@
-import { THE_MOVIE_DB_BASE_URL } from '../../utils/constants';
+import { THE_MOVIE_DB_BASE_API_URL } from '../../utils/constants';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { extendType, nonNull, stringArg, intArg, arg, idArg } from 'nexus';
 
@@ -13,7 +13,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -33,7 +33,7 @@ export const ShowQueries = extendType({
 				q = q.split(' ').join('+');
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/search/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&query=${q}`
+						`${THE_MOVIE_DB_BASE_API_URL}/search/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&query=${q}`
 					);
 					const data = await res.json();
 					return data;
@@ -51,7 +51,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { showDetailsId }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/${showDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/${showDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 					);
 					const data = await res.json();
 					return data;
@@ -71,7 +71,7 @@ export const ShowQueries = extendType({
 					const keywordID = await CommonMethods.getKeywordId('anime');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_keywords=${keywordID}`
+						`${THE_MOVIE_DB_BASE_API_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_keywords=${keywordID}`
 					);
 					const data = await res.json();
 					return data;
@@ -107,7 +107,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/top_rated?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/top_rated?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -126,7 +126,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { recommendedShowsId, page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/${recommendedShowsId}/recommendations?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -145,7 +145,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { id, page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/${id}/reviews?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/${id}/reviews?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -168,7 +168,7 @@ export const ShowQueries = extendType({
 					const genreID = await CommonMethods.getGenreID(genre, 'tv');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=popularity.desc`
+						`${THE_MOVIE_DB_BASE_API_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=popularity.desc`
 					);
 					const data = await res.json();
 					return data;
@@ -191,7 +191,7 @@ export const ShowQueries = extendType({
 					const genreID = await CommonMethods.getGenreID(genre, 'tv');
 
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
+						`${THE_MOVIE_DB_BASE_API_URL}/discover/tv?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
 					);
 					const data = await res.json();
 					return data;
@@ -209,7 +209,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { showId }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/${showId}/credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/${showId}/credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 					);
 					const data = await res.json();
 					return data;
@@ -229,7 +229,7 @@ export const ShowQueries = extendType({
 			resolve: async (_parent, { showId, seasonNum, episodeNum }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+						`${THE_MOVIE_DB_BASE_API_URL}/tv/${showId}/season/${seasonNum}/episode/${episodeNum}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 					);
 					const data = await res.json();
 					return data;

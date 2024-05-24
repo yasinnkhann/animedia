@@ -100,7 +100,9 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
 								<div className='relative h-full'>
 									<Image
-										src={CommonMethods.getImage(episodeDetails.still_path)}
+										src={CommonMethods.getTheMovieDbImage(
+											episodeDetails.still_path
+										)}
 										alt={episodeDetails.name ?? ''}
 										layout='fill'
 										className='object-cover'

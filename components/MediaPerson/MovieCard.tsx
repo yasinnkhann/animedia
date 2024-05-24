@@ -38,7 +38,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getImage(movie.poster_path)}
+								src={CommonMethods.getTheMovieDbImage(movie.poster_path)}
 								alt={movie.title}
 								layout='fill'
 							/>

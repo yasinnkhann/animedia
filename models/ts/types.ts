@@ -8,6 +8,11 @@ import {
 	TopRatedMoviesByGenreQuery,
 	PopularShowsByGenreQuery,
 	TopRatedShowsByGenreQuery,
+	MovieDetailsQuery,
+	MoviesRes,
+	ShowsRes,
+	PeopleRes,
+	SearchedMoviesQuery,
 } from 'graphql/generated/code-gen/graphql';
 import {
 	MovieResult,
@@ -69,12 +74,16 @@ export type TDropDownSearchResult = NullablePartial<
 >;
 
 const contentConst = [
-	'movies',
-	'shows',
-	'people',
 	'movie',
+	'movies',
 	'show',
+	'shows',
 	'person',
+	'people',
+	'game',
+	'games',
 ] as const;
 
 export type TContent = (typeof contentConst)[number];
+
+export type TTheMovieDBRes = MoviesRes | ShowsRes | PeopleRes;

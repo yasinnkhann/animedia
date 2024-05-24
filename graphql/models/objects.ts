@@ -575,10 +575,10 @@ export const showObjects = {
 };
 
 export const gameObjects = {
-	game: objectType({
-		name: 'Game',
+	gameResult: objectType({
+		name: 'GameResult',
 		definition(t) {
-			t.id('id');
+			t.nonNull.id('id');
 			t.list.id('age_ratings');
 			t.list.id('alternative_names');
 			t.list.id('artworks');
@@ -588,6 +588,7 @@ export const gameObjects = {
 			t.id('collection');
 			t.list.id('collections');
 			t.id('cover');
+			t.string('coverUrl');
 			t.date('created_at');
 			t.list.id('dlcs');
 			t.list.id('expanded_games');
@@ -606,7 +607,7 @@ export const gameObjects = {
 			t.list.id('keywords');
 			t.list.id('language_supports');
 			t.list.id('multiplayer_modes');
-			t.string('name');
+			t.nonNull.string('name');
 			t.id('parent_game');
 			t.list.id('platforms');
 			t.list.id('player_perspectives');
@@ -633,6 +634,14 @@ export const gameObjects = {
 			t.string('version_title');
 			t.list.id('videos');
 			t.list.id('websites');
+		},
+	}),
+	gamesRes: objectType({
+		name: 'GamesRes',
+		definition(t) {
+			t.nonNull.list.field('results', {
+				type: nonNull('GameResult'),
+			});
 		},
 	}),
 	character: objectType({

@@ -221,7 +221,7 @@ const MovieDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getImage(
+						src={CommonMethods.getTheMovieDbImage(
 							movieDetailsData.movieDetails.poster_path
 						)}
 						alt={movieDetailsData.movieDetails.title ?? undefined}

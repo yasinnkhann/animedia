@@ -22,7 +22,7 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={CommonMethods.getImage(item.profile_path)}
+							src={CommonMethods.getTheMovieDbImage(item.profile_path)}
 							alt={item.name}
 							layout='fill'
 						/>

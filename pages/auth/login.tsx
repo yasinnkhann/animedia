@@ -8,22 +8,16 @@ import DiscordIcon from '../../assets/discord-icon.svg';
 import _ from 'lodash';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { getProviders, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { Field, Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
-import { InferGetServerSidePropsType } from 'next';
-import { getCsrfToken } from 'next-auth/react';
 import { useLazyQuery } from '@apollo/client';
 import { ILogin } from '@ts/interfaces';
 import { ThreeDots } from 'react-loading-icons';
 import { CommonMethods } from 'utils/CommonMethods';
 import { ACCOUNT_NOT_FOUND_MESSAGE } from 'utils/constants';
 
-export default function Login({
-	_providers,
-	_csrfToken,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Login() {
 	const [showPW, setShowPW] = useState(false);
 
 	const router = useRouter();
@@ -195,15 +189,3 @@ export default function Login({
 		</>
 	);
 }
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	const providers = await getProviders();
-	const csrfToken = await getCsrfToken({ req });
-
-	return {
-		props: {
-			providers,
-			csrfToken,
-		},
-	};
-};

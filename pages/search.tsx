@@ -6,7 +6,7 @@ import SearchBar from '../components/Search/SearchBar';
 import SearchResult from '../components/Search/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
-import { TContent } from '@ts/types';
+import { ExtractStrict, TContent } from '@ts/types';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
@@ -21,7 +21,9 @@ const Search: NextPage = () => {
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
 	const [searchResultsType, setSearchResultsType] =
-		useState<TContent>('movies');
+		useState<ExtractStrict<TContent, 'movies' | 'shows' | 'people' | 'games'>>(
+			'movies'
+		);
 
 	const [userMatchedMedias, setUserMatchedMedias] = useState<
 		UserShow[] | UserMovie[]
@@ -57,6 +59,15 @@ const Search: NextPage = () => {
 		}
 	);
 
+	const { data: searchedGamesData, loading: searchedGamesLoading } = useQuery(
+		Queries.SEARCHED_GAMES,
+		{
+			variables: {
+				q: (router.query.q as string) ?? '',
+			},
+		}
+	);
+
 	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
 		skip: searchResultsType !== 'shows',
 		fetchPolicy: 'network-only',
@@ -67,20 +78,31 @@ const Search: NextPage = () => {
 		fetchPolicy: 'network-only',
 	});
 
+	//
+	// const { data: usersGamesData } = useQuery(Queries.GET_USERS_MOVIES, {
+	// 	skip: searchResultsType !== 'games',
+	// 	fetchPolicy: 'network-only',
+	// });
+
 	const getSearchedTypeData = useCallback(() => {
-		if (searchResultsType === 'movies') {
-			return searchedMoviesData?.searchedMovies;
+		if (searchResultsType === 'movies' && searchedMoviesData?.searchedMovies) {
+			return searchedMoviesData.searchedMovies;
 		}
 
-		if (searchResultsType === 'shows') {
-			return searchedShowsData?.searchedShows;
+		if (searchResultsType === 'shows' && searchedShowsData?.searchedShows) {
+			return searchedShowsData.searchedShows;
 		}
 
-		if (searchResultsType === 'people') {
-			return searchedPeopleData?.searchedPeople;
+		if (searchResultsType === 'people' && searchedPeopleData?.searchedPeople) {
+			return searchedPeopleData.searchedPeople;
+		}
+
+		if (searchResultsType === 'games' && searchedGamesData?.searchGames) {
+			return searchedGamesData.searchGames;
 		}
 	}, [
 		searchResultsType,
+		searchedGamesData?.searchGames,
 		searchedMoviesData?.searchedMovies,
 		searchedPeopleData?.searchedPeople,
 		searchedShowsData?.searchedShows,
@@ -89,11 +111,16 @@ const Search: NextPage = () => {
 	const getSearchResultType = () => {
 		if (searchResultsType === 'movies') {
 			return 'movie';
-		} else if (searchResultsType === 'shows') {
-			return 'show';
-		} else {
-			return 'person';
 		}
+		if (searchResultsType === 'shows') {
+			return 'show';
+		}
+
+		if (searchResultsType === 'games') {
+			return 'game';
+		}
+
+		return 'person';
 	};
 
 	const scrollToTop = () => {
@@ -153,13 +180,14 @@ const Search: NextPage = () => {
 					? usersShowsData?.usersShows
 					: null;
 
-		if (!userDataArr || !getSearchedTypeData()?.results) return;
+		if (!userDataArr || !getSearchedTypeData()) return;
 
 		for (const userDataObj of userDataArr) {
 			if (userDataObj?.id) {
 				usersMediaMap.set(userDataObj.id, userDataObj);
 			}
 		}
+
 		for (const item of getSearchedTypeData()!.results) {
 			if (usersMediaMap.has(String(item.id))) {
 				matchedMedias.push(usersMediaMap.get(String(item.id)) as any);
@@ -173,7 +201,12 @@ const Search: NextPage = () => {
 		searchResultsType,
 		getSearchedTypeData,
 	]);
-	if (searchedMoviesLoading || searchedShowsLoading || searchedPeopleLoading) {
+	if (
+		searchedMoviesLoading ||
+		searchedShowsLoading ||
+		searchedPeopleLoading ||
+		searchedGamesLoading
+	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -236,6 +269,23 @@ const Search: NextPage = () => {
 										<li className='flex w-full items-center justify-between'>
 											<h4
 												className='cursor-pointer text-left'
+												onClick={() => setSearchResultsType('games')}
+												style={{
+													borderBottom:
+														searchResultsType === 'games'
+															? '1px solid black'
+															: undefined,
+												}}
+											>
+												Games
+											</h4>
+											<p className='text-right'>
+												{searchedGamesData?.searchGames.results.length ?? 0}
+											</p>
+										</li>
+										<li className='flex w-full items-center justify-between'>
+											<h4
+												className='cursor-pointer text-left'
 												onClick={() => setSearchResultsType('people')}
 												style={{
 													borderBottom:
@@ -275,7 +325,9 @@ const Search: NextPage = () => {
 										? searchedMoviesData.searchedMovies.total_results
 										: searchResultsType === 'shows'
 											? searchedShowsData.searchedShows.total_results
-											: searchedPeopleData.searchedPeople.total_results
+											: searchResultsType === 'people'
+												? searchedPeopleData.searchedPeople.total_results
+												: searchedGamesData?.searchGames.results.length ?? 0
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>

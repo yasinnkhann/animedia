@@ -5,8 +5,9 @@ import imageNotFound from '../assets/image-not-found.jpeg';
 import { TContent } from '@ts/types';
 import {
 	CLIENT_BASE_URL,
-	BASE_IMG_URL,
-	THE_MOVIE_DB_BASE_URL,
+	THE_MOVIE_DB_BASE_IMG_URL,
+	THE_MOVIE_DB_BASE_API_URL,
+	IGDB_BASE_IMAGE_URL,
 } from '../utils/constants';
 import {
 	MovieDetailsGenre,
@@ -63,7 +64,7 @@ export class CommonMethods {
 
 		try {
 			const res = await fetch(
-				`${THE_MOVIE_DB_BASE_URL}/genre/${mediaType}/list?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+				`${THE_MOVIE_DB_BASE_API_URL}/genre/${mediaType}/list?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 			);
 			const { genres }: { genres: TGenreObj[] } = await res.json();
 
@@ -80,12 +81,18 @@ export class CommonMethods {
 		}
 	};
 
-	public static getImage = (imagePath: string | null | undefined) => {
+	public static getTheMovieDbImage = (imagePath: string | null | undefined) => {
 		if (imagePath) {
-			return BASE_IMG_URL + imagePath;
-		} else {
-			return imageNotFound;
+			return THE_MOVIE_DB_BASE_IMG_URL + imagePath;
 		}
+		return imageNotFound;
+	};
+
+	public static getIgdbImage = (
+		igdbCoverId: string,
+		igdbImageSize = 'thumb'
+	) => {
+		return `${IGDB_BASE_IMAGE_URL}${igdbImageSize}/${igdbCoverId}.jpg`;
 	};
 
 	public static getKeywordId = async (q: string) => {
@@ -94,7 +101,7 @@ export class CommonMethods {
 
 		try {
 			const res = await fetch(
-				`${THE_MOVIE_DB_BASE_URL}/search/keyword?api_key=${process.env.THE_MOVIE_DB_API_KEY}&query=${q}`
+				`${THE_MOVIE_DB_BASE_API_URL}/search/keyword?api_key=${process.env.THE_MOVIE_DB_API_KEY}&query=${q}`
 			);
 			const { results }: { results: TKeywordObj[] } = await res.json();
 			if (_.isEmpty(results)) {
@@ -113,7 +120,7 @@ export class CommonMethods {
 	) => {
 		try {
 			const res = await fetch(
-				`${THE_MOVIE_DB_BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${pageNum}`
+				`${THE_MOVIE_DB_BASE_API_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${pageNum}`
 			);
 			const data = await res.json();
 

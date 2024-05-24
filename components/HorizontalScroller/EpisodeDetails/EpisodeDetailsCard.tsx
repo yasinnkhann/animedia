@@ -39,7 +39,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg object-contain'
-							src={CommonMethods.getImage(
+							src={CommonMethods.getTheMovieDbImage(
 								epDetailsCardData.episodeDetails.still_path
 							)}
 							alt={epDetailsCardData.episodeDetails.name ?? undefined}
@@ -126,7 +126,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 							<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
 								<div className='relative h-full'>
 									<Image
-										src={CommonMethods.getImage(
+										src={CommonMethods.getTheMovieDbImage(
 											epDetailsCardData.episodeDetails.still_path
 										)}
 										alt={epDetailsCardData.episodeDetails.name ?? ''}

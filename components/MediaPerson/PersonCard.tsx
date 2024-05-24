@@ -19,7 +19,7 @@ const PersonCard = ({ person }: Props) => {
 					<div className='relative h-[20rem] cursor-pointer'>
 						<Image
 							className='rounded-lg'
-							src={CommonMethods.getImage(person.profile_path)}
+							src={CommonMethods.getTheMovieDbImage(person.profile_path)}
 							alt={person.name}
 							layout='fill'
 						/>

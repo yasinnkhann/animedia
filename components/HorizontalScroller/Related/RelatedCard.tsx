@@ -13,7 +13,7 @@ interface Props {
 const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	const isMovie = 'title' in item;
 
-	const mediaTitle = isMovie ? (item.title as string) : (item.name as string);
+	const titleName = isMovie ? (item.title as string) : (item.name as string);
 
 	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
@@ -25,7 +25,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 			href={CommonMethods.getDetailsPageRoute(
 				isMovie ? 'movie' : 'show',
 				item.id,
-				mediaTitle
+				titleName
 			)}
 			passHref
 		>
@@ -37,8 +37,8 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={CommonMethods.getImage(item.poster_path)}
-							alt={mediaTitle}
+							src={CommonMethods.getTheMovieDbImage(item.poster_path)}
+							alt={titleName}
 							layout='fill'
 						/>
 						{userWatchStatusFromMedia && (
@@ -54,7 +54,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
 						<h2 className='m-0 w-full break-words text-center text-base'>
-							<p className='font-bold'>{mediaTitle}</p>
+							<p className='font-bold'>{titleName}</p>
 						</h2>
 					</div>
 				</section>

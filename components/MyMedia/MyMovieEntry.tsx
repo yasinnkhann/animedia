@@ -50,7 +50,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getImage(
+								src={CommonMethods.getTheMovieDbImage(
 									movieData?.movieDetails?.poster_path
 								)}
 								priority

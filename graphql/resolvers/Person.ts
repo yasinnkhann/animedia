@@ -1,4 +1,4 @@
-import { THE_MOVIE_DB_BASE_URL } from '../../utils/constants';
+import { THE_MOVIE_DB_BASE_API_URL } from '../../utils/constants';
 import {
 	objectType,
 	extendType,
@@ -206,7 +206,7 @@ export const PopularQueries = extendType({
 			resolve: async (_parent, { page }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/person/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
+						`${THE_MOVIE_DB_BASE_API_URL}/person/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
 					);
 					const data = await res.json();
 					return data;
@@ -224,7 +224,7 @@ export const PopularQueries = extendType({
 			resolve: async (_parent, { personDetailsId }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/person/${personDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=1`
+						`${THE_MOVIE_DB_BASE_API_URL}/person/${personDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=1`
 					);
 					const data = await res.json();
 					return data;
@@ -244,7 +244,7 @@ export const PopularQueries = extendType({
 				q = q.split(' ').join('+');
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/search/person?api_key=${process.env.THE_MOVIE_DB_API_KEY}&page=${page}&query=${q}`
+						`${THE_MOVIE_DB_BASE_API_URL}/search/person?api_key=${process.env.THE_MOVIE_DB_API_KEY}&page=${page}&query=${q}`
 					);
 					const data = await res.json();
 					return data;
@@ -262,7 +262,7 @@ export const PopularQueries = extendType({
 			resolve: async (_parent, { personsKnownForMovieResId }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+						`${THE_MOVIE_DB_BASE_API_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 					);
 					const data = await res.json();
 					return data;
@@ -280,7 +280,7 @@ export const PopularQueries = extendType({
 			resolve: async (_parent, { personsKnownForShowResId }) => {
 				try {
 					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
+						`${THE_MOVIE_DB_BASE_API_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
 					);
 					const data = await res.json();
 					return data;

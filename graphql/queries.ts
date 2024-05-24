@@ -53,7 +53,7 @@ export const SEARCHED_MOVIES = graphql(`
 `);
 
 export const MOVIE_DETAILS = graphql(`
-	query getMovieDetails($movieDetailsId: ID!) {
+	query MovieDetails($movieDetailsId: ID!) {
 		movieDetails(movieDetailsId: $movieDetailsId) {
 			adult
 			backdrop_path
@@ -359,7 +359,7 @@ export const SEARCHED_SHOWS = graphql(`
 `);
 
 export const SHOW_DETAILS = graphql(`
-	query getShowDetails($showDetailsId: ID!) {
+	query ShowDetails($showDetailsId: ID!) {
 		showDetails(showDetailsId: $showDetailsId) {
 			adult
 			backdrop_path
@@ -1046,3 +1046,284 @@ export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 		emailFromRedisToken(token: $token)
 	}
 `);
+
+export const SEARCHED_GAMES = graphql(`
+	query SearchGames($q: String!, $limit: Int) {
+		searchGames(q: $q, limit: $limit) {
+			results {
+				id
+				age_ratings
+				alternative_names
+				artworks
+				bundles
+				category
+				checksum
+				collection
+				collections
+				cover
+				coverUrl
+				created_at
+				dlcs
+				expanded_games
+				expansions
+				external_games
+				first_release_date
+				forks
+				franchise
+				franchises
+				game_engines
+				game_localizations
+				game_modes
+				genres
+				hypes
+				involved_companies
+				keywords
+				language_supports
+				multiplayer_modes
+				name
+				parent_game
+				platforms
+				player_perspectives
+				ports
+				rating
+				rating_count
+				release_dates
+				remakes
+				remasters
+				screenshots
+				similar_games
+				slug
+				standalone_expansions
+				status
+				storyline
+				summary
+				tags
+				themes
+				total_rating
+				total_rating_count
+				updated_at
+				url
+				version_parent
+				version_title
+				videos
+				websites
+			}
+		}
+	}
+`);
+
+// export const GAME_DETAILS = graphql(`
+// 	query GameDetails($gameDetailsId: ID!) {
+// 		gameDetails(gameDetailsId: $gameDetailsId) {
+// 			id
+// 			age_ratings
+// 			alternative_names
+// 			artworks
+// 			bundles
+// 			category
+// 			checksum
+// 			collection
+// 			collections
+// 			cover
+// 			created_at
+// 			dlcs
+// 			expanded_games
+// 			expansions
+// 			external_games
+// 			first_release_date
+// 			forks
+// 			franchise
+// 			franchises
+// 			game_engines
+// 			game_localizations
+// 			game_modes
+// 			genres
+// 			hypes
+// 			involved_companies
+// 			keywords
+// 			language_supports
+// 			multiplayer_modes
+// 			name
+// 			parent_game
+// 			platforms
+// 			player_perspectives
+// 			ports
+// 			rating
+// 			rating_count
+// 			release_dates
+// 			remakes
+// 			remasters
+// 			screenshots
+// 			similar_games
+// 			slug
+// 			standalone_expansions
+// 			status
+// 			storyline
+// 			summary
+// 			tags
+// 			themes
+// 			total_rating
+// 			total_rating_count
+// 			updated_at
+// 			url
+// 			version_parent
+// 			version_title
+// 			videos
+// 			websites
+// 		}
+// 	}
+// `);
+
+// export const GAMES_FROM_GENRES = graphql(`
+// 	query GamesFromGenres($genreIds: [ID!]!, $limit: Int) {
+// 		gamesFromGenres(genreIds: $genreIds, limit: $limit) {
+// 			id
+// 			age_ratings
+// 			alternative_names
+// 			artworks
+// 			bundles
+// 			category
+// 			checksum
+// 			collection
+// 			collections
+// 			cover
+// 			created_at
+// 			dlcs
+// 			expanded_games
+// 			expansions
+// 			external_games
+// 			first_release_date
+// 			forks
+// 			franchise
+// 			franchises
+// 			game_engines
+// 			game_localizations
+// 			game_modes
+// 			genres
+// 			hypes
+// 			involved_companies
+// 			keywords
+// 			language_supports
+// 			multiplayer_modes
+// 			name
+// 			parent_game
+// 			platforms
+// 			player_perspectives
+// 			ports
+// 			rating
+// 			rating_count
+// 			release_dates
+// 			remakes
+// 			remasters
+// 			screenshots
+// 			similar_games
+// 			slug
+// 			standalone_expansions
+// 			status
+// 			storyline
+// 			summary
+// 			tags
+// 			themes
+// 			total_rating
+// 			total_rating_count
+// 			updated_at
+// 			url
+// 			version_parent
+// 			version_title
+// 			videos
+// 			websites
+// 		}
+// 	}
+// `);
+
+// export const TOP_RATED_GAMES = graphql(`
+// 	query TopRatedGames($limit: Int) {
+// 		topRatedGames(limit: $limit) {
+// 			id
+// 			age_ratings
+// 			alternative_names
+// 			artworks
+// 			bundles
+// 			category
+// 			checksum
+// 			collection
+// 			collections
+// 			cover
+// 			created_at
+// 			dlcs
+// 			expanded_games
+// 			expansions
+// 			external_games
+// 			first_release_date
+// 			forks
+// 			franchise
+// 			franchises
+// 			game_engines
+// 			game_localizations
+// 			game_modes
+// 			genres
+// 			hypes
+// 			involved_companies
+// 			keywords
+// 			language_supports
+// 			multiplayer_modes
+// 			name
+// 			parent_game
+// 			platforms
+// 			player_perspectives
+// 			ports
+// 			rating
+// 			rating_count
+// 			release_dates
+// 			remakes
+// 			remasters
+// 			screenshots
+// 			similar_games
+// 			slug
+// 			standalone_expansions
+// 			status
+// 			storyline
+// 			summary
+// 			tags
+// 			themes
+// 			total_rating
+// 			total_rating_count
+// 			updated_at
+// 			url
+// 			version_parent
+// 			version_title
+// 			videos
+// 			websites
+// 		}
+// 	}
+// `);
+
+// export const CHARACTERS = graphql(`
+// 	query Characters($limit: Int) {
+// 		characters(limit: $limit) {
+// 			id
+// 			created_at
+// 			games
+// 			name
+// 			slug
+// 			updated_at
+// 			url
+// 			checksum
+// 		}
+// 	}
+// `);
+
+// export const SEARCH_CHARACTERS = graphql(`
+// 	query SearchCharacters($q: String!, $limit: Int) {
+// 		searchCharacters(q: $q, limit: $limit) {
+// 			id
+// 			created_at
+// 			games
+// 			name
+// 			slug
+// 			updated_at
+// 			url
+// 			checksum
+// 		}
+// 	}
+// `);

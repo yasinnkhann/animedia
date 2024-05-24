@@ -49,7 +49,7 @@ type ErrorRes {
   message: String!
 }
 
-type Game {
+type GameResult {
   age_ratings: [ID]
   alternative_names: [ID]
   artworks: [ID]
@@ -59,6 +59,7 @@ type Game {
   collection: ID
   collections: [ID]
   cover: ID
+  coverUrl: String
   created_at: DateTime
   dlcs: [ID]
   expanded_games: [ID]
@@ -73,12 +74,12 @@ type Game {
   game_modes: [ID]
   genres: [ID]
   hypes: Int
-  id: ID
+  id: ID!
   involved_companies: [ID]
   keywords: [ID]
   language_supports: [ID]
   multiplayer_modes: [ID]
-  name: String
+  name: String!
   parent_game: ID
   platforms: [ID]
   player_perspectives: [ID]
@@ -105,6 +106,10 @@ type Game {
   version_title: String
   videos: [ID]
   websites: [ID]
+}
+
+type GamesRes {
+  results: [GameResult!]!
 }
 
 """
@@ -436,13 +441,12 @@ type PersonsKnownForShowRes {
 
 type Query {
   accountVerified(email: String!): AccountVerifiedRes
-  characters(limit: Int = 500): [Character]!
   checkEmailVerificationToken(token: String!, userId: ID!): RedisRes
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  game(gameId: ID!): [Game]!
-  gamesFromGenres(genreIds: [ID!]!, limit: Int = 500): [Game]!
+  gameDetails(gameDetailsId: ID!): GamesRes!
+  gamesFromGenres(genreIds: [ID!]!, limit: Int = 500): GamesRes!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes
@@ -459,15 +463,14 @@ type Query {
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
   recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
   recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
-  searchCharacters(limit: Int = 500, q: String!): [Character]!
-  searchGames(limit: Int = 500, q: String!): [Game]!
+  searchGames(limit: Int = 500, q: String!): GamesRes!
   searchedMovies(page: Int = 1, q: String!): MoviesRes!
   searchedPeople(page: Int = 1, q: String!): PeopleRes!
   searchedShows(page: Int = 1, q: String!): ShowsRes!
   showDetails(showDetailsId: ID!): ShowDetailsRes!
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
-  topRatedGames(limit: Int = 500): [Game]!
+  topRatedGames(limit: Int = 500): GamesRes!
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!

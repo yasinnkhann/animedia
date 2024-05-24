@@ -108,7 +108,7 @@ export interface NexusGenObjects {
   ErrorRes: { // root type
     message: string; // String!
   }
-  Game: { // root type
+  GameResult: { // root type
     age_ratings?: Array<string | null> | null; // [ID]
     alternative_names?: Array<string | null> | null; // [ID]
     artworks?: Array<string | null> | null; // [ID]
@@ -118,6 +118,7 @@ export interface NexusGenObjects {
     collection?: string | null; // ID
     collections?: Array<string | null> | null; // [ID]
     cover?: string | null; // ID
+    coverUrl?: string | null; // String
     created_at?: NexusGenScalars['DateTime'] | null; // DateTime
     dlcs?: Array<string | null> | null; // [ID]
     expanded_games?: Array<string | null> | null; // [ID]
@@ -132,12 +133,12 @@ export interface NexusGenObjects {
     game_modes?: Array<string | null> | null; // [ID]
     genres?: Array<string | null> | null; // [ID]
     hypes?: number | null; // Int
-    id?: string | null; // ID
+    id: string; // ID!
     involved_companies?: Array<string | null> | null; // [ID]
     keywords?: Array<string | null> | null; // [ID]
     language_supports?: Array<string | null> | null; // [ID]
     multiplayer_modes?: Array<string | null> | null; // [ID]
-    name?: string | null; // String
+    name: string; // String!
     parent_game?: string | null; // ID
     platforms?: Array<string | null> | null; // [ID]
     player_perspectives?: Array<string | null> | null; // [ID]
@@ -164,6 +165,9 @@ export interface NexusGenObjects {
     version_title?: string | null; // String
     videos?: Array<string | null> | null; // [ID]
     websites?: Array<string | null> | null; // [ID]
+  }
+  GamesRes: { // root type
+    results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
   }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
@@ -689,7 +693,7 @@ export interface NexusGenFieldTypes {
   ErrorRes: { // field return type
     message: string; // String!
   }
-  Game: { // field return type
+  GameResult: { // field return type
     age_ratings: Array<string | null> | null; // [ID]
     alternative_names: Array<string | null> | null; // [ID]
     artworks: Array<string | null> | null; // [ID]
@@ -699,6 +703,7 @@ export interface NexusGenFieldTypes {
     collection: string | null; // ID
     collections: Array<string | null> | null; // [ID]
     cover: string | null; // ID
+    coverUrl: string | null; // String
     created_at: NexusGenScalars['DateTime'] | null; // DateTime
     dlcs: Array<string | null> | null; // [ID]
     expanded_games: Array<string | null> | null; // [ID]
@@ -713,12 +718,12 @@ export interface NexusGenFieldTypes {
     game_modes: Array<string | null> | null; // [ID]
     genres: Array<string | null> | null; // [ID]
     hypes: number | null; // Int
-    id: string | null; // ID
+    id: string; // ID!
     involved_companies: Array<string | null> | null; // [ID]
     keywords: Array<string | null> | null; // [ID]
     language_supports: Array<string | null> | null; // [ID]
     multiplayer_modes: Array<string | null> | null; // [ID]
-    name: string | null; // String
+    name: string; // String!
     parent_game: string | null; // ID
     platforms: Array<string | null> | null; // [ID]
     player_perspectives: Array<string | null> | null; // [ID]
@@ -745,6 +750,9 @@ export interface NexusGenFieldTypes {
     version_title: string | null; // String
     videos: Array<string | null> | null; // [ID]
     websites: Array<string | null> | null; // [ID]
+  }
+  GamesRes: { // field return type
+    results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
   }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
@@ -1023,13 +1031,12 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     accountVerified: NexusGenRootTypes['AccountVerifiedRes'] | null; // AccountVerifiedRes
-    characters: Array<NexusGenRootTypes['Character'] | null>; // [Character]!
     checkEmailVerificationToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     checkForgotPasswordToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    game: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
-    gamesFromGenres: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
+    gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
+    gamesFromGenres: NexusGenRootTypes['GamesRes']; // GamesRes!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1046,15 +1053,14 @@ export interface NexusGenFieldTypes {
     popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     recommendedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    searchCharacters: Array<NexusGenRootTypes['Character'] | null>; // [Character]!
-    searchGames: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
+    searchGames: NexusGenRootTypes['GamesRes']; // GamesRes!
     searchedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     searchedPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
     searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
     showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
-    topRatedGames: Array<NexusGenRootTypes['Game'] | null>; // [Game]!
+    topRatedGames: NexusGenRootTypes['GamesRes']; // GamesRes!
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1317,7 +1323,7 @@ export interface NexusGenFieldTypeNames {
   ErrorRes: { // field return type name
     message: 'String'
   }
-  Game: { // field return type name
+  GameResult: { // field return type name
     age_ratings: 'ID'
     alternative_names: 'ID'
     artworks: 'ID'
@@ -1327,6 +1333,7 @@ export interface NexusGenFieldTypeNames {
     collection: 'ID'
     collections: 'ID'
     cover: 'ID'
+    coverUrl: 'String'
     created_at: 'DateTime'
     dlcs: 'ID'
     expanded_games: 'ID'
@@ -1373,6 +1380,9 @@ export interface NexusGenFieldTypeNames {
     version_title: 'String'
     videos: 'ID'
     websites: 'ID'
+  }
+  GamesRes: { // field return type name
+    results: 'GameResult'
   }
   KnownForResult: { // field return type name
     adult: 'Boolean'
@@ -1651,13 +1661,12 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     accountVerified: 'AccountVerifiedRes'
-    characters: 'Character'
     checkEmailVerificationToken: 'RedisRes'
     checkForgotPasswordToken: 'RedisRes'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
-    game: 'Game'
-    gamesFromGenres: 'Game'
+    gameDetails: 'GamesRes'
+    gamesFromGenres: 'GamesRes'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'
@@ -1674,15 +1683,14 @@ export interface NexusGenFieldTypeNames {
     popularShowsByGenre: 'ShowsRes'
     recommendedMovies: 'MoviesRes'
     recommendedShows: 'ShowsRes'
-    searchCharacters: 'Character'
-    searchGames: 'Game'
+    searchGames: 'GamesRes'
     searchedMovies: 'MoviesRes'
     searchedPeople: 'PeopleRes'
     searchedShows: 'ShowsRes'
     showDetails: 'ShowDetailsRes'
     showReviews: 'ShowReviewRes'
     showsCastCrew: 'ShowsCastCrewRes'
-    topRatedGames: 'Game'
+    topRatedGames: 'GamesRes'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'
@@ -1964,9 +1972,6 @@ export interface NexusGenArgTypes {
     accountVerified: { // args
       email: string; // String!
     }
-    characters: { // args
-      limit: number | null; // Int
-    }
     checkEmailVerificationToken: { // args
       token: string; // String!
       userId: string; // ID!
@@ -1983,8 +1988,8 @@ export interface NexusGenArgTypes {
       seasonNum: number; // Int!
       showId: string; // ID!
     }
-    game: { // args
-      gameId: string; // ID!
+    gameDetails: { // args
+      gameDetailsId: string; // ID!
     }
     gamesFromGenres: { // args
       genreIds: string[]; // [ID!]!
@@ -2042,10 +2047,6 @@ export interface NexusGenArgTypes {
     recommendedShows: { // args
       page: number | null; // Int
       recommendedShowsId: string; // ID!
-    }
-    searchCharacters: { // args
-      limit: number | null; // Int
-      q: string; // String!
     }
     searchGames: { // args
       limit: number | null; // Int

@@ -59,7 +59,7 @@ export const postIGDB = async (url: string, body = '') => {
 	}
 
 	try {
-		let accessToken = await redis.get('access-token');
+		let accessToken = await redis.get(IGDB_ACCESS_TOKEN_PREFIX);
 
 		if (accessToken === null) {
 			const accessTokenRes = await fetch(
@@ -74,6 +74,10 @@ export const postIGDB = async (url: string, body = '') => {
 
 			const accessTokenData: AccessTokenResponse = await accessTokenRes.json();
 			accessToken = accessTokenData.access_token;
+
+			if (!accessToken) {
+				throw new Error('Could not fetch newest access token.');
+			}
 
 			await redis.set(
 				IGDB_ACCESS_TOKEN_PREFIX,

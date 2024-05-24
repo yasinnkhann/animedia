@@ -1,4 +1,4 @@
-import { TContent } from '@ts/types';
+import { ExtractStrict, TContent } from '@ts/types';
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
@@ -9,11 +9,15 @@ import {
 	Maybe,
 	UserShow,
 	UserMovie,
+	GameResult,
 } from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
-	result: MovieResult | ShowResult | PersonResult;
-	searchedResultType: TContent;
+	result: MovieResult | ShowResult | PersonResult | GameResult;
+	searchedResultType: ExtractStrict<
+		TContent,
+		'movie' | 'show' | 'person' | 'game'
+	>;
 	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
@@ -22,7 +26,7 @@ const SearchResult = ({
 	searchedResultType,
 	userMatchedMedias,
 }: Props) => {
-	const mediaTitle = 'title' in result ? result.title : result.name;
+	const titleName = 'title' in result ? result.title : result.name;
 
 	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
@@ -36,7 +40,7 @@ const SearchResult = ({
 		<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
 			<Image
 				className='rounded-lg'
-				src={CommonMethods.getImage(imagePath)}
+				src={CommonMethods.getTheMovieDbImage(imagePath)}
 				alt={altText}
 				layout='fill'
 				priority
@@ -58,7 +62,7 @@ const SearchResult = ({
 		overview: string
 	) => (
 		<div className='p-4'>
-			<h3 className='cursor-pointer'>{mediaTitle}</h3>
+			<h3 className='cursor-pointer'>{titleName}</h3>
 			<p>
 				{releaseDate
 					? CommonMethods.formatDate(releaseDate)
@@ -74,36 +78,54 @@ const SearchResult = ({
 
 	const renderPersonDetails = () => (
 		<div className='p-4'>
-			<h3 className='cursor-pointer'>{mediaTitle}</h3>
+			<h3 className='cursor-pointer'>{titleName}</h3>
 		</div>
 	);
 
 	const renderSearchResult = () => {
+		let searchResult;
 		if (searchedResultType === 'movie') {
-			const searchResult = result as MovieResult;
+			searchResult = result as MovieResult;
 			return (
 				<>
-					{renderImage(searchResult.poster_path, searchResult.title)}
+					{renderImage(searchResult.poster_path, titleName)}
 					{renderMediaDetails(searchResult.release_date, searchResult.overview)}
 				</>
 			);
 		} else if (searchedResultType === 'show') {
-			const searchResult = result as ShowResult;
+			searchResult = result as ShowResult;
 			return (
 				<>
-					{renderImage(searchResult.poster_path, searchResult.name)}
+					{renderImage(searchResult.poster_path, titleName)}
 					{renderMediaDetails(
 						searchResult.first_air_date,
 						searchResult.overview
 					)}
 				</>
 			);
-		} else {
-			const searchResult = result as PersonResult;
+		} else if (searchedResultType === 'person') {
+			searchResult = result as PersonResult;
 			return (
 				<>
-					{renderImage(searchResult.profile_path, searchResult.name)}
+					{renderImage(searchResult.profile_path, titleName)}
 					{renderPersonDetails()}
+				</>
+			);
+		} else {
+			searchResult = result as GameResult;
+			console.log('cover: ', searchResult.coverUrl);
+			return (
+				<>
+					<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
+						<Image
+							className='rounded-lg'
+							src={searchResult.coverUrl ?? ''}
+							alt=''
+							layout='fill'
+							priority
+						/>
+					</div>
+					<h1>{titleName}</h1>
 				</>
 			);
 		}
@@ -114,7 +136,7 @@ const SearchResult = ({
 			href={CommonMethods.getDetailsPageRoute(
 				searchedResultType,
 				result.id,
-				mediaTitle
+				titleName
 			)}
 			passHref
 		>

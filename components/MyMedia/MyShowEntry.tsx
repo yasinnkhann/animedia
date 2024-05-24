@@ -51,7 +51,9 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getImage(showData?.showDetails?.poster_path)}
+								src={CommonMethods.getTheMovieDbImage(
+									showData?.showDetails?.poster_path
+								)}
 								priority
 								alt={showData?.showDetails?.name}
 								layout='fill'

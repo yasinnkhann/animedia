@@ -35,7 +35,7 @@ const ShowCard = ({ show, rank }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getImage(show.poster_path)}
+								src={CommonMethods.getTheMovieDbImage(show.poster_path)}
 								alt={show.name}
 								layout='fill'
 							/>
