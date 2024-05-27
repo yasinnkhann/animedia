@@ -111,6 +111,7 @@ const SearchResult = ({
 			);
 		} else {
 			searchResult = result as GameResult;
+			if (searchResult) console.log(searchResult);
 			return (
 				<>
 					{renderImage(searchResult.coverUrl, titleName, 'igdb')}

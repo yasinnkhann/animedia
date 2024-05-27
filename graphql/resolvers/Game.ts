@@ -40,52 +40,55 @@ export const GameQueries = extendType({
 				gameDetailsId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { gameDetailsId }) => {
+				const finalRes = { results: [], total_results: null };
 				try {
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; where id = ${gameDetailsId};`
 					);
-					return res;
+					await addIGDBCoverUrl(res, '1080p');
+					finalRes.results = res;
 				} catch (err) {
 					console.error(err);
 				}
+				return finalRes;
 			},
 		});
-		t.nonNull.field('gamesFromGenres', {
-			type: 'GamesRes',
-			args: {
-				genreIds: nonNull(list(nonNull('ID'))),
-				limit: intArg({ default: 500 }),
-			},
-			resolve: async (_parent, { genreIds, limit }) => {
-				try {
-					const res = await postIGDB(
-						`${IGDB_BASE_API_URL}/games`,
-						`fields *; where genres = (${genreIds.join(',')}); limit ${limit};`
-					);
-					return res;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
-		t.nonNull.field('topRatedGames', {
-			type: 'GamesRes',
-			args: {
-				limit: intArg({ default: 500 }),
-			},
-			resolve: async (_parent, { limit }) => {
-				try {
-					const res = await postIGDB(
-						`${IGDB_BASE_API_URL}/games`,
-						`fields *; sort rating desc; limit ${limit};`
-					);
-					return res;
-				} catch (err) {
-					console.error(err);
-				}
-			},
-		});
+		// t.nonNull.field('gamesFromGenres', {
+		// 	type: 'GamesRes',
+		// 	args: {
+		// 		genreIds: nonNull(list(nonNull('ID'))),
+		// 		limit: intArg({ default: 500 }),
+		// 	},
+		// 	resolve: async (_parent, { genreIds, limit }) => {
+		// 		try {
+		// 			const res = await postIGDB(
+		// 				`${IGDB_BASE_API_URL}/games`,
+		// 				`fields *; where genres = (${genreIds.join(',')}); limit ${limit};`
+		// 			);
+		// 			return res;
+		// 		} catch (err) {
+		// 			console.error(err);
+		// 		}
+		// 	},
+		// });
+		// t.nonNull.field('topRatedGames', {
+		// 	type: 'GamesRes',
+		// 	args: {
+		// 		limit: intArg({ default: 500 }),
+		// 	},
+		// 	resolve: async (_parent, { limit }) => {
+		// 		try {
+		// 			const res = await postIGDB(
+		// 				`${IGDB_BASE_API_URL}/games`,
+		// 				`fields *; sort rating desc; limit ${limit};`
+		// 			);
+		// 			return res;
+		// 		} catch (err) {
+		// 			console.error(err);
+		// 		}
+		// 	},
+		// });
 		// t.nonNull.field('characters', {
 		// 	type: list('Character'),
 		// 	args: {

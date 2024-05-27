@@ -168,7 +168,7 @@ export interface NexusGenObjects {
   }
   GamesRes: { // root type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
-    total_results: number; // Int!
+    total_results?: number | null; // Int
   }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
@@ -759,7 +759,7 @@ export interface NexusGenFieldTypes {
   }
   GamesRes: { // field return type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
-    total_results: number; // Int!
+    total_results: number | null; // Int
   }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
@@ -1043,7 +1043,6 @@ export interface NexusGenFieldTypes {
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
-    gamesFromGenres: NexusGenRootTypes['GamesRes']; // GamesRes!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1067,7 +1066,6 @@ export interface NexusGenFieldTypes {
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
     showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
-    topRatedGames: NexusGenRootTypes['GamesRes']; // GamesRes!
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1681,7 +1679,6 @@ export interface NexusGenFieldTypeNames {
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
     gameDetails: 'GamesRes'
-    gamesFromGenres: 'GamesRes'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'
@@ -1705,7 +1702,6 @@ export interface NexusGenFieldTypeNames {
     showDetails: 'ShowDetailsRes'
     showReviews: 'ShowReviewRes'
     showsCastCrew: 'ShowsCastCrewRes'
-    topRatedGames: 'GamesRes'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'
@@ -2013,10 +2009,6 @@ export interface NexusGenArgTypes {
     gameDetails: { // args
       gameDetailsId: string; // ID!
     }
-    gamesFromGenres: { // args
-      genreIds: string[]; // [ID!]!
-      limit: number | null; // Int
-    }
     movieDetails: { // args
       movieDetailsId: string; // ID!
     }
@@ -2096,9 +2088,6 @@ export interface NexusGenArgTypes {
     }
     showsCastCrew: { // args
       showId: string; // ID!
-    }
-    topRatedGames: { // args
-      limit: number | null; // Int
     }
     topRatedMovies: { // args
       page: number | null; // Int

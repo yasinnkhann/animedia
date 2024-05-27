@@ -7,7 +7,6 @@ import {
 	CLIENT_BASE_URL,
 	THE_MOVIE_DB_BASE_IMG_URL,
 	THE_MOVIE_DB_BASE_API_URL,
-	IGDB_BASE_IMAGE_URL,
 } from '../utils/constants';
 import {
 	MovieDetailsGenre,

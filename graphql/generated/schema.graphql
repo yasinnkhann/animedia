@@ -110,7 +110,7 @@ type GameResult {
 
 type GamesRes {
   results: [GameResult!]!
-  total_results: Int!
+  total_results: Int
 }
 
 """
@@ -447,7 +447,6 @@ type Query {
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
   gameDetails(gameDetailsId: ID!): GamesRes!
-  gamesFromGenres(genreIds: [ID!]!, limit: Int = 500): GamesRes!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes
@@ -471,7 +470,6 @@ type Query {
   showDetails(showDetailsId: ID!): ShowDetailsRes!
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
-  topRatedGames(limit: Int = 500): GamesRes!
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!
