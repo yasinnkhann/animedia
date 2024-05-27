@@ -110,6 +110,7 @@ type GameResult {
 
 type GamesRes {
   results: [GameResult!]!
+  total_results: Int!
 }
 
 """
@@ -463,7 +464,7 @@ type Query {
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
   recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
   recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
-  searchGames(limit: Int = 500, q: String!): GamesRes!
+  searchGames(limit: Int!, page: Int!, q: String!): GamesRes!
   searchedMovies(page: Int = 1, q: String!): MoviesRes!
   searchedPeople(page: Int = 1, q: String!): PeopleRes!
   searchedShows(page: Int = 1, q: String!): ShowsRes!

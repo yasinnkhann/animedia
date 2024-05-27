@@ -647,6 +647,7 @@ export const gameObjects = {
 	gamesRes: objectType({
 		name: 'GamesRes',
 		definition(t) {
+			t.nonNull.int('total_results');
 			t.nonNull.list.field('results', {
 				type: nonNull('GameResult'),
 			});

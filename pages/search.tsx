@@ -64,6 +64,8 @@ const Search: NextPage = () => {
 		{
 			variables: {
 				q: (router.query.q as string) ?? '',
+				limit: RESULTS_PER_PAGE,
+				page: currPage,
 			},
 		}
 	);
@@ -283,7 +285,7 @@ const Search: NextPage = () => {
 												Games
 											</h4>
 											<p className='text-right'>
-												{searchedGamesData?.searchGames.results.length ?? 0}
+												{searchedGamesData?.searchGames.total_results}
 											</p>
 										</li>
 										<li className='flex w-full items-center justify-between'>
@@ -330,7 +332,7 @@ const Search: NextPage = () => {
 											? searchedShowsData.searchedShows.total_results
 											: searchResultsType === 'people'
 												? searchedPeopleData.searchedPeople.total_results
-												: searchedGamesData?.searchGames.results.length ?? 0
+												: searchedGamesData?.searchGames.total_results!
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>

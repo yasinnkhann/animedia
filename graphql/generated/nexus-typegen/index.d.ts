@@ -168,6 +168,7 @@ export interface NexusGenObjects {
   }
   GamesRes: { // root type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
+    total_results: number; // Int!
   }
   KnownForResult: { // root type
     adult?: boolean | null; // Boolean
@@ -758,6 +759,7 @@ export interface NexusGenFieldTypes {
   }
   GamesRes: { // field return type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
+    total_results: number; // Int!
   }
   KnownForResult: { // field return type
     adult: boolean | null; // Boolean
@@ -1395,6 +1397,7 @@ export interface NexusGenFieldTypeNames {
   }
   GamesRes: { // field return type name
     results: 'GameResult'
+    total_results: 'Int'
   }
   KnownForResult: { // field return type name
     adult: 'Boolean'
@@ -2068,7 +2071,8 @@ export interface NexusGenArgTypes {
       recommendedShowsId: string; // ID!
     }
     searchGames: { // args
-      limit: number | null; // Int
+      limit: number; // Int!
+      page: number; // Int!
       q: string; // String!
     }
     searchedMovies: { // args

@@ -9,14 +9,21 @@ export const GameQueries = extendType({
 			type: 'GamesRes',
 			args: {
 				q: nonNull(stringArg()),
-				limit: intArg({ default: 500 }),
+				limit: nonNull(intArg()),
+				page: nonNull(intArg()),
 			},
-			resolve: async (_parent, { q, limit }) => {
-				const finalRes = { results: [] };
+			resolve: async (_parent, { q, limit, page }) => {
+				const finalRes = { results: [], total_results: 0 };
+
 				try {
+					const { count } = await postIGDB(
+						`${IGDB_BASE_API_URL}/games/count`,
+						`search "${q}";`
+					);
+					finalRes.total_results = count;
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
-						`fields *; limit ${limit}; search "${q}";`
+						`fields *; search "${q}"; limit ${limit}; offset ${page * limit - limit};`
 					);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
