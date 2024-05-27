@@ -1112,6 +1112,16 @@ export const SEARCHED_GAMES = graphql(`
 	}
 `);
 
+export const GET_USERS_GAMES = graphql(`
+	query UsersGames {
+		usersGames {
+			id
+			name
+			rating
+		}
+	}
+`);
+
 // export const GAME_DETAILS = graphql(`
 // 	query GameDetails($gameDetailsId: ID!) {
 // 		gameDetails(gameDetailsId: $gameDetailsId) {

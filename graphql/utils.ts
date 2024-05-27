@@ -1,8 +1,13 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { IGDB_ACCESS_TOKEN_PREFIX, __prod__ } from 'utils/constants';
+import {
+	IGDB_ACCESS_TOKEN_PREFIX,
+	IGDB_BASE_API_URL,
+	__prod__,
+} from 'utils/constants';
 import { redis } from '../lib/redis';
+import { TIGDBImageSizes } from '@ts/types';
 
 export const sendEmail = async (payload: Mail.Options) => {
 	let transporterConfig: SMTPTransport.Options = {};
@@ -100,4 +105,30 @@ export const postIGDB = async (url: string, body = '') => {
 	} catch (err) {
 		console.error(err);
 	}
+};
+
+export const addIGDBCoverUrl = async (
+	res: any[],
+	imageSize: TIGDBImageSizes
+) => {
+	await Promise.all(
+		res.map(async (result: any) => {
+			if (result.cover) {
+				const coverResponse = await postIGDB(
+					`${IGDB_BASE_API_URL}/covers`,
+					`fields url; where id=${result.cover};`
+				);
+				if (coverResponse && coverResponse.length > 0) {
+					let coverUrl: string = coverResponse[0].url;
+					if (imageSize !== 'thumb') {
+						coverUrl = coverUrl.replace('thumb', imageSize);
+					}
+					result.coverUrl = coverUrl;
+				} else {
+					result.coverUrl = null;
+				}
+			}
+			return result;
+		})
+	);
 };

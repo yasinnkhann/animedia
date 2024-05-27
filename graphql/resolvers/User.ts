@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
-import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
+import { extendType, stringArg, nonNull, idArg, intArg, list } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
 import { getErrorMsg, sendEmail } from 'graphql/utils';
@@ -69,6 +69,23 @@ export const UserQueries = extendType({
 			},
 		});
 
+		t.field('usersGame', {
+			type: 'UserGame',
+			args: {
+				gameId: nonNull(stringArg()),
+			},
+			resolve: async (_parent, { gameId }, ctx) => {
+				return await ctx.prisma.game.findUnique({
+					where: {
+						id_userId: {
+							id: gameId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		});
+
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
 			resolve: async (_parent, _args, ctx) => {
@@ -89,6 +106,22 @@ export const UserQueries = extendType({
 			type: 'UserShow',
 			resolve: async (_parent, _args, ctx) => {
 				return await ctx.prisma.show.findMany({
+					where: {
+						userId: ctx.session?.user?.id,
+					},
+					orderBy: [
+						{
+							name: 'asc',
+						},
+					],
+				});
+			},
+		});
+
+		t.list.field('usersGames', {
+			type: 'UserGame',
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.game.findMany({
 					where: {
 						userId: ctx.session?.user?.id,
 					},

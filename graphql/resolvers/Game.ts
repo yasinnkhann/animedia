@@ -1,42 +1,6 @@
 import { IGDB_BASE_API_URL } from 'utils/constants';
-import { postIGDB } from '../utils';
+import { postIGDB, addIGDBCoverUrl } from '../utils';
 import { extendType, nonNull, stringArg, list, intArg, idArg } from 'nexus';
-
-const addCoverUrl = async (
-	res: any[],
-	imageSize?:
-		| 'cover_small'
-		| 'screenshot_med'
-		| 'cover_big'
-		| 'logo_med'
-		| 'screenshot_big'
-		| 'screenshot_huge'
-		| 'thumb'
-		| 'micro'
-		| '720p'
-		| '1080p'
-) => {
-	return await Promise.all(
-		res.map(async (result: any) => {
-			if (result.cover) {
-				const coverResponse = await postIGDB(
-					`${IGDB_BASE_API_URL}/covers`,
-					`fields url; where id=${result.cover};`
-				);
-				if (coverResponse && coverResponse.length > 0) {
-					let coverUrl = coverResponse[0].url;
-					if (imageSize) {
-						coverUrl = coverUrl.replace('thumb', imageSize);
-					}
-					result.coverUrl = coverUrl;
-				} else {
-					result.coverUrl = null;
-				}
-			}
-			return result;
-		})
-	);
-};
 
 export const GameQueries = extendType({
 	type: 'Query',
@@ -48,17 +12,19 @@ export const GameQueries = extendType({
 				limit: intArg({ default: 500 }),
 			},
 			resolve: async (_parent, { q, limit }) => {
-				// try {
-				let res = await postIGDB(
-					`${IGDB_BASE_API_URL}/games`,
-					`fields *; limit ${limit}; search "${q}";`
-				);
-				res = addCoverUrl(res, '1080p');
-				const finalRes = { results: res };
+				const finalRes = { results: [] };
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/games`,
+						`fields *; limit ${limit}; search "${q}";`
+					);
+					await addIGDBCoverUrl(res, '1080p');
+					finalRes.results = res;
+					return finalRes;
+				} catch (err) {
+					console.error(err);
+				}
 				return finalRes;
-				// } catch (err) {
-				// 	console.error(err);
-				// }
 			},
 		});
 		t.nonNull.field('gameDetails', {

@@ -88,12 +88,12 @@ export class CommonMethods {
 		return imageNotFound;
 	};
 
-	public static getIgdbImage = (
-		igdbCoverId: string,
-		igdbImageSize = 'thumb'
-	) => {
-		return `${IGDB_BASE_IMAGE_URL}${igdbImageSize}/${igdbCoverId}.jpg`;
-	};
+	// public static getIgdbImage = (
+	// 	igdbCoverId: string,
+	// 	igdbImageSize = 'thumb'
+	// ) => {
+	// 	return `${IGDB_BASE_IMAGE_URL}${igdbImageSize}/${igdbCoverId}.jpg`;
+	// };
 
 	public static getKeywordId = async (q: string) => {
 		type TKeywordObj = MovieDetailsGenre | ShowDetailsGenre;

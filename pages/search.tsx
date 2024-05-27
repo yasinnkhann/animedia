@@ -78,11 +78,10 @@ const Search: NextPage = () => {
 		fetchPolicy: 'network-only',
 	});
 
-	//
-	// const { data: usersGamesData } = useQuery(Queries.GET_USERS_MOVIES, {
-	// 	skip: searchResultsType !== 'games',
-	// 	fetchPolicy: 'network-only',
-	// });
+	const { data: usersGamesData } = useQuery(Queries.GET_USERS_GAMES, {
+		skip: searchResultsType !== 'games',
+		fetchPolicy: 'network-only',
+	});
 
 	const getSearchedTypeData = useCallback(() => {
 		if (searchResultsType === 'movies' && searchedMoviesData?.searchedMovies) {
@@ -173,14 +172,17 @@ const Search: NextPage = () => {
 
 		const usersMediaMap: Map<string, UserShow | UserMovie> = new Map();
 
-		const userDataArr =
-			searchResultsType === 'movies'
-				? usersMoviesData?.usersMovies
-				: searchResultsType === 'shows'
-					? usersShowsData?.usersShows
-					: null;
+		let userDataArr;
 
-		if (!userDataArr || !getSearchedTypeData()) return;
+		if (searchResultsType === 'movies' && usersMoviesData?.usersMovies) {
+			userDataArr = usersMoviesData.usersMovies;
+		} else if (searchResultsType === 'shows' && usersShowsData?.usersShows) {
+			userDataArr = usersShowsData.usersShows;
+		}
+
+		userDataArr = userDataArr ?? [];
+
+		if (!getSearchedTypeData()) return;
 
 		for (const userDataObj of userDataArr) {
 			if (userDataObj?.id) {
@@ -189,15 +191,16 @@ const Search: NextPage = () => {
 		}
 
 		for (const item of getSearchedTypeData()!.results) {
-			if (usersMediaMap.has(String(item.id))) {
-				matchedMedias.push(usersMediaMap.get(String(item.id)) as any);
+			if (usersMediaMap.has(item.id)) {
+				matchedMedias.push(usersMediaMap.get(item.id) as any);
 			}
 		}
 
 		setUserMatchedMedias(matchedMedias);
 	}, [
-		usersShowsData?.usersShows,
 		usersMoviesData?.usersMovies,
+		usersShowsData?.usersShows,
+		usersGamesData?.usersGames,
 		searchResultsType,
 		getSearchedTypeData,
 	]);

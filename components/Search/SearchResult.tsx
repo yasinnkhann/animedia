@@ -35,12 +35,17 @@ const SearchResult = ({
 
 	const renderImage = (
 		imagePath: Maybe<string> | undefined,
-		altText: string
+		altText: string,
+		apiType: 'igdb' | 'the-movie-db'
 	) => (
 		<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
 			<Image
 				className='rounded-lg'
-				src={CommonMethods.getTheMovieDbImage(imagePath)}
+				src={
+					apiType === 'the-movie-db'
+						? CommonMethods.getTheMovieDbImage(imagePath)
+						: imagePath ?? ''
+				}
 				alt={altText}
 				layout='fill'
 				priority
@@ -57,7 +62,7 @@ const SearchResult = ({
 		</div>
 	);
 
-	const renderMediaDetails = (
+	const renderDetails = (
 		releaseDate: Maybe<string> | undefined,
 		overview: string
 	) => (
@@ -76,56 +81,43 @@ const SearchResult = ({
 		</div>
 	);
 
-	const renderPersonDetails = () => (
-		<div className='p-4'>
-			<h3 className='cursor-pointer'>{titleName}</h3>
-		</div>
-	);
-
 	const renderSearchResult = () => {
 		let searchResult;
 		if (searchedResultType === 'movie') {
 			searchResult = result as MovieResult;
 			return (
 				<>
-					{renderImage(searchResult.poster_path, titleName)}
-					{renderMediaDetails(searchResult.release_date, searchResult.overview)}
+					{renderImage(searchResult.poster_path, titleName, 'the-movie-db')}
+					{renderDetails(searchResult.release_date, searchResult.overview)}
 				</>
 			);
 		} else if (searchedResultType === 'show') {
 			searchResult = result as ShowResult;
 			return (
 				<>
-					{renderImage(searchResult.poster_path, titleName)}
-					{renderMediaDetails(
-						searchResult.first_air_date,
-						searchResult.overview
-					)}
+					{renderImage(searchResult.poster_path, titleName, 'the-movie-db')}
+					{renderDetails(searchResult.first_air_date, searchResult.overview)}
 				</>
 			);
 		} else if (searchedResultType === 'person') {
 			searchResult = result as PersonResult;
 			return (
 				<>
-					{renderImage(searchResult.profile_path, titleName)}
-					{renderPersonDetails()}
+					{renderImage(searchResult.profile_path, titleName, 'the-movie-db')}
+					<div className='p-4'>
+						<h3 className='cursor-pointer'>{titleName}</h3>
+					</div>
 				</>
 			);
 		} else {
 			searchResult = result as GameResult;
-			console.log('cover: ', searchResult.coverUrl);
 			return (
 				<>
-					<div className='relative w-[7rem] min-w-[7rem] cursor-pointer'>
-						<Image
-							className='rounded-lg'
-							src={searchResult.coverUrl ?? ''}
-							alt=''
-							layout='fill'
-							priority
-						/>
-					</div>
-					<h1>{titleName}</h1>
+					{renderImage(searchResult.coverUrl, titleName, 'igdb')}
+					{renderDetails(
+						new Date(searchResult.first_release_date * 1000).toISOString(),
+						searchResult.summary ?? ''
+					)}
 				</>
 			);
 		}

@@ -8,11 +8,9 @@ import {
 	TopRatedMoviesByGenreQuery,
 	PopularShowsByGenreQuery,
 	TopRatedShowsByGenreQuery,
-	MovieDetailsQuery,
 	MoviesRes,
 	ShowsRes,
 	PeopleRes,
-	SearchedMoviesQuery,
 } from 'graphql/generated/code-gen/graphql';
 import {
 	MovieResult,
@@ -87,3 +85,18 @@ const contentConst = [
 export type TContent = (typeof contentConst)[number];
 
 export type TTheMovieDBRes = MoviesRes | ShowsRes | PeopleRes;
+
+const igdbImageSizesConst = [
+	'cover_small',
+	'screenshot_med',
+	'cover_big',
+	'logo_med',
+	'screenshot_big',
+	'screenshot_huge',
+	'thumb',
+	'micro',
+	'720p',
+	'1080p',
+] as const;
+
+export type TIGDBImageSizes = (typeof igdbImageSizesConst)[number];

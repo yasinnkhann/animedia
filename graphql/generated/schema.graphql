@@ -478,6 +478,8 @@ type Query {
   trendingMovies(page: Int = 1, timeWindow: TimeWindowTypes!): MoviesRes!
   trendingShows(page: Int = 1, timeWindow: TimeWindowTypes!): ShowsRes!
   user(id: ID!): User
+  usersGame(gameId: String!): UserGame
+  usersGames: [UserGame]
   usersMovie(movieId: String!): UserMovie
   usersMovies: [UserMovie]
   usersShow(showId: String!): UserShow
@@ -729,6 +731,12 @@ type User {
   name: String
   password: String
   shows: [UserShow]
+}
+
+type UserGame {
+  id: ID
+  name: String
+  rating: Int
 }
 
 type UserMovie {

@@ -24,6 +24,14 @@ export const userObjects = {
 			t.int('current_episode');
 		},
 	}),
+	userGame: objectType({
+		name: 'UserGame',
+		definition(t) {
+			t.id('id');
+			t.string('name');
+			t.int('rating');
+		},
+	}),
 	user: objectType({
 		name: 'User',
 		definition(t) {

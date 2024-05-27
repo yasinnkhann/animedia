@@ -634,6 +634,11 @@ export interface NexusGenObjects {
     password?: string | null; // String
     shows?: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
   }
+  UserGame: { // root type
+    id?: string | null; // ID
+    name?: string | null; // String
+    rating?: number | null; // Int
+  }
   UserMovie: { // root type
     id?: string | null; // ID
     name?: string | null; // String
@@ -1068,6 +1073,8 @@ export interface NexusGenFieldTypes {
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     user: NexusGenRootTypes['User'] | null; // User
+    usersGame: NexusGenRootTypes['UserGame'] | null; // UserGame
+    usersGames: Array<NexusGenRootTypes['UserGame'] | null> | null; // [UserGame]
     usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     usersMovies: Array<NexusGenRootTypes['UserMovie'] | null> | null; // [UserMovie]
     usersShow: NexusGenRootTypes['UserShow'] | null; // UserShow
@@ -1273,6 +1280,11 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     password: string | null; // String
     shows: Array<NexusGenRootTypes['UserShow'] | null> | null; // [UserShow]
+  }
+  UserGame: { // field return type
+    id: string | null; // ID
+    name: string | null; // String
+    rating: number | null; // Int
   }
   UserMovie: { // field return type
     id: string | null; // ID
@@ -1698,6 +1710,8 @@ export interface NexusGenFieldTypeNames {
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
     user: 'User'
+    usersGame: 'UserGame'
+    usersGames: 'UserGame'
     usersMovie: 'UserMovie'
     usersMovies: 'UserMovie'
     usersShow: 'UserShow'
@@ -1904,6 +1918,11 @@ export interface NexusGenFieldTypeNames {
     password: 'String'
     shows: 'UserShow'
   }
+  UserGame: { // field return type name
+    id: 'ID'
+    name: 'String'
+    rating: 'Int'
+  }
   UserMovie: { // field return type name
     id: 'ID'
     name: 'String'
@@ -2101,6 +2120,9 @@ export interface NexusGenArgTypes {
     }
     user: { // args
       id: string; // ID!
+    }
+    usersGame: { // args
+      gameId: string; // String!
     }
     usersMovie: { // args
       movieId: string; // String!
