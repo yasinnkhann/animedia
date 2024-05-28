@@ -129,6 +129,20 @@ export const GameQueries = extendType({
 				}
 			},
 		});
+		t.nonNull.field('gameThemes', {
+			type: list('GameTheme'),
+			resolve: async () => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/themes`,
+						`fields name; limit 500;`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
 		// t.nonNull.field('gamesFromGenres', {
 		// 	type: 'GamesRes',
 		// 	args: {

@@ -1228,6 +1228,15 @@ export const GAME_COLLECTIONS = graphql(`
 	}
 `);
 
+export const GAME_THEMES = graphql(`
+	query GameThemes {
+		gameThemes {
+			id
+			name
+		}
+	}
+`);
+
 // export const GAMES_FROM_GENRES = graphql(`
 // 	query GamesFromGenres($genreIds: [ID!]!, $limit: Int) {
 // 		gamesFromGenres(genreIds: $genreIds, limit: $limit) {

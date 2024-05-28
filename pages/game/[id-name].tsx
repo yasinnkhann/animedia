@@ -1,36 +1,22 @@
-import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import MediaCastHorizontalScroller from '../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { useSession } from 'next-auth/react';
-import { ICast } from '@ts/interfaces';
-import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
-import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { useMutation, useQuery } from '@apollo/client';
-import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import { useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { GAME_GENRES } from 'utils/constants';
-import { platform } from 'process';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
 
 	const router = useRouter();
-
-	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
-		WatchStatusTypes.NotWatching
-	);
-
-	const [rating, setRating] = useState<number>(ratingOptions[0].value);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
@@ -53,6 +39,9 @@ const GameDetails = () => {
 		Queries.GAME_COMPANY,
 		{ skip: !id, variables: { gameId: id } }
 	);
+	const { data: gameThemesData, loading: gameThemesLoading } = useQuery(
+		Queries.GAME_THEMES
+	);
 
 	const { data: gameCollectionsData, loading: gameCollectionsLoading } =
 		useQuery(Queries.GAME_COLLECTIONS, {
@@ -66,7 +55,9 @@ const GameDetails = () => {
 		gamePlatformsLoading ||
 		!gamePlatformsData?.gamePlatforms ||
 		gameCompanyLoading ||
-		!gameCompanyData?.gameCompany
+		!gameCompanyData?.gameCompany ||
+		gameThemesLoading ||
+		!gameThemesData?.gameThemes
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -156,7 +147,7 @@ const GameDetails = () => {
 						</>
 					)}
 
-					{game.genres && game.genres.length > 0 && (
+					{game.genres && !_.isEmpty(game.genres) && (
 						<>
 							<h4 className='mt-4'>Genre(s)</h4>
 							<div className='ml-1'>
@@ -173,7 +164,22 @@ const GameDetails = () => {
 						</>
 					)}
 
-					{gameCompanyData.gameCompany && (
+					{!_.isEmpty(game.themes) && (
+						<>
+							<h4 className='mt-4'>Theme</h4>
+							<div className='ml-1'>
+								{gameThemesData.gameThemes
+									.filter(theme =>
+										game.themes!.some(themeId => theme!.id === themeId)
+									)
+									.map(theme => (
+										<p key={theme!.id}>{theme!.name}</p>
+									))}
+							</div>
+						</>
+					)}
+
+					{!_.isEmpty(gameCompanyData.gameCompany) && (
 						<>
 							<h4 className='mt-4'>Developed By:</h4>
 							{gameCompanyData.gameCompany.map(company => (

@@ -172,7 +172,7 @@ export interface NexusGenObjects {
     storyline?: string | null; // String
     summary?: string | null; // String
     tags?: Array<string | null> | null; // [ID]
-    themes?: Array<string | null> | null; // [ID]
+    themes?: string[] | null; // [ID!]
     total_rating?: number | null; // Float
     total_rating_count?: number | null; // Int
     updated_at?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -181,6 +181,10 @@ export interface NexusGenObjects {
     version_title?: string | null; // String
     videos?: Array<string | null> | null; // [ID]
     websites?: Array<string | null> | null; // [ID]
+  }
+  GameTheme: { // root type
+    id: string; // ID!
+    name: string; // String!
   }
   GamesRes: { // root type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
@@ -779,7 +783,7 @@ export interface NexusGenFieldTypes {
     storyline: string | null; // String
     summary: string | null; // String
     tags: Array<string | null> | null; // [ID]
-    themes: Array<string | null> | null; // [ID]
+    themes: string[] | null; // [ID!]
     total_rating: number | null; // Float
     total_rating_count: number | null; // Int
     updated_at: NexusGenScalars['DateTime'] | null; // DateTime
@@ -788,6 +792,10 @@ export interface NexusGenFieldTypes {
     version_title: string | null; // String
     videos: Array<string | null> | null; // [ID]
     websites: Array<string | null> | null; // [ID]
+  }
+  GameTheme: { // field return type
+    id: string; // ID!
+    name: string; // String!
   }
   GamesRes: { // field return type
     results: NexusGenRootTypes['GameResult'][]; // [GameResult!]!
@@ -1078,6 +1086,7 @@ export interface NexusGenFieldTypes {
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null>; // [GameCompany]!
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
     gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null>; // [GamePlatform]!
+    gameThemes: Array<NexusGenRootTypes['GameTheme'] | null>; // [GameTheme]!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1444,6 +1453,10 @@ export interface NexusGenFieldTypeNames {
     videos: 'ID'
     websites: 'ID'
   }
+  GameTheme: { // field return type name
+    id: 'ID'
+    name: 'String'
+  }
   GamesRes: { // field return type name
     results: 'GameResult'
     total_results: 'Int'
@@ -1733,6 +1746,7 @@ export interface NexusGenFieldTypeNames {
     gameCompany: 'GameCompany'
     gameDetails: 'GamesRes'
     gamePlatforms: 'GamePlatform'
+    gameThemes: 'GameTheme'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'

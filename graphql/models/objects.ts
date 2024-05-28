@@ -633,7 +633,7 @@ export const gameObjects = {
 			t.string('storyline');
 			t.string('summary');
 			t.list.id('tags');
-			t.list.id('themes');
+			t.list.nonNull.id('themes');
 			t.float('total_rating');
 			t.int('total_rating_count');
 			t.date('updated_at');
@@ -692,6 +692,13 @@ export const gameObjects = {
 					})
 				),
 			});
+		},
+	}),
+	gameTheme: objectType({
+		name: 'GameTheme',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
 		},
 	}),
 	// character: objectType({
