@@ -18,6 +18,7 @@ import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
+import { GAME_GENRES } from 'utils/constants';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -51,7 +52,11 @@ const GameDetails = () => {
 	}
 
 	if (gameDetailsData.gameDetails.results.length !== 1) {
-		return <section>Error getting game</section>;
+		return (
+			<section className='flex h-screen items-center justify-center'>
+				Error getting game
+			</section>
+		);
 	}
 
 	const game = gameDetailsData.gameDetails.results[0];
@@ -85,10 +90,57 @@ const GameDetails = () => {
 						</p>
 					</section>
 
+					{status === 'authenticated' && session && (
+						<section className='my-4 h-[1.5rem]'></section>
+					)}
+
 					<section className='pb-32'>
 						<h1>{game.name}</h1>
 						<p className='my-4'>{game.storyline}</p>
 					</section>
+				</section>
+
+				<section className='my-4 ml-8'>
+					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
+
+					<h4 className='mt-4'>Release Date</h4>
+					{game.first_release_date ? (
+						<p className='ml-1'>
+							{CommonMethods.formatDate(
+								new Date(game.first_release_date * 1000).toISOString()
+							)}
+						</p>
+					) : (
+						<p className='ml-1'>N/A</p>
+					)}
+
+					{game.genres && game.genres.length > 0 && (
+						<>
+							<h4 className='mt-4'>Genre(s)</h4>
+							<div className='ml-1'>
+								{game.genres.map(genreId => (
+									<p key={genreId}>
+										{CommonMethods.toTitleCase(
+											GAME_GENRES[
+												genreId as unknown as keyof typeof GAME_GENRES
+											]
+										)}
+									</p>
+								))}
+							</div>
+						</>
+					)}
+
+					{game.url && (
+						<>
+							<h4 className='mt-4'>Official Page</h4>
+							<Link href={game.url}>
+								<a className='ml-1 underline' target='_blank'>
+									Learn More
+								</a>
+							</Link>
+						</>
+					)}
 				</section>
 			</main>
 		</>

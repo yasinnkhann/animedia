@@ -131,7 +131,7 @@ export interface NexusGenObjects {
     game_engines?: Array<string | null> | null; // [ID]
     game_localizations?: Array<string | null> | null; // [ID]
     game_modes?: Array<string | null> | null; // [ID]
-    genres?: Array<string | null> | null; // [ID]
+    genres?: string[] | null; // [ID!]
     hypes?: number | null; // Int
     id: string; // ID!
     involved_companies?: Array<string | null> | null; // [ID]
@@ -722,7 +722,7 @@ export interface NexusGenFieldTypes {
     game_engines: Array<string | null> | null; // [ID]
     game_localizations: Array<string | null> | null; // [ID]
     game_modes: Array<string | null> | null; // [ID]
-    genres: Array<string | null> | null; // [ID]
+    genres: string[] | null; // [ID!]
     hypes: number | null; // Int
     id: string; // ID!
     involved_companies: Array<string | null> | null; // [ID]

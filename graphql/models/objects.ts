@@ -609,7 +609,7 @@ export const gameObjects = {
 			t.list.id('game_engines');
 			t.list.id('game_localizations');
 			t.list.id('game_modes');
-			t.list.id('genres');
+			t.list.nonNull.id('genres');
 			t.int('hypes');
 			t.list.id('involved_companies');
 			t.list.id('keywords');

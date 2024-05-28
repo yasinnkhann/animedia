@@ -211,13 +211,15 @@ export class CommonMethods {
 	};
 
 	public static toTitleCase = (str: string) => {
-		let titleCase = '';
+		str = str.replace(/_/g, ' ');
 
-		for (const word of str.split(' ')) {
-			titleCase += word[0].toUpperCase() + word.slice(1) + ' ';
-		}
-		titleCase = titleCase.slice(0, -1);
-		return titleCase;
+		const words = str.split(' ');
+
+		const titleCaseWords = words.map(
+			word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+		);
+
+		return titleCaseWords.join(' ');
 	};
 
 	public static sleep = async (ms: number) => {

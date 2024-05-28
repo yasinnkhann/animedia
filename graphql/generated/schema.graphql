@@ -72,7 +72,7 @@ type GameResult {
   game_engines: [ID]
   game_localizations: [ID]
   game_modes: [ID]
-  genres: [ID]
+  genres: [ID!]
   hypes: Int
   id: ID!
   involved_companies: [ID]
