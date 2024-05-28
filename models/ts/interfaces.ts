@@ -8,10 +8,10 @@ export interface IHorizontalScrollerItemClickInfo {
 
 export interface IRelatedMedia {
 	id: string;
-	poster_path: string | undefined | null;
-	title?: string;
-	name?: string;
+	imagePath: string | undefined | null;
+	name: string;
 	popularity: number;
+	type: 'movie' | 'show' | 'game';
 }
 
 export interface ICast {

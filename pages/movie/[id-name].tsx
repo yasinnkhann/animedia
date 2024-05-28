@@ -356,9 +356,10 @@ const MovieDetails = () => {
 								<RelatedHorizontalScroller
 									items={recMoviesData.recommendedMovies.results.map(movie => ({
 										id: movie.id,
-										poster_path: movie.poster_path,
-										title: movie.title,
+										imagePath: movie.poster_path,
+										name: movie.title,
 										popularity: movie.popularity ?? 0,
+										type: 'movie',
 									}))}
 									mediaType={'movies'}
 								/>

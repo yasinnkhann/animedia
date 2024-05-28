@@ -742,9 +742,10 @@ const ShowDetails = () => {
 								<RelatedHorizontalScroller
 									items={recShowsData.recommendedShows.results.map(show => ({
 										id: show.id,
-										poster_path: show.poster_path,
+										imagePath: show.poster_path,
 										name: show.name,
 										popularity: show.popularity ?? 0,
+										type: 'show',
 									}))}
 									mediaType={'shows'}
 								/>

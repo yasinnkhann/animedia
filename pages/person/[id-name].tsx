@@ -65,9 +65,10 @@ const PersonDetails = () => {
 
 				mappedMoviesCast.push({
 					id: castObj.id,
-					poster_path: castObj.poster_path,
-					title: castObj.title,
+					imagePath: castObj.poster_path,
+					name: castObj.title,
 					popularity: castObj.popularity,
+					type: 'movie',
 				});
 			}
 		}
@@ -86,9 +87,10 @@ const PersonDetails = () => {
 
 				mappedShowsCast.push({
 					id: castObj.id,
-					poster_path: castObj.poster_path,
+					imagePath: castObj.poster_path,
 					name: castObj.name,
 					popularity: castObj.popularity,
+					type: 'show',
 				});
 			}
 		}

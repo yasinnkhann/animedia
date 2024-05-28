@@ -11,9 +11,9 @@ interface Props {
 }
 
 const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
-	const isMovie = 'title' in item;
+	// const isMovie = 'title' in item;
 
-	const titleName = isMovie ? (item.title as string) : (item.name as string);
+	// const titleName = isMovie ? (item.title as string) : (item.name as string);
 
 	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
@@ -22,11 +22,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	return (
 		<Link
-			href={CommonMethods.getDetailsPageRoute(
-				isMovie ? 'movie' : 'show',
-				item.id,
-				titleName
-			)}
+			href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)}
 			passHref
 		>
 			<a
@@ -37,8 +33,12 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={CommonMethods.getTheMovieDbImage(item.poster_path)}
-							alt={titleName}
+							src={
+								item.type !== 'game'
+									? CommonMethods.getTheMovieDbImage(item.imagePath)
+									: CommonMethods.getIgdbImage(item.imagePath ?? '')
+							}
+							alt={item.name}
 							layout='fill'
 						/>
 						{userWatchStatusFromMedia && (
@@ -54,7 +54,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
 						<h2 className='m-0 w-full break-words text-center text-base'>
-							<p className='font-bold'>{titleName}</p>
+							<p className='font-bold'>{item.name}</p>
 						</h2>
 					</div>
 				</section>

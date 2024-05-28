@@ -66,9 +66,7 @@ const GameDetails = () => {
 		gamePlatformsLoading ||
 		!gamePlatformsData?.gamePlatforms ||
 		gameCompanyLoading ||
-		!gameCompanyData?.gameCompany ||
-		gameCollectionsLoading ||
-		!gameCollectionsData?.gameCollections
+		!gameCompanyData?.gameCompany
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -128,7 +126,6 @@ const GameDetails = () => {
 
 				<section className='my-4 ml-8'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
-
 					<h4 className='mt-4'>Release Date</h4>
 					{game.first_release_date ? (
 						<p className='ml-1'>
@@ -195,19 +192,28 @@ const GameDetails = () => {
 							</Link>
 						</>
 					)}
+				</section>
 
-					<section className='pb-4'>
-						<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
-						{/* <RelatedHorizontalScroller
-							items={recMoviesData.recommendedMovies.results.map(movie => ({
-								id: movie.id,
-								poster_path: movie.poster_path,
-								title: movie.title,
-								popularity: movie.popularity ?? 0,
-							}))}
-							mediaType={'movies'}
-						/> */}
-					</section>
+				<section className='col-start-2 mt-4'>
+					{!gameCollectionsLoading &&
+						gameCollectionsData?.gameCollections &&
+						!_.isEmpty(gameCollectionsData.gameCollections.games) && (
+							<section className='pb-4'>
+								<h3 className='mb-4 ml-8 mt-4'>Check out the series</h3>
+								<RelatedHorizontalScroller
+									items={gameCollectionsData.gameCollections.games.map(
+										game => ({
+											id: game.id,
+											imagePath: game.coverUrl,
+											name: game.name,
+											popularity: game.rating ?? 0,
+											type: 'game',
+										})
+									)}
+									mediaType={'movies'}
+								/>
+							</section>
+						)}
 				</section>
 			</main>
 		</>
