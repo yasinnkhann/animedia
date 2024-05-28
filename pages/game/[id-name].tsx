@@ -23,6 +23,7 @@ import { platform } from 'process';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
+
 	const router = useRouter();
 
 	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
@@ -38,7 +39,7 @@ const GameDetails = () => {
 		{
 			skip: !id,
 			variables: {
-				gameDetailsId: id,
+				gameId: id,
 			},
 			fetchPolicy: 'network-only',
 		}
@@ -48,13 +49,26 @@ const GameDetails = () => {
 		Queries.GAME_PLATFORMS
 	);
 
-	console.log(gamePlatformsData);
+	const { data: gameCompanyData, loading: gameCompanyLoading } = useQuery(
+		Queries.GAME_COMPANY,
+		{ skip: !id, variables: { gameId: id } }
+	);
+
+	const { data: gameCollectionsData, loading: gameCollectionsLoading } =
+		useQuery(Queries.GAME_COLLECTIONS, {
+			skip: !id,
+			variables: { gameId: id },
+		});
 
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails ||
 		gamePlatformsLoading ||
-		!gamePlatformsData?.gamePlatforms
+		!gamePlatformsData?.gamePlatforms ||
+		gameCompanyLoading ||
+		!gameCompanyData?.gameCompany ||
+		gameCollectionsLoading ||
+		!gameCollectionsData?.gameCollections
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -162,6 +176,15 @@ const GameDetails = () => {
 						</>
 					)}
 
+					{gameCompanyData.gameCompany && (
+						<>
+							<h4 className='mt-4'>Developed By:</h4>
+							{gameCompanyData.gameCompany.map(company => (
+								<p key={company?.id}>{company?.name}</p>
+							))}
+						</>
+					)}
+
 					{game.url && (
 						<>
 							<h4 className='mt-4'>Official Page</h4>
@@ -172,6 +195,19 @@ const GameDetails = () => {
 							</Link>
 						</>
 					)}
+
+					<section className='pb-4'>
+						<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
+						{/* <RelatedHorizontalScroller
+							items={recMoviesData.recommendedMovies.results.map(movie => ({
+								id: movie.id,
+								poster_path: movie.poster_path,
+								title: movie.title,
+								popularity: movie.popularity ?? 0,
+							}))}
+							mediaType={'movies'}
+						/> */}
+					</section>
 				</section>
 			</main>
 		</>

@@ -1124,8 +1124,8 @@ export const GET_USERS_GAMES = graphql(`
 `);
 
 export const GAME_DETAILS = graphql(`
-	query GameDetails($gameDetailsId: ID!) {
-		gameDetails(gameDetailsId: $gameDetailsId) {
+	query GameDetails($gameId: ID!) {
+		gameDetails(gameId: $gameId) {
 			total_results
 			results {
 				id
@@ -1194,6 +1194,36 @@ export const GAME_PLATFORMS = graphql(`
 		gamePlatforms {
 			id
 			name
+		}
+	}
+`);
+export const GAME_COMPANY = graphql(`
+	query GameCompany($gameId: ID!) {
+		gameCompany(gameId: $gameId) {
+			id
+			country
+			description
+			developed
+			logo
+			name
+			published
+		}
+	}
+`);
+
+export const GAME_COLLECTIONS = graphql(`
+	query Games($gameId: ID!) {
+		gameCollections(gameId: $gameId) {
+			id
+			name
+			games {
+				id
+				name
+				first_release_date
+				rating
+				cover
+				coverUrl
+			}
 		}
 	}
 `);

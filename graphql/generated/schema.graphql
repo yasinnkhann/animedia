@@ -13,17 +13,6 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
-type Character {
-  checksum: String
-  created_at: DateTime
-  games: [ID]
-  id: ID
-  name: String
-  slug: String
-  updated_at: DateTime
-  url: String
-}
-
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -47,6 +36,31 @@ type EpisodeDetailsRes {
 
 type ErrorRes {
   message: String!
+}
+
+type Game {
+  cover: ID
+  coverUrl: String
+  first_release_date: BigInt
+  id: String!
+  name: String!
+  rating: Float
+}
+
+type GameCollections {
+  games: [Game!]!
+  id: ID!
+  name: String!
+}
+
+type GameCompany {
+  country: String
+  description: String
+  developed: [ID!]
+  id: ID!
+  logo: ID
+  name: String!
+  published: [ID!]
 }
 
 type GamePlatform {
@@ -451,7 +465,9 @@ type Query {
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  gameDetails(gameDetailsId: ID!): GamesRes!
+  gameCollections(gameId: ID!): GameCollections!
+  gameCompany(gameId: ID!): [GameCompany]!
+  gameDetails(gameId: ID!): GamesRes!
   gamePlatforms: [GamePlatform]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!

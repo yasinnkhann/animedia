@@ -660,17 +660,51 @@ export const gameObjects = {
 			t.nonNull.string('name');
 		},
 	}),
-	character: objectType({
-		name: 'Character',
+	gameCompany: objectType({
+		name: 'GameCompany',
 		definition(t) {
-			t.id('id');
-			t.date('created_at');
-			t.list.id('games');
-			t.string('name');
-			t.string('slug');
-			t.date('updated_at');
-			t.string('url');
-			t.string('checksum');
+			t.nonNull.id('id');
+			t.string('country');
+			t.string('description');
+			t.list.nonNull.id('developed');
+			t.id('logo');
+			t.nonNull.string('name');
+			t.list.nonNull.id('published');
 		},
 	}),
+	gameCollections: objectType({
+		name: 'GameCollections',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.list.field('games', {
+				type: nonNull(
+					objectType({
+						name: 'Game',
+						definition(t) {
+							t.nonNull.string('id');
+							t.nonNull.string('name');
+							t.bigint('first_release_date');
+							t.float('rating');
+							t.id('cover');
+							t.string('coverUrl');
+						},
+					})
+				),
+			});
+		},
+	}),
+	// character: objectType({
+	// 	name: 'Character',
+	// 	definition(t) {
+	// 		t.id('id');
+	// 		t.date('created_at');
+	// 		t.list.id('games');
+	// 		t.string('name');
+	// 		t.string('slug');
+	// 		t.date('updated_at');
+	// 		t.string('url');
+	// 		t.string('checksum');
+	// 	},
+	// }),
 };

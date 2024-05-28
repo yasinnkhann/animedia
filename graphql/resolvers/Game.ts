@@ -37,14 +37,14 @@ export const GameQueries = extendType({
 		t.nonNull.field('gameDetails', {
 			type: 'GamesRes',
 			args: {
-				gameDetailsId: nonNull(idArg()),
+				gameId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { gameDetailsId }) => {
+			resolve: async (_parent, { gameId }) => {
 				const finalRes = { results: [], total_results: null };
 				try {
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
-						`fields *; where id = ${gameDetailsId};`
+						`fields *; where id = ${gameId};`
 					);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
@@ -65,6 +65,67 @@ export const GameQueries = extendType({
 					return res;
 				} catch (err) {
 					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('gameCompany', {
+			type: list('GameCompany'),
+			args: {
+				gameId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { gameId }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/companies`,
+						`fields *; where developed = [${gameId}];`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('gameCollections', {
+			type: 'GameCollections',
+			args: {
+				gameId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { gameId }) => {
+				try {
+					let collections = (
+						await postIGDB(
+							`${IGDB_BASE_API_URL}/collections`,
+							`fields *; where games = [${gameId}];`
+						)
+					)[0];
+
+					const finalRes = {
+						id: collections.id,
+						name: collections.name,
+						games: [],
+					};
+
+					if (collections.games && collections.games.length > 0) {
+						const gamesData = await Promise.all(
+							collections.games.map(async (collectionGameId: string) => {
+								const res = await postIGDB(
+									`${IGDB_BASE_API_URL}/games`,
+									`fields name, first_release_date, cover, rating; where id = ${collectionGameId};`
+								);
+								await addIGDBCoverUrl(res, '1080p');
+								return res[0];
+							})
+						);
+
+						collections = gamesData.sort(
+							(a, b) => a.first_release_date - b.first_release_date
+						);
+					}
+					finalRes.games = collections;
+					return finalRes;
+				} catch (err) {
+					console.error(err);
+					throw new Error('Error fetching game collections');
 				}
 			},
 		});
