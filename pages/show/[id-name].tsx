@@ -643,7 +643,7 @@ const ShowDetails = () => {
 								{showDetailsData.showDetails.last_episode_to_air.episode_number}
 								<br />
 								{CommonMethods.formatDate(
-									showDetailsData.showDetails.last_episode_to_air.air_date!
+									showDetailsData.showDetails.last_episode_to_air.air_date
 								)}
 							</p>
 						</div>
@@ -655,18 +655,15 @@ const ShowDetails = () => {
 						<div className='ml-1'>
 							<p>
 								Season{' '}
-								{
-									showDetailsData.showDetails?.next_episode_to_air
-										?.season_number
-								}{' '}
+								{showDetailsData.showDetails?.next_episode_to_air.season_number}{' '}
 								Episode{' '}
 								{
 									showDetailsData.showDetails?.next_episode_to_air
-										?.episode_number
+										.episode_number
 								}
 								<br />
 								{CommonMethods.formatDate(
-									showDetailsData.showDetails.next_episode_to_air.air_date!
+									showDetailsData.showDetails.next_episode_to_air.air_date
 								)}
 							</p>
 						</div>
@@ -708,7 +705,7 @@ const ShowDetails = () => {
 								<h3 className='mb-4 ml-8'>Episodes</h3>
 								<EpisodeDetailsHorizontalScroller
 									seasons={showDetailsData.showDetails.seasons.filter(
-										season => season?.season_number && season.season_number > 0
+										season => season.season_number && season.season_number > 0
 									)}
 									showId={showDetailsData.showDetails.id}
 								/>
@@ -724,10 +721,10 @@ const ShowDetails = () => {
 									items={
 										showsCastCrewData.showsCastCrew
 											?.cast!.map(cast => ({
-												id: cast!.id,
-												name: cast!.name,
-												character: cast!.character,
-												profile_path: cast!.profile_path,
+												id: cast.id,
+												name: cast.name,
+												character: cast.character,
+												profile_path: cast.profile_path,
 											}))
 											.slice(0, 20) as ICast[]
 									}

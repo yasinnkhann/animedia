@@ -82,9 +82,9 @@ export interface NexusGenObjects {
   }
   EpisodeDetailsRes: { // root type
     air_date?: string | null; // String
-    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    crew?: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
     episode_number?: number | null; // Int
-    guest_stars?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    guest_stars?: NexusGenRootTypes['ShowsCastModel'][] | null; // [ShowsCastModel!]
     id?: string | null; // ID
     name?: string | null; // String
     overview?: string | null; // String
@@ -232,12 +232,12 @@ export interface NexusGenObjects {
     overview: string; // String!
     popularity?: number | null; // Float
     poster_path?: string | null; // String
-    production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
+    production_companies: NexusGenRootTypes['MovieDetailsProdCompany'][]; // [MovieDetailsProdCompany!]!
+    production_countries: NexusGenRootTypes['MovieDetailsProdCountry'][]; // [MovieDetailsProdCountry!]!
     release_date?: string | null; // String
     revenue?: NexusGenScalars['BigInt'] | null; // BigInt
     runtime?: number | null; // Int
-    spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
+    spoken_languages: NexusGenRootTypes['MovieDetailsSpokenLang'][]; // [MovieDetailsSpokenLang!]!
     status: string; // String!
     tagline: string; // String!
     title: string; // String!
@@ -275,7 +275,7 @@ export interface NexusGenObjects {
   MovieReviewsRes: { // root type
     id: string; // ID!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
+    results: NexusGenRootTypes['MovieReviewsResult'][]; // [MovieReviewsResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -289,8 +289,8 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   MoviesCastCrewRes: { // root type
-    cast?: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
-    crew?: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+    cast?: NexusGenRootTypes['MoviesCastModel'][] | null; // [MoviesCastModel!]
+    crew?: NexusGenRootTypes['MoviesCrewModel'][] | null; // [MoviesCrewModel!]
     id?: string | null; // ID
   }
   MoviesCastModel: { // root type
@@ -323,7 +323,7 @@ export interface NexusGenObjects {
   MoviesInTheatresRes: { // root type
     dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
     page: string; // String!
-    results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
+    results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -521,7 +521,7 @@ export interface NexusGenObjects {
   ShowDetailsRes: { // root type
     adult: boolean; // Boolean!
     backdrop_path?: string | null; // String
-    created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
+    created_by: NexusGenRootTypes['ShowDetailsCreatedBy'][]; // [ShowDetailsCreatedBy!]!
     episode_run_time: Array<number | null>; // [Int]!
     first_air_date?: string | null; // String
     genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
@@ -530,10 +530,10 @@ export interface NexusGenObjects {
     in_production: boolean; // Boolean!
     languages: Array<string | null>; // [String]!
     last_air_date?: string | null; // String
-    last_episode_to_air?: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
+    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir']; // ShowDetailsLastEpToAir!
     name: string; // String!
     networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air?: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
+    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir']; // ShowDetailsNextEpToAir!
     number_of_episodes: number; // Int!
     number_of_seasons: number; // Int!
     origin_country: Array<string | null>; // [String]!
@@ -542,10 +542,10 @@ export interface NexusGenObjects {
     overview: string; // String!
     popularity?: number | null; // Float
     poster_path?: string | null; // String
-    production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
-    seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
-    spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
+    production_companies: NexusGenRootTypes['ShowDetailsProdCompany'][]; // [ShowDetailsProdCompany!]!
+    production_countries: NexusGenRootTypes['ShowDetailsCountry'][]; // [ShowDetailsCountry!]!
+    seasons: NexusGenRootTypes['ShowDetailsSeason'][]; // [ShowDetailsSeason!]!
+    spoken_languages: NexusGenRootTypes['ShowDetailsSpokenLang'][]; // [ShowDetailsSpokenLang!]!
     status: string; // String!
     tagline: string; // String!
     type: string; // String!
@@ -590,7 +590,7 @@ export interface NexusGenObjects {
   ShowReviewRes: { // root type
     id: string; // ID!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
+    results: NexusGenRootTypes['ShowReviewResult'][]; // [ShowReviewResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -604,8 +604,8 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   ShowsCastCrewRes: { // root type
-    cast?: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    crew?: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    cast?: NexusGenRootTypes['ShowsCastModel'][] | null; // [ShowsCastModel!]
+    crew?: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
     id?: string | null; // ID
   }
   ShowsCastModel: { // root type
@@ -639,6 +639,14 @@ export interface NexusGenObjects {
     results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
+  }
+  SimilarGame: { // root type
+    cover?: string | null; // ID
+    coverUrl?: string | null; // String
+    first_release_date?: NexusGenScalars['BigInt'] | null; // BigInt
+    id: string; // String!
+    name: string; // String!
+    rating?: number | null; // Float
   }
   TheatreDates: { // root type
     maximum: string; // String!
@@ -693,9 +701,9 @@ export interface NexusGenFieldTypes {
   }
   EpisodeDetailsRes: { // field return type
     air_date: string | null; // String
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    crew: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
     episode_number: number | null; // Int
-    guest_stars: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
+    guest_stars: NexusGenRootTypes['ShowsCastModel'][] | null; // [ShowsCastModel!]
     id: string | null; // ID
     name: string | null; // String
     overview: string | null; // String
@@ -843,12 +851,12 @@ export interface NexusGenFieldTypes {
     overview: string; // String!
     popularity: number | null; // Float
     poster_path: string | null; // String
-    production_companies: Array<NexusGenRootTypes['MovieDetailsProdCompany'] | null>; // [MovieDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['MovieDetailsProdCountry'] | null>; // [MovieDetailsProdCountry]!
+    production_companies: NexusGenRootTypes['MovieDetailsProdCompany'][]; // [MovieDetailsProdCompany!]!
+    production_countries: NexusGenRootTypes['MovieDetailsProdCountry'][]; // [MovieDetailsProdCountry!]!
     release_date: string | null; // String
     revenue: NexusGenScalars['BigInt'] | null; // BigInt
     runtime: number | null; // Int
-    spoken_languages: Array<NexusGenRootTypes['MovieDetailsSpokenLang'] | null>; // [MovieDetailsSpokenLang]!
+    spoken_languages: NexusGenRootTypes['MovieDetailsSpokenLang'][]; // [MovieDetailsSpokenLang!]!
     status: string; // String!
     tagline: string; // String!
     title: string; // String!
@@ -886,7 +894,7 @@ export interface NexusGenFieldTypes {
   MovieReviewsRes: { // field return type
     id: string; // ID!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['MovieReviewsResult'] | null>; // [MovieReviewsResult]!
+    results: NexusGenRootTypes['MovieReviewsResult'][]; // [MovieReviewsResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -900,8 +908,8 @@ export interface NexusGenFieldTypes {
     url: string; // String!
   }
   MoviesCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['MoviesCastModel'] | null> | null; // [MoviesCastModel]
-    crew: Array<NexusGenRootTypes['MoviesCrewModel'] | null> | null; // [MoviesCrewModel]
+    cast: NexusGenRootTypes['MoviesCastModel'][] | null; // [MoviesCastModel!]
+    crew: NexusGenRootTypes['MoviesCrewModel'][] | null; // [MoviesCrewModel!]
     id: string | null; // ID
   }
   MoviesCastModel: { // field return type
@@ -934,7 +942,7 @@ export interface NexusGenFieldTypes {
   MoviesInTheatresRes: { // field return type
     dates: NexusGenRootTypes['TheatreDates']; // TheatreDates!
     page: string; // String!
-    results: Array<NexusGenRootTypes['MovieResult'] | null>; // [MovieResult]!
+    results: NexusGenRootTypes['MovieResult'][]; // [MovieResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -1110,6 +1118,7 @@ export interface NexusGenFieldTypes {
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
     showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
+    similarGames: NexusGenRootTypes['SimilarGame'][]; // [SimilarGame!]!
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1191,7 +1200,7 @@ export interface NexusGenFieldTypes {
   ShowDetailsRes: { // field return type
     adult: boolean; // Boolean!
     backdrop_path: string | null; // String
-    created_by: Array<NexusGenRootTypes['ShowDetailsCreatedBy'] | null>; // [ShowDetailsCreatedBy]!
+    created_by: NexusGenRootTypes['ShowDetailsCreatedBy'][]; // [ShowDetailsCreatedBy!]!
     episode_run_time: Array<number | null>; // [Int]!
     first_air_date: string | null; // String
     genres: NexusGenRootTypes['ShowDetailsGenre'][]; // [ShowDetailsGenre!]!
@@ -1200,10 +1209,10 @@ export interface NexusGenFieldTypes {
     in_production: boolean; // Boolean!
     languages: Array<string | null>; // [String]!
     last_air_date: string | null; // String
-    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
+    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir']; // ShowDetailsLastEpToAir!
     name: string; // String!
     networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
+    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir']; // ShowDetailsNextEpToAir!
     number_of_episodes: number; // Int!
     number_of_seasons: number; // Int!
     origin_country: Array<string | null>; // [String]!
@@ -1212,10 +1221,10 @@ export interface NexusGenFieldTypes {
     overview: string; // String!
     popularity: number | null; // Float
     poster_path: string | null; // String
-    production_companies: Array<NexusGenRootTypes['ShowDetailsProdCompany'] | null>; // [ShowDetailsProdCompany]!
-    production_countries: Array<NexusGenRootTypes['ShowDetailsCountry'] | null>; // [ShowDetailsCountry]!
-    seasons: Array<NexusGenRootTypes['ShowDetailsSeason'] | null>; // [ShowDetailsSeason]!
-    spoken_languages: Array<NexusGenRootTypes['ShowDetailsSpokenLang'] | null>; // [ShowDetailsSpokenLang]!
+    production_companies: NexusGenRootTypes['ShowDetailsProdCompany'][]; // [ShowDetailsProdCompany!]!
+    production_countries: NexusGenRootTypes['ShowDetailsCountry'][]; // [ShowDetailsCountry!]!
+    seasons: NexusGenRootTypes['ShowDetailsSeason'][]; // [ShowDetailsSeason!]!
+    spoken_languages: NexusGenRootTypes['ShowDetailsSpokenLang'][]; // [ShowDetailsSpokenLang!]!
     status: string; // String!
     tagline: string; // String!
     type: string; // String!
@@ -1260,7 +1269,7 @@ export interface NexusGenFieldTypes {
   ShowReviewRes: { // field return type
     id: string; // ID!
     page: number; // Int!
-    results: Array<NexusGenRootTypes['ShowReviewResult'] | null>; // [ShowReviewResult]!
+    results: NexusGenRootTypes['ShowReviewResult'][]; // [ShowReviewResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
   }
@@ -1274,8 +1283,8 @@ export interface NexusGenFieldTypes {
     url: string; // String!
   }
   ShowsCastCrewRes: { // field return type
-    cast: Array<NexusGenRootTypes['ShowsCastModel'] | null> | null; // [ShowsCastModel]
-    crew: Array<NexusGenRootTypes['ShowsCrewModel'] | null> | null; // [ShowsCrewModel]
+    cast: NexusGenRootTypes['ShowsCastModel'][] | null; // [ShowsCastModel!]
+    crew: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
     id: string | null; // ID
   }
   ShowsCastModel: { // field return type
@@ -1309,6 +1318,14 @@ export interface NexusGenFieldTypes {
     results: NexusGenRootTypes['ShowResult'][]; // [ShowResult!]!
     total_pages: number; // Int!
     total_results: number; // Int!
+  }
+  SimilarGame: { // field return type
+    cover: string | null; // ID
+    coverUrl: string | null; // String
+    first_release_date: NexusGenScalars['BigInt'] | null; // BigInt
+    id: string; // String!
+    name: string; // String!
+    rating: number | null; // Float
   }
   TheatreDates: { // field return type
     maximum: string; // String!
@@ -1770,6 +1787,7 @@ export interface NexusGenFieldTypeNames {
     showDetails: 'ShowDetailsRes'
     showReviews: 'ShowReviewRes'
     showsCastCrew: 'ShowsCastCrewRes'
+    similarGames: 'SimilarGame'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'
@@ -1970,6 +1988,14 @@ export interface NexusGenFieldTypeNames {
     total_pages: 'Int'
     total_results: 'Int'
   }
+  SimilarGame: { // field return type name
+    cover: 'ID'
+    coverUrl: 'String'
+    first_release_date: 'BigInt'
+    id: 'String'
+    name: 'String'
+    rating: 'Float'
+  }
   TheatreDates: { // field return type name
     maximum: 'String'
     minimum: 'String'
@@ -2083,6 +2109,12 @@ export interface NexusGenArgTypes {
     gameDetails: { // args
       gameId: string; // ID!
     }
+    gamePlatforms: { // args
+      limit: number | null; // Int
+    }
+    gameThemes: { // args
+      limit: number | null; // Int
+    }
     movieDetails: { // args
       movieDetailsId: string; // ID!
     }
@@ -2162,6 +2194,10 @@ export interface NexusGenArgTypes {
     }
     showsCastCrew: { // args
       showId: string; // ID!
+    }
+    similarGames: { // args
+      gameIds: string[]; // [ID!]!
+      limit: number | null; // Int
     }
     topRatedMovies: { // args
       page: number | null; // Int

@@ -337,10 +337,10 @@ const MovieDetails = () => {
 									items={
 										moviesCastCrewData.moviesCastCrew
 											.cast!.map(cast => ({
-												id: cast!.id,
-												name: cast!.name,
-												character: cast!.character,
-												profile_path: cast!.profile_path,
+												id: cast.id,
+												name: cast.name,
+												character: cast.character,
+												profile_path: cast.profile_path,
 											}))
 											.slice(0, 20) as ICast[]
 									}

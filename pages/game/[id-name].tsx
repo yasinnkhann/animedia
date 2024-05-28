@@ -49,6 +49,17 @@ const GameDetails = () => {
 			variables: { gameId: id },
 		});
 
+	const { data: similarGamesData, loading: similarGamesLoading } = useQuery(
+		Queries.SIMILAR_GAMES,
+		{
+			skip: !gameDetailsData?.gameDetails.results[0]?.similar_games,
+			variables: {
+				gameIds: gameDetailsData?.gameDetails.results[0]
+					?.similar_games as string[],
+			},
+		}
+	);
+
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails ||
@@ -75,7 +86,8 @@ const GameDetails = () => {
 	}
 
 	const game = gameDetailsData.gameDetails.results[0];
-	console.log(game);
+	// console.log(game);
+	console.log(similarGamesData?.similarGames);
 
 	return (
 		<>
@@ -216,7 +228,23 @@ const GameDetails = () => {
 											type: 'game',
 										})
 									)}
-									mediaType={'movies'}
+								/>
+							</section>
+						)}
+
+					{!similarGamesLoading &&
+						similarGamesData?.similarGames &&
+						!_.isEmpty(similarGamesData.similarGames) && (
+							<section className='pb-4'>
+								<h3 className='mb-4 ml-8 mt-4'>Games you might like</h3>
+								<RelatedHorizontalScroller
+									items={similarGamesData.similarGames.map(game => ({
+										id: game.id,
+										imagePath: game.coverUrl,
+										name: game.name,
+										popularity: game.rating ?? 0,
+										type: 'game',
+									}))}
 								/>
 							</section>
 						)}

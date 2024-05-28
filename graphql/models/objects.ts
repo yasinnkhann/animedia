@@ -176,16 +176,16 @@ export const movieObjects = {
 			t.float('popularity');
 			t.string('poster_path');
 			t.nonNull.list.field('production_companies', {
-				type: 'MovieDetailsProdCompany',
+				type: nonNull('MovieDetailsProdCompany'),
 			});
 			t.nonNull.list.field('production_countries', {
-				type: 'MovieDetailsProdCountry',
+				type: nonNull('MovieDetailsProdCountry'),
 			});
 			t.string('release_date');
 			t.bigint('revenue');
 			t.int('runtime');
 			t.nonNull.list.field('spoken_languages', {
-				type: 'MovieDetailsSpokenLang',
+				type: nonNull('MovieDetailsSpokenLang'),
 			});
 			t.nonNull.string('status');
 			t.nonNull.string('tagline');
@@ -209,7 +209,7 @@ export const movieObjects = {
 		definition(t) {
 			t.nonNull.string('author');
 			t.nonNull.field('author_details', {
-				type: 'MovieReviewAuthorDetails',
+				type: nonNull('MovieReviewAuthorDetails'),
 			});
 			t.nonNull.string('content');
 			t.nonNull.string('created_at');
@@ -226,7 +226,7 @@ export const movieObjects = {
 				t.nonNull.int('total_pages'),
 				t.nonNull.int('total_results');
 			t.nonNull.list.field('results', {
-				type: 'MovieReviewsResult',
+				type: nonNull('MovieReviewsResult'),
 			});
 		},
 	}),
@@ -241,13 +241,13 @@ export const movieObjects = {
 		name: 'MoviesInTheatresRes',
 		definition(t) {
 			t.nonNull.field('dates', {
-				type: 'TheatreDates',
+				type: nonNull('TheatreDates'),
 			});
 			t.nonNull.string('page');
 			t.nonNull.int('total_pages');
 			t.nonNull.int('total_results');
 			t.nonNull.list.field('results', {
-				type: 'MovieResult',
+				type: nonNull('MovieResult'),
 			});
 		},
 	}),
@@ -289,10 +289,10 @@ export const movieObjects = {
 		definition(t) {
 			t.id('id');
 			t.list.field('cast', {
-				type: 'MoviesCastModel',
+				type: nonNull('MoviesCastModel'),
 			});
 			t.list.field('crew', {
-				type: 'MoviesCrewModel',
+				type: nonNull('MoviesCrewModel'),
 			});
 		},
 	}),
@@ -430,7 +430,7 @@ export const showObjects = {
 			t.nonNull.boolean('adult');
 			t.string('backdrop_path');
 			t.nonNull.list.field('created_by', {
-				type: 'ShowDetailsCreatedBy',
+				type: nonNull('ShowDetailsCreatedBy'),
 			});
 			t.nonNull.list.int('episode_run_time');
 			t.string('first_air_date');
@@ -443,11 +443,11 @@ export const showObjects = {
 			t.nonNull.list.string('languages');
 			t.string('last_air_date');
 			t.field('last_episode_to_air', {
-				type: 'ShowDetailsLastEpToAir',
+				type: nonNull('ShowDetailsLastEpToAir'),
 			});
 			t.nonNull.string('name');
 			t.field('next_episode_to_air', {
-				type: 'ShowDetailsNextEpToAir',
+				type: nonNull('ShowDetailsNextEpToAir'),
 			});
 			t.nonNull.list.field('networks', {
 				type: nonNull('ShowDetailsNetwork'),
@@ -461,16 +461,16 @@ export const showObjects = {
 			t.float('popularity');
 			t.string('poster_path');
 			t.nonNull.list.field('production_companies', {
-				type: 'ShowDetailsProdCompany',
+				type: nonNull('ShowDetailsProdCompany'),
 			});
 			t.nonNull.list.field('production_countries', {
-				type: 'ShowDetailsCountry',
+				type: nonNull('ShowDetailsCountry'),
 			});
 			t.nonNull.list.field('seasons', {
-				type: 'ShowDetailsSeason',
+				type: nonNull('ShowDetailsSeason'),
 			});
 			t.nonNull.list.field('spoken_languages', {
-				type: 'ShowDetailsSpokenLang',
+				type: nonNull('ShowDetailsSpokenLang'),
 			});
 			t.nonNull.string('status');
 			t.nonNull.string('tagline');
@@ -493,7 +493,7 @@ export const showObjects = {
 		definition(t) {
 			t.nonNull.string('author');
 			t.nonNull.field('author_details', {
-				type: 'ShowReviewAuthorDetails',
+				type: nonNull('ShowReviewAuthorDetails'),
 			});
 			t.nonNull.string('content');
 			t.nonNull.string('created_at');
@@ -510,7 +510,7 @@ export const showObjects = {
 				t.nonNull.int('total_pages'),
 				t.nonNull.int('total_results');
 			t.nonNull.list.field('results', {
-				type: 'ShowReviewResult',
+				type: nonNull('ShowReviewResult'),
 			});
 		},
 	}),
@@ -551,10 +551,10 @@ export const showObjects = {
 		definition(t) {
 			t.id('id');
 			t.list.field('cast', {
-				type: 'ShowsCastModel',
+				type: nonNull('ShowsCastModel'),
 			});
 			t.list.field('crew', {
-				type: 'ShowsCrewModel',
+				type: nonNull('ShowsCrewModel'),
 			});
 		},
 	}),
@@ -563,11 +563,11 @@ export const showObjects = {
 		definition(t) {
 			t.string('air_date');
 			t.list.field('crew', {
-				type: 'ShowsCrewModel',
+				type: nonNull('ShowsCrewModel'),
 			});
 			t.int('episode_number');
 			t.list.field('guest_stars', {
-				type: 'ShowsCastModel',
+				type: nonNull('ShowsCastModel'),
 			});
 			t.string('name');
 			t.string('overview');
@@ -701,6 +701,18 @@ export const gameObjects = {
 			t.nonNull.string('name');
 		},
 	}),
+	similarGame: objectType({
+		name: 'SimilarGame',
+		definition(t) {
+			t.nonNull.string('id');
+			t.nonNull.string('name');
+			t.bigint('first_release_date');
+			t.float('rating');
+			t.id('cover');
+			t.string('coverUrl');
+		},
+	}),
+
 	// character: objectType({
 	// 	name: 'Character',
 	// 	definition(t) {

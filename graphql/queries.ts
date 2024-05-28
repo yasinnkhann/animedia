@@ -1237,6 +1237,19 @@ export const GAME_THEMES = graphql(`
 	}
 `);
 
+export const SIMILAR_GAMES = graphql(`
+	query SimilarGames($gameIds: [ID!]!, $limit: Int) {
+		similarGames(gameIds: $gameIds, limit: $limit) {
+			id
+			name
+			first_release_date
+			rating
+			cover
+			coverUrl
+		}
+	}
+`);
+
 // export const GAMES_FROM_GENRES = graphql(`
 // 	query GamesFromGenres($genreIds: [ID!]!, $limit: Int) {
 // 		gamesFromGenres(genreIds: $genreIds, limit: $limit) {

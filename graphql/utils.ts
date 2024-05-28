@@ -114,18 +114,24 @@ export const addIGDBCoverUrl = async (
 	await Promise.all(
 		res.map(async (result: any) => {
 			if (result.cover) {
-				const coverResponse = await postIGDB(
-					`${IGDB_BASE_API_URL}/covers`,
-					`fields url; where id=${result.cover};`
-				);
-				if (coverResponse && coverResponse.length > 0) {
-					let coverUrl: string = coverResponse[0].url;
-					if (imageSize !== 'thumb') {
-						coverUrl = coverUrl.replace('thumb', imageSize);
+				try {
+					const coverResponse = await postIGDB(
+						`${IGDB_BASE_API_URL}/covers`,
+						`fields url; where id=${result.cover};`
+					);
+					if (coverResponse && coverResponse.length > 0) {
+						console.log('in', coverResponse);
+						let coverUrl: string = coverResponse[0].url;
+						if (imageSize !== 'thumb') {
+							coverUrl = coverUrl.replace('thumb', imageSize);
+						}
+						result.coverUrl = coverUrl;
+					} else {
+						console.log('fail');
+						result.coverUrl = null;
 					}
-					result.coverUrl = coverUrl;
-				} else {
-					result.coverUrl = null;
+				} catch (err) {
+					console.error(err);
 				}
 			}
 			return result;

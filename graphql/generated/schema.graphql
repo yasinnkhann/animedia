@@ -20,9 +20,9 @@ scalar DateTime
 
 type EpisodeDetailsRes {
   air_date: String
-  crew: [ShowsCrewModel]
+  crew: [ShowsCrewModel!]
   episode_number: Int
-  guest_stars: [ShowsCastModel]
+  guest_stars: [ShowsCastModel!]
   id: ID
   name: String
   overview: String
@@ -188,12 +188,12 @@ type MovieDetailsRes {
   overview: String!
   popularity: Float
   poster_path: String
-  production_companies: [MovieDetailsProdCompany]!
-  production_countries: [MovieDetailsProdCountry]!
+  production_companies: [MovieDetailsProdCompany!]!
+  production_countries: [MovieDetailsProdCountry!]!
   release_date: String
   revenue: BigInt
   runtime: Int
-  spoken_languages: [MovieDetailsSpokenLang]!
+  spoken_languages: [MovieDetailsSpokenLang!]!
   status: String!
   tagline: String!
   title: String!
@@ -257,7 +257,7 @@ type MovieReviewAuthorDetails {
 type MovieReviewsRes {
   id: ID!
   page: Int!
-  results: [MovieReviewsResult]!
+  results: [MovieReviewsResult!]!
   total_pages: Int!
   total_results: Int!
 }
@@ -273,8 +273,8 @@ type MovieReviewsResult {
 }
 
 type MoviesCastCrewRes {
-  cast: [MoviesCastModel]
-  crew: [MoviesCrewModel]
+  cast: [MoviesCastModel!]
+  crew: [MoviesCrewModel!]
   id: ID
 }
 
@@ -310,7 +310,7 @@ type MoviesCrewModel {
 type MoviesInTheatresRes {
   dates: TheatreDates!
   page: String!
-  results: [MovieResult]!
+  results: [MovieResult!]!
   total_pages: Int!
   total_results: Int!
 }
@@ -473,8 +473,8 @@ type Query {
   gameCollections(gameId: ID!): GameCollections!
   gameCompany(gameId: ID!): [GameCompany]!
   gameDetails(gameId: ID!): GamesRes!
-  gamePlatforms: [GamePlatform]!
-  gameThemes: [GameTheme]!
+  gamePlatforms(limit: Int = 500): [GamePlatform]!
+  gameThemes(limit: Int = 500): [GameTheme]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes
@@ -498,6 +498,7 @@ type Query {
   showDetails(showDetailsId: ID!): ShowDetailsRes!
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
+  similarGames(gameIds: [ID!]!, limit: Int = 500): [SimilarGame!]!
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!
@@ -589,7 +590,7 @@ type ShowDetailsProdCompany {
 type ShowDetailsRes {
   adult: Boolean!
   backdrop_path: String
-  created_by: [ShowDetailsCreatedBy]!
+  created_by: [ShowDetailsCreatedBy!]!
   episode_run_time: [Int]!
   first_air_date: String
   genres: [ShowDetailsGenre!]!
@@ -598,10 +599,10 @@ type ShowDetailsRes {
   in_production: Boolean!
   languages: [String]!
   last_air_date: String
-  last_episode_to_air: ShowDetailsLastEpToAir
+  last_episode_to_air: ShowDetailsLastEpToAir!
   name: String!
   networks: [ShowDetailsNetwork!]!
-  next_episode_to_air: ShowDetailsNextEpToAir
+  next_episode_to_air: ShowDetailsNextEpToAir!
   number_of_episodes: Int!
   number_of_seasons: Int!
   origin_country: [String]!
@@ -610,10 +611,10 @@ type ShowDetailsRes {
   overview: String!
   popularity: Float
   poster_path: String
-  production_companies: [ShowDetailsProdCompany]!
-  production_countries: [ShowDetailsCountry]!
-  seasons: [ShowDetailsSeason]!
-  spoken_languages: [ShowDetailsSpokenLang]!
+  production_companies: [ShowDetailsProdCompany!]!
+  production_countries: [ShowDetailsCountry!]!
+  seasons: [ShowDetailsSeason!]!
+  spoken_languages: [ShowDetailsSpokenLang!]!
   status: String!
   tagline: String!
   type: String!
@@ -682,7 +683,7 @@ type ShowReviewAuthorDetails {
 type ShowReviewRes {
   id: ID!
   page: Int!
-  results: [ShowReviewResult]!
+  results: [ShowReviewResult!]!
   total_pages: Int!
   total_results: Int!
 }
@@ -698,8 +699,8 @@ type ShowReviewResult {
 }
 
 type ShowsCastCrewRes {
-  cast: [ShowsCastModel]
-  crew: [ShowsCrewModel]
+  cast: [ShowsCastModel!]
+  crew: [ShowsCrewModel!]
   id: ID
 }
 
@@ -736,6 +737,15 @@ type ShowsRes {
   results: [ShowResult!]!
   total_pages: Int!
   total_results: Int!
+}
+
+type SimilarGame {
+  cover: ID
+  coverUrl: String
+  first_release_date: BigInt
+  id: String!
+  name: String!
+  rating: Float
 }
 
 type TheatreDates {

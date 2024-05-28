@@ -32,9 +32,9 @@ export type AccountVerifiedRes = {
 export type EpisodeDetailsRes = {
   __typename?: 'EpisodeDetailsRes';
   air_date?: Maybe<Scalars['String']['output']>;
-  crew?: Maybe<Array<Maybe<ShowsCrewModel>>>;
+  crew?: Maybe<Array<ShowsCrewModel>>;
   episode_number?: Maybe<Scalars['Int']['output']>;
-  guest_stars?: Maybe<Array<Maybe<ShowsCastModel>>>;
+  guest_stars?: Maybe<Array<ShowsCastModel>>;
   id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   overview?: Maybe<Scalars['String']['output']>;
@@ -208,12 +208,12 @@ export type MovieDetailsRes = {
   overview: Scalars['String']['output'];
   popularity?: Maybe<Scalars['Float']['output']>;
   poster_path?: Maybe<Scalars['String']['output']>;
-  production_companies: Array<Maybe<MovieDetailsProdCompany>>;
-  production_countries: Array<Maybe<MovieDetailsProdCountry>>;
+  production_companies: Array<MovieDetailsProdCompany>;
+  production_countries: Array<MovieDetailsProdCountry>;
   release_date?: Maybe<Scalars['String']['output']>;
   revenue?: Maybe<Scalars['BigInt']['output']>;
   runtime?: Maybe<Scalars['Int']['output']>;
-  spoken_languages: Array<Maybe<MovieDetailsSpokenLang>>;
+  spoken_languages: Array<MovieDetailsSpokenLang>;
   status: Scalars['String']['output'];
   tagline: Scalars['String']['output'];
   title: Scalars['String']['output'];
@@ -281,7 +281,7 @@ export type MovieReviewsRes = {
   __typename?: 'MovieReviewsRes';
   id: Scalars['ID']['output'];
   page: Scalars['Int']['output'];
-  results: Array<Maybe<MovieReviewsResult>>;
+  results: Array<MovieReviewsResult>;
   total_pages: Scalars['Int']['output'];
   total_results: Scalars['Int']['output'];
 };
@@ -299,8 +299,8 @@ export type MovieReviewsResult = {
 
 export type MoviesCastCrewRes = {
   __typename?: 'MoviesCastCrewRes';
-  cast?: Maybe<Array<Maybe<MoviesCastModel>>>;
-  crew?: Maybe<Array<Maybe<MoviesCrewModel>>>;
+  cast?: Maybe<Array<MoviesCastModel>>;
+  crew?: Maybe<Array<MoviesCrewModel>>;
   id?: Maybe<Scalars['ID']['output']>;
 };
 
@@ -339,7 +339,7 @@ export type MoviesInTheatresRes = {
   __typename?: 'MoviesInTheatresRes';
   dates: TheatreDates;
   page: Scalars['String']['output'];
-  results: Array<Maybe<MovieResult>>;
+  results: Array<MovieResult>;
   total_pages: Scalars['Int']['output'];
   total_results: Scalars['Int']['output'];
 };
@@ -607,6 +607,7 @@ export type Query = {
   showDetails: ShowDetailsRes;
   showReviews: ShowReviewRes;
   showsCastCrew?: Maybe<ShowsCastCrewRes>;
+  similarGames: Array<SimilarGame>;
   topRatedMovies: MoviesRes;
   topRatedMoviesByGenre: MoviesRes;
   topRatedShows: ShowsRes;
@@ -664,6 +665,16 @@ export type QueryGameCompanyArgs = {
 
 export type QueryGameDetailsArgs = {
   gameId: Scalars['ID']['input'];
+};
+
+
+export type QueryGamePlatformsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGameThemesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -790,6 +801,12 @@ export type QueryShowReviewsArgs = {
 
 export type QueryShowsCastCrewArgs = {
   showId: Scalars['ID']['input'];
+};
+
+
+export type QuerySimilarGamesArgs = {
+  gameIds: Array<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -932,7 +949,7 @@ export type ShowDetailsRes = {
   __typename?: 'ShowDetailsRes';
   adult: Scalars['Boolean']['output'];
   backdrop_path?: Maybe<Scalars['String']['output']>;
-  created_by: Array<Maybe<ShowDetailsCreatedBy>>;
+  created_by: Array<ShowDetailsCreatedBy>;
   episode_run_time: Array<Maybe<Scalars['Int']['output']>>;
   first_air_date?: Maybe<Scalars['String']['output']>;
   genres: Array<ShowDetailsGenre>;
@@ -941,10 +958,10 @@ export type ShowDetailsRes = {
   in_production: Scalars['Boolean']['output'];
   languages: Array<Maybe<Scalars['String']['output']>>;
   last_air_date?: Maybe<Scalars['String']['output']>;
-  last_episode_to_air?: Maybe<ShowDetailsLastEpToAir>;
+  last_episode_to_air: ShowDetailsLastEpToAir;
   name: Scalars['String']['output'];
   networks: Array<ShowDetailsNetwork>;
-  next_episode_to_air?: Maybe<ShowDetailsNextEpToAir>;
+  next_episode_to_air: ShowDetailsNextEpToAir;
   number_of_episodes: Scalars['Int']['output'];
   number_of_seasons: Scalars['Int']['output'];
   origin_country: Array<Maybe<Scalars['String']['output']>>;
@@ -953,10 +970,10 @@ export type ShowDetailsRes = {
   overview: Scalars['String']['output'];
   popularity?: Maybe<Scalars['Float']['output']>;
   poster_path?: Maybe<Scalars['String']['output']>;
-  production_companies: Array<Maybe<ShowDetailsProdCompany>>;
-  production_countries: Array<Maybe<ShowDetailsCountry>>;
-  seasons: Array<Maybe<ShowDetailsSeason>>;
-  spoken_languages: Array<Maybe<ShowDetailsSpokenLang>>;
+  production_companies: Array<ShowDetailsProdCompany>;
+  production_countries: Array<ShowDetailsCountry>;
+  seasons: Array<ShowDetailsSeason>;
+  spoken_languages: Array<ShowDetailsSpokenLang>;
   status: Scalars['String']['output'];
   tagline: Scalars['String']['output'];
   type: Scalars['String']['output'];
@@ -1030,7 +1047,7 @@ export type ShowReviewRes = {
   __typename?: 'ShowReviewRes';
   id: Scalars['ID']['output'];
   page: Scalars['Int']['output'];
-  results: Array<Maybe<ShowReviewResult>>;
+  results: Array<ShowReviewResult>;
   total_pages: Scalars['Int']['output'];
   total_results: Scalars['Int']['output'];
 };
@@ -1048,8 +1065,8 @@ export type ShowReviewResult = {
 
 export type ShowsCastCrewRes = {
   __typename?: 'ShowsCastCrewRes';
-  cast?: Maybe<Array<Maybe<ShowsCastModel>>>;
-  crew?: Maybe<Array<Maybe<ShowsCrewModel>>>;
+  cast?: Maybe<Array<ShowsCastModel>>;
+  crew?: Maybe<Array<ShowsCrewModel>>;
   id?: Maybe<Scalars['ID']['output']>;
 };
 
@@ -1089,6 +1106,16 @@ export type ShowsRes = {
   results: Array<ShowResult>;
   total_pages: Scalars['Int']['output'];
   total_results: Scalars['Int']['output'];
+};
+
+export type SimilarGame = {
+  __typename?: 'SimilarGame';
+  cover?: Maybe<Scalars['ID']['output']>;
+  coverUrl?: Maybe<Scalars['String']['output']>;
+  first_release_date?: Maybe<Scalars['BigInt']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  rating?: Maybe<Scalars['Float']['output']>;
 };
 
 export type TheatreDates = {
@@ -1262,7 +1289,7 @@ export type MovieDetailsQueryVariables = Exact<{
 }>;
 
 
-export type MovieDetailsQuery = { __typename?: 'Query', movieDetails: { __typename?: 'MovieDetailsRes', adult: boolean, backdrop_path?: string | null, homepage: string, id: string, imdb_id?: string | null, original_language: string, original_title: string, overview: string, popularity?: number | null, poster_path?: string | null, release_date?: string | null, revenue?: any | null, runtime?: number | null, status: string, tagline: string, title: string, video?: boolean | null, vote_average?: number | null, vote_count: number, genres: Array<{ __typename?: 'MovieDetailsGenre', id: string, name: string }>, production_companies: Array<{ __typename?: 'MovieDetailsProdCompany', id: string, logo_path?: string | null, name: string, origin_country: string } | null>, production_countries: Array<{ __typename?: 'MovieDetailsProdCountry', iso_3166_1: string, name: string } | null>, spoken_languages: Array<{ __typename?: 'MovieDetailsSpokenLang', english_name: string, iso_639_1: string, name: string } | null> } };
+export type MovieDetailsQuery = { __typename?: 'Query', movieDetails: { __typename?: 'MovieDetailsRes', adult: boolean, backdrop_path?: string | null, homepage: string, id: string, imdb_id?: string | null, original_language: string, original_title: string, overview: string, popularity?: number | null, poster_path?: string | null, release_date?: string | null, revenue?: any | null, runtime?: number | null, status: string, tagline: string, title: string, video?: boolean | null, vote_average?: number | null, vote_count: number, genres: Array<{ __typename?: 'MovieDetailsGenre', id: string, name: string }>, production_companies: Array<{ __typename?: 'MovieDetailsProdCompany', id: string, logo_path?: string | null, name: string, origin_country: string }>, production_countries: Array<{ __typename?: 'MovieDetailsProdCountry', iso_3166_1: string, name: string }>, spoken_languages: Array<{ __typename?: 'MovieDetailsSpokenLang', english_name: string, iso_639_1: string, name: string }> } };
 
 export type PopularAnimeMoviesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1300,14 +1327,14 @@ export type MovieReviewsQueryVariables = Exact<{
 }>;
 
 
-export type MovieReviewsQuery = { __typename?: 'Query', movieReviews: { __typename?: 'MovieReviewsRes', id: string, page: number, total_pages: number, total_results: number, results: Array<{ __typename?: 'MovieReviewsResult', author: string, content: string, created_at: string, id: string, updated_at: string, url: string, author_details: { __typename?: 'MovieReviewAuthorDetails', name: string, username: string, avatar_path?: string | null, rating?: number | null } } | null> } };
+export type MovieReviewsQuery = { __typename?: 'Query', movieReviews: { __typename?: 'MovieReviewsRes', id: string, page: number, total_pages: number, total_results: number, results: Array<{ __typename?: 'MovieReviewsResult', author: string, content: string, created_at: string, id: string, updated_at: string, url: string, author_details: { __typename?: 'MovieReviewAuthorDetails', name: string, username: string, avatar_path?: string | null, rating?: number | null } }> } };
 
 export type MoviesInTheatresQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type MoviesInTheatresQuery = { __typename?: 'Query', moviesInTheatres: { __typename?: 'MoviesInTheatresRes', page: string, total_pages: number, total_results: number, dates: { __typename?: 'TheatreDates', maximum: string, minimum: string }, results: Array<{ __typename?: 'MovieResult', adult: boolean, backdrop_path?: string | null, genre_ids?: Array<string | null> | null, id: string, original_language: string, original_title: string, overview: string, popularity?: number | null, poster_path?: string | null, release_date?: string | null, title: string, video?: boolean | null, vote_average?: number | null, vote_count?: number | null } | null> } };
+export type MoviesInTheatresQuery = { __typename?: 'Query', moviesInTheatres: { __typename?: 'MoviesInTheatresRes', page: string, total_pages: number, total_results: number, dates: { __typename?: 'TheatreDates', maximum: string, minimum: string }, results: Array<{ __typename?: 'MovieResult', adult: boolean, backdrop_path?: string | null, genre_ids?: Array<string | null> | null, id: string, original_language: string, original_title: string, overview: string, popularity?: number | null, poster_path?: string | null, release_date?: string | null, title: string, video?: boolean | null, vote_average?: number | null, vote_count?: number | null }> } };
 
 export type PopularMoviesByGenreQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1345,7 +1372,7 @@ export type ShowDetailsQueryVariables = Exact<{
 }>;
 
 
-export type ShowDetailsQuery = { __typename?: 'Query', showDetails: { __typename?: 'ShowDetailsRes', adult: boolean, backdrop_path?: string | null, episode_run_time: Array<number | null>, first_air_date?: string | null, homepage: string, id: string, in_production: boolean, languages: Array<string | null>, last_air_date?: string | null, name: string, number_of_episodes: number, number_of_seasons: number, origin_country: Array<string | null>, original_language: string, original_name: string, overview: string, popularity?: number | null, poster_path?: string | null, status: string, tagline: string, type: string, vote_average?: number | null, vote_count?: number | null, created_by: Array<{ __typename?: 'ShowDetailsCreatedBy', id?: string | null, credit_id?: string | null, name?: string | null, gender?: number | null, profile_path?: string | null } | null>, genres: Array<{ __typename?: 'ShowDetailsGenre', id: string, name: string }>, last_episode_to_air?: { __typename?: 'ShowDetailsLastEpToAir', air_date?: string | null, episode_number: number, id: string, name: string, overview: string, production_code: string, runtime?: number | null, season_number: number, show_id: string, still_path?: string | null, vote_average?: number | null, vote_count: number } | null, networks: Array<{ __typename?: 'ShowDetailsNetwork', id: string, name: string, logo_path?: string | null, origin_country: string }>, production_companies: Array<{ __typename?: 'ShowDetailsProdCompany', id: string, logo_path?: string | null, name: string, origin_country: string } | null>, production_countries: Array<{ __typename?: 'ShowDetailsCountry', iso_3166_1: string, name: string } | null>, seasons: Array<{ __typename?: 'ShowDetailsSeason', air_date?: string | null, episode_count: number, id: string, name: string, overview: string, poster_path?: string | null, season_number: number } | null>, spoken_languages: Array<{ __typename?: 'ShowDetailsSpokenLang', english_name: string, iso_639_1: string, name: string } | null>, next_episode_to_air?: { __typename?: 'ShowDetailsNextEpToAir', air_date?: string | null, episode_number: number, id: string, name: string, overview: string, production_code: string, runtime?: number | null, season_number: number, show_id: string, still_path?: string | null, vote_average?: number | null, vote_count: number } | null } };
+export type ShowDetailsQuery = { __typename?: 'Query', showDetails: { __typename?: 'ShowDetailsRes', adult: boolean, backdrop_path?: string | null, episode_run_time: Array<number | null>, first_air_date?: string | null, homepage: string, id: string, in_production: boolean, languages: Array<string | null>, last_air_date?: string | null, name: string, number_of_episodes: number, number_of_seasons: number, origin_country: Array<string | null>, original_language: string, original_name: string, overview: string, popularity?: number | null, poster_path?: string | null, status: string, tagline: string, type: string, vote_average?: number | null, vote_count?: number | null, created_by: Array<{ __typename?: 'ShowDetailsCreatedBy', id?: string | null, credit_id?: string | null, name?: string | null, gender?: number | null, profile_path?: string | null }>, genres: Array<{ __typename?: 'ShowDetailsGenre', id: string, name: string }>, last_episode_to_air: { __typename?: 'ShowDetailsLastEpToAir', air_date?: string | null, episode_number: number, id: string, name: string, overview: string, production_code: string, runtime?: number | null, season_number: number, show_id: string, still_path?: string | null, vote_average?: number | null, vote_count: number }, networks: Array<{ __typename?: 'ShowDetailsNetwork', id: string, name: string, logo_path?: string | null, origin_country: string }>, production_companies: Array<{ __typename?: 'ShowDetailsProdCompany', id: string, logo_path?: string | null, name: string, origin_country: string }>, production_countries: Array<{ __typename?: 'ShowDetailsCountry', iso_3166_1: string, name: string }>, seasons: Array<{ __typename?: 'ShowDetailsSeason', air_date?: string | null, episode_count: number, id: string, name: string, overview: string, poster_path?: string | null, season_number: number }>, spoken_languages: Array<{ __typename?: 'ShowDetailsSpokenLang', english_name: string, iso_639_1: string, name: string }>, next_episode_to_air: { __typename?: 'ShowDetailsNextEpToAir', air_date?: string | null, episode_number: number, id: string, name: string, overview: string, production_code: string, runtime?: number | null, season_number: number, show_id: string, still_path?: string | null, vote_average?: number | null, vote_count: number } } };
 
 export type PopularAnimeShowsQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1383,7 +1410,7 @@ export type ShowReviewsQueryVariables = Exact<{
 }>;
 
 
-export type ShowReviewsQuery = { __typename?: 'Query', showReviews: { __typename?: 'ShowReviewRes', id: string, page: number, total_pages: number, total_results: number, results: Array<{ __typename?: 'ShowReviewResult', author: string, content: string, created_at: string, id: string, updated_at: string, url: string, author_details: { __typename?: 'ShowReviewAuthorDetails', name: string, username: string, avatar_path?: string | null, rating?: number | null } } | null> } };
+export type ShowReviewsQuery = { __typename?: 'Query', showReviews: { __typename?: 'ShowReviewRes', id: string, page: number, total_pages: number, total_results: number, results: Array<{ __typename?: 'ShowReviewResult', author: string, content: string, created_at: string, id: string, updated_at: string, url: string, author_details: { __typename?: 'ShowReviewAuthorDetails', name: string, username: string, avatar_path?: string | null, rating?: number | null } }> } };
 
 export type PopularShowsByGenreQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -1473,14 +1500,14 @@ export type ShowsCastCrewQueryVariables = Exact<{
 }>;
 
 
-export type ShowsCastCrewQuery = { __typename?: 'Query', showsCastCrew?: { __typename?: 'ShowsCastCrewRes', id?: string | null, cast?: Array<{ __typename?: 'ShowsCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, character?: string | null, credit_id?: string | null, order?: number | null } | null> | null, crew?: Array<{ __typename?: 'ShowsCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null } | null> | null } | null };
+export type ShowsCastCrewQuery = { __typename?: 'Query', showsCastCrew?: { __typename?: 'ShowsCastCrewRes', id?: string | null, cast?: Array<{ __typename?: 'ShowsCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, character?: string | null, credit_id?: string | null, order?: number | null }> | null, crew?: Array<{ __typename?: 'ShowsCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null }> | null } | null };
 
 export type MoviesCastCrewQueryVariables = Exact<{
   movieId: Scalars['ID']['input'];
 }>;
 
 
-export type MoviesCastCrewQuery = { __typename?: 'Query', moviesCastCrew?: { __typename?: 'MoviesCastCrewRes', id?: string | null, cast?: Array<{ __typename?: 'MoviesCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, cast_id?: string | null, character?: string | null, credit_id?: string | null, order?: number | null } | null> | null, crew?: Array<{ __typename?: 'MoviesCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null } | null> | null } | null };
+export type MoviesCastCrewQuery = { __typename?: 'Query', moviesCastCrew?: { __typename?: 'MoviesCastCrewRes', id?: string | null, cast?: Array<{ __typename?: 'MoviesCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, cast_id?: string | null, character?: string | null, credit_id?: string | null, order?: number | null }> | null, crew?: Array<{ __typename?: 'MoviesCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null }> | null } | null };
 
 export type EpisodeDetailsQueryVariables = Exact<{
   showId: Scalars['ID']['input'];
@@ -1489,7 +1516,7 @@ export type EpisodeDetailsQueryVariables = Exact<{
 }>;
 
 
-export type EpisodeDetailsQuery = { __typename?: 'Query', episodeDetails?: { __typename?: 'EpisodeDetailsRes', air_date?: string | null, episode_number?: number | null, name?: string | null, overview?: string | null, id?: string | null, production_code?: string | null, runtime?: number | null, season_number?: number | null, still_path?: string | null, vote_average?: number | null, vote_count?: number | null, crew?: Array<{ __typename?: 'ShowsCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null } | null> | null, guest_stars?: Array<{ __typename?: 'ShowsCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, character?: string | null, credit_id?: string | null, order?: number | null } | null> | null } | null };
+export type EpisodeDetailsQuery = { __typename?: 'Query', episodeDetails?: { __typename?: 'EpisodeDetailsRes', air_date?: string | null, episode_number?: number | null, name?: string | null, overview?: string | null, id?: string | null, production_code?: string | null, runtime?: number | null, season_number?: number | null, still_path?: string | null, vote_average?: number | null, vote_count?: number | null, crew?: Array<{ __typename?: 'ShowsCrewModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, credit_id?: string | null, department?: string | null, job?: string | null }> | null, guest_stars?: Array<{ __typename?: 'ShowsCastModel', adult?: boolean | null, gender?: number | null, id?: string | null, known_for_department?: string | null, name?: string | null, original_name?: string | null, popularity?: number | null, profile_path?: string | null, character?: string | null, credit_id?: string | null, order?: number | null }> | null } | null };
 
 export type CheckEmailVerificationTokenQueryVariables = Exact<{
   token: Scalars['String']['input'];
@@ -1566,6 +1593,14 @@ export type GameThemesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GameThemesQuery = { __typename?: 'Query', gameThemes: Array<{ __typename?: 'GameTheme', id: string, name: string } | null> };
 
+export type SimilarGamesQueryVariables = Exact<{
+  gameIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type SimilarGamesQuery = { __typename?: 'Query', similarGames: Array<{ __typename?: 'SimilarGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> };
+
 export const MovieResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MovieResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MovieResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adult"}},{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_title"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"release_date"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"video"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<MovieResultFragment, unknown>;
 export const ShowResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ShowResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ShowResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"first_air_date"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"origin_country"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_name"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<ShowResultFragment, unknown>;
 export const AddedMovieDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddedMovie"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"movieId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"movieName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"watchStatus"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WatchStatusTypes"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addMovie"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"movieId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"movieId"}}},{"kind":"Argument","name":{"kind":"Name","value":"movieName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"movieName"}}},{"kind":"Argument","name":{"kind":"Name","value":"watchStatus"},"value":{"kind":"Variable","name":{"kind":"Name","value":"watchStatus"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}}]}}]}}]} as unknown as DocumentNode<AddedMovieMutation, AddedMovieMutationVariables>;
@@ -1624,3 +1659,4 @@ export const GamePlatformsDocument = {"kind":"Document","definitions":[{"kind":"
 export const GameCompanyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GameCompany"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameCompany"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"country"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"developed"}},{"kind":"Field","name":{"kind":"Name","value":"logo"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"published"}}]}}]}}]} as unknown as DocumentNode<GameCompanyQuery, GameCompanyQueryVariables>;
 export const GamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Games"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameCollections"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_release_date"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"cover"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;
 export const GameThemesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GameThemes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameThemes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GameThemesQuery, GameThemesQueryVariables>;
+export const SimilarGamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SimilarGames"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"similarGames"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_release_date"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"cover"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}}]}}]}}]} as unknown as DocumentNode<SimilarGamesQuery, SimilarGamesQueryVariables>;

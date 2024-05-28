@@ -56,11 +56,14 @@ export const GameQueries = extendType({
 		});
 		t.nonNull.field('gamePlatforms', {
 			type: list('GamePlatform'),
-			resolve: async () => {
+			args: {
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { limit }) => {
 				try {
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/platforms`,
-						`fields name; limit 500;`
+						`fields name; limit ${limit};`
 					);
 					return res;
 				} catch (err) {
@@ -131,12 +134,34 @@ export const GameQueries = extendType({
 		});
 		t.nonNull.field('gameThemes', {
 			type: list('GameTheme'),
-			resolve: async () => {
+			args: {
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { limit }) => {
 				try {
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/themes`,
-						`fields name; limit 500;`
+						`fields name; limit ${limit};`
 					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.nonNull.field('similarGames', {
+			type: list(nonNull('SimilarGame')),
+			args: {
+				gameIds: nonNull(list(nonNull('ID'))),
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { gameIds, limit }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/games`,
+						`fields name, first_release_date, rating, cover; limit ${limit}; where id = (${gameIds.join(',')});`
+					);
+					await addIGDBCoverUrl(res, '1080p');
 					return res;
 				} catch (err) {
 					console.error(err);

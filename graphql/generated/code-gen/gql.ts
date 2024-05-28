@@ -71,6 +71,7 @@ const documents = {
     "\n\tquery GameCompany($gameId: ID!) {\n\t\tgameCompany(gameId: $gameId) {\n\t\t\tid\n\t\t\tcountry\n\t\t\tdescription\n\t\t\tdeveloped\n\t\t\tlogo\n\t\t\tname\n\t\t\tpublished\n\t\t}\n\t}\n": types.GameCompanyDocument,
     "\n\tquery Games($gameId: ID!) {\n\t\tgameCollections(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\tgames {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\tfirst_release_date\n\t\t\t\trating\n\t\t\t\tcover\n\t\t\t\tcoverUrl\n\t\t\t}\n\t\t}\n\t}\n": types.GamesDocument,
     "\n\tquery GameThemes {\n\t\tgameThemes {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n": types.GameThemesDocument,
+    "\n\tquery SimilarGames($gameIds: [ID!]!, $limit: Int) {\n\t\tsimilarGames(gameIds: $gameIds, limit: $limit) {\n\t\t\tid\n\t\t\tname\n\t\t\tfirst_release_date\n\t\t\trating\n\t\t\tcover\n\t\t\tcoverUrl\n\t\t}\n\t}\n": types.SimilarGamesDocument,
 };
 
 /**
@@ -319,6 +320,10 @@ export function graphql(source: "\n\tquery Games($gameId: ID!) {\n\t\tgameCollec
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tquery GameThemes {\n\t\tgameThemes {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery GameThemes {\n\t\tgameThemes {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery SimilarGames($gameIds: [ID!]!, $limit: Int) {\n\t\tsimilarGames(gameIds: $gameIds, limit: $limit) {\n\t\t\tid\n\t\t\tname\n\t\t\tfirst_release_date\n\t\t\trating\n\t\t\tcover\n\t\t\tcoverUrl\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery SimilarGames($gameIds: [ID!]!, $limit: Int) {\n\t\tsimilarGames(gameIds: $gameIds, limit: $limit) {\n\t\t\tid\n\t\t\tname\n\t\t\tfirst_release_date\n\t\t\trating\n\t\t\tcover\n\t\t\tcoverUrl\n\t\t}\n\t}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
