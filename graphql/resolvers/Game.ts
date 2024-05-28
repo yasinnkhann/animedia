@@ -54,6 +54,20 @@ export const GameQueries = extendType({
 				return finalRes;
 			},
 		});
+		t.nonNull.field('gamePlatforms', {
+			type: list('GamePlatform'),
+			resolve: async () => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/platforms`,
+						`fields name; limit 500;`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
 		// t.nonNull.field('gamesFromGenres', {
 		// 	type: 'GamesRes',
 		// 	args: {

@@ -108,6 +108,10 @@ export interface NexusGenObjects {
   ErrorRes: { // root type
     message: string; // String!
   }
+  GamePlatform: { // root type
+    id: string; // ID!
+    name: string; // String!
+  }
   GameResult: { // root type
     age_ratings?: Array<string | null> | null; // [ID]
     alternative_names?: Array<string | null> | null; // [ID]
@@ -140,7 +144,7 @@ export interface NexusGenObjects {
     multiplayer_modes?: Array<string | null> | null; // [ID]
     name: string; // String!
     parent_game?: string | null; // ID
-    platforms?: Array<string | null> | null; // [ID]
+    platforms?: string[] | null; // [ID!]
     player_perspectives?: Array<string | null> | null; // [ID]
     ports?: Array<string | null> | null; // [ID]
     rating?: number | null; // Float
@@ -699,6 +703,10 @@ export interface NexusGenFieldTypes {
   ErrorRes: { // field return type
     message: string; // String!
   }
+  GamePlatform: { // field return type
+    id: string; // ID!
+    name: string; // String!
+  }
   GameResult: { // field return type
     age_ratings: Array<string | null> | null; // [ID]
     alternative_names: Array<string | null> | null; // [ID]
@@ -731,7 +739,7 @@ export interface NexusGenFieldTypes {
     multiplayer_modes: Array<string | null> | null; // [ID]
     name: string; // String!
     parent_game: string | null; // ID
-    platforms: Array<string | null> | null; // [ID]
+    platforms: string[] | null; // [ID!]
     player_perspectives: Array<string | null> | null; // [ID]
     ports: Array<string | null> | null; // [ID]
     rating: number | null; // Float
@@ -1043,6 +1051,7 @@ export interface NexusGenFieldTypes {
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
+    gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null>; // [GamePlatform]!
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1334,6 +1343,10 @@ export interface NexusGenFieldTypeNames {
   }
   ErrorRes: { // field return type name
     message: 'String'
+  }
+  GamePlatform: { // field return type name
+    id: 'ID'
+    name: 'String'
   }
   GameResult: { // field return type name
     age_ratings: 'ID'
@@ -1679,6 +1692,7 @@ export interface NexusGenFieldTypeNames {
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
     gameDetails: 'GamesRes'
+    gamePlatforms: 'GamePlatform'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
     moviesCastCrew: 'MoviesCastCrewRes'

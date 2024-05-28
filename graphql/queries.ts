@@ -1189,6 +1189,15 @@ export const GAME_DETAILS = graphql(`
 	}
 `);
 
+export const GAME_PLATFORMS = graphql(`
+	query GamePlatforms {
+		gamePlatforms {
+			id
+			name
+		}
+	}
+`);
+
 // export const GAMES_FROM_GENRES = graphql(`
 // 	query GamesFromGenres($genreIds: [ID!]!, $limit: Int) {
 // 		gamesFromGenres(genreIds: $genreIds, limit: $limit) {

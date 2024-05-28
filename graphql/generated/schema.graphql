@@ -49,6 +49,11 @@ type ErrorRes {
   message: String!
 }
 
+type GamePlatform {
+  id: ID!
+  name: String!
+}
+
 type GameResult {
   age_ratings: [ID]
   alternative_names: [ID]
@@ -81,7 +86,7 @@ type GameResult {
   multiplayer_modes: [ID]
   name: String!
   parent_game: ID
-  platforms: [ID]
+  platforms: [ID!]
   player_perspectives: [ID]
   ports: [ID]
   rating: Float
@@ -447,6 +452,7 @@ type Query {
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
   gameDetails(gameDetailsId: ID!): GamesRes!
+  gamePlatforms: [GamePlatform]!
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!
   moviesCastCrew(movieId: ID!): MoviesCastCrewRes

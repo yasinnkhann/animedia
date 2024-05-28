@@ -617,7 +617,7 @@ export const gameObjects = {
 			t.list.id('multiplayer_modes');
 			t.nonNull.string('name');
 			t.id('parent_game');
-			t.list.id('platforms');
+			t.list.nonNull.id('platforms');
 			t.list.id('player_perspectives');
 			t.list.id('ports');
 			t.float('rating');
@@ -651,6 +651,13 @@ export const gameObjects = {
 			t.nonNull.list.field('results', {
 				type: nonNull('GameResult'),
 			});
+		},
+	}),
+	gamePlatform: objectType({
+		name: 'GamePlatform',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
 		},
 	}),
 	character: objectType({

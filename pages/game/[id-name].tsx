@@ -19,6 +19,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { GAME_GENRES } from 'utils/constants';
+import { platform } from 'process';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -43,7 +44,18 @@ const GameDetails = () => {
 		}
 	);
 
-	if (gameDetailsLoading || !gameDetailsData?.gameDetails) {
+	const { data: gamePlatformsData, loading: gamePlatformsLoading } = useQuery(
+		Queries.GAME_PLATFORMS
+	);
+
+	console.log(gamePlatformsData);
+
+	if (
+		gameDetailsLoading ||
+		!gameDetailsData?.gameDetails ||
+		gamePlatformsLoading ||
+		!gamePlatformsData?.gamePlatforms
+	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -112,6 +124,25 @@ const GameDetails = () => {
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>
+					)}
+
+					{game.platforms && game.platforms.length > 0 && (
+						<>
+							<h4 className='mt-4'>Console(s)</h4>
+							<div className='ml-1'>
+								{gamePlatformsData.gamePlatforms
+									.filter(platform =>
+										game.platforms!.some(
+											platformId => platform!.id === platformId
+										)
+									)
+									.map(platform => (
+										<p key={platform!.id}>
+											{CommonMethods.toTitleCase(platform!.name)}
+										</p>
+									))}
+							</div>
+						</>
 					)}
 
 					{game.genres && game.genres.length > 0 && (
