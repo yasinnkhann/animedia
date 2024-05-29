@@ -25,7 +25,7 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; search "${q}"; limit ${limit}; offset ${page * limit - limit};`
 					);
-					await addIGDBCoverUrl(res, '1080p');
+					await addIGDBCoverUrl(res, '1080p', 1, 0);
 					finalRes.results = res;
 					return finalRes;
 				} catch (err) {

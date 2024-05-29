@@ -115,54 +115,17 @@ export const postIGDB = async (url: string, body = '') => {
 	}
 };
 
-// export const addIGDBCoverUrl = async (
-// 	res: any[],
-// 	imageSize: TIGDBImageSizes
-// ) => {
-// 	await Promise.all(
-// 		res.map(async (result: any) => {
-// 			if (result.cover) {
-// 				try {
-// 					const coverResponse = await postIGDB(
-// 						`${IGDB_BASE_API_URL}/covers`,
-// 						`fields url; where id=${result.cover};`
-// 					);
-// 					if (coverResponse && coverResponse.length > 0) {
-// 						console.log('in', coverResponse);
-// 						let coverUrl: string = coverResponse[0].url;
-// 						if (imageSize !== 'thumb') {
-// 							coverUrl = coverUrl.replace('thumb', imageSize);
-// 						}
-// 						result.coverUrl = coverUrl;
-// 					} else {
-// 						console.log('fail', coverResponse);
-// 						result.coverUrl = null;
-// 					}
-// 				} catch (err) {
-// 					console.error(err);
-// 					result.coverUrl = null;
-// 				}
-// 			} else {
-// 				result.coverUrl = null;
-// 			}
-// 			return result;
-// 		})
-// 	);
-// };
-// RES: {
-// 	message: 'Too Many Requests';
-// }
 export const addIGDBCoverUrl = async (
 	res: any[],
 	imageSize: TIGDBImageSizes,
-	maxRetries = 100,
-	retryDelayMs = 2000
+	maxRetries = 5,
+	initialRetryDelayMs = 300
 ) => {
-	console.log('RES: ', res);
 	await Promise.all(
 		res.map(async (result: any) => {
 			let retries = 0;
 			let success = false;
+			let retryDelayMs = initialRetryDelayMs;
 
 			while (retries < maxRetries && !success) {
 				try {
@@ -192,11 +155,7 @@ export const addIGDBCoverUrl = async (
 
 				if (!success) {
 					await sleep(retryDelayMs);
-					// await new Promise<void>(resolve => {
-					// 	setTimeout(() => {
-					// 		resolve();
-					// 	}, retryDelayMs);
-					// });
+					retryDelayMs *= 2;
 					retries++;
 				}
 			}

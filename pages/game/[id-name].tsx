@@ -62,7 +62,7 @@ const GameDetails = () => {
 
 	if (
 		gameDetailsLoading ||
-		!gameDetailsData?.gameDetails ||
+		!gameDetailsData?.gameDetails.results ||
 		gamePlatformsLoading ||
 		!gamePlatformsData?.gamePlatforms ||
 		gameCompanyLoading ||
