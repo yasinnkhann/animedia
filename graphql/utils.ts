@@ -9,6 +9,14 @@ import {
 import { redis } from '../lib/redis';
 import { TIGDBImageSizes } from '@ts/types';
 
+export const sleep = async (ms: number) => {
+	await new Promise<void>(resolve => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+};
+
 export const sendEmail = async (payload: Mail.Options) => {
 	let transporterConfig: SMTPTransport.Options = {};
 
@@ -107,31 +115,89 @@ export const postIGDB = async (url: string, body = '') => {
 	}
 };
 
+// export const addIGDBCoverUrl = async (
+// 	res: any[],
+// 	imageSize: TIGDBImageSizes
+// ) => {
+// 	await Promise.all(
+// 		res.map(async (result: any) => {
+// 			if (result.cover) {
+// 				try {
+// 					const coverResponse = await postIGDB(
+// 						`${IGDB_BASE_API_URL}/covers`,
+// 						`fields url; where id=${result.cover};`
+// 					);
+// 					if (coverResponse && coverResponse.length > 0) {
+// 						console.log('in', coverResponse);
+// 						let coverUrl: string = coverResponse[0].url;
+// 						if (imageSize !== 'thumb') {
+// 							coverUrl = coverUrl.replace('thumb', imageSize);
+// 						}
+// 						result.coverUrl = coverUrl;
+// 					} else {
+// 						console.log('fail', coverResponse);
+// 						result.coverUrl = null;
+// 					}
+// 				} catch (err) {
+// 					console.error(err);
+// 					result.coverUrl = null;
+// 				}
+// 			} else {
+// 				result.coverUrl = null;
+// 			}
+// 			return result;
+// 		})
+// 	);
+// };
+// RES: {
+// 	message: 'Too Many Requests';
+// }
 export const addIGDBCoverUrl = async (
 	res: any[],
-	imageSize: TIGDBImageSizes
+	imageSize: TIGDBImageSizes,
+	maxRetries = 100,
+	retryDelayMs = 2000
 ) => {
+	console.log('RES: ', res);
 	await Promise.all(
 		res.map(async (result: any) => {
-			if (result.cover) {
+			let retries = 0;
+			let success = false;
+
+			while (retries < maxRetries && !success) {
 				try {
-					const coverResponse = await postIGDB(
-						`${IGDB_BASE_API_URL}/covers`,
-						`fields url; where id=${result.cover};`
-					);
-					if (coverResponse && coverResponse.length > 0) {
-						console.log('in', coverResponse);
-						let coverUrl: string = coverResponse[0].url;
-						if (imageSize !== 'thumb') {
-							coverUrl = coverUrl.replace('thumb', imageSize);
+					if (result.cover) {
+						const coverResponse = await postIGDB(
+							`${IGDB_BASE_API_URL}/covers`,
+							`fields url; where id=${result.cover};`
+						);
+
+						if (coverResponse && coverResponse.length > 0) {
+							let coverUrl: string = coverResponse[0].url;
+							if (imageSize !== 'thumb') {
+								coverUrl = coverUrl.replace('thumb', imageSize);
+							}
+							result.coverUrl = coverUrl;
+							success = true;
+						} else {
+							result.coverUrl = null;
 						}
-						result.coverUrl = coverUrl;
 					} else {
-						console.log('fail');
 						result.coverUrl = null;
 					}
 				} catch (err) {
 					console.error(err);
+					result.coverUrl = null;
+				}
+
+				if (!success) {
+					await sleep(retryDelayMs);
+					// await new Promise<void>(resolve => {
+					// 	setTimeout(() => {
+					// 		resolve();
+					// 	}, retryDelayMs);
+					// });
+					retries++;
 				}
 			}
 			return result;

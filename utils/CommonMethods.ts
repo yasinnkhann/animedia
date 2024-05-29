@@ -222,14 +222,6 @@ export class CommonMethods {
 		return titleCaseWords.join(' ');
 	};
 
-	public static sleep = async (ms: number) => {
-		return await new Promise<void>(resolve => {
-			setTimeout(() => {
-				resolve();
-			}, ms);
-		});
-	};
-
 	public static notifyError = (
 		error: string,
 		position: ToastPosition,
