@@ -64,7 +64,12 @@ export const getErrorMsg = (error: unknown) => {
 	}
 };
 
-export const postIGDB = async (url: string, body = '') => {
+export const postIGDB = async (
+	url: string,
+	body = '',
+	maxRetries = 10,
+	initialRetryDelayMs = 300
+) => {
 	interface AccessTokenResponse {
 		access_token: string;
 		expires_in: number;
@@ -100,16 +105,28 @@ export const postIGDB = async (url: string, body = '') => {
 			);
 		}
 
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Client-ID': process.env.IGDB_CLIENT_ID,
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body,
-		});
-		return await response.json();
+		let retries = 0;
+		let retryDelayMs = initialRetryDelayMs;
+
+		while (retries < maxRetries) {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Client-ID': process.env.IGDB_CLIENT_ID,
+					Authorization: `Bearer ${accessToken}`,
+				},
+				body,
+			});
+			if (response.ok) {
+				return await response.json();
+			} else {
+				await sleep(retryDelayMs);
+				retryDelayMs *= 2;
+				retries++;
+			}
+		}
+		throw new Error('Could not fetch after max retries');
 	} catch (err) {
 		console.error(err);
 	}
@@ -117,47 +134,32 @@ export const postIGDB = async (url: string, body = '') => {
 
 export const addIGDBCoverUrl = async (
 	res: any[],
-	imageSize: TIGDBImageSizes,
-	maxRetries = 5,
-	initialRetryDelayMs = 300
+	imageSize: TIGDBImageSizes
 ) => {
 	await Promise.all(
 		res.map(async (result: any) => {
-			let retries = 0;
-			let success = false;
-			let retryDelayMs = initialRetryDelayMs;
+			try {
+				if (result.cover) {
+					const coverResponse = await postIGDB(
+						`${IGDB_BASE_API_URL}/covers`,
+						`fields url; where id=${result.cover};`
+					);
 
-			while (retries < maxRetries && !success) {
-				try {
-					if (result.cover) {
-						const coverResponse = await postIGDB(
-							`${IGDB_BASE_API_URL}/covers`,
-							`fields url; where id=${result.cover};`
-						);
-
-						if (coverResponse && coverResponse.length > 0) {
-							let coverUrl: string = coverResponse[0].url;
-							if (imageSize !== 'thumb') {
-								coverUrl = coverUrl.replace('thumb', imageSize);
-							}
-							result.coverUrl = coverUrl;
-							success = true;
-						} else {
-							result.coverUrl = null;
+					if (coverResponse && coverResponse.length > 0) {
+						let coverUrl: string = coverResponse[0].url;
+						if (imageSize !== 'thumb') {
+							coverUrl = coverUrl.replace('thumb', imageSize);
 						}
+						result.coverUrl = coverUrl;
 					} else {
 						result.coverUrl = null;
 					}
-				} catch (err) {
-					console.error(err);
+				} else {
 					result.coverUrl = null;
 				}
-
-				if (!success) {
-					await sleep(retryDelayMs);
-					retryDelayMs *= 2;
-					retries++;
-				}
+			} catch (err) {
+				console.error(err);
+				result.coverUrl = null;
 			}
 			return result;
 		})

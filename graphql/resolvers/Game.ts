@@ -25,7 +25,7 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; search "${q}"; limit ${limit}; offset ${page * limit - limit};`
 					);
-					await addIGDBCoverUrl(res, '1080p', 1, 0);
+					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
 					return finalRes;
 				} catch (err) {
@@ -46,6 +46,7 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; where id = ${gameId};`
 					);
+					if (res.message) console.log('RES IN GAME DETAILS: ', res);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
 				} catch (err) {
@@ -103,18 +104,19 @@ export const GameQueries = extendType({
 					)[0];
 
 					const finalRes = {
-						id: collections.id,
-						name: collections.name,
+						id: collections?.id,
+						name: collections?.name,
 						games: [],
 					};
 
-					if (collections.games && collections.games.length > 0) {
+					if (collections?.games && collections.games.length > 0) {
 						const gamesData = await Promise.all(
 							collections.games.map(async (collectionGameId: string) => {
 								const res = await postIGDB(
 									`${IGDB_BASE_API_URL}/games`,
 									`fields name, first_release_date, cover, rating; where id = ${collectionGameId};`
 								);
+								if (res.message) console.log('RES IN COLLECTION: ', res);
 								await addIGDBCoverUrl(res, '1080p');
 								return res[0];
 							})
@@ -161,6 +163,7 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields name, first_release_date, rating, cover; limit ${limit}; where id = (${gameIds.join(',')});`
 					);
+					if (res.message) console.log('RES IN SIMILAR: ', res);
 					await addIGDBCoverUrl(res, '1080p');
 					return res;
 				} catch (err) {
