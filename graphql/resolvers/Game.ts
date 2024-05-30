@@ -14,7 +14,6 @@ export const GameQueries = extendType({
 			},
 			resolve: async (_parent, { q, limit, page }) => {
 				const finalRes = { results: [], total_results: 0 };
-
 				try {
 					const { count } = await postIGDB(
 						`${IGDB_BASE_API_URL}/games/count`,
@@ -27,7 +26,6 @@ export const GameQueries = extendType({
 					);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
-					return finalRes;
 				} catch (err) {
 					console.error(err);
 				}
