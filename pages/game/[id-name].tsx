@@ -274,6 +274,7 @@ const GameDetails = () => {
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Check out the series</h3>
 								<RelatedHorizontalScroller
+									height={30}
 									items={gameCollectionsData.gameCollections.games.map(
 										game => ({
 											id: game.id,
