@@ -55,7 +55,7 @@ export const GameQueries = extendType({
 				return finalRes;
 			},
 		});
-		t.nonNull.field('gamePlatforms', {
+		t.field('gamePlatforms', {
 			type: list('GamePlatform'),
 			args: {
 				limit: intArg({ default: 500 }),
@@ -72,7 +72,7 @@ export const GameQueries = extendType({
 				}
 			},
 		});
-		t.nonNull.field('gameCompany', {
+		t.field('gameCompany', {
 			type: list('GameCompany'),
 			args: {
 				gameId: nonNull(idArg()),
@@ -89,7 +89,7 @@ export const GameQueries = extendType({
 				}
 			},
 		});
-		t.nonNull.field('gameCollections', {
+		t.field('gameCollections', {
 			type: 'GameCollections',
 			args: {
 				gameId: nonNull(idArg()),
@@ -134,7 +134,7 @@ export const GameQueries = extendType({
 				}
 			},
 		});
-		t.nonNull.field('gameThemes', {
+		t.field('gameThemes', {
 			type: list('GameTheme'),
 			args: {
 				limit: intArg({ default: 500 }),
@@ -151,7 +151,7 @@ export const GameQueries = extendType({
 				}
 			},
 		});
-		t.nonNull.field('similarGames', {
+		t.field('similarGames', {
 			type: list(nonNull('SimilarGame')),
 			args: {
 				gameIds: nonNull(list(nonNull('ID'))),

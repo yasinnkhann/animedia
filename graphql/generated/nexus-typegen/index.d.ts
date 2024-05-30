@@ -1090,11 +1090,11 @@ export interface NexusGenFieldTypes {
     checkForgotPasswordToken: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    gameCollections: NexusGenRootTypes['GameCollections']; // GameCollections!
-    gameCompany: Array<NexusGenRootTypes['GameCompany'] | null>; // [GameCompany]!
+    gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
+    gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
-    gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null>; // [GamePlatform]!
-    gameThemes: Array<NexusGenRootTypes['GameTheme'] | null>; // [GameTheme]!
+    gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null> | null; // [GamePlatform]
+    gameThemes: Array<NexusGenRootTypes['GameTheme'] | null> | null; // [GameTheme]
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
     moviesCastCrew: NexusGenRootTypes['MoviesCastCrewRes'] | null; // MoviesCastCrewRes
@@ -1118,7 +1118,7 @@ export interface NexusGenFieldTypes {
     showDetails: NexusGenRootTypes['ShowDetailsRes']; // ShowDetailsRes!
     showReviews: NexusGenRootTypes['ShowReviewRes']; // ShowReviewRes!
     showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
-    similarGames: NexusGenRootTypes['SimilarGame'][]; // [SimilarGame!]!
+    similarGames: NexusGenRootTypes['SimilarGame'][] | null; // [SimilarGame!]
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!

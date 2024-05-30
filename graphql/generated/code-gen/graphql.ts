@@ -579,11 +579,11 @@ export type Query = {
   checkForgotPasswordToken?: Maybe<RedisRes>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
-  gameCollections: GameCollections;
-  gameCompany: Array<Maybe<GameCompany>>;
+  gameCollections?: Maybe<GameCollections>;
+  gameCompany?: Maybe<Array<Maybe<GameCompany>>>;
   gameDetails: GamesRes;
-  gamePlatforms: Array<Maybe<GamePlatform>>;
-  gameThemes: Array<Maybe<GameTheme>>;
+  gamePlatforms?: Maybe<Array<Maybe<GamePlatform>>>;
+  gameThemes?: Maybe<Array<Maybe<GameTheme>>>;
   movieDetails: MovieDetailsRes;
   movieReviews: MovieReviewsRes;
   moviesCastCrew?: Maybe<MoviesCastCrewRes>;
@@ -607,7 +607,7 @@ export type Query = {
   showDetails: ShowDetailsRes;
   showReviews: ShowReviewRes;
   showsCastCrew?: Maybe<ShowsCastCrewRes>;
-  similarGames: Array<SimilarGame>;
+  similarGames?: Maybe<Array<SimilarGame>>;
   topRatedMovies: MoviesRes;
   topRatedMoviesByGenre: MoviesRes;
   topRatedShows: ShowsRes;
@@ -1572,26 +1572,26 @@ export type GameDetailsQuery = { __typename?: 'Query', gameDetails: { __typename
 export type GamePlatformsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GamePlatformsQuery = { __typename?: 'Query', gamePlatforms: Array<{ __typename?: 'GamePlatform', id: string, name: string } | null> };
+export type GamePlatformsQuery = { __typename?: 'Query', gamePlatforms?: Array<{ __typename?: 'GamePlatform', id: string, name: string } | null> | null };
 
 export type GameCompanyQueryVariables = Exact<{
   gameId: Scalars['ID']['input'];
 }>;
 
 
-export type GameCompanyQuery = { __typename?: 'Query', gameCompany: Array<{ __typename?: 'GameCompany', id: string, country?: string | null, description?: string | null, developed?: Array<string> | null, logo?: string | null, name: string, published?: Array<string> | null } | null> };
+export type GameCompanyQuery = { __typename?: 'Query', gameCompany?: Array<{ __typename?: 'GameCompany', id: string, country?: string | null, description?: string | null, developed?: Array<string> | null, logo?: string | null, name: string, published?: Array<string> | null } | null> | null };
 
 export type GamesQueryVariables = Exact<{
   gameId: Scalars['ID']['input'];
 }>;
 
 
-export type GamesQuery = { __typename?: 'Query', gameCollections: { __typename?: 'GameCollections', id: string, name: string, games: Array<{ __typename?: 'Game', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> } };
+export type GamesQuery = { __typename?: 'Query', gameCollections?: { __typename?: 'GameCollections', id: string, name: string, games: Array<{ __typename?: 'Game', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> } | null };
 
 export type GameThemesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameThemesQuery = { __typename?: 'Query', gameThemes: Array<{ __typename?: 'GameTheme', id: string, name: string } | null> };
+export type GameThemesQuery = { __typename?: 'Query', gameThemes?: Array<{ __typename?: 'GameTheme', id: string, name: string } | null> | null };
 
 export type SimilarGamesQueryVariables = Exact<{
   gameIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
@@ -1599,7 +1599,7 @@ export type SimilarGamesQueryVariables = Exact<{
 }>;
 
 
-export type SimilarGamesQuery = { __typename?: 'Query', similarGames: Array<{ __typename?: 'SimilarGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> };
+export type SimilarGamesQuery = { __typename?: 'Query', similarGames?: Array<{ __typename?: 'SimilarGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> | null };
 
 export const MovieResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MovieResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MovieResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adult"}},{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_title"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"release_date"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"video"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<MovieResultFragment, unknown>;
 export const ShowResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ShowResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ShowResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"first_air_date"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"origin_country"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_name"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<ShowResultFragment, unknown>;
