@@ -51,19 +51,9 @@ export type ErrorRes = {
   message: Scalars['String']['output'];
 };
 
-export type Game = {
-  __typename?: 'Game';
-  cover?: Maybe<Scalars['ID']['output']>;
-  coverUrl?: Maybe<Scalars['String']['output']>;
-  first_release_date?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  rating?: Maybe<Scalars['Float']['output']>;
-};
-
 export type GameCollections = {
   __typename?: 'GameCollections';
-  games: Array<Game>;
+  games: Array<RelatedGame>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
@@ -577,6 +567,7 @@ export type Query = {
   accountVerified?: Maybe<AccountVerifiedRes>;
   checkEmailVerificationToken?: Maybe<RedisRes>;
   checkForgotPasswordToken?: Maybe<RedisRes>;
+  dlcGames?: Maybe<Array<RelatedGame>>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
   gameCollections?: Maybe<GameCollections>;
@@ -607,7 +598,7 @@ export type Query = {
   showDetails: ShowDetailsRes;
   showReviews: ShowReviewRes;
   showsCastCrew?: Maybe<ShowsCastCrewRes>;
-  similarGames?: Maybe<Array<SimilarGame>>;
+  similarGames?: Maybe<Array<RelatedGame>>;
   topRatedMovies: MoviesRes;
   topRatedMoviesByGenre: MoviesRes;
   topRatedShows: ShowsRes;
@@ -638,6 +629,12 @@ export type QueryCheckEmailVerificationTokenArgs = {
 export type QueryCheckForgotPasswordTokenArgs = {
   token: Scalars['String']['input'];
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryDlcGamesArgs = {
+  gameIds: Array<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -876,6 +873,16 @@ export type RegisteredUserRes = {
   errors: Array<ErrorRes>;
 };
 
+export type RelatedGame = {
+  __typename?: 'RelatedGame';
+  cover?: Maybe<Scalars['ID']['output']>;
+  coverUrl?: Maybe<Scalars['String']['output']>;
+  first_release_date?: Maybe<Scalars['BigInt']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  rating?: Maybe<Scalars['Float']['output']>;
+};
+
 export type ShowDetailsCountry = {
   __typename?: 'ShowDetailsCountry';
   iso_3166_1: Scalars['String']['output'];
@@ -1106,16 +1113,6 @@ export type ShowsRes = {
   results: Array<ShowResult>;
   total_pages: Scalars['Int']['output'];
   total_results: Scalars['Int']['output'];
-};
-
-export type SimilarGame = {
-  __typename?: 'SimilarGame';
-  cover?: Maybe<Scalars['ID']['output']>;
-  coverUrl?: Maybe<Scalars['String']['output']>;
-  first_release_date?: Maybe<Scalars['BigInt']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  rating?: Maybe<Scalars['Float']['output']>;
 };
 
 export type TheatreDates = {
@@ -1586,7 +1583,7 @@ export type GamesQueryVariables = Exact<{
 }>;
 
 
-export type GamesQuery = { __typename?: 'Query', gameCollections?: { __typename?: 'GameCollections', id: string, name: string, games: Array<{ __typename?: 'Game', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> } | null };
+export type GamesQuery = { __typename?: 'Query', gameCollections?: { __typename?: 'GameCollections', id: string, name: string, games: Array<{ __typename?: 'RelatedGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> } | null };
 
 export type GameThemesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1599,7 +1596,15 @@ export type SimilarGamesQueryVariables = Exact<{
 }>;
 
 
-export type SimilarGamesQuery = { __typename?: 'Query', similarGames?: Array<{ __typename?: 'SimilarGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> | null };
+export type SimilarGamesQuery = { __typename?: 'Query', similarGames?: Array<{ __typename?: 'RelatedGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> | null };
+
+export type DlcGamesQueryVariables = Exact<{
+  gameIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DlcGamesQuery = { __typename?: 'Query', dlcGames?: Array<{ __typename?: 'RelatedGame', id: string, name: string, first_release_date?: any | null, rating?: number | null, cover?: string | null, coverUrl?: string | null }> | null };
 
 export const MovieResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MovieResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MovieResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adult"}},{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_title"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"release_date"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"video"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<MovieResultFragment, unknown>;
 export const ShowResultFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ShowResult"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ShowResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"backdrop_path"}},{"kind":"Field","name":{"kind":"Name","value":"first_air_date"}},{"kind":"Field","name":{"kind":"Name","value":"genre_ids"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"origin_country"}},{"kind":"Field","name":{"kind":"Name","value":"original_language"}},{"kind":"Field","name":{"kind":"Name","value":"original_name"}},{"kind":"Field","name":{"kind":"Name","value":"overview"}},{"kind":"Field","name":{"kind":"Name","value":"popularity"}},{"kind":"Field","name":{"kind":"Name","value":"poster_path"}},{"kind":"Field","name":{"kind":"Name","value":"vote_average"}},{"kind":"Field","name":{"kind":"Name","value":"vote_count"}}]}}]} as unknown as DocumentNode<ShowResultFragment, unknown>;
@@ -1660,3 +1665,4 @@ export const GameCompanyDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Games"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameCollections"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"games"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_release_date"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"cover"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GamesQuery, GamesQueryVariables>;
 export const GameThemesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GameThemes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameThemes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GameThemesQuery, GameThemesQueryVariables>;
 export const SimilarGamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SimilarGames"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"similarGames"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_release_date"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"cover"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}}]}}]}}]} as unknown as DocumentNode<SimilarGamesQuery, SimilarGamesQueryVariables>;
+export const DlcGamesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DlcGames"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dlcGames"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"gameIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"gameIds"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_release_date"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"cover"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}}]}}]}}]} as unknown as DocumentNode<DlcGamesQuery, DlcGamesQueryVariables>;

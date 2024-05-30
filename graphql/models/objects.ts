@@ -672,28 +672,6 @@ export const gameObjects = {
 			t.list.nonNull.id('published');
 		},
 	}),
-	gameCollections: objectType({
-		name: 'GameCollections',
-		definition(t) {
-			t.nonNull.id('id');
-			t.nonNull.string('name');
-			t.nonNull.list.field('games', {
-				type: nonNull(
-					objectType({
-						name: 'Game',
-						definition(t) {
-							t.nonNull.string('id');
-							t.nonNull.string('name');
-							t.bigint('first_release_date');
-							t.float('rating');
-							t.id('cover');
-							t.string('coverUrl');
-						},
-					})
-				),
-			});
-		},
-	}),
 	gameTheme: objectType({
 		name: 'GameTheme',
 		definition(t) {
@@ -701,8 +679,8 @@ export const gameObjects = {
 			t.nonNull.string('name');
 		},
 	}),
-	similarGame: objectType({
-		name: 'SimilarGame',
+	relatedGame: objectType({
+		name: 'RelatedGame',
 		definition(t) {
 			t.nonNull.string('id');
 			t.nonNull.string('name');
@@ -712,7 +690,16 @@ export const gameObjects = {
 			t.string('coverUrl');
 		},
 	}),
-
+	gameCollections: objectType({
+		name: 'GameCollections',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
+			t.nonNull.list.field('games', {
+				type: nonNull('RelatedGame'),
+			});
+		},
+	}),
 	// character: objectType({
 	// 	name: 'Character',
 	// 	definition(t) {

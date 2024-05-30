@@ -46,7 +46,6 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; where id = ${gameId};`
 					);
-					if (res.message) console.log('RES IN GAME DETAILS: ', res);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
 				} catch (err) {
@@ -116,7 +115,6 @@ export const GameQueries = extendType({
 									`${IGDB_BASE_API_URL}/games`,
 									`fields name, first_release_date, cover, rating; where id = ${collectionGameId};`
 								);
-								if (res.message) console.log('RES IN COLLECTION: ', res);
 								await addIGDBCoverUrl(res, '1080p');
 								return res[0];
 							})
@@ -152,7 +150,7 @@ export const GameQueries = extendType({
 			},
 		});
 		t.field('similarGames', {
-			type: list(nonNull('SimilarGame')),
+			type: list(nonNull('RelatedGame')),
 			args: {
 				gameIds: nonNull(list(nonNull('ID'))),
 				limit: intArg({ default: 500 }),
@@ -163,7 +161,27 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games`,
 						`fields name, first_release_date, rating, cover; limit ${limit}; where id = (${gameIds.join(',')});`
 					);
-					if (res.message) console.log('RES IN SIMILAR: ', res);
+					await addIGDBCoverUrl(res, '1080p');
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.field('dlcGames', {
+			type: list(nonNull('RelatedGame')),
+			args: {
+				gameIds: nonNull(list(nonNull('ID'))),
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { gameIds, limit }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/games`,
+						`fields name, first_release_date, rating, cover; limit ${limit}; where id = (${gameIds.join(',')});`,
+						1,
+						0
+					);
 					await addIGDBCoverUrl(res, '1080p');
 					return res;
 				} catch (err) {

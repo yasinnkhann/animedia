@@ -38,17 +38,8 @@ type ErrorRes {
   message: String!
 }
 
-type Game {
-  cover: ID
-  coverUrl: String
-  first_release_date: BigInt
-  id: String!
-  name: String!
-  rating: Float
-}
-
 type GameCollections {
-  games: [Game!]!
+  games: [RelatedGame!]!
   id: ID!
   name: String!
 }
@@ -468,6 +459,7 @@ type Query {
   accountVerified(email: String!): AccountVerifiedRes
   checkEmailVerificationToken(token: String!, userId: ID!): RedisRes
   checkForgotPasswordToken(token: String!, userId: ID!): RedisRes
+  dlcGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
   gameCollections(gameId: ID!): GameCollections
@@ -498,7 +490,7 @@ type Query {
   showDetails(showDetailsId: ID!): ShowDetailsRes!
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
-  similarGames(gameIds: [ID!]!, limit: Int = 500): [SimilarGame!]
+  similarGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!
@@ -523,6 +515,15 @@ type RedisRes {
 type RegisteredUserRes {
   createdUser: User
   errors: [ErrorRes!]!
+}
+
+type RelatedGame {
+  cover: ID
+  coverUrl: String
+  first_release_date: BigInt
+  id: String!
+  name: String!
+  rating: Float
 }
 
 type ShowDetailsCountry {
@@ -737,15 +738,6 @@ type ShowsRes {
   results: [ShowResult!]!
   total_pages: Int!
   total_results: Int!
-}
-
-type SimilarGame {
-  cover: ID
-  coverUrl: String
-  first_release_date: BigInt
-  id: String!
-  name: String!
-  rating: Float
 }
 
 type TheatreDates {

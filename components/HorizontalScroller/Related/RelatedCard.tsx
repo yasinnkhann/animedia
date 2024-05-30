@@ -11,10 +11,6 @@ interface Props {
 }
 
 const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
-	// const isMovie = 'title' in item;
-
-	// const titleName = isMovie ? (item.title as string) : (item.name as string);
-
 	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
 		userMatchedMedias,
 		item

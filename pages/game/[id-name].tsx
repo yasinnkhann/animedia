@@ -60,6 +60,16 @@ const GameDetails = () => {
 		}
 	);
 
+	const { data: dlcGamesData, loading: dlcGamesLoading } = useQuery(
+		Queries.DLC_GAMES,
+		{
+			skip: !gameDetailsData?.gameDetails.results[0]?.dlcs,
+			variables: {
+				gameIds: gameDetailsData?.gameDetails.results[0]?.dlcs as string[],
+			},
+		}
+	);
+
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails.results ||
@@ -86,8 +96,7 @@ const GameDetails = () => {
 	}
 
 	const game = gameDetailsData.gameDetails.results[0];
-	// console.log(game);
-	console.log(similarGamesData?.similarGames);
+	console.log(game);
 
 	return (
 		<>
@@ -193,10 +202,12 @@ const GameDetails = () => {
 
 					{!_.isEmpty(gameCompanyData.gameCompany) && (
 						<>
-							<h4 className='mt-4'>Developed By:</h4>
-							{gameCompanyData.gameCompany.map(company => (
-								<p key={company?.id}>{company?.name}</p>
-							))}
+							<h4 className='mt-4'>Developers:</h4>
+							<div className='ml-1'>
+								{gameCompanyData.gameCompany.map(company => (
+									<p key={company?.id}>{company?.name}</p>
+								))}
+							</div>
 						</>
 					)}
 
@@ -213,6 +224,23 @@ const GameDetails = () => {
 				</section>
 
 				<section className='col-start-2 mt-4'>
+					{!dlcGamesLoading &&
+						dlcGamesData?.dlcGames &&
+						!_.isEmpty(dlcGamesData.dlcGames) && (
+							<section className='pb-4'>
+								<h3 className='mb-4 ml-8 mt-4'>DLC</h3>
+								<RelatedHorizontalScroller
+									items={dlcGamesData.dlcGames.map(dlc => ({
+										id: dlc.id,
+										imagePath: dlc.coverUrl,
+										name: dlc.name,
+										popularity: dlc.rating ?? 0,
+										type: 'game',
+									}))}
+								/>
+							</section>
+						)}
+
 					{!gameCollectionsLoading &&
 						gameCollectionsData?.gameCollections &&
 						!_.isEmpty(gameCollectionsData.gameCollections.games) && (
