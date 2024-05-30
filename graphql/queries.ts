@@ -1048,8 +1048,8 @@ export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 `);
 
 export const SEARCHED_GAMES = graphql(`
-	query SearchGames($q: String!, $limit: Int!, $page: Int!) {
-		searchGames(q: $q, limit: $limit, page: $page) {
+	query SearchedGames($q: String!, $limit: Int!, $page: Int!) {
+		searchedGames(q: $q, limit: $limit, page: $page) {
 			total_results
 			results {
 				id

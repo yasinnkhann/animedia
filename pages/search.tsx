@@ -98,12 +98,12 @@ const Search: NextPage = () => {
 			return searchedPeopleData.searchedPeople;
 		}
 
-		if (searchResultsType === 'games' && searchedGamesData?.searchGames) {
-			return searchedGamesData.searchGames;
+		if (searchResultsType === 'games' && searchedGamesData?.searchedGames) {
+			return searchedGamesData.searchedGames;
 		}
 	}, [
 		searchResultsType,
-		searchedGamesData?.searchGames,
+		searchedGamesData?.searchedGames,
 		searchedMoviesData?.searchedMovies,
 		searchedPeopleData?.searchedPeople,
 		searchedShowsData?.searchedShows,
@@ -285,7 +285,7 @@ const Search: NextPage = () => {
 												Games
 											</h4>
 											<p className='text-right'>
-												{searchedGamesData?.searchGames.total_results}
+												{searchedGamesData?.searchedGames.total_results}
 											</p>
 										</li>
 										<li className='flex w-full items-center justify-between'>
@@ -332,7 +332,7 @@ const Search: NextPage = () => {
 											? searchedShowsData.searchedShows.total_results
 											: searchResultsType === 'people'
 												? searchedPeopleData.searchedPeople.total_results
-												: searchedGamesData?.searchGames.total_results!
+												: searchedGamesData?.searchedGames.total_results!
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>

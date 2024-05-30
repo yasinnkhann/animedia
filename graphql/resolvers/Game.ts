@@ -5,7 +5,7 @@ import { extendType, nonNull, stringArg, list, intArg, idArg } from 'nexus';
 export const GameQueries = extendType({
 	type: 'Query',
 	definition(t) {
-		t.nonNull.field('searchGames', {
+		t.nonNull.field('searchedGames', {
 			type: 'GamesRes',
 			args: {
 				q: nonNull(stringArg()),

@@ -1111,7 +1111,7 @@ export interface NexusGenFieldTypes {
     popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     recommendedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    searchGames: NexusGenRootTypes['GamesRes']; // GamesRes!
+    searchedGames: NexusGenRootTypes['GamesRes']; // GamesRes!
     searchedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     searchedPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
     searchedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1781,7 +1781,7 @@ export interface NexusGenFieldTypeNames {
     popularShowsByGenre: 'ShowsRes'
     recommendedMovies: 'MoviesRes'
     recommendedShows: 'ShowsRes'
-    searchGames: 'GamesRes'
+    searchedGames: 'GamesRes'
     searchedMovies: 'MoviesRes'
     searchedPeople: 'PeopleRes'
     searchedShows: 'ShowsRes'
@@ -2176,7 +2176,7 @@ export interface NexusGenArgTypes {
       page: number | null; // Int
       recommendedShowsId: string; // ID!
     }
-    searchGames: { // args
+    searchedGames: { // args
       limit: number; // Int!
       page: number; // Int!
       q: string; // String!
