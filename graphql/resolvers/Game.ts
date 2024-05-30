@@ -189,6 +189,38 @@ export const GameQueries = extendType({
 				}
 			},
 		});
+		t.field('gamePreviews', {
+			type: list(nonNull('GamePreview')),
+			args: {
+				gameId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { gameId }) => {
+				let finalRes = [];
+				try {
+					const videoRes = await postIGDB(
+						`${IGDB_BASE_API_URL}/game_videos`,
+						`fields game, video_id, name; where game = ${gameId};`
+					);
+
+					if (videoRes.length > 0) {
+						finalRes.push(videoRes[0]);
+					}
+
+					let screenshotsRes = await postIGDB(
+						`${IGDB_BASE_API_URL}/screenshots`,
+						`fields game, url; where game = ${gameId};`
+					);
+					screenshotsRes = screenshotsRes.map((ss: any) => ({
+						...ss,
+						url: ss.url.replace('thumb', '1080p'),
+					}));
+					finalRes = finalRes.concat(screenshotsRes);
+				} catch (err) {
+					console.error(err);
+				}
+				return finalRes;
+			},
+		});
 		// t.nonNull.field('gamesFromGenres', {
 		// 	type: 'GamesRes',
 		// 	args: {

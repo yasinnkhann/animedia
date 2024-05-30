@@ -38,3 +38,12 @@ export interface IRegister {
 	password: string;
 	confirmPassword: string;
 }
+
+export interface IGamePreview {
+	id: string;
+	game: string;
+	url?: string | null;
+	video_id?: string | null;
+	name?: string | null;
+	videoUrl?: string | null;
+}

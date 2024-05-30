@@ -1263,6 +1263,18 @@ export const DLC_GAMES = graphql(`
 	}
 `);
 
+export const GAME_PREVIEWS = graphql(`
+	query GamePreviews($gameId: ID!) {
+		gamePreviews(gameId: $gameId) {
+			id
+			game
+			name
+			url
+			video_id
+		}
+	}
+`);
+
 // export const GAMES_FROM_GENRES = graphql(`
 // 	query GamesFromGenres($genreIds: [ID!]!, $limit: Int) {
 // 		gamesFromGenres(genreIds: $genreIds, limit: $limit) {

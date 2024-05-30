@@ -116,6 +116,13 @@ export interface NexusGenObjects {
     id: string; // ID!
     name: string; // String!
   }
+  GamePreview: { // root type
+    game: string; // ID!
+    id: string; // ID!
+    name?: string | null; // String
+    url?: string | null; // String
+    video_id?: string | null; // String
+  }
   GameResult: { // root type
     age_ratings?: Array<string | null> | null; // [ID]
     alternative_names?: Array<string | null> | null; // [ID]
@@ -727,6 +734,13 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     name: string; // String!
   }
+  GamePreview: { // field return type
+    game: string; // ID!
+    id: string; // ID!
+    name: string | null; // String
+    url: string | null; // String
+    video_id: string | null; // String
+  }
   GameResult: { // field return type
     age_ratings: Array<string | null> | null; // [ID]
     alternative_names: Array<string | null> | null; // [ID]
@@ -1079,6 +1093,7 @@ export interface NexusGenFieldTypes {
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
     gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null> | null; // [GamePlatform]
+    gamePreviews: NexusGenRootTypes['GamePreview'][] | null; // [GamePreview!]
     gameThemes: Array<NexusGenRootTypes['GameTheme'] | null> | null; // [GameTheme]
     movieDetails: NexusGenRootTypes['MovieDetailsRes']; // MovieDetailsRes!
     movieReviews: NexusGenRootTypes['MovieReviewsRes']; // MovieReviewsRes!
@@ -1388,6 +1403,13 @@ export interface NexusGenFieldTypeNames {
   GamePlatform: { // field return type name
     id: 'ID'
     name: 'String'
+  }
+  GamePreview: { // field return type name
+    game: 'ID'
+    id: 'ID'
+    name: 'String'
+    url: 'String'
+    video_id: 'String'
   }
   GameResult: { // field return type name
     age_ratings: 'ID'
@@ -1741,6 +1763,7 @@ export interface NexusGenFieldTypeNames {
     gameCompany: 'GameCompany'
     gameDetails: 'GamesRes'
     gamePlatforms: 'GamePlatform'
+    gamePreviews: 'GamePreview'
     gameThemes: 'GameTheme'
     movieDetails: 'MovieDetailsRes'
     movieReviews: 'MovieReviewsRes'
@@ -2093,6 +2116,9 @@ export interface NexusGenArgTypes {
     }
     gamePlatforms: { // args
       limit: number | null; // Int
+    }
+    gamePreviews: { // args
+      gameId: string; // ID!
     }
     gameThemes: { // args
       limit: number | null; // Int

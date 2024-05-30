@@ -59,6 +59,14 @@ type GamePlatform {
   name: String!
 }
 
+type GamePreview {
+  game: ID!
+  id: ID!
+  name: String
+  url: String
+  video_id: String
+}
+
 type GameResult {
   age_ratings: [ID]
   alternative_names: [ID]
@@ -466,6 +474,7 @@ type Query {
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
   gamePlatforms(limit: Int = 500): [GamePlatform]
+  gamePreviews(gameId: ID!): [GamePreview!]
   gameThemes(limit: Int = 500): [GameTheme]
   movieDetails(movieDetailsId: ID!): MovieDetailsRes!
   movieReviews(id: ID!, page: Int = 1): MovieReviewsRes!

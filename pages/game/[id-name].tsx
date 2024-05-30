@@ -14,6 +14,7 @@ import { useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { GAME_GENRES, MAX_SUMMARY_WORD_LENGTH } from 'utils/constants';
 import Modal from 'components/Modal';
+import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -31,7 +32,6 @@ const GameDetails = () => {
 			variables: {
 				gameId: id,
 			},
-			fetchPolicy: 'network-only',
 		}
 	);
 
@@ -70,6 +70,16 @@ const GameDetails = () => {
 			skip: !gameDetailsData?.gameDetails.results[0]?.dlcs,
 			variables: {
 				gameIds: gameDetailsData?.gameDetails.results[0]?.dlcs as string[],
+			},
+		}
+	);
+
+	const { data: gamePreviewsData, loading: gamePreviewsLoading } = useQuery(
+		Queries.GAME_PREVIEWS,
+		{
+			skip: !id,
+			variables: {
+				gameId: id,
 			},
 		}
 	);
@@ -251,6 +261,17 @@ const GameDetails = () => {
 				</section>
 
 				<section className='col-start-2 mt-4'>
+					{!gamePreviewsLoading &&
+						gamePreviewsData?.gamePreviews &&
+						!_.isEmpty(gamePreviewsData.gamePreviews) && (
+							<section className='pb-4'>
+								<h3 className='mb-4 ml-8 mt-4'>Preview</h3>
+								<GamePreviewHorizontalScroller
+									items={gamePreviewsData.gamePreviews}
+								/>
+							</section>
+						)}
+
 					{!dlcGamesLoading &&
 						dlcGamesData?.dlcGames &&
 						!_.isEmpty(dlcGamesData.dlcGames) && (

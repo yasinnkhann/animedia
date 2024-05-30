@@ -700,6 +700,16 @@ export const gameObjects = {
 			});
 		},
 	}),
+	gamePreview: objectType({
+		name: 'GamePreview',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.id('game');
+			t.string('url');
+			t.string('video_id');
+			t.string('name');
+		},
+	}),
 	// character: objectType({
 	// 	name: 'Character',
 	// 	definition(t) {
