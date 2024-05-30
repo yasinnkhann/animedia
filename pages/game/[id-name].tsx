@@ -157,7 +157,7 @@ const GameDetails = () => {
 									</div>
 								)
 							) : (
-								<i>No Bio Available</i>
+								<i>Storyline Not Available</i>
 							)}
 						</div>
 					</section>
