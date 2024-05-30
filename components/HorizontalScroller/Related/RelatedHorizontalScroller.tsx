@@ -15,10 +15,9 @@ type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 interface Props {
 	items: IRelatedMedia[];
 	mediaType?: ExtractStrict<TContent, 'movies' | 'shows'>;
-	height?: number;
 }
 
-const RelatedHorizontalScroller = ({ items, mediaType, height }: Props) => {
+const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 	const [userMatchedMedias, setUserMatchedMedias] = useState<
 		UserShow[] | UserMovie[]
 	>([]);
@@ -117,7 +116,7 @@ const RelatedHorizontalScroller = ({ items, mediaType, height }: Props) => {
 			onMouseDown={() => dragStart}
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
-			scrollContainerClassName={`${height ? `!h-[${height}rem]` : `!h-[22rem]`} !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl`}
+			scrollContainerClassName='!h-[22rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
 				<RelatedCard
