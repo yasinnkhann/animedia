@@ -13,7 +13,7 @@ import RelatedHorizontalScroller from '../../components/HorizontalScroller/Relat
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
-	MAX_BIO_WORD_LENGTH,
+	MAX_SUMMARY_WORD_LENGTH,
 } from '../../utils/constants';
 
 const PersonDetails = () => {
@@ -149,14 +149,14 @@ const PersonDetails = () => {
 					<div>
 						{personDetailsData.personDetails.biography ? (
 							personDetailsData.personDetails.biography.split(' ').length <=
-							MAX_BIO_WORD_LENGTH ? (
+							MAX_SUMMARY_WORD_LENGTH ? (
 								personDetailsData.personDetails.biography
 							) : (
 								<div>
 									<p>
 										{personDetailsData.personDetails.biography
 											.split(' ')
-											.slice(0, MAX_BIO_WORD_LENGTH)
+											.slice(0, MAX_SUMMARY_WORD_LENGTH)
 											.join(' ') + '...'}
 									</p>
 									<button

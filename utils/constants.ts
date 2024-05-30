@@ -35,7 +35,7 @@ export const VERIFICATION_EMAIL_COUNT_LIMIT = 10;
 
 export const FORGOT_PASSWORD_EMAIL_COUNT_LIMIT = 10;
 
-export const MAX_BIO_WORD_LENGTH = 200;
+export const MAX_SUMMARY_WORD_LENGTH = 300;
 
 export const ACCOUNT_NOT_FOUND_MESSAGE = 'Could not find account.';
 

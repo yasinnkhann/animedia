@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +12,8 @@ import { useSession } from 'next-auth/react';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
-import { GAME_GENRES } from 'utils/constants';
+import { GAME_GENRES, MAX_SUMMARY_WORD_LENGTH } from 'utils/constants';
+import Modal from 'components/Modal';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -19,6 +21,8 @@ const GameDetails = () => {
 	const router = useRouter();
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+
+	const [showFullDescription, setShowFullDescription] = useState(false);
 
 	const { data: gameDetailsData, loading: gameDetailsLoading } = useQuery(
 		Queries.GAME_DETAILS,
@@ -132,7 +136,30 @@ const GameDetails = () => {
 
 					<section className='pb-32'>
 						<h1>{game.name}</h1>
-						<p className='my-4'>{game.storyline}</p>
+						<div>
+							{game.storyline ? (
+								game.storyline.split(' ').length <= MAX_SUMMARY_WORD_LENGTH ? (
+									game.storyline
+								) : (
+									<div>
+										<p>
+											{game.storyline
+												.split(' ')
+												.slice(0, MAX_SUMMARY_WORD_LENGTH)
+												.join(' ') + '...'}
+										</p>
+										<button
+											className='mt-2 text-blue-500 underline'
+											onClick={() => setShowFullDescription(state => !state)}
+										>
+											{showFullDescription ? 'See Less' : 'See More'}
+										</button>
+									</div>
+								)
+							) : (
+								<i>No Bio Available</i>
+							)}
+						</div>
 					</section>
 				</section>
 
@@ -278,6 +305,13 @@ const GameDetails = () => {
 						)}
 				</section>
 			</main>
+
+			{showFullDescription && (
+				<Modal closeModal={() => setShowFullDescription(false)}>
+					<h3 className='mb-4 text-xl font-semibold'>Storyline</h3>
+					<p>{game.storyline}</p>
+				</Modal>
+			)}
 		</>
 	);
 };
