@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
-import { GAME_GENRES, MAX_SUMMARY_WORD_LENGTH } from 'utils/constants';
+import { MAX_SUMMARY_WORD_LENGTH } from 'utils/constants';
 import Modal from 'components/Modal';
 import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
 
@@ -84,6 +84,10 @@ const GameDetails = () => {
 		}
 	);
 
+	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(
+		Queries.GAME_GENRES
+	);
+
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails.results ||
@@ -92,7 +96,9 @@ const GameDetails = () => {
 		gameCompanyLoading ||
 		!gameCompanyData?.gameCompany ||
 		gameThemesLoading ||
-		!gameThemesData?.gameThemes
+		!gameThemesData?.gameThemes ||
+		gameGenresLoading ||
+		!gameGenresData?.gameGenres
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -205,22 +211,23 @@ const GameDetails = () => {
 						</>
 					)}
 
-					{game.genres && !_.isEmpty(game.genres) && (
-						<>
-							<h4 className='mt-4'>Genre(s)</h4>
-							<div className='ml-1'>
-								{game.genres.map(genreId => (
-									<p key={genreId}>
-										{CommonMethods.toTitleCase(
-											GAME_GENRES[
-												genreId as unknown as keyof typeof GAME_GENRES
-											]
-										)}
-									</p>
-								))}
-							</div>
-						</>
-					)}
+					{game.genres &&
+						!_.isEmpty(game.genres) &&
+						gameGenresData.gameGenres &&
+						!_.isEmpty(gameGenresData.gameGenres) && (
+							<>
+								<h4 className='mt-4'>Genre(s)</h4>
+								<div className='ml-1'>
+									{gameGenresData.gameGenres
+										.filter(genre =>
+											game.genres.some(genreId => genreId === genre.id)
+										)
+										.map(genre => (
+											<p key={genre.id}>{genre.name}</p>
+										))}
+								</div>
+							</>
+						)}
 
 					{!_.isEmpty(game.themes) && (
 						<>

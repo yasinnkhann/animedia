@@ -229,8 +229,16 @@ export const PEOPLE_ITEMS = [
 
 export const GAME_ITEMS = [
 	{
+		label: 'Popular Games',
+		key: 'popular',
+	},
+	{
 		label: 'Top Rated Games',
 		key: 'top-rated',
+	},
+	{
+		label: 'Explore Games by Genre',
+		key: 'genre',
 	},
 ];
 

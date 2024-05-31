@@ -53,7 +53,7 @@ export class CommonMethods {
 	public static getGenreID = async (
 		genreName: `${MovieGenreTypes}` | `${ShowGenreTypes}`,
 		mediaType: 'movie' | 'tv'
-	): Promise<number> => {
+	): Promise<string> => {
 		type TGenreObj = MovieDetailsGenre | ShowDetailsGenre;
 
 		const parsedGenreName = genreName
@@ -74,7 +74,7 @@ export class CommonMethods {
 			if (!genreObj?.id) {
 				throw new Error('No Genre ID Found.');
 			}
-			return +genreObj.id;
+			return genreObj.id;
 		} catch (err) {
 			throw err;
 		}

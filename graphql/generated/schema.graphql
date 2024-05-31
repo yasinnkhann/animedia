@@ -54,6 +54,11 @@ type GameCompany {
   published: [ID!]
 }
 
+type GameGenre {
+  id: ID!
+  name: String!
+}
+
 type GamePlatform {
   id: ID!
   name: String!
@@ -90,7 +95,7 @@ type GameResult {
   game_engines: [ID]
   game_localizations: [ID]
   game_modes: [ID]
-  genres: [ID!]
+  genres: [ID!]!
   hypes: Int
   id: ID!
   involved_companies: [ID]
@@ -473,6 +478,7 @@ type Query {
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
+  gameGenres: [GameGenre!]!
   gamePlatforms(limit: Int = 500): [GamePlatform]
   gamePreviews(gameId: ID!): [GamePreview!]
   gameThemes(limit: Int = 500): [GameTheme]
@@ -485,6 +491,7 @@ type Query {
   personsKnownForShow(personsKnownForShowResId: ID!): PersonsKnownForShowRes!
   popularAnimeMovies(page: Int = 1): MoviesRes!
   popularAnimeShows(page: Int = 1): ShowsRes!
+  popularGames(limit: Int!, page: Int!): GamesRes
   popularMovies(page: Int = 1): MoviesRes!
   popularMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   popularPeople(page: Int = 1): PeopleRes!
@@ -501,6 +508,7 @@ type Query {
   showsCastCrew(showId: ID!): ShowsCastCrewRes
   similarGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   topRatedGames(limit: Int!, page: Int!): GamesRes
+  topRatedGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes!
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!

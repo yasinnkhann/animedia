@@ -112,6 +112,10 @@ export interface NexusGenObjects {
     name: string; // String!
     published?: string[] | null; // [ID!]
   }
+  GameGenre: { // root type
+    id: string; // ID!
+    name: string; // String!
+  }
   GamePlatform: { // root type
     id: string; // ID!
     name: string; // String!
@@ -146,7 +150,7 @@ export interface NexusGenObjects {
     game_engines?: Array<string | null> | null; // [ID]
     game_localizations?: Array<string | null> | null; // [ID]
     game_modes?: Array<string | null> | null; // [ID]
-    genres?: string[] | null; // [ID!]
+    genres: string[]; // [ID!]!
     hypes?: number | null; // Int
     id: string; // ID!
     involved_companies?: Array<string | null> | null; // [ID]
@@ -730,6 +734,10 @@ export interface NexusGenFieldTypes {
     name: string; // String!
     published: string[] | null; // [ID!]
   }
+  GameGenre: { // field return type
+    id: string; // ID!
+    name: string; // String!
+  }
   GamePlatform: { // field return type
     id: string; // ID!
     name: string; // String!
@@ -764,7 +772,7 @@ export interface NexusGenFieldTypes {
     game_engines: Array<string | null> | null; // [ID]
     game_localizations: Array<string | null> | null; // [ID]
     game_modes: Array<string | null> | null; // [ID]
-    genres: string[] | null; // [ID!]
+    genres: string[]; // [ID!]!
     hypes: number | null; // Int
     id: string; // ID!
     involved_companies: Array<string | null> | null; // [ID]
@@ -1092,6 +1100,7 @@ export interface NexusGenFieldTypes {
     gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
+    gameGenres: NexusGenRootTypes['GameGenre'][]; // [GameGenre!]!
     gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null> | null; // [GamePlatform]
     gamePreviews: NexusGenRootTypes['GamePreview'][] | null; // [GamePreview!]
     gameThemes: Array<NexusGenRootTypes['GameTheme'] | null> | null; // [GameTheme]
@@ -1104,6 +1113,7 @@ export interface NexusGenFieldTypes {
     personsKnownForShow: NexusGenRootTypes['PersonsKnownForShowRes']; // PersonsKnownForShowRes!
     popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
+    popularGames: NexusGenRootTypes['GamesRes'] | null; // GamesRes
     popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
@@ -1120,6 +1130,7 @@ export interface NexusGenFieldTypes {
     showsCastCrew: NexusGenRootTypes['ShowsCastCrewRes'] | null; // ShowsCastCrewRes
     similarGames: NexusGenRootTypes['RelatedGame'][] | null; // [RelatedGame!]
     topRatedGames: NexusGenRootTypes['GamesRes'] | null; // GamesRes
+    topRatedGamesByGenre: NexusGenRootTypes['GamesRes']; // GamesRes!
     topRatedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     topRatedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
@@ -1400,6 +1411,10 @@ export interface NexusGenFieldTypeNames {
     logo: 'ID'
     name: 'String'
     published: 'ID'
+  }
+  GameGenre: { // field return type name
+    id: 'ID'
+    name: 'String'
   }
   GamePlatform: { // field return type name
     id: 'ID'
@@ -1763,6 +1778,7 @@ export interface NexusGenFieldTypeNames {
     gameCollections: 'GameCollections'
     gameCompany: 'GameCompany'
     gameDetails: 'GamesRes'
+    gameGenres: 'GameGenre'
     gamePlatforms: 'GamePlatform'
     gamePreviews: 'GamePreview'
     gameThemes: 'GameTheme'
@@ -1775,6 +1791,7 @@ export interface NexusGenFieldTypeNames {
     personsKnownForShow: 'PersonsKnownForShowRes'
     popularAnimeMovies: 'MoviesRes'
     popularAnimeShows: 'ShowsRes'
+    popularGames: 'GamesRes'
     popularMovies: 'MoviesRes'
     popularMoviesByGenre: 'MoviesRes'
     popularPeople: 'PeopleRes'
@@ -1791,6 +1808,7 @@ export interface NexusGenFieldTypeNames {
     showsCastCrew: 'ShowsCastCrewRes'
     similarGames: 'RelatedGame'
     topRatedGames: 'GamesRes'
+    topRatedGamesByGenre: 'GamesRes'
     topRatedMovies: 'MoviesRes'
     topRatedMoviesByGenre: 'MoviesRes'
     topRatedShows: 'ShowsRes'
@@ -2153,6 +2171,10 @@ export interface NexusGenArgTypes {
     popularAnimeShows: { // args
       page: number | null; // Int
     }
+    popularGames: { // args
+      limit: number; // Int!
+      page: number; // Int!
+    }
     popularMovies: { // args
       page: number | null; // Int
     }
@@ -2210,6 +2232,11 @@ export interface NexusGenArgTypes {
       limit: number | null; // Int
     }
     topRatedGames: { // args
+      limit: number; // Int!
+      page: number; // Int!
+    }
+    topRatedGamesByGenre: { // args
+      genreId: string; // ID!
       limit: number; // Int!
       page: number; // Int!
     }

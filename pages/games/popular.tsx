@@ -8,12 +8,12 @@ import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { Circles } from 'react-loading-icons';
 import { useQuery } from '@apollo/client';
 
-const TopRatedGames = () => {
+const PopularGames = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const { data: topRatedGamesData, loading: topRatedGamesLoading } = useQuery(
-		Queries.TOP_RATED_GAMES,
+	const { data: popularGamesData, loading: popularGamesLoading } = useQuery(
+		Queries.POPULAR_GAMES,
 		{
 			variables: {
 				limit: RESULTS_PER_PAGE,
@@ -36,7 +36,7 @@ const TopRatedGames = () => {
 		}
 	}, [router]);
 
-	if (!topRatedGamesData?.topRatedGames || topRatedGamesLoading) {
+	if (!popularGamesData?.popularGames || popularGamesLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -47,20 +47,20 @@ const TopRatedGames = () => {
 	return (
 		<>
 			<Head>
-				<title>Top-Rated Games</title>
+				<title>Popular Games</title>
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-				{topRatedGamesData ? (
+				{popularGamesData ? (
 					<section className='flex flex-col items-center'>
 						<MediaList
-							mediaData={topRatedGamesData.topRatedGames}
+							mediaData={popularGamesData.popularGames}
 							pageNum={currPage}
-							title='Top Rated Games'
+							title='Popular Games'
 						/>
 						<Pagination
 							currPage={currPage}
-							totalItems={topRatedGamesData.topRatedGames.total_results}
+							totalItems={popularGamesData.popularGames.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
 							paginate={(pageNum: number) =>
 								router.push(`${router.pathname}?page=${pageNum}`)
@@ -79,4 +79,4 @@ const TopRatedGames = () => {
 	);
 };
 
-export default TopRatedGames;
+export default PopularGames;

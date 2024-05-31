@@ -609,7 +609,7 @@ export const gameObjects = {
 			t.list.id('game_engines');
 			t.list.id('game_localizations');
 			t.list.id('game_modes');
-			t.list.nonNull.id('genres');
+			t.nonNull.list.nonNull.id('genres');
 			t.int('hypes');
 			t.list.id('involved_companies');
 			t.list.id('keywords');
@@ -708,6 +708,13 @@ export const gameObjects = {
 			t.string('url');
 			t.string('video_id');
 			t.string('name');
+		},
+	}),
+	gameGenre: objectType({
+		name: 'GameGenre',
+		definition(t) {
+			t.nonNull.id('id');
+			t.nonNull.string('name');
 		},
 	}),
 	// character: objectType({
