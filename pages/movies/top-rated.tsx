@@ -44,7 +44,7 @@ const TopRatedMovies = () => {
 						<MediaList
 							mediaData={topRatedMoviesData.topRatedMovies}
 							pageNum={currPage}
-							title='Top-Rated Movies'
+							title='Top Rated Movies'
 						/>
 						<Pagination
 							currPage={currPage}
