@@ -7,22 +7,69 @@ import * as Queries from 'graphql/queries';
 import { Select } from 'antd';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { Circles } from 'react-loading-icons';
-import { useQuery } from '@apollo/client';
-import { GameGenre } from 'graphql/generated/code-gen/graphql';
+import { TypedDocumentNode, useQuery } from '@apollo/client';
+import {
+	Exact,
+	GameGenre,
+	PopularGamesByGenreQuery,
+	TopRatedGamesByGenreQuery,
+} from 'graphql/generated/code-gen/graphql';
+import { SORT_BY_OPTIONS } from 'models/dropDownOptions';
+import { TGamesGenreData } from '@ts/types';
 
 const { Option } = Select;
 
 const Genre = () => {
 	const router = useRouter();
+
 	const [currPage, setCurrPage] = useState(1);
 
 	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(
 		Queries.GAME_GENRES
 	);
 
-	const [gameGenreType, setGameGenreType] = useState<GameGenre['id'] | null>(
+	const [sortByQueryType, setSortByQueryType] = useState<
+		TypedDocumentNode<
+			PopularGamesByGenreQuery | TopRatedGamesByGenreQuery,
+			Exact<{
+				genreId: string;
+				limit: number;
+				page: number;
+			}>
+		>
+	>(Queries.POPULAR_GAMES_BY_GENRE);
+
+	const [selectedGameGenre, setSelectedGameGenre] = useState<GameGenre | null>(
 		null
 	);
+
+	const { data: genreOfGamesData } = useQuery(sortByQueryType, {
+		skip: !gameGenresData?.gameGenres.length,
+		variables: {
+			genreId: selectedGameGenre?.id ?? '0',
+			page: currPage,
+			limit: RESULTS_PER_PAGE,
+		},
+	});
+
+	const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
+		if (value === 'Popular') {
+			setSortByQueryType(Queries.POPULAR_GAMES_BY_GENRE);
+		} else {
+			setSortByQueryType(Queries.TOP_RATED_GAMES_BY_GENRE);
+		}
+	};
+
+	const handleGenreTypeChange = (genreId: string) => {
+		if (gameGenresData?.gameGenres) {
+			const foundGameGenre = gameGenresData.gameGenres.find(
+				genre => genre.id === genreId
+			);
+			if (foundGameGenre) {
+				setSelectedGameGenre(foundGameGenre);
+			}
+		}
+	};
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -40,14 +87,14 @@ const Genre = () => {
 
 	useEffect(() => {
 		if (gameGenresData?.gameGenres.length) {
-			setGameGenreType(gameGenresData.gameGenres[0].id);
+			setSelectedGameGenre(gameGenresData.gameGenres[0]);
 		}
 	}, [gameGenresData?.gameGenres]);
 
 	if (
 		gameGenresLoading ||
 		!gameGenresData?.gameGenres.length ||
-		!gameGenreType
+		!selectedGameGenre
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -65,6 +112,28 @@ const Genre = () => {
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				<section className='grid grid-cols-[20%_60%_20%]'>
 					<section className='mt-4 justify-self-center'>
+						<div className='mb-2'>
+							<label
+								className='mb-1 block text-blue-500'
+								htmlFor='sort-by-dropdown'
+							>
+								Sort By:
+							</label>
+
+							<Select
+								className='!w-[10rem]'
+								id='sort-by-dropdown'
+								defaultValue='Popular'
+								onChange={handleSortByChange}
+							>
+								{SORT_BY_OPTIONS.map(option => (
+									<Option key={option.value} value={option.value}>
+										{option.text}
+									</Option>
+								))}
+							</Select>
+						</div>
+
 						<div>
 							<label
 								className='mb-1 block text-blue-500'
@@ -76,8 +145,8 @@ const Genre = () => {
 								className='!w-[10rem]'
 								id='genre-type-dropdown'
 								size='middle'
-								defaultValue={gameGenreType}
-								onChange={value => setGameGenreType(value)}
+								defaultValue={selectedGameGenre.name}
+								onChange={handleGenreTypeChange}
 							>
 								{gameGenresData.gameGenres.map(option => (
 									<Option key={option.id} value={option.id}>
@@ -87,9 +156,10 @@ const Genre = () => {
 							</Select>
 						</div>
 					</section>
-					{/* {(genreOfGamesData?.[
+
+					{(genreOfGamesData?.[
 						Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
-					] as unknown as TMoviesGenreData) ? (
+					] as unknown as TGamesGenreData) ? (
 						<div>
 							<MediaList
 								mediaData={
@@ -97,10 +167,14 @@ const Genre = () => {
 										Object.keys(
 											genreOfGamesData
 										)[0] as keyof typeof genreOfGamesData
-									] as unknown as TMoviesGenreData
+									] as unknown as TGamesGenreData
 								}
 								pageNum={currPage}
-								title={`Top-Rated ${movieGenreType} Movies`}
+								title={`${
+									sortByQueryType === Queries.POPULAR_GAMES_BY_GENRE
+										? 'Popular'
+										: 'Top-Rated'
+								} ${selectedGameGenre.name} Games`}
 								genrePage
 							/>
 
@@ -112,7 +186,7 @@ const Genre = () => {
 											Object.keys(
 												genreOfGamesData
 											)[0] as keyof typeof genreOfGamesData
-										] as unknown as TMoviesGenreData
+										] as unknown as TGamesGenreData
 									).total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
@@ -127,7 +201,7 @@ const Genre = () => {
 						<div className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
 							<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
 						</div>
-					)} */}
+					)}
 				</section>
 			</main>
 		</>

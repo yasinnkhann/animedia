@@ -11,6 +11,8 @@ import {
 	MoviesRes,
 	ShowsRes,
 	PeopleRes,
+	PopularGamesByGenreQuery,
+	TopRatedGamesByGenreQuery,
 } from 'graphql/generated/code-gen/graphql';
 import {
 	MovieResult,
@@ -52,6 +54,10 @@ export type TMoviesGenreData =
 export type TShowsGenreData =
 	| PopularShowsByGenreQuery['popularShowsByGenre']
 	| TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
+
+export type TGamesGenreData =
+	| PopularGamesByGenreQuery['popularGamesByGenre']
+	| TopRatedGamesByGenreQuery['topRatedGamesByGenre'];
 
 export type TDropDownSearchResult = NullablePartial<
 	{

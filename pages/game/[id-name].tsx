@@ -116,7 +116,6 @@ const GameDetails = () => {
 	}
 
 	const game = gameDetailsData.gameDetails.results[0];
-	console.log(game);
 
 	return (
 		<>
