@@ -14,6 +14,7 @@ import {
 	MOVIES_ITEMS,
 	SHOWS_ITEMS,
 	PEOPLE_ITEMS,
+	GAME_ITEMS,
 } from 'models/dropDownOptions';
 
 const Header = () => {
@@ -57,6 +58,13 @@ const Header = () => {
 									items={SHOWS_ITEMS}
 									name='Shows'
 									routeType='shows'
+								/>
+							</li>
+							<li>
+								<DropDownItem
+									items={GAME_ITEMS}
+									name='Games'
+									routeType='games'
 								/>
 							</li>
 							<li>

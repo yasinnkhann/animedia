@@ -19,7 +19,9 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/games/count`,
 						`search "${q}";`
 					);
+
 					finalRes.total_results = count;
+
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; search "${q}"; limit ${limit}; offset ${page * limit - limit};`
@@ -38,7 +40,7 @@ export const GameQueries = extendType({
 				gameId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { gameId }) => {
-				const finalRes = { results: [], total_results: null };
+				const finalRes = { results: [], total_results: 0 };
 				try {
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
@@ -219,6 +221,34 @@ export const GameQueries = extendType({
 				return finalRes;
 			},
 		});
+		t.field('topRatedGames', {
+			type: 'GamesRes',
+			args: {
+				limit: nonNull(intArg()),
+				page: nonNull(intArg()),
+			},
+			resolve: async (_parent, { limit, page }) => {
+				const finalRes = { results: [], total_results: 0 };
+				try {
+					const { count } = await postIGDB(
+						`${IGDB_BASE_API_URL}/games/count`,
+						`fields *; limit ${limit};`
+					);
+
+					finalRes.total_results = count;
+
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/games`,
+						`fields *; limit ${limit}; offset ${page * limit - limit}; sort rating_count desc;`
+					);
+					await addIGDBCoverUrl(res, '1080p');
+					finalRes.results = res;
+				} catch (err) {
+					console.error(err);
+				}
+				return finalRes;
+			},
+		});
 		// t.nonNull.field('gamesFromGenres', {
 		// 	type: 'GamesRes',
 		// 	args: {
@@ -237,23 +267,7 @@ export const GameQueries = extendType({
 		// 		}
 		// 	},
 		// });
-		// t.nonNull.field('topRatedGames', {
-		// 	type: 'GamesRes',
-		// 	args: {
-		// 		limit: intArg({ default: 500 }),
-		// 	},
-		// 	resolve: async (_parent, { limit }) => {
-		// 		try {
-		// 			const res = await postIGDB(
-		// 				`${IGDB_BASE_API_URL}/games`,
-		// 				`fields *; sort rating desc; limit ${limit};`
-		// 			);
-		// 			return res;
-		// 		} catch (err) {
-		// 			console.error(err);
-		// 		}
-		// 	},
-		// });
+
 		// t.nonNull.field('characters', {
 		// 	type: list('Character'),
 		// 	args: {

@@ -80,8 +80,8 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 			}
 		}
 		for (const item of items) {
-			if (usersMediaDict.has(String(item.id))) {
-				matchedMedias.push(usersMediaDict.get(String(item.id)) as any);
+			if (usersMediaDict.has(item.id)) {
+				matchedMedias.push(usersMediaDict.get(item.id) as any);
 			}
 		}
 

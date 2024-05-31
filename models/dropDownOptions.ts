@@ -227,6 +227,13 @@ export const PEOPLE_ITEMS = [
 	},
 ];
 
+export const GAME_ITEMS = [
+	{
+		label: 'Top Rated Games',
+		key: 'top-rated',
+	},
+];
+
 export const MY_MEDIA_ITEMS = [
 	{
 		label: 'Watching',

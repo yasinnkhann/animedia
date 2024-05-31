@@ -133,7 +133,7 @@ type GameTheme {
 
 type GamesRes {
   results: [GameResult!]!
-  total_results: Int
+  total_results: Int!
 }
 
 """
@@ -500,6 +500,7 @@ type Query {
   showReviews(id: ID!, page: Int = 1): ShowReviewRes!
   showsCastCrew(showId: ID!): ShowsCastCrewRes
   similarGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
+  topRatedGames(limit: Int!, page: Int!): GamesRes
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!

@@ -1,14 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 import { IGamePreview } from '@ts/interfaces';
-import { CommonMethods } from 'utils/CommonMethods';
 
 interface Props {
 	item: IGamePreview;
 	dragging: boolean;
 }
 
-const GamePreviewCard = ({ item, dragging }: Props) => {
+const GamePreviewCard = ({ item }: Props) => {
 	return (
 		<section className='relative mx-4 h-[20rem] w-[35rem] select-none'>
 			<div className='relative h-full w-full'>
@@ -20,7 +19,7 @@ const GamePreviewCard = ({ item, dragging }: Props) => {
 					></iframe>
 				)}
 				{item.url && (
-					<Image className='rounded-lg' src={item.url} alt={''} layout='fill' />
+					<Image className='rounded-lg' src={item.url} alt='' layout='fill' />
 				)}
 			</div>
 		</section>

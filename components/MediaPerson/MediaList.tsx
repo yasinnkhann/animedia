@@ -3,10 +3,15 @@ import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
-import { MoviesRes, ShowsRes } from '../../graphql/generated/code-gen/graphql';
+import {
+	GamesRes,
+	MoviesRes,
+	ShowsRes,
+} from '../../graphql/generated/code-gen/graphql';
+import GameCard from './GameCard';
 
 interface Props {
-	mediaData: MoviesRes | ShowsRes;
+	mediaData: MoviesRes | ShowsRes | GamesRes;
 	pageNum: number;
 	title: string;
 	genrePage?: boolean;
@@ -50,9 +55,9 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 						</thead>
 						<tbody className='divide-y divide-gray-200'>
 							{mediaData.results.map((media, idx) => {
-								let mediaComp;
+								let mediaComp = <></>;
 
-								if ('title' in media) {
+								if (media.__typename === 'MovieResult') {
 									mediaComp = (
 										<MovieCard
 											movie={media}
@@ -63,10 +68,25 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 											}
 										/>
 									);
-								} else {
+								}
+
+								if (media.__typename === 'ShowResult') {
 									mediaComp = (
 										<ShowCard
 											show={media}
+											rank={
+												pageNum * RESULTS_PER_PAGE -
+												(RESULTS_PER_PAGE - idx) +
+												1
+											}
+										/>
+									);
+								}
+
+								if (media.__typename === 'GameResult') {
+									mediaComp = (
+										<GameCard
+											game={media}
 											rank={
 												pageNum * RESULTS_PER_PAGE -
 												(RESULTS_PER_PAGE - idx) +

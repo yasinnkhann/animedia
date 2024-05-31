@@ -47,6 +47,7 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 							layout='fill'
 							priority
 						/>
+
 						{userWatchStatusFromMedia && (
 							<div
 								className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
