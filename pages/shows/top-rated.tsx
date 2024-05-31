@@ -35,7 +35,7 @@ const TopRatedShows = () => {
 	return (
 		<>
 			<Head>
-				<title>Top-Rated Shows</title>
+				<title>Top Rated Shows</title>
 			</Head>
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

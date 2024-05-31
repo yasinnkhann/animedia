@@ -65,27 +65,17 @@ const GameCard = ({ game, rank }: Props) => {
 				<p className='text-base'>{((game.rating ?? 0) / 10).toFixed(1)}</p>
 			</td>
 
-			{/* {session && (
+			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
-						<p>
-							{usersMovieData?.usersMovie?.rating
-								? usersMovieData.usersMovie.rating
-								: 'N/A'}
-						</p>
+						<p>N/A</p>
 					</td>
 
 					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
-						<p>
-							{usersMovieData?.usersMovie?.status
-								? CommonMethods.renderTableStatus(
-										usersMovieData.usersMovie.status
-									)
-								: 'N/A'}
-						</p>
+						<p>N/A</p>
 					</td>
 				</>
-			)} */}
+			)}
 		</tr>
 	);
 };

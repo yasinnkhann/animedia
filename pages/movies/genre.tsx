@@ -139,7 +139,7 @@ const Genre = () => {
 								title={`${
 									sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE
 										? 'Popular'
-										: 'Top-Rated'
+										: 'Top Rated'
 								} ${movieGenreType} Movies`}
 								genrePage
 							/>

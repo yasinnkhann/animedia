@@ -144,7 +144,7 @@ const Genre = () => {
 								title={`${
 									sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE
 										? 'Popular'
-										: 'Top-Rated'
+										: 'Top Rated'
 								} ${CommonMethods.unParseSpecialChars(showGenreType)} Shows`}
 								genrePage
 							/>

@@ -173,7 +173,7 @@ const Genre = () => {
 								title={`${
 									sortByQueryType === Queries.POPULAR_GAMES_BY_GENRE
 										? 'Popular'
-										: 'Top-Rated'
+										: 'Top Rated'
 								} ${selectedGameGenre.name} Games`}
 								genrePage
 							/>

@@ -10,8 +10,8 @@ export const SORT_BY_OPTIONS = [
 		text: 'Popular',
 	},
 	{
-		value: 'Top-Rated',
-		text: 'Top-Rated',
+		value: 'Top Rated',
+		text: 'Top Rated',
 	},
 ];
 

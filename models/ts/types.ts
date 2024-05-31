@@ -13,11 +13,9 @@ import {
 	PeopleRes,
 	PopularGamesByGenreQuery,
 	TopRatedGamesByGenreQuery,
-} from 'graphql/generated/code-gen/graphql';
-import {
 	MovieResult,
 	ShowResult,
-} from '../../graphql/generated/code-gen/graphql';
+} from 'graphql/generated/code-gen/graphql';
 
 export type NullablePartial<T, K extends keyof T> = {
 	[P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
