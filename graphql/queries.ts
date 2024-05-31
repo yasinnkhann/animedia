@@ -1416,9 +1416,75 @@ export const TOP_RATED_GAMES = graphql(`
 	}
 `);
 
+export const POPULAR_GAMES_BY_GENRE = graphql(`
+	query PopularGamesByGenre($genreId: ID!, $limit: Int!, $page: Int!) {
+		popularGamesByGenre(genreId: $genreId, limit: $limit, page: $page) {
+			total_results
+			results {
+				id
+				age_ratings
+				alternative_names
+				artworks
+				bundles
+				category
+				checksum
+				collection
+				collections
+				cover
+				coverUrl
+				created_at
+				dlcs
+				expanded_games
+				expansions
+				external_games
+				first_release_date
+				forks
+				franchise
+				franchises
+				game_engines
+				game_localizations
+				game_modes
+				genres
+				hypes
+				involved_companies
+				keywords
+				language_supports
+				multiplayer_modes
+				name
+				parent_game
+				platforms
+				player_perspectives
+				ports
+				rating
+				rating_count
+				release_dates
+				remakes
+				remasters
+				screenshots
+				similar_games
+				slug
+				standalone_expansions
+				status
+				storyline
+				summary
+				tags
+				themes
+				total_rating
+				total_rating_count
+				updated_at
+				url
+				version_parent
+				version_title
+				videos
+				websites
+			}
+		}
+	}
+`);
+
 export const TOP_RATED_GAMES_BY_GENRE = graphql(`
-	query TopRatedGamesByGenre($genreId: ID!, $page: Int!, $limit: Int!) {
-		topRatedGamesByGenre(genreId: $genreId, page: $page, limit: $limit) {
+	query TopRatedGamesByGenre($genreId: ID!, $limit: Int!, $page: Int!) {
+		topRatedGamesByGenre(genreId: $genreId, limit: $limit, page: $page) {
 			total_results
 			results {
 				id

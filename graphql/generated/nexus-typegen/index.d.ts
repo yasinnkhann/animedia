@@ -1114,6 +1114,7 @@ export interface NexusGenFieldTypes {
     popularAnimeMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularAnimeShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     popularGames: NexusGenRootTypes['GamesRes'] | null; // GamesRes
+    popularGamesByGenre: NexusGenRootTypes['GamesRes']; // GamesRes!
     popularMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularMoviesByGenre: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     popularPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
@@ -1792,6 +1793,7 @@ export interface NexusGenFieldTypeNames {
     popularAnimeMovies: 'MoviesRes'
     popularAnimeShows: 'ShowsRes'
     popularGames: 'GamesRes'
+    popularGamesByGenre: 'GamesRes'
     popularMovies: 'MoviesRes'
     popularMoviesByGenre: 'MoviesRes'
     popularPeople: 'PeopleRes'
@@ -2172,6 +2174,11 @@ export interface NexusGenArgTypes {
       page: number | null; // Int
     }
     popularGames: { // args
+      limit: number; // Int!
+      page: number; // Int!
+    }
+    popularGamesByGenre: { // args
+      genreId: string; // ID!
       limit: number; // Int!
       page: number; // Int!
     }

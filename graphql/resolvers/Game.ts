@@ -242,10 +242,7 @@ export const GameQueries = extendType({
 			resolve: async (_parent, { limit, page }) => {
 				const finalRes = { results: [], total_results: 0 };
 				try {
-					const { count } = await postIGDB(
-						`${IGDB_BASE_API_URL}/games/count`,
-						`fields *; limit ${limit};`
-					);
+					const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`);
 
 					finalRes.total_results = count;
 
@@ -270,16 +267,42 @@ export const GameQueries = extendType({
 			resolve: async (_parent, { limit, page }) => {
 				const finalRes = { results: [], total_results: 0 };
 				try {
-					const { count } = await postIGDB(
-						`${IGDB_BASE_API_URL}/games/count`,
-						`fields *; limit ${limit};`
-					);
+					const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`);
 
 					finalRes.total_results = count;
 
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
 						`fields *; limit ${limit}; offset ${page * limit - limit}; sort rating desc;`
+					);
+					await addIGDBCoverUrl(res, '1080p');
+					finalRes.results = res;
+				} catch (err) {
+					console.error(err);
+				}
+				return finalRes;
+			},
+		});
+		t.nonNull.field('popularGamesByGenre', {
+			type: 'GamesRes',
+			args: {
+				genreId: nonNull(idArg()),
+				limit: nonNull(intArg()),
+				page: nonNull(intArg()),
+			},
+			resolve: async (_parent, { genreId, limit, page }) => {
+				const finalRes = { results: [], total_results: 0 };
+				try {
+					const { count } = await postIGDB(
+						`${IGDB_BASE_API_URL}/games/count`,
+						`where genres = ${genreId};`
+					);
+
+					finalRes.total_results = count;
+
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/games`,
+						`fields *; where genres = ${genreId}; limit ${limit}; offset ${page * limit - limit}; sort rating_count desc;`
 					);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;
@@ -301,14 +324,14 @@ export const GameQueries = extendType({
 				try {
 					const { count } = await postIGDB(
 						`${IGDB_BASE_API_URL}/games/count`,
-						`fields *; limit ${limit}; where genres = ${genreId};`
+						`where genres = ${genreId};`
 					);
 
 					finalRes.total_results = count;
 
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/games`,
-						`fields *; where genres = ${genreId}; limit ${limit}; offset ${page * limit - limit}; sort rating_count desc;`
+						`fields *; where genres = ${genreId}; limit ${limit}; offset ${page * limit - limit}; sort rating desc;`
 					);
 					await addIGDBCoverUrl(res, '1080p');
 					finalRes.results = res;

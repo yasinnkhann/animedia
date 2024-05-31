@@ -492,6 +492,7 @@ type Query {
   popularAnimeMovies(page: Int = 1): MoviesRes!
   popularAnimeShows(page: Int = 1): ShowsRes!
   popularGames(limit: Int!, page: Int!): GamesRes
+  popularGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes!
   popularMovies(page: Int = 1): MoviesRes!
   popularMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   popularPeople(page: Int = 1): PeopleRes!
