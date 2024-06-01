@@ -717,17 +717,17 @@ export const gameObjects = {
 			t.nonNull.string('name');
 		},
 	}),
-	// character: objectType({
-	// 	name: 'Character',
-	// 	definition(t) {
-	// 		t.id('id');
-	// 		t.date('created_at');
-	// 		t.list.id('games');
-	// 		t.string('name');
-	// 		t.string('slug');
-	// 		t.date('updated_at');
-	// 		t.string('url');
-	// 		t.string('checksum');
-	// 	},
-	// }),
+	character: objectType({
+		name: 'Character',
+		definition(t) {
+			t.nonNull.id('id');
+			t.string('country_name');
+			t.string('description');
+			t.nonNull.list.nonNull.id('games');
+			t.int('gender');
+			t.id('mug_shot');
+			t.nonNull.string('name');
+			t.int('species');
+		},
+	}),
 };

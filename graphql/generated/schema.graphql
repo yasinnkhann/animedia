@@ -13,6 +13,17 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
+type Character {
+  country_name: String
+  description: String
+  games: [ID!]!
+  gender: Int
+  id: ID!
+  mug_shot: ID
+  name: String!
+  species: Int
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -475,6 +486,7 @@ type Query {
   dlcGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
+  gameCharacters(genreId: ID!, limit: Int = 500): [Character]
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
@@ -492,7 +504,7 @@ type Query {
   popularAnimeMovies(page: Int = 1): MoviesRes!
   popularAnimeShows(page: Int = 1): ShowsRes!
   popularGames(limit: Int!, page: Int!): GamesRes
-  popularGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes!
+  popularGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes
   popularMovies(page: Int = 1): MoviesRes!
   popularMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   popularPeople(page: Int = 1): PeopleRes!
@@ -500,6 +512,7 @@ type Query {
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
   recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
   recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
+  searchGameCharacters(limit: Int = 500, name: String!): [Character]
   searchedGames(limit: Int!, page: Int!, q: String!): GamesRes!
   searchedMovies(page: Int = 1, q: String!): MoviesRes!
   searchedPeople(page: Int = 1, q: String!): PeopleRes!
@@ -509,7 +522,7 @@ type Query {
   showsCastCrew(showId: ID!): ShowsCastCrewRes
   similarGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   topRatedGames(limit: Int!, page: Int!): GamesRes
-  topRatedGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes!
+  topRatedGamesByGenre(genreId: ID!, limit: Int!, page: Int!): GamesRes
   topRatedMovies(page: Int = 1): MoviesRes!
   topRatedMoviesByGenre(genre: MovieGenreTypes!, page: Int = 1): MoviesRes!
   topRatedShows(page: Int = 1): ShowsRes!

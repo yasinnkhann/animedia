@@ -1548,32 +1548,32 @@ export const TOP_RATED_GAMES_BY_GENRE = graphql(`
 	}
 `);
 
-// export const CHARACTERS = graphql(`
-// 	query Characters($limit: Int) {
-// 		characters(limit: $limit) {
-// 			id
-// 			created_at
-// 			games
-// 			name
-// 			slug
-// 			updated_at
-// 			url
-// 			checksum
-// 		}
-// 	}
-// `);
+export const GAME_CHARACTERS = graphql(`
+	query GameCharacters($genreId: ID!, $limit: Int) {
+		gameCharacters(genreId: $genreId, limit: $limit) {
+			id
+			country_name
+			description
+			games
+			gender
+			mug_shot
+			name
+			species
+		}
+	}
+`);
 
-// export const SEARCH_CHARACTERS = graphql(`
-// 	query SearchCharacters($q: String!, $limit: Int) {
-// 		searchCharacters(q: $q, limit: $limit) {
-// 			id
-// 			created_at
-// 			games
-// 			name
-// 			slug
-// 			updated_at
-// 			url
-// 			checksum
-// 		}
-// 	}
-// `);
+export const SEARCH_GAME_CHARACTERS = graphql(`
+	query SearchGameCharacters($name: String!, $limit: Int) {
+		searchGameCharacters(name: $name, limit: $limit) {
+			id
+			country_name
+			description
+			games
+			gender
+			mug_shot
+			name
+			species
+		}
+	}
+`);

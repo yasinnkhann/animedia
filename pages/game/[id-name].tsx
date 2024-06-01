@@ -253,17 +253,6 @@ const GameDetails = () => {
 							</div>
 						</>
 					)}
-
-					{game.url && (
-						<>
-							<h4 className='mt-4'>Official Page</h4>
-							<Link href={game.url}>
-								<a className='ml-1 underline' target='_blank'>
-									Learn More
-								</a>
-							</Link>
-						</>
-					)}
 				</section>
 
 				<section className='col-start-2 mt-4'>

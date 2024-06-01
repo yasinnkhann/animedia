@@ -163,11 +163,11 @@ const Genre = () => {
 						<div>
 							<MediaList
 								mediaData={
-									genreOfGamesData?.[
+									(genreOfGamesData?.[
 										Object.keys(
 											genreOfGamesData
 										)[0] as keyof typeof genreOfGamesData
-									] as unknown as TGamesGenreData
+									] as unknown as TGamesGenreData)!
 								}
 								pageNum={currPage}
 								title={`${
@@ -181,13 +181,11 @@ const Genre = () => {
 							<Pagination
 								currPage={currPage}
 								totalItems={
-									(
-										genreOfGamesData?.[
-											Object.keys(
-												genreOfGamesData
-											)[0] as keyof typeof genreOfGamesData
-										] as unknown as TGamesGenreData
-									).total_results
+									(genreOfGamesData?.[
+										Object.keys(
+											genreOfGamesData
+										)[0] as keyof typeof genreOfGamesData
+									] as unknown as TGamesGenreData)!.total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>

@@ -283,7 +283,7 @@ export const GameQueries = extendType({
 				return finalRes;
 			},
 		});
-		t.nonNull.field('popularGamesByGenre', {
+		t.field('popularGamesByGenre', {
 			type: 'GamesRes',
 			args: {
 				genreId: nonNull(idArg()),
@@ -312,7 +312,7 @@ export const GameQueries = extendType({
 				return finalRes;
 			},
 		});
-		t.nonNull.field('topRatedGamesByGenre', {
+		t.field('topRatedGamesByGenre', {
 			type: 'GamesRes',
 			args: {
 				genreId: nonNull(idArg()),
@@ -342,40 +342,41 @@ export const GameQueries = extendType({
 			},
 		});
 
-		// t.nonNull.field('characters', {
-		// 	type: list('Character'),
-		// 	args: {
-		// 		limit: intArg({ default: 500 }),
-		// 	},
-		// 	resolve: async (_parent, { limit }) => {
-		// 		try {
-		// 			const res = await postIGDB(
-		// 				`${IGDB_BASE_API_URL}/characters`,
-		// 				`fields *; limit ${limit};`
-		// 			);
-		// 			return res;
-		// 		} catch (err) {
-		// 			console.error(err);
-		// 		}
-		// 	},
-		// });
-		// t.nonNull.field('searchCharacters', {
-		// 	type: list('Character'),
-		// 	args: {
-		// 		q: nonNull(stringArg()),
-		// 		limit: intArg({ default: 500 }),
-		// 	},
-		// 	resolve: async (_parent, { q, limit }) => {
-		// 		try {
-		// 			const res = await postIGDB(
-		// 				`${IGDB_BASE_API_URL}/characters`,
-		// 				`fields *; limit ${limit}; search "${q}";`
-		// 			);
-		// 			return res;
-		// 		} catch (err) {
-		// 			console.error(err);
-		// 		}
-		// 	},
-		// });
+		t.field('gameCharacters', {
+			type: list('Character'),
+			args: {
+				genreId: nonNull(idArg()),
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { genreId, limit }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/characters`,
+						`fields country_name, description, games, gender, mug_shot, name, species; where games = [${genreId}]; limit ${limit};`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
+		t.field('searchGameCharacters', {
+			type: list('Character'),
+			args: {
+				name: nonNull(stringArg()),
+				limit: intArg({ default: 500 }),
+			},
+			resolve: async (_parent, { name, limit }) => {
+				try {
+					const res = await postIGDB(
+						`${IGDB_BASE_API_URL}/characters`,
+						`fields country_name, description, games, gender, mug_shot, name, species; where name = "${name}"; limit ${limit};`
+					);
+					return res;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+		});
 	},
 });
