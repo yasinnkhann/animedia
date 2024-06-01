@@ -142,6 +142,7 @@ const Search: NextPage = () => {
 		if (
 			searchedMoviesData?.searchedMovies &&
 			searchedShowsData?.searchedShows &&
+			searchedGamesData?.searchedGames &&
 			searchedPeopleData?.searchedPeople
 		) {
 			if (
@@ -152,6 +153,13 @@ const Search: NextPage = () => {
 			} else if (
 				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
 				_.isEmpty(searchedShowsData.searchedShows.results) &&
+				!_.isEmpty(searchedGamesData.searchedGames.results)
+			) {
+				setSearchResultsType('games');
+			} else if (
+				_.isEmpty(searchedMoviesData.searchedMovies.results) &&
+				_.isEmpty(searchedShowsData.searchedShows.results) &&
+				_.isEmpty(searchedGamesData.searchedGames.results) &&
 				!_.isEmpty(searchedPeopleData.searchedPeople.results)
 			) {
 				setSearchResultsType('people');
@@ -167,6 +175,7 @@ const Search: NextPage = () => {
 		router.query.page,
 		searchedMoviesData?.searchedMovies,
 		searchedShowsData?.searchedShows,
+		searchedGamesData?.searchedGames,
 		searchedPeopleData?.searchedPeople,
 		searchBarRef.current,
 	]);

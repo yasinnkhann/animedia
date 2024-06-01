@@ -60,19 +60,13 @@ export type TGamesGenreData =
 export type TDropDownSearchResult = NullablePartial<
 	{
 		id: string;
-		movieTitle?: string;
+		titleName: string;
 		releaseDate?: string;
-		showName?: string;
 		firstAirDate?: string;
-		personName?: string;
 		knownForDepartment?: string;
+		type: 'movie' | 'show' | 'game' | 'person';
 	},
-	| 'movieTitle'
-	| 'releaseDate'
-	| 'showName'
-	| 'firstAirDate'
-	| 'personName'
-	| 'knownForDepartment'
+	'titleName' | 'releaseDate' | 'firstAirDate' | 'knownForDepartment' | 'type'
 >;
 
 const contentConst = [

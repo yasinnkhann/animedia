@@ -7,6 +7,7 @@ import { useDebounce } from 'hooks/useDebounce';
 import { useQuery } from '@apollo/client';
 import * as Queries from '../../graphql/queries';
 import _ from 'lodash';
+import { RESULTS_PER_PAGE } from 'utils/constants';
 
 interface Props {
 	closeSearch?: () => void;
@@ -40,6 +41,15 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			skip: _.isEmpty(searchQuery),
 		});
 
+		const { data: searchedGamesData } = useQuery(Queries.SEARCHED_GAMES, {
+			variables: {
+				q: searchQuery,
+				limit: RESULTS_PER_PAGE,
+				page: 1,
+			},
+			skip: _.isEmpty(searchQuery),
+		});
+
 		const { data: searchedPeopleData } = useQuery(Queries.SEARCHED_PEOPLE, {
 			variables: {
 				q: searchQuery,
@@ -52,37 +62,53 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				if (
 					searchedMoviesData?.searchedMovies &&
 					searchedShowsData?.searchedShows &&
+					searchedGamesData?.searchedGames &&
 					searchedPeopleData?.searchedPeople
 				) {
 					const movieResults = searchedMoviesData.searchedMovies.results.map(
 						movie => ({
 							id: movie.id,
-							movieTitle: movie.title,
+							titleName: movie.title,
 							releaseDate: movie.release_date,
+							type: 'movie',
 						})
 					);
 
 					const showsResults = searchedShowsData.searchedShows.results.map(
 						show => ({
 							id: show.id,
-							showName: show.name,
+							titleName: show.name,
 							firstAirDate: show.first_air_date,
+							type: 'show',
 						})
 					);
 
 					const peopleResults = searchedPeopleData.searchedPeople.results.map(
 						person => ({
 							id: person.id,
-							personName: person.name,
+							titleName: person.name,
 							knownForDepartment: person.known_for_department,
+							type: 'person',
+						})
+					);
+
+					const gameResults = searchedGamesData.searchedGames.results.map(
+						game => ({
+							id: game.id,
+							titleName: game.name,
+							releaseDate: new Date(
+								game.first_release_date * 1000
+							).toISOString(),
+							type: 'game',
 						})
 					);
 
 					setDropDownSearchResults([
 						...movieResults,
 						...showsResults,
+						...gameResults,
 						...peopleResults,
-					]);
+					] as TDropDownSearchResult[]);
 				}
 				setShowDropDownSearchResults(!_.isEmpty(searchQuery));
 			},
@@ -91,6 +117,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 				searchQuery,
 				searchedMoviesData?.searchedMovies,
 				searchedShowsData?.searchedShows,
+				searchedGamesData?.searchedGames,
 				searchedPeopleData?.searchedPeople,
 			]
 		);
@@ -108,9 +135,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 		const handleDropdownResultsClick = (result: TDropDownSearchResult) => {
 			router.push(
 				CommonMethods.getDetailsPageRoute(
-					result.movieTitle ? 'movie' : result.showName ? 'show' : 'person',
+					result.type!,
 					result.id,
-					(result.movieTitle || result.showName || result.personName) as string
+					result.titleName!
 				)
 			);
 			if (closeSearch) closeSearch();
@@ -157,24 +184,17 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 									className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
 									onClick={() => handleDropdownResultsClick(result)}
 								>
-									<span className='text-white'>
-										{result.movieTitle || result.showName || result.personName}{' '}
-										||{' '}
-									</span>
+									<span className='text-white'>{result.titleName} || </span>
 									<span className='text-gray-300'>
 										{' '}
-										{result.movieTitle
-											? CommonMethods.toTitleCase('movie')
-											: result.showName
-												? CommonMethods.toTitleCase('show')
-												: CommonMethods.toTitleCase('person')}
+										{CommonMethods.toTitleCase(result.type!)}
 									</span>
 									<span className='float-right text-white'>
-										{result.movieTitle
-											? CommonMethods.formatDate(result.releaseDate)
-											: result.showName
-												? CommonMethods.formatDate(result.firstAirDate)
-												: result.knownForDepartment}
+										{CommonMethods.formatDate(
+											result.releaseDate ??
+												result.firstAirDate ??
+												result.knownForDepartment
+										)}
 									</span>
 								</div>
 							))}
