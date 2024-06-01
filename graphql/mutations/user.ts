@@ -1,4 +1,4 @@
-import { graphql } from './generated/code-gen/gql';
+import { graphql } from '../generated/code-gen/gql';
 
 export const ADD_MOVIE = graphql(`
 	mutation AddedMovie(

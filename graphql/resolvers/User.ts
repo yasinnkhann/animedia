@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
-import { extendType, stringArg, nonNull, idArg, intArg, list } from 'nexus';
+import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
 import { getErrorMsg, sendEmail } from 'graphql/utils';
