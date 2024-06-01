@@ -104,8 +104,8 @@ export interface NexusGenObjects {
     games: string[]; // [ID!]!
     gender?: number | null; // Int
     id: string; // ID!
+    mugShotUrl?: string | null; // String
     mug_shot?: string | null; // ID
-    mugshotUrl?: string | null; // String
     name: string; // String!
     species?: number | null; // Int
   }
@@ -161,7 +161,7 @@ export interface NexusGenObjects {
     game_engines?: Array<string | null> | null; // [ID]
     game_localizations?: Array<string | null> | null; // [ID]
     game_modes?: Array<string | null> | null; // [ID]
-    genres: string[]; // [ID!]!
+    genres?: string[] | null; // [ID!]
     hypes?: number | null; // Int
     id: string; // ID!
     involved_companies?: Array<string | null> | null; // [ID]
@@ -741,8 +741,8 @@ export interface NexusGenFieldTypes {
     games: string[]; // [ID!]!
     gender: number | null; // Int
     id: string; // ID!
+    mugShotUrl: string | null; // String
     mug_shot: string | null; // ID
-    mugshotUrl: string | null; // String
     name: string; // String!
     species: number | null; // Int
   }
@@ -798,7 +798,7 @@ export interface NexusGenFieldTypes {
     game_engines: Array<string | null> | null; // [ID]
     game_localizations: Array<string | null> | null; // [ID]
     game_modes: Array<string | null> | null; // [ID]
-    genres: string[]; // [ID!]!
+    genres: string[] | null; // [ID!]
     hypes: number | null; // Int
     id: string; // ID!
     involved_companies: Array<string | null> | null; // [ID]
@@ -1123,7 +1123,7 @@ export interface NexusGenFieldTypes {
     dlcGames: NexusGenRootTypes['RelatedGame'][] | null; // [RelatedGame!]
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    gameCharacters: Array<NexusGenRootTypes['GameCharacter'] | null> | null; // [GameCharacter]
+    gameCharacters: NexusGenRootTypes['GameCharacter'][]; // [GameCharacter!]!
     gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
@@ -1437,8 +1437,8 @@ export interface NexusGenFieldTypeNames {
     games: 'ID'
     gender: 'Int'
     id: 'ID'
+    mugShotUrl: 'String'
     mug_shot: 'ID'
-    mugshotUrl: 'String'
     name: 'String'
     species: 'Int'
   }
@@ -2177,7 +2177,7 @@ export interface NexusGenArgTypes {
       showId: string; // ID!
     }
     gameCharacters: { // args
-      genreId: string; // ID!
+      gameId: string; // ID!
       limit: number | null; // Int
     }
     gameCollections: { // args

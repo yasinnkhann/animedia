@@ -1549,14 +1549,15 @@ export const TOP_RATED_GAMES_BY_GENRE = graphql(`
 `);
 
 export const GAME_CHARACTERS = graphql(`
-	query GameCharacters($genreId: ID!, $limit: Int) {
-		gameCharacters(genreId: $genreId, limit: $limit) {
+	query GameCharacters($gameId: ID!, $limit: Int) {
+		gameCharacters(gameId: $gameId, limit: $limit) {
 			id
 			country_name
 			description
 			games
 			gender
 			mug_shot
+			mugShotUrl
 			name
 			species
 		}
@@ -1574,7 +1575,7 @@ export const SEARCH_GAME_CHARACTERS = graphql(`
 				games
 				gender
 				mug_shot
-				mugshotUrl
+				mugShotUrl
 				name
 				species
 			}

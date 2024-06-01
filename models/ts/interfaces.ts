@@ -17,8 +17,9 @@ export interface IRelatedMedia {
 export interface ICast {
 	id: string;
 	name: string;
-	character: string;
+	character?: string;
 	profile_path: string | null;
+	type: string;
 }
 
 export interface IEPDetails {

@@ -351,17 +351,18 @@ export const GameQueries = extendType({
 		});
 
 		t.field('gameCharacters', {
-			type: list('GameCharacter'),
+			type: nonNull(list(nonNull('GameCharacter'))),
 			args: {
-				genreId: nonNull(idArg()),
-				limit: intArg({ default: 500 }),
+				gameId: nonNull(idArg()),
+				limit: intArg({ default: 20 }),
 			},
-			resolve: async (_parent, { genreId, limit }) => {
+			resolve: async (_parent, { gameId, limit }) => {
 				try {
-					const res = await postIGDB(
+					let res = await postIGDB(
 						`${IGDB_BASE_API_URL}/characters`,
-						`fields country_name, description, games, gender, mug_shot, name, species; where games = [${genreId}]; limit ${limit};`
+						`fields country_name, description, games, gender, mug_shot, name, species; where games = [${gameId}]; limit ${limit};`
 					);
+					res = res.filter((obj: any) => obj.mug_shot);
 					await addIGDBMugShotUrl(res, '1080p');
 					return res;
 				} catch (err) {

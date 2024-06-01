@@ -44,8 +44,8 @@ type GameCharacter {
   games: [ID!]!
   gender: Int
   id: ID!
+  mugShotUrl: String
   mug_shot: ID
-  mugshotUrl: String
   name: String!
   species: Int
 }
@@ -107,7 +107,7 @@ type GameResult {
   game_engines: [ID]
   game_localizations: [ID]
   game_modes: [ID]
-  genres: [ID!]!
+  genres: [ID!]
   hypes: Int
   id: ID!
   involved_companies: [ID]
@@ -487,7 +487,7 @@ type Query {
   dlcGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  gameCharacters(genreId: ID!, limit: Int = 500): [GameCharacter]
+  gameCharacters(gameId: ID!, limit: Int = 20): [GameCharacter!]!
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!

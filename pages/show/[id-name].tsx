@@ -21,6 +21,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { FaPlus } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import _ from 'lodash';
+import { RESULTS_PER_PAGE } from 'utils/constants';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
@@ -725,8 +726,9 @@ const ShowDetails = () => {
 												name: cast.name,
 												character: cast.character,
 												profile_path: cast.profile_path,
+												type: cast.__typename,
 											}))
-											.slice(0, 20) as ICast[]
+											.slice(0, RESULTS_PER_PAGE) as ICast[]
 									}
 								/>
 							</section>

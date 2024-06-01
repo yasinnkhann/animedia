@@ -22,7 +22,11 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg'
-							src={CommonMethods.getTheMovieDbImage(item.profile_path)}
+							src={
+								item.type === 'GameCharacter'
+									? CommonMethods.getIgdbImage(item.profile_path ?? '')
+									: CommonMethods.getTheMovieDbImage(item.profile_path)
+							}
 							alt={item.name}
 							layout='fill'
 						/>
@@ -31,7 +35,9 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
 						<h2 className='m-0 w-full break-words text-center text-base'>
 							<p className='font-bold'>{item.name}</p>
-							<p className='break-words'>{item.character}</p>
+							{item.character && (
+								<p className='break-words'>{item.character}</p>
+							)}
 						</h2>
 					</div>
 				</section>

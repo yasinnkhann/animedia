@@ -18,6 +18,7 @@ import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
+import { RESULTS_PER_PAGE } from 'utils/constants';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -341,8 +342,9 @@ const MovieDetails = () => {
 												name: cast.name,
 												character: cast.character,
 												profile_path: cast.profile_path,
+												type: cast.__typename,
 											}))
-											.slice(0, 20) as ICast[]
+											.slice(0, RESULTS_PER_PAGE) as ICast[]
 									}
 								/>
 							</section>

@@ -80,10 +80,10 @@ const Search: NextPage = () => {
 		fetchPolicy: 'network-only',
 	});
 
-	const { data: usersGamesData } = useQuery(Queries.GET_USERS_GAMES, {
-		skip: searchResultsType !== 'games',
-		fetchPolicy: 'network-only',
-	});
+	// const { data: usersGamesData } = useQuery(Queries.GET_USERS_GAMES, {
+	// 	skip: searchResultsType !== 'games',
+	// 	fetchPolicy: 'network-only',
+	// });
 
 	const getSearchedTypeData = useCallback(() => {
 		if (searchResultsType === 'movies' && searchedMoviesData?.searchedMovies) {
@@ -202,7 +202,7 @@ const Search: NextPage = () => {
 	}, [
 		usersMoviesData?.usersMovies,
 		usersShowsData?.usersShows,
-		usersGamesData?.usersGames,
+		// usersGamesData?.usersGames,
 		searchResultsType,
 		getSearchedTypeData,
 	]);
@@ -285,7 +285,7 @@ const Search: NextPage = () => {
 												Games
 											</h4>
 											<p className='text-right'>
-												{searchedGamesData?.searchedGames.total_results}
+												{searchedGamesData?.searchedGames.total_results ?? 0}
 											</p>
 										</li>
 										<li className='flex w-full items-center justify-between'>

@@ -12,9 +12,11 @@ import { useSession } from 'next-auth/react';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
-import { MAX_SUMMARY_WORD_LENGTH } from 'utils/constants';
+import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from 'utils/constants';
 import Modal from 'components/Modal';
 import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
+import MediaCastHorizontalScroller from 'components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
+import { ICast } from '@ts/interfaces';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -60,6 +62,16 @@ const GameDetails = () => {
 			variables: {
 				gameIds: gameDetailsData?.gameDetails.results[0]
 					?.similar_games as string[],
+			},
+		}
+	);
+
+	const { data: gameCharactersData, loading: gameCharactersLoading } = useQuery(
+		Queries.GAME_CHARACTERS,
+		{
+			skip: !gameDetailsData?.gameDetails.results[0].id,
+			variables: {
+				gameId: gameDetailsData?.gameDetails.results[0].id ?? '0',
 			},
 		}
 	);
@@ -116,6 +128,7 @@ const GameDetails = () => {
 	}
 
 	const game = gameDetailsData.gameDetails.results[0];
+	const gameSummary = game.storyline || game.summary;
 
 	return (
 		<>
@@ -152,13 +165,13 @@ const GameDetails = () => {
 					<section className='pb-32'>
 						<h1>{game.name}</h1>
 						<div>
-							{game.storyline ? (
-								game.storyline.split(' ').length <= MAX_SUMMARY_WORD_LENGTH ? (
-									game.storyline
+							{gameSummary ? (
+								gameSummary.split(' ').length <= MAX_SUMMARY_WORD_LENGTH ? (
+									gameSummary
 								) : (
 									<div>
 										<p>
-											{game.storyline
+											{gameSummary
 												.split(' ')
 												.slice(0, MAX_SUMMARY_WORD_LENGTH)
 												.join(' ') + '...'}
@@ -219,7 +232,7 @@ const GameDetails = () => {
 								<div className='ml-1'>
 									{gameGenresData.gameGenres
 										.filter(genre =>
-											game.genres.some(genreId => genreId === genre.id)
+											(game.genres ?? []).some(genreId => genreId === genre.id)
 										)
 										.map(genre => (
 											<p key={genre.id}>{genre.name}</p>
@@ -263,6 +276,26 @@ const GameDetails = () => {
 								<h3 className='mb-4 ml-8 mt-4'>Preview</h3>
 								<GamePreviewHorizontalScroller
 									items={gamePreviewsData.gamePreviews}
+								/>
+							</section>
+						)}
+
+					{!gameCharactersLoading &&
+						gameCharactersData?.gameCharacters &&
+						!_.isEmpty(gameCharactersData.gameCharacters) && (
+							<section>
+								<h3 className='mb-4 ml-8'>Characters</h3>
+								<MediaCastHorizontalScroller
+									items={
+										gameCharactersData.gameCharacters
+											.map(char => ({
+												id: char.id,
+												name: char.name,
+												profile_path: char.mugShotUrl,
+												type: char.__typename,
+											}))
+											.slice(0, RESULTS_PER_PAGE) as ICast[]
+									}
 								/>
 							</section>
 						)}
