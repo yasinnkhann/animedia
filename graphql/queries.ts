@@ -1566,14 +1566,18 @@ export const GAME_CHARACTERS = graphql(`
 export const SEARCH_GAME_CHARACTERS = graphql(`
 	query SearchGameCharacters($name: String!, $limit: Int) {
 		searchGameCharacters(name: $name, limit: $limit) {
-			id
-			country_name
-			description
-			games
-			gender
-			mug_shot
-			name
-			species
+			total_results
+			results {
+				id
+				country_name
+				description
+				games
+				gender
+				mug_shot
+				mugshotUrl
+				name
+				species
+			}
 		}
 	}
 `);

@@ -13,17 +13,6 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
-type Character {
-  country_name: String
-  description: String
-  games: [ID!]!
-  gender: Int
-  id: ID!
-  mug_shot: ID
-  name: String!
-  species: Int
-}
-
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -47,6 +36,18 @@ type EpisodeDetailsRes {
 
 type ErrorRes {
   message: String!
+}
+
+type GameCharacter {
+  country_name: String
+  description: String
+  games: [ID!]!
+  gender: Int
+  id: ID!
+  mug_shot: ID
+  mugshotUrl: String
+  name: String!
+  species: Int
 }
 
 type GameCollections {
@@ -486,7 +487,7 @@ type Query {
   dlcGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  gameCharacters(genreId: ID!, limit: Int = 500): [Character]
+  gameCharacters(genreId: ID!, limit: Int = 500): [GameCharacter]
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
@@ -512,7 +513,7 @@ type Query {
   popularShowsByGenre(genre: ShowGenreTypes!, page: Int = 1): ShowsRes!
   recommendedMovies(page: Int = 1, recommendedMoviesId: ID!): MoviesRes!
   recommendedShows(page: Int = 1, recommendedShowsId: ID!): ShowsRes!
-  searchGameCharacters(limit: Int = 500, name: String!): [Character]
+  searchGameCharacters(limit: Int = 500, name: String!): SearchCharacter
   searchedGames(limit: Int!, page: Int!, q: String!): GamesRes!
   searchedMovies(page: Int = 1, q: String!): MoviesRes!
   searchedPeople(page: Int = 1, q: String!): PeopleRes!
@@ -556,6 +557,11 @@ type RelatedGame {
   id: String!
   name: String!
   rating: Float
+}
+
+type SearchCharacter {
+  results: [GameCharacter!]!
+  total_results: Int
 }
 
 type ShowDetailsCountry {

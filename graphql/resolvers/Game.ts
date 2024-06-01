@@ -1,6 +1,14 @@
 import { IGDB_BASE_API_URL } from 'utils/constants';
-import { postIGDB, addIGDBCoverUrl } from '../utils';
-import { extendType, nonNull, stringArg, list, intArg, idArg } from 'nexus';
+import { postIGDB, addIGDBCoverUrl, addIGDBMugShotUrl } from '../utils';
+import {
+	extendType,
+	nonNull,
+	stringArg,
+	list,
+	intArg,
+	idArg,
+	objectType,
+} from 'nexus';
 
 export const GameQueries = extendType({
 	type: 'Query',
@@ -343,7 +351,7 @@ export const GameQueries = extendType({
 		});
 
 		t.field('gameCharacters', {
-			type: list('Character'),
+			type: list('GameCharacter'),
 			args: {
 				genreId: nonNull(idArg()),
 				limit: intArg({ default: 500 }),
@@ -354,6 +362,7 @@ export const GameQueries = extendType({
 						`${IGDB_BASE_API_URL}/characters`,
 						`fields country_name, description, games, gender, mug_shot, name, species; where games = [${genreId}]; limit ${limit};`
 					);
+					await addIGDBMugShotUrl(res, '1080p');
 					return res;
 				} catch (err) {
 					console.error(err);
@@ -361,21 +370,43 @@ export const GameQueries = extendType({
 			},
 		});
 		t.field('searchGameCharacters', {
-			type: list('Character'),
+			type: objectType({
+				name: 'SearchCharacter',
+				definition(t) {
+					t.int('total_results');
+					t.nonNull.list.field('results', {
+						type: nonNull('GameCharacter'),
+					});
+				},
+			}),
 			args: {
 				name: nonNull(stringArg()),
 				limit: intArg({ default: 500 }),
 			},
 			resolve: async (_parent, { name, limit }) => {
+				const finalRes = { results: [], total_results: 0 };
+				const adjustedName = name
+					.split(' ')
+					.map(word => word[0].toUpperCase() + word.slice(1).toLowerCase())
+					.join(' ');
 				try {
+					const { count } = await postIGDB(
+						`${IGDB_BASE_API_URL}/characters/count`,
+						`where name = "${adjustedName}";`
+					);
+
+					finalRes.total_results = count;
+
 					const res = await postIGDB(
 						`${IGDB_BASE_API_URL}/characters`,
-						`fields country_name, description, games, gender, mug_shot, name, species; where name = "${name}"; limit ${limit};`
+						`fields country_name, description, games, gender, mug_shot, name, species; where name = "${adjustedName}"; limit ${limit};`
 					);
-					return res;
+					await addIGDBMugShotUrl(res, '1080p');
+					finalRes.results = res;
 				} catch (err) {
 					console.error(err);
 				}
+				return finalRes;
 			},
 		});
 	},

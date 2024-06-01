@@ -165,3 +165,37 @@ export const addIGDBCoverUrl = async (
 		})
 	);
 };
+
+export const addIGDBMugShotUrl = async (
+	res: any[],
+	imageSize: TIGDBImageSizes
+) => {
+	await Promise.all(
+		res.map(async (result: any) => {
+			try {
+				if (result.mug_shot) {
+					const mugShotResponse = await postIGDB(
+						`${IGDB_BASE_API_URL}/character_mug_shots`,
+						`fields url; where id=${result.mug_shot};`
+					);
+
+					if (mugShotResponse && mugShotResponse.length > 0) {
+						let mugShotUrl: string = mugShotResponse[0].url;
+						if (imageSize !== 'thumb') {
+							mugShotUrl = mugShotUrl.replace('thumb', imageSize);
+						}
+						result.mugShotUrl = mugShotUrl;
+					} else {
+						result.mugShotUrl = null;
+					}
+				} else {
+					result.mugShotUrl = null;
+				}
+			} catch (err) {
+				console.error(err);
+				result.mugShotUrl = null;
+			}
+			return result;
+		})
+	);
+};

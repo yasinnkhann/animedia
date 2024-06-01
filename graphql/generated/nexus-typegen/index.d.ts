@@ -80,16 +80,6 @@ export interface NexusGenObjects {
     errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     id?: string | null; // String
   }
-  Character: { // root type
-    country_name?: string | null; // String
-    description?: string | null; // String
-    games: string[]; // [ID!]!
-    gender?: number | null; // Int
-    id: string; // ID!
-    mug_shot?: string | null; // ID
-    name: string; // String!
-    species?: number | null; // Int
-  }
   EpisodeDetailsRes: { // root type
     air_date?: string | null; // String
     crew?: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
@@ -107,6 +97,17 @@ export interface NexusGenObjects {
   }
   ErrorRes: { // root type
     message: string; // String!
+  }
+  GameCharacter: { // root type
+    country_name?: string | null; // String
+    description?: string | null; // String
+    games: string[]; // [ID!]!
+    gender?: number | null; // Int
+    id: string; // ID!
+    mug_shot?: string | null; // ID
+    mugshotUrl?: string | null; // String
+    name: string; // String!
+    species?: number | null; // Int
   }
   GameCollections: { // root type
     games: NexusGenRootTypes['RelatedGame'][]; // [RelatedGame!]!
@@ -484,6 +485,10 @@ export interface NexusGenObjects {
     name: string; // String!
     rating?: number | null; // Float
   }
+  SearchCharacter: { // root type
+    results: NexusGenRootTypes['GameCharacter'][]; // [GameCharacter!]!
+    total_results?: number | null; // Int
+  }
   ShowDetailsCountry: { // root type
     iso_3166_1: string; // String!
     name: string; // String!
@@ -712,16 +717,6 @@ export interface NexusGenFieldTypes {
     errors: NexusGenRootTypes['ErrorRes'][]; // [ErrorRes!]!
     id: string | null; // String
   }
-  Character: { // field return type
-    country_name: string | null; // String
-    description: string | null; // String
-    games: string[]; // [ID!]!
-    gender: number | null; // Int
-    id: string; // ID!
-    mug_shot: string | null; // ID
-    name: string; // String!
-    species: number | null; // Int
-  }
   EpisodeDetailsRes: { // field return type
     air_date: string | null; // String
     crew: NexusGenRootTypes['ShowsCrewModel'][] | null; // [ShowsCrewModel!]
@@ -739,6 +734,17 @@ export interface NexusGenFieldTypes {
   }
   ErrorRes: { // field return type
     message: string; // String!
+  }
+  GameCharacter: { // field return type
+    country_name: string | null; // String
+    description: string | null; // String
+    games: string[]; // [ID!]!
+    gender: number | null; // Int
+    id: string; // ID!
+    mug_shot: string | null; // ID
+    mugshotUrl: string | null; // String
+    name: string; // String!
+    species: number | null; // Int
   }
   GameCollections: { // field return type
     games: NexusGenRootTypes['RelatedGame'][]; // [RelatedGame!]!
@@ -1117,7 +1123,7 @@ export interface NexusGenFieldTypes {
     dlcGames: NexusGenRootTypes['RelatedGame'][] | null; // [RelatedGame!]
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    gameCharacters: Array<NexusGenRootTypes['Character'] | null> | null; // [Character]
+    gameCharacters: Array<NexusGenRootTypes['GameCharacter'] | null> | null; // [GameCharacter]
     gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
@@ -1143,7 +1149,7 @@ export interface NexusGenFieldTypes {
     popularShowsByGenre: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     recommendedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     recommendedShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
-    searchGameCharacters: Array<NexusGenRootTypes['Character'] | null> | null; // [Character]
+    searchGameCharacters: NexusGenRootTypes['SearchCharacter'] | null; // SearchCharacter
     searchedGames: NexusGenRootTypes['GamesRes']; // GamesRes!
     searchedMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     searchedPeople: NexusGenRootTypes['PeopleRes']; // PeopleRes!
@@ -1184,6 +1190,10 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
     rating: number | null; // Float
+  }
+  SearchCharacter: { // field return type
+    results: NexusGenRootTypes['GameCharacter'][]; // [GameCharacter!]!
+    total_results: number | null; // Int
   }
   ShowDetailsCountry: { // field return type
     iso_3166_1: string; // String!
@@ -1403,16 +1413,6 @@ export interface NexusGenFieldTypeNames {
     errors: 'ErrorRes'
     id: 'String'
   }
-  Character: { // field return type name
-    country_name: 'String'
-    description: 'String'
-    games: 'ID'
-    gender: 'Int'
-    id: 'ID'
-    mug_shot: 'ID'
-    name: 'String'
-    species: 'Int'
-  }
   EpisodeDetailsRes: { // field return type name
     air_date: 'String'
     crew: 'ShowsCrewModel'
@@ -1430,6 +1430,17 @@ export interface NexusGenFieldTypeNames {
   }
   ErrorRes: { // field return type name
     message: 'String'
+  }
+  GameCharacter: { // field return type name
+    country_name: 'String'
+    description: 'String'
+    games: 'ID'
+    gender: 'Int'
+    id: 'ID'
+    mug_shot: 'ID'
+    mugshotUrl: 'String'
+    name: 'String'
+    species: 'Int'
   }
   GameCollections: { // field return type name
     games: 'RelatedGame'
@@ -1808,7 +1819,7 @@ export interface NexusGenFieldTypeNames {
     dlcGames: 'RelatedGame'
     emailFromRedisToken: 'String'
     episodeDetails: 'EpisodeDetailsRes'
-    gameCharacters: 'Character'
+    gameCharacters: 'GameCharacter'
     gameCollections: 'GameCollections'
     gameCompany: 'GameCompany'
     gameDetails: 'GamesRes'
@@ -1834,7 +1845,7 @@ export interface NexusGenFieldTypeNames {
     popularShowsByGenre: 'ShowsRes'
     recommendedMovies: 'MoviesRes'
     recommendedShows: 'ShowsRes'
-    searchGameCharacters: 'Character'
+    searchGameCharacters: 'SearchCharacter'
     searchedGames: 'GamesRes'
     searchedMovies: 'MoviesRes'
     searchedPeople: 'PeopleRes'
@@ -1875,6 +1886,10 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
     rating: 'Float'
+  }
+  SearchCharacter: { // field return type name
+    results: 'GameCharacter'
+    total_results: 'Int'
   }
   ShowDetailsCountry: { // field return type name
     iso_3166_1: 'String'

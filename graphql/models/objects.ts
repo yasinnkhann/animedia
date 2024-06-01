@@ -718,7 +718,7 @@ export const gameObjects = {
 		},
 	}),
 	character: objectType({
-		name: 'Character',
+		name: 'GameCharacter',
 		definition(t) {
 			t.nonNull.id('id');
 			t.string('country_name');
@@ -726,6 +726,7 @@ export const gameObjects = {
 			t.nonNull.list.nonNull.id('games');
 			t.int('gender');
 			t.id('mug_shot');
+			t.string('mugshotUrl');
 			t.nonNull.string('name');
 			t.int('species');
 		},
