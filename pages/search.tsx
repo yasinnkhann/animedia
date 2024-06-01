@@ -161,12 +161,14 @@ const Search: NextPage = () => {
 				searchBarRef.current.value = router.query.q as string;
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		router.query.q,
 		router.query.page,
 		searchedMoviesData?.searchedMovies,
 		searchedShowsData?.searchedShows,
 		searchedPeopleData?.searchedPeople,
+		searchBarRef.current,
 	]);
 
 	useEffect(() => {

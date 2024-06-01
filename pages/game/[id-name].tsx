@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
