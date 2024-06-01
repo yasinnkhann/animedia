@@ -556,10 +556,10 @@ export interface NexusGenObjects {
     in_production: boolean; // Boolean!
     languages: Array<string | null>; // [String]!
     last_air_date?: string | null; // String
-    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir']; // ShowDetailsLastEpToAir!
+    last_episode_to_air?: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
     name: string; // String!
     networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir']; // ShowDetailsNextEpToAir!
+    next_episode_to_air?: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
     number_of_episodes: number; // Int!
     number_of_seasons: number; // Int!
     origin_country: Array<string | null>; // [String]!
@@ -1262,10 +1262,10 @@ export interface NexusGenFieldTypes {
     in_production: boolean; // Boolean!
     languages: Array<string | null>; // [String]!
     last_air_date: string | null; // String
-    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir']; // ShowDetailsLastEpToAir!
+    last_episode_to_air: NexusGenRootTypes['ShowDetailsLastEpToAir'] | null; // ShowDetailsLastEpToAir
     name: string; // String!
     networks: NexusGenRootTypes['ShowDetailsNetwork'][]; // [ShowDetailsNetwork!]!
-    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir']; // ShowDetailsNextEpToAir!
+    next_episode_to_air: NexusGenRootTypes['ShowDetailsNextEpToAir'] | null; // ShowDetailsNextEpToAir
     number_of_episodes: number; // Int!
     number_of_seasons: number; // Int!
     origin_country: Array<string | null>; // [String]!

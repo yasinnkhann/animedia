@@ -46,7 +46,6 @@ export class CommonMethods {
 			.replace(/-{2,}/g, '-')
 			.replace(/^-+|-+$/g, '')
 			.replace(/'/g, '');
-
 		return `${CLIENT_BASE_URL}/${mediaType}/${id}-${cleanTitle}`;
 	};
 
@@ -87,7 +86,7 @@ export class CommonMethods {
 		return imageNotFound;
 	};
 
-	public static getIgdbImage = (imagePath: string) => {
+	public static getIgdbImage = (imagePath: string | null | undefined) => {
 		if (!imagePath) {
 			return imageNotFound;
 		}

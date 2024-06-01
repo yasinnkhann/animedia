@@ -139,7 +139,7 @@ const GameDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getIgdbImage(game.coverUrl ?? '')}
+						src={CommonMethods.getIgdbImage(game.coverUrl)}
 						alt={game.name}
 						layout='fill'
 					/>

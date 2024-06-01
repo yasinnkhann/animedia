@@ -32,7 +32,7 @@ const GameCard = ({ game, rank }: Props) => {
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getIgdbImage(game.coverUrl ?? '')}
+								src={CommonMethods.getIgdbImage(game.coverUrl)}
 								alt={game.name}
 								layout='fill'
 							/>

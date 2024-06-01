@@ -44,7 +44,7 @@ const SearchResult = ({
 				src={
 					apiType === 'the-movie-db'
 						? CommonMethods.getTheMovieDbImage(imagePath)
-						: CommonMethods.getIgdbImage(imagePath ?? '')
+						: CommonMethods.getIgdbImage(imagePath)
 				}
 				alt={altText}
 				layout='fill'

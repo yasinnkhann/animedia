@@ -40,6 +40,9 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 		}
 	};
 
+	const heightClass =
+		items[0].type === 'GameCharacter' ? '!h-[20rem]' : '!h-[22rem]';
+
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
@@ -48,7 +51,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 			onMouseDown={() => dragStart}
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
-			scrollContainerClassName='!h-[22rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+			scrollContainerClassName={`${heightClass} !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl`}
 		>
 			{items.map(item => (
 				<MediaCastCard key={item.id} item={item} dragging={dragging} />

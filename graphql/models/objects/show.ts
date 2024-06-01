@@ -155,11 +155,11 @@ export const showDetailsRes = objectType({
 		t.nonNull.list.string('languages');
 		t.string('last_air_date');
 		t.field('last_episode_to_air', {
-			type: nonNull('ShowDetailsLastEpToAir'),
+			type: 'ShowDetailsLastEpToAir',
 		});
 		t.nonNull.string('name');
 		t.field('next_episode_to_air', {
-			type: nonNull('ShowDetailsNextEpToAir'),
+			type: 'ShowDetailsNextEpToAir',
 		});
 		t.nonNull.list.field('networks', {
 			type: nonNull('ShowDetailsNetwork'),

@@ -32,7 +32,7 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 							src={
 								item.type !== 'game'
 									? CommonMethods.getTheMovieDbImage(item.imagePath)
-									: CommonMethods.getIgdbImage(item.imagePath ?? '')
+									: CommonMethods.getIgdbImage(item.imagePath)
 							}
 							alt={item.name}
 							layout='fill'
