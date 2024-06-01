@@ -24,9 +24,6 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			TDropDownSearchResult[]
 		>([]);
 
-		const [showDropDownSearchResults, setShowDropDownSearchResults] =
-			useState(false);
-
 		const { data: searchedMoviesData } = useQuery(Queries.SEARCHED_MOVIES, {
 			variables: {
 				q: searchQuery,
@@ -59,58 +56,59 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		useDebounce(
 			() => {
+				let allResults: any[] = [];
 				if (
-					searchedMoviesData?.searchedMovies &&
-					searchedShowsData?.searchedShows &&
-					searchedGamesData?.searchedGames &&
-					searchedPeopleData?.searchedPeople
+					searchedMoviesData?.searchedMovies.results &&
+					searchedShowsData?.searchedShows.results &&
+					searchedGamesData?.searchedGames.results &&
+					searchedPeopleData?.searchedPeople.results
 				) {
-					const movieResults = searchedMoviesData.searchedMovies.results.map(
-						movie => ({
+					const movieResults = searchedMoviesData.searchedMovies.results
+						.map(movie => ({
 							id: movie.id,
 							titleName: movie.title,
 							releaseDate: movie.release_date,
 							type: 'movie',
-						})
-					);
+						}))
+						.slice(0, 5);
 
-					const showsResults = searchedShowsData.searchedShows.results.map(
-						show => ({
+					const showsResults = searchedShowsData.searchedShows.results
+						.map(show => ({
 							id: show.id,
 							titleName: show.name,
 							firstAirDate: show.first_air_date,
 							type: 'show',
-						})
-					);
+						}))
+						.slice(0, 5);
 
-					const peopleResults = searchedPeopleData.searchedPeople.results.map(
-						person => ({
+					const peopleResults = searchedPeopleData.searchedPeople.results
+						.map(person => ({
 							id: person.id,
 							titleName: person.name,
 							knownForDepartment: person.known_for_department,
 							type: 'person',
-						})
-					);
+						}))
+						.slice(0, 5);
 
-					const gameResults = searchedGamesData.searchedGames.results.map(
-						game => ({
+					const gameResults = searchedGamesData.searchedGames.results
+						.map(game => ({
 							id: game.id,
 							titleName: game.name,
 							releaseDate: new Date(
 								game.first_release_date * 1000
 							).toISOString(),
 							type: 'game',
-						})
-					);
+						}))
+						.slice(0, 5);
 
-					setDropDownSearchResults([
+					allResults = [
 						...movieResults,
 						...showsResults,
 						...gameResults,
 						...peopleResults,
-					] as TDropDownSearchResult[]);
+					];
 				}
-				setShowDropDownSearchResults(!_.isEmpty(searchQuery));
+				setDropDownSearchResults(allResults as TDropDownSearchResult[]);
 			},
 			_.isEmpty(searchQuery) ? 0 : 2000,
 			[
@@ -149,13 +147,14 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 			}
 
 			const close = (e: KeyboardEvent) => {
-				if (showDropDownSearchResults && e.key === 'Escape') {
-					setShowDropDownSearchResults(false);
+				if (!_.isEmpty(dropDownSearchResults) && e.key === 'Escape') {
+					setDropDownSearchResults([]);
+					(ref as RefObject<HTMLButtonElement>).current?.blur();
 				}
 			};
 			window.addEventListener('keydown', close);
 			return () => window.removeEventListener('keydown', close);
-		}, [isSearchBtnClicked, ref, showDropDownSearchResults]);
+		}, [isSearchBtnClicked, ref, dropDownSearchResults]);
 
 		return (
 			<form
@@ -169,38 +168,36 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 					ref={ref}
 					onChange={e => setSearchQuery(e.target.value)}
 				/>
+
 				<button
 					className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-gray-700 transition-all hover:scale-125 hover:cursor-pointer hover:text-black focus:text-black focus:outline-none'
 					type='submit'
 				>
 					<FaSearch />
 				</button>
-				{showDropDownSearchResults && (
+
+				{!_.isEmpty(dropDownSearchResults) && (
 					<div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-						{!_.isEmpty(dropDownSearchResults) &&
-							dropDownSearchResults.map(result => (
-								<div
-									key={result.id}
-									className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
-									onClick={() => handleDropdownResultsClick(result)}
-								>
-									<span className='text-white'>{result.titleName} || </span>
-									<span className='text-gray-300'>
-										{' '}
-										{CommonMethods.toTitleCase(result.type!)}
-									</span>
-									<span className='float-right text-white'>
-										{CommonMethods.formatDate(
-											result.releaseDate ??
-												result.firstAirDate ??
-												result.knownForDepartment
-										)}
-									</span>
-								</div>
-							))}
-						{_.isEmpty(dropDownSearchResults) && (
-							<span className='text-sm text-white'>No results found</span>
-						)}
+						{dropDownSearchResults.map(result => (
+							<div
+								key={result.id}
+								className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+								onClick={() => handleDropdownResultsClick(result)}
+							>
+								<span className='text-white'>{result.titleName} || </span>
+								<span className='text-gray-300'>
+									{' '}
+									{CommonMethods.toTitleCase(result.type!)}
+								</span>
+								<span className='float-right text-white'>
+									{CommonMethods.formatDate(
+										result.releaseDate ??
+											result.firstAirDate ??
+											result.knownForDepartment
+									)}
+								</span>
+							</div>
+						))}
 					</div>
 				)}
 			</form>
