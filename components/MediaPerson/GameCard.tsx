@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { GameResult } from 'graphql/generated/code-gen/graphql';
+import { useQuery } from '@apollo/client';
+import * as Queries from '../../graphql/queries';
 
 interface Props {
 	game: GameResult;
@@ -12,11 +14,11 @@ interface Props {
 const GameCard = ({ game, rank }: Props) => {
 	const { data: session } = useSession();
 
-	// const { data: usersGameData } = useQuery(Queries.USERS_MOVIE, {
-	// 	variables: {
-	// 		movieId: String(movie.id),
-	// 	},
-	// });
+	const { data: usersGameData } = useQuery(Queries.USERS_GAME, {
+		variables: {
+			gameId: game.id,
+		},
+	});
 
 	return (
 		<tr className='border-2'>
@@ -66,11 +68,7 @@ const GameCard = ({ game, rank }: Props) => {
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
-						<p>N/A</p>
-					</td>
-
-					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
-						<p>N/A</p>
+						<p>{usersGameData?.usersGame?.rating ?? 'N/A'}</p>
 					</td>
 				</>
 			)}

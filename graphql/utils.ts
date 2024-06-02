@@ -68,7 +68,7 @@ export const postIGDB = async (
 	url: string,
 	body = '',
 	maxRetries = 10,
-	initialRetryDelayMs = 300
+	initialRetryDelayMs = 100
 ) => {
 	interface AccessTokenResponse {
 		access_token: string;

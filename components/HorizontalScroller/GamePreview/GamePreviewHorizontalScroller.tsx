@@ -11,7 +11,7 @@ interface Props {
 	items: IGamePreview[];
 }
 
-const GamePreviewHorizontalScoller = ({ items }: Props) => {
+const GamePreviewHorizontalScroller = ({ items }: Props) => {
 	const { dragStart, dragStop, dragMove, dragging } = useDrag();
 
 	const handleDrag =
@@ -58,4 +58,4 @@ const GamePreviewHorizontalScoller = ({ items }: Props) => {
 	);
 };
 
-export default GamePreviewHorizontalScoller;
+export default GamePreviewHorizontalScroller;

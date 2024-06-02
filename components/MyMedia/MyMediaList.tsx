@@ -2,12 +2,17 @@ import { Fragment } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
-import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import {
+	UserGame,
+	UserMovie,
+	UserShow,
+} from 'graphql/generated/code-gen/graphql';
+import MyGameEntry from './MyGameEntry';
 
 interface Props {
 	status: TStatusParam;
-	myMedias: UserMovie[] | UserShow[];
-	mediaType: Uppercase<ExtractStrict<TContent, 'movies' | 'shows'>>;
+	myMedias: UserMovie[] | UserShow[] | UserGame[];
+	mediaType: Uppercase<ExtractStrict<TContent, 'movies' | 'shows' | 'games'>>;
 }
 
 const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
@@ -18,7 +23,7 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 			<section className='flex flex-col pb-4'>
 				<div className='relative mt-8 flex h-[3rem] items-center justify-center bg-gray-200'>
 					<h4 className='text-center text-blue-500'>
-						{adjustedStatus} {mediaType}:
+						{adjustedStatus ? `${adjustedStatus} ${mediaType}` : mediaType}
 					</h4>
 					<h4 className='ml-2 text-green-700'>{myMedias.length}</h4>
 				</div>
@@ -39,6 +44,12 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 								</th>
 							)}
 
+							{mediaType === 'GAMES' && (
+								<th className='w-[8rem] border-x-2 border-gray-200 p-4'>
+									In Wishlist
+								</th>
+							)}
+
 							<th className='w-[7rem] border-x-2 border-gray-200 p-4'>
 								Remove
 							</th>
@@ -56,7 +67,7 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 										count={idx + 1}
 									/>
 								);
-							} else {
+							} else if (mediaType === 'SHOWS') {
 								myMediaComp = (
 									<MyShowEntry
 										key={myMedia.id}
@@ -64,6 +75,16 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 										count={idx + 1}
 									/>
 								);
+							} else if (mediaType === 'GAMES') {
+								myMediaComp = (
+									<MyGameEntry
+										key={myMedia.id}
+										myGame={myMedia as UserGame}
+										count={idx + 1}
+									/>
+								);
+							} else {
+								myMediaComp = <></>;
 							}
 							return <Fragment key={myMedia.id}>{myMediaComp}</Fragment>;
 						})}

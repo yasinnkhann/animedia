@@ -36,7 +36,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 									Rank
 								</th>
 								<th className='border-r-2 border-gray-200 px-2  py-2 lg:px-4 lg:py-4'>
-									Title
+									{mediaData.__typename === 'MoviesRes' ? 'Title' : 'Name'}
 								</th>
 								<th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
 									Rating
@@ -46,9 +46,11 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 										<th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
 											My Rating
 										</th>
-										<th className='w-1/6 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
-											Status
-										</th>
+										{mediaData.__typename !== 'GamesRes' && (
+											<th className='w-1/6 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+												Status
+											</th>
+										)}
 									</>
 								)}
 							</tr>

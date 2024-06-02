@@ -77,7 +77,7 @@ const Header = () => {
 						</ul>
 						<ul
 							id='right-section'
-							className='!mr-4 !flex !w-[20rem] !justify-around'
+							className='!mr-4 !flex !w-[30rem] !justify-around'
 						>
 							<li
 								className={`!flex !w-full !items-center ${
@@ -98,6 +98,13 @@ const Header = () => {
 											name='My Movies'
 											routeType='my-movies'
 										/>
+										<Link
+											href='/my-games'
+											className='cursor-pointer no-underline'
+											passHref
+										>
+											<a className='no-underline'>My Games</a>
+										</Link>
 									</>
 								)}
 
