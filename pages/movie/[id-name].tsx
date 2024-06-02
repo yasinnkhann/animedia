@@ -19,6 +19,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from 'utils/constants';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -249,36 +250,42 @@ const MovieDetails = () => {
 					</section>
 
 					{status === 'authenticated' && session && (
-						<section className='my-4 h-[1.5rem]'>
-							<select
-								className='mr-4 h-full rounded outline-none'
-								value={watchStatus}
-								onChange={handleChangeWatchStatus}
-								disabled={isDBPending}
-							>
-								{watchStatusOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
+						<section className='my-4 flex items-center space-x-4'>
+							<div className='relative'>
+								<select
+									className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+									value={watchStatus}
+									onChange={handleChangeWatchStatus}
+									disabled={isDBPending}
+								>
+									{watchStatusOptions.map(option => (
+										<option key={option.value} value={option.value}>
+											{option.text}
+										</option>
+									))}
+								</select>
+								<IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+							</div>
 
-							<select
-								className='h-full rounded outline-none'
-								value={rating}
-								onChange={handleChangeRating}
-								disabled={
-									watchStatus === 'NOT_WATCHING' ||
-									watchStatus === 'PLAN_TO_WATCH' ||
-									isDBPending
-								}
-							>
-								{ratingOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
+							<div className='relative'>
+								<select
+									className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+									value={rating}
+									onChange={handleChangeRating}
+									disabled={
+										watchStatus === 'NOT_WATCHING' ||
+										watchStatus === 'PLAN_TO_WATCH' ||
+										isDBPending
+									}
+								>
+									{ratingOptions.map(option => (
+										<option key={option.value} value={option.value}>
+											{option.text}
+										</option>
+									))}
+								</select>
+								<IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+							</div>
 						</section>
 					)}
 

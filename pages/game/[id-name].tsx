@@ -19,6 +19,7 @@ import MediaCastHorizontalScroller from 'components/HorizontalScroller/MediaCast
 import { ICast } from '@ts/interfaces';
 import { ratingOptions } from 'models/dropDownOptions';
 import { Button } from 'antd';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -329,29 +330,36 @@ const GameDetails = () => {
 					</section>
 
 					{status === 'authenticated' && session && (
-						<section className='my-4 h-[1.5rem]'>
-							<Button
-								onClick={handleWishList}
-								type='primary'
-								style={{
-									backgroundColor: usersGame?.wishList ? '#52c41a' : '',
-									borderColor: usersGame?.wishList ? '#52c41a' : '',
-								}}
-							>
-								{usersGame?.wishList ? 'Added to Wishlist' : 'Add to Wishlist'}
-							</Button>
+						<section className='my-4 flex items-center space-x-4'>
+							<div className='relative'>
+								<Button
+									onClick={handleWishList}
+									type='primary'
+									style={{
+										backgroundColor: usersGame?.wishList ? '#52c41a' : '',
+										borderColor: usersGame?.wishList ? '#52c41a' : '',
+									}}
+								>
+									{usersGame?.wishList
+										? 'Added to Wishlist'
+										: 'Add to Wishlist'}
+								</Button>
+							</div>
 
-							<select
-								className='h-full rounded outline-none'
-								value={rating}
-								onChange={handleChangeRating}
-							>
-								{ratingOptions.map(option => (
-									<option key={option.value} value={option.value}>
-										{option.text}
-									</option>
-								))}
-							</select>
+							<div className='relative'>
+								<select
+									className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+									value={rating}
+									onChange={handleChangeRating}
+								>
+									{ratingOptions.map(option => (
+										<option key={option.value} value={option.value}>
+											{option.text}
+										</option>
+									))}
+								</select>
+								<IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+							</div>
 						</section>
 					)}
 
