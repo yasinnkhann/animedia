@@ -46,8 +46,7 @@ const ForgotPassword = () => {
 							</h2>
 
 							<p className='mt-8 text-center text-sm text-gray-600'>
-								Enter your email address and we&apos;ll send you a link to reset
-								your password.
+								Enter your email address and we&apos;ll send you a link to reset your password.
 							</p>
 						</div>
 						<form className='space-y-6' onSubmit={formik.handleSubmit}>
@@ -82,13 +81,9 @@ const ForgotPassword = () => {
 								</div>
 							)}
 
-							{!loading &&
-								data &&
-								_.isEmpty(data.sendForgotPasswordEmail?.errors) && (
-									<p className='text-center text-green-600'>
-										Reset link has been sent
-									</p>
-								)}
+							{!loading && data && _.isEmpty(data.sendForgotPasswordEmail?.errors) && (
+								<p className='text-center text-green-600'>Reset link has been sent</p>
+							)}
 
 							{!loading &&
 								data &&
@@ -99,16 +94,13 @@ const ForgotPassword = () => {
 									</div>
 								))}
 
-							{!loading &&
-								data &&
-								_.isEmpty(data.sendForgotPasswordEmail?.errors) && (
-									<div>
-										<p className='text-center'>
-											Please check your email to click the link and enter your
-											new password.
-										</p>
-									</div>
-								)}
+							{!loading && data && _.isEmpty(data.sendForgotPasswordEmail?.errors) && (
+								<div>
+									<p className='text-center'>
+										Please check your email to click the link and enter your new password.
+									</p>
+								</div>
+							)}
 						</form>
 					</div>
 				</section>

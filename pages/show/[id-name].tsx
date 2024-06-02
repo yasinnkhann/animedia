@@ -28,9 +28,7 @@ const ShowDetails = () => {
 
 	const router = useRouter();
 
-	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
-		WatchStatusTypes.NotWatching
-	);
+	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(WatchStatusTypes.NotWatching);
 
 	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
@@ -40,42 +38,32 @@ const ShowDetails = () => {
 
 	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
 
-	const [totalEpCountGathered, setTotalEpCountGathered] =
-		useState<boolean>(false);
+	const [totalEpCountGathered, setTotalEpCountGathered] = useState<boolean>(false);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
-	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(
-		Queries.SHOW_DETAILS,
-		{
-			skip: !id,
-			variables: {
-				showDetailsId: id,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(Queries.SHOW_DETAILS, {
+		skip: !id,
+		variables: {
+			showDetailsId: id,
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: usersShowData, loading: usersShowLoading } = useQuery(
-		Queries.USERS_SHOW,
-		{
-			skip: !showDetailsData?.showDetails.id,
-			variables: {
-				showId: showDetailsData?.showDetails.id!,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersShowData, loading: usersShowLoading } = useQuery(Queries.USERS_SHOW, {
+		skip: !showDetailsData?.showDetails.id,
+		variables: {
+			showId: showDetailsData?.showDetails.id!,
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: recShowsData, loading: recShowsLoading } = useQuery(
-		Queries.RECOMMENDED_SHOWS,
-		{
-			skip: !showDetailsData?.showDetails.id,
-			variables: {
-				recommendedShowsId: showDetailsData?.showDetails.id!,
-			},
-		}
-	);
+	const { data: recShowsData, loading: recShowsLoading } = useQuery(Queries.RECOMMENDED_SHOWS, {
+		skip: !showDetailsData?.showDetails.id,
+		variables: {
+			recommendedShowsId: showDetailsData?.showDetails.id!,
+		},
+	});
 
 	const { data: showsCastCrewData, loading: showsCastCrewLoading } = useQuery(
 		Queries.GET_SHOWS_CAST_CREW,
@@ -87,65 +75,56 @@ const ShowDetails = () => {
 		}
 	);
 
-	const [addShow, { loading: addShowLoading }] = useMutation(
-		Mutations.ADD_SHOW,
-		{
-			variables: {
-				showId: showDetailsData?.showDetails.id!,
-				showName: showDetailsData?.showDetails.name!,
-				watchStatus,
-				currentEpisode: +currEp,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_SHOW,
-					variables: {
-						showId: showDetailsData?.showDetails.id!,
-					},
+	const [addShow, { loading: addShowLoading }] = useMutation(Mutations.ADD_SHOW, {
+		variables: {
+			showId: showDetailsData?.showDetails.id!,
+			showName: showDetailsData?.showDetails.name!,
+			watchStatus,
+			currentEpisode: +currEp,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_SHOW,
+				variables: {
+					showId: showDetailsData?.showDetails.id!,
 				},
-				'UsersShow',
-			],
-		}
-	);
+			},
+			'UsersShow',
+		],
+	});
 
-	const [updateShow, { loading: updateShowLoading }] = useMutation(
-		Mutations.UPDATE_SHOW,
-		{
-			variables: {
-				showId: showDetailsData?.showDetails.id!,
-				watchStatus,
-				showRating: typeof rating === 'number' ? rating : null,
-				currentEpisode: +currEp,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_SHOW,
-					variables: {
-						showId: showDetailsData?.showDetails.id!,
-					},
+	const [updateShow, { loading: updateShowLoading }] = useMutation(Mutations.UPDATE_SHOW, {
+		variables: {
+			showId: showDetailsData?.showDetails.id!,
+			watchStatus,
+			showRating: typeof rating === 'number' ? rating : null,
+			currentEpisode: +currEp,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_SHOW,
+				variables: {
+					showId: showDetailsData?.showDetails.id!,
 				},
-				'UsersShow',
-			],
-		}
-	);
+			},
+			'UsersShow',
+		],
+	});
 
-	const [deleteShow, { loading: deleteShowLoading }] = useMutation(
-		Mutations.DELETE_SHOW,
-		{
-			variables: {
-				showId: showDetailsData?.showDetails.id!,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_SHOW,
-					variables: {
-						showId: showDetailsData?.showDetails.id!,
-					},
+	const [deleteShow, { loading: deleteShowLoading }] = useMutation(Mutations.DELETE_SHOW, {
+		variables: {
+			showId: showDetailsData?.showDetails.id!,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_SHOW,
+				variables: {
+					showId: showDetailsData?.showDetails.id!,
 				},
-				'UsersShow',
-			],
-		}
-	);
+			},
+			'UsersShow',
+		],
+	});
 
 	const isDBPending = addShowLoading || updateShowLoading || deleteShowLoading;
 
@@ -170,8 +149,7 @@ const ShowDetails = () => {
 			if (
 				season?.name.startsWith('Season') &&
 				season.season_number !== 0 &&
-				(!season.air_date ||
-					currDate.getTime() < new Date(season.air_date).getTime())
+				(!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
 			) {
 				totalEpCount -= season.episode_count;
 				totalSeasonCount--;
@@ -187,10 +165,7 @@ const ShowDetails = () => {
 	]);
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		if (
-			!showDetailsData?.showDetails.id ||
-			!showDetailsData?.showDetails.name
-		) {
+		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
 
@@ -247,8 +222,7 @@ const ShowDetails = () => {
 			const addShowVariables = {
 				...showVariables,
 				showName: showDetailsData.showDetails.name,
-				currentEpisode:
-					value === WatchStatusTypes.Completed ? currTotalEpCount : +currEp,
+				currentEpisode: value === WatchStatusTypes.Completed ? currTotalEpCount : +currEp,
 			};
 			addShow({ variables: addShowVariables });
 		}
@@ -320,18 +294,13 @@ const ShowDetails = () => {
 	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (showDetailsData?.showDetails?.id) {
 			if (usersShowData?.usersShow?.id) {
-				if (
-					usersShowData.usersShow.current_episode === e.target.valueAsNumber
-				) {
+				if (usersShowData.usersShow.current_episode === e.target.valueAsNumber) {
 					return;
 				}
 				if (e.target.value === '' || +e.target.value > currTotalEpCount) {
 					setCurrEp(String(usersShowData?.usersShow.current_episode) ?? '0');
 				} else {
-					if (
-						watchStatus === WatchStatusTypes.Watching &&
-						+e.target.value === currTotalEpCount
-					) {
+					if (watchStatus === WatchStatusTypes.Watching && +e.target.value === currTotalEpCount) {
 						setWatchStatus(WatchStatusTypes.Completed);
 
 						updateShow({
@@ -372,10 +341,7 @@ const ShowDetails = () => {
 	};
 
 	const handleIncrementBtn = () => {
-		if (
-			!showDetailsData?.showDetails.id ||
-			!showDetailsData?.showDetails.name
-		) {
+		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
 
@@ -415,10 +381,7 @@ const ShowDetails = () => {
 					},
 				});
 			}
-		} else if (
-			prevEp + 1 < currTotalEpCount &&
-			usersShowData?.usersShow?.status
-		) {
+		} else if (prevEp + 1 < currTotalEpCount && usersShowData?.usersShow?.status) {
 			if (
 				usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
 				usersShowData.usersShow.status === WatchStatusTypes.OnHold
@@ -453,9 +416,7 @@ const ShowDetails = () => {
 		getCurrTotalSeasonAndEpCount();
 
 		if (usersShowData?.usersShow) {
-			setWatchStatus(
-				usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching
-			);
+			setWatchStatus(usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching);
 			setRating(usersShowData.usersShow.rating ?? '');
 			setCurrEp(String(usersShowData.usersShow.current_episode ?? ''));
 
@@ -521,9 +482,7 @@ const ShowDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getTheMovieDbImage(
-							showDetailsData.showDetails.poster_path
-						)}
+						src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
 						alt={showDetailsData.showDetails.name}
 						layout='fill'
 					/>
@@ -533,15 +492,11 @@ const ShowDetails = () => {
 					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
-								percentageVal={
-									+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) *
-									10
-								}
+								percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
 							/>
 						</section>
 						<p className='ml-[.5rem] text-base font-medium'>
-							{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted
-							users
+							{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
 						</p>
 					</section>
 
@@ -569,9 +524,7 @@ const ShowDetails = () => {
 									value={rating}
 									onChange={handleChangeRating}
 									disabled={
-										watchStatus === 'NOT_WATCHING' ||
-										watchStatus === 'PLAN_TO_WATCH' ||
-										isDBPending
+										watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isDBPending
 									}
 								>
 									{ratingOptions.map(option => (
@@ -627,9 +580,7 @@ const ShowDetails = () => {
 					<h4 className='mt-4'>First Air Date</h4>
 					{showDetailsData.showDetails.first_air_date ? (
 						<p className='ml-1'>
-							{CommonMethods.formatDate(
-								showDetailsData.showDetails.first_air_date
-							)}
+							{CommonMethods.formatDate(showDetailsData.showDetails.first_air_date)}
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>
@@ -638,14 +589,10 @@ const ShowDetails = () => {
 					{showDetailsData.showDetails.last_episode_to_air ? (
 						<div className='ml-1'>
 							<p>
-								Season{' '}
-								{showDetailsData.showDetails.last_episode_to_air.season_number}{' '}
-								Episode{' '}
+								Season {showDetailsData.showDetails.last_episode_to_air.season_number} Episode{' '}
 								{showDetailsData.showDetails.last_episode_to_air.episode_number}
 								<br />
-								{CommonMethods.formatDate(
-									showDetailsData.showDetails.last_episode_to_air.air_date
-								)}
+								{CommonMethods.formatDate(showDetailsData.showDetails.last_episode_to_air.air_date)}
 							</p>
 						</div>
 					) : (
@@ -655,17 +602,10 @@ const ShowDetails = () => {
 					{showDetailsData.showDetails.next_episode_to_air ? (
 						<div className='ml-1'>
 							<p>
-								Season{' '}
-								{showDetailsData.showDetails?.next_episode_to_air.season_number}{' '}
-								Episode{' '}
-								{
-									showDetailsData.showDetails?.next_episode_to_air
-										.episode_number
-								}
+								Season {showDetailsData.showDetails?.next_episode_to_air.season_number} Episode{' '}
+								{showDetailsData.showDetails?.next_episode_to_air.episode_number}
 								<br />
-								{CommonMethods.formatDate(
-									showDetailsData.showDetails.next_episode_to_air.air_date
-								)}
+								{CommonMethods.formatDate(showDetailsData.showDetails.next_episode_to_air.air_date)}
 							</p>
 						</div>
 					) : (
@@ -674,9 +614,7 @@ const ShowDetails = () => {
 					<h4 className='mt-4'>Status</h4>
 					<p className='ml-1'>{showDetailsData.showDetails?.status}</p>
 					<h4 className='mt-4'>In Production</h4>
-					<p className='ml-1'>
-						{showDetailsData.showDetails.in_production ? 'Yes' : 'No'}
-					</p>
+					<p className='ml-1'>{showDetailsData.showDetails.in_production ? 'Yes' : 'No'}</p>
 					<h4 className='mt-4'>Genre(s)</h4>
 					<div className='ml-1'>
 						{showDetailsData.showDetails.genres.map((genre, idx) => (
@@ -684,9 +622,7 @@ const ShowDetails = () => {
 						))}
 					</div>
 					<h4 className='mt-4'>Original Language</h4>
-					<p className='ml-1'>
-						{getEnglishName(showDetailsData.showDetails.original_language)}
-					</p>
+					<p className='ml-1'>{getEnglishName(showDetailsData.showDetails.original_language)}</p>
 					{showDetailsData.showDetails.homepage.length > 0 && (
 						<>
 							<h4 className='mt-4'>Official Page</h4>

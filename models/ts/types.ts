@@ -25,12 +25,7 @@ export type ExtractStrict<T, U extends T> = U;
 
 export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
-export type TStatusParam =
-	| 'watching'
-	| 'completed'
-	| 'on-hold'
-	| 'dropped'
-	| 'plan-to-watch';
+export type TStatusParam = 'watching' | 'completed' | 'on-hold' | 'dropped' | 'plan-to-watch';
 
 const searchResultsConst = ['movies', 'shows', 'people'] as const;
 

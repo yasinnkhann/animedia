@@ -90,11 +90,7 @@ export const ShowQueries = extendType({
 				page: intArg({ default: 1 }),
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
-				const trendingMovies = await CommonMethods.getTrendingMedia(
-					'tv',
-					timeWindow,
-					page
-				);
+				const trendingMovies = await CommonMethods.getTrendingMedia('tv', timeWindow, page);
 				return trendingMovies;
 			},
 		});

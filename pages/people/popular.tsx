@@ -42,17 +42,12 @@ const PopularPeople = () => {
 				{popularPeopleData ? (
 					<>
 						<h3 className='mb-4'>Popular People</h3>
-						<PeopleList
-							peopleData={popularPeopleData.popularPeople}
-							pageNum={currPage}
-						/>
+						<PeopleList peopleData={popularPeopleData.popularPeople} pageNum={currPage} />
 						<Pagination
 							currPage={currPage}
 							totalItems={popularPeopleData.popularPeople.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) =>
-								router.push(`${router.pathname}?page=${pageNum}`)
-							}
+							paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 							siblingCount={1}
 							maxPageNum={500}
 						/>

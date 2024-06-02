@@ -26,45 +26,34 @@ const MovieDetails = () => {
 
 	const router = useRouter();
 
-	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
-		WatchStatusTypes.NotWatching
-	);
+	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(WatchStatusTypes.NotWatching);
 
 	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
-	const { data: movieDetailsData, loading: movieDetailsLoading } = useQuery(
-		Queries.MOVIE_DETAILS,
-		{
-			skip: !id,
-			variables: {
-				movieDetailsId: id,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: movieDetailsData, loading: movieDetailsLoading } = useQuery(Queries.MOVIE_DETAILS, {
+		skip: !id,
+		variables: {
+			movieDetailsId: id,
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
-		Queries.USERS_MOVIE,
-		{
-			skip: !movieDetailsData?.movieDetails.id,
-			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(Queries.USERS_MOVIE, {
+		skip: !movieDetailsData?.movieDetails.id,
+		variables: {
+			movieId: String(movieDetailsData?.movieDetails.id!),
+		},
+		fetchPolicy: 'network-only',
+	});
 
-	const { data: recMoviesData, loading: recMoviesLoading } = useQuery(
-		Queries.RECOMMENDED_MOVIES,
-		{
-			skip: !movieDetailsData?.movieDetails.id,
-			variables: {
-				recommendedMoviesId: movieDetailsData?.movieDetails.id!,
-			},
-		}
-	);
+	const { data: recMoviesData, loading: recMoviesLoading } = useQuery(Queries.RECOMMENDED_MOVIES, {
+		skip: !movieDetailsData?.movieDetails.id,
+		variables: {
+			recommendedMoviesId: movieDetailsData?.movieDetails.id!,
+		},
+	});
 
 	const { data: moviesCastCrewData, loading: moviesCastCrewLoading } = useQuery(
 		Queries.GET_MOVIES_CAST_CREW,
@@ -76,66 +65,56 @@ const MovieDetails = () => {
 		}
 	);
 
-	const [addMovie, { loading: addMovieLoading }] = useMutation(
-		Mutations.ADD_MOVIE,
-		{
-			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
-				movieName: movieDetailsData?.movieDetails.title!,
-				watchStatus,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_MOVIE,
-					variables: {
-						movieId: String(movieDetailsData?.movieDetails.id!),
-					},
+	const [addMovie, { loading: addMovieLoading }] = useMutation(Mutations.ADD_MOVIE, {
+		variables: {
+			movieId: String(movieDetailsData?.movieDetails.id!),
+			movieName: movieDetailsData?.movieDetails.title!,
+			watchStatus,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_MOVIE,
+				variables: {
+					movieId: String(movieDetailsData?.movieDetails.id!),
 				},
-				'UsersMovie',
-			],
-		}
-	);
-
-	const [updateMovie, { loading: updateMovieLoading }] = useMutation(
-		Mutations.UPDATE_MOVIE,
-		{
-			variables: {
-				movieId: String(movieDetailsData?.movieDetails?.id!),
-				watchStatus,
-				movieRating: typeof rating === 'number' ? rating : null,
 			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_MOVIE,
-					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
-					},
-				},
-				'UsersMovie',
-			],
-		}
-	);
+			'UsersMovie',
+		],
+	});
 
-	const [deleteMovie, { loading: deleteMovieLoading }] = useMutation(
-		Mutations.DELETE_MOVIE,
-		{
-			variables: {
-				movieId: String(movieDetailsData?.movieDetails.id!),
+	const [updateMovie, { loading: updateMovieLoading }] = useMutation(Mutations.UPDATE_MOVIE, {
+		variables: {
+			movieId: String(movieDetailsData?.movieDetails?.id!),
+			watchStatus,
+			movieRating: typeof rating === 'number' ? rating : null,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_MOVIE,
+				variables: {
+					movieId: String(movieDetailsData?.movieDetails?.id!),
+				},
 			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_MOVIE,
-					variables: {
-						movieId: String(movieDetailsData?.movieDetails.id!),
-					},
-				},
-				'UsersMovie',
-			],
-		}
-	);
+			'UsersMovie',
+		],
+	});
 
-	const isDBPending =
-		addMovieLoading || updateMovieLoading || deleteMovieLoading;
+	const [deleteMovie, { loading: deleteMovieLoading }] = useMutation(Mutations.DELETE_MOVIE, {
+		variables: {
+			movieId: String(movieDetailsData?.movieDetails.id!),
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_MOVIE,
+				variables: {
+					movieId: String(movieDetailsData?.movieDetails.id!),
+				},
+			},
+			'UsersMovie',
+		],
+	});
+
+	const isDBPending = addMovieLoading || updateMovieLoading || deleteMovieLoading;
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
@@ -202,11 +181,7 @@ const MovieDetails = () => {
 		}
 	}, [usersMovieData, usersMovieLoading]);
 
-	if (
-		movieDetailsLoading ||
-		!movieDetailsData?.movieDetails ||
-		usersMovieLoading
-	) {
+	if (movieDetailsLoading || !movieDetailsData?.movieDetails || usersMovieLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -224,9 +199,7 @@ const MovieDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getTheMovieDbImage(
-							movieDetailsData.movieDetails.poster_path
-						)}
+						src={CommonMethods.getTheMovieDbImage(movieDetailsData.movieDetails.poster_path)}
 						alt={movieDetailsData.movieDetails.title ?? undefined}
 						layout='fill'
 					/>
@@ -236,16 +209,11 @@ const MovieDetails = () => {
 					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
 							<RoundProgressBar
-								percentageVal={
-									+(movieDetailsData.movieDetails.vote_average ?? 0).toFixed(
-										1
-									) * 10
-								}
+								percentageVal={+(movieDetailsData.movieDetails.vote_average ?? 0).toFixed(1) * 10}
 							/>
 						</section>
 						<p className='ml-[.5rem] text-base font-medium'>
-							{commaNumber(movieDetailsData.movieDetails.vote_count)} voted
-							users
+							{commaNumber(movieDetailsData.movieDetails.vote_count)} voted users
 						</p>
 					</section>
 
@@ -273,9 +241,7 @@ const MovieDetails = () => {
 									value={rating}
 									onChange={handleChangeRating}
 									disabled={
-										watchStatus === 'NOT_WATCHING' ||
-										watchStatus === 'PLAN_TO_WATCH' ||
-										isDBPending
+										watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isDBPending
 									}
 								>
 									{ratingOptions.map(option => (
@@ -299,17 +265,13 @@ const MovieDetails = () => {
 				<section className='my-4 ml-8'>
 					<h3 className='mb-4 underline underline-offset-4'>Details</h3>
 					<h4>Runtime</h4>
-					<p className='ml-1'>
-						{movieDetailsData.movieDetails.runtime} minutes
-					</p>
+					<p className='ml-1'>{movieDetailsData.movieDetails.runtime} minutes</p>
 					<h4 className='mt-4'>Status</h4>
 					<p className='ml-1'>{movieDetailsData.movieDetails.status}</p>
 					<h4 className='mt-4'>Release Date</h4>
 					{movieDetailsData.movieDetails.release_date ? (
 						<p className='ml-1'>
-							{CommonMethods.formatDate(
-								movieDetailsData.movieDetails.release_date
-							)}
+							{CommonMethods.formatDate(movieDetailsData.movieDetails.release_date)}
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>
@@ -321,9 +283,7 @@ const MovieDetails = () => {
 						))}
 					</div>
 					<h4 className='mt-4'>Original Language</h4>
-					<p className='ml-1'>
-						{getEnglishName(movieDetailsData.movieDetails.original_language)}
-					</p>
+					<p className='ml-1'>{getEnglishName(movieDetailsData.movieDetails.original_language)}</p>
 					{movieDetailsData.movieDetails.homepage.length > 0 && (
 						<>
 							<h4 className='mt-4'>Official Page</h4>

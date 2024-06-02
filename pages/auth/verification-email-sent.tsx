@@ -15,12 +15,11 @@ interface Props {
 }
 
 const VerificationEmailSent = ({ verifiedData }: Props) => {
-	const [verificationEmailSentErrors, setVerificationEmailSentErrors] =
-		useState<RedisRes['errors']>([]);
+	const [verificationEmailSentErrors, setVerificationEmailSentErrors] = useState<
+		RedisRes['errors']
+	>([]);
 
-	const [sendVerificationEmail, { loading }] = useMutation(
-		Mutations.SEND_VERIFICATION_EMAIL
-	);
+	const [sendVerificationEmail, { loading }] = useMutation(Mutations.SEND_VERIFICATION_EMAIL);
 
 	const handleResendLink = async () => {
 		try {
@@ -48,14 +47,11 @@ const VerificationEmailSent = ({ verifiedData }: Props) => {
 			<main className='flex h-screen flex-col items-center justify-center'>
 				<section className='flex h-36 flex-col'>
 					<p>
-						A verification link has been sent to your email. If you cannot find
-						it, be sure to check your spam folder.
+						A verification link has been sent to your email. If you cannot find it, be sure to check
+						your spam folder.
 					</p>
 					<div className='mt-8 flex flex-col items-center'>
-						<button
-							className='rounded bg-blue-500 px-4 py-2 text-white'
-							onClick={handleResendLink}
-						>
+						<button className='rounded bg-blue-500 px-4 py-2 text-white' onClick={handleResendLink}>
 							{loading ? 'Resending Link...' : 'Resend Link'}
 						</button>
 						{loading && (
@@ -82,14 +78,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { uid, token } = ctx.query;
 
 	try {
-		const verifyTokenRes = await request(
-			SERVER_BASE_URL,
-			Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-			{
-				token: token as string,
-				userId: uid as string,
-			}
-		);
+		const verifyTokenRes = await request(SERVER_BASE_URL, Queries.CHECK_EMAIL_VERIFICATION_TOKEN, {
+			token: token as string,
+			userId: uid as string,
+		});
 
 		const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
 

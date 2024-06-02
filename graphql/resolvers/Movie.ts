@@ -91,11 +91,7 @@ export const MovieQueries = extendType({
 			},
 			resolve: async (_parent, { timeWindow, page }) => {
 				try {
-					const trendingMovies = await CommonMethods.getTrendingMedia(
-						'movie',
-						timeWindow,
-						page
-					);
+					const trendingMovies = await CommonMethods.getTrendingMedia('movie', timeWindow, page);
 					return trendingMovies;
 				} catch (err) {
 					console.error(err);

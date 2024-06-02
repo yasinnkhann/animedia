@@ -58,8 +58,7 @@ const PersonDetails = () => {
 
 		const mappedMoviesCast: IRelatedMedia[] = [];
 
-		for (const castObj of knownForMoviesData?.personsKnownForMovie?.cast ??
-			[]) {
+		for (const castObj of knownForMoviesData?.personsKnownForMovie?.cast ?? []) {
 			if (castObj && !uniqueMovies.has(castObj.id)) {
 				uniqueMovies.add(castObj!.id);
 
@@ -112,12 +111,7 @@ const PersonDetails = () => {
 		return age;
 	};
 
-	if (
-		personDetailsLoading ||
-		!personDetailsData ||
-		knownForMoviesLoading ||
-		knownForShowsLoading
-	) {
+	if (personDetailsLoading || !personDetailsData || knownForMoviesLoading || knownForShowsLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -135,9 +129,7 @@ const PersonDetails = () => {
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
-						src={CommonMethods.getTheMovieDbImage(
-							personDetailsData.personDetails.profile_path
-						)}
+						src={CommonMethods.getTheMovieDbImage(personDetailsData.personDetails.profile_path)}
 						alt={personDetailsData.personDetails.name ?? undefined}
 						layout='fill'
 					/>
@@ -176,9 +168,7 @@ const PersonDetails = () => {
 				<section className='ml-8 mt-4'>
 					<h3 className='mb-4 underline underline-offset-4'>Personal Info</h3>
 					<h4>Known For</h4>
-					<p className='ml-1'>
-						{personDetailsData.personDetails.known_for_department}
-					</p>
+					<p className='ml-1'>{personDetailsData.personDetails.known_for_department}</p>
 					<h4 className='mt-4'>Gender</h4>
 					<p className='ml-1'>
 						{personDetailsData.personDetails.gender === 1
@@ -190,13 +180,9 @@ const PersonDetails = () => {
 					<h4 className='mt-4'>Date of Birth</h4>
 					<p className='ml-1'>
 						{personDetailsData.personDetails.birthday
-							? `${CommonMethods.formatDate(
-									personDetailsData.personDetails.birthday
-								)}${
+							? `${CommonMethods.formatDate(personDetailsData.personDetails.birthday)}${
 									!personDetailsData.personDetails.deathday
-										? ` (${getAge(
-												personDetailsData.personDetails.birthday
-											)} years old)`
+										? ` (${getAge(personDetailsData.personDetails.birthday)} years old)`
 										: ''
 								}`
 							: 'Unknown'}

@@ -5,11 +5,7 @@ import HomeHorizontalScroller from '../components/HorizontalScroller/Home/HomeHo
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode, useQuery } from '@apollo/client';
-import {
-	THomeHorizontalScrollerData,
-	TWhatsPopularData,
-	TTrendingData,
-} from '@ts/types';
+import { THomeHorizontalScrollerData, TWhatsPopularData, TTrendingData } from '@ts/types';
 import type { NextPage, GetStaticProps } from 'next';
 import {
 	PopularMoviesQuery,
@@ -48,18 +44,13 @@ const Home: NextPage = () => {
 
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
-	const { data: whatsPopularData, loading: whatsPopularLoading } = useQuery(
-		whatsPopularQueryType
-	);
+	const { data: whatsPopularData, loading: whatsPopularLoading } = useQuery(whatsPopularQueryType);
 
-	const { data: trendingData, loading: trendingLoading } = useQuery(
-		trendingQueryType,
-		{
-			variables: {
-				timeWindow: trendingTimeWindow,
-			},
-		}
-	);
+	const { data: trendingData, loading: trendingLoading } = useQuery(trendingQueryType, {
+		variables: {
+			timeWindow: trendingTimeWindow,
+		},
+	});
 
 	// Preparing the queries
 	useQuery(Queries.POPULAR_SHOWS);
@@ -85,10 +76,7 @@ const Home: NextPage = () => {
 	});
 
 	const allDataLoaded =
-		whatsPopularData &&
-		!whatsPopularLoading &&
-		trendingData &&
-		!trendingLoading;
+		whatsPopularData && !whatsPopularLoading && trendingData && !trendingLoading;
 
 	const handleChangePopularQueryType = (
 		queryType: TypedDocumentNode<
@@ -143,9 +131,7 @@ const Home: NextPage = () => {
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
-										onClick={() =>
-											handleChangePopularQueryType(Queries.POPULAR_MOVIES)
-										}
+										onClick={() => handleChangePopularQueryType(Queries.POPULAR_MOVIES)}
 									>
 										Movies
 									</li>
@@ -155,9 +141,7 @@ const Home: NextPage = () => {
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
-										onClick={() =>
-											handleChangePopularQueryType(Queries.POPULAR_SHOWS)
-										}
+										onClick={() => handleChangePopularQueryType(Queries.POPULAR_SHOWS)}
 									>
 										Shows
 									</li>
@@ -167,9 +151,7 @@ const Home: NextPage = () => {
 												? 'border-b-4 border-indigo-500'
 												: ''
 										}`}
-										onClick={() =>
-											handleChangePopularQueryType(Queries.MOVIES_IN_THEATRES)
-										}
+										onClick={() => handleChangePopularQueryType(Queries.MOVIES_IN_THEATRES)}
 									>
 										In Theatres
 									</li>
@@ -181,9 +163,7 @@ const Home: NextPage = () => {
 									items={
 										(
 											whatsPopularData[
-												Object.keys(
-													whatsPopularData
-												)[0] as keyof typeof whatsPopularData
+												Object.keys(whatsPopularData)[0] as keyof typeof whatsPopularData
 											] as unknown as TWhatsPopularData
 										).results as THomeHorizontalScrollerData
 									}
@@ -202,9 +182,7 @@ const Home: NextPage = () => {
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
-											onClick={() =>
-												handleChangeTrendingQueryType(Queries.TRENDING_MOVIES)
-											}
+											onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_MOVIES)}
 										>
 											Movies
 										</li>
@@ -214,9 +192,7 @@ const Home: NextPage = () => {
 													? 'border-b-4 border-indigo-500'
 													: ''
 											}`}
-											onClick={() =>
-												handleChangeTrendingQueryType(Queries.TRENDING_SHOWS)
-											}
+											onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_SHOWS)}
 										>
 											Shows
 										</li>
@@ -224,9 +200,7 @@ const Home: NextPage = () => {
 									<ul className='flex justify-around'>
 										<li
 											className={`mr-4 cursor-pointer md:mr-20 ${
-												trendingTimeWindow === 'day'
-													? 'border-b-4 border-indigo-500'
-													: ''
+												trendingTimeWindow === 'day' ? 'border-b-4 border-indigo-500' : ''
 											}`}
 											onClick={() => setTrendingTimeWindow(TimeWindowTypes.Day)}
 										>
@@ -234,13 +208,9 @@ const Home: NextPage = () => {
 										</li>
 										<li
 											className={`cursor-pointer ${
-												trendingTimeWindow === 'week'
-													? 'border-b-4 border-indigo-500'
-													: ''
+												trendingTimeWindow === 'week' ? 'border-b-4 border-indigo-500' : ''
 											}`}
-											onClick={() =>
-												setTrendingTimeWindow(TimeWindowTypes.Week)
-											}
+											onClick={() => setTrendingTimeWindow(TimeWindowTypes.Week)}
 										>
 											This Week
 										</li>
@@ -253,9 +223,7 @@ const Home: NextPage = () => {
 									items={
 										(
 											trendingData[
-												Object.keys(
-													trendingData
-												)[0] as keyof typeof trendingData
+												Object.keys(trendingData)[0] as keyof typeof trendingData
 											] as unknown as TTrendingData
 										).results as THomeHorizontalScrollerData
 									}

@@ -24,9 +24,7 @@ const ChangePassword = ({ verifiedData }: Props) => {
 		onSubmit,
 	});
 
-	const [changePassword, { loading, data }] = useMutation(
-		Mutations.CHANGE_PASSWORD
-	);
+	const [changePassword, { loading, data }] = useMutation(Mutations.CHANGE_PASSWORD);
 
 	async function onSubmit() {
 		const { newPassword } = formik.values;
@@ -44,12 +42,8 @@ const ChangePassword = ({ verifiedData }: Props) => {
 
 			<main className='mx-auto mt-[calc(var(--header-height-mobile))] flex w-full items-center justify-center'>
 				<section className='w-full max-w-md translate-y-1/2 transform rounded-lg bg-white p-8 shadow-md'>
-					<h2 className='mb-4 text-center text-3xl font-extrabold text-gray-900'>
-						New Password
-					</h2>
-					<p className='mb-8 text-center text-sm text-gray-600'>
-						Please enter your new password
-					</p>
+					<h2 className='mb-4 text-center text-3xl font-extrabold text-gray-900'>New Password</h2>
+					<p className='mb-8 text-center text-sm text-gray-600'>Please enter your new password</p>
 					<form className='space-y-4' onSubmit={formik.handleSubmit}>
 						<div>
 							<label htmlFor='newPassword' className='sr-only'>
@@ -81,9 +75,7 @@ const ChangePassword = ({ verifiedData }: Props) => {
 
 						{!loading && data && !_.isEmpty(data.changePassword?.errors) && (
 							<div className='text-center text-red-500'>
-								{data.changePassword?.errors.map((err, idx) => (
-									<p key={idx}>{err.message}</p>
-								))}
+								{data.changePassword?.errors.map((err, idx) => <p key={idx}>{err.message}</p>)}
 							</div>
 						)}
 
@@ -112,8 +104,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 			}
 		);
 
-		const checkForgotPWTokenData =
-			checkForgotPWTokenRes.checkForgotPasswordToken;
+		const checkForgotPWTokenData = checkForgotPWTokenRes.checkForgotPasswordToken;
 
 		if (!checkForgotPWTokenData || !_.isEmpty(checkForgotPWTokenData.errors)) {
 			return {

@@ -22,9 +22,7 @@ export default function Login() {
 
 	const router = useRouter();
 
-	const [fetchAccountVerifiedData, { loading, error }] = useLazyQuery(
-		Queries.ACCOUNT_VERIFIED
-	);
+	const [fetchAccountVerifiedData, { loading, error }] = useLazyQuery(Queries.ACCOUNT_VERIFIED);
 
 	const handleSubmitBtnClick = (
 		formikErrors: FormikErrors<{
@@ -33,18 +31,11 @@ export default function Login() {
 		}>
 	) => {
 		if (formikErrors.email || formikErrors.password) {
-			CommonMethods.notifyError(
-				ACCOUNT_NOT_FOUND_MESSAGE,
-				'bottom-center',
-				3000
-			);
+			CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
 		} else return;
 	};
 
-	const handleSubmit = async (
-		values: ILogin,
-		_formikHelpers: FormikHelpers<ILogin>
-	) => {
+	const handleSubmit = async (values: ILogin, _formikHelpers: FormikHelpers<ILogin>) => {
 		const { email, password } = values;
 
 		const { data: { accountVerified } = {} } = await fetchAccountVerifiedData({
@@ -52,11 +43,7 @@ export default function Login() {
 		});
 
 		if (error || (accountVerified && accountVerified.errors.length > 0)) {
-			CommonMethods.notifyError(
-				ACCOUNT_NOT_FOUND_MESSAGE,
-				'bottom-center',
-				3000
-			);
+			CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
 			return;
 		}
 
@@ -118,11 +105,7 @@ export default function Login() {
 											onClick={() => setShowPW(!showPW)}
 											className='text-gray-500 hover:text-blue-500 focus:outline-none'
 										>
-											{showPW ? (
-												<BsFillEyeSlashFill size={24} />
-											) : (
-												<BsFillEyeFill size={24} />
-											)}
+											{showPW ? <BsFillEyeSlashFill size={24} /> : <BsFillEyeFill size={24} />}
 										</button>
 									</div>
 								</div>
@@ -179,9 +162,7 @@ export default function Login() {
 							</a>
 						</Link>
 						<Link href='/auth/forgot-password'>
-							<a className='text-center text-gray-600 hover:text-blue-500'>
-								Forgot your password?
-							</a>
+							<a className='text-center text-gray-600 hover:text-blue-500'>Forgot your password?</a>
 						</Link>
 					</div>
 				</section>

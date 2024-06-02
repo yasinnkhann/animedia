@@ -26,14 +26,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 				<p className='text-lg'>{rank}</p>
 			</td>
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<Link
-					href={CommonMethods.getDetailsPageRoute(
-						'movie',
-						movie.id,
-						movie.title
-					)}
-					passHref
-				>
+				<Link href={CommonMethods.getDetailsPageRoute('movie', movie.id, movie.title)} passHref>
 					<a className='text-inherit no-underline'>
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
@@ -46,14 +39,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 					</a>
 				</Link>
 				<section className='col-start-2 pl-4'>
-					<Link
-						href={CommonMethods.getDetailsPageRoute(
-							'movie',
-							movie.id,
-							movie.title
-						)}
-						passHref
-					>
+					<Link href={CommonMethods.getDetailsPageRoute('movie', movie.id, movie.title)} passHref>
 						<a className='text-inherit no-underline'>
 							<h3 className='cursor-pointer'>{movie.title}</h3>
 						</a>
@@ -74,19 +60,13 @@ const MovieCard = ({ movie, rank }: Props) => {
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
-						<p>
-							{usersMovieData?.usersMovie?.rating
-								? usersMovieData.usersMovie.rating
-								: 'N/A'}
-						</p>
+						<p>{usersMovieData?.usersMovie?.rating ? usersMovieData.usersMovie.rating : 'N/A'}</p>
 					</td>
 
 					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
 						<p>
 							{usersMovieData?.usersMovie?.status
-								? CommonMethods.renderTableStatus(
-										usersMovieData.usersMovie.status
-									)
+								? CommonMethods.renderTableStatus(usersMovieData.usersMovie.status)
 								: 'N/A'}
 						</p>
 					</td>

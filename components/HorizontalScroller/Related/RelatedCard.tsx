@@ -17,14 +17,8 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 	);
 
 	return (
-		<Link
-			href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)}
-			passHref
-		>
-			<a
-				onClick={e => dragging && e.preventDefault()}
-				className='text-inherit no-underline'
-			>
+		<Link href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)} passHref>
+			<a onClick={e => dragging && e.preventDefault()} className='text-inherit no-underline'>
 				<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
 					<div className='relative h-full w-full'>
 						<Image

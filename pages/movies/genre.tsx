@@ -8,10 +8,7 @@ import { Select } from 'antd';
 import { TypedDocumentNode, useQuery } from '@apollo/client';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { Circles } from 'react-loading-icons';
-import {
-	SORT_BY_OPTIONS,
-	MOVIE_GENRE_TYPE_OPTIONS,
-} from '../../models/dropDownOptions';
+import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '../../models/dropDownOptions';
 import {
 	Exact,
 	InputMaybe,
@@ -37,9 +34,7 @@ const Genre = () => {
 		>
 	>(Queries.POPULAR_MOVIES_BY_GENRE);
 
-	const [movieGenreType, setMovieGenreType] = useState<MovieGenreTypes>(
-		MovieGenreTypes.Action
-	);
+	const [movieGenreType, setMovieGenreType] = useState<MovieGenreTypes>(MovieGenreTypes.Action);
 
 	const { data: genreOfMoviesData } = useQuery(sortByQueryType, {
 		variables: { genre: movieGenreType, page: currPage },
@@ -81,10 +76,7 @@ const Genre = () => {
 				<section className='grid grid-cols-[20%_60%_20%]'>
 					<section className='mt-4 justify-self-center'>
 						<div className='mb-2'>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='sort-by-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='sort-by-dropdown'>
 								Sort By:
 							</label>
 							<Select
@@ -102,10 +94,7 @@ const Genre = () => {
 						</div>
 
 						<div>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='genre-type-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='genre-type-dropdown'>
 								Genre Type:
 							</label>
 							<Select
@@ -130,16 +119,12 @@ const Genre = () => {
 							<MediaList
 								mediaData={
 									genreOfMoviesData?.[
-										Object.keys(
-											genreOfMoviesData
-										)[0] as keyof typeof genreOfMoviesData
+										Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
 									] as unknown as TMoviesGenreData
 								}
 								pageNum={currPage}
 								title={`${
-									sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE
-										? 'Popular'
-										: 'Top Rated'
+									sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE ? 'Popular' : 'Top Rated'
 								} ${movieGenreType} Movies`}
 								genrePage
 							/>
@@ -149,16 +134,12 @@ const Genre = () => {
 								totalItems={
 									(
 										genreOfMoviesData?.[
-											Object.keys(
-												genreOfMoviesData
-											)[0] as keyof typeof genreOfMoviesData
+											Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
 										] as unknown as TMoviesGenreData
 									).total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
-								paginate={(pageNum: number) =>
-									router.push(`${router.pathname}?page=${pageNum}`)
-								}
+								paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 								siblingCount={1}
 								maxPageNum={500}
 							/>

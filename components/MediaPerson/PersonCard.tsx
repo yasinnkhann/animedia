@@ -10,10 +10,7 @@ interface Props {
 
 const PersonCard = ({ person }: Props) => {
 	return (
-		<Link
-			href={CommonMethods.getDetailsPageRoute('person', person.id, person.name)}
-			passHref
-		>
+		<Link href={CommonMethods.getDetailsPageRoute('person', person.id, person.name)} passHref>
 			<a className='text-inherit no-underline'>
 				<section>
 					<div className='relative h-[20rem] cursor-pointer'>

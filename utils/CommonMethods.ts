@@ -33,11 +33,7 @@ export class CommonMethods {
 		}
 	};
 
-	public static getDetailsPageRoute = (
-		mediaType: TContent,
-		id: string,
-		title: string
-	) => {
+	public static getDetailsPageRoute = (mediaType: TContent, id: string, title: string) => {
 		const cleanTitle = unidecode(title)
 			.toLowerCase()
 			.replace(/[^\w\s'_]+/g, '-')
@@ -66,9 +62,7 @@ export class CommonMethods {
 			);
 			const { genres }: { genres: TGenreObj[] } = await res.json();
 
-			const genreObj = genres.find(
-				genreObj => genreObj.name === parsedGenreName
-			);
+			const genreObj = genres.find(genreObj => genreObj.name === parsedGenreName);
 
 			if (!genreObj?.id) {
 				throw new Error('No Genre ID Found.');
@@ -135,9 +129,7 @@ export class CommonMethods {
 			[key: string]: any;
 		}
 	) => {
-		const dataFound = userMatchedMedias.find(
-			(data: UserShow | UserMovie) => data.id! === item.id
-		);
+		const dataFound = userMatchedMedias.find((data: UserShow | UserMovie) => data.id! === item.id);
 
 		if (dataFound?.status) {
 			switch (dataFound.status) {
@@ -221,11 +213,7 @@ export class CommonMethods {
 		return titleCaseWords.join(' ');
 	};
 
-	public static notifyError = (
-		error: string,
-		position: ToastPosition,
-		duration: number
-	) => {
+	public static notifyError = (error: string, position: ToastPosition, duration: number) => {
 		toast.error(error, {
 			position,
 			duration,

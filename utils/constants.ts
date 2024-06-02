@@ -4,14 +4,11 @@ export const THE_MOVIE_DB_BASE_IMG_URL = 'https://image.tmdb.org/t/p/original';
 
 export const IGDB_BASE_API_URL = 'https://api.igdb.com/v4';
 
-export const IGDB_BASE_IMAGE_URL =
-	'https://images.igdb.com/igdb/image/upload/t_';
+export const IGDB_BASE_IMAGE_URL = 'https://images.igdb.com/igdb/image/upload/t_';
 
 export const __prod__ = process.env.NODE_ENV === 'production';
 
-export const CLIENT_BASE_URL = __prod__
-	? 'https://animedia.vercel.app'
-	: 'http://localhost:3000';
+export const CLIENT_BASE_URL = __prod__ ? 'https://animedia.vercel.app' : 'http://localhost:3000';
 
 export const SERVER_BASE_URL = `${CLIENT_BASE_URL}/api/graphql`;
 

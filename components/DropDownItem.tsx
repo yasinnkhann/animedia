@@ -76,8 +76,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 					}}
 					size='large'
 				>
-					{session?.user?.name![0].toUpperCase() ||
-						(session as any)?.token?.name![0].toUpperCase()}
+					{session?.user?.name![0].toUpperCase() || (session as any)?.token?.name![0].toUpperCase()}
 				</Avatar>
 			);
 		}
@@ -91,17 +90,11 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 			onOpenChange={handleOpenChange}
 			open={open}
 		>
-			<a
-				className='cursor-pointer no-underline'
-				onClick={e => e.preventDefault()}
-			>
+			<a className='cursor-pointer no-underline' onClick={e => e.preventDefault()}>
 				{isProfile ? (
 					renderAvatar()
 				) : (
-					<p
-						className='text-base'
-						onClick={() => setOpen(currOpen => !currOpen)}
-					>
+					<p className='text-base' onClick={() => setOpen(currOpen => !currOpen)}>
 						{name}
 					</p>
 				)}

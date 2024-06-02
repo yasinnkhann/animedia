@@ -3,36 +3,25 @@ import Head from 'next/head';
 import MyMediaList from 'components/MyMedia/MyMediaList';
 import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
-import { CommonMethods } from 'utils/CommonMethods';
 import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
-import {
-	UserGame,
-	UserShow,
-	WatchStatusTypes,
-} from 'graphql/generated/code-gen/graphql';
+import { UserGame } from 'graphql/generated/code-gen/graphql';
 
 const MyGames = () => {
 	const { data: session, status } = useSession();
 
 	const router = useRouter();
 
-	const { data: usersGamesData, loading: usersGamesLoading } = useQuery(
-		Queries.USERS_GAMES,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersGamesData, loading: usersGamesLoading } = useQuery(Queries.USERS_GAMES, {
+		fetchPolicy: 'network-only',
+	});
 
 	const [myGames, setMyGames] = useState<UserGame[]>([]);
 
 	useEffect(() => {
-		if (
-			usersGamesData?.usersGames &&
-			Array.isArray(usersGamesData.usersGames)
-		) {
+		if (usersGamesData?.usersGames && Array.isArray(usersGamesData.usersGames)) {
 			setMyGames(usersGamesData.usersGames as UserGame[]);
 		}
 	}, [usersGamesData?.usersGames]);

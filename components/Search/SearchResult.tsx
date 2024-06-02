@@ -14,18 +14,11 @@ import {
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult | GameResult;
-	searchedResultType: ExtractStrict<
-		TContent,
-		'movie' | 'show' | 'person' | 'game'
-	>;
+	searchedResultType: ExtractStrict<TContent, 'movie' | 'show' | 'person' | 'game'>;
 	userMatchedMedias: UserShow[] | UserMovie[];
 }
 
-const SearchResult = ({
-	result,
-	searchedResultType,
-	userMatchedMedias,
-}: Props) => {
+const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) => {
 	const titleName = 'title' in result ? result.title : result.name;
 
 	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
@@ -62,17 +55,10 @@ const SearchResult = ({
 		</div>
 	);
 
-	const renderDetails = (
-		releaseDate: Maybe<string> | undefined,
-		overview: string
-	) => (
+	const renderDetails = (releaseDate: Maybe<string> | undefined, overview: string) => (
 		<div className='p-4'>
 			<h3 className='cursor-pointer'>{titleName}</h3>
-			<p>
-				{releaseDate
-					? CommonMethods.formatDate(releaseDate)
-					: 'Date Not Available'}
-			</p>
+			<p>{releaseDate ? CommonMethods.formatDate(releaseDate) : 'Date Not Available'}</p>
 			<p>
 				{overview.split(' ').length > 50
 					? `${overview.split(' ').slice(0, 50).join(' ')}...`
@@ -125,11 +111,7 @@ const SearchResult = ({
 
 	return (
 		<Link
-			href={CommonMethods.getDetailsPageRoute(
-				searchedResultType,
-				result.id,
-				titleName
-			)}
+			href={CommonMethods.getDetailsPageRoute(searchedResultType, result.id, titleName)}
 			passHref
 		>
 			<a className='text-inherit no-underline'>

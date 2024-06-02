@@ -35,14 +35,8 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 	return (
 		<>
 			{item.type !== 'GameCharacter' ? (
-				<Link
-					href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)}
-					passHref
-				>
-					<a
-						onClick={e => dragging && e.preventDefault()}
-						className='text-inherit no-underline'
-					>
+				<Link href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)} passHref>
+					<a onClick={e => dragging && e.preventDefault()} className='text-inherit no-underline'>
 						{body}
 					</a>
 				</Link>

@@ -12,15 +12,12 @@ const PopularGames = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const { data: popularGamesData, loading: popularGamesLoading } = useQuery(
-		Queries.POPULAR_GAMES,
-		{
-			variables: {
-				limit: RESULTS_PER_PAGE,
-				page: currPage,
-			},
-		}
-	);
+	const { data: popularGamesData, loading: popularGamesLoading } = useQuery(Queries.POPULAR_GAMES, {
+		variables: {
+			limit: RESULTS_PER_PAGE,
+			page: currPage,
+		},
+	});
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -62,9 +59,7 @@ const PopularGames = () => {
 							currPage={currPage}
 							totalItems={popularGamesData.popularGames.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) =>
-								router.push(`${router.pathname}?page=${pageNum}`)
-							}
+							paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 							siblingCount={1}
 							maxPageNum={500}
 						/>

@@ -16,10 +16,7 @@ const startServer = apolloServer.start();
 const cors = Cors();
 
 export default cors(async function handler(req, res) {
-	res.setHeader(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept'
-	);
+	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
 	const allowedOrigins = [
 		'http://localhost:3000',
@@ -35,10 +32,7 @@ export default cors(async function handler(req, res) {
 
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-	res.setHeader(
-		'Access-Control-Allow-Methods',
-		'GET,OPTIONS,PATCH,DELETE,POST,PUT'
-	);
+	res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
 
 	if (req.method === 'OPTIONS') {
 		res.end();

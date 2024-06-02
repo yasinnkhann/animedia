@@ -38,21 +38,12 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 			</td>
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<Link
-					href={CommonMethods.getDetailsPageRoute(
-						'game',
-						myGame.id!,
-						myGame.name!
-					)}
-					passHref
-				>
+				<Link href={CommonMethods.getDetailsPageRoute('game', myGame.id!, myGame.name!)} passHref>
 					<a className='text-inherit no-underline'>
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
 								className='rounded-lg'
-								src={CommonMethods.getIgdbImage(
-									gameData?.gameDetails?.results[0].coverUrl
-								)}
+								src={CommonMethods.getIgdbImage(gameData?.gameDetails?.results[0].coverUrl)}
 								priority
 								alt={gameData?.gameDetails?.results[0].name}
 								layout='fill'
@@ -61,14 +52,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 					</a>
 				</Link>
 				<section className='col-start-2 pl-4'>
-					<Link
-						href={CommonMethods.getDetailsPageRoute(
-							'show',
-							myGame.id!,
-							myGame.name!
-						)}
-						passHref
-					>
+					<Link href={CommonMethods.getDetailsPageRoute('show', myGame.id!, myGame.name!)} passHref>
 						<a className='text-inherit no-underline'>
 							<h3 className='cursor-pointer'>{myGame.name}</h3>
 						</a>
@@ -76,9 +60,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 					<p>
 						{gameData?.gameDetails?.results[0].first_release_date
 							? CommonMethods.formatDate(
-									new Date(
-										gameData.gameDetails.results[0].first_release_date * 1000
-									).toISOString()
+									new Date(gameData.gameDetails.results[0].first_release_date * 1000).toISOString()
 								)
 							: 'Release Date Not Available'}
 					</p>

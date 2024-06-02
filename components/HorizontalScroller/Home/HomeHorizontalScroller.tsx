@@ -19,9 +19,7 @@ interface Props {
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<
-		UserShow[] | UserMovie[]
-	>([]);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<UserShow[] | UserMovie[]>([]);
 
 	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
 		skip: 'title' in items[0],
@@ -44,10 +42,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 				}
 			});
 
-	const onWheel = (
-		apiObj: scrollVisibilityApiType,
-		e: React.WheelEvent
-	): void => {
+	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
 		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
 		if (isTouchPad) {
@@ -68,9 +63,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 		const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
 
 		const userDataArr =
-			'title' in items[0]
-				? usersMoviesData?.usersMovies
-				: usersShowsData?.usersShows;
+			'title' in items[0] ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
 
 		if (!userDataArr) return;
 

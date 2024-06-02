@@ -16,9 +16,7 @@ const Custom404 = () => {
 					<div className='relative my-2 block text-center text-[4em] leading-[80%] tracking-[0.75rem]'>
 						THE PAGE
 					</div>
-					<div className='relative my-2 block text-center text-xl'>
-						WAS NOT FOUND
-					</div>
+					<div className='relative my-2 block text-center text-xl'>WAS NOT FOUND</div>
 				</section>
 			</main>
 		</>

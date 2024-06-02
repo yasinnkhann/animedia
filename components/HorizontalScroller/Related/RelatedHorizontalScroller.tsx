@@ -18,9 +18,7 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<
-		UserShow[] | UserMovie[]
-	>([]);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<UserShow[] | UserMovie[]>([]);
 
 	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
 		skip: mediaType === 'movies',
@@ -43,10 +41,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 				}
 			});
 
-	const onWheel = (
-		apiObj: scrollVisibilityApiType,
-		e: React.WheelEvent
-	): void => {
+	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
 		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
 		if (isTouchPad) {
@@ -67,9 +62,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		if (mediaType) {
 			const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
 			const userDataArr =
-				mediaType === 'movies'
-					? usersMoviesData?.usersMovies
-					: usersShowsData?.usersShows;
+				mediaType === 'movies' ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
 
 			if (!userDataArr) return;
 
@@ -86,9 +79,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		} else {
 			for (const item of items) {
 				const userDataArr =
-					'title' in item
-						? usersMoviesData?.usersMovies
-						: usersShowsData?.usersShows;
+					'title' in item ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
 
 				if (!userDataArr) return;
 
@@ -101,12 +92,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		}
 
 		setUserMatchedMedias(matchedMedias);
-	}, [
-		usersShowsData?.usersShows,
-		usersMoviesData?.usersMovies,
-		items,
-		mediaType,
-	]);
+	}, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items, mediaType]);
 
 	return (
 		<ScrollMenu

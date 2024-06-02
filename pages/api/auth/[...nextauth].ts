@@ -41,10 +41,7 @@ export const authOptions: NextAuthOptions = {
 				password: { label: 'Password', type: 'password' },
 			},
 			authorize: async (credentials, _req) => {
-				if (
-					!CommonMethods.isValidEmail(credentials?.email) ||
-					!credentials?.password
-				) {
+				if (!CommonMethods.isValidEmail(credentials?.email) || !credentials?.password) {
 					return;
 				}
 				try {
@@ -54,10 +51,7 @@ export const authOptions: NextAuthOptions = {
 
 					if (!result) return;
 
-					const checkPassword = await verify(
-						result.password,
-						credentials.password
-					);
+					const checkPassword = await verify(result.password, credentials.password);
 
 					if (!checkPassword || result.email !== credentials.email) {
 						return;
@@ -124,8 +118,7 @@ export const authOptions: NextAuthOptions = {
 				});
 
 				if (isEmailVerifiedUpdatedInDB?.emailVerified) {
-					(token.user as any).emailVerified =
-						isEmailVerifiedUpdatedInDB?.emailVerified;
+					(token.user as any).emailVerified = isEmailVerifiedUpdatedInDB?.emailVerified;
 				}
 			}
 

@@ -31,16 +31,10 @@ function Arrow({
 }
 
 export function LeftArrow() {
-	const {
-		isFirstItemVisible,
-		scrollPrev,
-		visibleItemsWithoutSeparators,
-		initComplete,
-	} = useContext(VisibilityContext);
+	const { isFirstItemVisible, scrollPrev, visibleItemsWithoutSeparators, initComplete } =
+		useContext(VisibilityContext);
 
-	const [disabled, setDisabled] = useState(
-		!initComplete || (initComplete && isFirstItemVisible)
-	);
+	const [disabled, setDisabled] = useState(!initComplete || (initComplete && isFirstItemVisible));
 
 	useEffect(() => {
 		// detect if whole component visible

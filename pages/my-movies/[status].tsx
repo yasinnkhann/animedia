@@ -8,31 +8,22 @@ import { useRouter } from 'next/router';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client';
-import {
-	UserMovie,
-	WatchStatusTypes,
-} from 'graphql/generated/code-gen/graphql';
+import { UserMovie, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 const Status = () => {
 	const { data: session, status } = useSession();
 
 	const router = useRouter();
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
-		Queries.USERS_MOVIES,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(Queries.USERS_MOVIES, {
+		fetchPolicy: 'network-only',
+	});
 
 	const [myMovies, setMyMovies] = useState<UserMovie[]>([]);
 
 	useEffect(() => {
 		if (status && status !== 'loading' && router.query.status) {
-			if (
-				!session ||
-				!CommonMethods.statusParams.has(router.query.status as string)
-			) {
+			if (!session || !CommonMethods.statusParams.has(router.query.status as string)) {
 				router.replace('/');
 				return;
 			}
@@ -61,11 +52,7 @@ const Status = () => {
 		}
 	}, [router, session, status, usersMoviesData]);
 
-	if (
-		usersMoviesLoading ||
-		status === 'loading' ||
-		router.query.status === undefined
-	) {
+	if (usersMoviesLoading || status === 'loading' || router.query.status === undefined) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -73,10 +60,7 @@ const Status = () => {
 		);
 	}
 
-	if (
-		!CommonMethods.statusParams.has(router.query.status as string) ||
-		!session
-	) {
+	if (!CommonMethods.statusParams.has(router.query.status as string) || !session) {
 		router.replace('/');
 		return;
 	}

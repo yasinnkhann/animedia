@@ -1,12 +1,5 @@
 import { THE_MOVIE_DB_BASE_API_URL } from '../../utils/constants';
-import {
-	objectType,
-	extendType,
-	nonNull,
-	intArg,
-	stringArg,
-	idArg,
-} from 'nexus';
+import { objectType, extendType, nonNull, intArg, stringArg, idArg } from 'nexus';
 
 export const KnownForResult = objectType({
 	name: 'KnownForResult',

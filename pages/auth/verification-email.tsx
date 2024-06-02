@@ -15,8 +15,7 @@ const VerificationEmail = () => {
 
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
 				<div className='flex h-[80vh] items-center justify-center'>
-					You have been successfully verified! Please login to get redirected to
-					your account.
+					You have been successfully verified! Please login to get redirected to your account.
 				</div>
 			</main>
 		</>
@@ -29,14 +28,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 	const { uid, token } = ctx.query;
 
 	try {
-		const verifyTokenRes = await request(
-			SERVER_BASE_URL,
-			Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-			{
-				token: token as string,
-				userId: uid as string,
-			}
-		);
+		const verifyTokenRes = await request(SERVER_BASE_URL, Queries.CHECK_EMAIL_VERIFICATION_TOKEN, {
+			token: token as string,
+			userId: uid as string,
+		});
 
 		const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
 
@@ -49,13 +44,9 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 			};
 		}
 
-		const verifyUserEmailRes = await request(
-			SERVER_BASE_URL,
-			Mutations.VERIFY_USER_EMAIL,
-			{
-				userId: verifyTokenData.userId,
-			}
-		);
+		const verifyUserEmailRes = await request(SERVER_BASE_URL, Mutations.VERIFY_USER_EMAIL, {
+			userId: verifyTokenData.userId,
+		});
 
 		if (
 			!verifyUserEmailRes.verifyUserEmail ||

@@ -20,9 +20,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		const [searchQuery, setSearchQuery] = useState('');
 
-		const [dropDownSearchResults, setDropDownSearchResults] = useState<
-			TDropDownSearchResult[]
-		>([]);
+		const [dropDownSearchResults, setDropDownSearchResults] = useState<TDropDownSearchResult[]>([]);
 
 		const { data: searchedMoviesData } = useQuery(Queries.SEARCHED_MOVIES, {
 			variables: {
@@ -94,19 +92,12 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 						.map(game => ({
 							id: game.id,
 							titleName: game.name,
-							releaseDate: new Date(
-								game.first_release_date * 1000
-							).toISOString(),
+							releaseDate: new Date(game.first_release_date * 1000).toISOString(),
 							type: 'game',
 						}))
 						.slice(0, 5);
 
-					allResults = [
-						...movieResults,
-						...showsResults,
-						...gameResults,
-						...peopleResults,
-					];
+					allResults = [...movieResults, ...showsResults, ...gameResults, ...peopleResults];
 				}
 				setDropDownSearchResults(allResults as TDropDownSearchResult[]);
 			},
@@ -131,13 +122,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 		};
 
 		const handleDropdownResultsClick = (result: TDropDownSearchResult) => {
-			router.push(
-				CommonMethods.getDetailsPageRoute(
-					result.type!,
-					result.id,
-					result.titleName!
-				)
-			);
+			router.push(CommonMethods.getDetailsPageRoute(result.type!, result.id, result.titleName!));
 			if (closeSearch) closeSearch();
 		};
 
@@ -185,15 +170,10 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 								onClick={() => handleDropdownResultsClick(result)}
 							>
 								<span className='text-white'>{result.titleName} || </span>
-								<span className='text-gray-300'>
-									{' '}
-									{CommonMethods.toTitleCase(result.type!)}
-								</span>
+								<span className='text-gray-300'> {CommonMethods.toTitleCase(result.type!)}</span>
 								<span className='float-right text-white'>
 									{CommonMethods.formatDate(
-										result.releaseDate ??
-											result.firstAirDate ??
-											result.knownForDepartment
+										result.releaseDate ?? result.firstAirDate ?? result.knownForDepartment
 									)}
 								</span>
 							</div>

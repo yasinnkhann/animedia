@@ -3,11 +3,7 @@ import { join } from 'path';
 import { applyMiddleware } from 'graphql-middleware';
 import { permissions } from './permissions';
 import * as types from './types';
-import {
-	DateTimeResolver,
-	JSONObjectResolver,
-	GraphQLBigInt,
-} from 'graphql-scalars';
+import { DateTimeResolver, JSONObjectResolver, GraphQLBigInt } from 'graphql-scalars';
 
 export const dateScalar = asNexusMethod(DateTimeResolver, 'date');
 export const jsonScalar = asNexusMethod(JSONObjectResolver, 'json');
@@ -21,13 +17,7 @@ export const baseSchema = makeSchema({
 		output: false,
 	},
 	outputs: {
-		typegen: join(
-			process.cwd(),
-			'graphql',
-			'generated',
-			'nexus-typegen',
-			'index.d.ts'
-		),
+		typegen: join(process.cwd(), 'graphql', 'generated', 'nexus-typegen', 'index.d.ts'),
 		schema: join(process.cwd(), 'graphql', 'generated', 'schema.graphql'),
 	},
 	contextType: {

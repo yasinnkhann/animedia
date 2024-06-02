@@ -24,9 +24,7 @@ const Genre = () => {
 
 	const [currPage, setCurrPage] = useState(1);
 
-	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(
-		Queries.GAME_GENRES
-	);
+	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(Queries.GAME_GENRES);
 
 	const [sortByQueryType, setSortByQueryType] = useState<
 		TypedDocumentNode<
@@ -39,9 +37,7 @@ const Genre = () => {
 		>
 	>(Queries.POPULAR_GAMES_BY_GENRE);
 
-	const [selectedGameGenre, setSelectedGameGenre] = useState<GameGenre | null>(
-		null
-	);
+	const [selectedGameGenre, setSelectedGameGenre] = useState<GameGenre | null>(null);
 
 	const { data: genreOfGamesData } = useQuery(sortByQueryType, {
 		skip: !gameGenresData?.gameGenres.length,
@@ -62,9 +58,7 @@ const Genre = () => {
 
 	const handleGenreTypeChange = (genreId: string) => {
 		if (gameGenresData?.gameGenres) {
-			const foundGameGenre = gameGenresData.gameGenres.find(
-				genre => genre.id === genreId
-			);
+			const foundGameGenre = gameGenresData.gameGenres.find(genre => genre.id === genreId);
 			if (foundGameGenre) {
 				setSelectedGameGenre(foundGameGenre);
 			}
@@ -91,11 +85,7 @@ const Genre = () => {
 		}
 	}, [gameGenresData?.gameGenres]);
 
-	if (
-		gameGenresLoading ||
-		!gameGenresData?.gameGenres.length ||
-		!selectedGameGenre
-	) {
+	if (gameGenresLoading || !gameGenresData?.gameGenres.length || !selectedGameGenre) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -113,10 +103,7 @@ const Genre = () => {
 				<section className='grid grid-cols-[20%_60%_20%]'>
 					<section className='mt-4 justify-self-center'>
 						<div className='mb-2'>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='sort-by-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='sort-by-dropdown'>
 								Sort By:
 							</label>
 
@@ -135,10 +122,7 @@ const Genre = () => {
 						</div>
 
 						<div>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='genre-type-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='genre-type-dropdown'>
 								Genre Type:
 							</label>
 							<Select
@@ -164,16 +148,12 @@ const Genre = () => {
 							<MediaList
 								mediaData={
 									(genreOfGamesData?.[
-										Object.keys(
-											genreOfGamesData
-										)[0] as keyof typeof genreOfGamesData
+										Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
 									] as unknown as TGamesGenreData)!
 								}
 								pageNum={currPage}
 								title={`${
-									sortByQueryType === Queries.POPULAR_GAMES_BY_GENRE
-										? 'Popular'
-										: 'Top Rated'
+									sortByQueryType === Queries.POPULAR_GAMES_BY_GENRE ? 'Popular' : 'Top Rated'
 								} ${selectedGameGenre.name} Games`}
 								genrePage
 							/>
@@ -182,15 +162,11 @@ const Genre = () => {
 								currPage={currPage}
 								totalItems={
 									(genreOfGamesData?.[
-										Object.keys(
-											genreOfGamesData
-										)[0] as keyof typeof genreOfGamesData
+										Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
 									] as unknown as TGamesGenreData)!.total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
-								paginate={(pageNum: number) =>
-									router.push(`${router.pathname}?page=${pageNum}`)
-								}
+								paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 								siblingCount={1}
 								maxPageNum={500}
 							/>

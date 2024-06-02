@@ -12,14 +12,11 @@ const PopularAnimeMovies = () => {
 	const router = useRouter();
 	const [currPage, setCurrPage] = useState(1);
 
-	const { data: popularAnimeMoviesData } = useQuery(
-		Queries.POPULAR_ANIME_MOVIES,
-		{
-			variables: {
-				page: currPage,
-			},
-		}
-	);
+	const { data: popularAnimeMoviesData } = useQuery(Queries.POPULAR_ANIME_MOVIES, {
+		variables: {
+			page: currPage,
+		},
+	});
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -51,13 +48,9 @@ const PopularAnimeMovies = () => {
 						/>
 						<Pagination
 							currPage={currPage}
-							totalItems={
-								popularAnimeMoviesData.popularAnimeMovies.total_results
-							}
+							totalItems={popularAnimeMoviesData.popularAnimeMovies.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) =>
-								router.push(`${router.pathname}?page=${pageNum}`)
-							}
+							paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 							siblingCount={1}
 							maxPageNum={500}
 						/>

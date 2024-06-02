@@ -360,11 +360,7 @@ export const GET_SHOWS_CAST_CREW = graphql(`
 
 export const GET_EPISODE_DETAILS = graphql(`
 	query EpisodeDetails($showId: ID!, $seasonNum: Int!, $episodeNum: Int!) {
-		episodeDetails(
-			showId: $showId
-			seasonNum: $seasonNum
-			episodeNum: $episodeNum
-		) {
+		episodeDetails(showId: $showId, seasonNum: $seasonNum, episodeNum: $episodeNum) {
 			air_date
 			crew {
 				adult

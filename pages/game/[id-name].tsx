@@ -34,55 +34,45 @@ const GameDetails = () => {
 
 	const [showFullDescription, setShowFullDescription] = useState(false);
 
-	const { data: gameDetailsData, loading: gameDetailsLoading } = useQuery(
-		Queries.GAME_DETAILS,
-		{
-			skip: !id,
-			variables: {
-				gameId: id,
-			},
-		}
-	);
+	const { data: gameDetailsData, loading: gameDetailsLoading } = useQuery(Queries.GAME_DETAILS, {
+		skip: !id,
+		variables: {
+			gameId: id,
+		},
+	});
 
-	const { data: usersGameData, loading: usersGameLoading } = useQuery(
-		Queries.USERS_GAME,
-		{
-			skip: !id,
-			variables: {
-				gameId: id,
-			},
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersGameData, loading: usersGameLoading } = useQuery(Queries.USERS_GAME, {
+		skip: !id,
+		variables: {
+			gameId: id,
+		},
+		fetchPolicy: 'network-only',
+	});
 
 	const { data: gamePlatformsData, loading: gamePlatformsLoading } = useQuery(
 		Queries.GAME_PLATFORMS
 	);
 
-	const { data: gameCompanyData, loading: gameCompanyLoading } = useQuery(
-		Queries.GAME_COMPANY,
-		{ skip: !id, variables: { gameId: id } }
-	);
-	const { data: gameThemesData, loading: gameThemesLoading } = useQuery(
-		Queries.GAME_THEMES
-	);
+	const { data: gameCompanyData, loading: gameCompanyLoading } = useQuery(Queries.GAME_COMPANY, {
+		skip: !id,
+		variables: { gameId: id },
+	});
+	const { data: gameThemesData, loading: gameThemesLoading } = useQuery(Queries.GAME_THEMES);
 
-	const { data: gameCollectionsData, loading: gameCollectionsLoading } =
-		useQuery(Queries.GAME_COLLECTIONS, {
+	const { data: gameCollectionsData, loading: gameCollectionsLoading } = useQuery(
+		Queries.GAME_COLLECTIONS,
+		{
 			skip: !id,
 			variables: { gameId: id },
-		});
-
-	const { data: similarGamesData, loading: similarGamesLoading } = useQuery(
-		Queries.SIMILAR_GAMES,
-		{
-			skip: !gameDetailsData?.gameDetails.results[0]?.similar_games,
-			variables: {
-				gameIds: gameDetailsData?.gameDetails.results[0]
-					?.similar_games as string[],
-			},
 		}
 	);
+
+	const { data: similarGamesData, loading: similarGamesLoading } = useQuery(Queries.SIMILAR_GAMES, {
+		skip: !gameDetailsData?.gameDetails.results[0]?.similar_games,
+		variables: {
+			gameIds: gameDetailsData?.gameDetails.results[0]?.similar_games as string[],
+		},
+	});
 
 	const { data: gameCharactersData, loading: gameCharactersLoading } = useQuery(
 		Queries.GAME_CHARACTERS,
@@ -94,88 +84,71 @@ const GameDetails = () => {
 		}
 	);
 
-	const { data: dlcGamesData, loading: dlcGamesLoading } = useQuery(
-		Queries.DLC_GAMES,
-		{
-			skip: !gameDetailsData?.gameDetails.results[0]?.dlcs,
-			variables: {
-				gameIds: gameDetailsData?.gameDetails.results[0]?.dlcs as string[],
-			},
-		}
-	);
+	const { data: dlcGamesData, loading: dlcGamesLoading } = useQuery(Queries.DLC_GAMES, {
+		skip: !gameDetailsData?.gameDetails.results[0]?.dlcs,
+		variables: {
+			gameIds: gameDetailsData?.gameDetails.results[0]?.dlcs as string[],
+		},
+	});
 
-	const { data: gamePreviewsData, loading: gamePreviewsLoading } = useQuery(
-		Queries.GAME_PREVIEWS,
-		{
-			skip: !id,
-			variables: {
-				gameId: id,
-			},
-		}
-	);
+	const { data: gamePreviewsData, loading: gamePreviewsLoading } = useQuery(Queries.GAME_PREVIEWS, {
+		skip: !id,
+		variables: {
+			gameId: id,
+		},
+	});
 
-	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(
-		Queries.GAME_GENRES
-	);
+	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(Queries.GAME_GENRES);
 
-	const [addGame, { loading: addGameLoading }] = useMutation(
-		Mutations.ADD_GAME,
-		{
-			variables: {
-				gameId: id,
-				gameName: gameDetailsData?.gameDetails.results[0]?.name!,
-				rating: typeof rating === 'number' ? rating : null,
-				wishList: addToWishList,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_GAME,
-					variables: {
-						gameId: id,
-					},
+	const [addGame, { loading: addGameLoading }] = useMutation(Mutations.ADD_GAME, {
+		variables: {
+			gameId: id,
+			gameName: gameDetailsData?.gameDetails.results[0]?.name!,
+			rating: typeof rating === 'number' ? rating : null,
+			wishList: addToWishList,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_GAME,
+				variables: {
+					gameId: id,
 				},
-				'UsersGame',
-			],
-		}
-	);
-
-	const [updateGame, { loading: updateGameLoading }] = useMutation(
-		Mutations.UPDATE_GAME,
-		{
-			variables: {
-				gameId: id,
-				rating: typeof rating === 'number' ? rating : null,
-				wishList: addToWishList,
 			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_GAME,
-					variables: {
-						movieId: id,
-					},
-				},
-				'UsersGame',
-			],
-		}
-	);
+			'UsersGame',
+		],
+	});
 
-	const [deleteGame, { loading: deleteGameLoading }] = useMutation(
-		Mutations.DELETE_GAME,
-		{
-			variables: {
-				gameId: id,
-			},
-			refetchQueries: () => [
-				{
-					query: Queries.USERS_GAME,
-					variables: {
-						movieId: id,
-					},
+	const [updateGame, { loading: updateGameLoading }] = useMutation(Mutations.UPDATE_GAME, {
+		variables: {
+			gameId: id,
+			rating: typeof rating === 'number' ? rating : null,
+			wishList: addToWishList,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_GAME,
+				variables: {
+					movieId: id,
 				},
-				'UsersGame',
-			],
-		}
-	);
+			},
+			'UsersGame',
+		],
+	});
+
+	const [deleteGame, { loading: deleteGameLoading }] = useMutation(Mutations.DELETE_GAME, {
+		variables: {
+			gameId: id,
+		},
+		refetchQueries: () => [
+			{
+				query: Queries.USERS_GAME,
+				variables: {
+					movieId: id,
+				},
+			},
+			'UsersGame',
+		],
+	});
 
 	const handleWishList = () => {
 		if (usersGame?.id && usersGame.wishList && !usersGame.rating) {
@@ -291,9 +264,7 @@ const GameDetails = () => {
 
 	if (gameDetailsData.gameDetails.results.length !== 1) {
 		return (
-			<section className='flex h-screen items-center justify-center'>
-				Error getting game
-			</section>
+			<section className='flex h-screen items-center justify-center'>Error getting game</section>
 		);
 	}
 
@@ -320,9 +291,7 @@ const GameDetails = () => {
 				<section className='mt-4'>
 					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
-							<RoundProgressBar
-								percentageVal={+(game.rating ?? 0).toFixed(1)}
-							/>
+							<RoundProgressBar percentageVal={+(game.rating ?? 0).toFixed(1)} />
 						</section>
 						<p className='ml-[.5rem] text-base font-medium'>
 							{commaNumber(game.rating_count ?? 0)} voted users
@@ -340,9 +309,7 @@ const GameDetails = () => {
 										borderColor: usersGame?.wishList ? '#52c41a' : '',
 									}}
 								>
-									{usersGame?.wishList
-										? 'Added to Wishlist'
-										: 'Add to Wishlist'}
+									{usersGame?.wishList ? 'Added to Wishlist' : 'Add to Wishlist'}
 								</Button>
 							</div>
 
@@ -372,10 +339,7 @@ const GameDetails = () => {
 								) : (
 									<div>
 										<p>
-											{gameSummary
-												.split(' ')
-												.slice(0, MAX_SUMMARY_WORD_LENGTH)
-												.join(' ') + '...'}
+											{gameSummary.split(' ').slice(0, MAX_SUMMARY_WORD_LENGTH).join(' ') + '...'}
 										</p>
 										<button
 											className='mt-2 text-blue-500 underline'
@@ -397,9 +361,7 @@ const GameDetails = () => {
 					<h4 className='mt-4'>Release Date</h4>
 					{game.first_release_date ? (
 						<p className='ml-1'>
-							{CommonMethods.formatDate(
-								new Date(game.first_release_date * 1000).toISOString()
-							)}
+							{CommonMethods.formatDate(new Date(game.first_release_date * 1000).toISOString())}
 						</p>
 					) : (
 						<p className='ml-1'>N/A</p>
@@ -411,14 +373,10 @@ const GameDetails = () => {
 							<div className='ml-1'>
 								{gamePlatformsData.gamePlatforms
 									.filter(platform =>
-										game.platforms!.some(
-											platformId => platform!.id === platformId
-										)
+										game.platforms!.some(platformId => platform!.id === platformId)
 									)
 									.map(platform => (
-										<p key={platform!.id}>
-											{CommonMethods.toTitleCase(platform!.name)}
-										</p>
+										<p key={platform!.id}>{CommonMethods.toTitleCase(platform!.name)}</p>
 									))}
 							</div>
 						</>
@@ -432,9 +390,7 @@ const GameDetails = () => {
 								<h4 className='mt-4'>Genre(s)</h4>
 								<div className='ml-1'>
 									{gameGenresData.gameGenres
-										.filter(genre =>
-											(game.genres ?? []).some(genreId => genreId === genre.id)
-										)
+										.filter(genre => (game.genres ?? []).some(genreId => genreId === genre.id))
 										.map(genre => (
 											<p key={genre.id}>{genre.name}</p>
 										))}
@@ -447,9 +403,7 @@ const GameDetails = () => {
 							<h4 className='mt-4'>Theme</h4>
 							<div className='ml-1'>
 								{gameThemesData.gameThemes
-									.filter(theme =>
-										game.themes!.some(themeId => theme!.id === themeId)
-									)
+									.filter(theme => game.themes!.some(themeId => theme!.id === themeId))
 									.map(theme => (
 										<p key={theme!.id}>{theme!.name}</p>
 									))}
@@ -475,9 +429,7 @@ const GameDetails = () => {
 						!_.isEmpty(gamePreviewsData.gamePreviews) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Preview</h3>
-								<GamePreviewHorizontalScroller
-									items={gamePreviewsData.gamePreviews}
-								/>
+								<GamePreviewHorizontalScroller items={gamePreviewsData.gamePreviews} />
 							</section>
 						)}
 
@@ -501,22 +453,20 @@ const GameDetails = () => {
 							</section>
 						)}
 
-					{!dlcGamesLoading &&
-						dlcGamesData?.dlcGames &&
-						!_.isEmpty(dlcGamesData.dlcGames) && (
-							<section className='pb-4'>
-								<h3 className='mb-4 ml-8 mt-4'>DLC</h3>
-								<RelatedHorizontalScroller
-									items={dlcGamesData.dlcGames.map(dlc => ({
-										id: dlc.id,
-										imagePath: dlc.coverUrl,
-										name: dlc.name,
-										popularity: dlc.rating ?? 0,
-										type: 'game',
-									}))}
-								/>
-							</section>
-						)}
+					{!dlcGamesLoading && dlcGamesData?.dlcGames && !_.isEmpty(dlcGamesData.dlcGames) && (
+						<section className='pb-4'>
+							<h3 className='mb-4 ml-8 mt-4'>DLC</h3>
+							<RelatedHorizontalScroller
+								items={dlcGamesData.dlcGames.map(dlc => ({
+									id: dlc.id,
+									imagePath: dlc.coverUrl,
+									name: dlc.name,
+									popularity: dlc.rating ?? 0,
+									type: 'game',
+								}))}
+							/>
+						</section>
+					)}
 
 					{!gameCollectionsLoading &&
 						gameCollectionsData?.gameCollections &&
@@ -524,15 +474,13 @@ const GameDetails = () => {
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Check out the series</h3>
 								<RelatedHorizontalScroller
-									items={gameCollectionsData.gameCollections.games.map(
-										game => ({
-											id: game.id,
-											imagePath: game.coverUrl,
-											name: game.name,
-											popularity: game.rating ?? 0,
-											type: 'game',
-										})
-									)}
+									items={gameCollectionsData.gameCollections.games.map(game => ({
+										id: game.id,
+										imagePath: game.coverUrl,
+										name: game.name,
+										popularity: game.rating ?? 0,
+										type: 'game',
+									}))}
 								/>
 							</section>
 						)}

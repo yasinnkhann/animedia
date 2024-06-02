@@ -2,11 +2,7 @@ import { Fragment } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
-import {
-	UserGame,
-	UserMovie,
-	UserShow,
-} from 'graphql/generated/code-gen/graphql';
+import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 import MyGameEntry from './MyGameEntry';
 
 interface Props {
@@ -34,25 +30,17 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 
 							<th className='border-r-2 border-gray-200 p-4'>Title</th>
 
-							<th className='w-[7rem] border-x-2 border-gray-200 p-4'>
-								My Rating
-							</th>
+							<th className='w-[7rem] border-x-2 border-gray-200 p-4'>My Rating</th>
 
 							{mediaType === 'SHOWS' && (
-								<th className='w-[8rem] border-x-2 border-gray-200 p-4'>
-									Current Ep.
-								</th>
+								<th className='w-[8rem] border-x-2 border-gray-200 p-4'>Current Ep.</th>
 							)}
 
 							{mediaType === 'GAMES' && (
-								<th className='w-[8rem] border-x-2 border-gray-200 p-4'>
-									In Wishlist
-								</th>
+								<th className='w-[8rem] border-x-2 border-gray-200 p-4'>In Wishlist</th>
 							)}
 
-							<th className='w-[7rem] border-x-2 border-gray-200 p-4'>
-								Remove
-							</th>
+							<th className='w-[7rem] border-x-2 border-gray-200 p-4'>Remove</th>
 						</tr>
 					</thead>
 
@@ -61,27 +49,15 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 							let myMediaComp: JSX.Element;
 							if (mediaType === 'MOVIES') {
 								myMediaComp = (
-									<MyMovieEntry
-										key={myMedia.id}
-										myMovie={myMedia as UserMovie}
-										count={idx + 1}
-									/>
+									<MyMovieEntry key={myMedia.id} myMovie={myMedia as UserMovie} count={idx + 1} />
 								);
 							} else if (mediaType === 'SHOWS') {
 								myMediaComp = (
-									<MyShowEntry
-										key={myMedia.id}
-										myShow={myMedia as UserShow}
-										count={idx + 1}
-									/>
+									<MyShowEntry key={myMedia.id} myShow={myMedia as UserShow} count={idx + 1} />
 								);
 							} else if (mediaType === 'GAMES') {
 								myMediaComp = (
-									<MyGameEntry
-										key={myMedia.id}
-										myGame={myMedia as UserGame}
-										count={idx + 1}
-									/>
+									<MyGameEntry key={myMedia.id} myGame={myMedia as UserGame} count={idx + 1} />
 								);
 							} else {
 								myMediaComp = <></>;

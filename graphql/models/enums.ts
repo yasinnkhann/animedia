@@ -7,14 +7,7 @@ export const timeWindowTypes = enumType({
 
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
-	members: [
-		'NOT_WATCHING',
-		'WATCHING',
-		'PLAN_TO_WATCH',
-		'COMPLETED',
-		'ON_HOLD',
-		'DROPPED',
-	],
+	members: ['NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED'],
 });
 
 export const MovieGenreTypes = enumType({

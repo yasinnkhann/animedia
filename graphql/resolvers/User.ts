@@ -1,13 +1,6 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
-import {
-	extendType,
-	stringArg,
-	nonNull,
-	idArg,
-	intArg,
-	booleanArg,
-} from 'nexus';
+import { extendType, stringArg, nonNull, idArg, intArg, booleanArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
 import { getErrorMsg, sendEmail } from 'graphql/utils';
@@ -148,9 +141,7 @@ export const UserQueries = extendType({
 				userId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { token, userId }, ctx) => {
-				const tokenStored = await ctx.redis.get(
-					`${VERIFICATION_EMAIL_PREFIX}:${userId}`
-				);
+				const tokenStored = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
 
 				if (token !== tokenStored) {
 					return {
@@ -175,9 +166,7 @@ export const UserQueries = extendType({
 				userId: nonNull(idArg()),
 			},
 			resolve: async (_parent, { token, userId }, ctx) => {
-				const tokenStored = await ctx.redis.get(
-					`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`
-				);
+				const tokenStored = await ctx.redis.get(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`);
 
 				if (token !== tokenStored) {
 					return {
@@ -238,9 +227,7 @@ export const UserQueries = extendType({
 				token: nonNull(stringArg()),
 			},
 			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(
-					`${VERIFICATION_EMAIL_PREFIX}:${token}`
-				);
+				const userId = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${token}`);
 
 				if (!userId) return null;
 
@@ -291,11 +278,7 @@ export const UserMutations = extendType({
 				watchStatus: nonNull(WatchStatusTypes),
 				currentEpisode: intArg(),
 			},
-			resolve: async (
-				_parent,
-				{ showId, showName, watchStatus, currentEpisode },
-				ctx
-			) => {
+			resolve: async (_parent, { showId, showName, watchStatus, currentEpisode }, ctx) => {
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
@@ -368,11 +351,7 @@ export const UserMutations = extendType({
 				showRating: intArg(),
 				currentEpisode: intArg(),
 			},
-			resolve: async (
-				_parent,
-				{ showId, watchStatus, showRating, currentEpisode },
-				ctx
-			) => {
+			resolve: async (_parent, { showId, watchStatus, showRating, currentEpisode }, ctx) => {
 				return await ctx.prisma.show.update({
 					where: {
 						id_userId: {
@@ -486,8 +465,7 @@ export const UserMutations = extendType({
 						data: { name, email, password: await hash(password) },
 					});
 
-					const { password: _userPassword, ...createdUserWithoutPassword } =
-						newUser;
+					const { password: _userPassword, ...createdUserWithoutPassword } = newUser;
 
 					return {
 						errors: [],
@@ -563,10 +541,7 @@ export const UserMutations = extendType({
 
 					const verificationEmailCount = +(verificationEmailCountRes ?? '0');
 
-					if (
-						__prod__ &&
-						verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT
-					) {
+					if (__prod__ && verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT) {
 						return {
 							errors: [
 								{
@@ -644,14 +619,9 @@ export const UserMutations = extendType({
 						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`
 					);
 
-					const forgotPasswordEmailCount = +(
-						forgotPasswordEmailCountRes ?? '0'
-					);
+					const forgotPasswordEmailCount = +(forgotPasswordEmailCountRes ?? '0');
 
-					if (
-						__prod__ &&
-						forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT
-					) {
+					if (__prod__ && forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT) {
 						return {
 							errors: [
 								{
@@ -725,9 +695,7 @@ export const UserMutations = extendType({
 
 					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`);
 
-					await ctx.redis.del(
-						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${userId}`
-					);
+					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${userId}`);
 
 					return {
 						errors: [],

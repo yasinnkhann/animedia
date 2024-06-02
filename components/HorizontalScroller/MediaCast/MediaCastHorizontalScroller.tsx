@@ -22,10 +22,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 				}
 			});
 
-	const onWheel = (
-		apiObj: scrollVisibilityApiType,
-		e: React.WheelEvent
-	): void => {
+	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
 		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
 		if (isTouchPad) {
@@ -40,8 +37,7 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
 		}
 	};
 
-	const heightClass =
-		items[0].type === 'GameCharacter' ? '!h-[20rem]' : '!h-[22rem]';
+	const heightClass = items[0].type === 'GameCharacter' ? '!h-[20rem]' : '!h-[22rem]';
 
 	return (
 		<ScrollMenu

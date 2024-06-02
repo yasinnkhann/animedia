@@ -21,13 +21,9 @@ const Search: NextPage = () => {
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
 	const [searchResultsType, setSearchResultsType] =
-		useState<ExtractStrict<TContent, 'movies' | 'shows' | 'people' | 'games'>>(
-			'movies'
-		);
+		useState<ExtractStrict<TContent, 'movies' | 'shows' | 'people' | 'games'>>('movies');
 
-	const [userMatchedMedias, setUserMatchedMedias] = useState<
-		UserShow[] | UserMovie[]
-	>([]);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<UserShow[] | UserMovie[]>([]);
 
 	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
@@ -254,9 +250,7 @@ const Search: NextPage = () => {
 												onClick={() => setSearchResultsType('movies')}
 												style={{
 													borderBottom:
-														searchResultsType === 'movies'
-															? '1px solid black'
-															: undefined,
+														searchResultsType === 'movies' ? '1px solid black' : undefined,
 												}}
 											>
 												Movies
@@ -271,16 +265,12 @@ const Search: NextPage = () => {
 												onClick={() => setSearchResultsType('shows')}
 												style={{
 													borderBottom:
-														searchResultsType === 'shows'
-															? '1px solid black'
-															: undefined,
+														searchResultsType === 'shows' ? '1px solid black' : undefined,
 												}}
 											>
 												Shows
 											</h4>
-											<p className='text-right'>
-												{searchedShowsData.searchedShows.total_results}
-											</p>
+											<p className='text-right'>{searchedShowsData.searchedShows.total_results}</p>
 										</li>
 										<li className='flex w-full items-center justify-between'>
 											<h4
@@ -288,9 +278,7 @@ const Search: NextPage = () => {
 												onClick={() => setSearchResultsType('games')}
 												style={{
 													borderBottom:
-														searchResultsType === 'games'
-															? '1px solid black'
-															: undefined,
+														searchResultsType === 'games' ? '1px solid black' : undefined,
 												}}
 											>
 												Games
@@ -305,9 +293,7 @@ const Search: NextPage = () => {
 												onClick={() => setSearchResultsType('people')}
 												style={{
 													borderBottom:
-														searchResultsType === 'people'
-															? '1px solid black'
-															: undefined,
+														searchResultsType === 'people' ? '1px solid black' : undefined,
 												}}
 											>
 												People
@@ -347,9 +333,7 @@ const Search: NextPage = () => {
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
 								paginate={(pageNum: number) =>
-									router.push(
-										`${router.pathname}?q=${router.query.q}&page=${pageNum}`
-									)
+									router.push(`${router.pathname}?q=${router.query.q}&page=${pageNum}`)
 								}
 								siblingCount={1}
 								maxPageNum={500}

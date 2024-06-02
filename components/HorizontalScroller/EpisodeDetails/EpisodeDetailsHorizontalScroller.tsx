@@ -24,10 +24,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 				}
 			});
 
-	const onWheel = (
-		apiObj: scrollVisibilityApiType,
-		e: React.WheelEvent
-	): void => {
+	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
 		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
 
 		if (isTouchPad) {

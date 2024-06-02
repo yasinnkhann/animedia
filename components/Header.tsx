@@ -34,75 +34,36 @@ const Header = () => {
 					<section>
 						<Link href='/'>
 							<a className='!mb-0 text-black hover:text-black'>
-								<AiFillHome
-									size={25}
-									onClick={() => setIsSearchBtnClicked(false)}
-								/>
+								<AiFillHome size={25} onClick={() => setIsSearchBtnClicked(false)} />
 							</a>
 						</Link>
 					</section>
 					<section className='ml-[4rem] !flex w-full !items-center justify-between'>
-						<ul
-							id='left-section'
-							className='!mb-0 !flex w-[50%] justify-around'
-						>
+						<ul id='left-section' className='!mb-0 !flex w-[50%] justify-around'>
 							<li>
-								<DropDownItem
-									items={MOVIES_ITEMS}
-									name='Movies'
-									routeType='movies'
-								/>
+								<DropDownItem items={MOVIES_ITEMS} name='Movies' routeType='movies' />
 							</li>
 							<li>
-								<DropDownItem
-									items={SHOWS_ITEMS}
-									name='Shows'
-									routeType='shows'
-								/>
+								<DropDownItem items={SHOWS_ITEMS} name='Shows' routeType='shows' />
 							</li>
 							<li>
-								<DropDownItem
-									items={GAME_ITEMS}
-									name='Games'
-									routeType='games'
-								/>
+								<DropDownItem items={GAME_ITEMS} name='Games' routeType='games' />
 							</li>
 							<li>
-								<DropDownItem
-									items={PEOPLE_ITEMS}
-									name='People'
-									routeType='people'
-								/>
+								<DropDownItem items={PEOPLE_ITEMS} name='People' routeType='people' />
 							</li>
 						</ul>
-						<ul
-							id='right-section'
-							className='!mr-4 !flex !w-[30rem] !justify-around'
-						>
+						<ul id='right-section' className='!mr-4 !flex !w-[30rem] !justify-around'>
 							<li
 								className={`!flex !w-full !items-center ${
-									status === 'authenticated'
-										? '!justify-around'
-										: 'mr-8 !justify-end'
+									status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
 								}`}
 							>
 								{status === 'authenticated' && session && (
 									<>
-										<DropDownItem
-											items={MY_MEDIA_ITEMS}
-											name='My Shows'
-											routeType='my-shows'
-										/>
-										<DropDownItem
-											items={MY_MEDIA_ITEMS}
-											name='My Movies'
-											routeType='my-movies'
-										/>
-										<Link
-											href='/my-games'
-											className='cursor-pointer no-underline'
-											passHref
-										>
+										<DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' routeType='my-shows' />
+										<DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
+										<Link href='/my-games' className='cursor-pointer no-underline' passHref>
 											<a className='no-underline'>My Games</a>
 										</Link>
 									</>
@@ -137,15 +98,11 @@ const Header = () => {
 										/>
 									))}
 
-								{status === 'unauthenticated' &&
-									router.pathname !== '/auth/login' && (
-										<div
-											className='flex cursor-pointer items-center'
-											onClick={() => signIn()}
-										>
-											<BiLogIn size={30} />
-										</div>
-									)}
+								{status === 'unauthenticated' && router.pathname !== '/auth/login' && (
+									<div className='flex cursor-pointer items-center' onClick={() => signIn()}>
+										<BiLogIn size={30} />
+									</div>
+								)}
 
 								{status === 'authenticated' && (
 									<DropDownItem

@@ -93,9 +93,7 @@ export const SEARCHED_PEOPLE = graphql(`
 
 export const GET_PERSONS_KNOWN_FOR_MOVIES = graphql(`
 	query PersonsKnownForMovie($personsKnownForMovieResId: ID!) {
-		personsKnownForMovie(
-			personsKnownForMovieResId: $personsKnownForMovieResId
-		) {
+		personsKnownForMovie(personsKnownForMovieResId: $personsKnownForMovieResId) {
 			id
 			cast {
 				adult

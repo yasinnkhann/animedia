@@ -13,9 +13,7 @@ export type Context = {
 	res: GetServerSidePropsContext['res'];
 };
 
-export async function context(
-	ctxArg: GetServerSidePropsContext
-): Promise<Context> {
+export async function context(ctxArg: GetServerSidePropsContext): Promise<Context> {
 	const { req, res } = ctxArg;
 	const session = await getSession({ req });
 

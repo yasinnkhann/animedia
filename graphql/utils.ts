@@ -1,11 +1,7 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import {
-	IGDB_ACCESS_TOKEN_PREFIX,
-	IGDB_BASE_API_URL,
-	__prod__,
-} from 'utils/constants';
+import { IGDB_ACCESS_TOKEN_PREFIX, IGDB_BASE_API_URL, __prod__ } from 'utils/constants';
 import { redis } from '../lib/redis';
 import { TIGDBImageSizes } from '@ts/types';
 
@@ -97,12 +93,7 @@ export const postIGDB = async (
 				throw new Error('Could not fetch newest access token.');
 			}
 
-			await redis.set(
-				IGDB_ACCESS_TOKEN_PREFIX,
-				accessToken,
-				'EX',
-				accessTokenData.expires_in
-			);
+			await redis.set(IGDB_ACCESS_TOKEN_PREFIX, accessToken, 'EX', accessTokenData.expires_in);
 		}
 
 		let retries = 0;
@@ -132,10 +123,7 @@ export const postIGDB = async (
 	}
 };
 
-export const addIGDBCoverUrl = async (
-	res: any[],
-	imageSize: TIGDBImageSizes
-) => {
+export const addIGDBCoverUrl = async (res: any[], imageSize: TIGDBImageSizes) => {
 	await Promise.all(
 		res.map(async (result: any) => {
 			try {
@@ -166,10 +154,7 @@ export const addIGDBCoverUrl = async (
 	);
 };
 
-export const addIGDBMugShotUrl = async (
-	res: any[],
-	imageSize: TIGDBImageSizes
-) => {
+export const addIGDBMugShotUrl = async (res: any[], imageSize: TIGDBImageSizes) => {
 	await Promise.all(
 		res.map(async (result: any) => {
 			try {

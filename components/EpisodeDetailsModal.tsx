@@ -52,9 +52,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							<div className='flex items-center space-x-4'>
 								<div className='h-16 w-16'>
 									<RoundProgressBar
-										percentageVal={
-											+(episodeDetails.vote_average ?? 0).toFixed(1) * 10
-										}
+										percentageVal={+(episodeDetails.vote_average ?? 0).toFixed(1) * 10}
 									/>
 								</div>
 								<p className='text-sm text-gray-600'>
@@ -90,9 +88,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							<div className='mt-6'>
 								<h4 className='mb-2 font-semibold'>Description:</h4>
 								<p>
-									{episodeDetails.overview
-										? episodeDetails.overview
-										: 'No Description Available'}
+									{episodeDetails.overview ? episodeDetails.overview : 'No Description Available'}
 								</p>
 							</div>
 						</div>
@@ -100,9 +96,7 @@ const EpisodeDetailsModal = ({ closeModal, episodeDetails }: Props) => {
 							<div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
 								<div className='relative h-full'>
 									<Image
-										src={CommonMethods.getTheMovieDbImage(
-											episodeDetails.still_path
-										)}
+										src={CommonMethods.getTheMovieDbImage(episodeDetails.still_path)}
 										alt={episodeDetails.name ?? ''}
 										layout='fill'
 										className='object-cover'

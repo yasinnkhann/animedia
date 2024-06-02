@@ -9,10 +9,7 @@ import { TypedDocumentNode, useQuery } from '@apollo/client';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { Circles } from 'react-loading-icons';
-import {
-	SORT_BY_OPTIONS,
-	SHOW_GENRE_TYPE_OPTIONS,
-} from '../../models/dropDownOptions';
+import { SORT_BY_OPTIONS, SHOW_GENRE_TYPE_OPTIONS } from '../../models/dropDownOptions';
 import {
 	Exact,
 	InputMaybe,
@@ -85,10 +82,7 @@ const Genre = () => {
 				<section className='grid grid-cols-[20%_60%_20%]'>
 					<section className='m-4 justify-self-center'>
 						<div className='mb-2'>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='sort-by-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='sort-by-dropdown'>
 								Sort By:
 							</label>
 							<Select
@@ -106,10 +100,7 @@ const Genre = () => {
 						</div>
 
 						<div>
-							<label
-								className='mb-1 block text-blue-500'
-								htmlFor='genre-type-dropdown'
-							>
+							<label className='mb-1 block text-blue-500' htmlFor='genre-type-dropdown'>
 								Genre Type:
 							</label>
 							<Select
@@ -135,16 +126,12 @@ const Genre = () => {
 							<MediaList
 								mediaData={
 									genreOfShowsData?.[
-										Object.keys(
-											genreOfShowsData
-										)[0] as keyof typeof genreOfShowsData
+										Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
 									] as unknown as TShowsGenreData
 								}
 								pageNum={currPage}
 								title={`${
-									sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE
-										? 'Popular'
-										: 'Top Rated'
+									sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE ? 'Popular' : 'Top Rated'
 								} ${CommonMethods.unParseSpecialChars(showGenreType)} Shows`}
 								genrePage
 							/>
@@ -153,16 +140,12 @@ const Genre = () => {
 								totalItems={
 									(
 										genreOfShowsData?.[
-											Object.keys(
-												genreOfShowsData
-											)[0] as keyof typeof genreOfShowsData
+											Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
 										] as unknown as TShowsGenreData
 									).total_results
 								}
 								itemsPerPage={RESULTS_PER_PAGE}
-								paginate={(pageNum: number) =>
-									router.push(`${router.pathname}?page=${pageNum}`)
-								}
+								paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 								siblingCount={1}
 								maxPageNum={500}
 							/>

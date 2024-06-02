@@ -1,16 +1,8 @@
 import { graphql } from '../generated/code-gen/gql';
 
 export const ADD_MOVIE = graphql(`
-	mutation AddMovie(
-		$movieId: ID!
-		$movieName: String!
-		$watchStatus: WatchStatusTypes!
-	) {
-		addMovie(
-			movieId: $movieId
-			movieName: $movieName
-			watchStatus: $watchStatus
-		) {
+	mutation AddMovie($movieId: ID!, $movieName: String!, $watchStatus: WatchStatusTypes!) {
+		addMovie(movieId: $movieId, movieName: $movieName, watchStatus: $watchStatus) {
 			id
 			name
 			status
@@ -42,18 +34,8 @@ export const ADD_SHOW = graphql(`
 `);
 
 export const ADD_GAME = graphql(`
-	mutation AddGame(
-		$gameId: ID!
-		$gameName: String!
-		$wishList: Boolean
-		$rating: Int
-	) {
-		addGame(
-			gameId: $gameId
-			gameName: $gameName
-			wishList: $wishList
-			rating: $rating
-		) {
+	mutation AddGame($gameId: ID!, $gameName: String!, $wishList: Boolean, $rating: Int) {
+		addGame(gameId: $gameId, gameName: $gameName, wishList: $wishList, rating: $rating) {
 			id
 			name
 			rating
@@ -63,16 +45,8 @@ export const ADD_GAME = graphql(`
 `);
 
 export const UPDATE_MOVIE = graphql(`
-	mutation UpdateMovie(
-		$movieId: ID!
-		$watchStatus: WatchStatusTypes!
-		$movieRating: Int
-	) {
-		updateMovie(
-			movieId: $movieId
-			watchStatus: $watchStatus
-			movieRating: $movieRating
-		) {
+	mutation UpdateMovie($movieId: ID!, $watchStatus: WatchStatusTypes!, $movieRating: Int) {
+		updateMovie(movieId: $movieId, watchStatus: $watchStatus, movieRating: $movieRating) {
 			id
 			name
 			status

@@ -1,14 +1,6 @@
 import { IGDB_BASE_API_URL } from 'utils/constants';
 import { postIGDB, addIGDBCoverUrl, addIGDBMugShotUrl } from '../utils';
-import {
-	extendType,
-	nonNull,
-	stringArg,
-	list,
-	intArg,
-	idArg,
-	objectType,
-} from 'nexus';
+import { extendType, nonNull, stringArg, list, intArg, idArg, objectType } from 'nexus';
 
 export const GameQueries = extendType({
 	type: 'Query',
@@ -23,10 +15,7 @@ export const GameQueries = extendType({
 			resolve: async (_parent, { q, limit, page }) => {
 				const finalRes = { results: [], total_results: 0 };
 				try {
-					const { count } = await postIGDB(
-						`${IGDB_BASE_API_URL}/games/count`,
-						`search "${q}";`
-					);
+					const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`, `search "${q}";`);
 
 					finalRes.total_results = count;
 
@@ -66,10 +55,7 @@ export const GameQueries = extendType({
 			type: nonNull(list(nonNull('GameGenre'))),
 			resolve: async () => {
 				try {
-					const res = await postIGDB(
-						`${IGDB_BASE_API_URL}/genres`,
-						`fields *; limit 500;`
-					);
+					const res = await postIGDB(`${IGDB_BASE_API_URL}/genres`, `fields *; limit 500;`);
 					return res;
 				} catch (err) {
 					console.error(err);
@@ -142,9 +128,7 @@ export const GameQueries = extendType({
 							})
 						);
 
-						collections = gamesData.sort(
-							(a, b) => a.first_release_date - b.first_release_date
-						);
+						collections = gamesData.sort((a, b) => a.first_release_date - b.first_release_date);
 					}
 					finalRes.games = collections;
 					return finalRes;
@@ -161,10 +145,7 @@ export const GameQueries = extendType({
 			},
 			resolve: async (_parent, { limit }) => {
 				try {
-					const res = await postIGDB(
-						`${IGDB_BASE_API_URL}/themes`,
-						`fields name; limit ${limit};`
-					);
+					const res = await postIGDB(`${IGDB_BASE_API_URL}/themes`, `fields name; limit ${limit};`);
 					return res;
 				} catch (err) {
 					console.error(err);

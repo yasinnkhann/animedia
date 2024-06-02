@@ -50,9 +50,7 @@ const TopRatedMovies = () => {
 							currPage={currPage}
 							totalItems={topRatedMoviesData.topRatedMovies.total_results}
 							itemsPerPage={RESULTS_PER_PAGE}
-							paginate={(pageNum: number) =>
-								router.push(`${router.pathname}?page=${pageNum}`)
-							}
+							paginate={(pageNum: number) => router.push(`${router.pathname}?page=${pageNum}`)}
 							siblingCount={1}
 							maxPageNum={500}
 						/>

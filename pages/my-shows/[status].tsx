@@ -15,21 +15,15 @@ const Status = () => {
 
 	const router = useRouter();
 
-	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
-		Queries.USERS_SHOWS,
-		{
-			fetchPolicy: 'network-only',
-		}
-	);
+	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(Queries.USERS_SHOWS, {
+		fetchPolicy: 'network-only',
+	});
 
 	const [myShows, setMyShows] = useState<UserShow[]>([]);
 
 	useEffect(() => {
 		if (status && status !== 'loading' && router.query.status) {
-			if (
-				!session ||
-				!CommonMethods.statusParams.has(router.query.status as string)
-			) {
+			if (!session || !CommonMethods.statusParams.has(router.query.status as string)) {
 				router.replace('/');
 				return;
 			}
@@ -50,19 +44,13 @@ const Status = () => {
 					status = WatchStatusTypes.PlanToWatch;
 				}
 
-				const showsFiltered = usersShowsData.usersShows.filter(
-					show => show?.status === status
-				);
+				const showsFiltered = usersShowsData.usersShows.filter(show => show?.status === status);
 				setMyShows(showsFiltered as UserShow[]);
 			}
 		}
 	}, [router, session, status, usersShowsData?.usersShows]);
 
-	if (
-		usersShowsLoading ||
-		status === 'loading' ||
-		router.query.status === undefined
-	) {
+	if (usersShowsLoading || status === 'loading' || router.query.status === undefined) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
@@ -70,10 +58,7 @@ const Status = () => {
 		);
 	}
 
-	if (
-		!CommonMethods.statusParams.has(router.query.status as string) ||
-		!session
-	) {
+	if (!CommonMethods.statusParams.has(router.query.status as string) || !session) {
 		router.replace('/');
 		return;
 	}

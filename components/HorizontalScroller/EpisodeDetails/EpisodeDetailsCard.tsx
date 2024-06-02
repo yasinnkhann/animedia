@@ -27,21 +27,12 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 
 	return (
 		<>
-			<section
-				className='relative mx-4 h-[7rem] w-[15rem] select-none'
-				role='button'
-				tabIndex={0}
-			>
-				<section
-					className='relative h-full w-full'
-					onClick={() => setShowModal(true)}
-				>
+			<section className='relative mx-4 h-[7rem] w-[15rem] select-none' role='button' tabIndex={0}>
+				<section className='relative h-full w-full' onClick={() => setShowModal(true)}>
 					<div className='relative h-full w-full'>
 						<Image
 							className='rounded-lg object-contain'
-							src={CommonMethods.getTheMovieDbImage(
-								epDetailsCardData.episodeDetails.still_path
-							)}
+							src={CommonMethods.getTheMovieDbImage(epDetailsCardData.episodeDetails.still_path)}
 							alt={epDetailsCardData.episodeDetails.name ?? undefined}
 							layout='fill'
 						/>
@@ -52,9 +43,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 								Season {epDetailsCardData.episodeDetails.season_number} Ep.{' '}
 								{epDetailsCardData.episodeDetails.episode_number}
 							</p>
-							<p className='font-bold'>
-								{epDetailsCardData.episodeDetails.name}
-							</p>
+							<p className='font-bold'>{epDetailsCardData.episodeDetails.name}</p>
 						</h2>
 					</div>
 				</section>
@@ -63,26 +52,19 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 				<Modal closeModal={() => setShowModal(false)}>
 					<div className='w-full rounded-lg bg-white'>
 						<div className='flex items-center justify-between border-b border-gray-300 px-6 py-4'>
-							<h2 className='text-lg font-semibold'>
-								{epDetailsCardData.episodeDetails.name}
-							</h2>
+							<h2 className='text-lg font-semibold'>{epDetailsCardData.episodeDetails.name}</h2>
 						</div>
 						<div className='p-6'>
 							<div className='flex items-center space-x-4'>
 								<div className='h-16 w-16'>
 									<RoundProgressBar
 										percentageVal={
-											+(
-												epDetailsCardData.episodeDetails.vote_average ?? 0
-											).toFixed(1) * 10
+											+(epDetailsCardData.episodeDetails.vote_average ?? 0).toFixed(1) * 10
 										}
 									/>
 								</div>
 								<p className='text-sm text-gray-600'>
-									{commaNumber(
-										epDetailsCardData.episodeDetails.vote_count ?? 0
-									)}{' '}
-									voted users
+									{commaNumber(epDetailsCardData.episodeDetails.vote_count ?? 0)} voted users
 								</p>
 							</div>
 							<div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-2'>
@@ -106,9 +88,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 									<h4 className='font-semibold'>Air Date</h4>
 									<p>
 										{epDetailsCardData.episodeDetails.air_date
-											? CommonMethods.formatDate(
-													epDetailsCardData.episodeDetails.air_date
-												)
+											? CommonMethods.formatDate(epDetailsCardData.episodeDetails.air_date)
 											: 'Air Date Not Available'}
 									</p>
 								</div>

@@ -34,9 +34,7 @@ export default function Register() {
 
 	const [registerUser] = useMutation(Mutations.REGISTER_USER);
 
-	const [sendVerificationEmail] = useMutation(
-		Mutations.SEND_VERIFICATION_EMAIL
-	);
+	const [sendVerificationEmail] = useMutation(Mutations.SEND_VERIFICATION_EMAIL);
 
 	async function onSubmit() {
 		const { name, email, password } = formik.values;
@@ -98,9 +96,7 @@ export default function Register() {
 									name='name'
 									placeholder='Name'
 									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
-										formik.errors.name && formik.touched.name
-											? 'border-rose-600'
-											: ''
+										formik.errors.name && formik.touched.name ? 'border-rose-600' : ''
 									}`}
 								/>
 								<span className='icon absolute right-3 top-1/2 -translate-y-1/2 transform'>
@@ -119,9 +115,7 @@ export default function Register() {
 									name='email'
 									placeholder='Email'
 									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
-										formik.errors.email && formik.touched.email
-											? 'border-rose-600'
-											: ''
+										formik.errors.email && formik.touched.email ? 'border-rose-600' : ''
 									}`}
 								/>
 								<span className='icon absolute right-3 top-1/2 -translate-y-1/2 transform'>
@@ -141,17 +135,13 @@ export default function Register() {
 									name='password'
 									placeholder='Password'
 									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
-										formik.errors.password && formik.touched.password
-											? 'border-rose-600'
-											: ''
+										formik.errors.password && formik.touched.password ? 'border-rose-600' : ''
 									}`}
 								/>
 								<span className='icon absolute right-3 top-1/2 -translate-y-1/2 transform'>
 									<button
 										type='button'
-										onClick={() =>
-											setShowPW({ ...showPW, password: !showPW.password })
-										}
+										onClick={() => setShowPW({ ...showPW, password: !showPW.password })}
 										className='text-gray-500 hover:text-blue-500 focus:outline-none'
 									>
 										{showPW.password ? (
@@ -163,9 +153,7 @@ export default function Register() {
 								</span>
 							</div>
 							{formik.errors.password && formik.touched.password && (
-								<span className='ml-2 text-red-500'>
-									{formik.errors.password}
-								</span>
+								<span className='ml-2 text-red-500'>{formik.errors.password}</span>
 							)}
 						</div>
 
@@ -177,8 +165,7 @@ export default function Register() {
 									name='confirmPassword'
 									placeholder='Confirm Password'
 									className={`w-full rounded-lg border py-3 pl-10 pr-12 focus:border-blue-500 focus:outline-none ${
-										formik.errors.confirmPassword &&
-										formik.touched.confirmPassword
+										formik.errors.confirmPassword && formik.touched.confirmPassword
 											? 'border-rose-600'
 											: ''
 									}`}
@@ -202,12 +189,9 @@ export default function Register() {
 									</button>
 								</span>
 							</div>
-							{formik.errors.confirmPassword &&
-								formik.touched.confirmPassword && (
-									<span className='ml-2 text-red-500'>
-										{formik.errors.confirmPassword}
-									</span>
-								)}
+							{formik.errors.confirmPassword && formik.touched.confirmPassword && (
+								<span className='ml-2 text-red-500'>{formik.errors.confirmPassword}</span>
+							)}
 						</div>
 
 						<button
@@ -232,9 +216,7 @@ export default function Register() {
 
 					<div className='mt-4 flex flex-col items-center'>
 						<Link href='/auth/login'>
-							<a className='text-center text-gray-600 hover:text-blue-500'>
-								Have an account?
-							</a>
+							<a className='text-center text-gray-600 hover:text-blue-500'>Have an account?</a>
 						</Link>
 					</div>
 				</section>

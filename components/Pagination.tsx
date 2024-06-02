@@ -76,9 +76,7 @@ const Pagination = ({
 					return (
 						<button
 							className={`${
-								pageNumber === currPage
-									? 'cursor-default text-red-500'
-									: 'cursor-pointer'
+								pageNumber === currPage ? 'cursor-default text-red-500' : 'cursor-pointer'
 							} px-2`}
 							key={idx}
 							onClick={() => {
@@ -94,9 +92,7 @@ const Pagination = ({
 			<div className='px-2'>
 				<button
 					className={`cursor-pointer border-none bg-none p-0 font-sans text-inherit outline-inherit ${
-						currPage === lastPage
-							? 'cursor-default !text-gray-500'
-							: '!text-green-700'
+						currPage === lastPage ? 'cursor-default !text-gray-500' : '!text-green-700'
 					}`}
 					onClick={goToNextPage}
 					disabled={currPage === lastPage}

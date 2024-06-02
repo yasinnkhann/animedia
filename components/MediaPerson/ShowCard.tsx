@@ -27,10 +27,7 @@ const ShowCard = ({ show, rank }: Props) => {
 			</td>
 
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-				<Link
-					href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
-					passHref
-				>
+				<Link href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)} passHref>
 					<a className='text-inherit no-underline'>
 						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
 							<Image
@@ -44,10 +41,7 @@ const ShowCard = ({ show, rank }: Props) => {
 				</Link>
 
 				<section className='col-start-2 pl-4'>
-					<Link
-						href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
-						passHref
-					>
+					<Link href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)} passHref>
 						<a className='text-inherit no-underline'>
 							<h3 className='cursor-pointer'>{show.name}</h3>
 						</a>
@@ -67,18 +61,12 @@ const ShowCard = ({ show, rank }: Props) => {
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
-						<p>
-							{usersShowData?.usersShow?.rating
-								? usersShowData.usersShow.rating
-								: 'N/A'}
-						</p>
+						<p>{usersShowData?.usersShow?.rating ? usersShowData.usersShow.rating : 'N/A'}</p>
 					</td>
 					<td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
 						<p>
 							{usersShowData?.usersShow?.status
-								? CommonMethods.renderTableStatus(
-										usersShowData.usersShow.status
-									)
+								? CommonMethods.renderTableStatus(usersShowData.usersShow.status)
 								: 'N/A'}
 						</p>
 					</td>
