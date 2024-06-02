@@ -10,7 +10,12 @@
 	"ignorePatterns": ["graphql/generated"],
 	"root": true,
 	"rules": {
-		"prettier/prettier": ["warn"],
+		"prettier/prettier": [
+			"warn",
+			{
+				"printWidth": 100
+			}
+		],
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
 			{

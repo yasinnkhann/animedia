@@ -1,14 +1,10 @@
 import { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
+import GameCard from './GameCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
-import {
-	GamesRes,
-	MoviesRes,
-	ShowsRes,
-} from '../../graphql/generated/code-gen/graphql';
-import GameCard from './GameCard';
+import { GamesRes, MoviesRes, ShowsRes } from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	mediaData: MoviesRes | ShowsRes | GamesRes;
@@ -25,9 +21,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 			className={`w-full ${!genrePage ? 'px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24' : ''}`}
 		>
 			<section className='flex flex-col'>
-				<h3 className='mb-2 ml-4 text-lg lg:text-xl'>
-					{title.split('_').join(' ')}
-				</h3>
+				<h3 className='mb-2 ml-4 text-lg lg:text-xl'>{title.split('_').join(' ')}</h3>
 				<div className='overflow-x-auto'>
 					<table className='w-full table-auto text-sm sm:text-base'>
 						<thead>
@@ -47,9 +41,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 											My Rating
 										</th>
 										{mediaData.__typename !== 'GamesRes' && (
-											<th className='w-1/6 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
-												Status
-											</th>
+											<th className='w-1/6 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>Status</th>
 										)}
 									</>
 								)}
@@ -63,11 +55,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 									mediaComp = (
 										<MovieCard
 											movie={media}
-											rank={
-												pageNum * RESULTS_PER_PAGE -
-												(RESULTS_PER_PAGE - idx) +
-												1
-											}
+											rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
 										/>
 									);
 								}
@@ -76,11 +64,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 									mediaComp = (
 										<ShowCard
 											show={media}
-											rank={
-												pageNum * RESULTS_PER_PAGE -
-												(RESULTS_PER_PAGE - idx) +
-												1
-											}
+											rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
 										/>
 									);
 								}
@@ -89,11 +73,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 									mediaComp = (
 										<GameCard
 											game={media}
-											rank={
-												pageNum * RESULTS_PER_PAGE -
-												(RESULTS_PER_PAGE - idx) +
-												1
-											}
+											rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
 										/>
 									);
 								}
