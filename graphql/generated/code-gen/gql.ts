@@ -16,18 +16,18 @@ const documents = {
     "\n\tfragment MovieResult on MovieResult {\n\t\tadult\n\t\tbackdrop_path\n\t\tgenre_ids\n\t\tid\n\t\toriginal_language\n\t\toriginal_title\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\trelease_date\n\t\ttitle\n\t\tvideo\n\t\tvote_average\n\t\tvote_count\n\t}\n": types.MovieResultFragmentDoc,
     "\n\tfragment ShowResult on ShowResult {\n\t\tbackdrop_path\n\t\tfirst_air_date\n\t\tgenre_ids\n\t\tid\n\t\tname\n\t\torigin_country\n\t\toriginal_language\n\t\toriginal_name\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\tvote_average\n\t\tvote_count\n\t}\n": types.ShowResultFragmentDoc,
     "\n\tmutation AddMovie(\n\t\t$movieId: ID!\n\t\t$movieName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t) {\n\t\taddMovie(\n\t\t\tmovieId: $movieId\n\t\t\tmovieName: $movieName\n\t\t\twatchStatus: $watchStatus\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.AddMovieDocument,
-    "\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UpdateMovieDocument,
-    "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.DeleteMovieDocument,
     "\n\tmutation AddShow(\n\t\t$showId: ID!\n\t\t$showName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$currentEpisode: Int\n\t) {\n\t\taddShow(\n\t\t\tshowId: $showId\n\t\t\tshowName: $showName\n\t\t\twatchStatus: $watchStatus\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.AddShowDocument,
+    "\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.AddGameDocument,
+    "\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UpdateMovieDocument,
     "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateShowDocument,
+    "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateGameDocument,
+    "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.DeleteMovieDocument,
     "\n\tmutation DeleteShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.DeleteShowDocument,
     "\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n": types.VerifyUserEmailDocument,
     "\n\tmutation SendVerificationEmail($userId: ID!) {\n\t\tsendVerificationEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.SendVerificationEmailDocument,
     "\n\tmutation RegisterUser($name: String!, $email: String!, $password: String!) {\n\t\tregisterUser(name: $name, email: $email, password: $password) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tcreatedUser {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\temail\n\t\t\t\tpassword\n\t\t\t\timage\n\t\t\t\tcreated_at\n\t\t\t\temailVerified\n\t\t\t\tmovies {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t}\n\t\t\t\tshows {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t\tcurrent_episode\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.RegisterUserDocument,
     "\n\tmutation SendForgotPasswordEmail($email: String!) {\n\t\tsendForgotPasswordEmail(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.SendForgotPasswordEmailDocument,
     "\n\tmutation ChangePassword($userId: ID!, $newPassword: String!) {\n\t\tchangePassword(userId: $userId, newPassword: $newPassword) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.ChangePasswordDocument,
-    "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateGameDocument,
-    "\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.AddGameDocument,
     "\n\tquery SearchedGames($q: String!, $limit: Int!, $page: Int!) {\n\t\tsearchedGames(q: $q, limit: $limit, page: $page) {\n\t\t\ttotal_results\n\t\t\tresults {\n\t\t\t\tid\n\t\t\t\tage_ratings\n\t\t\t\talternative_names\n\t\t\t\tartworks\n\t\t\t\tbundles\n\t\t\t\tcategory\n\t\t\t\tchecksum\n\t\t\t\tcollection\n\t\t\t\tcollections\n\t\t\t\tcover\n\t\t\t\tcoverUrl\n\t\t\t\tcreated_at\n\t\t\t\tdlcs\n\t\t\t\texpanded_games\n\t\t\t\texpansions\n\t\t\t\texternal_games\n\t\t\t\tfirst_release_date\n\t\t\t\tforks\n\t\t\t\tfranchise\n\t\t\t\tfranchises\n\t\t\t\tgame_engines\n\t\t\t\tgame_localizations\n\t\t\t\tgame_modes\n\t\t\t\tgenres\n\t\t\t\thypes\n\t\t\t\tinvolved_companies\n\t\t\t\tkeywords\n\t\t\t\tlanguage_supports\n\t\t\t\tmultiplayer_modes\n\t\t\t\tname\n\t\t\t\tparent_game\n\t\t\t\tplatforms\n\t\t\t\tplayer_perspectives\n\t\t\t\tports\n\t\t\t\trating\n\t\t\t\trating_count\n\t\t\t\trelease_dates\n\t\t\t\tremakes\n\t\t\t\tremasters\n\t\t\t\tscreenshots\n\t\t\t\tsimilar_games\n\t\t\t\tslug\n\t\t\t\tstandalone_expansions\n\t\t\t\tstatus\n\t\t\t\tstoryline\n\t\t\t\tsummary\n\t\t\t\ttags\n\t\t\t\tthemes\n\t\t\t\ttotal_rating\n\t\t\t\ttotal_rating_count\n\t\t\t\tupdated_at\n\t\t\t\turl\n\t\t\t\tversion_parent\n\t\t\t\tversion_title\n\t\t\t\tvideos\n\t\t\t\twebsites\n\t\t\t}\n\t\t}\n\t}\n": types.SearchedGamesDocument,
     "\n\tquery GameDetails($gameId: ID!) {\n\t\tgameDetails(gameId: $gameId) {\n\t\t\ttotal_results\n\t\t\tresults {\n\t\t\t\tid\n\t\t\t\tage_ratings\n\t\t\t\talternative_names\n\t\t\t\tartworks\n\t\t\t\tbundles\n\t\t\t\tcategory\n\t\t\t\tchecksum\n\t\t\t\tcollection\n\t\t\t\tcollections\n\t\t\t\tcover\n\t\t\t\tcoverUrl\n\t\t\t\tcreated_at\n\t\t\t\tdlcs\n\t\t\t\texpanded_games\n\t\t\t\texpansions\n\t\t\t\texternal_games\n\t\t\t\tfirst_release_date\n\t\t\t\tforks\n\t\t\t\tfranchise\n\t\t\t\tfranchises\n\t\t\t\tgame_engines\n\t\t\t\tgame_localizations\n\t\t\t\tgame_modes\n\t\t\t\tgenres\n\t\t\t\thypes\n\t\t\t\tinvolved_companies\n\t\t\t\tkeywords\n\t\t\t\tlanguage_supports\n\t\t\t\tmultiplayer_modes\n\t\t\t\tname\n\t\t\t\tparent_game\n\t\t\t\tplatforms\n\t\t\t\tplayer_perspectives\n\t\t\t\tports\n\t\t\t\trating\n\t\t\t\trating_count\n\t\t\t\trelease_dates\n\t\t\t\tremakes\n\t\t\t\tremasters\n\t\t\t\tscreenshots\n\t\t\t\tsimilar_games\n\t\t\t\tslug\n\t\t\t\tstandalone_expansions\n\t\t\t\tstatus\n\t\t\t\tstoryline\n\t\t\t\tsummary\n\t\t\t\ttags\n\t\t\t\tthemes\n\t\t\t\ttotal_rating\n\t\t\t\ttotal_rating_count\n\t\t\t\tupdated_at\n\t\t\t\turl\n\t\t\t\tversion_parent\n\t\t\t\tversion_title\n\t\t\t\tvideos\n\t\t\t\twebsites\n\t\t\t}\n\t\t}\n\t}\n": types.GameDetailsDocument,
     "\n\tquery GameGenres {\n\t\tgameGenres {\n\t\t\tid\n\t\t\tname\n\t\t}\n\t}\n": types.GameGenresDocument,
@@ -75,15 +75,15 @@ const documents = {
     "\n\tquery EpisodeDetails($showId: ID!, $seasonNum: Int!, $episodeNum: Int!) {\n\t\tepisodeDetails(\n\t\t\tshowId: $showId\n\t\t\tseasonNum: $seasonNum\n\t\t\tepisodeNum: $episodeNum\n\t\t) {\n\t\t\tair_date\n\t\t\tcrew {\n\t\t\t\tadult\n\t\t\t\tgender\n\t\t\t\tid\n\t\t\t\tknown_for_department\n\t\t\t\tname\n\t\t\t\toriginal_name\n\t\t\t\tpopularity\n\t\t\t\tprofile_path\n\t\t\t\tcredit_id\n\t\t\t\tdepartment\n\t\t\t\tjob\n\t\t\t}\n\t\t\tepisode_number\n\t\t\tguest_stars {\n\t\t\t\tadult\n\t\t\t\tgender\n\t\t\t\tid\n\t\t\t\tknown_for_department\n\t\t\t\tname\n\t\t\t\toriginal_name\n\t\t\t\tpopularity\n\t\t\t\tprofile_path\n\t\t\t\tcharacter\n\t\t\t\tcredit_id\n\t\t\t\torder\n\t\t\t}\n\t\t\tname\n\t\t\toverview\n\t\t\tid\n\t\t\tproduction_code\n\t\t\truntime\n\t\t\tseason_number\n\t\t\tstill_path\n\t\t\tvote_average\n\t\t\tvote_count\n\t\t}\n\t}\n": types.EpisodeDetailsDocument,
     "\n\tquery User($userId: ID!) {\n\t\tuser(id: $userId) {\n\t\t\tid\n\t\t\tname\n\t\t\temail\n\t\t\timage\n\t\t\tmovies {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\tstatus\n\t\t\t\trating\n\t\t\t}\n\t\t\tshows {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\tstatus\n\t\t\t\trating\n\t\t\t\tcurrent_episode\n\t\t\t}\n\t\t}\n\t}\n": types.UserDocument,
     "\n\tquery UsersMovie($movieId: String!) {\n\t\tusersMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UsersMovieDocument,
-    "\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UsersMoviesDocument,
     "\n\tquery UsersShow($showId: String!) {\n\t\tusersShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UsersShowDocument,
     "\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UsersGameDocument,
+    "\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UsersMoviesDocument,
     "\n\tquery UsersShows {\n\t\tusersShows {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UsersShowsDocument,
+    "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UsersGamesDocument,
     "\n\tquery CheckEmailVerificationToken($token: String!, $userId: ID!) {\n\t\tcheckEmailVerificationToken(token: $token, userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckEmailVerificationTokenDocument,
     "\n\tquery CheckForgotPasswordToken($token: String!, $userId: ID!) {\n\t\tcheckForgotPasswordToken(token: $token, userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckForgotPasswordTokenDocument,
     "\n\tquery AccountVerified($email: String!) {\n\t\taccountVerified(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tid\n\t\t\temailVerified\n\t\t}\n\t}\n": types.AccountVerifiedDocument,
     "\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n": types.EmailFromRedisTokenDocument,
-    "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UsersGamesDocument,
 };
 
 /**
@@ -115,19 +115,27 @@ export function graphql(source: "\n\tmutation AddMovie(\n\t\t$movieId: ID!\n\t\t
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n\tmutation AddShow(\n\t\t$showId: ID!\n\t\t$showName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$currentEpisode: Int\n\t) {\n\t\taddShow(\n\t\t\tshowId: $showId\n\t\t\tshowName: $showName\n\t\t\twatchStatus: $watchStatus\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation AddShow(\n\t\t$showId: ID!\n\t\t$showName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$currentEpisode: Int\n\t) {\n\t\taddShow(\n\t\t\tshowId: $showId\n\t\t\tshowName: $showName\n\t\t\twatchStatus: $watchStatus\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -152,14 +160,6 @@ export function graphql(source: "\n\tmutation SendForgotPasswordEmail($email: St
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation ChangePassword($userId: ID!, $newPassword: String!) {\n\t\tchangePassword(userId: $userId, newPassword: $newPassword) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation ChangePassword($userId: ID!, $newPassword: String!) {\n\t\tchangePassword(userId: $userId, newPassword: $newPassword) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -351,10 +351,6 @@ export function graphql(source: "\n\tquery UsersMovie($movieId: String!) {\n\t\t
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n\tquery UsersShow($showId: String!) {\n\t\tusersShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersShow($showId: String!) {\n\t\tusersShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -363,7 +359,15 @@ export function graphql(source: "\n\tquery UsersGame($gameId: String!) {\n\t\tus
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n\tquery UsersShows {\n\t\tusersShows {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersShows {\n\t\tusersShows {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -380,10 +384,6 @@ export function graphql(source: "\n\tquery AccountVerified($email: String!) {\n\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n"): (typeof documents)["\n\tquery EmailFromRedisToken($token: String!) {\n\t\temailFromRedisToken(token: $token)\n\t}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

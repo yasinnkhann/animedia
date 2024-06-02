@@ -19,36 +19,6 @@ export const ADD_MOVIE = graphql(`
 	}
 `);
 
-export const UPDATE_MOVIE = graphql(`
-	mutation UpdateMovie(
-		$movieId: ID!
-		$watchStatus: WatchStatusTypes!
-		$movieRating: Int
-	) {
-		updateMovie(
-			movieId: $movieId
-			watchStatus: $watchStatus
-			movieRating: $movieRating
-		) {
-			id
-			name
-			status
-			rating
-		}
-	}
-`);
-
-export const DELETE_MOVIE = graphql(`
-	mutation DeleteMovie($movieId: ID!) {
-		deleteMovie(movieId: $movieId) {
-			id
-			name
-			status
-			rating
-		}
-	}
-`);
-
 export const ADD_SHOW = graphql(`
 	mutation AddShow(
 		$showId: ID!
@@ -71,6 +41,46 @@ export const ADD_SHOW = graphql(`
 	}
 `);
 
+export const ADD_GAME = graphql(`
+	mutation AddGame(
+		$gameId: ID!
+		$gameName: String!
+		$wishList: Boolean
+		$rating: Int
+	) {
+		addGame(
+			gameId: $gameId
+			gameName: $gameName
+			wishList: $wishList
+			rating: $rating
+		) {
+			id
+			name
+			rating
+			wishList
+		}
+	}
+`);
+
+export const UPDATE_MOVIE = graphql(`
+	mutation UpdateMovie(
+		$movieId: ID!
+		$watchStatus: WatchStatusTypes!
+		$movieRating: Int
+	) {
+		updateMovie(
+			movieId: $movieId
+			watchStatus: $watchStatus
+			movieRating: $movieRating
+		) {
+			id
+			name
+			status
+			rating
+		}
+	}
+`);
+
 export const UPDATE_SHOW = graphql(`
 	mutation UpdateShow(
 		$showId: ID!
@@ -89,6 +99,39 @@ export const UPDATE_SHOW = graphql(`
 			status
 			rating
 			current_episode
+		}
+	}
+`);
+
+export const UPDATE_GAME = graphql(`
+	mutation UpdateGame(
+		$showId: ID!
+		$watchStatus: WatchStatusTypes!
+		$showRating: Int
+		$currentEpisode: Int
+	) {
+		updateShow(
+			showId: $showId
+			watchStatus: $watchStatus
+			showRating: $showRating
+			currentEpisode: $currentEpisode
+		) {
+			id
+			name
+			status
+			rating
+			current_episode
+		}
+	}
+`);
+
+export const DELETE_MOVIE = graphql(`
+	mutation DeleteMovie($movieId: ID!) {
+		deleteMovie(movieId: $movieId) {
+			id
+			name
+			status
+			rating
 		}
 	}
 `);
@@ -180,49 +223,6 @@ export const CHANGE_PASSWORD = graphql(`
 			}
 			token
 			userId
-		}
-	}
-`);
-
-export const UPDATE_GAME = graphql(`
-	mutation UpdateGame(
-		$showId: ID!
-		$watchStatus: WatchStatusTypes!
-		$showRating: Int
-		$currentEpisode: Int
-	) {
-		updateShow(
-			showId: $showId
-			watchStatus: $watchStatus
-			showRating: $showRating
-			currentEpisode: $currentEpisode
-		) {
-			id
-			name
-			status
-			rating
-			current_episode
-		}
-	}
-`);
-
-export const ADD_GAME = graphql(`
-	mutation AddGame(
-		$gameId: ID!
-		$gameName: String!
-		$wishList: Boolean
-		$rating: Int
-	) {
-		addGame(
-			gameId: $gameId
-			gameName: $gameName
-			wishList: $wishList
-			rating: $rating
-		) {
-			id
-			name
-			rating
-			wishList
 		}
 	}
 `);

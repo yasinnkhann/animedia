@@ -35,17 +35,6 @@ export const USERS_MOVIE = graphql(`
 	}
 `);
 
-export const USERS_MOVIES = graphql(`
-	query UsersMovies {
-		usersMovies {
-			id
-			name
-			status
-			rating
-		}
-	}
-`);
-
 export const USERS_SHOW = graphql(`
 	query UsersShow($showId: String!) {
 		usersShow(showId: $showId) {
@@ -69,6 +58,17 @@ export const USERS_GAME = graphql(`
 	}
 `);
 
+export const USERS_MOVIES = graphql(`
+	query UsersMovies {
+		usersMovies {
+			id
+			name
+			status
+			rating
+		}
+	}
+`);
+
 export const USERS_SHOWS = graphql(`
 	query UsersShows {
 		usersShows {
@@ -77,6 +77,17 @@ export const USERS_SHOWS = graphql(`
 			status
 			rating
 			current_episode
+		}
+	}
+`);
+
+export const USERS_GAMES = graphql(`
+	query UsersGames {
+		usersGames {
+			id
+			name
+			rating
+			wishList
 		}
 	}
 `);
@@ -120,16 +131,5 @@ export const ACCOUNT_VERIFIED = graphql(`
 export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 	query EmailFromRedisToken($token: String!) {
 		emailFromRedisToken(token: $token)
-	}
-`);
-
-export const USERS_GAMES = graphql(`
-	query UsersGames {
-		usersGames {
-			id
-			name
-			rating
-			wishList
-		}
 	}
 `);
