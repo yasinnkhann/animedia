@@ -267,7 +267,7 @@ export const MY_MEDIA_ITEMS = [
 
 export const ratingOptions = [
 	{
-		value: 0,
+		value: '',
 		text: 'Select Rating',
 	},
 	{

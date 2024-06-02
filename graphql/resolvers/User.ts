@@ -329,7 +329,7 @@ export const UserMutations = extendType({
 								id: gameId,
 								name: gameName,
 								wishList: wishList ?? undefined,
-								rating: rating ?? undefined,
+								rating,
 							},
 						},
 					},
@@ -406,7 +406,7 @@ export const UserMutations = extendType({
 					},
 					data: {
 						wishList: wishList ?? undefined,
-						rating: rating ? rating : null,
+						rating,
 					},
 				});
 			},
@@ -439,6 +439,23 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: showId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+				});
+			},
+		});
+
+		t.field('deleteGame', {
+			type: 'UserGame',
+			args: {
+				gameId: nonNull(idArg()),
+			},
+			resolve: async (_parent, { gameId }, ctx) => {
+				return await ctx.prisma.game.delete({
+					where: {
+						id_userId: {
+							id: gameId,
 							userId: ctx.session!.user?.id!,
 						},
 					},

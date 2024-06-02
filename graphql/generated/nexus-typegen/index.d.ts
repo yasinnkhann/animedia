@@ -990,6 +990,7 @@ export interface NexusGenFieldTypes {
     addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     changePassword: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    deleteGame: NexusGenRootTypes['UserGame'] | null; // UserGame
     deleteMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     deleteShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
@@ -1689,6 +1690,7 @@ export interface NexusGenFieldTypeNames {
     addMovie: 'UserMovie'
     addShow: 'UserShow'
     changePassword: 'RedisRes'
+    deleteGame: 'UserGame'
     deleteMovie: 'UserMovie'
     deleteShow: 'UserShow'
     registerUser: 'RegisteredUserRes'
@@ -2132,6 +2134,9 @@ export interface NexusGenArgTypes {
     changePassword: { // args
       newPassword: string; // String!
       userId: string; // ID!
+    }
+    deleteGame: { // args
+      gameId: string; // ID!
     }
     deleteMovie: { // args
       movieId: string; // ID!

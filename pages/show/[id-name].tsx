@@ -32,7 +32,7 @@ const ShowDetails = () => {
 		WatchStatusTypes.NotWatching
 	);
 
-	const [rating, setRating] = useState<number>(ratingOptions[0].value);
+	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
@@ -456,8 +456,8 @@ const ShowDetails = () => {
 			setWatchStatus(
 				usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching
 			);
-			setRating(usersShowData.usersShow.rating ?? 0);
-			setCurrEp(String(usersShowData.usersShow.current_episode ?? 0));
+			setRating(usersShowData.usersShow.rating ?? '');
+			setCurrEp(String(usersShowData.usersShow.current_episode ?? ''));
 
 			if (
 				usersShowData.usersShow.current_episode === currTotalEpCount &&
@@ -490,7 +490,7 @@ const ShowDetails = () => {
 			}
 		} else {
 			setWatchStatus(WatchStatusTypes.NotWatching);
-			setRating(0);
+			setRating('');
 			setCurrEp('0');
 		}
 	}, [

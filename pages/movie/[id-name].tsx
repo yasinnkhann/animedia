@@ -29,7 +29,7 @@ const MovieDetails = () => {
 		WatchStatusTypes.NotWatching
 	);
 
-	const [rating, setRating] = useState<number>(ratingOptions[0].value);
+	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
@@ -194,10 +194,10 @@ const MovieDetails = () => {
 
 		if (usersMovieData?.usersMovie?.status) {
 			setWatchStatus(usersMovieData.usersMovie.status);
-			setRating(usersMovieData.usersMovie.rating ?? 0);
+			setRating(usersMovieData.usersMovie.rating ?? '');
 		} else {
 			setWatchStatus(WatchStatusTypes.NotWatching);
-			setRating(0);
+			setRating('');
 		}
 	}, [usersMovieData, usersMovieLoading]);
 

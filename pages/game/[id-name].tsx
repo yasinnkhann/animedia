@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
@@ -27,7 +27,7 @@ const GameDetails = () => {
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
 
-	const [rating, setRating] = useState<number>(ratingOptions[0].value);
+	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
 	const [addToWishList, setAddToWishList] = useState<boolean>(false);
 
@@ -138,37 +138,121 @@ const GameDetails = () => {
 		}
 	);
 
-	// const [updateGame, { loading: updateGameLoading }] = useMutation(
-	// 	Mutations.UPDATE_GAME,
-	// 	{
-	// 		variables: {
-	// 			gameId: id,
-	// 			gameRating: typeof rating === 'number' ? rating : null,
-	// 		},
-	// 		refetchQueries: () => [
-	// 			{
-	// 				query: Queries.USERS_MOVIE,
-	// 				variables: {
-	// 					movieId: id,
-	// 				},
-	// 			},
-	// 			'UsersMovie',
-	// 		],
-	// 	}
-	// );
+	const [updateGame, { loading: updateGameLoading }] = useMutation(
+		Mutations.UPDATE_GAME,
+		{
+			variables: {
+				gameId: id,
+				rating: typeof rating === 'number' ? rating : null,
+				wishList: addToWishList,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.USERS_GAME,
+					variables: {
+						movieId: id,
+					},
+				},
+				'UsersGame',
+			],
+		}
+	);
+
+	const [deleteGame, { loading: deleteGameLoading }] = useMutation(
+		Mutations.DELETE_GAME,
+		{
+			variables: {
+				gameId: id,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.USERS_GAME,
+					variables: {
+						movieId: id,
+					},
+				},
+				'UsersGame',
+			],
+		}
+	);
+
+	const handleWishList = () => {
+		if (!usersGame?.id) {
+			addGame({
+				variables: {
+					gameId: id,
+					gameName: game.name,
+					rating: typeof rating === 'number' ? rating : null,
+					wishList: true,
+				},
+			});
+			setAddToWishList(true);
+			return;
+		}
+
+		if (!usersGame?.wishList) {
+			updateGame({
+				variables: {
+					gameId: id,
+					wishList: true,
+				},
+			});
+			setAddToWishList(true);
+			return;
+		}
+
+		if (usersGame?.wishList) {
+			updateGame({
+				variables: {
+					gameId: id,
+					wishList: false,
+				},
+			});
+			setAddToWishList(false);
+			return;
+		}
+	};
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 		setRating(+value);
 
-		// updateGame({
-		// 	variables: {
-		// 		gameId: id,
-		// 		gameRating: isNaN(parseInt(value)) ? null : parseInt(value),
-		// 		wishList: null,
-		// 	},
-		// });
+		if (!usersGame?.id) {
+			addGame({
+				variables: {
+					gameId: id,
+					gameName: game.name,
+					rating: typeof rating === 'number' ? rating : null,
+					wishList: addToWishList,
+				},
+			});
+			return;
+		}
+
+		updateGame({
+			variables: {
+				gameId: id,
+				rating: typeof rating === 'number' ? rating : null,
+			},
+		});
+		return;
 	};
+
+	useEffect(() => {
+		if (usersGameLoading || !usersGameData?.usersGame) return;
+
+		if (usersGameData.usersGame) {
+			setRating(usersGameData.usersGame.rating ?? '');
+			setAddToWishList(usersGameData.usersGame.wishList ?? false);
+		} else {
+			setRating('');
+			setAddToWishList(false);
+		}
+	}, [
+		gameDetailsData?.gameDetails.results,
+		usersGameData?.usersGame,
+		usersGameLoading,
+	]);
 
 	if (
 		gameDetailsLoading ||
@@ -181,6 +265,9 @@ const GameDetails = () => {
 		!gameThemesData?.gameThemes ||
 		gameGenresLoading ||
 		!gameGenresData?.gameGenres
+		//  ||
+		// usersGameLoading ||
+		// !usersGameData?.usersGame
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
@@ -199,7 +286,7 @@ const GameDetails = () => {
 
 	const game = gameDetailsData.gameDetails.results[0];
 	const gameSummary = game.storyline || game.summary;
-	const addedToWishlist = usersGameData?.usersGame?.wishList;
+	const usersGame = usersGameData?.usersGame;
 
 	return (
 		<>
@@ -232,13 +319,14 @@ const GameDetails = () => {
 					{status === 'authenticated' && session && (
 						<section className='my-4 h-[1.5rem]'>
 							<Button
+								onClick={handleWishList}
 								type='primary'
 								style={{
-									backgroundColor: addedToWishlist ? '#52c41a' : '',
-									borderColor: addedToWishlist ? '#52c41a' : '',
+									backgroundColor: usersGame?.wishList ? '#52c41a' : '',
+									borderColor: usersGame?.wishList ? '#52c41a' : '',
 								}}
 							>
-								{addedToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
+								{usersGame?.wishList ? 'Added to Wishlist' : 'Add to Wishlist'}
 							</Button>
 
 							<select

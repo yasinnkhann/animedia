@@ -20,9 +20,10 @@ const documents = {
     "\n\tmutation AddGame(\n\t\t$gameId: ID!\n\t\t$gameName: String!\n\t\t$wishList: Boolean\n\t\t$rating: Int\n\t) {\n\t\taddGame(\n\t\t\tgameId: $gameId\n\t\t\tgameName: $gameName\n\t\t\twishList: $wishList\n\t\t\trating: $rating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.AddGameDocument,
     "\n\tmutation UpdateMovie(\n\t\t$movieId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$movieRating: Int\n\t) {\n\t\tupdateMovie(\n\t\t\tmovieId: $movieId\n\t\t\twatchStatus: $watchStatus\n\t\t\tmovieRating: $movieRating\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UpdateMovieDocument,
     "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateShowDocument,
-    "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateGameDocument,
+    "\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UpdateGameDocument,
     "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.DeleteMovieDocument,
     "\n\tmutation DeleteShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.DeleteShowDocument,
+    "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.DeleteGameDocument,
     "\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n": types.VerifyUserEmailDocument,
     "\n\tmutation SendVerificationEmail($userId: ID!) {\n\t\tsendVerificationEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.SendVerificationEmailDocument,
     "\n\tmutation RegisterUser($name: String!, $email: String!, $password: String!) {\n\t\tregisterUser(name: $name, email: $email, password: $password) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tcreatedUser {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\temail\n\t\t\t\tpassword\n\t\t\t\timage\n\t\t\t\tcreated_at\n\t\t\t\temailVerified\n\t\t\t\tmovies {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t}\n\t\t\t\tshows {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t\tcurrent_episode\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.RegisterUserDocument,
@@ -131,7 +132,7 @@ export function graphql(source: "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -140,6 +141,10 @@ export function graphql(source: "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\t
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation DeleteShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

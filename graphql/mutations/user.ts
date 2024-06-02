@@ -104,23 +104,12 @@ export const UPDATE_SHOW = graphql(`
 `);
 
 export const UPDATE_GAME = graphql(`
-	mutation UpdateGame(
-		$showId: ID!
-		$watchStatus: WatchStatusTypes!
-		$showRating: Int
-		$currentEpisode: Int
-	) {
-		updateShow(
-			showId: $showId
-			watchStatus: $watchStatus
-			showRating: $showRating
-			currentEpisode: $currentEpisode
-		) {
+	mutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {
+		updateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {
 			id
 			name
-			status
 			rating
-			current_episode
+			wishList
 		}
 	}
 `);
@@ -144,6 +133,17 @@ export const DELETE_SHOW = graphql(`
 			status
 			rating
 			current_episode
+		}
+	}
+`);
+
+export const DELETE_GAME = graphql(`
+	mutation DeleteGame($gameId: ID!) {
+		deleteGame(gameId: $gameId) {
+			id
+			name
+			rating
+			wishList
 		}
 	}
 `);
