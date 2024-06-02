@@ -685,6 +685,7 @@ export interface NexusGenObjects {
     id?: string | null; // ID
     name?: string | null; // String
     rating?: number | null; // Int
+    wishList?: boolean | null; // Boolean
   }
   UserMovie: { // root type
     id?: string | null; // ID
@@ -985,6 +986,7 @@ export interface NexusGenFieldTypes {
     total_results: number; // Int!
   }
   Mutation: { // field return type
+    addGame: NexusGenRootTypes['UserGame'] | null; // UserGame
     addMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     addShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     changePassword: NexusGenRootTypes['RedisRes'] | null; // RedisRes
@@ -993,6 +995,7 @@ export interface NexusGenFieldTypes {
     registerUser: NexusGenRootTypes['RegisteredUserRes'] | null; // RegisteredUserRes
     sendForgotPasswordEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
     sendVerificationEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
+    updateGame: NexusGenRootTypes['UserGame'] | null; // UserGame
     updateMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
     updateShow: NexusGenRootTypes['UserShow'] | null; // UserShow
     verifyUserEmail: NexusGenRootTypes['RedisRes'] | null; // RedisRes
@@ -1391,6 +1394,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // ID
     name: string | null; // String
     rating: number | null; // Int
+    wishList: boolean | null; // Boolean
   }
   UserMovie: { // field return type
     id: string | null; // ID
@@ -1681,6 +1685,7 @@ export interface NexusGenFieldTypeNames {
     total_results: 'Int'
   }
   Mutation: { // field return type name
+    addGame: 'UserGame'
     addMovie: 'UserMovie'
     addShow: 'UserShow'
     changePassword: 'RedisRes'
@@ -1689,6 +1694,7 @@ export interface NexusGenFieldTypeNames {
     registerUser: 'RegisteredUserRes'
     sendForgotPasswordEmail: 'RedisRes'
     sendVerificationEmail: 'RedisRes'
+    updateGame: 'UserGame'
     updateMovie: 'UserMovie'
     updateShow: 'UserShow'
     verifyUserEmail: 'RedisRes'
@@ -2087,6 +2093,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     name: 'String'
     rating: 'Int'
+    wishList: 'Boolean'
   }
   UserMovie: { // field return type name
     id: 'ID'
@@ -2105,6 +2112,12 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addGame: { // args
+      gameId: string; // ID!
+      gameName: string; // String!
+      rating?: number | null; // Int
+      wishList?: boolean | null; // Boolean
+    }
     addMovie: { // args
       movieId: string; // ID!
       movieName: string; // String!
@@ -2136,6 +2149,11 @@ export interface NexusGenArgTypes {
     }
     sendVerificationEmail: { // args
       userId: string; // ID!
+    }
+    updateGame: { // args
+      gameId: string; // ID!
+      rating?: number | null; // Int
+      wishList?: boolean | null; // Boolean
     }
     updateMovie: { // args
       movieId: string; // ID!

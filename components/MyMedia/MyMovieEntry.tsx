@@ -25,7 +25,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 		},
 		refetchQueries: () => [
 			{
-				query: Queries.GET_USERS_MOVIES,
+				query: Queries.USERS_MOVIES,
 			},
 			'UsersMovies',
 		],

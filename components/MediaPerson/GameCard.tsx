@@ -12,7 +12,7 @@ interface Props {
 const GameCard = ({ game, rank }: Props) => {
 	const { data: session } = useSession();
 
-	// const { data: usersGameData } = useQuery(Queries.GET_USERS_MOVIE, {
+	// const { data: usersGameData } = useQuery(Queries.USERS_MOVIE, {
 	// 	variables: {
 	// 		movieId: String(movie.id),
 	// 	},

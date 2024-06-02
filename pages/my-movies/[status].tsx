@@ -19,7 +19,7 @@ const Status = () => {
 	const router = useRouter();
 
 	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(
-		Queries.GET_USERS_MOVIES,
+		Queries.USERS_MOVIES,
 		{
 			fetchPolicy: 'network-only',
 		}

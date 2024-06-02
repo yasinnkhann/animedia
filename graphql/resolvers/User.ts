@@ -1,6 +1,13 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
-import { extendType, stringArg, nonNull, idArg, intArg } from 'nexus';
+import {
+	extendType,
+	stringArg,
+	nonNull,
+	idArg,
+	intArg,
+	booleanArg,
+} from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
 import { getErrorMsg, sendEmail } from 'graphql/utils';
@@ -305,6 +312,31 @@ export const UserMutations = extendType({
 			},
 		});
 
+		t.field('addGame', {
+			type: 'UserGame',
+			args: {
+				gameId: nonNull(idArg()),
+				gameName: nonNull(stringArg()),
+				wishList: booleanArg(),
+				rating: intArg(),
+			},
+			resolve: async (_parent, { gameId, gameName, wishList, rating }, ctx) => {
+				return await ctx.prisma.user.update({
+					where: { id: ctx.session!.user?.id },
+					data: {
+						game: {
+							create: {
+								id: gameId,
+								name: gameName,
+								wishList: wishList ?? undefined,
+								rating: rating ?? undefined,
+							},
+						},
+					},
+				});
+			},
+		});
+
 		t.field('updateMovie', {
 			type: 'UserMovie',
 			args: {
@@ -352,6 +384,29 @@ export const UserMutations = extendType({
 						status: watchStatus,
 						rating: showRating ? showRating : null,
 						current_episode: currentEpisode ?? undefined,
+					},
+				});
+			},
+		});
+
+		t.field('updateGame', {
+			type: 'UserGame',
+			args: {
+				gameId: nonNull(idArg()),
+				wishList: booleanArg(),
+				rating: intArg(),
+			},
+			resolve: async (_parent, { gameId, wishList, rating }, ctx) => {
+				return await ctx.prisma.game.update({
+					where: {
+						id_userId: {
+							id: gameId,
+							userId: ctx.session!.user?.id!,
+						},
+					},
+					data: {
+						wishList: wishList ?? undefined,
+						rating: rating ? rating : null,
 					},
 				});
 			},

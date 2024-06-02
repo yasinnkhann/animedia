@@ -16,7 +16,7 @@ const Status = () => {
 	const router = useRouter();
 
 	const { data: usersShowsData, loading: usersShowsLoading } = useQuery(
-		Queries.GET_USERS_SHOWS,
+		Queries.USERS_SHOWS,
 		{
 			fetchPolicy: 'network-only',
 		}

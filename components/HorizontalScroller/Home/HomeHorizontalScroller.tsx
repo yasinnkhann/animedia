@@ -23,12 +23,12 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 		UserShow[] | UserMovie[]
 	>([]);
 
-	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
+	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
 		skip: 'title' in items[0],
 		fetchPolicy: 'network-only',
 	});
 
-	const { data: usersMoviesData } = useQuery(Queries.GET_USERS_MOVIES, {
+	const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
 		skip: 'name' in items[0],
 		fetchPolicy: 'network-only',
 	});

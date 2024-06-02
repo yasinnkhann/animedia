@@ -14,7 +14,7 @@ interface Props {
 const ShowCard = ({ show, rank }: Props) => {
 	const { data: session } = useSession();
 
-	const { data: usersShowData } = useQuery(Queries.GET_USERS_SHOW, {
+	const { data: usersShowData } = useQuery(Queries.USERS_SHOW, {
 		variables: {
 			showId: String(show.id),
 		},

@@ -3,19 +3,22 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
+import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import { useSession } from 'next-auth/react';
 import { CommonMethods } from '../../utils/CommonMethods';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from 'utils/constants';
 import Modal from 'components/Modal';
 import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
 import MediaCastHorizontalScroller from 'components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { ICast } from '@ts/interfaces';
+import { ratingOptions } from 'models/dropDownOptions';
+import { Button } from 'antd';
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -23,6 +26,10 @@ const GameDetails = () => {
 	const router = useRouter();
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+
+	const [rating, setRating] = useState<number>(ratingOptions[0].value);
+
+	const [addToWishList, setAddToWishList] = useState<boolean>(false);
 
 	const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -33,6 +40,17 @@ const GameDetails = () => {
 			variables: {
 				gameId: id,
 			},
+		}
+	);
+
+	const { data: usersGameData, loading: usersGameLoading } = useQuery(
+		Queries.USERS_GAME,
+		{
+			skip: !id,
+			variables: {
+				gameId: id,
+			},
+			fetchPolicy: 'network-only',
 		}
 	);
 
@@ -99,6 +117,59 @@ const GameDetails = () => {
 		Queries.GAME_GENRES
 	);
 
+	const [addGame, { loading: addGameLoading }] = useMutation(
+		Mutations.ADD_GAME,
+		{
+			variables: {
+				gameId: id,
+				gameName: gameDetailsData?.gameDetails.results[0]?.name!,
+				rating: typeof rating === 'number' ? rating : null,
+				wishList: addToWishList,
+			},
+			refetchQueries: () => [
+				{
+					query: Queries.USERS_GAME,
+					variables: {
+						gameId: id,
+					},
+				},
+				'UsersGame',
+			],
+		}
+	);
+
+	// const [updateGame, { loading: updateGameLoading }] = useMutation(
+	// 	Mutations.UPDATE_GAME,
+	// 	{
+	// 		variables: {
+	// 			gameId: id,
+	// 			gameRating: typeof rating === 'number' ? rating : null,
+	// 		},
+	// 		refetchQueries: () => [
+	// 			{
+	// 				query: Queries.USERS_MOVIE,
+	// 				variables: {
+	// 					movieId: id,
+	// 				},
+	// 			},
+	// 			'UsersMovie',
+	// 		],
+	// 	}
+	// );
+
+	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const { value } = e.target;
+		setRating(+value);
+
+		// updateGame({
+		// 	variables: {
+		// 		gameId: id,
+		// 		gameRating: isNaN(parseInt(value)) ? null : parseInt(value),
+		// 		wishList: null,
+		// 	},
+		// });
+	};
+
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails.results ||
@@ -128,6 +199,7 @@ const GameDetails = () => {
 
 	const game = gameDetailsData.gameDetails.results[0];
 	const gameSummary = game.storyline || game.summary;
+	const addedToWishlist = usersGameData?.usersGame?.wishList;
 
 	return (
 		<>
@@ -158,7 +230,29 @@ const GameDetails = () => {
 					</section>
 
 					{status === 'authenticated' && session && (
-						<section className='my-4 h-[1.5rem]'></section>
+						<section className='my-4 h-[1.5rem]'>
+							<Button
+								type='primary'
+								style={{
+									backgroundColor: addedToWishlist ? '#52c41a' : '',
+									borderColor: addedToWishlist ? '#52c41a' : '',
+								}}
+							>
+								{addedToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
+							</Button>
+
+							<select
+								className='h-full rounded outline-none'
+								value={rating}
+								onChange={handleChangeRating}
+							>
+								{ratingOptions.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</select>
+						</section>
 					)}
 
 					<section className='pb-32'>

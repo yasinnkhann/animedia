@@ -26,7 +26,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 		},
 		refetchQueries: () => [
 			{
-				query: Queries.GET_USERS_SHOWS,
+				query: Queries.USERS_SHOWS,
 			},
 			'UsersShows',
 		],

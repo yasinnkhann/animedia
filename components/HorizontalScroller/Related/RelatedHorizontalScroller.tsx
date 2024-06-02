@@ -22,12 +22,12 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
 		UserShow[] | UserMovie[]
 	>([]);
 
-	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
+	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
 		skip: mediaType === 'movies',
 		fetchPolicy: 'network-only',
 	});
 
-	const { data: usersMoviesData } = useQuery(Queries.GET_USERS_MOVIES, {
+	const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
 		skip: mediaType === 'shows',
 		fetchPolicy: 'network-only',
 	});

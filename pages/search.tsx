@@ -70,17 +70,17 @@ const Search: NextPage = () => {
 		}
 	);
 
-	const { data: usersShowsData } = useQuery(Queries.GET_USERS_SHOWS, {
+	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
 		skip: searchResultsType !== 'shows',
 		fetchPolicy: 'network-only',
 	});
 
-	const { data: usersMoviesData } = useQuery(Queries.GET_USERS_MOVIES, {
+	const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
 		skip: searchResultsType !== 'movies',
 		fetchPolicy: 'network-only',
 	});
 
-	// const { data: usersGamesData } = useQuery(Queries.GET_USERS_GAMES, {
+	// const { data: usersGamesData } = useQuery(Queries.USERS_GAMES, {
 	// 	skip: searchResultsType !== 'games',
 	// 	fetchPolicy: 'network-only',
 	// });

@@ -22,6 +22,7 @@ import { RESULTS_PER_PAGE } from 'utils/constants';
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
+
 	const router = useRouter();
 
 	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(
@@ -44,7 +45,7 @@ const MovieDetails = () => {
 	);
 
 	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(
-		Queries.GET_USERS_MOVIE,
+		Queries.USERS_MOVIE,
 		{
 			skip: !movieDetailsData?.movieDetails.id,
 			variables: {
@@ -84,7 +85,7 @@ const MovieDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_MOVIE,
+					query: Queries.USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.movieDetails.id!),
 					},
@@ -104,7 +105,7 @@ const MovieDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_MOVIE,
+					query: Queries.USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.movieDetails?.id!),
 					},
@@ -122,7 +123,7 @@ const MovieDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_MOVIE,
+					query: Queries.USERS_MOVIE,
 					variables: {
 						movieId: String(movieDetailsData?.movieDetails.id!),
 					},

@@ -1,6 +1,6 @@
 import { graphql } from '../generated/code-gen/gql';
 
-export const GET_USER = graphql(`
+export const USER = graphql(`
 	query User($userId: ID!) {
 		user(id: $userId) {
 			id
@@ -24,7 +24,7 @@ export const GET_USER = graphql(`
 	}
 `);
 
-export const GET_USERS_MOVIE = graphql(`
+export const USERS_MOVIE = graphql(`
 	query UsersMovie($movieId: String!) {
 		usersMovie(movieId: $movieId) {
 			id
@@ -35,7 +35,7 @@ export const GET_USERS_MOVIE = graphql(`
 	}
 `);
 
-export const GET_USERS_MOVIES = graphql(`
+export const USERS_MOVIES = graphql(`
 	query UsersMovies {
 		usersMovies {
 			id
@@ -46,7 +46,7 @@ export const GET_USERS_MOVIES = graphql(`
 	}
 `);
 
-export const GET_USERS_SHOW = graphql(`
+export const USERS_SHOW = graphql(`
 	query UsersShow($showId: String!) {
 		usersShow(showId: $showId) {
 			id
@@ -58,7 +58,18 @@ export const GET_USERS_SHOW = graphql(`
 	}
 `);
 
-export const GET_USERS_SHOWS = graphql(`
+export const USERS_GAME = graphql(`
+	query UsersGame($gameId: String!) {
+		usersGame(gameId: $gameId) {
+			id
+			name
+			rating
+			wishList
+		}
+	}
+`);
+
+export const USERS_SHOWS = graphql(`
 	query UsersShows {
 		usersShows {
 			id
@@ -112,12 +123,13 @@ export const EMAIL_FROM_REDIS_TOKEN = graphql(`
 	}
 `);
 
-export const GET_USERS_GAMES = graphql(`
+export const USERS_GAMES = graphql(`
 	query UsersGames {
 		usersGames {
 			id
 			name
 			rating
+			wishList
 		}
 	}
 `);

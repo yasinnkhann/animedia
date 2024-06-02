@@ -1,7 +1,7 @@
 import { graphql } from '../generated/code-gen/gql';
 
 export const ADD_MOVIE = graphql(`
-	mutation AddedMovie(
+	mutation AddMovie(
 		$movieId: ID!
 		$movieName: String!
 		$watchStatus: WatchStatusTypes!
@@ -20,7 +20,7 @@ export const ADD_MOVIE = graphql(`
 `);
 
 export const UPDATE_MOVIE = graphql(`
-	mutation UpdatedMovie(
+	mutation UpdateMovie(
 		$movieId: ID!
 		$watchStatus: WatchStatusTypes!
 		$movieRating: Int
@@ -39,7 +39,7 @@ export const UPDATE_MOVIE = graphql(`
 `);
 
 export const DELETE_MOVIE = graphql(`
-	mutation DeletedMovie($movieId: ID!) {
+	mutation DeleteMovie($movieId: ID!) {
 		deleteMovie(movieId: $movieId) {
 			id
 			name
@@ -50,7 +50,7 @@ export const DELETE_MOVIE = graphql(`
 `);
 
 export const ADD_SHOW = graphql(`
-	mutation AddedShow(
+	mutation AddShow(
 		$showId: ID!
 		$showName: String!
 		$watchStatus: WatchStatusTypes!
@@ -72,7 +72,7 @@ export const ADD_SHOW = graphql(`
 `);
 
 export const UPDATE_SHOW = graphql(`
-	mutation UpdatedShow(
+	mutation UpdateShow(
 		$showId: ID!
 		$watchStatus: WatchStatusTypes!
 		$showRating: Int
@@ -94,7 +94,7 @@ export const UPDATE_SHOW = graphql(`
 `);
 
 export const DELETE_SHOW = graphql(`
-	mutation DeletedShow($showId: ID!) {
+	mutation DeleteShow($showId: ID!) {
 		deleteShow(showId: $showId) {
 			id
 			name
@@ -180,6 +180,49 @@ export const CHANGE_PASSWORD = graphql(`
 			}
 			token
 			userId
+		}
+	}
+`);
+
+export const UPDATE_GAME = graphql(`
+	mutation UpdateGame(
+		$showId: ID!
+		$watchStatus: WatchStatusTypes!
+		$showRating: Int
+		$currentEpisode: Int
+	) {
+		updateShow(
+			showId: $showId
+			watchStatus: $watchStatus
+			showRating: $showRating
+			currentEpisode: $currentEpisode
+		) {
+			id
+			name
+			status
+			rating
+			current_episode
+		}
+	}
+`);
+
+export const ADD_GAME = graphql(`
+	mutation AddGame(
+		$gameId: ID!
+		$gameName: String!
+		$wishList: Boolean
+		$rating: Int
+	) {
+		addGame(
+			gameId: $gameId
+			gameName: $gameName
+			wishList: $wishList
+			rating: $rating
+		) {
+			id
+			name
+			rating
+			wishList
 		}
 	}
 `);

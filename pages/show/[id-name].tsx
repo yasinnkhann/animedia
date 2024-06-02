@@ -57,7 +57,7 @@ const ShowDetails = () => {
 	);
 
 	const { data: usersShowData, loading: usersShowLoading } = useQuery(
-		Queries.GET_USERS_SHOW,
+		Queries.USERS_SHOW,
 		{
 			skip: !showDetailsData?.showDetails.id,
 			variables: {
@@ -98,7 +98,7 @@ const ShowDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_SHOW,
+					query: Queries.USERS_SHOW,
 					variables: {
 						showId: showDetailsData?.showDetails.id!,
 					},
@@ -119,7 +119,7 @@ const ShowDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_SHOW,
+					query: Queries.USERS_SHOW,
 					variables: {
 						showId: showDetailsData?.showDetails.id!,
 					},
@@ -137,7 +137,7 @@ const ShowDetails = () => {
 			},
 			refetchQueries: () => [
 				{
-					query: Queries.GET_USERS_SHOW,
+					query: Queries.USERS_SHOW,
 					variables: {
 						showId: showDetailsData?.showDetails.id!,
 					},

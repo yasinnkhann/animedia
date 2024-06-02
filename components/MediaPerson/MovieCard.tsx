@@ -14,7 +14,7 @@ interface Props {
 const MovieCard = ({ movie, rank }: Props) => {
 	const { data: session } = useSession();
 
-	const { data: usersMovieData } = useQuery(Queries.GET_USERS_MOVIE, {
+	const { data: usersMovieData } = useQuery(Queries.USERS_MOVIE, {
 		variables: {
 			movieId: String(movie.id),
 		},
