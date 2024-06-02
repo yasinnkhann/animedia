@@ -178,7 +178,7 @@ const MovieDetails = () => {
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		setRating(+value);
+		setRating(value === '' ? '' : +value);
 
 		updateMovie({
 			variables: {

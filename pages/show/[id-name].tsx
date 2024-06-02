@@ -257,7 +257,7 @@ const ShowDetails = () => {
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
 
-		setRating(+value);
+		setRating(value === '' ? '' : +value);
 
 		if (!showDetailsData?.showDetails.id) return;
 

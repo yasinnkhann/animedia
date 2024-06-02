@@ -177,6 +177,13 @@ const GameDetails = () => {
 	);
 
 	const handleWishList = () => {
+		if (usersGame?.id && usersGame.wishList && !usersGame.rating) {
+			deleteGame({
+				variables: { gameId: id },
+			});
+			return;
+		}
+
 		if (!usersGame?.id) {
 			addGame({
 				variables: {
@@ -215,14 +222,21 @@ const GameDetails = () => {
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { value } = e.target;
-		setRating(+value);
+		setRating(value === '' ? '' : +value);
+
+		if (usersGame?.id && value === '' && !usersGame.wishList) {
+			deleteGame({
+				variables: { gameId: id },
+			});
+			return;
+		}
 
 		if (!usersGame?.id) {
 			addGame({
 				variables: {
 					gameId: id,
 					gameName: game.name,
-					rating: typeof rating === 'number' ? rating : null,
+					rating: isNaN(parseInt(value)) ? null : parseInt(value),
 					wishList: addToWishList,
 				},
 			});
@@ -232,16 +246,16 @@ const GameDetails = () => {
 		updateGame({
 			variables: {
 				gameId: id,
-				rating: typeof rating === 'number' ? rating : null,
+				rating: isNaN(parseInt(value)) ? null : parseInt(value),
 			},
 		});
 		return;
 	};
 
 	useEffect(() => {
-		if (usersGameLoading || !usersGameData?.usersGame) return;
+		if (usersGameLoading) return;
 
-		if (usersGameData.usersGame) {
+		if (usersGameData?.usersGame?.id) {
 			setRating(usersGameData.usersGame.rating ?? '');
 			setAddToWishList(usersGameData.usersGame.wishList ?? false);
 		} else {
@@ -249,8 +263,9 @@ const GameDetails = () => {
 			setAddToWishList(false);
 		}
 	}, [
-		gameDetailsData?.gameDetails.results,
-		usersGameData?.usersGame,
+		usersGameData?.usersGame?.id,
+		usersGameData?.usersGame?.rating,
+		usersGameData?.usersGame?.wishList,
 		usersGameLoading,
 	]);
 
@@ -265,9 +280,6 @@ const GameDetails = () => {
 		!gameThemesData?.gameThemes ||
 		gameGenresLoading ||
 		!gameGenresData?.gameGenres
-		//  ||
-		// usersGameLoading ||
-		// !usersGameData?.usersGame
 	) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
