@@ -52,7 +52,7 @@ export const GameQueries = extendType({
 			},
 		});
 		t.field('gameGenres', {
-			type: nonNull(list(nonNull('GameGenre'))),
+			type: list(nonNull('GameGenre')),
 			resolve: async () => {
 				try {
 					const res = await postIGDB(`${IGDB_BASE_API_URL}/genres`, `fields *; limit 500;`);

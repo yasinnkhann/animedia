@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client';
 import { UserGame } from 'graphql/generated/code-gen/graphql';
 
 const MyGames = () => {
-	const { data: session, status } = useSession();
+	const { status } = useSession();
 
 	const router = useRouter();
 

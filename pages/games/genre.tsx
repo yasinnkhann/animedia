@@ -40,7 +40,7 @@ const Genre = () => {
 	const [selectedGameGenre, setSelectedGameGenre] = useState<GameGenre | null>(null);
 
 	const { data: genreOfGamesData } = useQuery(sortByQueryType, {
-		skip: !gameGenresData?.gameGenres.length,
+		skip: !gameGenresData?.gameGenres?.length,
 		variables: {
 			genreId: selectedGameGenre?.id ?? '0',
 			page: currPage,
@@ -80,12 +80,12 @@ const Genre = () => {
 	}, [router]);
 
 	useEffect(() => {
-		if (gameGenresData?.gameGenres.length) {
+		if (gameGenresData?.gameGenres?.length) {
 			setSelectedGameGenre(gameGenresData.gameGenres[0]);
 		}
 	}, [gameGenresData?.gameGenres]);
 
-	if (gameGenresLoading || !gameGenresData?.gameGenres.length || !selectedGameGenre) {
+	if (gameGenresLoading || !gameGenresData?.gameGenres?.length || !selectedGameGenre) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />

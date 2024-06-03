@@ -494,7 +494,7 @@ type Query {
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
-  gameGenres: [GameGenre!]!
+  gameGenres: [GameGenre!]
   gamePlatforms(limit: Int = 500): [GamePlatform]
   gamePreviews(gameId: ID!): [GamePreview!]
   gameThemes(limit: Int = 500): [GameTheme]

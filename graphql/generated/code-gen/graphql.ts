@@ -625,7 +625,7 @@ export type Query = {
   gameCollections?: Maybe<GameCollections>;
   gameCompany?: Maybe<Array<Maybe<GameCompany>>>;
   gameDetails: GamesRes;
-  gameGenres: Array<GameGenre>;
+  gameGenres?: Maybe<Array<GameGenre>>;
   gamePlatforms?: Maybe<Array<Maybe<GamePlatform>>>;
   gamePreviews?: Maybe<Array<GamePreview>>;
   gameThemes?: Maybe<Array<Maybe<GameTheme>>>;
@@ -1420,7 +1420,7 @@ export type GameDetailsQuery = { __typename?: 'Query', gameDetails: { __typename
 export type GameGenresQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GameGenresQuery = { __typename?: 'Query', gameGenres: Array<{ __typename?: 'GameGenre', id: string, name: string }> };
+export type GameGenresQuery = { __typename?: 'Query', gameGenres?: Array<{ __typename?: 'GameGenre', id: string, name: string }> | null };
 
 export type GamePlatformsQueryVariables = Exact<{ [key: string]: never; }>;
 

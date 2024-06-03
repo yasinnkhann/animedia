@@ -1131,7 +1131,7 @@ export interface NexusGenFieldTypes {
     gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!
-    gameGenres: NexusGenRootTypes['GameGenre'][]; // [GameGenre!]!
+    gameGenres: NexusGenRootTypes['GameGenre'][] | null; // [GameGenre!]
     gamePlatforms: Array<NexusGenRootTypes['GamePlatform'] | null> | null; // [GamePlatform]
     gamePreviews: NexusGenRootTypes['GamePreview'][] | null; // [GamePreview!]
     gameThemes: Array<NexusGenRootTypes['GameTheme'] | null> | null; // [GameTheme]
