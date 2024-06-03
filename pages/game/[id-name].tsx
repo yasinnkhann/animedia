@@ -30,7 +30,7 @@ const GameDetails = () => {
 
 	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
-	const [addToWishList, setAddToWishList] = useState<boolean>(false);
+	const [addToWishlist, setAddToWishlist] = useState<boolean>(false);
 
 	const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -105,7 +105,7 @@ const GameDetails = () => {
 			gameId: id,
 			gameName: gameDetailsData?.gameDetails.results[0]?.name!,
 			rating: typeof rating === 'number' ? rating : null,
-			wishList: addToWishList,
+			wishlist: addToWishlist,
 		},
 		refetchQueries: () => [
 			{
@@ -122,7 +122,7 @@ const GameDetails = () => {
 		variables: {
 			gameId: id,
 			rating: typeof rating === 'number' ? rating : null,
-			wishList: addToWishList,
+			wishlist: addToWishlist,
 		},
 		refetchQueries: () => [
 			{
@@ -150,8 +150,8 @@ const GameDetails = () => {
 		],
 	});
 
-	const handleWishList = () => {
-		if (usersGame?.id && usersGame.wishList && !usersGame.rating) {
+	const handleWishlist = () => {
+		if (usersGame?.id && usersGame.wishlist && !usersGame.rating) {
 			deleteGame({
 				variables: { gameId: id },
 			});
@@ -164,32 +164,32 @@ const GameDetails = () => {
 					gameId: id,
 					gameName: game.name,
 					rating: typeof rating === 'number' ? rating : null,
-					wishList: true,
+					wishlist: true,
 				},
 			});
-			setAddToWishList(true);
+			setAddToWishlist(true);
 			return;
 		}
 
-		if (!usersGame?.wishList) {
+		if (!usersGame?.wishlist) {
 			updateGame({
 				variables: {
 					gameId: id,
-					wishList: true,
+					wishlist: true,
 				},
 			});
-			setAddToWishList(true);
+			setAddToWishlist(true);
 			return;
 		}
 
-		if (usersGame?.wishList) {
+		if (usersGame?.wishlist) {
 			updateGame({
 				variables: {
 					gameId: id,
-					wishList: false,
+					wishlist: false,
 				},
 			});
-			setAddToWishList(false);
+			setAddToWishlist(false);
 			return;
 		}
 	};
@@ -198,7 +198,7 @@ const GameDetails = () => {
 		const { value } = e.target;
 		setRating(value === '' ? '' : +value);
 
-		if (usersGame?.id && value === '' && !usersGame.wishList) {
+		if (usersGame?.id && value === '' && !usersGame.wishlist) {
 			deleteGame({
 				variables: { gameId: id },
 			});
@@ -211,7 +211,7 @@ const GameDetails = () => {
 					gameId: id,
 					gameName: game.name,
 					rating: isNaN(parseInt(value)) ? null : parseInt(value),
-					wishList: addToWishList,
+					wishlist: addToWishlist,
 				},
 			});
 			return;
@@ -231,15 +231,15 @@ const GameDetails = () => {
 
 		if (usersGameData?.usersGame?.id) {
 			setRating(usersGameData.usersGame.rating ?? '');
-			setAddToWishList(usersGameData.usersGame.wishList ?? false);
+			setAddToWishlist(usersGameData.usersGame.wishlist ?? false);
 		} else {
 			setRating('');
-			setAddToWishList(false);
+			setAddToWishlist(false);
 		}
 	}, [
 		usersGameData?.usersGame?.id,
 		usersGameData?.usersGame?.rating,
-		usersGameData?.usersGame?.wishList,
+		usersGameData?.usersGame?.wishlist,
 		usersGameLoading,
 	]);
 
@@ -302,14 +302,14 @@ const GameDetails = () => {
 						<section className='my-4 flex items-center space-x-4'>
 							<div className='relative'>
 								<Button
-									onClick={handleWishList}
+									onClick={handleWishlist}
 									type='primary'
 									style={{
-										backgroundColor: usersGame?.wishList ? '#52c41a' : '',
-										borderColor: usersGame?.wishList ? '#52c41a' : '',
+										backgroundColor: usersGame?.wishlist ? '#52c41a' : '',
+										borderColor: usersGame?.wishlist ? '#52c41a' : '',
 									}}
 								>
-									{usersGame?.wishList ? 'Added to Wishlist' : 'Add to Wishlist'}
+									{usersGame?.wishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
 								</Button>
 							</div>
 

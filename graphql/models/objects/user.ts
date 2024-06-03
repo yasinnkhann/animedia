@@ -31,7 +31,7 @@ export const userGame = objectType({
 		t.id('id');
 		t.string('name');
 		t.int('rating');
-		t.boolean('wishList');
+		t.boolean('wishlist');
 	},
 });
 

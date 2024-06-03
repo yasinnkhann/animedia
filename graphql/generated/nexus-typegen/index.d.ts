@@ -685,7 +685,7 @@ export interface NexusGenObjects {
     id?: string | null; // ID
     name?: string | null; // String
     rating?: number | null; // Int
-    wishList?: boolean | null; // Boolean
+    wishlist?: boolean | null; // Boolean
   }
   UserMovie: { // root type
     id?: string | null; // ID
@@ -1395,7 +1395,7 @@ export interface NexusGenFieldTypes {
     id: string | null; // ID
     name: string | null; // String
     rating: number | null; // Int
-    wishList: boolean | null; // Boolean
+    wishlist: boolean | null; // Boolean
   }
   UserMovie: { // field return type
     id: string | null; // ID
@@ -2095,7 +2095,7 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     name: 'String'
     rating: 'Int'
-    wishList: 'Boolean'
+    wishlist: 'Boolean'
   }
   UserMovie: { // field return type name
     id: 'ID'
@@ -2118,7 +2118,7 @@ export interface NexusGenArgTypes {
       gameId: string; // ID!
       gameName: string; // String!
       rating?: number | null; // Int
-      wishList?: boolean | null; // Boolean
+      wishlist?: boolean | null; // Boolean
     }
     addMovie: { // args
       movieId: string; // ID!
@@ -2158,7 +2158,7 @@ export interface NexusGenArgTypes {
     updateGame: { // args
       gameId: string; // ID!
       rating?: number | null; // Int
-      wishList?: boolean | null; // Boolean
+      wishlist?: boolean | null; // Boolean
     }
     updateMovie: { // args
       movieId: string; // ID!

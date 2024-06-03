@@ -300,10 +300,10 @@ export const UserMutations = extendType({
 			args: {
 				gameId: nonNull(idArg()),
 				gameName: nonNull(stringArg()),
-				wishList: booleanArg(),
+				wishlist: booleanArg(),
 				rating: intArg(),
 			},
-			resolve: async (_parent, { gameId, gameName, wishList, rating }, ctx) => {
+			resolve: async (_parent, { gameId, gameName, wishlist, rating }, ctx) => {
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id },
 					data: {
@@ -311,7 +311,7 @@ export const UserMutations = extendType({
 							create: {
 								id: gameId,
 								name: gameName,
-								wishList: wishList ?? undefined,
+								wishlist: wishlist ?? undefined,
 								rating,
 							},
 						},
@@ -372,10 +372,10 @@ export const UserMutations = extendType({
 			type: 'UserGame',
 			args: {
 				gameId: nonNull(idArg()),
-				wishList: booleanArg(),
+				wishlist: booleanArg(),
 				rating: intArg(),
 			},
-			resolve: async (_parent, { gameId, wishList, rating }, ctx) => {
+			resolve: async (_parent, { gameId, wishlist, rating }, ctx) => {
 				return await ctx.prisma.game.update({
 					where: {
 						id_userId: {
@@ -384,7 +384,7 @@ export const UserMutations = extendType({
 						},
 					},
 					data: {
-						wishList: wishList ?? undefined,
+						wishlist: wishlist ?? undefined,
 						rating,
 					},
 				});

@@ -339,7 +339,7 @@ type MoviesRes {
 }
 
 type Mutation {
-  addGame(gameId: ID!, gameName: String!, rating: Int, wishList: Boolean): UserGame
+  addGame(gameId: ID!, gameName: String!, rating: Int, wishlist: Boolean): UserGame
   addMovie(movieId: ID!, movieName: String!, watchStatus: WatchStatusTypes!): UserMovie
   addShow(currentEpisode: Int, showId: ID!, showName: String!, watchStatus: WatchStatusTypes!): UserShow
   changePassword(newPassword: String!, userId: ID!): RedisRes
@@ -349,7 +349,7 @@ type Mutation {
   registerUser(email: String!, name: String!, password: String!): RegisteredUserRes
   sendForgotPasswordEmail(email: String!): RedisRes
   sendVerificationEmail(userId: ID!): RedisRes
-  updateGame(gameId: ID!, rating: Int, wishList: Boolean): UserGame
+  updateGame(gameId: ID!, rating: Int, wishlist: Boolean): UserGame
   updateMovie(movieId: ID!, movieRating: Int, watchStatus: WatchStatusTypes!): UserMovie
   updateShow(currentEpisode: Int, showId: ID!, showRating: Int, watchStatus: WatchStatusTypes!): UserShow
   verifyUserEmail(userId: ID!): RedisRes
@@ -807,7 +807,7 @@ type UserGame {
   id: ID
   name: String
   rating: Int
-  wishList: Boolean
+  wishlist: Boolean
 }
 
 type UserMovie {

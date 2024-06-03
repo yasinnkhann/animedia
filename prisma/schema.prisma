@@ -89,7 +89,7 @@ model Game {
   id     String
   name   String
   rating Int?
-  wishList Boolean @default(false)
+  wishlist Boolean @default(false)
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 

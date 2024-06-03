@@ -53,7 +53,7 @@ export const USERS_GAME = graphql(`
 			id
 			name
 			rating
-			wishList
+			wishlist
 		}
 	}
 `);
@@ -87,7 +87,7 @@ export const USERS_GAMES = graphql(`
 			id
 			name
 			rating
-			wishList
+			wishlist
 		}
 	}
 `);

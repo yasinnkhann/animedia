@@ -150,7 +150,7 @@ export class CommonMethods {
 				}
 			}
 
-			if ('wishList' in dataFound) {
+			if ('wishlist' in dataFound) {
 				return 'WL';
 			}
 		}

@@ -17,13 +17,13 @@ const documents = {
     "\n\tfragment ShowResult on ShowResult {\n\t\tbackdrop_path\n\t\tfirst_air_date\n\t\tgenre_ids\n\t\tid\n\t\tname\n\t\torigin_country\n\t\toriginal_language\n\t\toriginal_name\n\t\toverview\n\t\tpopularity\n\t\tposter_path\n\t\tvote_average\n\t\tvote_count\n\t}\n": types.ShowResultFragmentDoc,
     "\n\tmutation AddMovie($movieId: ID!, $movieName: String!, $watchStatus: WatchStatusTypes!) {\n\t\taddMovie(movieId: $movieId, movieName: $movieName, watchStatus: $watchStatus) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.AddMovieDocument,
     "\n\tmutation AddShow(\n\t\t$showId: ID!\n\t\t$showName: String!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$currentEpisode: Int\n\t) {\n\t\taddShow(\n\t\t\tshowId: $showId\n\t\t\tshowName: $showName\n\t\t\twatchStatus: $watchStatus\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.AddShowDocument,
-    "\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishList: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.AddGameDocument,
+    "\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishlist: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n": types.AddGameDocument,
     "\n\tmutation UpdateMovie($movieId: ID!, $watchStatus: WatchStatusTypes!, $movieRating: Int) {\n\t\tupdateMovie(movieId: $movieId, watchStatus: $watchStatus, movieRating: $movieRating) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UpdateMovieDocument,
     "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\t$watchStatus: WatchStatusTypes!\n\t\t$showRating: Int\n\t\t$currentEpisode: Int\n\t) {\n\t\tupdateShow(\n\t\t\tshowId: $showId\n\t\t\twatchStatus: $watchStatus\n\t\t\tshowRating: $showRating\n\t\t\tcurrentEpisode: $currentEpisode\n\t\t) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UpdateShowDocument,
-    "\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UpdateGameDocument,
+    "\n\tmutation UpdateGame($gameId: ID!, $wishlist: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n": types.UpdateGameDocument,
     "\n\tmutation DeleteMovie($movieId: ID!) {\n\t\tdeleteMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.DeleteMovieDocument,
     "\n\tmutation DeleteShow($showId: ID!) {\n\t\tdeleteShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.DeleteShowDocument,
-    "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.DeleteGameDocument,
+    "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n": types.DeleteGameDocument,
     "\n\tmutation VerifyUserEmail($userId: ID!) {\n\t\tverifyUserEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tuserId\n\t\t}\n\t}\n": types.VerifyUserEmailDocument,
     "\n\tmutation SendVerificationEmail($userId: ID!) {\n\t\tsendVerificationEmail(userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.SendVerificationEmailDocument,
     "\n\tmutation RegisterUser($name: String!, $email: String!, $password: String!) {\n\t\tregisterUser(name: $name, email: $email, password: $password) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tcreatedUser {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\temail\n\t\t\t\tpassword\n\t\t\t\timage\n\t\t\t\tcreated_at\n\t\t\t\temailVerified\n\t\t\t\tmovies {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t}\n\t\t\t\tshows {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tstatus\n\t\t\t\t\trating\n\t\t\t\t\tcurrent_episode\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.RegisterUserDocument,
@@ -77,10 +77,10 @@ const documents = {
     "\n\tquery User($userId: ID!) {\n\t\tuser(id: $userId) {\n\t\t\tid\n\t\t\tname\n\t\t\temail\n\t\t\timage\n\t\t\tmovies {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\tstatus\n\t\t\t\trating\n\t\t\t}\n\t\t\tshows {\n\t\t\t\tid\n\t\t\t\tname\n\t\t\t\tstatus\n\t\t\t\trating\n\t\t\t\tcurrent_episode\n\t\t\t}\n\t\t}\n\t}\n": types.UserDocument,
     "\n\tquery UsersMovie($movieId: String!) {\n\t\tusersMovie(movieId: $movieId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UsersMovieDocument,
     "\n\tquery UsersShow($showId: String!) {\n\t\tusersShow(showId: $showId) {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UsersShowDocument,
-    "\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UsersGameDocument,
+    "\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n": types.UsersGameDocument,
     "\n\tquery UsersMovies {\n\t\tusersMovies {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t}\n\t}\n": types.UsersMoviesDocument,
     "\n\tquery UsersShows {\n\t\tusersShows {\n\t\t\tid\n\t\t\tname\n\t\t\tstatus\n\t\t\trating\n\t\t\tcurrent_episode\n\t\t}\n\t}\n": types.UsersShowsDocument,
-    "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n": types.UsersGamesDocument,
+    "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n": types.UsersGamesDocument,
     "\n\tquery CheckEmailVerificationToken($token: String!, $userId: ID!) {\n\t\tcheckEmailVerificationToken(token: $token, userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckEmailVerificationTokenDocument,
     "\n\tquery CheckForgotPasswordToken($token: String!, $userId: ID!) {\n\t\tcheckForgotPasswordToken(token: $token, userId: $userId) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\ttoken\n\t\t\tuserId\n\t\t}\n\t}\n": types.CheckForgotPasswordTokenDocument,
     "\n\tquery AccountVerified($email: String!) {\n\t\taccountVerified(email: $email) {\n\t\t\terrors {\n\t\t\t\tmessage\n\t\t\t}\n\t\t\tid\n\t\t\temailVerified\n\t\t}\n\t}\n": types.AccountVerifiedDocument,
@@ -120,7 +120,7 @@ export function graphql(source: "\n\tmutation AddShow(\n\t\t$showId: ID!\n\t\t$s
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishList: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishList: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishlist: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation AddGame($gameId: ID!, $gameName: String!, $wishlist: Boolean, $rating: Int) {\n\t\taddGame(gameId: $gameId, gameName: $gameName, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -132,7 +132,7 @@ export function graphql(source: "\n\tmutation UpdateShow(\n\t\t$showId: ID!\n\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tmutation UpdateGame($gameId: ID!, $wishlist: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation UpdateGame($gameId: ID!, $wishlist: Boolean, $rating: Int) {\n\t\tupdateGame(gameId: $gameId, wishlist: $wishlist, rating: $rating) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -144,7 +144,7 @@ export function graphql(source: "\n\tmutation DeleteShow($showId: ID!) {\n\t\tde
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation DeleteGame($gameId: ID!) {\n\t\tdeleteGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -360,7 +360,7 @@ export function graphql(source: "\n\tquery UsersShow($showId: String!) {\n\t\tus
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGame($gameId: String!) {\n\t\tusersGame(gameId: $gameId) {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -372,7 +372,7 @@ export function graphql(source: "\n\tquery UsersShows {\n\t\tusersShows {\n\t\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishList\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery UsersGames {\n\t\tusersGames {\n\t\t\tid\n\t\t\tname\n\t\t\trating\n\t\t\twishlist\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

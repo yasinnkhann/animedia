@@ -72,7 +72,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 			</td>
 
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
-				<p className='text-lg'>{myGame.wishList ? 'Yes' : 'No'}</p>
+				<p className='text-lg'>{myGame.wishlist ? 'Yes' : 'No'}</p>
 			</td>
 
 			<td className='border-x-2 border-gray-200 text-center align-middle'>

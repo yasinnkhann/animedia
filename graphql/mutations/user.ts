@@ -34,12 +34,12 @@ export const ADD_SHOW = graphql(`
 `);
 
 export const ADD_GAME = graphql(`
-	mutation AddGame($gameId: ID!, $gameName: String!, $wishList: Boolean, $rating: Int) {
-		addGame(gameId: $gameId, gameName: $gameName, wishList: $wishList, rating: $rating) {
+	mutation AddGame($gameId: ID!, $gameName: String!, $wishlist: Boolean, $rating: Int) {
+		addGame(gameId: $gameId, gameName: $gameName, wishlist: $wishlist, rating: $rating) {
 			id
 			name
 			rating
-			wishList
+			wishlist
 		}
 	}
 `);
@@ -78,12 +78,12 @@ export const UPDATE_SHOW = graphql(`
 `);
 
 export const UPDATE_GAME = graphql(`
-	mutation UpdateGame($gameId: ID!, $wishList: Boolean, $rating: Int) {
-		updateGame(gameId: $gameId, wishList: $wishList, rating: $rating) {
+	mutation UpdateGame($gameId: ID!, $wishlist: Boolean, $rating: Int) {
+		updateGame(gameId: $gameId, wishlist: $wishlist, rating: $rating) {
 			id
 			name
 			rating
-			wishList
+			wishlist
 		}
 	}
 `);
@@ -117,7 +117,7 @@ export const DELETE_GAME = graphql(`
 			id
 			name
 			rating
-			wishList
+			wishlist
 		}
 	}
 `);
