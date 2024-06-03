@@ -1127,7 +1127,7 @@ export interface NexusGenFieldTypes {
     dlcGames: NexusGenRootTypes['RelatedGame'][] | null; // [RelatedGame!]
     emailFromRedisToken: string | null; // String
     episodeDetails: NexusGenRootTypes['EpisodeDetailsRes'] | null; // EpisodeDetailsRes
-    gameCharacters: NexusGenRootTypes['GameCharacter'][]; // [GameCharacter!]!
+    gameCharacters: NexusGenRootTypes['GameCharacter'][] | null; // [GameCharacter!]
     gameCollections: NexusGenRootTypes['GameCollections'] | null; // GameCollections
     gameCompany: Array<NexusGenRootTypes['GameCompany'] | null> | null; // [GameCompany]
     gameDetails: NexusGenRootTypes['GamesRes']; // GamesRes!

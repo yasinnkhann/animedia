@@ -332,7 +332,7 @@ export const GameQueries = extendType({
 		});
 
 		t.field('gameCharacters', {
-			type: nonNull(list(nonNull('GameCharacter'))),
+			type: list(nonNull('GameCharacter')),
 			args: {
 				gameId: nonNull(idArg()),
 				limit: intArg({ default: 20 }),

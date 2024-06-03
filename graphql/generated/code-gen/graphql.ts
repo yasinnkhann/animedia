@@ -621,7 +621,7 @@ export type Query = {
   dlcGames?: Maybe<Array<RelatedGame>>;
   emailFromRedisToken?: Maybe<Scalars['String']['output']>;
   episodeDetails?: Maybe<EpisodeDetailsRes>;
-  gameCharacters: Array<GameCharacter>;
+  gameCharacters?: Maybe<Array<GameCharacter>>;
   gameCollections?: Maybe<GameCollections>;
   gameCompany?: Maybe<Array<Maybe<GameCompany>>>;
   gameDetails: GamesRes;
@@ -1509,7 +1509,7 @@ export type GameCharactersQueryVariables = Exact<{
 }>;
 
 
-export type GameCharactersQuery = { __typename?: 'Query', gameCharacters: Array<{ __typename?: 'GameCharacter', id: string, country_name?: string | null, description?: string | null, games: Array<string>, gender?: number | null, mug_shot?: string | null, mugShotUrl?: string | null, name: string, species?: number | null }> };
+export type GameCharactersQuery = { __typename?: 'Query', gameCharacters?: Array<{ __typename?: 'GameCharacter', id: string, country_name?: string | null, description?: string | null, games: Array<string>, gender?: number | null, mug_shot?: string | null, mugShotUrl?: string | null, name: string, species?: number | null }> | null };
 
 export type SearchGameCharactersQueryVariables = Exact<{
   name: Scalars['String']['input'];

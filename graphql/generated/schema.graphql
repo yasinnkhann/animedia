@@ -490,7 +490,7 @@ type Query {
   dlcGames(gameIds: [ID!]!, limit: Int = 500): [RelatedGame!]
   emailFromRedisToken(token: String!): String
   episodeDetails(episodeNum: Int!, seasonNum: Int!, showId: ID!): EpisodeDetailsRes
-  gameCharacters(gameId: ID!, limit: Int = 20): [GameCharacter!]!
+  gameCharacters(gameId: ID!, limit: Int = 20): [GameCharacter!]
   gameCollections(gameId: ID!): GameCollections
   gameCompany(gameId: ID!): [GameCompany]
   gameDetails(gameId: ID!): GamesRes!
