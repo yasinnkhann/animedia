@@ -26,7 +26,7 @@ const GameDetails = () => {
 
 	const router = useRouter();
 
-	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '0';
+	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '';
 
 	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
