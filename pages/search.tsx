@@ -6,7 +6,7 @@ import SearchBar from '../components/Search/SearchBar';
 import SearchResult from '../components/Search/SearchResult';
 import * as Queries from '../graphql/queries';
 import { useRouter } from 'next/router';
-import { ExtractStrict, TContent } from '@ts/types';
+import { TSearchResults } from '@ts/types';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
@@ -20,8 +20,7 @@ const Search: NextPage = () => {
 
 	const searchBarRef = useRef<HTMLInputElement>(null);
 
-	const [searchResultsType, setSearchResultsType] =
-		useState<ExtractStrict<TContent, 'movies' | 'shows' | 'people' | 'games'>>('movies');
+	const [searchResultsType, setSearchResultsType] = useState<TSearchResults>('movies');
 
 	const [userMatchedMedias, setUserMatchedMedias] = useState<UserMovie[] | UserShow[] | UserGame[]>(
 		[]

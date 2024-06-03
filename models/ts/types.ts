@@ -27,7 +27,7 @@ export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
 export type TStatusParam = 'watching' | 'completed' | 'on-hold' | 'dropped' | 'plan-to-watch';
 
-const searchResultsConst = ['movies', 'shows', 'people'] as const;
+const searchResultsConst = ['movies', 'shows', 'people', 'games'] as const;
 
 export type TSearchResults = (typeof searchResultsConst)[number];
 
