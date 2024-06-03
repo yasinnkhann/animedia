@@ -16,6 +16,7 @@ import {
 	WatchStatusTypes,
 	MovieGenreTypes,
 	ShowGenreTypes,
+	UserGame,
 } from '../graphql/generated/code-gen/graphql';
 import toast, { ToastPosition } from 'react-hot-toast';
 
@@ -122,27 +123,35 @@ export class CommonMethods {
 		}
 	};
 
-	public static getUserWatchStatusFromMedia = (
-		userMatchedMedias: (UserShow | UserMovie)[],
+	public static getUserStatusFromMedia = (
+		userMatchedMedias: (UserShow | UserMovie | UserGame)[],
 		item: {
 			id: string;
 			[key: string]: any;
 		}
 	) => {
-		const dataFound = userMatchedMedias.find((data: UserShow | UserMovie) => data.id! === item.id);
+		const dataFound = userMatchedMedias.find(
+			(data: UserShow | UserMovie | UserGame) => data.id === item.id
+		);
 
-		if (dataFound?.status) {
-			switch (dataFound.status) {
-				case WatchStatusTypes.Watching:
-					return 'W';
-				case WatchStatusTypes.Completed:
-					return 'C';
-				case WatchStatusTypes.PlanToWatch:
-					return 'PW';
-				case WatchStatusTypes.OnHold:
-					return 'OH';
-				default:
-					return 'D';
+		if (dataFound) {
+			if ('status' in dataFound) {
+				switch (dataFound.status) {
+					case WatchStatusTypes.Watching:
+						return 'W';
+					case WatchStatusTypes.Completed:
+						return 'C';
+					case WatchStatusTypes.PlanToWatch:
+						return 'PW';
+					case WatchStatusTypes.OnHold:
+						return 'OH';
+					default:
+						return 'D';
+				}
+			}
+
+			if ('wishList' in dataFound) {
+				return 'WL';
 			}
 		}
 
@@ -183,9 +192,9 @@ export class CommonMethods {
 	};
 
 	public static getWatchStatusBackgroundColor = (
-		watchStatus: ReturnType<typeof CommonMethods.getUserWatchStatusFromMedia>
+		status: ReturnType<typeof CommonMethods.getUserStatusFromMedia>
 	) => {
-		switch (watchStatus) {
+		switch (status) {
 			case 'W':
 				return 'bg-green-500';
 			case 'C':
@@ -196,6 +205,8 @@ export class CommonMethods {
 				return 'bg-orange-500';
 			case 'D':
 				return 'bg-red-500';
+			case 'WL':
+				return 'bg-purple-500';
 			default:
 				return '';
 		}

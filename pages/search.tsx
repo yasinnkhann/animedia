@@ -10,7 +10,7 @@ import { ExtractStrict, TContent } from '@ts/types';
 import { RESULTS_PER_PAGE } from '../utils/constants';
 import type { NextPage } from 'next';
 import { useQuery } from '@apollo/client';
-import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 
 const Search: NextPage = () => {
@@ -23,7 +23,9 @@ const Search: NextPage = () => {
 	const [searchResultsType, setSearchResultsType] =
 		useState<ExtractStrict<TContent, 'movies' | 'shows' | 'people' | 'games'>>('movies');
 
-	const [userMatchedMedias, setUserMatchedMedias] = useState<UserShow[] | UserMovie[]>([]);
+	const [userMatchedMedias, setUserMatchedMedias] = useState<UserMovie[] | UserShow[] | UserGame[]>(
+		[]
+	);
 
 	const { data: searchedMoviesData, loading: searchedMoviesLoading } = useQuery(
 		Queries.SEARCHED_MOVIES,
@@ -76,10 +78,10 @@ const Search: NextPage = () => {
 		fetchPolicy: 'network-only',
 	});
 
-	// const { data: usersGamesData } = useQuery(Queries.USERS_GAMES, {
-	// 	skip: searchResultsType !== 'games',
-	// 	fetchPolicy: 'network-only',
-	// });
+	const { data: usersGamesData } = useQuery(Queries.USERS_GAMES, {
+		skip: searchResultsType !== 'games',
+		fetchPolicy: 'network-only',
+	});
 
 	const getSearchedTypeData = useCallback(() => {
 		if (searchResultsType === 'movies' && searchedMoviesData?.searchedMovies) {
@@ -177,9 +179,9 @@ const Search: NextPage = () => {
 	]);
 
 	useEffect(() => {
-		const matchedMedias: UserShow[] | UserMovie[] = [];
+		const matchedMedias: UserMovie[] | UserShow[] | UserGame[] = [];
 
-		const usersMediaMap: Map<string, UserShow | UserMovie> = new Map();
+		const usersMediaMap: Map<string, UserMovie | UserShow | UserGame> = new Map();
 
 		let userDataArr;
 
@@ -187,6 +189,8 @@ const Search: NextPage = () => {
 			userDataArr = usersMoviesData.usersMovies;
 		} else if (searchResultsType === 'shows' && usersShowsData?.usersShows) {
 			userDataArr = usersShowsData.usersShows;
+		} else if (searchResultsType === 'games' && usersGamesData?.usersGames) {
+			userDataArr = usersGamesData.usersGames;
 		}
 
 		userDataArr = userDataArr ?? [];
@@ -209,7 +213,7 @@ const Search: NextPage = () => {
 	}, [
 		usersMoviesData?.usersMovies,
 		usersShowsData?.usersShows,
-		// usersGamesData?.usersGames,
+		usersGamesData?.usersGames,
 		searchResultsType,
 		getSearchedTypeData,
 	]);

@@ -20,10 +20,7 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 
 	const titleName = isMovie ? item.title : item.name;
 
-	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
-		userMatchedMedias,
-		item
-	);
+	const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
 
 	return (
 		<Link

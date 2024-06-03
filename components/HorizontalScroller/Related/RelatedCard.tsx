@@ -11,10 +11,7 @@ interface Props {
 }
 
 const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
-	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
-		userMatchedMedias,
-		item
-	);
+	const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
 
 	return (
 		<Link href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)} passHref>

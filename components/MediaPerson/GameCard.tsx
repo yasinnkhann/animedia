@@ -62,6 +62,10 @@ const GameCard = ({ game, rank }: Props) => {
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
 						<p>{usersGameData?.usersGame?.rating ?? 'N/A'}</p>
 					</td>
+
+					<td className='border-x-2 border-gray-200 text-center align-middle'>
+						<p>{usersGameData?.usersGame?.wishList ? 'Yes' : 'No'}</p>
+					</td>
 				</>
 			)}
 		</tr>

@@ -40,9 +40,10 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
 										<th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
 											My Rating
 										</th>
-										{mediaData.__typename !== 'GamesRes' && (
-											<th className='w-1/6 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>Status</th>
-										)}
+
+										<th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+											{mediaData.__typename === 'GamesRes' ? 'In Wishlist' : 'Status'}
+										</th>
 									</>
 								)}
 							</tr>

@@ -16,7 +16,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 
 	const { data: usersMovieData } = useQuery(Queries.USERS_MOVIE, {
 		variables: {
-			movieId: String(movie.id),
+			movieId: movie.id,
 		},
 	});
 

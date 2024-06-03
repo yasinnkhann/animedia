@@ -16,7 +16,7 @@ const ShowCard = ({ show, rank }: Props) => {
 
 	const { data: usersShowData } = useQuery(Queries.USERS_SHOW, {
 		variables: {
-			showId: String(show.id),
+			showId: show.id,
 		},
 	});
 

@@ -10,21 +10,19 @@ import {
 	UserShow,
 	UserMovie,
 	GameResult,
+	UserGame,
 } from '../../graphql/generated/code-gen/graphql';
 
 interface Props {
 	result: MovieResult | ShowResult | PersonResult | GameResult;
 	searchedResultType: ExtractStrict<TContent, 'movie' | 'show' | 'person' | 'game'>;
-	userMatchedMedias: UserShow[] | UserMovie[];
+	userMatchedMedias: UserMovie[] | UserShow[] | UserGame[];
 }
 
 const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) => {
 	const titleName = 'title' in result ? result.title : result.name;
 
-	const userWatchStatusFromMedia = CommonMethods.getUserWatchStatusFromMedia(
-		userMatchedMedias,
-		result
-	);
+	const userStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, result);
 
 	const renderImage = (
 		imagePath: Maybe<string> | undefined,
@@ -43,13 +41,13 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
 				layout='fill'
 				priority
 			/>
-			{userWatchStatusFromMedia && (
+			{userStatusFromMedia && (
 				<div
 					className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
-						userWatchStatusFromMedia
+						userStatusFromMedia
 					)} text-base text-white`}
 				>
-					{userWatchStatusFromMedia}
+					{userStatusFromMedia}
 				</div>
 			)}
 		</div>
