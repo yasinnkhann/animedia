@@ -100,7 +100,7 @@ const GameDetails = () => {
 
 	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(Queries.GAME_GENRES);
 
-	const [addGame, { loading: addGameLoading }] = useMutation(Mutations.ADD_GAME, {
+	const [addGame] = useMutation(Mutations.ADD_GAME, {
 		variables: {
 			gameId: id,
 			gameName: gameDetailsData?.gameDetails.results[0]?.name!,
@@ -118,7 +118,7 @@ const GameDetails = () => {
 		],
 	});
 
-	const [updateGame, { loading: updateGameLoading }] = useMutation(Mutations.UPDATE_GAME, {
+	const [updateGame] = useMutation(Mutations.UPDATE_GAME, {
 		variables: {
 			gameId: id,
 			rating: typeof rating === 'number' ? rating : null,
@@ -135,7 +135,7 @@ const GameDetails = () => {
 		],
 	});
 
-	const [deleteGame, { loading: deleteGameLoading }] = useMutation(Mutations.DELETE_GAME, {
+	const [deleteGame] = useMutation(Mutations.DELETE_GAME, {
 		variables: {
 			gameId: id,
 		},

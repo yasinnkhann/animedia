@@ -40,7 +40,7 @@ const ShowDetails = () => {
 
 	const [totalEpCountGathered, setTotalEpCountGathered] = useState<boolean>(false);
 
-	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '';
 
 	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(Queries.SHOW_DETAILS, {
 		skip: !id,

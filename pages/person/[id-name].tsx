@@ -19,7 +19,7 @@ import {
 const PersonDetails = () => {
 	const router = useRouter();
 
-	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '';
 
 	const [showFullDescription, setShowFullDescription] = useState(false);
 

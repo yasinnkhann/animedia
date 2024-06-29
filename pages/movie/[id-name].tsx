@@ -30,7 +30,7 @@ const MovieDetails = () => {
 
 	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
 
-	const id = (router.query?.['id-name'] as string)?.split('-')[0];
+	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '';
 
 	const { data: movieDetailsData, loading: movieDetailsLoading } = useQuery(Queries.MOVIE_DETAILS, {
 		skip: !id,
