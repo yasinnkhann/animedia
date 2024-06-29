@@ -323,7 +323,11 @@ const ShowDetails = () => {
 					});
 				}
 			} else {
-				if (e.target.value !== '' && +e.target.value <= currTotalEpCount) {
+				if (
+					e.target.value !== '' &&
+					e.target.value !== '0' &&
+					+e.target.value <= currTotalEpCount
+				) {
 					addShow({
 						variables: {
 							showId: showDetailsData.showDetails.id,
@@ -415,7 +419,7 @@ const ShowDetails = () => {
 
 		getCurrTotalSeasonAndEpCount();
 
-		if (usersShowData?.usersShow) {
+		if (usersShowData?.usersShow && typeof usersShowData.usersShow.current_episode === 'number') {
 			setWatchStatus(usersShowData.usersShow.status ?? WatchStatusTypes.NotWatching);
 			setRating(usersShowData.usersShow.rating ?? '');
 			setCurrEp(String(usersShowData.usersShow.current_episode ?? ''));
@@ -435,7 +439,7 @@ const ShowDetails = () => {
 					},
 				});
 			} else if (
-				usersShowData.usersShow.current_episode &&
+				usersShowData.usersShow.current_episode >= 0 &&
 				usersShowData.usersShow.current_episode < currTotalEpCount &&
 				usersShowData.usersShow.status === WatchStatusTypes.Completed
 			) {
