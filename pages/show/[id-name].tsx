@@ -287,11 +287,34 @@ const ShowDetails = () => {
 			seasonNo: value,
 		}));
 
-		const totalEpCount = getTotalEpCountFromSeason(+value);
+		const totalEpCount = getTotalEpCountForChangedSeason(+value);
 
 		if (totalEpCount === undefined) return;
 
 		setCurrEp(totalEpCount);
+	};
+
+	const handleSeasonEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+
+		if (/[\D]/g.test(value)) {
+			setCurrSeason(currSeason => ({
+				...currSeason,
+				episode: '0',
+			}));
+			return;
+		}
+		if (
+			+value > +calculateSeasonEpisodeNumber().seasonEpCount ||
+			value.startsWith('00') ||
+			(value.startsWith('0') && /[1-9]/.test(value.slice(1)))
+		) {
+			return;
+		}
+		setCurrSeason(currSeason => ({
+			...currSeason,
+			episode: value,
+		}));
 	};
 
 	const handleSeasonOnBlur = () => {
@@ -318,7 +341,39 @@ const ShowDetails = () => {
 		}
 	};
 
-	const getTotalEpCountFromSeason = (seasonNum: number) => {
+	const handleSeasonEpisodeOnBlur = () => {
+		if (!showDetailsData?.showDetails.id) return;
+
+		const seasonNo = Number(currSeason.seasonNo);
+		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
+		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
+		const currentEpCount = Number(currSeason.episode);
+
+		const totalEpisode =
+			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: totalEpisode,
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: watchStatus,
+					currentEpisode: totalEpisode,
+				},
+			});
+		}
+	};
+
+	const getTotalEpCountForChangedSeason = (seasonNum: number) => {
 		if (!showDetailsData?.showDetails) return;
 
 		let totalEpisodesCount = 0;
@@ -365,7 +420,6 @@ const ShowDetails = () => {
 
 	const handleSeasonSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
 		if (
 			currSeason.seasonNo === '' ||
 			+currSeason.seasonNo > currTotalSeasonCount ||
@@ -373,7 +427,7 @@ const ShowDetails = () => {
 		)
 			return;
 
-		const totalEpCount = getTotalEpCountFromSeason(+currSeason.seasonNo);
+		const totalEpCount = getTotalEpCountForChangedSeason(+currSeason.seasonNo);
 
 		if (totalEpCount === undefined) return;
 
@@ -393,6 +447,45 @@ const ShowDetails = () => {
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: WatchStatusTypes.Watching,
 					currentEpisode: +totalEpCount,
+				},
+			});
+		}
+	};
+
+	const handleSeasonEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if (
+			currSeason.episode === '' ||
+			+currSeason.episode > +calculateSeasonEpisodeNumber().seasonEpCount ||
+			!showDetailsData?.showDetails?.id
+		)
+			return;
+
+		const seasonNo = Number(currSeason.seasonNo);
+		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
+		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
+		const currentEpCount = Number(currSeason.episode);
+
+		const totalEpCount =
+			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: totalEpCount,
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: totalEpCount,
 				},
 			});
 		}
@@ -764,7 +857,7 @@ const ShowDetails = () => {
 
 									<form
 										className='flex items-center rounded border border-gray-300'
-										onSubmit={handleEpisodeSubmit}
+										onSubmit={handleSeasonEpisodeSubmit}
 									>
 										<div>
 											<span className='px-3 text-gray-700'>Episode:</span>
@@ -772,9 +865,8 @@ const ShowDetails = () => {
 												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 												type='text'
 												value={currSeason.episode}
-												onChange={handleEpisodeChange}
-												onFocus={e => (e.target.selectionStart = 1)}
-												onBlur={handleEpisodeOnBlur}
+												onChange={handleSeasonEpisodeChange}
+												onBlur={handleSeasonEpisodeOnBlur}
 												disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
 											/>
 											<span className='px-1 text-gray-700'>/</span>{' '}
