@@ -35,6 +35,11 @@ const ShowDetails = () => {
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
+	const [currSeason, setCurrSeason] = useState<{
+		seasonNo: string;
+		episode: string;
+	}>({ seasonNo: '0', episode: '0' });
+
 	const [currTotalEpCount, setCurrTotalEpCount] = useState<number>(0);
 
 	const [currTotalSeasonCount, setCurrTotalSeasonCount] = useState<number>(0);
@@ -253,31 +258,93 @@ const ShowDetails = () => {
 	const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 
-		if (/[\D]/gi.test(value)) {
-			setCurrEp(String(usersShowData?.usersShow?.current_episode) ?? '0');
-			e.target.selectionStart = 1;
+		if (/[\D]/g.test(value)) {
+			setCurrEp(String(usersShowData?.usersShow?.current_episode ?? '0'));
+			return;
+		}
+		if (
+			+value > currTotalEpCount ||
+			value.startsWith('00') ||
+			(value.startsWith('0') && /[1-9]/.test(value.slice(1)))
+		) {
+			return;
+		}
+		setCurrEp(value);
+	};
+
+	const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!showDetailsData?.showDetails.id) return;
+
+		const { value } = e.target;
+
+		if (+value > currTotalSeasonCount || value.startsWith('0')) {
+			return;
+		}
+
+		setCurrSeason(currSeason => ({
+			...currSeason,
+			episode: '1',
+			seasonNo: value,
+		}));
+
+		const totalEpCount = getTotalEpCountFromSeason(+value);
+
+		if (totalEpCount === undefined) return;
+
+		setCurrEp(totalEpCount);
+	};
+
+	const handleSeasonOnBlur = () => {
+		if (!showDetailsData?.showDetails.id) return;
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: +currEp,
+				},
+			});
 		} else {
-			if (
-				+value > currTotalEpCount ||
-				value.startsWith('00') ||
-				(value.startsWith('0') && /[1-9]/.test(value.slice(1)))
-			) {
-				return;
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: watchStatus,
+					currentEpisode: +currEp,
+				},
+			});
+		}
+	};
+
+	const getTotalEpCountFromSeason = (seasonNum: number) => {
+		if (!showDetailsData?.showDetails) return;
+
+		let totalEpisodesCount = 0;
+		const seasons = showDetailsData.showDetails.seasons.filter(
+			season => season.season_number && season.season_number > 0
+		);
+
+		for (const season of seasons) {
+			totalEpisodesCount += season.episode_count;
+			if (seasonNum === season.season_number) {
+				totalEpisodesCount = totalEpisodesCount - season.episode_count + 1;
+				return String(totalEpisodesCount);
 			}
-			setCurrEp(value);
 		}
 	};
 
 	const handleEpisodeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (currEp === '' || +currEp > currTotalEpCount) return;
+		if (currEp === '' || +currEp > currTotalEpCount || !showDetailsData?.showDetails?.id) return;
 
 		if (+currEp === currTotalEpCount) {
 			setWatchStatus(WatchStatusTypes.Completed);
 
 			updateShow({
 				variables: {
-					showId: String(showDetailsData?.showDetails?.id),
+					showId: String(showDetailsData.showDetails.id),
 					showRating: typeof rating === 'string' ? null : rating,
 					watchStatus: WatchStatusTypes.Completed,
 					currentEpisode: currTotalEpCount,
@@ -288,7 +355,7 @@ const ShowDetails = () => {
 
 		updateShow({
 			variables: {
-				showId: String(showDetailsData?.showDetails?.id),
+				showId: String(showDetailsData.showDetails.id),
 				showRating: typeof rating === 'string' ? null : rating,
 				watchStatus,
 				currentEpisode: +currEp,
@@ -296,55 +363,86 @@ const ShowDetails = () => {
 		});
 	};
 
-	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-		if (showDetailsData?.showDetails?.id) {
-			if (usersShowData?.usersShow?.id) {
-				if (usersShowData.usersShow.current_episode === e.target.valueAsNumber) {
-					return;
-				}
-				if (e.target.value === '' || +e.target.value > currTotalEpCount) {
-					setCurrEp(String(usersShowData?.usersShow.current_episode) ?? '0');
-				} else {
-					if (watchStatus === WatchStatusTypes.Watching && +e.target.value === currTotalEpCount) {
-						setWatchStatus(WatchStatusTypes.Completed);
+	const handleSeasonSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 
-						updateShow({
-							variables: {
-								showId: showDetailsData.showDetails.id,
-								showRating: typeof rating === 'string' ? null : rating,
-								watchStatus: WatchStatusTypes.Completed,
-								currentEpisode: currTotalEpCount,
-							},
-						});
-						return;
-					}
+		if (
+			currSeason.seasonNo === '' ||
+			+currSeason.seasonNo > currTotalSeasonCount ||
+			!showDetailsData?.showDetails?.id
+		)
+			return;
+
+		const totalEpCount = getTotalEpCountFromSeason(+currSeason.seasonNo);
+
+		if (totalEpCount === undefined) return;
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: +totalEpCount,
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showRating: typeof rating === 'string' ? null : rating,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: +totalEpCount,
+				},
+			});
+		}
+	};
+
+	const handleEpisodeOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		if (!showDetailsData?.showDetails?.id) return;
+
+		if (usersShowData?.usersShow?.id) {
+			if (usersShowData.usersShow.current_episode === e.target.valueAsNumber) {
+				return;
+			}
+			if (e.target.value === '' || +e.target.value > currTotalEpCount) {
+				setCurrEp(String(usersShowData?.usersShow.current_episode) ?? '0');
+			} else {
+				if (watchStatus === WatchStatusTypes.Watching && +e.target.value === currTotalEpCount) {
+					setWatchStatus(WatchStatusTypes.Completed);
+
 					updateShow({
 						variables: {
 							showId: showDetailsData.showDetails.id,
 							showRating: typeof rating === 'string' ? null : rating,
-							watchStatus,
-							currentEpisode: +currEp,
+							watchStatus: WatchStatusTypes.Completed,
+							currentEpisode: currTotalEpCount,
 						},
 					});
+					return;
 				}
-			} else {
-				if (
-					e.target.value !== '' &&
-					e.target.value !== '0' &&
-					+e.target.value <= currTotalEpCount
-				) {
-					addShow({
-						variables: {
-							showId: showDetailsData.showDetails.id,
-							showName: showDetailsData.showDetails.name,
-							watchStatus:
-								e.target.valueAsNumber === currTotalEpCount
-									? WatchStatusTypes.Completed
-									: WatchStatusTypes.Watching,
-							currentEpisode: +currEp,
-						},
-					});
-				}
+				updateShow({
+					variables: {
+						showId: showDetailsData.showDetails.id,
+						showRating: typeof rating === 'string' ? null : rating,
+						watchStatus,
+						currentEpisode: +currEp,
+					},
+				});
+			}
+		} else {
+			if (e.target.value !== '' && e.target.value !== '0' && +e.target.value <= currTotalEpCount) {
+				addShow({
+					variables: {
+						showId: showDetailsData.showDetails.id,
+						showName: showDetailsData.showDetails.name,
+						watchStatus:
+							e.target.valueAsNumber === currTotalEpCount
+								? WatchStatusTypes.Completed
+								: WatchStatusTypes.Watching,
+						currentEpisode: +currEp,
+					},
+				});
 			}
 		}
 	};
@@ -487,7 +585,7 @@ const ShowDetails = () => {
 		usersShowLoading,
 	]);
 
-	const calculateSeasonEpisodeNumber = () => {
+	const calculateSeasonEpisodeNumber = useCallback(() => {
 		if (showDetailsData && showDetailsData.showDetails) {
 			let totalEpisodesCount = 0;
 			const seasons = showDetailsData.showDetails.seasons.filter(
@@ -499,15 +597,19 @@ const ShowDetails = () => {
 				if (totalEpisodesCount >= +currEp) {
 					const episodeInSeason = season.episode_count - (totalEpisodesCount - Number(currEp));
 					return {
-						seasonNo: season.season_number,
-						seasonEpCount: season.episode_count,
-						episode: episodeInSeason,
+						seasonNo: String(season.season_number),
+						seasonEpCount: String(season.episode_count),
+						episode: String(episodeInSeason),
 					};
 				}
 			}
 		}
-		return { seasonNo: -1, seasonEpCount: -1, episode: -1 };
-	};
+		return {
+			seasonNo: '0',
+			seasonEpCount: '0',
+			episode: '0',
+		};
+	}, [currEp, showDetailsData]);
 
 	useEffect(() => {
 		const checkEpisodeCountDisplay = () => {
@@ -521,6 +623,14 @@ const ShowDetails = () => {
 		};
 		checkEpisodeCountDisplay();
 	}, []);
+
+	useEffect(() => {
+		const { seasonNo, episode } = calculateSeasonEpisodeNumber();
+		setCurrSeason({
+			seasonNo,
+			episode,
+		});
+	}, [calculateSeasonEpisodeNumber]);
 
 	if (showDetailsLoading || !showDetailsData?.showDetails || usersShowLoading) {
 		return (
@@ -623,60 +733,66 @@ const ShowDetails = () => {
 							)}
 
 							{episodeCountDisplay === 'season-episode' && (
-								<form
-									className='flex items-center rounded border border-gray-300'
-									onSubmit={handleEpisodeSubmit}
-								>
-									<div>
-										<span className='px-3 text-gray-700'>Season:</span>
-										<input
-											className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
-											type='text'
-											value={calculateSeasonEpisodeNumber().seasonNo}
-											onChange={handleEpisodeChange}
-											onFocus={e => (e.target.selectionStart = 1)}
-											onBlur={handleEpisodeOnBlur}
-											disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
-										/>
-										<span className='px-1 text-gray-700'>/</span>{' '}
-										<span className='px-1 text-gray-700'>{currTotalSeasonCount}</span>
-									</div>
-
-									<button
-										className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-										onClick={handleIncrementBtn}
-										type='button'
-										disabled={+currEp >= currTotalEpCount || isDBPending}
+								<>
+									<form
+										className='flex items-center rounded border border-gray-300'
+										onSubmit={handleSeasonSubmit}
 									>
-										<FaPlus className='text-blue-500' />
-									</button>
+										<div>
+											<span className='px-3 text-gray-700'>Season:</span>
+											<input
+												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+												type='text'
+												value={currSeason.seasonNo}
+												onChange={handleSeasonChange}
+												onBlur={handleSeasonOnBlur}
+												disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+											/>
+											<span className='px-1 text-gray-700'>/</span>{' '}
+											<span className='px-1 text-gray-700'>{currTotalSeasonCount}</span>
+										</div>
 
-									<div>
-										<span className='px-3 text-gray-700'>Episode:</span>
-										<input
-											className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
-											type='text'
-											value={calculateSeasonEpisodeNumber().episode}
-											onChange={handleEpisodeChange}
-											onFocus={e => (e.target.selectionStart = 1)}
-											onBlur={handleEpisodeOnBlur}
-											disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
-										/>
-										<span className='px-1 text-gray-700'>/</span>{' '}
-										<span className='px-1 text-gray-700'>
-											{calculateSeasonEpisodeNumber().seasonEpCount}
-										</span>
-									</div>
+										<button
+											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+											onClick={handleIncrementBtn}
+											type='button'
+											disabled={+currEp >= currTotalEpCount || isDBPending}
+										>
+											<FaPlus className='text-blue-500' />
+										</button>
+									</form>
 
-									<button
-										className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-										onClick={handleIncrementBtn}
-										type='button'
-										disabled={+currEp >= currTotalEpCount || isDBPending}
+									<form
+										className='flex items-center rounded border border-gray-300'
+										onSubmit={handleEpisodeSubmit}
 									>
-										<FaPlus className='text-blue-500' />
-									</button>
-								</form>
+										<div>
+											<span className='px-3 text-gray-700'>Episode:</span>
+											<input
+												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+												type='text'
+												value={currSeason.episode}
+												onChange={handleEpisodeChange}
+												onFocus={e => (e.target.selectionStart = 1)}
+												onBlur={handleEpisodeOnBlur}
+												disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+											/>
+											<span className='px-1 text-gray-700'>/</span>{' '}
+											<span className='px-1 text-gray-700'>
+												{calculateSeasonEpisodeNumber().seasonEpCount}
+											</span>
+										</div>
+
+										<button
+											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+											onClick={handleIncrementBtn}
+											type='button'
+											disabled={+currEp >= currTotalEpCount || isDBPending}
+										>
+											<FaPlus className='text-blue-500' />
+										</button>
+									</form>
+								</>
 							)}
 
 							<AiFillControl

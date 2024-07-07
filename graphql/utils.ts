@@ -63,7 +63,7 @@ export const getErrorMsg = (error: unknown) => {
 export const postIGDB = async (
 	url: string,
 	body = '',
-	maxRetries = 5,
+	maxRetries = 10,
 	initialRetryDelayMs = 500
 ) => {
 	interface AccessTokenResponse {
