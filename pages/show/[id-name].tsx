@@ -540,7 +540,7 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleIncrementBtn = () => {
+	const handleTotalEpisodeIncrementBtn = () => {
 		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
@@ -605,6 +605,81 @@ const ShowDetails = () => {
 				variables: {
 					...updateShowVariables,
 					watchStatus: WatchStatusTypes.Completed,
+				},
+			});
+		}
+	};
+
+	const handleSeasonIncrementBtn = () => {
+		if (
+			!showDetailsData?.showDetails.id ||
+			!showDetailsData?.showDetails.name ||
+			+currSeason.seasonNo === currTotalSeasonCount
+		) {
+			return;
+		}
+
+		const prevSeason = +currSeason.seasonNo;
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: Number(getTotalEpCountForChangedSeason(prevSeason + 1)),
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					watchStatus: WatchStatusTypes.Watching,
+					currentEpisode: Number(getTotalEpCountForChangedSeason(prevSeason + 1)),
+				},
+			});
+		}
+	};
+
+	const handleSeasonEpisodeIncrementBtn = () => {
+		if (
+			!showDetailsData?.showDetails.id ||
+			!showDetailsData?.showDetails.name ||
+			+currSeason.episode === +calculateSeasonEpisodeNumber().seasonEpCount
+		) {
+			return;
+		}
+		const prevEp = +currSeason.episode;
+
+		const seasonNo = Number(currSeason.seasonNo);
+		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
+		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
+		const currentEpCount = prevEp + 1;
+
+		const totalEpisode =
+			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
+
+		if (!usersShowData?.usersShow) {
+			addShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					showName: showDetailsData.showDetails.name,
+					watchStatus:
+						totalEpisode === currTotalEpCount
+							? WatchStatusTypes.Completed
+							: WatchStatusTypes.Watching,
+					currentEpisode: totalEpisode,
+				},
+			});
+		} else {
+			updateShow({
+				variables: {
+					showId: showDetailsData.showDetails.id,
+					watchStatus:
+						totalEpisode === currTotalEpCount
+							? WatchStatusTypes.Completed
+							: WatchStatusTypes.Watching,
+					currentEpisode: totalEpisode,
 				},
 			});
 		}
@@ -816,7 +891,7 @@ const ShowDetails = () => {
 									<span className='px-1 text-gray-700'>{currTotalEpCount}</span>
 									<button
 										className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-										onClick={handleIncrementBtn}
+										onClick={handleTotalEpisodeIncrementBtn}
 										type='button'
 										disabled={+currEp >= currTotalEpCount || isDBPending}
 									>
@@ -847,7 +922,7 @@ const ShowDetails = () => {
 
 										<button
 											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-											onClick={handleIncrementBtn}
+											onClick={handleSeasonIncrementBtn}
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
@@ -877,7 +952,7 @@ const ShowDetails = () => {
 
 										<button
 											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-											onClick={handleIncrementBtn}
+											onClick={handleSeasonEpisodeIncrementBtn}
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
