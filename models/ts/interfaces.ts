@@ -48,3 +48,8 @@ export interface IGamePreview {
 	name?: string | null;
 	videoUrl?: string | null;
 }
+
+export interface ICurrentSeasonEpisode {
+	seasonNo: string;
+	episode: string;
+}

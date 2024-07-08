@@ -12,7 +12,7 @@ import EpisodeDetailsHorizontalScroller from '../../components/HorizontalScrolle
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useSession } from 'next-auth/react';
-import { ICast } from '@ts/interfaces';
+import { ICast, ICurrentSeasonEpisode } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '../../utils/CommonMethods';
@@ -20,9 +20,10 @@ import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
 import { FaPlus } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import _ from 'lodash';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { AiFillControl } from 'react-icons/ai';
+import { TEpisodeCountDisplay } from '@ts/types';
+import _ from 'lodash';
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
@@ -35,10 +36,10 @@ const ShowDetails = () => {
 
 	const [currEp, setCurrEp] = useState<string>('0');
 
-	const [currSeason, setCurrSeason] = useState<{
-		seasonNo: string;
-		episode: string;
-	}>({ seasonNo: '0', episode: '0' });
+	const [currSeasonEp, setCurrSeasonEp] = useState<ICurrentSeasonEpisode>({
+		seasonNo: '0',
+		episode: '0',
+	});
 
 	const [currTotalEpCount, setCurrTotalEpCount] = useState<number>(0);
 
@@ -48,9 +49,7 @@ const ShowDetails = () => {
 
 	const id = (router.query?.['id-name'] as string)?.split('-')[0] ?? '';
 
-	const [episodeCountDisplay, setEpisodeCountDisplay] = useState<
-		'total-episodes' | 'season-episode'
-	>();
+	const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
 	const { data: showDetailsData, loading: showDetailsLoading } = useQuery(Queries.SHOW_DETAILS, {
 		skip: !id,
@@ -281,8 +280,8 @@ const ShowDetails = () => {
 			return;
 		}
 
-		setCurrSeason(currSeason => ({
-			...currSeason,
+		setCurrSeasonEp(currSeasonEp => ({
+			...currSeasonEp,
 			episode: '1',
 			seasonNo: value,
 		}));
@@ -298,8 +297,8 @@ const ShowDetails = () => {
 		const { value } = e.target;
 
 		if (/[\D]/g.test(value)) {
-			setCurrSeason(currSeason => ({
-				...currSeason,
+			setCurrSeasonEp(currSeasonEp => ({
+				...currSeasonEp,
 				episode: '0',
 			}));
 			return;
@@ -311,8 +310,8 @@ const ShowDetails = () => {
 		) {
 			return;
 		}
-		setCurrSeason(currSeason => ({
-			...currSeason,
+		setCurrSeasonEp(currSeasonEp => ({
+			...currSeasonEp,
 			episode: value,
 		}));
 	};
@@ -344,10 +343,10 @@ const ShowDetails = () => {
 	const handleSeasonEpisodeOnBlur = () => {
 		if (!showDetailsData?.showDetails.id) return;
 
-		const seasonNo = Number(currSeason.seasonNo);
+		const seasonNo = Number(currSeasonEp.seasonNo);
 		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
 		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
-		const currentEpCount = Number(currSeason.episode);
+		const currentEpCount = Number(currSeasonEp.episode);
 
 		const totalEpisode =
 			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
@@ -421,13 +420,13 @@ const ShowDetails = () => {
 	const handleSeasonSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (
-			currSeason.seasonNo === '' ||
-			+currSeason.seasonNo > currTotalSeasonCount ||
+			currSeasonEp.seasonNo === '' ||
+			+currSeasonEp.seasonNo > currTotalSeasonCount ||
 			!showDetailsData?.showDetails?.id
 		)
 			return;
 
-		const totalEpCount = getTotalEpCountForChangedSeason(+currSeason.seasonNo);
+		const totalEpCount = getTotalEpCountForChangedSeason(+currSeasonEp.seasonNo);
 
 		if (totalEpCount === undefined) return;
 
@@ -456,16 +455,16 @@ const ShowDetails = () => {
 		e.preventDefault();
 
 		if (
-			currSeason.episode === '' ||
-			+currSeason.episode > +calculateSeasonEpisodeNumber().seasonEpCount ||
+			currSeasonEp.episode === '' ||
+			+currSeasonEp.episode > +calculateSeasonEpisodeNumber().seasonEpCount ||
 			!showDetailsData?.showDetails?.id
 		)
 			return;
 
-		const seasonNo = Number(currSeason.seasonNo);
+		const seasonNo = Number(currSeasonEp.seasonNo);
 		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
 		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
-		const currentEpCount = Number(currSeason.episode);
+		const currentEpCount = Number(currSeasonEp.episode);
 
 		const totalEpCount =
 			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
@@ -614,12 +613,12 @@ const ShowDetails = () => {
 		if (
 			!showDetailsData?.showDetails.id ||
 			!showDetailsData?.showDetails.name ||
-			+currSeason.seasonNo === currTotalSeasonCount
+			+currSeasonEp.seasonNo === currTotalSeasonCount
 		) {
 			return;
 		}
 
-		const prevSeason = +currSeason.seasonNo;
+		const prevSeason = +currSeasonEp.seasonNo;
 
 		if (!usersShowData?.usersShow) {
 			addShow({
@@ -645,13 +644,13 @@ const ShowDetails = () => {
 		if (
 			!showDetailsData?.showDetails.id ||
 			!showDetailsData?.showDetails.name ||
-			+currSeason.episode === +calculateSeasonEpisodeNumber().seasonEpCount
+			+currSeasonEp.episode === +calculateSeasonEpisodeNumber().seasonEpCount
 		) {
 			return;
 		}
-		const prevEp = +currSeason.episode;
+		const prevEp = +currSeasonEp.episode;
 
-		const seasonNo = Number(currSeason.seasonNo);
+		const seasonNo = Number(currSeasonEp.seasonNo);
 		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
 		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
 		const currentEpCount = prevEp + 1;
@@ -794,7 +793,7 @@ const ShowDetails = () => {
 
 	useEffect(() => {
 		const { seasonNo, episode } = calculateSeasonEpisodeNumber();
-		setCurrSeason({
+		setCurrSeasonEp({
 			seasonNo,
 			episode,
 		});
@@ -883,7 +882,6 @@ const ShowDetails = () => {
 										type='text'
 										value={currEp}
 										onChange={handleEpisodeChange}
-										onFocus={e => (e.target.selectionStart = 1)}
 										onBlur={handleEpisodeOnBlur}
 										disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
 									/>
@@ -895,7 +893,9 @@ const ShowDetails = () => {
 										type='button'
 										disabled={+currEp >= currTotalEpCount || isDBPending}
 									>
-										<FaPlus className='text-blue-500' />
+										<FaPlus
+											className={`${+currEp >= currTotalEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+										/>
 									</button>
 								</form>
 							)}
@@ -911,7 +911,7 @@ const ShowDetails = () => {
 											<input
 												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 												type='text'
-												value={currSeason.seasonNo}
+												value={currSeasonEp.seasonNo}
 												onChange={handleSeasonChange}
 												onBlur={handleSeasonOnBlur}
 												disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
@@ -926,7 +926,9 @@ const ShowDetails = () => {
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
-											<FaPlus className='text-blue-500' />
+											<FaPlus
+												className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-gray-500' : 'text-blue-500'}`}
+											/>
 										</button>
 									</form>
 
@@ -939,7 +941,7 @@ const ShowDetails = () => {
 											<input
 												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 												type='text'
-												value={currSeason.episode}
+												value={currSeasonEp.episode}
 												onChange={handleSeasonEpisodeChange}
 												onBlur={handleSeasonEpisodeOnBlur}
 												disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
@@ -956,7 +958,9 @@ const ShowDetails = () => {
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
-											<FaPlus className='text-blue-500' />
+											<FaPlus
+												className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+											/>
 										</button>
 									</form>
 								</>

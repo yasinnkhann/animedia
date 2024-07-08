@@ -93,3 +93,5 @@ const igdbImageSizesConst = [
 ] as const;
 
 export type TIGDBImageSizes = (typeof igdbImageSizesConst)[number];
+
+export type TEpisodeCountDisplay = 'total-episodes' | 'season-episode';
