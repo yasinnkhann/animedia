@@ -18,7 +18,7 @@ import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import { useMutation, useQuery } from '@apollo/client';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { AiFillControl } from 'react-icons/ai';
@@ -539,20 +539,21 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleTotalEpisodeIncrementBtn = () => {
+	const handleTotalEpisodeBtn = (action: 'increment' | 'decrement') => {
 		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
 
 		const prevEp = +currEp;
+		const epPostAction = action === 'increment' ? prevEp + 1 : prevEp - 1;
 
 		const updateShowVariables = {
-			showId: String(showDetailsData.showDetails.id),
+			showId: showDetailsData.showDetails.id,
 			showRating: typeof rating === 'string' ? null : rating,
-			currentEpisode: prevEp + 1,
+			currentEpisode: epPostAction,
 		};
 
-		if (prevEp + 1 === 1) {
+		if (epPostAction === 1) {
 			if (!usersShowData?.usersShow?.status) {
 				addShow({
 					variables: {
@@ -580,7 +581,7 @@ const ShowDetails = () => {
 					},
 				});
 			}
-		} else if (prevEp + 1 < currTotalEpCount && usersShowData?.usersShow?.status) {
+		} else if (epPostAction < currTotalEpCount && usersShowData?.usersShow?.status) {
 			if (
 				usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
 				usersShowData.usersShow.status === WatchStatusTypes.OnHold
@@ -599,7 +600,7 @@ const ShowDetails = () => {
 					},
 				});
 			}
-		} else if (prevEp + 1 === currTotalEpCount && usersShowData?.usersShow) {
+		} else if (epPostAction === currTotalEpCount && usersShowData?.usersShow) {
 			updateShow({
 				variables: {
 					...updateShowVariables,
@@ -609,16 +610,21 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleSeasonIncrementBtn = () => {
-		if (
-			!showDetailsData?.showDetails.id ||
-			!showDetailsData?.showDetails.name ||
-			+currSeasonEp.seasonNo === currTotalSeasonCount
-		) {
+	const handleSeasonBtn = (action: 'increment' | 'decrement') => {
+		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
 
 		const prevSeason = +currSeasonEp.seasonNo;
+
+		if (
+			(action === 'increment' && prevSeason === +currTotalSeasonCount) ||
+			(action === 'decrement' && prevSeason === 1)
+		) {
+			return;
+		}
+
+		const seasonPostAction = action === 'increment' ? prevSeason + 1 : prevSeason - 1;
 
 		if (!usersShowData?.usersShow) {
 			addShow({
@@ -626,7 +632,7 @@ const ShowDetails = () => {
 					showId: showDetailsData.showDetails.id,
 					showName: showDetailsData.showDetails.name,
 					watchStatus: WatchStatusTypes.Watching,
-					currentEpisode: Number(getTotalEpCountForChangedSeason(prevSeason + 1)),
+					currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
 				},
 			});
 		} else {
@@ -634,26 +640,31 @@ const ShowDetails = () => {
 				variables: {
 					showId: showDetailsData.showDetails.id,
 					watchStatus: WatchStatusTypes.Watching,
-					currentEpisode: Number(getTotalEpCountForChangedSeason(prevSeason + 1)),
+					currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
 				},
 			});
 		}
 	};
 
-	const handleSeasonEpisodeIncrementBtn = () => {
+	const handleSeasonEpisodeBtn = (action: 'increment' | 'decrement') => {
+		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
+			return;
+		}
+
+		const prevEp = +currSeasonEp.episode;
+		const epPostAction = action === 'increment' ? prevEp + 1 : prevEp - 1;
+
 		if (
-			!showDetailsData?.showDetails.id ||
-			!showDetailsData?.showDetails.name ||
-			+currSeasonEp.episode === +calculateSeasonEpisodeNumber().seasonEpCount
+			(action === 'increment' && prevEp === +calculateSeasonEpisodeNumber().seasonEpCount) ||
+			(action === 'decrement' && prevEp === 0)
 		) {
 			return;
 		}
-		const prevEp = +currSeasonEp.episode;
 
 		const seasonNo = Number(currSeasonEp.seasonNo);
 		const totalEpCountForChangedSeason = Number(getTotalEpCountForChangedSeason(seasonNo));
 		const seasonEpCount = Number(calculateSeasonEpisodeNumber().seasonEpCount);
-		const currentEpCount = prevEp + 1;
+		const currentEpCount = epPostAction;
 
 		const totalEpisode =
 			totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
@@ -877,6 +888,14 @@ const ShowDetails = () => {
 									onSubmit={handleEpisodeSubmit}
 								>
 									<span className='px-3 text-gray-700'>Episodes:</span>
+									<button
+										className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+										onClick={() => handleTotalEpisodeBtn('decrement')}
+										type='button'
+										disabled={+currEp <= 0 || isDBPending}
+									>
+										<FaMinus className={`${+currEp <= 0 ? 'text-gray-500' : 'text-blue-500'}`} />
+									</button>
 									<input
 										className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 										type='text'
@@ -889,7 +908,7 @@ const ShowDetails = () => {
 									<span className='px-1 text-gray-700'>{currTotalEpCount}</span>
 									<button
 										className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-										onClick={handleTotalEpisodeIncrementBtn}
+										onClick={() => handleTotalEpisodeBtn('increment')}
 										type='button'
 										disabled={+currEp >= currTotalEpCount || isDBPending}
 									>
@@ -908,6 +927,16 @@ const ShowDetails = () => {
 									>
 										<div>
 											<span className='px-3 text-gray-700'>Season:</span>
+											<button
+												className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+												onClick={() => handleSeasonBtn('decrement')}
+												type='button'
+												disabled={+currSeasonEp.seasonNo <= 1 || isDBPending}
+											>
+												<FaMinus
+													className={`${+currSeasonEp.seasonNo <= 1 ? 'text-gray-500' : 'text-blue-500'}`}
+												/>
+											</button>
 											<input
 												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 												type='text'
@@ -922,7 +951,7 @@ const ShowDetails = () => {
 
 										<button
 											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-											onClick={handleSeasonIncrementBtn}
+											onClick={() => handleSeasonBtn('increment')}
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
@@ -938,6 +967,16 @@ const ShowDetails = () => {
 									>
 										<div>
 											<span className='px-3 text-gray-700'>Episode:</span>
+											<button
+												className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+												onClick={() => handleSeasonEpisodeBtn('decrement')}
+												type='button'
+												disabled={+currSeasonEp.episode <= 0 || isDBPending}
+											>
+												<FaMinus
+													className={`${+currSeasonEp.episode <= 0 ? 'text-gray-500' : 'text-blue-500'}`}
+												/>
+											</button>
 											<input
 												className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
 												type='text'
@@ -954,7 +993,7 @@ const ShowDetails = () => {
 
 										<button
 											className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-											onClick={handleSeasonEpisodeIncrementBtn}
+											onClick={() => handleSeasonEpisodeBtn('increment')}
 											type='button'
 											disabled={+currEp >= currTotalEpCount || isDBPending}
 										>
