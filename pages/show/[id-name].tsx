@@ -22,7 +22,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { AiFillControl } from 'react-icons/ai';
-import { TEpisodeCountDisplay } from '@ts/types';
+import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
 import _ from 'lodash';
 
 const ShowDetails = () => {
@@ -539,7 +539,7 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleTotalEpisodeBtn = (action: 'increment' | 'decrement') => {
+	const handleTotalEpisodeBtn = (action: TSeasonEpisodeAction) => {
 		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
@@ -610,7 +610,7 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleSeasonBtn = (action: 'increment' | 'decrement') => {
+	const handleSeasonBtn = (action: TSeasonEpisodeAction) => {
 		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
@@ -646,7 +646,7 @@ const ShowDetails = () => {
 		}
 	};
 
-	const handleSeasonEpisodeBtn = (action: 'increment' | 'decrement') => {
+	const handleSeasonEpisodeBtn = (action: TSeasonEpisodeAction) => {
 		if (!showDetailsData?.showDetails.id || !showDetailsData?.showDetails.name) {
 			return;
 		}
