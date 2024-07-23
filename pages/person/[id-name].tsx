@@ -8,13 +8,17 @@ import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useQuery } from '@apollo/client';
-import Modal from 'components/Modal';
-import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import {
 	KNOWN_FOR_MIN_EP_COUNT,
 	KNOWN_FOR_CARDS_LIMIT,
 	MAX_SUMMARY_WORD_LENGTH,
 } from '../../utils/constants';
+import { lazy, Suspense } from 'react';
+
+const Modal = lazy(() => import('components/Modal'));
+const RelatedHorizontalScroller = lazy(
+	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
+);
 
 const PersonDetails = () => {
 	const router = useRouter();
@@ -212,16 +216,20 @@ const PersonDetails = () => {
 				{!_.isEmpty(memoMappedMedia) && (
 					<section className='col-start-2 mt-4 pb-4'>
 						<h3 className='mb-4 ml-8'>Known For</h3>
-						<RelatedHorizontalScroller items={memoMappedMedia} />
+						<Suspense fallback={<div>Loading...</div>}>
+							<RelatedHorizontalScroller items={memoMappedMedia} />
+						</Suspense>
 					</section>
 				)}
 			</main>
 
 			{showFullDescription && (
-				<Modal closeModal={() => setShowFullDescription(false)}>
-					<h3 className='mb-4 text-xl font-semibold'>Biography</h3>
-					<p>{personDetailsData.personDetails.biography}</p>
-				</Modal>
+				<Suspense fallback={<div>Loading...</div>}>
+					<Modal closeModal={() => setShowFullDescription(false)}>
+						<h3 className='mb-4 text-xl font-semibold'>Biography</h3>
+						<p>{personDetailsData.personDetails.biography}</p>
+					</Modal>
+				</Suspense>
 			)}
 		</>
 	);

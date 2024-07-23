@@ -8,8 +8,6 @@ import * as Mutations from '../../graphql/mutations';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
-import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import MediaCastHorizontalScroller from '../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { useSession } from 'next-auth/react';
 import { ICast } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from 'models/dropDownOptions';
@@ -20,6 +18,14 @@ import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from 'utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { lazy, Suspense } from 'react';
+
+const RelatedHorizontalScroller = lazy(
+	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
+);
+const MediaCastHorizontalScroller = lazy(
+	() => import('../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller')
+);
 
 const MovieDetails = () => {
 	const { data: session, status } = useSession();
@@ -302,19 +308,21 @@ const MovieDetails = () => {
 						!_.isEmpty(moviesCastCrewData.moviesCastCrew.cast) && (
 							<section>
 								<h3 className='mb-4 ml-8'>Cast</h3>
-								<MediaCastHorizontalScroller
-									items={
-										moviesCastCrewData.moviesCastCrew
-											.cast!.map(cast => ({
-												id: cast.id,
-												name: cast.name,
-												character: cast.character,
-												profile_path: cast.profile_path,
-												type: cast.__typename,
-											}))
-											.slice(0, RESULTS_PER_PAGE) as ICast[]
-									}
-								/>
+								<Suspense fallback={<div>Loading...</div>}>
+									<MediaCastHorizontalScroller
+										items={
+											moviesCastCrewData.moviesCastCrew
+												.cast!.map(cast => ({
+													id: cast.id,
+													name: cast.name,
+													character: cast.character,
+													profile_path: cast.profile_path,
+													type: cast.__typename,
+												}))
+												.slice(0, RESULTS_PER_PAGE) as ICast[]
+										}
+									/>
+								</Suspense>
 							</section>
 						)}
 
@@ -323,16 +331,18 @@ const MovieDetails = () => {
 						!_.isEmpty(recMoviesData.recommendedMovies.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
-								<RelatedHorizontalScroller
-									items={recMoviesData.recommendedMovies.results.map(movie => ({
-										id: movie.id,
-										imagePath: movie.poster_path,
-										name: movie.title,
-										popularity: movie.popularity ?? 0,
-										type: 'movie',
-									}))}
-									mediaType={'movies'}
-								/>
+								<Suspense fallback={<div>Loading...</div>}>
+									<RelatedHorizontalScroller
+										items={recMoviesData.recommendedMovies.results.map(movie => ({
+											id: movie.id,
+											imagePath: movie.poster_path,
+											name: movie.title,
+											popularity: movie.popularity ?? 0,
+											type: 'movie',
+										}))}
+										mediaType={'movies'}
+									/>
+								</Suspense>
 							</section>
 						)}
 				</section>

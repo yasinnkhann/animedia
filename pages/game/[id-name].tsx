@@ -13,13 +13,15 @@ import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from 'utils/constants';
-import Modal from 'components/Modal';
 import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
 import MediaCastHorizontalScroller from 'components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { ICast } from '@ts/interfaces';
 import { ratingOptions } from 'models/dropDownOptions';
 import { Button } from 'antd';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { lazy, Suspense } from 'react';
+
+const Modal = lazy(() => import('components/Modal'));
 
 const GameDetails = () => {
 	const { data: session, status } = useSession();
@@ -505,10 +507,12 @@ const GameDetails = () => {
 			</main>
 
 			{showFullDescription && (
-				<Modal closeModal={() => setShowFullDescription(false)}>
-					<h3 className='mb-4 text-xl font-semibold'>Storyline</h3>
-					<p>{game.storyline}</p>
-				</Modal>
+				<Suspense fallback={<div>Loading...</div>}>
+					<Modal closeModal={() => setShowFullDescription(false)}>
+						<h3 className='mb-4 text-xl font-semibold'>Storyline</h3>
+						<p>{game.storyline}</p>
+					</Modal>
+				</Suspense>
 			)}
 		</>
 	);

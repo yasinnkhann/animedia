@@ -6,9 +6,6 @@ import Link from 'next/link';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
-import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import MediaCastHorizontalScroller from '../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
-import EpisodeDetailsHorizontalScroller from '../../components/HorizontalScroller/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { useSession } from 'next-auth/react';
@@ -24,6 +21,19 @@ import { RESULTS_PER_PAGE } from 'utils/constants';
 import { AiFillControl } from 'react-icons/ai';
 import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
 import _ from 'lodash';
+import { lazy, Suspense } from 'react';
+
+const RelatedHorizontalScroller = lazy(
+	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
+);
+const MediaCastHorizontalScroller = lazy(
+	() => import('../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller')
+);
+
+const EpisodeDetailsHorizontalScroller = lazy(
+	() =>
+		import('../../components/HorizontalScroller/EpisodeDetails/EpisodeDetailsHorizontalScroller')
+);
 
 const ShowDetails = () => {
 	const { data: session, status } = useSession();
@@ -1089,12 +1099,14 @@ const ShowDetails = () => {
 						showDetailsData.showDetails.number_of_episodes <= 500 && (
 							<section>
 								<h3 className='mb-4 ml-8'>Episodes</h3>
-								<EpisodeDetailsHorizontalScroller
-									seasons={showDetailsData.showDetails.seasons.filter(
-										season => season.season_number && season.season_number > 0
-									)}
-									showId={showDetailsData.showDetails.id}
-								/>
+								<Suspense fallback={<div>Loading...</div>}>
+									<EpisodeDetailsHorizontalScroller
+										seasons={showDetailsData.showDetails.seasons.filter(
+											season => season.season_number && season.season_number > 0
+										)}
+										showId={showDetailsData.showDetails.id}
+									/>
+								</Suspense>
 							</section>
 						)}
 
@@ -1103,19 +1115,21 @@ const ShowDetails = () => {
 						!_.isEmpty(showsCastCrewData.showsCastCrew.cast) && (
 							<section>
 								<h3 className='mb-4 ml-8 mt-4'>Cast</h3>
-								<MediaCastHorizontalScroller
-									items={
-										showsCastCrewData.showsCastCrew
-											?.cast!.map(cast => ({
-												id: cast.id,
-												name: cast.name,
-												character: cast.character,
-												profile_path: cast.profile_path,
-												type: cast.__typename,
-											}))
-											.slice(0, RESULTS_PER_PAGE) as ICast[]
-									}
-								/>
+								<Suspense fallback={<div>Loading...</div>}>
+									<MediaCastHorizontalScroller
+										items={
+											showsCastCrewData.showsCastCrew
+												?.cast!.map(cast => ({
+													id: cast.id,
+													name: cast.name,
+													character: cast.character,
+													profile_path: cast.profile_path,
+													type: cast.__typename,
+												}))
+												.slice(0, RESULTS_PER_PAGE) as ICast[]
+										}
+									/>
+								</Suspense>
 							</section>
 						)}
 					{!recShowsLoading &&
@@ -1123,16 +1137,18 @@ const ShowDetails = () => {
 						!_.isEmpty(recShowsData.recommendedShows.results) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
-								<RelatedHorizontalScroller
-									items={recShowsData.recommendedShows.results.map(show => ({
-										id: show.id,
-										imagePath: show.poster_path,
-										name: show.name,
-										popularity: show.popularity ?? 0,
-										type: 'show',
-									}))}
-									mediaType={'shows'}
-								/>
+								<Suspense fallback={<div>Loading...</div>}>
+									<RelatedHorizontalScroller
+										items={recShowsData.recommendedShows.results.map(show => ({
+											id: show.id,
+											imagePath: show.poster_path,
+											name: show.name,
+											popularity: show.popularity ?? 0,
+											type: 'show',
+										}))}
+										mediaType={'shows'}
+									/>
+								</Suspense>
 							</section>
 						)}
 				</section>
