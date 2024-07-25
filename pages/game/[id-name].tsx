@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
@@ -15,18 +15,11 @@ import { ICast } from '@ts/interfaces';
 import { ratingOptions } from 'models/dropDownOptions';
 import { Button } from 'antd';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { lazy, Suspense } from 'react';
+import RoundProgressBar from '../../components/RoundProgressBar';
+import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
+import GamePreviewHorizontalScroller from 'components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
+import MediaCastHorizontalScroller from 'components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 
-const RoundProgressBar = lazy(() => import('../../components/RoundProgressBar'));
-const RelatedHorizontalScroller = lazy(
-	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
-);
-const GamePreviewHorizontalScroller = lazy(
-	() => import('components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller')
-);
-const MediaCastHorizontalScroller = lazy(
-	() => import('components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller')
-);
 const Modal = lazy(() => import('components/Modal'));
 
 const GameDetails = () => {
@@ -299,9 +292,7 @@ const GameDetails = () => {
 				<section className='mt-4'>
 					<section className='mb-8 mt-8 flex items-center'>
 						<section className='h-[5rem] w-[5rem]'>
-							<Suspense fallback={<div>Loading...</div>}>
-								<RoundProgressBar percentageVal={+(game.rating ?? 0).toFixed(1)} />
-							</Suspense>
+							<RoundProgressBar percentageVal={+(game.rating ?? 0).toFixed(1)} />
 						</section>
 						<p className='ml-[.5rem] text-base font-medium'>
 							{commaNumber(game.rating_count ?? 0)} voted users
@@ -439,9 +430,7 @@ const GameDetails = () => {
 						!_.isEmpty(gamePreviewsData.gamePreviews) && (
 							<section className='pb-4'>
 								<h3 className='mb-4 ml-8 mt-4'>Preview</h3>
-								<Suspense fallback={<div>Loading...</div>}>
-									<GamePreviewHorizontalScroller items={gamePreviewsData.gamePreviews} />
-								</Suspense>
+								<GamePreviewHorizontalScroller items={gamePreviewsData.gamePreviews} />
 							</section>
 						)}
 
@@ -450,20 +439,18 @@ const GameDetails = () => {
 						!_.isEmpty(gameCharactersData.gameCharacters) && (
 							<section>
 								<h3 className='mb-4 ml-8'>Characters</h3>
-								<Suspense fallback={<div>Loading...</div>}>
-									<MediaCastHorizontalScroller
-										items={
-											gameCharactersData.gameCharacters
-												.map(char => ({
-													id: char.id,
-													name: char.name,
-													profile_path: char.mugShotUrl,
-													type: char.__typename,
-												}))
-												.slice(0, RESULTS_PER_PAGE) as ICast[]
-										}
-									/>
-								</Suspense>
+								<MediaCastHorizontalScroller
+									items={
+										gameCharactersData.gameCharacters
+											.map(char => ({
+												id: char.id,
+												name: char.name,
+												profile_path: char.mugShotUrl,
+												type: char.__typename,
+											}))
+											.slice(0, RESULTS_PER_PAGE) as ICast[]
+									}
+								/>
 							</section>
 						)}
 

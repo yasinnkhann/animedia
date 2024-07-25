@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, lazy, Suspense } from 'react';
 import Head from 'next/head';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
@@ -13,12 +13,9 @@ import {
 	KNOWN_FOR_CARDS_LIMIT,
 	MAX_SUMMARY_WORD_LENGTH,
 } from '../../utils/constants';
-import { lazy, Suspense } from 'react';
+import RelatedHorizontalScroller from '../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
 
 const Modal = lazy(() => import('components/Modal'));
-const RelatedHorizontalScroller = lazy(
-	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
-);
 
 const PersonDetails = () => {
 	const router = useRouter();
@@ -216,9 +213,7 @@ const PersonDetails = () => {
 				{!_.isEmpty(memoMappedMedia) && (
 					<section className='col-start-2 mt-4 pb-4'>
 						<h3 className='mb-4 ml-8'>Known For</h3>
-						<Suspense fallback={<div>Loading...</div>}>
-							<RelatedHorizontalScroller items={memoMappedMedia} />
-						</Suspense>
+						<RelatedHorizontalScroller items={memoMappedMedia} />
 					</section>
 				)}
 			</main>
