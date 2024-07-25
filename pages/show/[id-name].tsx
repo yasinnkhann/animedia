@@ -22,6 +22,7 @@ import { AiFillControl } from 'react-icons/ai';
 import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
 import _ from 'lodash';
 import { lazy, Suspense } from 'react';
+import { SpinningCircles } from 'react-loading-icons';
 
 const RelatedHorizontalScroller = lazy(
 	() => import('../../components/HorizontalScroller/Related/RelatedHorizontalScroller')
@@ -845,15 +846,23 @@ const ShowDetails = () => {
 				</section>
 
 				<section className='mt-4'>
-					<section className='mb-8 mt-8 flex items-center'>
-						<section className='h-[5rem] w-[5rem]'>
-							<RoundProgressBar
-								percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
-							/>
-						</section>
-						<p className='ml-[.5rem] text-base font-medium'>
-							{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
-						</p>
+					<section className='relative mb-8 mt-8 flex items-center'>
+						<div className='flex items-center'>
+							<section className='h-[5rem] w-[5rem]'>
+								<RoundProgressBar
+									percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
+								/>
+							</section>
+							<p className='ml-[.5rem] text-base font-medium'>
+								{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
+							</p>
+						</div>
+
+						{isDBPending && (
+							<div className='absolute left-1/2 top-12 -translate-x-1/2 transform'>
+								<SpinningCircles height={50} stroke='#00b3ff' />
+							</div>
+						)}
 					</section>
 
 					{status === 'authenticated' && session && (

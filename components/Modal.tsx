@@ -27,22 +27,20 @@ const Modal = ({ children, closeModal }: Props) => {
 	};
 
 	return (
-		<>
-			<section
-				onClick={handleClickOutside}
-				className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
+		<section
+			onClick={handleClickOutside}
+			className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
+		>
+			<div
+				className='relative m-auto h-[85vh] w-[70vw] overflow-scroll rounded bg-white p-4 scrollbar-hide'
+				ref={contentRef}
 			>
-				<div
-					className='relative m-auto h-[85vh] w-[70vw] overflow-scroll rounded bg-white p-4 scrollbar-hide'
-					ref={contentRef}
-				>
-					<button onClick={() => closeModal()} className='float-right'>
-						<GrClose className='h-6 w-6 text-gray-500 transition duration-300 hover:text-gray-700' />
-					</button>
-					{children}
-				</div>
-			</section>
-		</>
+				<button onClick={() => closeModal()} className='float-right'>
+					<GrClose className='h-6 w-6 text-gray-500 transition duration-300 hover:text-gray-700' />
+				</button>
+				{children}
+			</div>
+		</section>
 	);
 };
 

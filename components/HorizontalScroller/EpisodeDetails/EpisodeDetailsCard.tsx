@@ -7,6 +7,8 @@ import { CommonMethods } from 'utils/CommonMethods';
 import RoundProgressBar from 'components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import { lazy, Suspense } from 'react';
+import { Puff } from 'react-loading-icons';
+
 const Modal = lazy(() => import('components/Modal'));
 
 interface Props {
@@ -49,8 +51,15 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					</div>
 				</section>
 			</section>
+
 			{showModal && (
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense
+					fallback={
+						<div className='flex justify-center'>
+							<Puff stroke='#00b3ff' />
+						</div>
+					}
+				>
 					<Modal closeModal={() => setShowModal(false)}>
 						<div className='w-full rounded-lg bg-white'>
 							<div className='flex items-center justify-between border-b border-gray-300 px-6 py-4'>
