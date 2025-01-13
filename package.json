@@ -14,7 +14,7 @@
 		"codegen": "graphql-codegen --watch",
 		"gen-env-types": "gen-env-types .env -o types/env.d.ts -e .",
 		"lint": "next lint",
-		"prepare": "husky install"
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.8",
