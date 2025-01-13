@@ -846,6 +846,12 @@ const ShowDetails = () => {
 							<p className='ml-[.5rem] text-base font-medium'>
 								{commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
 							</p>
+
+							<AiFillControl
+								size={35}
+								onClick={toggleEpisodeCountDisplay}
+								className='ml-8 cursor-pointer'
+							/>
 						</div>
 
 						{isDBPending && (
@@ -1013,12 +1019,6 @@ const ShowDetails = () => {
 									</form>
 								</>
 							)}
-
-							<AiFillControl
-								size={35}
-								onClick={toggleEpisodeCountDisplay}
-								className='cursor-pointer'
-							/>
 						</section>
 					)}
 
