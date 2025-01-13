@@ -46,9 +46,9 @@ const Header = () => {
 							<li>
 								<DropDownItem items={SHOWS_ITEMS} name='Shows' routeType='shows' />
 							</li>
-							<li>
+							{/* <li>
 								<DropDownItem items={GAME_ITEMS} name='Games' routeType='games' />
-							</li>
+							</li> */}
 							<li>
 								<DropDownItem items={PEOPLE_ITEMS} name='People' routeType='people' />
 							</li>
@@ -63,9 +63,9 @@ const Header = () => {
 									<>
 										<DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' routeType='my-shows' />
 										<DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
-										<Link href='/my-games' className='cursor-pointer no-underline' passHref>
+										{/* <Link href='/my-games' className='cursor-pointer no-underline' passHref>
 											<a className='no-underline'>My Games</a>
-										</Link>
+										</Link> */}
 									</>
 								)}
 
