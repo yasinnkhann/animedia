@@ -1094,18 +1094,17 @@ const ShowDetails = () => {
 				</section>
 
 				<section className='col-start-2 mt-4'>
-					{!_.isEmpty(showDetailsData.showDetails.seasons) &&
-						showDetailsData.showDetails.number_of_episodes <= 500 && (
-							<section>
-								<h3 className='mb-4 ml-8'>Episodes</h3>
-								<EpisodeDetailsHorizontalScroller
-									seasons={showDetailsData.showDetails.seasons.filter(
-										season => season.season_number && season.season_number > 0
-									)}
-									showId={showDetailsData.showDetails.id}
-								/>
-							</section>
-						)}
+					{!_.isEmpty(showDetailsData.showDetails.seasons) && (
+						<section>
+							<h3 className='mb-4 ml-8'>Episodes</h3>
+							<EpisodeDetailsHorizontalScroller
+								seasons={showDetailsData.showDetails.seasons.filter(
+									season => season.season_number && season.season_number > 0
+								)}
+								showId={showDetailsData.showDetails.id}
+							/>
+						</section>
+					)}
 
 					{!showsCastCrewLoading &&
 						showsCastCrewData?.showsCastCrew &&
