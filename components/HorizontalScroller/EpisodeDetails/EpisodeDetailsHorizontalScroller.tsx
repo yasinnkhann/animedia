@@ -1,9 +1,11 @@
+import React, { useState, useRef, useEffect } from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IEPDetails } from '@ts/interfaces';
 import { ShowDetailsRes } from '../../../graphql/generated/code-gen/graphql';
+import { RESULTS_PER_EPISODES_SLIDER } from 'utils/constants';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -14,6 +16,10 @@ interface Props {
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 	const { dragStart, dragStop, dragMove } = useDrag();
+	const [episodesToShow, setEpisodesToShow] = useState(RESULTS_PER_EPISODES_SLIDER);
+	const scrollContainerRef = useRef<scrollVisibilityApiType>(
+		null
+	) as React.MutableRefObject<scrollVisibilityApiType>;
 
 	const handleDrag =
 		({ scrollContainer }: scrollVisibilityApiType) =>
@@ -53,6 +59,27 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 		return groupedArr;
 	};
 
+	useEffect(() => {
+		const handleScroll = () => {
+			if (
+				scrollContainerRef.current?.scrollContainer?.current &&
+				scrollContainerRef.current.scrollContainer.current.scrollLeft +
+					scrollContainerRef.current.scrollContainer.current.clientWidth >=
+					scrollContainerRef.current.scrollContainer.current.scrollWidth
+			) {
+				setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
+			}
+		};
+
+		const scrollContainer = scrollContainerRef.current.scrollContainer.current;
+
+		scrollContainer?.addEventListener('scroll', handleScroll);
+
+		return () => {
+			scrollContainer?.removeEventListener('scroll', handleScroll);
+		};
+	}, [scrollContainerRef]);
+
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
@@ -62,10 +89,13 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 			onMouseUp={() => dragStop}
 			onMouseMove={handleDrag}
 			scrollContainerClassName='!h-[14rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+			apiRef={scrollContainerRef}
 		>
-			{groupSeasonsAndEps().map((item, idx) => (
-				<EpisodeDetailsCard item={item} key={idx} />
-			))}
+			{groupSeasonsAndEps()
+				.slice(0, episodesToShow)
+				.map((item, idx) => (
+					<EpisodeDetailsCard item={item} key={idx} />
+				))}
 		</ScrollMenu>
 	);
 };

@@ -18,6 +18,8 @@ export const KNOWN_FOR_MIN_EP_COUNT = 5;
 
 export const KNOWN_FOR_CARDS_LIMIT = 20;
 
+export const RESULTS_PER_EPISODES_SLIDER = 20;
+
 export const VERIFICATION_EMAIL_PREFIX = 'verification-email';
 
 export const FORGOT_PASSWORD_EMAIL_PREFIX = 'forgot-password-email';
