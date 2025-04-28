@@ -62,24 +62,26 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 
 	useEffect(() => {
 		const scrollContainer = scrollContainerRef.current?.scrollContainer?.current;
-
 		if (!scrollContainer) return;
 
 		let timeoutId: NodeJS.Timeout;
 
-		const isAtEnd = (container: HTMLElement) => {
-			const padding = 20; // Allow small margin
-			return container.scrollLeft + container.clientWidth >= container.scrollWidth - padding;
+		const isNearEnd = (container: HTMLElement) => {
+			const scrollLeft = container.scrollLeft;
+			const clientWidth = container.clientWidth;
+			const scrollWidth = container.scrollWidth;
+
+			const scrollPercent = (scrollLeft + clientWidth) / scrollWidth;
+			return scrollPercent > 0.8; // Trigger at 80% scrolled
 		};
 
 		const handleScroll = () => {
 			if (!scrollContainerRef.current?.scrollContainer?.current) return;
-
 			const container = scrollContainerRef.current.scrollContainer.current;
 
 			clearTimeout(timeoutId);
 			timeoutId = setTimeout(() => {
-				if (isAtEnd(container) && !isLoadingMore) {
+				if (isNearEnd(container) && !isLoadingMore) {
 					setIsLoadingMore(true);
 					setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
 				}
@@ -94,7 +96,6 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 		};
 	}, [isLoadingMore]);
 
-	// Reset loading lock when episodesToShow updates
 	useEffect(() => {
 		setIsLoadingMore(false);
 	}, [episodesToShow]);
