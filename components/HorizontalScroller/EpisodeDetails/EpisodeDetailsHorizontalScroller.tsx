@@ -17,6 +17,7 @@ interface Props {
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 	const { dragStart, dragStop, dragMove } = useDrag();
 	const [episodesToShow, setEpisodesToShow] = useState(RESULTS_PER_EPISODES_SLIDER);
+	const [isLoadingMore, setIsLoadingMore] = useState(false);
 	const scrollContainerRef = useRef<scrollVisibilityApiType>(
 		null
 	) as React.MutableRefObject<scrollVisibilityApiType>;
@@ -60,25 +61,43 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 	};
 
 	useEffect(() => {
-		const handleScroll = () => {
-			if (
-				scrollContainerRef.current?.scrollContainer?.current &&
-				scrollContainerRef.current.scrollContainer.current.scrollLeft +
-					scrollContainerRef.current.scrollContainer.current.clientWidth >=
-					scrollContainerRef.current.scrollContainer.current.scrollWidth
-			) {
-				setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
-			}
+		const scrollContainer = scrollContainerRef.current?.scrollContainer?.current;
+
+		if (!scrollContainer) return;
+
+		let timeoutId: NodeJS.Timeout;
+
+		const isAtEnd = (container: HTMLElement) => {
+			const padding = 20; // Allow small margin
+			return container.scrollLeft + container.clientWidth >= container.scrollWidth - padding;
 		};
 
-		const scrollContainer = scrollContainerRef.current.scrollContainer.current;
+		const handleScroll = () => {
+			if (!scrollContainerRef.current?.scrollContainer?.current) return;
 
-		scrollContainer?.addEventListener('scroll', handleScroll);
+			const container = scrollContainerRef.current.scrollContainer.current;
+
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => {
+				if (isAtEnd(container) && !isLoadingMore) {
+					setIsLoadingMore(true);
+					setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
+				}
+			}, 100);
+		};
+
+		scrollContainer.addEventListener('scroll', handleScroll);
 
 		return () => {
-			scrollContainer?.removeEventListener('scroll', handleScroll);
+			scrollContainer.removeEventListener('scroll', handleScroll);
+			clearTimeout(timeoutId);
 		};
-	}, [scrollContainerRef]);
+	}, [isLoadingMore]);
+
+	// Reset loading lock when episodesToShow updates
+	useEffect(() => {
+		setIsLoadingMore(false);
+	}, [episodesToShow]);
 
 	return (
 		<ScrollMenu
