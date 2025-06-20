@@ -38,6 +38,8 @@ export const MAX_SUMMARY_WORD_LENGTH = 300;
 
 export const ACCOUNT_NOT_FOUND_MESSAGE = 'Could not find account.';
 
+export const REDIS_MB_THRESHOLD = 25;
+
 export const REDIS_KEYS = [
 	VERIFICATION_EMAIL_COUNT_PREFIX,
 	VERIFICATION_EMAIL_PREFIX,
