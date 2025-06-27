@@ -16,7 +16,8 @@
 		"incremental": true,
 		"baseUrl": ".", // this must be specified if "paths" is specified.
 		"paths": {
-			"@ts/*": ["models/ts/*"] // this mapping is relative to "baseUrl"
+			"@ts/*": ["models/ts/*"], // this mapping is relative to "baseUrl"
+			"@lib/*": ["lib/*"] // this mapping is relative to "baseUrl"
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

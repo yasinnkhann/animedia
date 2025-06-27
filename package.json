@@ -54,6 +54,7 @@
 		"tinycolor2": "^1.6.0",
 		"unidecode": "^0.1.8",
 		"uuid": "^9.0.1",
+		"winston": "^3.17.0",
 		"yarn": "^1.22.21"
 	},
 	"devDependencies": {

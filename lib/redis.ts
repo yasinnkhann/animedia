@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
 import cron from 'node-cron';
+import logger from '@lib/logger';
 import { __prod__, REDIS_MB_THRESHOLD } from 'utils/constants';
 
 export const redis = __prod__
@@ -23,21 +24,20 @@ async function monitorRedisMemory() {
 		const usedMB = usedBytes / (1024 * 1024);
 
 		if (usedMB > REDIS_MB_THRESHOLD) {
-			console.warn('Approaching Redis memory limit. Cleaning up...');
+			logger.warn(`Redis memory usage is high: ${usedMB.toFixed(2)} MB`);
 			try {
 				await redis.flushdb();
-				console.log('Redis database flushed successfully.');
+				logger.info('Redis database flushed due to high memory usage');
 			} catch (flushErr) {
-				console.error('Failed to flush Redis database:', flushErr);
+				logger.error('Failed to flush Redis database:', flushErr);
 				return;
 			}
 		}
 	} catch (err) {
-		console.error('Redis memory check failed:', err);
+		logger.error('Error monitoring Redis memory:', err);
 	}
 }
 
 if (__prod__) {
-	console.log('Starting Redis memory monitoring...');
 	cron.schedule('*/30 * * * * *', monitorRedisMemory);
 }
