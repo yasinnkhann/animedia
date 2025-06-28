@@ -11,8 +11,8 @@ export const redis = __prod__
 		})
 	: new Redis();
 
-redis.on('connect', () => console.log('Redis Connected'));
-redis.on('error', err => console.error('Redis Error:', err));
+redis.on('connect', () => logger.info('Redis Connected'));
+redis.on('error', err => logger.error('Redis Error:', err));
 
 async function monitorRedisMemory() {
 	try {
