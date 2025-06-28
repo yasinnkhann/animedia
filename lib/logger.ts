@@ -6,9 +6,21 @@ const upperCaseLevel = format(info => {
 	return info;
 });
 
+const errorFormatter = format(info => {
+	if (info.error instanceof Error) {
+		info.error = {
+			message: info.error.message,
+			stack: info.error.stack,
+			name: info.error.name,
+		};
+	}
+	return info;
+});
+
 const logger = createLogger({
 	level: 'info',
 	format: format.combine(
+		errorFormatter(),
 		upperCaseLevel(),
 		__prod__ ? format.uncolorize() : format.colorize({ all: true }),
 		format.timestamp({ format: 'MM-DD-YYYY HH:mm:ss' }),
