@@ -6309,6 +6309,11 @@ node-addon-api@^8.0.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.3.1.tgz#53bc8a4f8dbde3de787b9828059da94ba9fd4eed"
   integrity sha512-lytcDEdxKjGJPTLEfW4mYMigRezMlyJY8W4wxJK8zE533Jlb8L8dRuObJFWg2P+AuOIxoCgKF+2Oq4d4Zd0OUA==
 
+node-cron@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/node-cron/-/node-cron-4.2.0.tgz#dbca778c06e1ff9567a0a36fb8837434ab4e688d"
+  integrity sha512-nOdP7uH7u55w7ybQq9fusXtsResok+ErzvOBydJUPBBaQ9W+EfBaBWFPgJ8sOB7FWQednDvVBJtgP5xA0bME7Q==
+
 node-domexception@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
