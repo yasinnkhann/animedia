@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-
 const cron = require('node-cron');
 const { exec } = require('child_process');
 
-cron.schedule('0 0 */5 * *', () => {
+cron.schedule('*/5 * * * *', () => {
 	console.log('Running cron job to query users...');
 	exec(
 		'npx ts-node ./scripts/queryUsers.ts',
