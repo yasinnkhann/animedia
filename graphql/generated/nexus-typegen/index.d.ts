@@ -1171,6 +1171,7 @@ export interface NexusGenFieldTypes {
     trendingMovies: NexusGenRootTypes['MoviesRes']; // MoviesRes!
     trendingShows: NexusGenRootTypes['ShowsRes']; // ShowsRes!
     user: NexusGenRootTypes['User'] | null; // User
+    users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     usersGame: NexusGenRootTypes['UserGame'] | null; // UserGame
     usersGames: Array<NexusGenRootTypes['UserGame'] | null> | null; // [UserGame]
     usersMovie: NexusGenRootTypes['UserMovie'] | null; // UserMovie
@@ -1871,6 +1872,7 @@ export interface NexusGenFieldTypeNames {
     trendingMovies: 'MoviesRes'
     trendingShows: 'ShowsRes'
     user: 'User'
+    users: 'User'
     usersGame: 'UserGame'
     usersGames: 'UserGame'
     usersMovie: 'UserMovie'

@@ -24,6 +24,33 @@ export const USER = graphql(`
 	}
 `);
 
+export const USERS = graphql(`
+	query Users {
+		users {
+			id
+			name
+			email
+			emailVerified
+			image
+			password
+			created_at
+			movies {
+				id
+				name
+				status
+				rating
+			}
+			shows {
+				id
+				name
+				status
+				rating
+				current_episode
+			}
+		}
+	}
+`);
+
 export const USERS_MOVIE = graphql(`
 	query UsersMovie($movieId: String!) {
 		usersMovie(movieId: $movieId) {

@@ -241,6 +241,13 @@ export const UserQueries = extendType({
 				return user.email;
 			},
 		});
+
+		t.list.field('users', {
+			type: 'User',
+			resolve: async (_parent, _args, ctx) => {
+				return await ctx.prisma.user.findMany();
+			},
+		});
 	},
 });
 
