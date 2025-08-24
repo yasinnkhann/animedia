@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
@@ -25,7 +25,6 @@ const ShowCard = ({ show, rank }: Props) => {
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{rank}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
@@ -36,7 +35,8 @@ const ShowCard = ({ show, rank }: Props) => {
 							className='rounded-lg'
 							src={CommonMethods.getTheMovieDbImage(show.poster_path)}
 							alt={show.name}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -55,11 +55,9 @@ const ShowCard = ({ show, rank }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-base'>{(show.vote_average ?? 0).toFixed(1)}</p>
 			</td>
-
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>

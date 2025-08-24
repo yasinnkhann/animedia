@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { IGamePreview } from '@ts/interfaces';
 
 interface Props {
@@ -18,7 +18,7 @@ const GamePreviewCard = ({ item }: Props) => {
 						className='h-full w-full'
 					></iframe>
 				)}
-				{item.url && <Image className='rounded-lg' src={item.url} alt='' layout='fill' />}
+				{item.url && <Image className='rounded-lg' src={item.url} alt='' fill sizes='100vw' />}
 			</div>
 		</section>
 	);

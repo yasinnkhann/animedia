@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
@@ -194,14 +194,14 @@ const MovieDetails = () => {
 			<Head>
 				<title>{movieDetailsData.movieDetails.title}</title>
 			</Head>
-
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(movieDetailsData.movieDetails.poster_path)}
 						alt={movieDetailsData.movieDetails.title ?? undefined}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 				</section>
 

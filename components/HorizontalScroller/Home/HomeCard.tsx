@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
 import { CommonMethods } from '../../../utils/CommonMethods';
@@ -34,8 +34,9 @@ const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(item.poster_path)}
 						alt={titleName}
-						layout='fill'
 						priority
+						fill
+						sizes='100vw'
 					/>
 
 					{userWatchStatusFromMedia && (

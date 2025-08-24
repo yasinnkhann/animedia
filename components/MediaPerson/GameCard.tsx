@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
@@ -35,7 +35,8 @@ const GameCard = ({ game, rank }: Props) => {
 							className='rounded-lg'
 							src={CommonMethods.getIgdbImage(game.coverUrl)}
 							alt={game.name}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -54,11 +55,9 @@ const GameCard = ({ game, rank }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-base'>{((game.rating ?? 0) / 10).toFixed(1)}</p>
 			</td>
-
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>

@@ -2,7 +2,7 @@ import React, { useMemo, useState, lazy, Suspense } from 'react';
 import Head from 'next/head';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';
@@ -125,14 +125,14 @@ const PersonDetails = () => {
 			<Head>
 				<title>{personDetailsData.personDetails.name}</title>
 			</Head>
-
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(personDetailsData.personDetails.profile_path)}
 						alt={personDetailsData.personDetails.name ?? ''}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 				</section>
 
@@ -217,7 +217,6 @@ const PersonDetails = () => {
 					</section>
 				)}
 			</main>
-
 			{showFullDescription && (
 				<Suspense fallback={<div>Loading...</div>}>
 					<Modal closeModal={() => setShowFullDescription(false)}>

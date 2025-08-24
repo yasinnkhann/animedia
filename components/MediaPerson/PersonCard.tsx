@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
 import { PersonResult } from '../../graphql/generated/code-gen/graphql';
@@ -20,7 +20,8 @@ const PersonCard = ({ person }: Props) => {
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(person.profile_path)}
 						alt={person.name}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 				</div>
 

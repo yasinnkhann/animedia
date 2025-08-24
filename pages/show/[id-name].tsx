@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
@@ -824,14 +824,14 @@ const ShowDetails = () => {
 			<Head>
 				<title>{showDetailsData.showDetails.name}</title>
 			</Head>
-
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
 						alt={showDetailsData.showDetails.name}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 				</section>
 

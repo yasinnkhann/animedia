@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { Circles } from 'react-loading-icons';
@@ -278,14 +278,14 @@ const GameDetails = () => {
 			<Head>
 				<title>{game.name}</title>
 			</Head>
-
 			<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
 				<section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
 					<Image
 						className='rounded-lg'
 						src={CommonMethods.getIgdbImage(game.coverUrl)}
 						alt={game.name}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 				</section>
 
@@ -504,7 +504,6 @@ const GameDetails = () => {
 						)}
 				</section>
 			</main>
-
 			{showFullDescription && (
 				<Suspense fallback={<div>Loading...</div>}>
 					<Modal closeModal={() => setShowFullDescription(false)}>

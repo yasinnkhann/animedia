@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
@@ -20,7 +20,8 @@ const MediaCastCard = ({ item, dragging }: Props) => {
 							: CommonMethods.getTheMovieDbImage(item.profile_path)
 					}
 					alt={item.name}
-					layout='fill'
+					fill
+					sizes='100vw'
 				/>
 			</div>
 

@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../graphql/queries';
@@ -36,7 +36,6 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{count}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute('movie', myMovie.id!, myMovie.name as string)}
@@ -48,7 +47,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 							src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
 							priority
 							alt={movieData?.movieDetails?.title || 'Movie Poster'}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -67,11 +67,9 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{myMovie.rating ?? 'N/A'}</p>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<BsFillTrashFill
 					size={20}

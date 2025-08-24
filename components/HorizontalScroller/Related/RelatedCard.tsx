@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
@@ -29,7 +29,8 @@ const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
 								: CommonMethods.getIgdbImage(item.imagePath)
 						}
 						alt={item.name}
-						layout='fill'
+						fill
+						sizes='100vw'
 					/>
 					{userWatchStatusFromMedia && (
 						<div

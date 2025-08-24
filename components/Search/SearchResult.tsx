@@ -1,5 +1,5 @@
 import { ExtractStrict, TContent } from '@ts/types';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
 import {
@@ -38,8 +38,9 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
 						: CommonMethods.getIgdbImage(imagePath)
 				}
 				alt={altText}
-				layout='fill'
 				priority
+				fill
+				sizes='100vw'
 			/>
 			{userStatusFromMedia && (
 				<div

@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
@@ -37,7 +37,8 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 							className='rounded-lg object-contain'
 							src={CommonMethods.getTheMovieDbImage(epDetailsCardData.episodeDetails.still_path)}
 							alt={epDetailsCardData.episodeDetails.name ?? ''}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</div>
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
@@ -51,7 +52,6 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 					</div>
 				</section>
 			</section>
-
 			{showModal && (
 				<Suspense
 					fallback={
@@ -121,8 +121,9 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 												epDetailsCardData.episodeDetails.still_path
 											)}
 											alt={epDetailsCardData.episodeDetails.name ?? ''}
-											layout='fill'
 											className='object-cover'
+											fill
+											sizes='100vw'
 										/>
 									</div>
 								</div>

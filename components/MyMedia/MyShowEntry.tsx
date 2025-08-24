@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
@@ -37,7 +37,6 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{count}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute('show', myShow.id!, myShow.name!)}
@@ -49,7 +48,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 							src={CommonMethods.getTheMovieDbImage(showData?.showDetails?.poster_path)}
 							priority
 							alt={showData?.showDetails?.name || 'Show Poster'}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -67,11 +67,9 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{myShow.rating ?? 'N/A'}</p>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>
 					{myShow.status === WatchStatusTypes.PlanToWatch ? 0 : myShow.current_episode}/
@@ -80,7 +78,6 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 						: showData?.showDetails?.number_of_episodes}
 				</p>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<BsFillTrashFill
 					size={20}

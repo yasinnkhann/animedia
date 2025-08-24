@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
@@ -36,7 +36,6 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{count}</p>
 			</td>
-
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute('game', myGame.id!, myGame.name!)}
@@ -48,7 +47,8 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 							src={CommonMethods.getIgdbImage(gameData?.gameDetails?.results[0].coverUrl)}
 							priority
 							alt={gameData?.gameDetails?.results[0].name || 'Game Cover'}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -68,15 +68,12 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{myGame.rating ?? 'N/A'}</p>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-lg'>{myGame.wishlist ? 'Yes' : 'No'}</p>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<BsFillTrashFill
 					size={20}

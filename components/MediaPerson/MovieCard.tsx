@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
@@ -35,7 +35,8 @@ const MovieCard = ({ movie, rank }: Props) => {
 							className='rounded-lg'
 							src={CommonMethods.getTheMovieDbImage(movie.poster_path)}
 							alt={movie.title}
-							layout='fill'
+							fill
+							sizes='100vw'
 						/>
 					</section>
 				</Link>
@@ -54,11 +55,9 @@ const MovieCard = ({ movie, rank }: Props) => {
 					</p>
 				</section>
 			</td>
-
 			<td className='border-x-2 border-gray-200 text-center align-middle'>
 				<p className='text-base'>{(movie.vote_average ?? 0).toFixed(1)}</p>
 			</td>
-
 			{session && (
 				<>
 					<td className='border-x-2 border-gray-200 text-center align-middle'>
