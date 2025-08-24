@@ -110,13 +110,11 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
 	return (
 		<Link
 			href={CommonMethods.getDetailsPageRoute(searchedResultType, result.id, titleName)}
-			passHref
+			className='text-inherit no-underline'
 		>
-			<a className='text-inherit no-underline'>
-				<section className='my-4 mr-16 flex h-[10rem] rounded-lg border'>
-					{renderSearchResult()}
-				</section>
-			</a>
+			<section className='my-4 mr-16 flex h-[10rem] rounded-lg border'>
+				{renderSearchResult()}
+			</section>
 		</Link>
 	);
 };

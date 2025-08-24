@@ -36,7 +36,7 @@ const EpisodeDetailsCard = ({ item }: Props) => {
 						<Image
 							className='rounded-lg object-contain'
 							src={CommonMethods.getTheMovieDbImage(epDetailsCardData.episodeDetails.still_path)}
-							alt={epDetailsCardData.episodeDetails.name ?? undefined}
+							alt={epDetailsCardData.episodeDetails.name ?? ''}
 							layout='fill'
 						/>
 					</div>

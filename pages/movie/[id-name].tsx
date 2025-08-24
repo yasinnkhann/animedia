@@ -287,10 +287,13 @@ const MovieDetails = () => {
 					{movieDetailsData.movieDetails.homepage.length > 0 && (
 						<>
 							<h4 className='mt-4'>Official Page</h4>
-							<Link href={movieDetailsData.movieDetails.homepage}>
-								<a className='ml-1 underline' target='_blank'>
-									Learn More
-								</a>
+							<Link
+								href={movieDetailsData.movieDetails.homepage}
+								className='ml-1 underline'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								Learn More
 							</Link>
 						</>
 					)}
@@ -299,13 +302,13 @@ const MovieDetails = () => {
 				<section className='col-start-2 mt-4'>
 					{!moviesCastCrewLoading &&
 						moviesCastCrewData?.moviesCastCrew &&
-						!_.isEmpty(moviesCastCrewData.moviesCastCrew.cast) && (
+						moviesCastCrewData.moviesCastCrew.cast?.length && (
 							<section>
 								<h3 className='mb-4 ml-8'>Cast</h3>
 								<MediaCastHorizontalScroller
 									items={
-										moviesCastCrewData.moviesCastCrew
-											.cast!.map(cast => ({
+										moviesCastCrewData.moviesCastCrew.cast
+											.map(cast => ({
 												id: cast.id,
 												name: cast.name,
 												character: cast.character,

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, JSX } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';

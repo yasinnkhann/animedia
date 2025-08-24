@@ -215,8 +215,8 @@ export default function Register() {
 					)}
 
 					<div className='mt-4 flex flex-col items-center'>
-						<Link href='/auth/login'>
-							<a className='text-center text-gray-600 hover:text-blue-500'>Have an account?</a>
+						<Link href='/auth/login' className='text-center text-gray-600 hover:text-blue-500'>
+							Have an account?
 						</Link>
 					</div>
 				</section>

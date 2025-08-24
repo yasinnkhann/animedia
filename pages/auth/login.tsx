@@ -156,13 +156,17 @@ export default function Login() {
 					</div>
 
 					<div className='mt-4 flex flex-col items-center'>
-						<Link href='/auth/register'>
-							<a className='mb-2 text-center text-gray-600 hover:text-blue-500'>
-								Don&apos;t have an account?
-							</a>
+						<Link
+							href='/auth/register'
+							className='mb-2 text-center text-gray-600 hover:text-blue-500'
+						>
+							Don&apos;t have an account?
 						</Link>
-						<Link href='/auth/forgot-password'>
-							<a className='text-center text-gray-600 hover:text-blue-500'>Forgot your password?</a>
+						<Link
+							href='/auth/forgot-password'
+							className='text-center text-gray-600 hover:text-blue-500'
+						>
+							Forgot your password?
 						</Link>
 					</div>
 				</section>

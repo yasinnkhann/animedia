@@ -131,7 +131,7 @@ const PersonDetails = () => {
 					<Image
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(personDetailsData.personDetails.profile_path)}
-						alt={personDetailsData.personDetails.name ?? undefined}
+						alt={personDetailsData.personDetails.name ?? ''}
 						layout='fill'
 					/>
 				</section>

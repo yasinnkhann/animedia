@@ -40,29 +40,25 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 			<td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
 				<Link
 					href={CommonMethods.getDetailsPageRoute('movie', myMovie.id!, myMovie.name as string)}
-					passHref
+					className='text-inherit no-underline'
 				>
-					<a className='text-inherit no-underline'>
-						<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
-							<Image
-								className='rounded-lg'
-								src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
-								priority
-								alt={movieData?.movieDetails?.title}
-								layout='fill'
-							/>
-						</section>
-					</a>
+					<section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+						<Image
+							className='rounded-lg'
+							src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
+							priority
+							alt={movieData?.movieDetails?.title || 'Movie Poster'}
+							layout='fill'
+						/>
+					</section>
 				</Link>
 
 				<section className='col-start-2 pl-4'>
 					<Link
 						href={CommonMethods.getDetailsPageRoute('movie', myMovie.id!, myMovie.name as string)}
-						passHref
+						className='text-inherit no-underline'
 					>
-						<a className='text-inherit no-underline'>
-							<h3 className='cursor-pointer'>{myMovie.name}</h3>
-						</a>
+						<h3 className='cursor-pointer'>{myMovie.name}</h3>
 					</Link>
 					<p>
 						{movieData?.movieDetails?.release_date
