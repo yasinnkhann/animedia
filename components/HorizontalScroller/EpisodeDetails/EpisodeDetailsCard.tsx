@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import * as Queries from '../../../graphql/queries';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';

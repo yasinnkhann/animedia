@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
 import { PersonResult } from '../../graphql/generated/code-gen/graphql';

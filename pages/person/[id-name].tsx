@@ -2,7 +2,7 @@ import React, { useMemo, useState, lazy, Suspense } from 'react';
 import Head from 'next/head';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import * as Queries from '../../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { IRelatedMedia } from '@ts/interfaces';

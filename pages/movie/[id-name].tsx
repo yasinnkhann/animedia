@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
