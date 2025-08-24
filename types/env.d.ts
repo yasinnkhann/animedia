@@ -28,6 +28,7 @@ declare global {
 			REDIS_HOST: string;
 			REDIS_PORT: string;
 			REDIS_PASSWORD: string;
+			CRON_SECRET: string;
 		}
 	}
 }
