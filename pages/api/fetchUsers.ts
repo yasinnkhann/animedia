@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CLIENT_BASE_URL } from '../../utils/constants';
-import * as Queries from '../../graphql/queries';
 
 const USERS = `
   query Users {
