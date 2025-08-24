@@ -41,6 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		const users = data.data.users;
 
+		console.log('Fetched users: ', users);
+
 		res.status(200).json({ success: true, users });
 	} catch (err) {
 		console.error('Error fetching users:', err);
