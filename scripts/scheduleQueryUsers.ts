@@ -2,8 +2,8 @@
 const cron = require('node-cron');
 const { exec } = require('child_process');
 
-cron.schedule('*/5 * * * *', () => {
-	console.log('Running cron job to query users...');
+cron.schedule('0 0 * * *', () => {
+	console.log('Running daily cron job to query users...');
 	exec(
 		'npx ts-node ./scripts/queryUsers.ts',
 		(err: Error | null, stdout: string, stderr: string) => {
