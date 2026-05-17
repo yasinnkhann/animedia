@@ -39,42 +39,46 @@ const MovieDetails = () => {
 		fetchPolicy: 'network-only',
 	});
 
+	const movieDetails = movieDetailsData?.movieDetails;
+	const movieId = movieDetails?.id ? String(movieDetails.id) : '';
+	const movieTitle = movieDetails?.title ?? '';
+
 	const { data: usersMovieData, loading: usersMovieLoading } = useQuery(Queries.USERS_MOVIE, {
-		skip: !movieDetailsData?.movieDetails.id,
+		skip: !movieId,
 		variables: {
-			movieId: String(movieDetailsData?.movieDetails.id!),
+			movieId,
 		},
 		fetchPolicy: 'network-only',
 	});
 
 	const { data: recMoviesData, loading: recMoviesLoading } = useQuery(Queries.RECOMMENDED_MOVIES, {
-		skip: !movieDetailsData?.movieDetails.id,
+		skip: !movieId,
 		variables: {
-			recommendedMoviesId: movieDetailsData?.movieDetails.id!,
+			recommendedMoviesId: movieId,
 		},
 	});
 
 	const { data: moviesCastCrewData, loading: moviesCastCrewLoading } = useQuery(
 		Queries.GET_MOVIES_CAST_CREW,
 		{
-			skip: !movieDetailsData?.movieDetails.id,
+			skip: !movieId,
 			variables: {
-				movieId: movieDetailsData?.movieDetails.id!,
+				movieId,
 			},
 		}
 	);
 
 	const [addMovie, { loading: addMovieLoading }] = useMutation(Mutations.ADD_MOVIE, {
 		variables: {
-			movieId: String(movieDetailsData?.movieDetails.id!),
-			movieName: movieDetailsData?.movieDetails.title!,
+			movieId,
+			movieName: movieTitle,
 			watchStatus,
 		},
 		refetchQueries: () => [
 			{
 				query: Queries.USERS_MOVIE,
 				variables: {
-					movieId: String(movieDetailsData?.movieDetails.id!),
+					movieId,
 				},
 			},
 			'UsersMovie',
@@ -83,7 +87,7 @@ const MovieDetails = () => {
 
 	const [updateMovie, { loading: updateMovieLoading }] = useMutation(Mutations.UPDATE_MOVIE, {
 		variables: {
-			movieId: String(movieDetailsData?.movieDetails?.id!),
+			movieId,
 			watchStatus,
 			movieRating: typeof rating === 'number' ? rating : null,
 		},
@@ -91,7 +95,7 @@ const MovieDetails = () => {
 			{
 				query: Queries.USERS_MOVIE,
 				variables: {
-					movieId: String(movieDetailsData?.movieDetails?.id!),
+					movieId,
 				},
 			},
 			'UsersMovie',
@@ -100,13 +104,13 @@ const MovieDetails = () => {
 
 	const [deleteMovie, { loading: deleteMovieLoading }] = useMutation(Mutations.DELETE_MOVIE, {
 		variables: {
-			movieId: String(movieDetailsData?.movieDetails.id!),
+			movieId,
 		},
 		refetchQueries: () => [
 			{
 				query: Queries.USERS_MOVIE,
 				variables: {
-					movieId: String(movieDetailsData?.movieDetails.id!),
+					movieId,
 				},
 			},
 			'UsersMovie',
@@ -116,6 +120,8 @@ const MovieDetails = () => {
 	const isDBPending = addMovieLoading || updateMovieLoading || deleteMovieLoading;
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		if (!movieId || !movieTitle) return;
+
 		const { value } = e.target;
 
 		setWatchStatus(value as WatchStatusTypes);
@@ -124,13 +130,13 @@ const MovieDetails = () => {
 			if ((value as WatchStatusTypes) === WatchStatusTypes.NotWatching) {
 				deleteMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId,
 					},
 				});
 			} else if ((value as WatchStatusTypes) === WatchStatusTypes.PlanToWatch) {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId,
 						watchStatus: value as WatchStatusTypes,
 						movieRating: null,
 					},
@@ -138,7 +144,7 @@ const MovieDetails = () => {
 			} else {
 				updateMovie({
 					variables: {
-						movieId: String(movieDetailsData?.movieDetails?.id!),
+						movieId,
 						watchStatus: value as WatchStatusTypes,
 						movieRating: usersMovieData.usersMovie?.rating ?? null,
 					},
@@ -147,8 +153,8 @@ const MovieDetails = () => {
 		} else {
 			addMovie({
 				variables: {
-					movieId: String(movieDetailsData?.movieDetails?.id!),
-					movieName: movieDetailsData?.movieDetails?.title!,
+					movieId,
+					movieName: movieTitle,
 					watchStatus: value as WatchStatusTypes,
 				},
 			});
@@ -156,12 +162,14 @@ const MovieDetails = () => {
 	};
 
 	const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		if (!movieId) return;
+
 		const { value } = e.target;
 		setRating(value === '' ? '' : +value);
 
 		updateMovie({
 			variables: {
-				movieId: String(movieDetailsData?.movieDetails!.id!),
+				movieId,
 				movieRating: isNaN(parseInt(value)) ? null : parseInt(value),
 				watchStatus,
 			},

@@ -36,6 +36,16 @@ import {
 	EmailInput,
 } from '../validations/inputs';
 
+const getSessionUserId = (ctx: { session?: { user?: { id?: string | null } | null } | null }) => {
+	const userId = ctx.session?.user?.id;
+
+	if (!userId) {
+		throw new Error('User must be authenticated.');
+	}
+
+	return userId;
+};
+
 export const UserQueries = extendType({
 	type: 'Query',
 	definition(t) {
@@ -67,7 +77,7 @@ export const UserQueries = extendType({
 					where: {
 						id_userId: {
 							id: input.movieId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});
@@ -85,7 +95,7 @@ export const UserQueries = extendType({
 					where: {
 						id_userId: {
 							id: input.showId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});
@@ -103,7 +113,7 @@ export const UserQueries = extendType({
 					where: {
 						id_userId: {
 							id: input.gameId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});
@@ -115,7 +125,7 @@ export const UserQueries = extendType({
 			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.movie.findMany({
 					where: {
-						userId: ctx.session?.user?.id!,
+						userId: getSessionUserId(ctx),
 					},
 					orderBy: [
 						{
@@ -292,7 +302,7 @@ export const UserMutations = extendType({
 			resolve: safeResolver(async (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				const input = parseInput(AddMovieInput, { movieId, movieName, watchStatus });
 				return await ctx.prisma.user.update({
-					where: { id: ctx.session!.user?.id! },
+					where: { id: getSessionUserId(ctx) },
 					data: {
 						movie: {
 							create: {
@@ -318,7 +328,7 @@ export const UserMutations = extendType({
 				async (_parent, { showId, showName, watchStatus, currentEpisode }, ctx) => {
 					const input = parseInput(AddShowInput, { showId, showName, watchStatus, currentEpisode });
 					return await ctx.prisma.user.update({
-						where: { id: ctx.session!.user?.id! },
+						where: { id: getSessionUserId(ctx) },
 						data: {
 							show: {
 								create: {
@@ -345,7 +355,7 @@ export const UserMutations = extendType({
 			resolve: safeResolver(async (_parent, { gameId, gameName, wishlist, rating }, ctx) => {
 				const input = parseInput(AddGameInput, { gameId, gameName, wishlist, rating });
 				return await ctx.prisma.user.update({
-					where: { id: ctx.session!.user?.id },
+					where: { id: getSessionUserId(ctx) },
 					data: {
 						game: {
 							create: {
@@ -373,7 +383,7 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: input.movieId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 					data: {
@@ -404,7 +414,7 @@ export const UserMutations = extendType({
 						where: {
 							id_userId: {
 								id: input.showId,
-								userId: ctx.session!.user?.id!,
+								userId: getSessionUserId(ctx),
 							},
 						},
 						data: {
@@ -430,7 +440,7 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: input.gameId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 					data: {
@@ -452,7 +462,7 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: input.movieId,
-							userId: ctx.session?.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});
@@ -470,7 +480,7 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: input.showId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});
@@ -488,7 +498,7 @@ export const UserMutations = extendType({
 					where: {
 						id_userId: {
 							id: input.gameId,
-							userId: ctx.session!.user?.id!,
+							userId: getSessionUserId(ctx),
 						},
 					},
 				});

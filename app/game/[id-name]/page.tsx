@@ -102,10 +102,12 @@ const GameDetails = () => {
 
 	const { data: gameGenresData, loading: gameGenresLoading } = useQuery(Queries.GAME_GENRES);
 
+	const gameName = gameDetailsData?.gameDetails.results[0]?.name ?? '';
+
 	const [addGame] = useMutation(Mutations.ADD_GAME, {
 		variables: {
 			gameId: id,
-			gameName: gameDetailsData?.gameDetails.results[0]?.name!,
+			gameName,
 			rating: typeof rating === 'number' ? rating : null,
 			wishlist: addToWishlist,
 		},

@@ -51,10 +51,14 @@ const ShowDetails = () => {
 		fetchPolicy: 'network-only',
 	});
 
+	const showDetails = showDetailsData?.showDetails;
+	const showId = showDetails?.id ?? '';
+	const showName = showDetails?.name ?? '';
+
 	const { data: usersShowData, loading: usersShowLoading } = useQuery(Queries.USERS_SHOW, {
-		skip: !showDetailsData?.showDetails.id,
+		skip: !showId,
 		variables: {
-			showId: showDetailsData?.showDetails.id!,
+			showId,
 		},
 		fetchPolicy: 'network-only',
 	});
@@ -65,26 +69,26 @@ const ShowDetails = () => {
 	const currEp = currEpInput ?? String(usersShow?.current_episode ?? '0');
 
 	const { data: recShowsData, loading: recShowsLoading } = useQuery(Queries.RECOMMENDED_SHOWS, {
-		skip: !showDetailsData?.showDetails.id,
+		skip: !showId,
 		variables: {
-			recommendedShowsId: showDetailsData?.showDetails.id!,
+			recommendedShowsId: showId,
 		},
 	});
 
 	const { data: showsCastCrewData, loading: showsCastCrewLoading } = useQuery(
 		Queries.GET_SHOWS_CAST_CREW,
 		{
-			skip: !showDetailsData?.showDetails.id,
+			skip: !showId,
 			variables: {
-				showId: showDetailsData?.showDetails.id!,
+				showId,
 			},
 		}
 	);
 
 	const [addShow, { loading: addShowLoading }] = useMutation(Mutations.ADD_SHOW, {
 		variables: {
-			showId: showDetailsData?.showDetails.id!,
-			showName: showDetailsData?.showDetails.name!,
+			showId,
+			showName,
 			watchStatus,
 			currentEpisode: +currEp,
 		},
@@ -92,7 +96,7 @@ const ShowDetails = () => {
 			{
 				query: Queries.USERS_SHOW,
 				variables: {
-					showId: showDetailsData?.showDetails.id!,
+					showId,
 				},
 			},
 			'UsersShow',
@@ -101,7 +105,7 @@ const ShowDetails = () => {
 
 	const [updateShow, { loading: updateShowLoading }] = useMutation(Mutations.UPDATE_SHOW, {
 		variables: {
-			showId: showDetailsData?.showDetails.id!,
+			showId,
 			watchStatus,
 			showRating: typeof rating === 'number' ? rating : null,
 			currentEpisode: +currEp,
@@ -110,7 +114,7 @@ const ShowDetails = () => {
 			{
 				query: Queries.USERS_SHOW,
 				variables: {
-					showId: showDetailsData?.showDetails.id!,
+					showId,
 				},
 			},
 			'UsersShow',
@@ -119,13 +123,13 @@ const ShowDetails = () => {
 
 	const [deleteShow, { loading: deleteShowLoading }] = useMutation(Mutations.DELETE_SHOW, {
 		variables: {
-			showId: showDetailsData?.showDetails.id!,
+			showId,
 		},
 		refetchQueries: () => [
 			{
 				query: Queries.USERS_SHOW,
 				variables: {
-					showId: showDetailsData?.showDetails.id!,
+					showId,
 				},
 			},
 			'UsersShow',
