@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState, lazy, Suspense } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -188,7 +188,7 @@ export default function PersonDetailsPage() {
 										Date of Death
 									</h4>
 									<p className='font-medium text-gray-900'>
-										{`${CommonMethods.formatDate(person.deathday)} (${getAge(person.birthday) - getAge(person.deathday)} years old)`}
+										{`${CommonMethods.formatDate(person.deathday)} (${person.birthday ? getAge(person.birthday) - getAge(person.deathday) : 'Unknown'} years old)`}
 									</p>
 								</div>
 							)}

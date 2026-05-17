@@ -13,7 +13,7 @@ import { Puff } from 'react-loading-icons';
 
 const Modal = lazy(() => import('components/Modal'));
 
-const EpisodeDetailsCard = ({ item }: { item: IEPDetails }) => {
+const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	const { data: epDetailsCardData } = useQuery(Queries.GET_EPISODE_DETAILS, {
@@ -34,7 +34,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails }) => {
 						<Image
 							className='rounded-lg object-contain'
 							src={CommonMethods.getTheMovieDbImage(epDetailsCardData.episodeDetails.still_path)}
-							alt={epDetailsCardData.episodeDetails.name ?? undefined}
+							alt={epDetailsCardData.episodeDetails.name ?? ''}
 							layout='fill'
 						/>
 					</div>

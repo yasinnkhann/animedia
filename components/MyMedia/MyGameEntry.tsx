@@ -45,7 +45,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 								className='rounded-lg'
 								src={CommonMethods.getIgdbImage(gameData?.gameDetails?.results[0].coverUrl)}
 								priority
-								alt={gameData?.gameDetails?.results[0].name}
+								alt={gameData?.gameDetails?.results[0].name ?? ''}
 								layout='fill'
 							/>
 						</section>

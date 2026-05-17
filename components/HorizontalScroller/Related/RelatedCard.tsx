@@ -8,11 +8,10 @@ const RelatedCard = ({
 	item,
 	dragging,
 	userMatchedMedias,
-	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
 }: {
 	item: IRelatedMedia;
 	dragging: boolean;
-	userMatchedMedias: UserShow[] | UserMovie[];
+	userMatchedMedias: Array<UserShow | UserMovie>;
 	itemId: string;
 }) => {
 	const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);

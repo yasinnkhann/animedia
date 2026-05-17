@@ -48,7 +48,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 								className='rounded-lg'
 								src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
 								priority
-								alt={movieData?.movieDetails?.title}
+								alt={movieData?.movieDetails?.title ?? ''}
 								layout='fill'
 							/>
 						</section>

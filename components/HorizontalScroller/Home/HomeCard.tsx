@@ -13,11 +13,10 @@ const HomeCard = ({
 	item,
 	dragging,
 	userMatchedMedias,
-	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
 }: {
 	item: MovieResult | ShowResult;
 	dragging: boolean;
-	userMatchedMedias: UserShow[] | UserMovie[];
+	userMatchedMedias: Array<UserShow | UserMovie>;
 	itemId: string;
 }) => {
 	const isMovie = 'title' in item;

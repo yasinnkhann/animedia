@@ -3,15 +3,7 @@ import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 
-const MediaCastCard = ({
-	item,
-	dragging,
-	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
-}: {
-	item: ICast;
-	dragging: boolean;
-	itemId: string;
-}) => {
+const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; itemId: string }) => {
 	const body = (
 		<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
 			<div className='relative h-full w-full'>

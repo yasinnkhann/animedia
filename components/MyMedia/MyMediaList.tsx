@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, type ReactElement } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
@@ -46,7 +46,7 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
 
 					<tbody className='!border-b-2 !border-gray-200'>
 						{myMedias?.map((myMedia, idx) => {
-							let myMediaComp: JSX.Element;
+							let myMediaComp: ReactElement;
 							if (mediaType === 'MOVIES') {
 								myMediaComp = (
 									<MyMovieEntry key={myMedia.id} myMovie={myMedia as UserMovie} count={idx + 1} />
