@@ -27,9 +27,9 @@ export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
 
 export type TStatusParam = 'watching' | 'completed' | 'on-hold' | 'dropped' | 'plan-to-watch';
 
-const searchResultsConst = ['movies', 'shows', 'people', 'games'] as const;
+const _searchResultsConst = ['movies', 'shows', 'people', 'games'] as const;
 
-export type TSearchResults = (typeof searchResultsConst)[number];
+export type TSearchResults = (typeof _searchResultsConst)[number];
 
 export type TWhatsPopularData =
 	| PopularMoviesQuery['popularMovies']
@@ -64,7 +64,7 @@ export type TDropDownSearchResult = NullablePartial<
 	'titleName' | 'releaseDate' | 'firstAirDate' | 'knownForDepartment' | 'type'
 >;
 
-const contentConst = [
+const _contentConst = [
 	'movie',
 	'movies',
 	'show',
@@ -75,11 +75,11 @@ const contentConst = [
 	'games',
 ] as const;
 
-export type TContent = (typeof contentConst)[number];
+export type TContent = (typeof _contentConst)[number];
 
 export type TTheMovieDBRes = MoviesRes | ShowsRes | PeopleRes;
 
-const igdbImageSizesConst = [
+const _igdbImageSizesConst = [
 	'cover_small',
 	'screenshot_med',
 	'cover_big',
@@ -92,7 +92,7 @@ const igdbImageSizesConst = [
 	'1080p',
 ] as const;
 
-export type TIGDBImageSizes = (typeof igdbImageSizesConst)[number];
+export type TIGDBImageSizes = (typeof _igdbImageSizesConst)[number];
 
 export type TEpisodeCountDisplay = 'total-episodes' | 'season-episode';
 

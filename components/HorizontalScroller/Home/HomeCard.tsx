@@ -9,13 +9,17 @@ import {
 	UserShow,
 } from '../../../graphql/generated/code-gen/graphql';
 
-interface Props {
+const HomeCard = ({
+	item,
+	dragging,
+	userMatchedMedias,
+	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
+}: {
 	item: MovieResult | ShowResult;
 	dragging: boolean;
 	userMatchedMedias: UserShow[] | UserMovie[];
-}
-
-const HomeCard = ({ item, dragging, userMatchedMedias }: Props) => {
+	itemId: string;
+}) => {
 	const isMovie = 'title' in item;
 
 	const titleName = isMovie ? item.title : item.name;

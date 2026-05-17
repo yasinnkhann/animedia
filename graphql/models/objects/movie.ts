@@ -132,10 +132,10 @@ export const movieReviewsResult = objectType({
 export const movieReviewsRes = objectType({
 	name: 'MovieReviewsRes',
 	definition(t) {
-		t.nonNull.id('id'),
-			t.nonNull.int('page'),
-			t.nonNull.int('total_pages'),
-			t.nonNull.int('total_results');
+		t.nonNull.id('id');
+		t.nonNull.int('page');
+		t.nonNull.int('total_pages');
+		t.nonNull.int('total_results');
 		t.nonNull.list.field('results', {
 			type: nonNull('MovieReviewsResult'),
 		});

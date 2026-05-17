@@ -3,7 +3,7 @@ import { hash } from 'argon2';
 import { extendType, stringArg, nonNull, idArg, intArg, booleanArg } from 'nexus';
 import { WatchStatusTypes } from 'graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
-import { getErrorMsg, sendEmail } from 'graphql/utils';
+import { sendEmail } from 'graphql/utils';
 import {
 	__prod__,
 	CLIENT_BASE_URL,
@@ -15,6 +15,26 @@ import {
 	FORGOT_PASSWORD_EMAIL_COUNT_LIMIT,
 	FORGOT_PASSWORD_EMAIL_PREFIX,
 } from 'utils/constants';
+import { safeResolver } from '../utils/resolver-helpers';
+import {
+	parseInput,
+	UserIdInput,
+	UserMediaInput,
+	UserShowInput,
+	UserGameInput,
+	TokenVerificationInput,
+	EmailVerificationInput,
+	TokenInput,
+	AddMovieInput,
+	AddShowInput,
+	AddGameInput,
+	UpdateMovieInput,
+	UpdateShowInput,
+	UpdateGameInput,
+	RegisterUserInput,
+	ChangePasswordInput,
+	EmailInput,
+} from '../validations/inputs';
 
 export const UserQueries = extendType({
 	type: 'Query',
@@ -24,15 +44,16 @@ export const UserQueries = extendType({
 			args: {
 				id: nonNull(idArg()),
 			},
-			resolve: async (_parent, { id }, ctx) => {
+			resolve: safeResolver(async (_parent, { id }, ctx) => {
+				const input = parseInput(UserIdInput, { id });
 				return await ctx.prisma.user.findUniqueOrThrow({
-					where: { id },
+					where: { id: input.id },
 					include: {
 						movie: true,
 						show: true,
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('usersMovie', {
@@ -40,16 +61,17 @@ export const UserQueries = extendType({
 			args: {
 				movieId: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { movieId }, ctx) => {
+			resolve: safeResolver(async (_parent, { movieId }, ctx) => {
+				const input = parseInput(UserMediaInput, { movieId });
 				return await ctx.prisma.movie.findUnique({
 					where: {
 						id_userId: {
-							id: movieId,
+							id: input.movieId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('usersShow', {
@@ -57,16 +79,17 @@ export const UserQueries = extendType({
 			args: {
 				showId: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { showId }, ctx) => {
+			resolve: safeResolver(async (_parent, { showId }, ctx) => {
+				const input = parseInput(UserShowInput, { showId });
 				return await ctx.prisma.show.findUnique({
 					where: {
 						id_userId: {
-							id: showId,
+							id: input.showId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('usersGame', {
@@ -74,21 +97,22 @@ export const UserQueries = extendType({
 			args: {
 				gameId: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { gameId }, ctx) => {
+			resolve: safeResolver(async (_parent, { gameId }, ctx) => {
+				const input = parseInput(UserGameInput, { gameId });
 				return await ctx.prisma.game.findUnique({
 					where: {
 						id_userId: {
-							id: gameId,
+							id: input.gameId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.list.field('usersMovies', {
 			type: 'UserMovie',
-			resolve: async (_parent, _args, ctx) => {
+			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.movie.findMany({
 					where: {
 						userId: ctx.session?.user?.id!,
@@ -99,12 +123,12 @@ export const UserQueries = extendType({
 						},
 					],
 				});
-			},
+			}),
 		});
 
 		t.list.field('usersShows', {
 			type: 'UserShow',
-			resolve: async (_parent, _args, ctx) => {
+			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.show.findMany({
 					where: {
 						userId: ctx.session?.user?.id,
@@ -115,12 +139,12 @@ export const UserQueries = extendType({
 						},
 					],
 				});
-			},
+			}),
 		});
 
 		t.list.field('usersGames', {
 			type: 'UserGame',
-			resolve: async (_parent, _args, ctx) => {
+			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.game.findMany({
 					where: {
 						userId: ctx.session?.user?.id,
@@ -131,7 +155,7 @@ export const UserQueries = extendType({
 						},
 					],
 				});
-			},
+			}),
 		});
 
 		t.field('checkEmailVerificationToken', {
@@ -140,10 +164,11 @@ export const UserQueries = extendType({
 				token: nonNull(stringArg()),
 				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { token, userId }, ctx) => {
-				const tokenStored = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
+			resolve: safeResolver(async (_parent, { token, userId }, ctx) => {
+				const input = parseInput(TokenVerificationInput, { token, userId });
+				const tokenStored = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${input.userId}`);
 
-				if (token !== tokenStored) {
+				if (input.token !== tokenStored) {
 					return {
 						errors: [{ message: 'Email verification token not found.' }],
 						token: null,
@@ -154,9 +179,9 @@ export const UserQueries = extendType({
 				return {
 					errors: [],
 					token: tokenStored,
-					userId,
+					userId: input.userId,
 				};
-			},
+			}),
 		});
 
 		t.field('checkForgotPasswordToken', {
@@ -165,10 +190,11 @@ export const UserQueries = extendType({
 				token: nonNull(stringArg()),
 				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { token, userId }, ctx) => {
-				const tokenStored = await ctx.redis.get(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`);
+			resolve: safeResolver(async (_parent, { token, userId }, ctx) => {
+				const input = parseInput(TokenVerificationInput, { token, userId });
+				const tokenStored = await ctx.redis.get(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${input.userId}`);
 
-				if (token !== tokenStored) {
+				if (input.token !== tokenStored) {
 					return {
 						errors: [{ message: 'Forgot password token not found.' }],
 						token: null,
@@ -179,9 +205,9 @@ export const UserQueries = extendType({
 				return {
 					errors: [],
 					token: tokenStored,
-					userId,
+					userId: input.userId,
 				};
-			},
+			}),
 		});
 
 		t.field('accountVerified', {
@@ -189,9 +215,10 @@ export const UserQueries = extendType({
 			args: {
 				email: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { email }, ctx) => {
+			resolve: safeResolver(async (_parent, { email }, ctx) => {
+				const input = parseInput(EmailVerificationInput, { email });
 				const acct = await ctx.prisma.user.findUnique({
-					where: { email },
+					where: { email: input.email },
 					select: { id: true, emailVerified: true },
 				});
 
@@ -218,7 +245,7 @@ export const UserQueries = extendType({
 					id: null,
 					emailVerified: null,
 				};
-			},
+			}),
 		});
 
 		t.field('emailFromRedisToken', {
@@ -226,8 +253,9 @@ export const UserQueries = extendType({
 			args: {
 				token: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { token }, ctx) => {
-				const userId = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${token}`);
+			resolve: safeResolver(async (_parent, { token }, ctx) => {
+				const input = parseInput(TokenInput, { token });
+				const userId = await ctx.redis.get(`${VERIFICATION_EMAIL_PREFIX}:${input.token}`);
 
 				if (!userId) return null;
 
@@ -239,7 +267,14 @@ export const UserQueries = extendType({
 				if (!user) return null;
 
 				return user.email;
-			},
+			}),
+		});
+
+		t.list.field('users', {
+			type: 'User',
+			resolve: safeResolver(async (_parent, _args, ctx) => {
+				return await ctx.prisma.user.findMany();
+			}),
 		});
 	},
 });
@@ -254,20 +289,21 @@ export const UserMutations = extendType({
 				movieName: nonNull(stringArg()),
 				watchStatus: nonNull(WatchStatusTypes),
 			},
-			resolve: async (_parent, { movieId, movieName, watchStatus }, ctx) => {
+			resolve: safeResolver(async (_parent, { movieId, movieName, watchStatus }, ctx) => {
+				const input = parseInput(AddMovieInput, { movieId, movieName, watchStatus });
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id! },
 					data: {
 						movie: {
 							create: {
-								id: movieId,
-								name: movieName,
-								status: watchStatus,
+								id: input.movieId,
+								name: input.movieName,
+								status: input.watchStatus,
 							},
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('addShow', {
@@ -278,21 +314,24 @@ export const UserMutations = extendType({
 				watchStatus: nonNull(WatchStatusTypes),
 				currentEpisode: intArg(),
 			},
-			resolve: async (_parent, { showId, showName, watchStatus, currentEpisode }, ctx) => {
-				return await ctx.prisma.user.update({
-					where: { id: ctx.session!.user?.id! },
-					data: {
-						show: {
-							create: {
-								id: showId,
-								name: showName,
-								status: watchStatus,
-								current_episode: currentEpisode ?? undefined,
+			resolve: safeResolver(
+				async (_parent, { showId, showName, watchStatus, currentEpisode }, ctx) => {
+					const input = parseInput(AddShowInput, { showId, showName, watchStatus, currentEpisode });
+					return await ctx.prisma.user.update({
+						where: { id: ctx.session!.user?.id! },
+						data: {
+							show: {
+								create: {
+									id: input.showId,
+									name: input.showName,
+									status: input.watchStatus,
+									current_episode: input.currentEpisode ?? undefined,
+								},
 							},
 						},
-					},
-				});
-			},
+					});
+				}
+			),
 		});
 
 		t.field('addGame', {
@@ -303,21 +342,22 @@ export const UserMutations = extendType({
 				wishlist: booleanArg(),
 				rating: intArg(),
 			},
-			resolve: async (_parent, { gameId, gameName, wishlist, rating }, ctx) => {
+			resolve: safeResolver(async (_parent, { gameId, gameName, wishlist, rating }, ctx) => {
+				const input = parseInput(AddGameInput, { gameId, gameName, wishlist, rating });
 				return await ctx.prisma.user.update({
 					where: { id: ctx.session!.user?.id },
 					data: {
 						game: {
 							create: {
-								id: gameId,
-								name: gameName,
-								wishlist: wishlist ?? undefined,
-								rating,
+								id: input.gameId,
+								name: input.gameName,
+								wishlist: input.wishlist ?? undefined,
+								rating: input.rating,
 							},
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('updateMovie', {
@@ -327,20 +367,21 @@ export const UserMutations = extendType({
 				watchStatus: nonNull(WatchStatusTypes),
 				movieRating: intArg(),
 			},
-			resolve: async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
+			resolve: safeResolver(async (_parent, { movieId, watchStatus, movieRating }, ctx) => {
+				const input = parseInput(UpdateMovieInput, { movieId, watchStatus, movieRating });
 				return await ctx.prisma.movie.update({
 					where: {
 						id_userId: {
-							id: movieId,
+							id: input.movieId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 					data: {
-						status: watchStatus,
-						rating: movieRating ? movieRating : null,
+						status: input.watchStatus,
+						rating: input.movieRating ? input.movieRating : null,
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('updateShow', {
@@ -351,21 +392,29 @@ export const UserMutations = extendType({
 				showRating: intArg(),
 				currentEpisode: intArg(),
 			},
-			resolve: async (_parent, { showId, watchStatus, showRating, currentEpisode }, ctx) => {
-				return await ctx.prisma.show.update({
-					where: {
-						id_userId: {
-							id: showId,
-							userId: ctx.session!.user?.id!,
+			resolve: safeResolver(
+				async (_parent, { showId, watchStatus, showRating, currentEpisode }, ctx) => {
+					const input = parseInput(UpdateShowInput, {
+						showId,
+						watchStatus,
+						showRating,
+						currentEpisode,
+					});
+					return await ctx.prisma.show.update({
+						where: {
+							id_userId: {
+								id: input.showId,
+								userId: ctx.session!.user?.id!,
+							},
 						},
-					},
-					data: {
-						status: watchStatus,
-						rating: showRating ? showRating : null,
-						current_episode: currentEpisode ?? undefined,
-					},
-				});
-			},
+						data: {
+							status: input.watchStatus,
+							rating: input.showRating ? input.showRating : null,
+							current_episode: input.currentEpisode ?? undefined,
+						},
+					});
+				}
+			),
 		});
 
 		t.field('updateGame', {
@@ -375,20 +424,21 @@ export const UserMutations = extendType({
 				wishlist: booleanArg(),
 				rating: intArg(),
 			},
-			resolve: async (_parent, { gameId, wishlist, rating }, ctx) => {
+			resolve: safeResolver(async (_parent, { gameId, wishlist, rating }, ctx) => {
+				const input = parseInput(UpdateGameInput, { gameId, wishlist, rating });
 				return await ctx.prisma.game.update({
 					where: {
 						id_userId: {
-							id: gameId,
+							id: input.gameId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 					data: {
-						wishlist: wishlist ?? undefined,
-						rating,
+						wishlist: input.wishlist ?? undefined,
+						rating: input.rating,
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('deleteMovie', {
@@ -396,16 +446,17 @@ export const UserMutations = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { movieId }, ctx) => {
+			resolve: safeResolver(async (_parent, { movieId }, ctx) => {
+				const input = parseInput(UserMediaInput, { movieId });
 				return await ctx.prisma.movie.delete({
 					where: {
 						id_userId: {
-							id: movieId,
+							id: input.movieId,
 							userId: ctx.session?.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('deleteShow', {
@@ -413,16 +464,17 @@ export const UserMutations = extendType({
 			args: {
 				showId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { showId }, ctx) => {
+			resolve: safeResolver(async (_parent, { showId }, ctx) => {
+				const input = parseInput(UserShowInput, { showId });
 				return await ctx.prisma.show.delete({
 					where: {
 						id_userId: {
-							id: showId,
+							id: input.showId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('deleteGame', {
@@ -430,16 +482,17 @@ export const UserMutations = extendType({
 			args: {
 				gameId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { gameId }, ctx) => {
+			resolve: safeResolver(async (_parent, { gameId }, ctx) => {
+				const input = parseInput(UserGameInput, { gameId });
 				return await ctx.prisma.game.delete({
 					where: {
 						id_userId: {
-							id: gameId,
+							id: input.gameId,
 							userId: ctx.session!.user?.id!,
 						},
 					},
 				});
-			},
+			}),
 		});
 
 		t.field('registerUser', {
@@ -449,36 +502,26 @@ export const UserMutations = extendType({
 				email: nonNull(stringArg()),
 				password: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { name, email, password }, ctx) => {
-				try {
-					const existingUser = await ctx.prisma.user.findUnique({
-						where: { email },
-					});
+			resolve: safeResolver(async (_parent, { name, email, password }, ctx) => {
+				const input = parseInput(RegisterUserInput, { name, email, password });
+				const existingUser = await ctx.prisma.user.findUnique({
+					where: { email: input.email },
+				});
 
-					if (existingUser) {
-						return {
-							errors: [{ message: 'Email Already Exists' }],
-							createdUser: null,
-						};
-					}
-					const newUser = await ctx.prisma.user.create({
-						data: { name, email, password: await hash(password) },
-					});
-
-					const { password: _userPassword, ...createdUserWithoutPassword } = newUser;
-
-					return {
-						errors: [],
-						createdUser: createdUserWithoutPassword,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						errors: [{ message: getErrorMsg(err) }],
-						createdUser: null,
-					};
+				if (existingUser) {
+					throw new Error('Email Already Exists');
 				}
-			},
+				const newUser = await ctx.prisma.user.create({
+					data: { name: input.name, email: input.email, password: await hash(input.password) },
+				});
+
+				const { password: _userPassword, ...createdUserWithoutPassword } = newUser;
+
+				return {
+					errors: [],
+					createdUser: createdUserWithoutPassword,
+				};
+			}),
 		});
 
 		t.field('verifyUserEmail', {
@@ -486,33 +529,25 @@ export const UserMutations = extendType({
 			args: {
 				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { userId }, ctx) => {
-				try {
-					await ctx.prisma.user.update({
-						where: { id: userId },
-						data: {
-							emailVerified: new Date(),
-						},
-					});
+			resolve: safeResolver(async (_parent, { userId }, ctx) => {
+				const input = parseInput(UserIdInput, { id: userId });
+				await ctx.prisma.user.update({
+					where: { id: input.id },
+					data: {
+						emailVerified: new Date(),
+					},
+				});
 
-					await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
+				await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${input.id}`);
 
-					await ctx.redis.del(`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`);
+				await ctx.redis.del(`${VERIFICATION_EMAIL_COUNT_PREFIX}:${input.id}`);
 
-					return {
-						errors: [],
-						token: null,
-						userId,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						errors: [{ message: getErrorMsg(err) }],
-						token: null,
-						userId: null,
-					};
-				}
-			},
+				return {
+					errors: [],
+					token: null,
+					userId: input.id,
+				};
+			}),
 		});
 
 		t.field('sendVerificationEmail', {
@@ -520,80 +555,63 @@ export const UserMutations = extendType({
 			args: {
 				userId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { userId }, ctx) => {
-				try {
-					const user = await ctx.prisma.user.findUnique({
-						where: { id: userId },
-						select: { email: true },
-					});
+			resolve: safeResolver(async (_parent, { userId }, ctx) => {
+				const input = parseInput(UserIdInput, { id: userId });
+				const user = await ctx.prisma.user.findUnique({
+					where: { id: input.id },
+					select: { email: true },
+				});
 
-					if (!user?.email) {
-						return {
-							errors: [{ message: 'Could not find user with that email' }],
-							token: null,
-							userId: null,
-						};
-					}
-
-					const verificationEmailCountRes = await ctx.redis.get(
-						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`
-					);
-
-					const verificationEmailCount = +(verificationEmailCountRes ?? '0');
-
-					if (__prod__ && verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT) {
-						return {
-							errors: [
-								{
-									message:
-										'You have reached the limit of verification emails. Please wait 24 hours to try again.',
-								},
-							],
-							token: null,
-							userId: null,
-						};
-					}
-
-					await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${userId}`);
-
-					const token = v4();
-
-					await ctx.redis.set(
-						`${VERIFICATION_EMAIL_PREFIX}:${userId}`,
-						token,
-						'EX',
-						REDIS_EXP_MAP[VERIFICATION_EMAIL_PREFIX]
-					);
-
-					await ctx.redis.set(
-						`${VERIFICATION_EMAIL_COUNT_PREFIX}:${userId}`,
-						(verificationEmailCount + 1).toString(),
-						'EX',
-						REDIS_EXP_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
-					);
-
-					const payload: Mail.Options = {
-						from: process.env.EMAIL_FROM,
-						to: user.email,
-						subject: 'Email Verification Link',
-						text: 'Click the link below to verify your email.',
-						html: `<a href="${CLIENT_BASE_URL}/auth/verification-email?uid=${userId}&token=${token}">Verify Email</a>`,
-					};
-
-					await sendEmail(payload);
-
-					return {
-						errors: [],
-						token,
-						userId,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						errors: [{ message: getErrorMsg(err) }],
-					};
+				if (!user?.email) {
+					throw new Error('Could not find user with that email');
 				}
-			},
+
+				const verificationEmailCountRes = await ctx.redis.get(
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${input.id}`
+				);
+
+				const verificationEmailCount = +(verificationEmailCountRes ?? '0');
+
+				if (__prod__ && verificationEmailCount === VERIFICATION_EMAIL_COUNT_LIMIT) {
+					throw new Error(
+						'You have reached the limit of verification emails. Please wait 24 hours to try again.'
+					);
+				}
+
+				await ctx.redis.del(`${VERIFICATION_EMAIL_PREFIX}:${input.id}`);
+
+				const token = v4();
+
+				await ctx.redis.set(
+					`${VERIFICATION_EMAIL_PREFIX}:${input.id}`,
+					token,
+					'EX',
+					REDIS_EXP_MAP[VERIFICATION_EMAIL_PREFIX]
+				);
+
+				await ctx.redis.set(
+					`${VERIFICATION_EMAIL_COUNT_PREFIX}:${input.id}`,
+					(verificationEmailCount + 1).toString(),
+					'EX',
+					REDIS_EXP_MAP[VERIFICATION_EMAIL_COUNT_PREFIX]
+				);
+
+				const payload: Mail.Options = {
+					from: process.env.EMAIL_FROM,
+					to: user.email,
+					subject: 'Email Verification Link',
+					text: 'Click the link below to verify your email.',
+					html: `<a href="${CLIENT_BASE_URL}/auth/verification-email?uid=${input.id}&token=${token}">Verify Email</a>`,
+				};
+
+				await sendEmail(payload);
+
+				return {
+					errors: [],
+					token,
+					userId: input.id,
+				};
+			}),
 		});
 
 		t.field('sendForgotPasswordEmail', {
@@ -601,81 +619,62 @@ export const UserMutations = extendType({
 			args: {
 				email: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { email }, ctx) => {
-				try {
-					const user = await ctx.prisma.user.findUnique({
-						where: { email },
-					});
+			resolve: safeResolver(async (_parent, { email }, ctx) => {
+				const input = parseInput(EmailInput, { email });
+				const user = await ctx.prisma.user.findUnique({
+					where: { email: input.email },
+				});
 
-					if (!user?.email) {
-						return {
-							errors: [{ message: 'No user found with that email' }],
-							token: null,
-							userId: null,
-						};
-					}
-
-					const forgotPasswordEmailCountRes = await ctx.redis.get(
-						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`
-					);
-
-					const forgotPasswordEmailCount = +(forgotPasswordEmailCountRes ?? '0');
-
-					if (__prod__ && forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT) {
-						return {
-							errors: [
-								{
-									message:
-										'You have reached the limit of forgot password emails. Please wait 24 hours to try again.',
-								},
-							],
-							token: null,
-							userId: null,
-						};
-					}
-
-					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`);
-
-					const token = v4();
-
-					await ctx.redis.set(
-						`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`,
-						token,
-						'EX',
-						REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_PREFIX]
-					);
-
-					await ctx.redis.set(
-						`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`,
-						(forgotPasswordEmailCount + 1).toString(),
-						'EX',
-						REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]
-					);
-
-					const payload: Mail.Options = {
-						from: process.env.EMAIL_FROM,
-						to: user.email,
-						subject: 'Forgot Password Link',
-						text: 'Click the link below to create a new password.',
-						html: `<a href="${CLIENT_BASE_URL}/auth/change-password?uid=${user.id}&token=${token}">Verify Email</a>`,
-					};
-
-					await sendEmail(payload);
-
-					return {
-						errors: [],
-						token,
-						userId: user.id,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						errors: [{ message: getErrorMsg(err) }],
-						token: null,
-						userId: null,
-					};
+				if (!user?.email) {
+					throw new Error('No user found with that email');
 				}
-			},
+
+				const forgotPasswordEmailCountRes = await ctx.redis.get(
+					`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`
+				);
+
+				const forgotPasswordEmailCount = +(forgotPasswordEmailCountRes ?? '0');
+
+				if (__prod__ && forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT) {
+					throw new Error(
+						'You have reached the limit of forgot password emails. Please wait 24 hours to try again.'
+					);
+				}
+
+				await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`);
+
+				const token = v4();
+
+				await ctx.redis.set(
+					`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`,
+					token,
+					'EX',
+					REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_PREFIX]
+				);
+
+				await ctx.redis.set(
+					`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${user.id}`,
+					(forgotPasswordEmailCount + 1).toString(),
+					'EX',
+					REDIS_EXP_MAP[FORGOT_PASSWORD_EMAIL_COUNT_PREFIX]
+				);
+
+				const payload: Mail.Options = {
+					from: process.env.EMAIL_FROM,
+					to: user.email,
+					subject: 'Forgot Password Link',
+					text: 'Click the link below to create a new password.',
+					html: `<a href="${CLIENT_BASE_URL}/auth/change-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+				};
+
+				await sendEmail(payload);
+
+				return {
+					errors: [],
+					token,
+					userId: user.id,
+				};
+			}),
 		});
 
 		t.field('changePassword', {
@@ -684,33 +683,25 @@ export const UserMutations = extendType({
 				userId: nonNull(idArg()),
 				newPassword: nonNull(stringArg()),
 			},
-			resolve: async (_parent, { userId, newPassword }, ctx) => {
-				try {
-					const hashedNewPassword = await hash(newPassword);
+			resolve: safeResolver(async (_parent, { userId, newPassword }, ctx) => {
+				const input = parseInput(ChangePasswordInput, { userId, newPassword });
+				const hashedNewPassword = await hash(input.newPassword);
 
-					await ctx.prisma.user.update({
-						data: { password: hashedNewPassword },
-						where: { id: userId },
-					});
+				await ctx.prisma.user.update({
+					data: { password: hashedNewPassword },
+					where: { id: input.userId },
+				});
 
-					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${userId}`);
+				await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${input.userId}`);
 
-					await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${userId}`);
+				await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_COUNT_PREFIX}:${input.userId}`);
 
-					return {
-						errors: [],
-						token: null,
-						userId,
-					};
-				} catch (err) {
-					console.error(err);
-					return {
-						errors: [{ message: getErrorMsg(err) }],
-						token: null,
-						userId: null,
-					};
-				}
-			},
+				return {
+					errors: [],
+					token: null,
+					userId: input.userId,
+				};
+			}),
 		});
 	},
 });

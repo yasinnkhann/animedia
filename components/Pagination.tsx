@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { usePagination } from '../hooks/usePagination';
 
@@ -80,7 +82,7 @@ const Pagination = ({
 							} px-2`}
 							key={idx}
 							onClick={() => {
-								typeof pageNumber === 'number' && paginate(pageNumber);
+								if (typeof pageNumber === 'number') paginate(pageNumber);
 							}}
 						>
 							{pageNumber}

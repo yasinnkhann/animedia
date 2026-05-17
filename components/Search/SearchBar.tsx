@@ -1,10 +1,12 @@
+'use client';
+
 import { forwardRef, useState, useEffect, RefObject } from 'react';
 import { CommonMethods } from 'utils/CommonMethods';
 import { TDropDownSearchResult } from '@ts/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { FaSearch } from 'react-icons/fa';
 import { useDebounce } from 'hooks/useDebounce';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../graphql/queries';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from 'utils/constants';
@@ -62,7 +64,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 					searchedPeopleData?.searchedPeople.results
 				) {
 					const movieResults = searchedMoviesData.searchedMovies.results
-						.map(movie => ({
+						.map((movie: any) => ({
 							id: movie.id,
 							titleName: movie.title,
 							releaseDate: movie.release_date,
@@ -71,7 +73,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 						.slice(0, 5);
 
 					const showsResults = searchedShowsData.searchedShows.results
-						.map(show => ({
+						.map((show: any) => ({
 							id: show.id,
 							titleName: show.name,
 							firstAirDate: show.first_air_date,
@@ -80,7 +82,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 						.slice(0, 5);
 
 					const peopleResults = searchedPeopleData.searchedPeople.results
-						.map(person => ({
+						.map((person: any) => ({
 							id: person.id,
 							titleName: person.name,
 							knownForDepartment: person.known_for_department,
@@ -128,13 +130,13 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
 		useEffect(() => {
 			if (isSearchBtnClicked) {
-				(ref as RefObject<HTMLButtonElement>).current?.focus();
+				(ref as RefObject<HTMLInputElement>).current?.focus();
 			}
 
 			const close = (e: KeyboardEvent) => {
 				if (!_.isEmpty(dropDownSearchResults) && e.key === 'Escape') {
 					setDropDownSearchResults([]);
-					(ref as RefObject<HTMLButtonElement>).current?.blur();
+					(ref as RefObject<HTMLInputElement>).current?.blur();
 				}
 			};
 			window.addEventListener('keydown', close);

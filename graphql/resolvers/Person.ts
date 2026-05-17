@@ -1,5 +1,12 @@
-import { THE_MOVIE_DB_BASE_API_URL } from '../../utils/constants';
 import { objectType, extendType, nonNull, intArg, stringArg, idArg } from 'nexus';
+import { tmdbClient } from '@lib/api';
+import { safeResolver } from '../utils/resolver-helpers';
+import {
+	parseInput,
+	PaginationInput,
+	PersonDetailsInput,
+	PersonSearchInput,
+} from '../validations/inputs';
 
 export const KnownForResult = objectType({
 	name: 'KnownForResult',
@@ -118,10 +125,10 @@ export const PersonsKnownForMovieCrew = objectType({
 export const PersonsKnownForMovieRes = objectType({
 	name: 'PersonsKnownForMovieRes',
 	definition(t) {
-		t.id('id'),
-			t.nonNull.list.field('cast', {
-				type: 'PersonsKnownForMovieCast',
-			});
+		t.id('id');
+		t.nonNull.list.field('cast', {
+			type: 'PersonsKnownForMovieCast',
+		});
 		t.nonNull.list.field('crew', {
 			type: 'PersonsKnownForMovieCrew',
 		});
@@ -196,17 +203,10 @@ export const PopularQueries = extendType({
 			args: {
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/person/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.getPopularPeople(validatedPage);
+			}),
 		});
 
 		t.nonNull.field('personDetails', {
@@ -214,17 +214,10 @@ export const PopularQueries = extendType({
 			args: {
 				personDetailsId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { personDetailsId }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/person/${personDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=1`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { personDetailsId }) => {
+				const input = parseInput(PersonDetailsInput, { personDetailsId });
+				return await tmdbClient.getPersonDetails(input.personDetailsId);
+			}),
 		});
 
 		t.nonNull.field('searchedPeople', {
@@ -233,18 +226,10 @@ export const PopularQueries = extendType({
 				q: nonNull(stringArg()),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { q, page }) => {
-				q = q.split(' ').join('+');
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/search/person?api_key=${process.env.THE_MOVIE_DB_API_KEY}&page=${page}&query=${q}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { q, page }) => {
+				const input = parseInput(PersonSearchInput, { q, page });
+				return await tmdbClient.searchPeople(input.q, input.page);
+			}),
 		});
 
 		t.nonNull.field('personsKnownForMovie', {
@@ -252,17 +237,9 @@ export const PopularQueries = extendType({
 			args: {
 				personsKnownForMovieResId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { personsKnownForMovieResId }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/person/${personsKnownForMovieResId}/movie_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { personsKnownForMovieResId }) => {
+				return await tmdbClient.getPersonMovieCredits(personsKnownForMovieResId);
+			}),
 		});
 
 		t.nonNull.field('personsKnownForShow', {
@@ -270,17 +247,9 @@ export const PopularQueries = extendType({
 			args: {
 				personsKnownForShowResId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { personsKnownForShowResId }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/person/${personsKnownForShowResId}/tv_credits?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { personsKnownForShowResId }) => {
+				return await tmdbClient.getPersonShowCredits(personsKnownForShowResId);
+			}),
 		});
 	},
 });

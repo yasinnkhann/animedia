@@ -1,4 +1,4 @@
-import { DefaultSession, type Account, Profile, JWT } from 'next-auth';
+import { DefaultSession, type Account, Profile } from 'next-auth';
 
 declare module 'next-auth' {
 	/**

@@ -1,11 +1,13 @@
+'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { useDrag } from '../../../hooks/useDrag';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IEPDetails } from '@ts/interfaces';
 import { ShowDetailsRes } from '../../../graphql/generated/code-gen/graphql';
 import { RESULTS_PER_EPISODES_SLIDER } from 'utils/constants';
+import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
@@ -15,36 +17,12 @@ interface Props {
 }
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
-	const { dragStart, dragStop, dragMove } = useDrag();
+	const { handleDrag, handleMouseDown, handleMouseUp, handleWheel } = useHorizontalScroller();
 	const [episodesToShow, setEpisodesToShow] = useState(RESULTS_PER_EPISODES_SLIDER);
-	const [isLoadingMore, setIsLoadingMore] = useState(false);
+	const isLoadingMore = useRef(false);
 	const scrollContainerRef = useRef<scrollVisibilityApiType>(
 		null
 	) as React.MutableRefObject<scrollVisibilityApiType>;
-
-	const handleDrag =
-		({ scrollContainer }: scrollVisibilityApiType) =>
-		(e: React.MouseEvent) =>
-			dragMove(e, posDiff => {
-				if (scrollContainer.current) {
-					scrollContainer.current.scrollLeft += posDiff;
-				}
-			});
-
-	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
-		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
-
-		if (isTouchPad) {
-			e.stopPropagation();
-			return;
-		}
-
-		if (e.deltaX < 0) {
-			apiObj.scrollNext();
-		} else if (e.deltaX > 0) {
-			apiObj.scrollPrev();
-		}
-	};
 
 	const groupSeasonsAndEps = () => {
 		const groupedArr: IEPDetails[] = [];
@@ -81,9 +59,10 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 
 			clearTimeout(timeoutId);
 			timeoutId = setTimeout(() => {
-				if (isNearEnd(container) && !isLoadingMore) {
-					setIsLoadingMore(true);
+				if (isNearEnd(container) && !isLoadingMore.current) {
+					isLoadingMore.current = true;
 					setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
+					isLoadingMore.current = false;
 				}
 			}, 100);
 		};
@@ -94,27 +73,23 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
 			scrollContainer.removeEventListener('scroll', handleScroll);
 			clearTimeout(timeoutId);
 		};
-	}, [isLoadingMore]);
-
-	useEffect(() => {
-		setIsLoadingMore(false);
-	}, [episodesToShow]);
+	}, []);
 
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
 			RightArrow={RightArrow}
-			onWheel={onWheel}
-			onMouseDown={() => dragStart}
-			onMouseUp={() => dragStop}
+			onWheel={handleWheel}
+			onMouseDown={handleMouseDown}
+			onMouseUp={handleMouseUp}
 			onMouseMove={handleDrag}
-			scrollContainerClassName='!h-[14rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+			scrollContainerClassName='!h-[14rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 			apiRef={scrollContainerRef}
 		>
 			{groupSeasonsAndEps()
 				.slice(0, episodesToShow)
 				.map((item, idx) => (
-					<EpisodeDetailsCard item={item} key={idx} />
+					<EpisodeDetailsCard item={item} key={idx} itemId={`${item.season}-${item.episode}`} />
 				))}
 		</ScrollMenu>
 	);

@@ -3,12 +3,15 @@ import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 
-interface Props {
+const MediaCastCard = ({
+	item,
+	dragging,
+	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
+}: {
 	item: ICast;
 	dragging: boolean;
-}
-
-const MediaCastCard = ({ item, dragging }: Props) => {
+	itemId: string;
+}) => {
 	const body = (
 		<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
 			<div className='relative h-full w-full'>

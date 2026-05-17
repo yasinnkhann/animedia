@@ -13,7 +13,7 @@
 
 @layer base {
 	body {
-		@apply h-[90vh] bg-gray-100;
+		@apply h-[90vh] bg-gray-100 hide-scrollbar;
 	}
 
 	h1 {

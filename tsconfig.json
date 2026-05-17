@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es2017",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -9,17 +9,30 @@
 		"noEmit": true,
 		"esModuleInterop": true,
 		"module": "esnext",
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"jsx": "preserve",
+		"jsx": "react-jsx",
 		"incremental": true,
-		"baseUrl": ".", // this must be specified if "paths" is specified.
+		"ignoreDeprecations": "6.0",
+		"baseUrl": ".",
 		"paths": {
-			"@ts/*": ["models/ts/*"], // this mapping is relative to "baseUrl"
-			"@lib/*": ["lib/*"] // this mapping is relative to "baseUrl"
-		}
+			"@/*": ["./*"],
+			"@ts/*": ["models/ts/*"],
+			"@lib/*": ["lib/*"]
+		},
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		".next/dev/types/**/*.ts"
+	],
 	"exclude": ["node_modules"]
 }

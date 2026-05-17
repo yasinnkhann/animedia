@@ -1,5 +1,7 @@
+'use client';
+
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import DropDownItem from './DropDownItem';
@@ -9,16 +11,10 @@ import { TbSearch } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
 import SearchBar from './Search/SearchBar';
 import { motion } from 'framer-motion';
-import {
-	MY_MEDIA_ITEMS,
-	MOVIES_ITEMS,
-	SHOWS_ITEMS,
-	PEOPLE_ITEMS,
-	GAME_ITEMS,
-} from 'models/dropDownOptions';
+import { MY_MEDIA_ITEMS, MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS } from 'models/dropDownOptions';
 
 const Header = () => {
-	const router = useRouter();
+	const pathname = usePathname();
 	const { data: session, status } = useSession();
 	const [isSearchBtnClicked, setIsSearchBtnClicked] = useState(false);
 	const searchBarRef = useRef<HTMLInputElement>(null);
@@ -69,10 +65,10 @@ const Header = () => {
 									</>
 								)}
 
-								{router.pathname !== '/' &&
-									router.pathname !== '/search' &&
-									router.pathname !== '/auth/login' &&
-									router.pathname !== '/auth/register' &&
+								{pathname !== '/' &&
+									pathname !== '/search' &&
+									pathname !== '/auth/login' &&
+									pathname !== '/auth/register' &&
 									(!isSearchBtnClicked ? (
 										<TbSearch
 											className='mr-4 cursor-pointer'
@@ -98,7 +94,7 @@ const Header = () => {
 										/>
 									))}
 
-								{status === 'unauthenticated' && router.pathname !== '/auth/login' && (
+								{status === 'unauthenticated' && pathname !== '/auth/login' && (
 									<div className='flex cursor-pointer items-center' onClick={() => signIn()}>
 										<BiLogIn size={30} />
 									</div>

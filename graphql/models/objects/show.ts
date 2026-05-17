@@ -220,10 +220,10 @@ export const showReviewResult = objectType({
 export const showReviewRes = objectType({
 	name: 'ShowReviewRes',
 	definition(t) {
-		t.nonNull.id('id'),
-			t.nonNull.int('page'),
-			t.nonNull.int('total_pages'),
-			t.nonNull.int('total_results');
+		t.nonNull.id('id');
+		t.nonNull.int('page');
+		t.nonNull.int('total_pages');
+		t.nonNull.int('total_results');
 		t.nonNull.list.field('results', {
 			type: nonNull('ShowReviewResult'),
 		});

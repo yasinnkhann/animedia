@@ -1,7 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import * as Queries from '../../../graphql/queries';
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { IEPDetails } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 import RoundProgressBar from 'components/RoundProgressBar';
@@ -11,11 +13,7 @@ import { Puff } from 'react-loading-icons';
 
 const Modal = lazy(() => import('components/Modal'));
 
-interface Props {
-	item: IEPDetails;
-}
-
-const EpisodeDetailsCard = ({ item }: Props) => {
+const EpisodeDetailsCard = ({ item }: { item: IEPDetails }) => {
 	const [showModal, setShowModal] = useState(false);
 
 	const { data: epDetailsCardData } = useQuery(Queries.GET_EPISODE_DETAILS, {

@@ -1,9 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { GameResult } from 'graphql/generated/code-gen/graphql';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../graphql/queries';
 
 interface Props {

@@ -1,7 +1,6 @@
 import Redis from 'ioredis';
-import cron from 'node-cron';
-import logger from '@lib/logger';
 import { __prod__, REDIS_MB_THRESHOLD } from 'utils/constants';
+import logger from './logger';
 
 export const redis = __prod__
 	? new Redis({
@@ -11,8 +10,8 @@ export const redis = __prod__
 		})
 	: new Redis();
 
-redis.on('connect', () => console.log('Redis Connected'));
-redis.on('error', err => console.error('Redis Error:', err));
+redis.on('connect', () => logger.info('Redis Connected'));
+redis.on('error', err => logger.error('Redis Error', { error: err }));
 
 async function monitorRedisMemory() {
 	try {
@@ -24,20 +23,20 @@ async function monitorRedisMemory() {
 		const usedMB = usedBytes / (1024 * 1024);
 
 		if (usedMB > REDIS_MB_THRESHOLD) {
-			logger.warn(`Redis memory usage is high: ${usedMB.toFixed(2)} MB`);
+			logger.warn('Redis memory usage is high', { usedMB: usedMB.toFixed(2) });
 			try {
 				await redis.flushdb();
 				logger.info('Redis database flushed due to high memory usage');
 			} catch (flushErr) {
-				logger.error('Failed to flush Redis database:', flushErr);
+				logger.error('Failed to flush Redis database', { error: flushErr });
 				return;
 			}
 		}
 	} catch (err) {
-		logger.error('Error monitoring Redis memory:', err);
+		logger.error('Error monitoring Redis memory', { error: err });
 	}
 }
 
 if (__prod__) {
-	cron.schedule('*/30 * * * * *', monitorRedisMemory);
+	setInterval(monitorRedisMemory, 30 * 1000);
 }

@@ -2,12 +2,13 @@ import React from 'react';
 import Image from 'next/image';
 import { IGamePreview } from '@ts/interfaces';
 
-interface Props {
+const GamePreviewCard = ({
+	item,
+	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
+}: {
 	item: IGamePreview;
-	dragging: boolean;
-}
-
-const GamePreviewCard = ({ item }: Props) => {
+	itemId: string;
+}) => {
 	return (
 		<section className='relative mx-4 h-[20rem] w-[35rem] select-none'>
 			<div className='relative h-full w-full'>

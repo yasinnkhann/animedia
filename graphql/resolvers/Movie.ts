@@ -1,6 +1,13 @@
-import { THE_MOVIE_DB_BASE_API_URL } from '../../utils/constants';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { extendType, nonNull, stringArg, intArg, arg, idArg } from 'nexus';
+import { tmdbClient } from '@lib/api';
+import { safeResolver } from '../utils/resolver-helpers';
+import {
+	MovieSearchInput,
+	MovieDetailsInput,
+	PaginationInput,
+	parseInput,
+} from '../validations/inputs';
 
 export const MovieQueries = extendType({
 	type: 'Query',
@@ -10,17 +17,10 @@ export const MovieQueries = extendType({
 			args: {
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/popular?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.getPopularMovies(validatedPage);
+			}),
 		});
 
 		t.nonNull.field('searchedMovies', {
@@ -29,18 +29,10 @@ export const MovieQueries = extendType({
 				q: nonNull(stringArg()),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { q, page }) => {
-				q = q.split(' ').join('+');
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/search/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&query=${q}&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { q, page }) => {
+				const input = parseInput(MovieSearchInput, { q, page });
+				return await tmdbClient.searchMovies(input.q, input.page);
+			}),
 		});
 
 		t.nonNull.field('movieDetails', {
@@ -48,17 +40,10 @@ export const MovieQueries = extendType({
 			args: {
 				movieDetailsId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { movieDetailsId }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/${movieDetailsId}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { movieDetailsId }) => {
+				const input = parseInput(MovieDetailsInput, { movieDetailsId });
+				return await tmdbClient.getMovieDetails(input.movieDetailsId);
+			}),
 		});
 
 		t.nonNull.field('popularAnimeMovies', {
@@ -66,19 +51,17 @@ export const MovieQueries = extendType({
 			args: {
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const keywordID = await CommonMethods.getKeywordId('anime');
+			resolve: safeResolver(async (_parent, { page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				const keywordSearchResults = await tmdbClient.searchKeyword('anime');
+				const keywordId = keywordSearchResults.results?.[0]?.id;
 
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&sort_by=popularity.desc&page=${page}&with_keywords=${keywordID}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
+				if (!keywordId) {
+					throw new Error('Anime keyword not found');
 				}
-			},
+
+				return await tmdbClient.discoverMoviesByKeyword(keywordId, validatedPage);
+			}),
 		});
 
 		t.nonNull.field('trendingMovies', {
@@ -89,14 +72,10 @@ export const MovieQueries = extendType({
 				}),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { timeWindow, page }) => {
-				try {
-					const trendingMovies = await CommonMethods.getTrendingMedia('movie', timeWindow, page);
-					return trendingMovies;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { timeWindow, page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.getTrending('movie', timeWindow as 'day' | 'week', validatedPage);
+			}),
 		});
 
 		t.nonNull.field('topRatedMovies', {
@@ -104,17 +83,10 @@ export const MovieQueries = extendType({
 			args: {
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/top_rated?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.getTopRatedMovies(validatedPage);
+			}),
 		});
 
 		t.nonNull.field('recommendedMovies', {
@@ -123,17 +95,10 @@ export const MovieQueries = extendType({
 				recommendedMoviesId: nonNull(idArg()),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { recommendedMoviesId, page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/${recommendedMoviesId}/recommendations?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { recommendedMoviesId, page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.getRecommendedMovies(recommendedMoviesId, validatedPage);
+			}),
 		});
 
 		t.nonNull.field('movieReviews', {
@@ -142,17 +107,10 @@ export const MovieQueries = extendType({
 				id: nonNull(idArg()),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { id, page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/${id}/reviews?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { id, page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.fetchTMDB(`/movie/${id}/reviews`, { page: validatedPage });
+			}),
 		});
 
 		t.nonNull.field('moviesInTheatres', {
@@ -160,17 +118,10 @@ export const MovieQueries = extendType({
 			args: {
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { page }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/now_playing?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				return await tmdbClient.fetchPaginated('/movie/now_playing', { page: validatedPage });
+			}),
 		});
 
 		t.nonNull.field('popularMoviesByGenre', {
@@ -181,19 +132,15 @@ export const MovieQueries = extendType({
 				}),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { genre, page }) => {
-				try {
-					const genreID = await CommonMethods.getGenreID(genre, 'movie');
-
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=popularity.desc`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { genre, page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				const genreID = await CommonMethods.getGenreID(genre, 'movie');
+				return await tmdbClient.fetchPaginated('/discover/movie', {
+					page: validatedPage,
+					with_genres: genreID,
+					sort_by: 'popularity.desc',
+				});
+			}),
 		});
 
 		t.nonNull.field('topRatedMoviesByGenre', {
@@ -204,19 +151,16 @@ export const MovieQueries = extendType({
 				}),
 				page: intArg({ default: 1 }),
 			},
-			resolve: async (_parent, { genre, page }) => {
-				try {
-					const genreID = await CommonMethods.getGenreID(genre, 'movie');
-
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/discover/movie?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${page}&with_genres=${genreID}&sort_by=vote_average.desc&vote_count.gte=10`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { genre, page }) => {
+				const { page: validatedPage } = parseInput(PaginationInput, { page });
+				const genreID = await CommonMethods.getGenreID(genre, 'movie');
+				return await tmdbClient.fetchPaginated('/discover/movie', {
+					page: validatedPage,
+					with_genres: genreID,
+					sort_by: 'vote_average.desc',
+					'vote_count.gte': 10,
+				});
+			}),
 		});
 
 		t.field('moviesCastCrew', {
@@ -224,17 +168,9 @@ export const MovieQueries = extendType({
 			args: {
 				movieId: nonNull(idArg()),
 			},
-			resolve: async (_parent, { movieId }) => {
-				try {
-					const res = await fetch(
-						`${THE_MOVIE_DB_BASE_API_URL}/movie/${movieId}/casts?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US`
-					);
-					const data = await res.json();
-					return data;
-				} catch (err) {
-					console.error(err);
-				}
-			},
+			resolve: safeResolver(async (_parent, { movieId }) => {
+				return await tmdbClient.getMovieCredits(movieId);
+			}),
 		});
 	},
 });

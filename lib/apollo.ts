@@ -3,9 +3,9 @@ import { relayStylePagination } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
 import { SERVER_BASE_URL } from 'utils/constants';
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError }: any) => {
 	if (graphQLErrors) {
-		graphQLErrors.forEach(err => {
+		graphQLErrors.forEach((err: any) => {
 			const { locations, message, path } = err;
 			console.warn(`[GraphQL Error]:\nMessage: ${message}, Locations: ${locations}, Path: ${path}`);
 		});

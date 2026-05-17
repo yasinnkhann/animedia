@@ -1,6 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import { Dropdown } from 'antd';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { Avatar } from 'antd';
 import tinycolor from 'tinycolor2';
@@ -66,6 +68,11 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 				/>
 			);
 		} else {
+			const initials =
+				session?.user?.name?.[0]?.toUpperCase() ??
+				(session as any)?.token?.name?.[0]?.toUpperCase() ??
+				'';
+
 			return (
 				<Avatar
 					onClick={() => setOpen(currOpen => !currOpen)}
@@ -76,7 +83,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 					}}
 					size='large'
 				>
-					{session?.user?.name![0].toUpperCase() || (session as any)?.token?.name![0].toUpperCase()}
+					{initials}
 				</Avatar>
 			);
 		}

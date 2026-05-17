@@ -2,26 +2,21 @@ import { PrismaClient } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 import { redis } from '../lib/redis';
 import { Session } from 'next-auth';
-import { getSession } from 'next-auth/react';
-import type { GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../app/api/auth/[...nextauth]/route';
 
 export type Context = {
 	prisma: PrismaClient;
 	redis: typeof redis;
 	session: Session | null;
-	req: GetServerSidePropsContext['req'];
-	res: GetServerSidePropsContext['res'];
 };
 
-export async function context(ctxArg: GetServerSidePropsContext): Promise<Context> {
-	const { req, res } = ctxArg;
-	const session = await getSession({ req });
+export async function context(): Promise<Context> {
+	const session = await getServerSession(authOptions);
 
 	return {
 		prisma,
 		redis,
 		session,
-		req,
-		res,
 	};
 }

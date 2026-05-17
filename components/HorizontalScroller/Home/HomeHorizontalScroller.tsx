@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useMemo } from 'react';
 import HomeCard from './HomeCard';
-import { useDrag } from '../../../hooks/useDrag';
-import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import {
 	MovieResult,
@@ -9,63 +10,44 @@ import {
 	UserMovie,
 	UserShow,
 } from '../../../graphql/generated/code-gen/graphql';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
-
-type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
+import { useSession } from 'next-auth/react';
+import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
 
 interface Props {
 	items: MovieResult[] | ShowResult[];
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
-	const [userMatchedMedias, setUserMatchedMedias] = useState<UserShow[] | UserMovie[]>([]);
+	const { status } = useSession();
+	const shouldFetchUserMedia = status === 'authenticated';
 
 	const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
-		skip: 'title' in items[0],
+		skip: !shouldFetchUserMedia || items.length === 0 || 'title' in items[0],
 		fetchPolicy: 'network-only',
 	});
 
 	const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
-		skip: 'name' in items[0],
+		skip: !shouldFetchUserMedia || items.length === 0 || 'name' in items[0],
 		fetchPolicy: 'network-only',
 	});
 
-	const { dragStart, dragStop, dragMove, dragging } = useDrag();
+	const { dragging, handleDrag, handleMouseDown, handleMouseUp, handleWheel } =
+		useHorizontalScroller();
 
-	const handleDrag =
-		({ scrollContainer }: scrollVisibilityApiType) =>
-		(e: React.MouseEvent) =>
-			dragMove(e, posDiff => {
-				if (scrollContainer.current) {
-					scrollContainer.current.scrollLeft += posDiff;
-				}
-			});
-
-	const onWheel = (apiObj: scrollVisibilityApiType, e: React.WheelEvent): void => {
-		const isTouchPad = Math.abs(e.deltaX) !== 0 || Math.abs(e.deltaY) < 15;
-
-		if (isTouchPad) {
-			e.stopPropagation();
-			return;
+	const userMatchedMedias = useMemo(() => {
+		if (!shouldFetchUserMedia || items.length === 0) {
+			return [];
 		}
 
-		if (e.deltaX < 0) {
-			apiObj.scrollNext();
-		} else if (e.deltaX > 0) {
-			apiObj.scrollPrev();
-		}
-	};
+		const matchedMedias: Array<UserShow | UserMovie> = [];
+		const usersMediaDict = new Map<string, UserShow | UserMovie>();
 
-	useEffect(() => {
-		const matchedMedias: UserShow[] | UserMovie[] = [];
+		const isMovie = 'title' in items[0];
+		const userDataArr = isMovie ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
 
-		const usersMediaDict: Map<string, UserShow | UserMovie> = new Map();
-
-		const userDataArr =
-			'title' in items[0] ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
-
-		if (!userDataArr) return;
+		if (!userDataArr) return [];
 
 		for (const userDataObj of userDataArr) {
 			if (userDataObj?.id) {
@@ -73,27 +55,29 @@ const HomeHorizontalScroller = ({ items }: Props) => {
 			}
 		}
 		for (const item of items) {
-			if (usersMediaDict.has(item.id)) {
-				matchedMedias.push(usersMediaDict.get(item.id) as any);
+			const matched = usersMediaDict.get(item.id);
+			if (matched) {
+				matchedMedias.push(matched);
 			}
 		}
 
-		setUserMatchedMedias(matchedMedias);
-	}, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items]);
+		return matchedMedias;
+	}, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items, shouldFetchUserMedia]);
 
 	return (
 		<ScrollMenu
 			LeftArrow={LeftArrow}
 			RightArrow={RightArrow}
-			onWheel={onWheel}
-			onMouseDown={() => dragStart}
-			onMouseUp={() => dragStop}
+			onWheel={handleWheel}
+			onMouseDown={handleMouseDown}
+			onMouseUp={handleMouseUp}
 			onMouseMove={handleDrag}
-			scrollContainerClassName='!h-[26rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+			scrollContainerClassName='!h-[26rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
 		>
 			{items.map(item => (
 				<HomeCard
 					key={item.id}
+					itemId={item.id}
 					item={item}
 					dragging={dragging}
 					userMatchedMedias={userMatchedMedias}

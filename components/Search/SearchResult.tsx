@@ -99,7 +99,9 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
 				<>
 					{renderImage(searchResult.coverUrl, titleName, 'igdb')}
 					{renderDetails(
-						new Date(searchResult.first_release_date * 1000).toISOString(),
+						searchResult.first_release_date
+							? new Date(searchResult.first_release_date * 1000).toISOString()
+							: undefined,
 						searchResult.summary ?? ''
 					)}
 				</>

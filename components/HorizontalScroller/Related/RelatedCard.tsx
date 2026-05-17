@@ -4,48 +4,55 @@ import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 import { UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
 
-interface Props {
+const RelatedCard = ({
+	item,
+	dragging,
+	userMatchedMedias,
+	itemId, // eslint-disable-line @typescript-eslint/no-unused-vars
+}: {
 	item: IRelatedMedia;
 	dragging: boolean;
 	userMatchedMedias: UserShow[] | UserMovie[];
-}
-
-const RelatedCard = ({ item, dragging, userMatchedMedias }: Props) => {
+	itemId: string;
+}) => {
 	const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
 
 	return (
-		<Link href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)} passHref>
-			<a onClick={e => dragging && e.preventDefault()} className='text-inherit no-underline'>
-				<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
-					<div className='relative h-full w-full'>
-						<Image
-							className='rounded-lg'
-							src={
-								item.type !== 'game'
-									? CommonMethods.getTheMovieDbImage(item.imagePath)
-									: CommonMethods.getIgdbImage(item.imagePath)
-							}
-							alt={item.name}
-							layout='fill'
-						/>
-						{userWatchStatusFromMedia && (
-							<div
-								className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
-									userWatchStatusFromMedia
-								)} text-base text-white`}
-							>
-								{userWatchStatusFromMedia}
-							</div>
-						)}
-					</div>
+		<Link
+			href={CommonMethods.getDetailsPageRoute(item.type, item.id, item.name)}
+			className='text-inherit no-underline'
+			onClick={e => dragging && e.preventDefault()}
+		>
+			<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
+				<div className='relative h-full w-full'>
+					<Image
+						className='rounded-lg'
+						src={
+							item.type !== 'game'
+								? CommonMethods.getTheMovieDbImage(item.imagePath)
+								: CommonMethods.getIgdbImage(item.imagePath)
+						}
+						alt={item.name}
+						fill
+						sizes='100vw'
+					/>
+					{userWatchStatusFromMedia && (
+						<div
+							className={`absolute right-0 top-0 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
+								userWatchStatusFromMedia
+							)} text-base text-white`}
+						>
+							{userWatchStatusFromMedia}
+						</div>
+					)}
+				</div>
 
-					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
-						<h2 className='m-0 w-full break-words text-center text-base'>
-							<p className='font-bold'>{item.name}</p>
-						</h2>
-					</div>
-				</section>
-			</a>
+				<div className='relative mt-3 flex w-full flex-wrap content-start whitespace-normal'>
+					<h2 className='m-0 w-full break-words text-base'>
+						<p className='font-bold'>{item.name}</p>
+					</h2>
+				</div>
+			</section>
 		</Link>
 	);
 };

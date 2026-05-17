@@ -1,9 +1,11 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { MovieResult } from 'graphql/generated/code-gen/graphql';
 
 interface Props {

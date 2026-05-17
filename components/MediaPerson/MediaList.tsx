@@ -1,3 +1,5 @@
+'use client';
+
 import { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
