@@ -125,7 +125,7 @@ export const AddShowInput = z.object({
 	showId: z.string().min(1, 'Show ID required'),
 	showName: z.string().min(1, 'Show name required').max(200),
 	watchStatus: WatchStatusInput,
-	currentEpisode: z.number().int().min(0).optional(),
+	currentEpisode: z.number().int().min(0).nullish(),
 });
 
 export const AddGameInput = z.object({

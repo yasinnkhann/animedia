@@ -141,7 +141,7 @@ export const UserQueries = extendType({
 			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.show.findMany({
 					where: {
-						userId: ctx.session?.user?.id,
+						userId: getSessionUserId(ctx),
 					},
 					orderBy: [
 						{
@@ -157,7 +157,7 @@ export const UserQueries = extendType({
 			resolve: safeResolver(async (_parent, _args, ctx) => {
 				return await ctx.prisma.game.findMany({
 					where: {
-						userId: ctx.session?.user?.id,
+						userId: getSessionUserId(ctx),
 					},
 					orderBy: [
 						{
@@ -414,7 +414,7 @@ export const UserMutations = extendType({
 					},
 					data: {
 						status: input.watchStatus,
-						rating: input.movieRating ? input.movieRating : null,
+						rating: input.movieRating === undefined ? undefined : input.movieRating,
 					},
 				});
 			}),
@@ -445,7 +445,7 @@ export const UserMutations = extendType({
 						},
 						data: {
 							status: input.watchStatus,
-							rating: input.showRating ? input.showRating : null,
+							rating: input.showRating === undefined ? undefined : input.showRating,
 							current_episode: input.currentEpisode ?? undefined,
 						},
 					});
@@ -471,7 +471,7 @@ export const UserMutations = extendType({
 					},
 					data: {
 						wishlist: input.wishlist ?? undefined,
-						rating: input.rating,
+						rating: input.rating === undefined ? undefined : input.rating,
 					},
 				});
 			}),
