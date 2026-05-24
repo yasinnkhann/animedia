@@ -137,6 +137,7 @@ const ShowDetails = () => {
 	});
 
 	const isDBPending = addShowLoading || updateShowLoading || deleteShowLoading;
+	const isInitialUsersShowLoading = usersShowLoading && usersShowData === undefined;
 
 	const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
 		if (
@@ -802,7 +803,7 @@ const ShowDetails = () => {
 		checkEpisodeCountDisplay();
 	}, []);
 
-	if (showDetailsLoading || !showDetailsData?.showDetails || usersShowLoading) {
+	if (showDetailsLoading || !showDetailsData?.showDetails || isInitialUsersShowLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />

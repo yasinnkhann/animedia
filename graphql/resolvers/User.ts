@@ -335,17 +335,26 @@ export const UserMutations = extendType({
 			resolve: safeResolver(
 				async (_parent, { showId, showName, watchStatus, currentEpisode }, ctx) => {
 					const input = parseInput(AddShowInput, { showId, showName, watchStatus, currentEpisode });
-					return await ctx.prisma.user.update({
-						where: { id: getSessionUserId(ctx) },
-						data: {
-							show: {
-								create: {
-									id: input.showId,
-									name: input.showName,
-									status: input.watchStatus,
-									current_episode: input.currentEpisode ?? undefined,
-								},
+					const userId = getSessionUserId(ctx);
+
+					return await ctx.prisma.show.upsert({
+						where: {
+							id_userId: {
+								id: input.showId,
+								userId,
 							},
+						},
+						create: {
+							id: input.showId,
+							name: input.showName,
+							status: input.watchStatus,
+							current_episode: input.currentEpisode ?? undefined,
+							userId,
+						},
+						update: {
+							name: input.showName,
+							status: input.watchStatus,
+							current_episode: input.currentEpisode ?? undefined,
 						},
 					});
 				}
