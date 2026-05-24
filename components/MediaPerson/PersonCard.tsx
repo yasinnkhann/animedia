@@ -20,7 +20,7 @@ const PersonCard = ({ person }: Props) => {
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(person.profile_path)}
 						alt={person.name}
-						layout='fill'
+						fill
 					/>
 				</div>
 

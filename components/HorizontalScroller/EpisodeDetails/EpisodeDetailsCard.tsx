@@ -35,7 +35,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
 							className='rounded-lg object-contain'
 							src={CommonMethods.getTheMovieDbImage(epDetailsCardData.episodeDetails.still_path)}
 							alt={epDetailsCardData.episodeDetails.name ?? ''}
-							layout='fill'
+							fill
 						/>
 					</div>
 					<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
@@ -119,7 +119,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
 												epDetailsCardData.episodeDetails.still_path
 											)}
 											alt={epDetailsCardData.episodeDetails.name ?? ''}
-											layout='fill'
+											fill
 											className='object-cover'
 										/>
 									</div>

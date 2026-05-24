@@ -37,7 +37,7 @@ const HomeCard = ({
 						className='rounded-lg'
 						src={CommonMethods.getTheMovieDbImage(item.poster_path)}
 						alt={titleName}
-						layout='fill'
+						fill
 						priority
 					/>
 

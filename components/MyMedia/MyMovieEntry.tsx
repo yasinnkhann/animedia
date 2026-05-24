@@ -48,7 +48,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 							src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
 							priority
 							alt={movieData?.movieDetails?.title ?? ''}
-							layout='fill'
+							fill
 						/>
 					</section>
 				</Link>

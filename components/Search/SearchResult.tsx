@@ -38,7 +38,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
 						: CommonMethods.getIgdbImage(imagePath)
 				}
 				alt={altText}
-				layout='fill'
+				fill
 				priority
 			/>
 			{userStatusFromMedia && (

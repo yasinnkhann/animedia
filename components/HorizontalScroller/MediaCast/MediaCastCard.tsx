@@ -15,7 +15,7 @@ const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; ite
 							: CommonMethods.getTheMovieDbImage(item.profile_path)
 					}
 					alt={item.name}
-					layout='fill'
+					fill
 				/>
 			</div>
 

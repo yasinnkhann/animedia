@@ -37,7 +37,7 @@ const MovieCard = ({ movie, rank }: Props) => {
 							className='rounded-lg'
 							src={CommonMethods.getTheMovieDbImage(movie.poster_path)}
 							alt={movie.title}
-							layout='fill'
+							fill
 						/>
 					</section>
 				</Link>

@@ -37,7 +37,7 @@ const GameCard = ({ game, rank }: Props) => {
 							className='rounded-lg'
 							src={CommonMethods.getIgdbImage(game.coverUrl)}
 							alt={game.name}
-							layout='fill'
+							fill
 						/>
 					</section>
 				</Link>

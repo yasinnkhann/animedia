@@ -48,7 +48,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 							src={CommonMethods.getIgdbImage(gameData?.gameDetails?.results[0].coverUrl)}
 							priority
 							alt={gameData?.gameDetails?.results[0].name ?? ''}
-							layout='fill'
+							fill
 						/>
 					</section>
 				</Link>
