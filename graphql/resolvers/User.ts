@@ -301,16 +301,24 @@ export const UserMutations = extendType({
 			},
 			resolve: safeResolver(async (_parent, { movieId, movieName, watchStatus }, ctx) => {
 				const input = parseInput(AddMovieInput, { movieId, movieName, watchStatus });
-				return await ctx.prisma.user.update({
-					where: { id: getSessionUserId(ctx) },
-					data: {
-						movie: {
-							create: {
-								id: input.movieId,
-								name: input.movieName,
-								status: input.watchStatus,
-							},
+				const userId = getSessionUserId(ctx);
+
+				return await ctx.prisma.movie.upsert({
+					where: {
+						id_userId: {
+							id: input.movieId,
+							userId,
 						},
+					},
+					create: {
+						id: input.movieId,
+						name: input.movieName,
+						status: input.watchStatus,
+						userId,
+					},
+					update: {
+						name: input.movieName,
+						status: input.watchStatus,
 					},
 				});
 			}),

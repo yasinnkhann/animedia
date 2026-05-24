@@ -82,6 +82,17 @@ export const GameCharacterSearchInput = z.object({
 });
 
 // User resolver inputs
+const WatchStatusInput = z.enum([
+	'NOT_WATCHING',
+	'WATCHING',
+	'PLAN_TO_WATCH',
+	'COMPLETED',
+	'ON_HOLD',
+	'DROPPED',
+]);
+
+const RatingInput = z.number().int().min(1).max(10).nullish();
+
 export const UserIdInput = z.object({
 	id: z.string().min(1, 'User ID required'),
 });
@@ -114,13 +125,13 @@ export const TokenInput = z.object({
 export const AddMovieInput = z.object({
 	movieId: z.string().min(1, 'Movie ID required'),
 	movieName: z.string().min(1, 'Movie name required').max(200),
-	watchStatus: z.enum(['WATCHED', 'WATCHING', 'PLAN_TO_WATCH', 'DROPPED']),
+	watchStatus: WatchStatusInput,
 });
 
 export const AddShowInput = z.object({
 	showId: z.string().min(1, 'Show ID required'),
 	showName: z.string().min(1, 'Show name required').max(200),
-	watchStatus: z.enum(['WATCHED', 'WATCHING', 'PLAN_TO_WATCH', 'DROPPED']),
+	watchStatus: WatchStatusInput,
 	currentEpisode: z.number().int().min(0).optional(),
 });
 
@@ -133,15 +144,15 @@ export const AddGameInput = z.object({
 
 export const UpdateMovieInput = z.object({
 	movieId: z.string().min(1, 'Movie ID required'),
-	watchStatus: z.enum(['WATCHED', 'WATCHING', 'PLAN_TO_WATCH', 'DROPPED']),
-	movieRating: z.number().int().min(1).max(10).optional(),
+	watchStatus: WatchStatusInput,
+	movieRating: RatingInput,
 });
 
 export const UpdateShowInput = z.object({
 	showId: z.string().min(1, 'Show ID required'),
-	watchStatus: z.enum(['WATCHED', 'WATCHING', 'PLAN_TO_WATCH', 'DROPPED']),
-	showRating: z.number().int().min(1).max(10).optional(),
-	currentEpisode: z.number().int().min(0).optional(),
+	watchStatus: WatchStatusInput,
+	showRating: RatingInput,
+	currentEpisode: z.number().int().min(0).nullish(),
 });
 
 export const UpdateGameInput = z.object({

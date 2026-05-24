@@ -26,8 +26,8 @@ const MovieDetails = () => {
 	const { data: session, status } = useSession();
 	const params = useParams();
 
-	const [watchStatus, setWatchStatus] = useState<WatchStatusTypes>(WatchStatusTypes.NotWatching);
-	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
+	const [watchStatusInput, setWatchStatus] = useState<WatchStatusTypes | null>(null);
+	const [ratingInput, setRating] = useState<number | string | null>(null);
 
 	const id = (params?.['id-name'] as string)?.split('-')[0] ?? '';
 
@@ -50,6 +50,9 @@ const MovieDetails = () => {
 		},
 		fetchPolicy: 'network-only',
 	});
+	const usersMovie = usersMovieData?.usersMovie;
+	const watchStatus = watchStatusInput ?? usersMovie?.status ?? WatchStatusTypes.NotWatching;
+	const rating = ratingInput ?? usersMovie?.rating ?? ratingOptions[0].value;
 
 	const { data: recMoviesData, loading: recMoviesLoading } = useQuery(Queries.RECOMMENDED_MOVIES, {
 		skip: !movieId,
@@ -118,6 +121,7 @@ const MovieDetails = () => {
 	});
 
 	const isDBPending = addMovieLoading || updateMovieLoading || deleteMovieLoading;
+	const isInitialUsersMovieLoading = usersMovieLoading && usersMovieData === undefined;
 
 	const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		if (!movieId || !movieTitle) return;
@@ -126,7 +130,7 @@ const MovieDetails = () => {
 
 		setWatchStatus(value as WatchStatusTypes);
 
-		if (usersMovieData?.usersMovie) {
+		if (usersMovie) {
 			if ((value as WatchStatusTypes) === WatchStatusTypes.NotWatching) {
 				deleteMovie({
 					variables: {
@@ -146,7 +150,7 @@ const MovieDetails = () => {
 					variables: {
 						movieId,
 						watchStatus: value as WatchStatusTypes,
-						movieRating: usersMovieData.usersMovie?.rating ?? null,
+						movieRating: usersMovie.rating ?? null,
 					},
 				});
 			}
@@ -176,22 +180,7 @@ const MovieDetails = () => {
 		});
 	};
 
-	const [prevUsersMovieData, setPrevUsersMovieData] = useState(usersMovieData);
-
-	if (usersMovieData !== prevUsersMovieData) {
-		setPrevUsersMovieData(usersMovieData);
-		if (!usersMovieLoading) {
-			if (usersMovieData?.usersMovie?.status) {
-				setWatchStatus(usersMovieData.usersMovie.status);
-				setRating(usersMovieData.usersMovie.rating ?? '');
-			} else {
-				setWatchStatus(WatchStatusTypes.NotWatching);
-				setRating('');
-			}
-		}
-	}
-
-	if (movieDetailsLoading || !movieDetailsData?.movieDetails || usersMovieLoading) {
+	if (movieDetailsLoading || !movieDetailsData?.movieDetails || isInitialUsersMovieLoading) {
 		return (
 			<section className='flex h-screen items-center justify-center'>
 				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
