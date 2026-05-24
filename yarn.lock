@@ -6924,15 +6924,10 @@ graceful-fs@^4.2.4:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
 
-grammex@^3.1.11:
+grammex@^3.1.1:
   version "3.1.12"
   resolved "https://registry.yarnpkg.com/grammex/-/grammex-3.1.12.tgz#08f021dd2cad009e64248fb53247cc6108788404"
   integrity sha512-6ufJOsSA7LcQehIJNCO7HIBykfM7DXQual0Ny780/DEcJIpBlHRvcqEBWGPYd7hrXL2GJ3oJI1MIhaXjWmLQOQ==
-
-graphmatch@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/graphmatch/-/graphmatch-1.1.1.tgz#dcec68e8cb74de0a372d5252fc06e241daf71c38"
-  integrity sha512-5ykVn/EXM1hF0XCaWh05VbYvEiOL2lY1kBxZtaYsyvjp7cmWOU1XsAdfQBwClraEofXDT197lFbXOEVMHpvQOg==
 
 graphql-config@^5.1.6:
   version "5.1.6"
@@ -9748,16 +9743,7 @@ string-env-interpolation@^1.0.1:
   resolved "https://registry.npmjs.org/string-env-interpolation/-/string-env-interpolation-1.0.1.tgz"
   integrity sha512-78lwMoCcn0nNu8LszbP1UA7g55OeE4v7rCeWnM5B453rnNr4aq+5it3FEYtZrSEiMvHZOZ9Jlqb0OD0M2VInqg==
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-string-width@^4.1.0:
+"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
   version "4.2.3"
   resolved "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -9867,14 +9853,7 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -10687,13 +10666,12 @@ yup@^0.32.0:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
-zeptomatch@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/zeptomatch/-/zeptomatch-2.1.0.tgz#cca2cb2c61308d0c26f9689e6640f6335d0f2101"
-  integrity sha512-KiGErG2J0G82LSpniV0CtIzjlJ10E04j02VOudJsPyPwNZgGnRKQy7I1R7GMyg/QswnE4l7ohSGrQbQbjXPPDA==
+zeptomatch@2.0.0, zeptomatch@2.1.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/zeptomatch/-/zeptomatch-2.0.0.tgz#eb9431eae9f6df76206d46af2cd66165a4989596"
+  integrity sha512-xjsIq0tpg7dNtJcbl0tNf4d4It4UK1ujSYJZXvGygse3GNgX44v/b2FRbM8sCGZS2qh4o983u8+1CBNNF+106g==
   dependencies:
-    grammex "^3.1.11"
-    graphmatch "^1.1.0"
+    grammex "^3.1.1"
 
 "zod-validation-error@^3.5.0 || ^4.0.0":
   version "4.0.2"

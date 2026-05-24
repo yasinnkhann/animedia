@@ -30,10 +30,12 @@ const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; ite
 	return (
 		<>
 			{item.type !== 'GameCharacter' ? (
-				<Link href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)} passHref>
-					<a onClick={e => dragging && e.preventDefault()} className='text-inherit no-underline'>
-						{body}
-					</a>
+				<Link
+					href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)}
+					className='text-inherit no-underline'
+					onClick={e => dragging && e.preventDefault()}
+				>
+					{body}
 				</Link>
 			) : (
 				body

@@ -534,6 +534,7 @@ type Query {
   trendingMovies(page: Int = 1, timeWindow: TimeWindowTypes!): MoviesRes!
   trendingShows(page: Int = 1, timeWindow: TimeWindowTypes!): ShowsRes!
   user(id: ID!): User
+  users: [User]
   usersGame(gameId: String!): UserGame
   usersGames: [UserGame]
   usersMovie(movieId: String!): UserMovie

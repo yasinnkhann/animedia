@@ -36,11 +36,10 @@ const eslintConfig = tseslint.config(
 			'react-hooks': eslintPluginReactHooks,
 		},
 		rules: {
-			'react-hooks/exhaustive-deps': 'warn',
-			// React Compiler rules: keep as warnings until patterns are refactored (syncing form state from queries).
-			'react-hooks/set-state-in-effect': 'warn',
-			'react-hooks/preserve-manual-memoization': 'warn',
-			'react-hooks/refs': 'warn',
+			'react-hooks/exhaustive-deps': 'error',
+			'react-hooks/set-state-in-effect': 'error',
+			'react-hooks/preserve-manual-memoization': 'error',
+			'react-hooks/refs': 'error',
 			'react-hooks/rules-of-hooks': 'error',
 		},
 	},
