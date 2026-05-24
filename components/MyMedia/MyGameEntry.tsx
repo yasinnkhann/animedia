@@ -54,7 +54,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 				</Link>
 				<section className='col-start-2 pl-4'>
 					<Link
-						href={CommonMethods.getDetailsPageRoute('show', myGame.id!, myGame.name!)}
+						href={CommonMethods.getDetailsPageRoute('game', myGame.id!, myGame.name!)}
 						className='text-inherit no-underline'
 					>
 						<h3 className='cursor-pointer'>{myGame.name}</h3>

@@ -1,4 +1,6 @@
-yarn lint-staged
+#!/usr/bin/env sh
+. "$NVM_DIR/nvm.sh" >/dev/null 2>&1 || . "$HOME/.nvm/nvm.sh" >/dev/null 2>&1
+nvm exec 22.13.0 yarn lint-staged
 
 # If using npm, remove above and uncomment below
 # npm run lint-staged
