@@ -30,9 +30,9 @@ const GameDetails = () => {
 
 	const id = (params?.['id-name'] as string)?.split('-')[0] ?? '';
 
-	const [rating, setRating] = useState<number | string>(ratingOptions[0].value);
+	const [ratingInput, setRating] = useState<number | string | null>(null);
 
-	const [addToWishlist, setAddToWishlist] = useState<boolean>(false);
+	const [addToWishlistInput, setAddToWishlist] = useState<boolean | null>(null);
 
 	const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -50,6 +50,9 @@ const GameDetails = () => {
 		},
 		fetchPolicy: 'network-only',
 	});
+	const usersGame = usersGameData?.usersGame;
+	const rating = ratingInput ?? usersGame?.rating ?? ratingOptions[0].value;
+	const addToWishlist = addToWishlistInput ?? usersGame?.wishlist ?? false;
 
 	const { data: gamePlatformsData, loading: gamePlatformsLoading } = useQuery(
 		Queries.GAME_PLATFORMS
@@ -104,7 +107,7 @@ const GameDetails = () => {
 
 	const gameName = gameDetailsData?.gameDetails.results[0]?.name ?? '';
 
-	const [addGame] = useMutation(Mutations.ADD_GAME, {
+	const [addGame, { loading: addGameLoading }] = useMutation(Mutations.ADD_GAME, {
 		variables: {
 			gameId: id,
 			gameName,
@@ -122,7 +125,7 @@ const GameDetails = () => {
 		],
 	});
 
-	const [updateGame] = useMutation(Mutations.UPDATE_GAME, {
+	const [updateGame, { loading: updateGameLoading }] = useMutation(Mutations.UPDATE_GAME, {
 		variables: {
 			gameId: id,
 			rating: typeof rating === 'number' ? rating : null,
@@ -132,14 +135,14 @@ const GameDetails = () => {
 			{
 				query: Queries.USERS_GAME,
 				variables: {
-					movieId: id,
+					gameId: id,
 				},
 			},
 			'UsersGame',
 		],
 	});
 
-	const [deleteGame] = useMutation(Mutations.DELETE_GAME, {
+	const [deleteGame, { loading: deleteGameLoading }] = useMutation(Mutations.DELETE_GAME, {
 		variables: {
 			gameId: id,
 		},
@@ -147,12 +150,13 @@ const GameDetails = () => {
 			{
 				query: Queries.USERS_GAME,
 				variables: {
-					movieId: id,
+					gameId: id,
 				},
 			},
 			'UsersGame',
 		],
 	});
+	const isDBPending = addGameLoading || updateGameLoading || deleteGameLoading;
 
 	const handleWishlist = () => {
 		if (usersGame?.id && usersGame.wishlist && !usersGame.rating) {
@@ -230,21 +234,6 @@ const GameDetails = () => {
 		return;
 	};
 
-	const [prevUsersGameData, setPrevUsersGameData] = useState(usersGameData);
-
-	if (usersGameData !== prevUsersGameData) {
-		setPrevUsersGameData(usersGameData);
-		if (!usersGameLoading) {
-			if (usersGameData?.usersGame?.id) {
-				setRating(usersGameData.usersGame.rating ?? '');
-				setAddToWishlist(usersGameData.usersGame.wishlist ?? false);
-			} else {
-				setRating('');
-				setAddToWishlist(false);
-			}
-		}
-	}
-
 	if (
 		gameDetailsLoading ||
 		!gameDetailsData?.gameDetails.results ||
@@ -272,7 +261,6 @@ const GameDetails = () => {
 
 	const game = gameDetailsData.gameDetails.results[0];
 	const gameSummary = game.storyline || game.summary;
-	const usersGame = usersGameData?.usersGame;
 
 	return (
 		<main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
@@ -302,12 +290,13 @@ const GameDetails = () => {
 							<Button
 								onClick={handleWishlist}
 								type='primary'
+								disabled={isDBPending || usersGameLoading}
 								style={{
-									backgroundColor: usersGame?.wishlist ? '#52c41a' : '',
-									borderColor: usersGame?.wishlist ? '#52c41a' : '',
+									backgroundColor: addToWishlist ? '#52c41a' : '',
+									borderColor: addToWishlist ? '#52c41a' : '',
 								}}
 							>
-								{usersGame?.wishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
+								{addToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
 							</Button>
 						</div>
 
@@ -316,6 +305,7 @@ const GameDetails = () => {
 								className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
 								value={rating}
 								onChange={handleChangeRating}
+								disabled={isDBPending || usersGameLoading}
 							>
 								{ratingOptions.map(option => (
 									<option key={option.value} value={option.value}>
