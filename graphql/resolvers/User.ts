@@ -371,17 +371,26 @@ export const UserMutations = extendType({
 			},
 			resolve: safeResolver(async (_parent, { gameId, gameName, wishlist, rating }, ctx) => {
 				const input = parseInput(AddGameInput, { gameId, gameName, wishlist, rating });
-				return await ctx.prisma.user.update({
-					where: { id: getSessionUserId(ctx) },
-					data: {
-						game: {
-							create: {
-								id: input.gameId,
-								name: input.gameName,
-								wishlist: input.wishlist ?? undefined,
-								rating: input.rating,
-							},
+				const userId = getSessionUserId(ctx);
+
+				return await ctx.prisma.game.upsert({
+					where: {
+						id_userId: {
+							id: input.gameId,
+							userId,
 						},
+					},
+					create: {
+						id: input.gameId,
+						name: input.gameName,
+						wishlist: input.wishlist ?? undefined,
+						rating: input.rating,
+						userId,
+					},
+					update: {
+						name: input.gameName,
+						wishlist: input.wishlist ?? undefined,
+						rating: input.rating,
 					},
 				});
 			}),

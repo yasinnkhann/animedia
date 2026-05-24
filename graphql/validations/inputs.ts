@@ -139,7 +139,7 @@ export const AddGameInput = z.object({
 	gameId: z.string().min(1, 'Game ID required'),
 	gameName: z.string().min(1, 'Game name required').max(200),
 	wishlist: z.boolean().optional(),
-	rating: z.number().int().min(1).max(10).optional(),
+	rating: RatingInput,
 });
 
 export const UpdateMovieInput = z.object({
@@ -158,7 +158,7 @@ export const UpdateShowInput = z.object({
 export const UpdateGameInput = z.object({
 	gameId: z.string().min(1, 'Game ID required'),
 	wishlist: z.boolean().optional(),
-	rating: z.number().int().min(1).max(10).optional(),
+	rating: RatingInput,
 });
 
 export const RegisterUserInput = z.object({
