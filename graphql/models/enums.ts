@@ -5,9 +5,18 @@ export const timeWindowTypes = enumType({
 	members: ['day', 'week'],
 });
 
+export const WATCH_STATUS_VALUES = [
+	'NOT_WATCHING',
+	'WATCHING',
+	'PLAN_TO_WATCH',
+	'COMPLETED',
+	'ON_HOLD',
+	'DROPPED',
+] as const;
+
 export const WatchStatusTypes = enumType({
 	name: 'WatchStatusTypes',
-	members: ['NOT_WATCHING', 'WATCHING', 'PLAN_TO_WATCH', 'COMPLETED', 'ON_HOLD', 'DROPPED'],
+	members: WATCH_STATUS_VALUES,
 });
 
 export const MovieGenreTypes = enumType({

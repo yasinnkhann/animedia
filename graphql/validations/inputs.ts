@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { WATCH_STATUS_VALUES } from '../models/enums';
 
 /**
  * Input validation schemas for GraphQL arguments
@@ -82,15 +83,7 @@ export const GameCharacterSearchInput = z.object({
 });
 
 // User resolver inputs
-const WatchStatusInput = z.enum([
-	'NOT_WATCHING',
-	'WATCHING',
-	'PLAN_TO_WATCH',
-	'COMPLETED',
-	'ON_HOLD',
-	'DROPPED',
-]);
-
+const WatchStatusInput = z.enum(WATCH_STATUS_VALUES);
 const RatingInput = z.number().int().min(1).max(10).nullish();
 
 export const UserIdInput = z.object({
