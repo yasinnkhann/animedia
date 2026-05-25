@@ -12,71 +12,71 @@ import { useQuery } from '@apollo/client/react';
 import { UserMovie, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
 
 function watchStatusFromParam(statusParam: string): WatchStatusTypes | undefined {
-	switch (statusParam) {
-		case 'watching':
-			return WatchStatusTypes.Watching;
-		case 'completed':
-			return WatchStatusTypes.Completed;
-		case 'on-hold':
-			return WatchStatusTypes.OnHold;
-		case 'dropped':
-			return WatchStatusTypes.Dropped;
-		case 'plan-to-watch':
-			return WatchStatusTypes.PlanToWatch;
-		default:
-			return undefined;
-	}
+  switch (statusParam) {
+    case 'watching':
+      return WatchStatusTypes.Watching;
+    case 'completed':
+      return WatchStatusTypes.Completed;
+    case 'on-hold':
+      return WatchStatusTypes.OnHold;
+    case 'dropped':
+      return WatchStatusTypes.Dropped;
+    case 'plan-to-watch':
+      return WatchStatusTypes.PlanToWatch;
+    default:
+      return undefined;
+  }
 }
 
 const Status = () => {
-	const { data: session, status: sessionStatus } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
 
-	const router = useRouter();
-	const params = useParams();
+  const router = useRouter();
+  const params = useParams();
 
-	const statusParam = params.status as string;
+  const statusParam = params.status as string;
 
-	const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(Queries.USERS_MOVIES, {
-		fetchPolicy: 'network-only',
-	});
+  const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(Queries.USERS_MOVIES, {
+    fetchPolicy: 'network-only',
+  });
 
-	const watchStatus = statusParam ? watchStatusFromParam(statusParam) : undefined;
+  const watchStatus = statusParam ? watchStatusFromParam(statusParam) : undefined;
 
-	const myMovies = useMemo((): UserMovie[] => {
-		if (!usersMoviesData?.usersMovies || watchStatus === undefined) {
-			return [];
-		}
-		return usersMoviesData.usersMovies.filter(
-			movie => movie?.status === watchStatus
-		) as UserMovie[];
-	}, [usersMoviesData, watchStatus]);
+  const myMovies = useMemo((): UserMovie[] => {
+    if (!usersMoviesData?.usersMovies || watchStatus === undefined) {
+      return [];
+    }
+    return usersMoviesData.usersMovies.filter(
+      movie => movie?.status === watchStatus
+    ) as UserMovie[];
+  }, [usersMoviesData, watchStatus]);
 
-	useEffect(() => {
-		if (sessionStatus && sessionStatus !== 'loading' && statusParam) {
-			if (!session || !CommonMethods.statusParams.has(statusParam)) {
-				router.push('/');
-			}
-		}
-	}, [router, session, sessionStatus, statusParam]);
+  useEffect(() => {
+    if (sessionStatus && sessionStatus !== 'loading' && statusParam) {
+      if (!session || !CommonMethods.statusParams.has(statusParam)) {
+        router.push('/');
+      }
+    }
+  }, [router, session, sessionStatus, statusParam]);
 
-	if (usersMoviesLoading || sessionStatus === 'loading' || statusParam === undefined) {
-		return (
-			<section className='flex h-screen items-center justify-center'>
-				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-			</section>
-		);
-	}
+  if (usersMoviesLoading || sessionStatus === 'loading' || statusParam === undefined) {
+    return (
+      <section className='flex h-screen items-center justify-center'>
+        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+      </section>
+    );
+  }
 
-	if (!CommonMethods.statusParams.has(statusParam) || !session) {
-		router.push('/');
-		return null;
-	}
+  if (!CommonMethods.statusParams.has(statusParam) || !session) {
+    router.push('/');
+    return null;
+  }
 
-	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			<MyMediaList status={statusParam as TStatusParam} myMedias={myMovies} mediaType='MOVIES' />
-		</main>
-	);
+  return (
+    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+      <MyMediaList status={statusParam as TStatusParam} myMedias={myMovies} mediaType='MOVIES' />
+    </main>
+  );
 };
 
 export default Status;

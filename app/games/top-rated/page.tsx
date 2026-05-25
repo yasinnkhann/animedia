@@ -8,63 +8,64 @@ import * as Queries from '../../../graphql/queries';
 import { RESULTS_PER_PAGE } from '../../../utils/constants';
 import { Circles } from 'react-loading-icons';
 import { useQuery } from '@apollo/client/react';
+
 const TopRatedGames = () => {
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const page = searchParams.get('page') ?? '1';
-	const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
+  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
 
-	const { data: topRatedGamesData, loading: topRatedGamesLoading } = useQuery(
-		Queries.TOP_RATED_GAMES,
-		{
-			variables: {
-				limit: RESULTS_PER_PAGE,
-				page: parseInt(page),
-			},
-		}
-	);
+  const { data: topRatedGamesData, loading: topRatedGamesLoading } = useQuery(
+    Queries.TOP_RATED_GAMES,
+    {
+      variables: {
+        limit: RESULTS_PER_PAGE,
+        page: parseInt(page),
+      },
+    }
+  );
 
-	const scrollToTop = () => {
-		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	};
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
 
-	useEffect(() => {
-		scrollToTop();
-	}, [page]);
+  useEffect(() => {
+    scrollToTop();
+  }, [page]);
 
-	if (!topRatedGamesData?.topRatedGames || topRatedGamesLoading) {
-		return (
-			<section className='flex h-screen items-center justify-center'>
-				<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-			</section>
-		);
-	}
+  if (!topRatedGamesData?.topRatedGames || topRatedGamesLoading) {
+    return (
+      <section className='flex h-screen items-center justify-center'>
+        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+      </section>
+    );
+  }
 
-	return (
-		<main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-			{topRatedGamesData ? (
-				<section className='flex flex-col items-center'>
-					<MediaList
-						mediaData={topRatedGamesData.topRatedGames}
-						pageNum={currPage}
-						title='Top Rated Games'
-					/>
-					<Pagination
-						currPage={currPage}
-						totalItems={topRatedGamesData.topRatedGames.total_results}
-						itemsPerPage={RESULTS_PER_PAGE}
-						paginate={(pageNum: number) => router.push(`/games/top-rated?page=${pageNum}`)}
-						siblingCount={1}
-						maxPageNum={500}
-					/>
-				</section>
-			) : (
-				<section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
-					<Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-				</section>
-			)}
-		</main>
-	);
+  return (
+    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+      {topRatedGamesData ? (
+        <section className='flex flex-col items-center'>
+          <MediaList
+            mediaData={topRatedGamesData.topRatedGames}
+            pageNum={currPage}
+            title='Top Rated Games'
+          />
+          <Pagination
+            currPage={currPage}
+            totalItems={topRatedGamesData.topRatedGames.total_results}
+            itemsPerPage={RESULTS_PER_PAGE}
+            paginate={(pageNum: number) => router.push(`/games/top-rated?page=${pageNum}`)}
+            siblingCount={1}
+            maxPageNum={500}
+          />
+        </section>
+      ) : (
+        <section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
+          <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
+        </section>
+      )}
+    </main>
+  );
 };
 
 export default TopRatedGames;
