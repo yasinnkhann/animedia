@@ -4,18 +4,18 @@ import Footer from './Footer';
 import { Toaster } from 'react-hot-toast';
 
 interface Props {
-	children?: ReactNode;
+  children?: ReactNode;
 }
 
 const Layout = ({ children }: Props) => {
-	return (
-		<>
-			<Toaster />
-			<Header />
-			{children}
-			<Footer />
-		</>
-	);
+  return (
+    <>
+      <Toaster />
+      <Header />
+      {children}
+      <Footer />
+    </>
+  );
 };
 
 export default Layout;

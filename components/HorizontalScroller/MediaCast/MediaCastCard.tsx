@@ -4,44 +4,44 @@ import { ICast } from '@ts/interfaces';
 import { CommonMethods } from 'utils/CommonMethods';
 
 const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; itemId: string }) => {
-	const body = (
-		<section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
-			<div className='relative h-full w-full'>
-				<Image
-					className='rounded-lg'
-					src={
-						item.type === 'GameCharacter'
-							? CommonMethods.getIgdbImage(item.profile_path)
-							: CommonMethods.getTheMovieDbImage(item.profile_path)
-					}
-					alt={item.name}
-					fill
-				/>
-			</div>
+  const body = (
+    <section className='relative mx-4 h-[15rem] w-[10rem] select-none'>
+      <div className='relative h-full w-full'>
+        <Image
+          className='rounded-lg'
+          src={
+            item.type === 'GameCharacter'
+              ? CommonMethods.getIgdbImage(item.profile_path)
+              : CommonMethods.getTheMovieDbImage(item.profile_path)
+          }
+          alt={item.name}
+          fill
+        />
+      </div>
 
-			<div className='relative flex w-full flex-wrap content-start whitespace-normal'>
-				<h2 className='m-0 w-full break-words text-center text-base'>
-					<p className='font-bold'>{item.name}</p>
-					{item.character && <p className='break-words'>{item.character}</p>}
-				</h2>
-			</div>
-		</section>
-	);
-	return (
-		<>
-			{item.type !== 'GameCharacter' ? (
-				<Link
-					href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)}
-					className='text-inherit no-underline'
-					onClick={e => dragging && e.preventDefault()}
-				>
-					{body}
-				</Link>
-			) : (
-				body
-			)}
-		</>
-	);
+      <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
+        <h2 className='m-0 w-full break-words text-center text-base'>
+          <p className='font-bold'>{item.name}</p>
+          {item.character && <p className='break-words'>{item.character}</p>}
+        </h2>
+      </div>
+    </section>
+  );
+  return (
+    <>
+      {item.type !== 'GameCharacter' ? (
+        <Link
+          href={CommonMethods.getDetailsPageRoute('person', item.id, item.name)}
+          className='text-inherit no-underline'
+          onClick={e => dragging && e.preventDefault()}
+        >
+          {body}
+        </Link>
+      ) : (
+        body
+      )}
+    </>
+  );
 };
 
 export default MediaCastCard;

@@ -25,25 +25,25 @@ import { safeResolver } from '@graphql/utils/resolver-helpers';
 import { parseInput, MovieSearchInput } from '@graphql/validations/inputs';
 
 export const MovieQueries = extendType({
-	type: 'Query',
-	definition(t) {
-		t.nonNull.field('searchedMovies', {
-			type: 'MoviesRes',
-			args: {
-				q: nonNull(stringArg()),
-				page: intArg({ default: 1 }),
-			},
-			// safeResolver automatically:
-			// - Catches errors and logs them
-			// - Sends errors to Sentry
-			// - Returns properly formatted errors
-			resolve: safeResolver(async (_parent, { q, page }) => {
-				// Validate input against schema
-				const input = parseInput(MovieSearchInput, { q, page });
-				return await tmdbClient.searchMovies(input.q, input.page);
-			}),
-		});
-	},
+  type: 'Query',
+  definition(t) {
+    t.nonNull.field('searchedMovies', {
+      type: 'MoviesRes',
+      args: {
+        q: nonNull(stringArg()),
+        page: intArg({ default: 1 }),
+      },
+      // safeResolver automatically:
+      // - Catches errors and logs them
+      // - Sends errors to Sentry
+      // - Returns properly formatted errors
+      resolve: safeResolver(async (_parent, { q, page }) => {
+        // Validate input against schema
+        const input = parseInput(MovieSearchInput, { q, page });
+        return await tmdbClient.searchMovies(input.q, input.page);
+      }),
+    });
+  },
 });
 ```
 
@@ -55,12 +55,12 @@ If you prefer manual control, use structured errors:
 import { StructuredGraphQLError, GraphQLErrorCodes } from '@graphql/utils/resolver-helpers';
 
 resolve: async (_parent, args, context) => {
-	try {
-		// ... resolver logic
-	} catch (error) {
-		// Throws error with structured format
-		throw new StructuredGraphQLError('Movie not found', GraphQLErrorCodes.NOT_FOUND, 404);
-	}
+  try {
+    // ... resolver logic
+  } catch (error) {
+    // Throws error with structured format
+    throw new StructuredGraphQLError('Movie not found', GraphQLErrorCodes.NOT_FOUND, 404);
+  }
 };
 ```
 
@@ -70,11 +70,11 @@ Pre-defined validation schemas are available:
 
 ```typescript
 import {
-	MovieSearchInput,
-	MovieDetailsInput,
-	GameSearchInput,
-	PersonDetailsInput,
-	parseInput,
+  MovieSearchInput,
+  MovieDetailsInput,
+  GameSearchInput,
+  PersonDetailsInput,
+  parseInput,
 } from '@graphql/validations/inputs';
 
 // Parse and validate
@@ -96,15 +96,15 @@ GraphQL errors are now structured with codes and status codes:
 
 ```json
 {
-	"errors": [
-		{
-			"message": "Movie not found",
-			"extensions": {
-				"code": "NOT_FOUND",
-				"statusCode": 404
-			}
-		}
-	]
+  "errors": [
+    {
+      "message": "Movie not found",
+      "extensions": {
+        "code": "NOT_FOUND",
+        "statusCode": 404
+      }
+    }
+  ]
 }
 ```
 
@@ -122,26 +122,26 @@ import { z } from 'zod';
 
 // Define input schema
 const CreateMovieSchema = z.object({
-	title: z.string().min(1),
-	year: z.number().int().min(1900),
+  title: z.string().min(1),
+  year: z.number().int().min(1900),
 });
 
 export default withApiHandler(async (req, res, { requestId, userId }) => {
-	if (req.method === 'POST') {
-		// Validate request body
-		const data = parseRequestBody(CreateMovieSchema, req.body);
+  if (req.method === 'POST') {
+    // Validate request body
+    const data = parseRequestBody(CreateMovieSchema, req.body);
 
-		// Perform operation
-		const result = await someOperation(data);
+    // Perform operation
+    const result = await someOperation(data);
 
-		// Send success response
-		sendSuccess(res, result, 201, requestId);
-	}
+    // Send success response
+    sendSuccess(res, result, 201, requestId);
+  }
 
-	if (req.method === 'GET') {
-		const movies = await fetchMovies();
-		sendSuccess(res, movies, 200, requestId);
-	}
+  if (req.method === 'GET') {
+    const movies = await fetchMovies();
+    sendSuccess(res, movies, 200, requestId);
+  }
 });
 ```
 
@@ -162,21 +162,21 @@ Error response:
 
 ```json
 {
-	"success": false,
-	"error": {
-		"code": "VALIDATION_ERROR",
-		"message": "Validation failed",
-		"details": {
-			"validationErrors": [
-				{
-					"path": "title",
-					"message": "String must contain at least 1 character(s)"
-				}
-			]
-		}
-	},
-	"timestamp": "2026-05-09T14:30:15.123Z",
-	"requestId": "abc123def456"
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "details": {
+      "validationErrors": [
+        {
+          "path": "title",
+          "message": "String must contain at least 1 character(s)"
+        }
+      ]
+    }
+  },
+  "timestamp": "2026-05-09T14:30:15.123Z",
+  "requestId": "abc123def456"
 }
 ```
 
@@ -269,13 +269,13 @@ When updating existing resolvers:
 
 ```typescript
 resolve: async (_parent, { q, page }) => {
-	try {
-		return await tmdbClient.searchMovies(q, page || 1);
-	} catch (err) {
-		logger.error('Failed to search movies', { query: q, error: err });
-		Sentry.captureException(err);
-		throw err;
-	}
+  try {
+    return await tmdbClient.searchMovies(q, page || 1);
+  } catch (err) {
+    logger.error('Failed to search movies', { query: q, error: err });
+    Sentry.captureException(err);
+    throw err;
+  }
 };
 ```
 
@@ -283,8 +283,8 @@ resolve: async (_parent, { q, page }) => {
 
 ```typescript
 resolve: safeResolver(async (_parent, { q, page }) => {
-	const input = parseInput(MovieSearchInput, { q, page });
-	return await tmdbClient.searchMovies(input.q, input.page);
+  const input = parseInput(MovieSearchInput, { q, page });
+  return await tmdbClient.searchMovies(input.q, input.page);
 });
 ```
 
@@ -311,9 +311,9 @@ A: Include it in the error details parameter:
 
 ```typescript
 throw new StructuredGraphQLError('Custom message', 'CUSTOM_ERROR', 500, {
-	userId,
-	movieId,
-	action: 'search',
+  userId,
+  movieId,
+  action: 'search',
 });
 ```
 
