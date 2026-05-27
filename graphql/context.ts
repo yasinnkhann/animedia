@@ -6,17 +6,17 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
 
 export type Context = {
-	prisma: PrismaClient;
-	redis: typeof redis;
-	session: Session | null;
+  prisma: PrismaClient;
+  redis: typeof redis;
+  session: Session | null;
 };
 
 export async function context(): Promise<Context> {
-	const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-	return {
-		prisma,
-		redis,
-		session,
-	};
+  return {
+    prisma,
+    redis,
+    session,
+  };
 }

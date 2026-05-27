@@ -11,13 +11,16 @@ import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import {
-  Exact,
-  GameGenre,
+  GameGenresQuery,
   PopularGamesByGenreQuery,
   TopRatedGamesByGenreQuery,
 } from '../../../graphql/generated/code-gen/graphql';
 import { SORT_BY_OPTIONS } from '../../../models/dropDownOptions';
 import { TGamesGenreData } from '@ts/types';
+
+type ExactVariables<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+
+type GameGenre = { id: string; name: string };
 
 const { Option } = Select;
 
@@ -33,7 +36,7 @@ const Genre = () => {
   const [sortByQueryType, setSortByQueryType] = useState<
     TypedDocumentNode<
       PopularGamesByGenreQuery | TopRatedGamesByGenreQuery,
-      Exact<{
+      ExactVariables<{
         genreId: string;
         limit: number;
         page: number;

@@ -3,54 +3,54 @@
 @tailwind utilities;
 
 :root {
-	--header-height-mobile: 3.5rem;
-	--header-height-2xl: 5rem;
+  --header-height-mobile: 3.5rem;
+  --header-height-2xl: 5rem;
 }
 
 * {
-	@apply box-border;
+  @apply box-border;
 }
 
 @layer base {
-	body {
-		@apply h-[90vh] bg-gray-100 hide-scrollbar;
-	}
+  body {
+    @apply hide-scrollbar h-[90vh] bg-gray-100;
+  }
 
-	h1 {
-		@apply text-3xl;
-	}
+  h1 {
+    @apply text-3xl;
+  }
 
-	h2 {
-		@apply text-2xl;
-	}
+  h2 {
+    @apply text-2xl;
+  }
 
-	h3 {
-		@apply text-xl;
-	}
+  h3 {
+    @apply text-xl;
+  }
 
-	h4 {
-		@apply text-lg;
-	}
+  h4 {
+    @apply text-lg;
+  }
 
-	h5 {
-		@apply text-base;
-	}
+  h5 {
+    @apply text-base;
+  }
 
-	h6 {
-		@apply text-sm;
-	}
+  h6 {
+    @apply text-sm;
+  }
 
-	a {
-		@apply text-blue-500 underline;
-	}
+  a {
+    @apply text-blue-500 underline;
+  }
 
-	input[type='number']::-webkit-inner-spin-button,
-	input[type='number']::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-	display: none;
+  display: none;
 }

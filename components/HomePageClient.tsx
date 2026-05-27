@@ -14,9 +14,9 @@ import {
   InputMaybe,
   PopularShowsQuery,
   MoviesInTheatresQuery,
-  TimeWindowTypes,
   TrendingMoviesQuery,
   TrendingShowsQuery,
+  TimeWindowTypes,
 } from '../graphql/generated/code-gen/graphql';
 
 const HomePageClient = () => {

@@ -12,13 +12,13 @@ import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { SORT_BY_OPTIONS, SHOW_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
-import {
+import type {
   Exact,
   InputMaybe,
   PopularShowsByGenreQuery,
-  ShowGenreTypes,
   TopRatedShowsByGenreQuery,
 } from '@/graphql/generated/code-gen/graphql';
+import { ShowGenreTypes as GQLShowGenreTypes } from '@/graphql/generated/code-gen/graphql';
 import { TShowsGenreData } from '@ts/types';
 
 const { Option } = Select;
@@ -34,13 +34,13 @@ const Genre = () => {
       PopularShowsByGenreQuery | TopRatedShowsByGenreQuery,
       Exact<{
         page?: InputMaybe<number> | undefined;
-        genre: ShowGenreTypes;
+        genre: GQLShowGenreTypes;
       }>
     >
   >(Queries.POPULAR_SHOWS_BY_GENRE);
 
-  const [showGenreType, setShowGenreType] = useState<ShowGenreTypes>(
-    ShowGenreTypes.ActionAmpersandAdventure
+  const [showGenreType, setShowGenreType] = useState<GQLShowGenreTypes>(
+    GQLShowGenreTypes.ActionAmpersandAdventure
   );
 
   const { data: genreOfShowsData } = useQuery(sortByQueryType, {
@@ -58,8 +58,8 @@ const Genre = () => {
     }
   };
 
-  const handleGenreTypeChange = (value: ShowGenreTypes) => {
-    setShowGenreType(value);
+  const handleGenreTypeChange = (value: string) => {
+    setShowGenreType(value as GQLShowGenreTypes);
   };
 
   const scrollToTop = () => {
@@ -100,7 +100,7 @@ const Genre = () => {
               className='!w-[10rem]'
               id='genre-type-dropdown'
               size='middle'
-              defaultValue={ShowGenreTypes.ActionAmpersandAdventure}
+              defaultValue='Action_AMPERSAND_Adventure'
               onChange={handleGenreTypeChange}
             >
               {SHOW_GENRE_TYPE_OPTIONS.map(option => (

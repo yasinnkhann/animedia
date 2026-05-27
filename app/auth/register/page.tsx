@@ -9,8 +9,11 @@ import { useFormik } from 'formik';
 import { registerValidate } from '../../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client/react';
-import { ErrorRes } from '../../../graphql/generated/code-gen/graphql';
 import _ from 'lodash';
+
+type ErrorRes = {
+  message: string;
+};
 
 export default function RegisterPage() {
   const [showPW, setShowPW] = useState({

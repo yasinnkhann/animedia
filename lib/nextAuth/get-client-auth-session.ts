@@ -4,17 +4,17 @@ import { getServerSession } from 'next-auth';
 import { authOptions as nextAuthOptions } from '../../app/api/auth/[...nextauth]/route';
 
 export const getClientAuthSession =
-	(func: GetServerSideProps) => async (ctx: GetServerSidePropsContext) => {
-		const session = await getServerSession(ctx.req, ctx.res, nextAuthOptions);
+  (func: GetServerSideProps) => async (ctx: GetServerSidePropsContext) => {
+    const session = await getServerSession(ctx.req, ctx.res, nextAuthOptions);
 
-		if (!session) {
-			return {
-				redirect: {
-					destination: '/',
-					permanent: false,
-				},
-			};
-		}
+    if (!session) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
 
-		return await func(ctx);
-	};
+    return await func(ctx);
+  };

@@ -10,13 +10,13 @@ import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import {
+import type {
   Exact,
   InputMaybe,
-  MovieGenreTypes,
   PopularMoviesByGenreQuery,
   TopRatedMoviesByGenreQuery,
 } from '@/graphql/generated/code-gen/graphql';
+import { MovieGenreTypes as GQLMovieGenreTypes } from '@/graphql/generated/code-gen/graphql';
 import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 import { TMoviesGenreData } from '@ts/types';
 
@@ -33,12 +33,14 @@ const Genre = () => {
       PopularMoviesByGenreQuery | TopRatedMoviesByGenreQuery,
       Exact<{
         page?: InputMaybe<number> | undefined;
-        genre: MovieGenreTypes;
+        genre: GQLMovieGenreTypes;
       }>
     >
   >(Queries.POPULAR_MOVIES_BY_GENRE);
 
-  const [movieGenreType, setMovieGenreType] = useState<MovieGenreTypes>(MovieGenreTypes.Action);
+  const [movieGenreType, setMovieGenreType] = useState<GQLMovieGenreTypes>(
+    GQLMovieGenreTypes.Action
+  );
 
   const { data: genreOfMoviesData } = useQuery(sortByQueryType, {
     variables: { genre: movieGenreType, page: parseInt(page, 10) },
@@ -52,8 +54,8 @@ const Genre = () => {
     }
   };
 
-  const handleGenreTypeChange = (value: MovieGenreTypes) => {
-    setMovieGenreType(value);
+  const handleGenreTypeChange = (value: string) => {
+    setMovieGenreType(value as GQLMovieGenreTypes);
   };
 
   const scrollToTop = () => {
@@ -94,7 +96,7 @@ const Genre = () => {
               className='!w-[10rem]'
               id='genre-type-dropdown'
               size='middle'
-              defaultValue={MovieGenreTypes.Action}
+              defaultValue='Action'
               onChange={handleGenreTypeChange}
             >
               {MOVIE_GENRE_TYPE_OPTIONS.map(option => (

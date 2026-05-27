@@ -1,343 +1,343 @@
-import {
-	MovieGenreTypes,
-	ShowGenreTypes,
-	WatchStatusTypes,
-} from '../graphql/generated/code-gen/graphql';
+import type {
+  MovieGenreTypes,
+  ShowGenreTypes,
+  WatchStatusTypes,
+} from '../graphql/generated/code-gen/runtimeEnums';
 
 export const SORT_BY_OPTIONS = [
-	{
-		value: 'Popular',
-		text: 'Popular',
-	},
-	{
-		value: 'Top Rated',
-		text: 'Top Rated',
-	},
+  {
+    value: 'Popular',
+    text: 'Popular',
+  },
+  {
+    value: 'Top Rated',
+    text: 'Top Rated',
+  },
 ];
 
 export const MOVIE_GENRE_TYPE_OPTIONS: {
-	value: MovieGenreTypes;
-	text: string;
+  value: MovieGenreTypes;
+  text: string;
 }[] = [
-	{
-		value: MovieGenreTypes.Action,
-		text: 'Action',
-	},
-	{
-		value: MovieGenreTypes.Adventure,
-		text: 'Adventure',
-	},
-	{
-		value: MovieGenreTypes.Animation,
-		text: 'Animation',
-	},
-	{
-		value: MovieGenreTypes.Comedy,
-		text: 'Comedy',
-	},
-	{
-		value: MovieGenreTypes.Crime,
-		text: 'Crime',
-	},
-	{
-		value: MovieGenreTypes.Documentary,
-		text: 'Documentary',
-	},
-	{
-		value: MovieGenreTypes.Drama,
-		text: 'Drama',
-	},
-	{
-		value: MovieGenreTypes.Family,
-		text: 'Family',
-	},
-	{
-		value: MovieGenreTypes.Fantasy,
-		text: 'Fantasy',
-	},
-	{
-		value: MovieGenreTypes.History,
-		text: 'History',
-	},
-	{
-		value: MovieGenreTypes.Horror,
-		text: 'Horror',
-	},
-	{
-		value: MovieGenreTypes.Music,
-		text: 'Music',
-	},
-	{
-		value: MovieGenreTypes.Mystery,
-		text: 'Mystery',
-	},
-	{
-		value: MovieGenreTypes.Romance,
-		text: 'Romance',
-	},
-	{
-		value: MovieGenreTypes.ScienceFiction,
-		text: 'Science Fiction',
-	},
-	{
-		value: MovieGenreTypes.TvMovie,
-		text: 'TV Movie',
-	},
-	{
-		value: MovieGenreTypes.Thriller,
-		text: 'Thriller',
-	},
-	{
-		value: MovieGenreTypes.War,
-		text: 'War',
-	},
-	{
-		value: MovieGenreTypes.Western,
-		text: 'Western',
-	},
+  {
+    value: 'Action',
+    text: 'Action',
+  },
+  {
+    value: 'Adventure',
+    text: 'Adventure',
+  },
+  {
+    value: 'Animation',
+    text: 'Animation',
+  },
+  {
+    value: 'Comedy',
+    text: 'Comedy',
+  },
+  {
+    value: 'Crime',
+    text: 'Crime',
+  },
+  {
+    value: 'Documentary',
+    text: 'Documentary',
+  },
+  {
+    value: 'Drama',
+    text: 'Drama',
+  },
+  {
+    value: 'Family',
+    text: 'Family',
+  },
+  {
+    value: 'Fantasy',
+    text: 'Fantasy',
+  },
+  {
+    value: 'History',
+    text: 'History',
+  },
+  {
+    value: 'Horror',
+    text: 'Horror',
+  },
+  {
+    value: 'Music',
+    text: 'Music',
+  },
+  {
+    value: 'Mystery',
+    text: 'Mystery',
+  },
+  {
+    value: 'Romance',
+    text: 'Romance',
+  },
+  {
+    value: 'Science_Fiction',
+    text: 'Science Fiction',
+  },
+  {
+    value: 'TV_Movie',
+    text: 'TV Movie',
+  },
+  {
+    value: 'Thriller',
+    text: 'Thriller',
+  },
+  {
+    value: 'War',
+    text: 'War',
+  },
+  {
+    value: 'Western',
+    text: 'Western',
+  },
 ];
 
 export const SHOW_GENRE_TYPE_OPTIONS: {
-	value: ShowGenreTypes;
-	text: string;
+  value: ShowGenreTypes;
+  text: string;
 }[] = [
-	{
-		value: ShowGenreTypes.ActionAmpersandAdventure,
-		text: 'Action & Adventure',
-	},
+  {
+    value: 'Action_AMPERSAND_Adventure',
+    text: 'Action & Adventure',
+  },
 
-	{
-		value: ShowGenreTypes.Animation,
-		text: 'Animation',
-	},
+  {
+    value: 'Animation',
+    text: 'Animation',
+  },
 
-	{
-		value: ShowGenreTypes.Comedy,
-		text: 'Comedy',
-	},
+  {
+    value: 'Comedy',
+    text: 'Comedy',
+  },
 
-	{
-		value: ShowGenreTypes.Crime,
-		text: 'Crime',
-	},
+  {
+    value: 'Crime',
+    text: 'Crime',
+  },
 
-	{
-		value: ShowGenreTypes.Documentary,
-		text: 'Documentary',
-	},
+  {
+    value: 'Documentary',
+    text: 'Documentary',
+  },
 
-	{
-		value: ShowGenreTypes.Drama,
-		text: 'Drama',
-	},
+  {
+    value: 'Drama',
+    text: 'Drama',
+  },
 
-	{
-		value: ShowGenreTypes.Family,
-		text: 'Family',
-	},
+  {
+    value: 'Family',
+    text: 'Family',
+  },
 
-	{
-		value: ShowGenreTypes.Kids,
-		text: 'Kids',
-	},
+  {
+    value: 'Kids',
+    text: 'Kids',
+  },
 
-	{
-		value: ShowGenreTypes.Mystery,
-		text: 'Mystery',
-	},
+  {
+    value: 'Mystery',
+    text: 'Mystery',
+  },
 
-	{
-		value: ShowGenreTypes.News,
-		text: 'News',
-	},
+  {
+    value: 'News',
+    text: 'News',
+  },
 
-	{
-		value: ShowGenreTypes.Reality,
-		text: 'Reality',
-	},
+  {
+    value: 'Reality',
+    text: 'Reality',
+  },
 
-	{
-		value: ShowGenreTypes.SciDashFiAmpersandFantasy,
-		text: 'Sci-Fi & Fantasy',
-	},
+  {
+    value: 'SciDASHFi_AMPERSAND_Fantasy',
+    text: 'Sci-Fi & Fantasy',
+  },
 
-	{
-		value: ShowGenreTypes.Soap,
-		text: 'Soap',
-	},
+  {
+    value: 'Soap',
+    text: 'Soap',
+  },
 
-	{
-		value: ShowGenreTypes.Talk,
-		text: 'Talk',
-	},
+  {
+    value: 'Talk',
+    text: 'Talk',
+  },
 
-	{
-		value: ShowGenreTypes.WarAmpersandPolitics,
-		text: 'War & Politics',
-	},
+  {
+    value: 'War_AMPERSAND_Politics',
+    text: 'War & Politics',
+  },
 
-	{
-		value: ShowGenreTypes.Western,
-		text: 'Western',
-	},
+  {
+    value: 'Western',
+    text: 'Western',
+  },
 ];
 
 export const MOVIES_ITEMS = [
-	{
-		label: 'Popular Movies',
-		key: 'popular',
-	},
-	{
-		label: 'Top Rated Movies',
-		key: 'top-rated',
-	},
-	{
-		label: 'Popular Anime Movies',
-		key: 'popular-anime',
-	},
-	{
-		label: 'Explore Movies by Genre',
-		key: 'genre',
-	},
+  {
+    label: 'Popular Movies',
+    key: 'popular',
+  },
+  {
+    label: 'Top Rated Movies',
+    key: 'top-rated',
+  },
+  {
+    label: 'Popular Anime Movies',
+    key: 'popular-anime',
+  },
+  {
+    label: 'Explore Movies by Genre',
+    key: 'genre',
+  },
 ];
 
 export const SHOWS_ITEMS = [
-	{
-		label: 'Popular Shows',
-		key: 'popular',
-	},
-	{
-		label: 'Top Rated Shows',
-		key: 'top-rated',
-	},
-	{
-		label: 'Popular Anime Shows',
-		key: 'popular-anime',
-	},
-	{
-		label: 'Explore Shows by Genre',
-		key: 'genre',
-	},
+  {
+    label: 'Popular Shows',
+    key: 'popular',
+  },
+  {
+    label: 'Top Rated Shows',
+    key: 'top-rated',
+  },
+  {
+    label: 'Popular Anime Shows',
+    key: 'popular-anime',
+  },
+  {
+    label: 'Explore Shows by Genre',
+    key: 'genre',
+  },
 ];
 
 export const PEOPLE_ITEMS = [
-	{
-		label: 'Popular People',
-		key: 'popular',
-	},
+  {
+    label: 'Popular People',
+    key: 'popular',
+  },
 ];
 
 export const GAME_ITEMS = [
-	{
-		label: 'Popular Games',
-		key: 'popular',
-	},
-	{
-		label: 'Top Rated Games',
-		key: 'top-rated',
-	},
-	{
-		label: 'Explore Games by Genre',
-		key: 'genre',
-	},
+  {
+    label: 'Popular Games',
+    key: 'popular',
+  },
+  {
+    label: 'Top Rated Games',
+    key: 'top-rated',
+  },
+  {
+    label: 'Explore Games by Genre',
+    key: 'genre',
+  },
 ];
 
 export const MY_MEDIA_ITEMS = [
-	{
-		label: 'Watching',
-		key: 'watching',
-	},
-	{
-		label: 'Completed',
-		key: 'completed',
-	},
-	{
-		label: 'On Hold',
-		key: 'on-hold',
-	},
-	{
-		label: 'Dropped',
-		key: 'dropped',
-	},
-	{
-		label: 'Plan To Watch',
-		key: 'plan-to-watch',
-	},
+  {
+    label: 'Watching',
+    key: 'watching',
+  },
+  {
+    label: 'Completed',
+    key: 'completed',
+  },
+  {
+    label: 'On Hold',
+    key: 'on-hold',
+  },
+  {
+    label: 'Dropped',
+    key: 'dropped',
+  },
+  {
+    label: 'Plan To Watch',
+    key: 'plan-to-watch',
+  },
 ];
 
 export const ratingOptions = [
-	{
-		value: '',
-		text: 'Select Rating',
-	},
-	{
-		value: 1,
-		text: '(1) Appalling',
-	},
-	{
-		value: 2,
-		text: '(2) Horrible',
-	},
-	{
-		value: 3,
-		text: '(3) Very Bad',
-	},
-	{
-		value: 4,
-		text: '(4) Bad',
-	},
-	{
-		value: 5,
-		text: '(5) Average',
-	},
-	{
-		value: 6,
-		text: '(6) Fine',
-	},
-	{
-		value: 7,
-		text: '(7) Good',
-	},
-	{
-		value: 8,
-		text: '(8) Very Good',
-	},
-	{
-		value: 9,
-		text: '(9) Great',
-	},
-	{
-		value: 10,
-		text: '(10) Masterpiece',
-	},
+  {
+    value: '',
+    text: 'Select Rating',
+  },
+  {
+    value: 1,
+    text: '(1) Appalling',
+  },
+  {
+    value: 2,
+    text: '(2) Horrible',
+  },
+  {
+    value: 3,
+    text: '(3) Very Bad',
+  },
+  {
+    value: 4,
+    text: '(4) Bad',
+  },
+  {
+    value: 5,
+    text: '(5) Average',
+  },
+  {
+    value: 6,
+    text: '(6) Fine',
+  },
+  {
+    value: 7,
+    text: '(7) Good',
+  },
+  {
+    value: 8,
+    text: '(8) Very Good',
+  },
+  {
+    value: 9,
+    text: '(9) Great',
+  },
+  {
+    value: 10,
+    text: '(10) Masterpiece',
+  },
 ];
 
 export const watchStatusOptions: {
-	value: WatchStatusTypes;
-	text: string;
+  value: WatchStatusTypes;
+  text: string;
 }[] = [
-	{
-		value: WatchStatusTypes.NotWatching,
-		text: 'Not Watching',
-	},
-	{
-		value: WatchStatusTypes.Watching,
-		text: 'Watching',
-	},
-	{
-		value: WatchStatusTypes.PlanToWatch,
-		text: 'Plan to Watch',
-	},
-	{
-		value: WatchStatusTypes.Completed,
-		text: 'Completed',
-	},
-	{
-		value: WatchStatusTypes.OnHold,
-		text: 'On Hold',
-	},
-	{
-		value: WatchStatusTypes.Dropped,
-		text: 'Dropped',
-	},
+  {
+    value: 'NOT_WATCHING',
+    text: 'Not Watching',
+  },
+  {
+    value: 'WATCHING',
+    text: 'Watching',
+  },
+  {
+    value: 'PLAN_TO_WATCH',
+    text: 'Plan to Watch',
+  },
+  {
+    value: 'COMPLETED',
+    text: 'Completed',
+  },
+  {
+    value: 'ON_HOLD',
+    text: 'On Hold',
+  },
+  {
+    value: 'DROPPED',
+    text: 'Dropped',
+  },
 ];

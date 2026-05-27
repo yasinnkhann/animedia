@@ -1,16 +1,16 @@
 import { DefaultSession, type Account, Profile } from 'next-auth';
 
 declare module 'next-auth' {
-	/**
-	 * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-	 */
-	interface Session {
-		user?: {
-			id: string;
-			created_at: Date;
-			emailVerified: Date | null;
-		} & DefaultSession['user'];
-		account?: Account;
-		profile?: Profile;
-	}
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user?: {
+      id: string;
+      created_at: Date;
+      emailVerified: Date | null;
+    } & DefaultSession['user'];
+    account?: Account;
+    profile?: Profile;
+  }
 }

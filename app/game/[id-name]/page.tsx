@@ -349,7 +349,9 @@ const GameDetails = () => {
         <h4 className='mt-4'>Release Date</h4>
         {game.first_release_date ? (
           <p className='ml-1'>
-            {CommonMethods.formatDate(new Date(game.first_release_date * 1000).toISOString())}
+            {CommonMethods.formatDate(
+              new Date(Number(game.first_release_date) * 1000).toISOString()
+            )}
           </p>
         ) : (
           <p className='ml-1'>N/A</p>
@@ -431,7 +433,7 @@ const GameDetails = () => {
                       id: char.id,
                       name: char.name,
                       profile_path: char.mugShotUrl,
-                      type: char.__typename,
+                      type: 'character',
                     }))
                     .slice(0, RESULTS_PER_PAGE) as ICast[]
                 }

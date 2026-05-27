@@ -15,7 +15,7 @@ import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import { WatchStatusTypes } from '@/graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
@@ -309,7 +309,7 @@ const MovieDetails = () => {
                       name: cast.name,
                       character: cast.character,
                       profile_path: cast.profile_path,
-                      type: cast.__typename,
+                      type: 'character',
                     }))
                     .slice(0, RESULTS_PER_PAGE) as ICast[]
                 }
