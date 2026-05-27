@@ -19,7 +19,11 @@
     "paths": {
       "@/*": ["./*"],
       "@ts/*": ["models/ts/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@graphql/*": ["graphql/*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@utils/*": ["utils/*"]
     },
     "plugins": [
       {

@@ -4,11 +4,11 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import DiscordProvider from 'next-auth/providers/discord';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { prisma } from '../../../../lib/prisma';
+import { prisma } from '@lib/prisma';
 import { verify } from 'argon2';
 import { CommonMethods } from '../../../../utils/CommonMethods';
 import * as Sentry from '@sentry/nextjs';
-import logger from '../../../../lib/logger';
+import logger from '@lib/logger';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
