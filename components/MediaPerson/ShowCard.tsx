@@ -6,7 +6,7 @@ import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { ShowResult } from 'graphql/generated/code-gen/graphql';
+import { ShowResult } from 'graphql/generated/code-gen/runtimeEnums';
 
 interface Props {
   show: ShowResult;

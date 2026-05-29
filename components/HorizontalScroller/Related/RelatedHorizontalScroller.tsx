@@ -7,7 +7,7 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
-import { UserShow, UserMovie } from 'graphql/generated/code-gen/graphql';
+import { UserShow, UserMovie } from 'graphql/generated/code-gen/runtimeEnums';
 import { TContent } from '@ts/types';
 import { ExtractStrict } from '@ts/types';
 import { useSession } from 'next-auth/react';

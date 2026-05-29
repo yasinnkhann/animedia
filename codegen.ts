@@ -11,6 +11,12 @@ const config: CodegenConfig = {
       plugins: [],
       config: {
         enumsAsTypes: false,
+        nonOptionalTypename: true,
+        scalars: {
+          BigInt: 'number',
+          DateTime: 'string',
+          JSONObject: 'Record<string, unknown>',
+        },
       },
     },
   },

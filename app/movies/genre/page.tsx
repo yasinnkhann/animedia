@@ -11,12 +11,14 @@ import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import type {
-  Exact,
-  InputMaybe,
   PopularMoviesByGenreQuery,
   TopRatedMoviesByGenreQuery,
 } from '@/graphql/generated/code-gen/graphql';
-import { MovieGenreTypes as GQLMovieGenreTypes } from '@/graphql/generated/code-gen/graphql';
+import {
+  MovieGenreTypes as GQLMovieGenreTypes,
+  Exact,
+  InputMaybe,
+} from '@/graphql/generated/code-gen/runtimeEnums';
 import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 import { TMoviesGenreData } from '@ts/types';
 

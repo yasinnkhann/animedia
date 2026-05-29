@@ -6,7 +6,7 @@ import ShowCard from './ShowCard';
 import GameCard from './GameCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
-import { GamesRes, MoviesRes, ShowsRes } from '../../graphql/generated/code-gen/graphql';
+import { GamesRes, MoviesRes, ShowsRes } from '../../graphql/generated/code-gen/runtimeEnums';
 
 interface Props {
   mediaData: MoviesRes | ShowsRes | GamesRes;

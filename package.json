@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "yarn run generate:prisma && next dev",
     "dev:inspect": "yarn run generate:prisma && NODE_OPTIONS='--inspect=0' next dev",
-    "build": "yarn run codegen && yarn run generate:prisma && next build",
+    "build": "yarn run generate:prisma && next build",
     "start": "next start",
     "studio": "npx prisma studio",
     "generate:prisma": "prisma generate",

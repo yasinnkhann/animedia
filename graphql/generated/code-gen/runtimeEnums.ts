@@ -1,3 +1,5 @@
+// Runtime enum objects (const objects that can be used as both type and value)
+
 export const MovieGenreTypes = {
   Action: 'Action',
   Adventure: 'Adventure',
@@ -60,3 +62,93 @@ export const WatchStatusTypes = {
 } as const;
 
 export type WatchStatusTypes = typeof WatchStatusTypes[keyof typeof WatchStatusTypes];
+
+// ---------------------------------------------------------------------------
+// Derived type aliases for types no longer directly exported from graphql.ts
+// ---------------------------------------------------------------------------
+
+import type {
+  UsersMovieQuery,
+  UsersShowQuery,
+  UsersGameQuery,
+  PopularMoviesQuery,
+  PopularShowsQuery,
+  SearchedGamesQuery,
+  SearchedPeopleQuery,
+  MovieDetailsQuery,
+  ShowDetailsQuery,
+  MoviesCastCrewQuery,
+  ShowsCastCrewQuery,
+  PopularMoviesByGenreQuery,
+  TopRatedMoviesByGenreQuery,
+  PopularShowsByGenreQuery,
+  TopRatedShowsByGenreQuery,
+  PopularGamesByGenreQuery,
+  TopRatedGamesByGenreQuery,
+} from './graphql';
+
+/** The shape of a user's tracked movie entry */
+export type UserMovie = NonNullable<UsersMovieQuery['usersMovie']>;
+
+/** The shape of a user's tracked show entry */
+export type UserShow = NonNullable<UsersShowQuery['usersShow']>;
+
+/** The shape of a user's tracked game entry */
+export type UserGame = NonNullable<UsersGameQuery['usersGame']>;
+
+/** A single movie result from list queries */
+export type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
+
+/** A single show result from list queries */
+export type ShowResult = PopularShowsQuery['popularShows']['results'][number];
+
+/** A single person result from search queries */
+export type PersonResult = SearchedPeopleQuery['searchedPeople']['results'][number];
+
+/** A single game result from search queries */
+export type GameResult = SearchedGamesQuery['searchedGames']['results'][number];
+
+/** Movies list response (has total_results, results, page, etc.) */
+export type MoviesRes = PopularMoviesQuery['popularMovies'];
+
+/** Shows list response */
+export type ShowsRes = PopularShowsQuery['popularShows'];
+
+/** People list response */
+export type PeopleRes = SearchedPeopleQuery['searchedPeople'];
+
+/** Games list response */
+export type GamesRes = NonNullable<PopularGamesByGenreQuery['popularGamesByGenre']>;
+
+/** Full show details response */
+export type ShowDetailsRes = ShowDetailsQuery['showDetails'];
+
+/** Genre object from movie details (id + name) */
+export type MovieDetailsGenre = MovieDetailsQuery['movieDetails']['genres'][number];
+
+/** Genre object from show details (id + name) */
+export type ShowDetailsGenre = ShowDetailsQuery['showDetails']['genres'][number];
+
+/** Nullable wrapper — mirrors the old Maybe<T> utility */
+export type Maybe<T> = T | null;
+
+/** Exact constraint helper (for use in TypedDocumentNode variable types) */
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+
+/** InputMaybe helper */
+export type InputMaybe<T> = T | null | undefined;
+
+/** TMoviesGenreData */
+export type TMoviesGenreData =
+  | PopularMoviesByGenreQuery['popularMoviesByGenre']
+  | TopRatedMoviesByGenreQuery['topRatedMoviesByGenre'];
+
+/** TShowsGenreData */
+export type TShowsGenreData =
+  | PopularShowsByGenreQuery['popularShowsByGenre']
+  | TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
+
+/** TGamesGenreData */
+export type TGamesGenreData =
+  | NonNullable<PopularGamesByGenreQuery['popularGamesByGenre']>
+  | NonNullable<TopRatedGamesByGenreQuery['topRatedGamesByGenre']>;

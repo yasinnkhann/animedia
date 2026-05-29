@@ -9,7 +9,7 @@ import {
   ShowResult,
   UserMovie,
   UserShow,
-} from '../../../graphql/generated/code-gen/graphql';
+} from '../../../graphql/generated/code-gen/runtimeEnums';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
 import { useSession } from 'next-auth/react';

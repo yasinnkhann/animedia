@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { TSearchResults } from '@ts/types';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { useQuery } from '@apollo/client/react';
-import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/runtimeEnums';
 import _ from 'lodash';
 
 export default function Search() {

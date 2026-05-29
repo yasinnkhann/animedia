@@ -94,7 +94,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
             .map(game => ({
               id: game.id,
               titleName: game.name,
-              releaseDate: new Date(game.first_release_date * 1000).toISOString(),
+              releaseDate: game.first_release_date
+                ? new Date(game.first_release_date * 1000).toISOString()
+                : undefined,
               type: 'game',
             }))
             .slice(0, 5);

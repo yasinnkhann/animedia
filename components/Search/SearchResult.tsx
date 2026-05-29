@@ -11,7 +11,7 @@ import {
   UserMovie,
   GameResult,
   UserGame,
-} from '../../graphql/generated/code-gen/graphql';
+} from '../../graphql/generated/code-gen/runtimeEnums';
 
 interface Props {
   result: MovieResult | ShowResult | PersonResult | GameResult;

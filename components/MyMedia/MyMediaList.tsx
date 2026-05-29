@@ -2,7 +2,7 @@ import { Fragment, type ReactElement } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
-import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/graphql';
+import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/runtimeEnums';
 import MyGameEntry from './MyGameEntry';
 
 interface Props {

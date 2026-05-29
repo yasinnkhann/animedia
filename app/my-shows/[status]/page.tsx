@@ -9,7 +9,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { UserShow, WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import { UserShow, WatchStatusTypes } from 'graphql/generated/code-gen/runtimeEnums';
 
 function watchStatusFromParam(statusParam: string): WatchStatusTypes | undefined {
   switch (statusParam) {

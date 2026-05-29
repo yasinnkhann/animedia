@@ -10,14 +10,12 @@ import { useQuery } from '@apollo/client/react';
 import { THomeHorizontalScrollerData, TWhatsPopularData } from '@ts/types';
 import {
   PopularMoviesQuery,
-  Exact,
-  InputMaybe,
   PopularShowsQuery,
   MoviesInTheatresQuery,
   TrendingMoviesQuery,
   TrendingShowsQuery,
-  TimeWindowTypes,
 } from '../graphql/generated/code-gen/graphql';
+import { TimeWindowTypes, Exact, InputMaybe } from '../graphql/generated/code-gen/runtimeEnums';
 
 const HomePageClient = () => {
   const [whatsPopularQueryType, setWhatsPopularQueryType] = useState<

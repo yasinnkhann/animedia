@@ -7,7 +7,7 @@ import {
   ShowResult,
   UserMovie,
   UserShow,
-} from '../../../graphql/generated/code-gen/graphql';
+} from '../../../graphql/generated/code-gen/runtimeEnums';
 
 const HomeCard = ({
   item,

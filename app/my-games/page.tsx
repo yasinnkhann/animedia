@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { UserGame } from 'graphql/generated/code-gen/graphql';
+import { UserGame } from 'graphql/generated/code-gen/runtimeEnums';
 
 const MyGames = () => {
   const { status } = useSession();

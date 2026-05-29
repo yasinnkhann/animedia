@@ -14,7 +14,7 @@ import type {
   UserShow,
   UserMovie,
   UserGame,
-} from '../graphql/generated/code-gen/graphql';
+} from '../graphql/generated/code-gen/runtimeEnums';
 import {
   MovieGenreTypes,
   ShowGenreTypes,

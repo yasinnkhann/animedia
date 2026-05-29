@@ -4,8 +4,8 @@ import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { UserShow } from 'graphql/generated/code-gen/graphql';
-import { WatchStatusTypes } from 'graphql/generated/code-gen/graphql';
+import type { UserShow } from 'graphql/generated/code-gen/runtimeEnums';
+import { WatchStatusTypes } from 'graphql/generated/code-gen/runtimeEnums';
 import Link from 'next/link';
 
 interface Props {

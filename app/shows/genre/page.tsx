@@ -13,12 +13,14 @@ import { useQuery } from '@apollo/client/react';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { SORT_BY_OPTIONS, SHOW_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 import type {
-  Exact,
-  InputMaybe,
   PopularShowsByGenreQuery,
   TopRatedShowsByGenreQuery,
 } from '@/graphql/generated/code-gen/graphql';
-import { ShowGenreTypes as GQLShowGenreTypes } from '@/graphql/generated/code-gen/graphql';
+import {
+  ShowGenreTypes as GQLShowGenreTypes,
+  Exact,
+  InputMaybe,
+} from '@/graphql/generated/code-gen/runtimeEnums';
 import { TShowsGenreData } from '@ts/types';
 
 const { Option } = Select;
