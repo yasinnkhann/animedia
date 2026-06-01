@@ -157,12 +157,12 @@ export const UpdateGameInput = z.object({
 export const RegisterUserInput = z.object({
   name: z.string().min(1, 'Name required').max(100),
   email: z.string().email('Valid email required'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 export const ChangePasswordInput = z.object({
   userId: z.string().min(1, 'User ID required'),
-  newPassword: z.string().min(6, 'Password must be at least 6 characters'),
+  newPassword: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 export const EmailInput = z.object({

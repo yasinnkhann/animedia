@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 
 interface Props {
   userId: string;
+  token: string;
 }
 
-export default function ChangePasswordForm({ userId }: Props) {
+export default function ChangePasswordForm({ userId, token }: Props) {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -28,7 +29,7 @@ export default function ChangePasswordForm({ userId }: Props) {
     const { newPassword } = formik.values;
     try {
       const res = await changePassword({
-        variables: { userId, newPassword },
+        variables: { userId, newPassword, token },
       });
       if (res.data?.changePassword && _.isEmpty(res.data.changePassword.errors)) {
         setTimeout(() => {

@@ -2135,6 +2135,7 @@ export interface NexusGenArgTypes {
     }
     changePassword: { // args
       newPassword: string; // String!
+      token: string; // String!
       userId: string; // ID!
     }
     deleteGame: { // args

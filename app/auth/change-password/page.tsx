@@ -38,7 +38,7 @@ export default async function ChangePasswordPage({ searchParams }: PageProps) {
 
   return (
     <main className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] flex w-full items-center justify-center px-4'>
-      <ChangePasswordForm userId={uid} />
+      <ChangePasswordForm userId={uid} token={token} />
     </main>
   );
 }

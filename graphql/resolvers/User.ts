@@ -283,7 +283,10 @@ export const UserQueries = extendType({
     t.list.field('users', {
       type: 'User',
       resolve: safeResolver(async (_parent, _args, ctx) => {
-        return await ctx.prisma.user.findMany();
+        getSessionUserId(ctx); // requires authentication
+        return await ctx.prisma.user.findMany({
+          select: { id: true, name: true, email: true, created_at: true },
+        });
       }),
     });
   },
@@ -661,8 +664,14 @@ export const UserMutations = extendType({
           where: { email: input.email },
         });
 
+        // Return a generic success response whether or not the user exists
+        // to prevent account enumeration attacks.
         if (!user?.email) {
-          throw new Error('No user found with that email');
+          return {
+            errors: [],
+            token: null,
+            userId: null,
+          };
         }
 
         const forgotPasswordEmailCountRes = await ctx.redis.get(
@@ -672,9 +681,12 @@ export const UserMutations = extendType({
         const forgotPasswordEmailCount = +(forgotPasswordEmailCountRes ?? '0');
 
         if (__prod__ && forgotPasswordEmailCount === FORGOT_PASSWORD_EMAIL_COUNT_LIMIT) {
-          throw new Error(
-            'You have reached the limit of forgot password emails. Please wait 24 hours to try again.'
-          );
+          // Also return generic success on rate-limit to avoid enumeration
+          return {
+            errors: [],
+            token: null,
+            userId: null,
+          };
         }
 
         await ctx.redis.del(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${user.id}`);
@@ -700,15 +712,15 @@ export const UserMutations = extendType({
           to: user.email,
           subject: 'Forgot Password Link',
           text: 'Click the link below to create a new password.',
-          html: `<a href="${CLIENT_BASE_URL}/auth/change-password?uid=${user.id}&token=${token}">Verify Email</a>`,
+          html: `<a href="${CLIENT_BASE_URL}/auth/change-password?uid=${user.id}&token=${token}">Reset Password</a>`,
         };
 
         await sendEmail(payload);
 
         return {
           errors: [],
-          token,
-          userId: user.id,
+          token: null, // Do not return the token to the client
+          userId: null, // Do not reveal the userId to the client
         };
       }),
     });
@@ -718,9 +730,18 @@ export const UserMutations = extendType({
       args: {
         userId: nonNull(idArg()),
         newPassword: nonNull(stringArg()),
+        token: nonNull(stringArg()),
       },
-      resolve: safeResolver(async (_parent, { userId, newPassword }, ctx) => {
+      resolve: safeResolver(async (_parent, { userId, newPassword, token }, ctx) => {
         const input = parseInput(ChangePasswordInput, { userId, newPassword });
+
+        // Validate the forgot-password token from Redis before allowing the change
+        const storedToken = await ctx.redis.get(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${input.userId}`);
+
+        if (!storedToken || storedToken !== token) {
+          throw new Error('Invalid or expired password reset token.');
+        }
+
         const hashedNewPassword = await hash(input.newPassword);
 
         await ctx.prisma.user.update({

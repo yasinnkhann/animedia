@@ -14,28 +14,33 @@ export const sleep = async (ms: number) => {
 };
 
 export const sendEmail = async (payload: Mail.Options) => {
-  let transporterConfig: SMTPTransport.Options = {};
-
   if (!__prod__) {
-    nodemailer.createTestAccount(async (_err, account) => {
-      transporterConfig = {
-        host: 'smtp.ethereal.email',
-        port: +process.env.TURBO_SMTP_UNSECURE_PORT,
-        secure: false,
-        auth: {
-          user: account.user,
-          pass: account.pass,
-        },
-      };
+    // createTestAccount is callback-based; promisify it so errors are propagated
+    const createTestAccount = (): Promise<nodemailer.TestAccount> =>
+      new Promise((resolve, reject) =>
+        nodemailer.createTestAccount((err, account) => {
+          if (err) reject(err);
+          else resolve(account);
+        })
+      );
 
-      const transporter = nodemailer.createTransport(transporterConfig);
+    const account = await createTestAccount();
 
-      const info = await transporter.sendMail(payload);
+    const transporterConfig: SMTPTransport.Options = {
+      host: 'smtp.ethereal.email',
+      port: +process.env.TURBO_SMTP_UNSECURE_PORT,
+      secure: false,
+      auth: {
+        user: account.user,
+        pass: account.pass,
+      },
+    };
 
-      console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
-    });
+    const transporter = nodemailer.createTransport(transporterConfig);
+    const info = await transporter.sendMail(payload);
+    console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
   } else {
-    transporterConfig = {
+    const transporterConfig: SMTPTransport.Options = {
       host: process.env.TURBO_SMTP_HOST,
       port: +process.env.TURBO_SMTP_SECURE_PORT,
       secure: true,

@@ -190,8 +190,8 @@ export const SEND_FORGOT_PASSWORD_EMAIL = graphql(`
 `);
 
 export const CHANGE_PASSWORD = graphql(`
-  mutation ChangePassword($userId: ID!, $newPassword: String!) {
-    changePassword(userId: $userId, newPassword: $newPassword) {
+  mutation ChangePassword($userId: ID!, $newPassword: String!, $token: String!) {
+    changePassword(userId: $userId, newPassword: $newPassword, token: $token) {
       errors {
         message
       }

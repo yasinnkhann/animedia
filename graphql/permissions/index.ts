@@ -4,6 +4,7 @@ import { isAuthenticated } from './rules/isAuthenticated';
 export const permissions = shield({
   Query: {
     user: isAuthenticated,
+    users: isAuthenticated,
     usersMovie: isAuthenticated,
     usersMovies: isAuthenticated,
     usersShow: isAuthenticated,
@@ -21,5 +22,6 @@ export const permissions = shield({
     updateMovie: isAuthenticated,
     updateShow: isAuthenticated,
     updateGame: isAuthenticated,
+    changePassword: isAuthenticated,
   },
 });
