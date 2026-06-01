@@ -10,6 +10,7 @@ import { RESULTS_PER_PAGE } from '../../../utils/constants';
 import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import {
   GameGenresQuery,
   PopularGamesByGenreQuery,
@@ -133,15 +134,15 @@ const Genre = () => {
           </div>
         </section>
 
-        {(genreOfGamesData?.[
-          Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
-        ] as unknown as TGamesGenreData) ? (
+        {(CommonMethods.extractGraphQLData(
+          genreOfGamesData ?? {}
+        ) as unknown as TGamesGenreData) ? (
           <div>
             <MediaList
               mediaData={
-                (genreOfGamesData?.[
-                  Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
-                ] as unknown as TGamesGenreData)!
+                (CommonMethods.extractGraphQLData(
+                  genreOfGamesData ?? {}
+                ) as unknown as TGamesGenreData)!
               }
               pageNum={currPage}
               title={`${
@@ -153,9 +154,9 @@ const Genre = () => {
             <Pagination
               currPage={currPage}
               totalItems={
-                (genreOfGamesData?.[
-                  Object.keys(genreOfGamesData)[0] as keyof typeof genreOfGamesData
-                ] as unknown as TGamesGenreData)!.total_results
+                (CommonMethods.extractGraphQLData(
+                  genreOfGamesData ?? {}
+                ) as unknown as TGamesGenreData)!.total_results
               }
               itemsPerPage={RESULTS_PER_PAGE}
               paginate={(pageNum: number) => router.push(`/games/genre?page=${pageNum}`)}

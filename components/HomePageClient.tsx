@@ -8,6 +8,7 @@ import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { THomeHorizontalScrollerData, TWhatsPopularData } from '@ts/types';
+import { CommonMethods } from '../utils/CommonMethods';
 import {
   PopularMoviesQuery,
   PopularShowsQuery,
@@ -159,9 +160,8 @@ const HomePageClient = () => {
               <HomeHorizontalScroller
                 items={(() => {
                   const data = whatsPopularData!;
-                  return (
-                    data[Object.keys(data)[0] as keyof typeof data] as unknown as TWhatsPopularData
-                  ).results as THomeHorizontalScrollerData;
+                  return (CommonMethods.extractGraphQLData(data) as unknown as TWhatsPopularData)
+                    .results as THomeHorizontalScrollerData;
                 })()}
               />
             </section>
@@ -218,9 +218,8 @@ const HomePageClient = () => {
               <HomeHorizontalScroller
                 items={(() => {
                   const data = trendingData!;
-                  return (
-                    data[Object.keys(data)[0] as keyof typeof data] as unknown as TWhatsPopularData
-                  ).results as THomeHorizontalScrollerData;
+                  return (CommonMethods.extractGraphQLData(data) as unknown as TWhatsPopularData)
+                    .results as THomeHorizontalScrollerData;
                 })()}
               />
             </section>

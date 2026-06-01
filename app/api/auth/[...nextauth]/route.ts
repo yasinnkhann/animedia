@@ -79,14 +79,10 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    signIn: async _info => {
-      return true;
-    },
-
     jwt: async ({ token, user, account, profile }) => {
       try {
         if (user) {
-          if ((profile as any)?.email_verified && user.id) {
+          if (profile?.email_verified && user.id) {
             const isEmailVerifiedUpdated = await prisma.user.findUnique({
               where: { id: user.id },
               select: { emailVerified: true },
@@ -102,7 +98,7 @@ export const authOptions: NextAuthOptions = {
             }
           }
           token.user = user;
-          delete (token.user as any).password;
+          delete token.user.password;
         }
 
         if (account) {
@@ -122,7 +118,7 @@ export const authOptions: NextAuthOptions = {
 
     session: async ({ session, token }) => {
       try {
-        const tokenUser = token.user as any;
+        const tokenUser = token.user;
 
         if (tokenUser?.id && !tokenUser.emailVerified) {
           const isEmailVerifiedUpdatedInDB = await prisma.user.findUnique({
@@ -135,9 +131,17 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
-        (session as any).user = tokenUser;
-        (session as any).account = token.account;
-        (session as any).profile = token.profile;
+        if (tokenUser) {
+          session.user = {
+            ...session.user,
+            ...tokenUser,
+            id: tokenUser.id || '',
+            created_at: tokenUser.created_at || new Date(),
+            emailVerified: tokenUser.emailVerified || null,
+          };
+        }
+        session.account = token.account;
+        session.profile = token.profile;
 
         return Promise.resolve(session);
       } catch (err) {

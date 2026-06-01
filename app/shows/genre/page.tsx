@@ -114,15 +114,15 @@ const Genre = () => {
           </div>
         </section>
 
-        {(genreOfShowsData?.[
-          Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
-        ] as unknown as TShowsGenreData) ? (
+        {(CommonMethods.extractGraphQLData(
+          genreOfShowsData ?? {}
+        ) as unknown as TShowsGenreData) ? (
           <div>
             <MediaList
               mediaData={
-                genreOfShowsData?.[
-                  Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
-                ] as unknown as TShowsGenreData
+                CommonMethods.extractGraphQLData(
+                  genreOfShowsData ?? {}
+                ) as unknown as TShowsGenreData
               }
               pageNum={currPage}
               title={`${
@@ -135,9 +135,9 @@ const Genre = () => {
               currPage={currPage}
               totalItems={
                 (
-                  genreOfShowsData?.[
-                    Object.keys(genreOfShowsData)[0] as keyof typeof genreOfShowsData
-                  ] as unknown as TShowsGenreData
+                  CommonMethods.extractGraphQLData(
+                    genreOfShowsData ?? {}
+                  ) as unknown as TShowsGenreData
                 ).total_results
               }
               itemsPerPage={RESULTS_PER_PAGE}

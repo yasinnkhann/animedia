@@ -1,4 +1,3 @@
-import moment from 'moment';
 import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
@@ -24,16 +23,21 @@ import toast, { ToastPosition } from 'react-hot-toast';
 
 export class CommonMethods {
   public static formatDate = (dateStr: string | null | undefined) => {
-    if (dateStr === undefined) {
+    if (!dateStr) {
       return undefined;
     }
-    const formattedDate = moment(dateStr).format('MMM Do, YYYY');
+    const date = new Date(dateStr);
 
-    if (formattedDate === 'Invalid date') {
+    if (isNaN(date.getTime())) {
       return undefined;
-    } else {
-      return formattedDate;
     }
+
+    // Formats like: "Nov 12, 2024"
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }).format(date);
   };
 
   public static getDetailsPageRoute = (mediaType: TContent, id: string, title: string) => {
@@ -231,5 +235,14 @@ export class CommonMethods {
       position,
       duration,
     });
+  };
+
+  /**
+   * Safely extracts the first property from a GraphQL response object,
+   * ignoring the __typename property added by Apollo Client.
+   */
+  public static extractGraphQLData = <T extends Record<string, any>>(data: T) => {
+    const key = Object.keys(data).find(k => k !== '__typename');
+    return key ? data[key] : undefined;
   };
 }
