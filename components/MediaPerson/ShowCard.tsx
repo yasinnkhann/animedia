@@ -6,7 +6,9 @@ import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { ShowResult } from 'graphql/generated/code-gen/runtimeEnums';
+import type { PopularShowsQuery } from '@/graphql/generated/code-gen/graphql';
+
+type ShowResult = PopularShowsQuery['popularShows']['results'][number];
 
 interface Props {
   show: ShowResult;

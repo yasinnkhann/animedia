@@ -8,18 +8,22 @@ import {
   THE_MOVIE_DB_BASE_API_URL,
 } from '../utils/constants';
 import type {
-  MovieDetailsGenre,
-  ShowDetailsGenre,
-  UserShow,
-  UserMovie,
-  UserGame,
-} from '../graphql/generated/code-gen/runtimeEnums';
-import {
+  MovieDetailsQuery,
   MovieGenreTypes,
+  ShowDetailsQuery,
   ShowGenreTypes,
+  UsersGamesQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
   WatchStatusTypes,
-} from '../graphql/generated/code-gen/runtimeEnums';
+} from '@/graphql/generated/code-gen/graphql';
 import toast, { ToastPosition } from 'react-hot-toast';
+
+type MovieDetailsGenre = MovieDetailsQuery['movieDetails']['genres'][number];
+type ShowDetailsGenre = ShowDetailsQuery['showDetails']['genres'][number];
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
 
 export class CommonMethods {
   public static formatDate = (dateStr: string | null | undefined) => {
@@ -143,13 +147,13 @@ export class CommonMethods {
     if (dataFound) {
       if ('status' in dataFound) {
         switch (dataFound.status) {
-          case WatchStatusTypes.Watching:
+          case 'WATCHING':
             return 'W';
-          case WatchStatusTypes.Completed:
+          case 'COMPLETED':
             return 'C';
-          case WatchStatusTypes.PlanToWatch:
+          case 'PLAN_TO_WATCH':
             return 'PW';
-          case WatchStatusTypes.OnHold:
+          case 'ON_HOLD':
             return 'OH';
           default:
             return 'D';

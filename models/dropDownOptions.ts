@@ -2,7 +2,7 @@ import type {
   MovieGenreTypes,
   ShowGenreTypes,
   WatchStatusTypes,
-} from '../graphql/generated/code-gen/runtimeEnums';
+} from '@/graphql/generated/code-gen/graphql';
 
 export const SORT_BY_OPTIONS = [
   {

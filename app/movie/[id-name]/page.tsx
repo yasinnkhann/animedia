@@ -15,7 +15,7 @@ import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { WatchStatusTypes } from '@/graphql/generated/code-gen/runtimeEnums';
+import type { WatchStatusTypes } from '@/graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
@@ -52,7 +52,7 @@ const MovieDetails = () => {
     fetchPolicy: 'network-only',
   });
   const usersMovie = usersMovieData?.usersMovie;
-  const watchStatus = watchStatusInput ?? usersMovie?.status ?? WatchStatusTypes.NotWatching;
+  const watchStatus = watchStatusInput ?? usersMovie?.status ?? 'NOT_WATCHING';
   const rating = ratingInput ?? usersMovie?.rating ?? ratingOptions[0].value;
 
   const { data: recMoviesData, loading: recMoviesLoading } = useQuery(Queries.RECOMMENDED_MOVIES, {
@@ -132,13 +132,13 @@ const MovieDetails = () => {
     setWatchStatus(value as WatchStatusTypes);
 
     if (usersMovie) {
-      if ((value as WatchStatusTypes) === WatchStatusTypes.NotWatching) {
+      if ((value as WatchStatusTypes) === 'NOT_WATCHING') {
         deleteMovie({
           variables: {
             movieId,
           },
         });
-      } else if ((value as WatchStatusTypes) === WatchStatusTypes.PlanToWatch) {
+      } else if ((value as WatchStatusTypes) === 'PLAN_TO_WATCH') {
         updateMovie({
           variables: {
             movieId,

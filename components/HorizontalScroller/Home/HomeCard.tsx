@@ -2,12 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
 import { CommonMethods } from '../../../utils/CommonMethods';
-import {
-  MovieResult,
-  ShowResult,
-  UserMovie,
-  UserShow,
-} from '../../../graphql/generated/code-gen/runtimeEnums';
+import type {
+  PopularMoviesQuery,
+  PopularShowsQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
+
+type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
+type ShowResult = PopularShowsQuery['popularShows']['results'][number];
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 const HomeCard = ({
   item,

@@ -4,16 +4,21 @@ import { useMemo } from 'react';
 import HomeCard from './HomeCard';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
-import {
-  MovieResult,
-  ShowResult,
-  UserMovie,
-  UserShow,
-} from '../../../graphql/generated/code-gen/runtimeEnums';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
 import { useSession } from 'next-auth/react';
 import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import type {
+  PopularMoviesQuery,
+  PopularShowsQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
+
+type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
+type ShowResult = PopularShowsQuery['popularShows']['results'][number];
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 interface Props {
   items: MovieResult[] | ShowResult[];

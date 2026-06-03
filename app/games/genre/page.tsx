@@ -12,16 +12,17 @@ import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { CommonMethods } from '../../../utils/CommonMethods';
 import {
-  GameGenresQuery,
   PopularGamesByGenreQuery,
   TopRatedGamesByGenreQuery,
 } from '../../../graphql/generated/code-gen/graphql';
 import { SORT_BY_OPTIONS } from '../../../models/dropDownOptions';
-import { TGamesGenreData } from '@ts/types';
 
 type ExactVariables<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 
 type GameGenre = { id: string; name: string };
+type GamesGenreData =
+  | NonNullable<PopularGamesByGenreQuery['popularGamesByGenre']>
+  | NonNullable<TopRatedGamesByGenreQuery['topRatedGamesByGenre']>;
 
 const { Option } = Select;
 
@@ -134,15 +135,13 @@ const Genre = () => {
           </div>
         </section>
 
-        {(CommonMethods.extractGraphQLData(
-          genreOfGamesData ?? {}
-        ) as unknown as TGamesGenreData) ? (
+        {(CommonMethods.extractGraphQLData(genreOfGamesData ?? {}) as unknown as GamesGenreData) ? (
           <div>
             <MediaList
               mediaData={
                 (CommonMethods.extractGraphQLData(
                   genreOfGamesData ?? {}
-                ) as unknown as TGamesGenreData)!
+                ) as unknown as GamesGenreData)!
               }
               pageNum={currPage}
               title={`${
@@ -156,7 +155,7 @@ const Genre = () => {
               totalItems={
                 (CommonMethods.extractGraphQLData(
                   genreOfGamesData ?? {}
-                ) as unknown as TGamesGenreData)!.total_results
+                ) as unknown as GamesGenreData)!.total_results
               }
               itemsPerPage={RESULTS_PER_PAGE}
               paginate={(pageNum: number) => router.push(`/games/genre?page=${pageNum}`)}

@@ -13,17 +13,19 @@ import { useQuery } from '@apollo/client/react';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { SORT_BY_OPTIONS, SHOW_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 import type {
-  PopularShowsByGenreQuery,
-  TopRatedShowsByGenreQuery,
-} from '@/graphql/generated/code-gen/graphql';
-import {
   ShowGenreTypes as GQLShowGenreTypes,
-  Exact,
-  InputMaybe,
-} from '@/graphql/generated/code-gen/runtimeEnums';
-import { TShowsGenreData } from '@ts/types';
+  PopularShowsByGenreQuery,
+  PopularShowsByGenreQueryVariables,
+  TopRatedShowsByGenreQuery,
+  TopRatedShowsByGenreQueryVariables,
+} from '@/graphql/generated/code-gen/graphql';
 
 const { Option } = Select;
+
+type ShowsGenreData =
+  | PopularShowsByGenreQuery['popularShowsByGenre']
+  | TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
+type ShowsGenreVariables = PopularShowsByGenreQueryVariables | TopRatedShowsByGenreQueryVariables;
 
 const Genre = () => {
   const router = useRouter();
@@ -32,17 +34,11 @@ const Genre = () => {
   const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
 
   const [sortByQueryType, setSortByQueryType] = useState<
-    TypedDocumentNode<
-      PopularShowsByGenreQuery | TopRatedShowsByGenreQuery,
-      Exact<{
-        page?: InputMaybe<number> | undefined;
-        genre: GQLShowGenreTypes;
-      }>
-    >
+    TypedDocumentNode<PopularShowsByGenreQuery | TopRatedShowsByGenreQuery, ShowsGenreVariables>
   >(Queries.POPULAR_SHOWS_BY_GENRE);
 
   const [showGenreType, setShowGenreType] = useState<GQLShowGenreTypes>(
-    GQLShowGenreTypes.ActionAmpersandAdventure
+    'Action_AMPERSAND_Adventure'
   );
 
   const { data: genreOfShowsData } = useQuery(sortByQueryType, {
@@ -114,15 +110,13 @@ const Genre = () => {
           </div>
         </section>
 
-        {(CommonMethods.extractGraphQLData(
-          genreOfShowsData ?? {}
-        ) as unknown as TShowsGenreData) ? (
+        {(CommonMethods.extractGraphQLData(genreOfShowsData ?? {}) as unknown as ShowsGenreData) ? (
           <div>
             <MediaList
               mediaData={
                 CommonMethods.extractGraphQLData(
                   genreOfShowsData ?? {}
-                ) as unknown as TShowsGenreData
+                ) as unknown as ShowsGenreData
               }
               pageNum={currPage}
               title={`${
@@ -137,7 +131,7 @@ const Genre = () => {
                 (
                   CommonMethods.extractGraphQLData(
                     genreOfShowsData ?? {}
-                  ) as unknown as TShowsGenreData
+                  ) as unknown as ShowsGenreData
                 ).total_results
               }
               itemsPerPage={RESULTS_PER_PAGE}

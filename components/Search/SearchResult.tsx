@@ -2,16 +2,23 @@ import { ExtractStrict, TContent } from '@ts/types';
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
-import {
-  MovieResult,
-  ShowResult,
-  PersonResult,
-  Maybe,
-  UserShow,
-  UserMovie,
-  GameResult,
-  UserGame,
-} from '../../graphql/generated/code-gen/runtimeEnums';
+import type {
+  SearchedGamesQuery,
+  SearchedMoviesQuery,
+  SearchedPeopleQuery,
+  SearchedShowsQuery,
+  UsersGamesQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
+
+type MovieResult = SearchedMoviesQuery['searchedMovies']['results'][number];
+type ShowResult = SearchedShowsQuery['searchedShows']['results'][number];
+type PersonResult = SearchedPeopleQuery['searchedPeople']['results'][number];
+type GameResult = SearchedGamesQuery['searchedGames']['results'][number];
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
 
 interface Props {
   result: MovieResult | ShowResult | PersonResult | GameResult;
@@ -25,7 +32,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
   const userStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, result);
 
   const renderImage = (
-    imagePath: Maybe<string> | undefined,
+    imagePath: string | null | undefined,
     altText: string,
     apiType: 'igdb' | 'the-movie-db'
   ) => (
@@ -53,7 +60,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
     </div>
   );
 
-  const renderDetails = (releaseDate: Maybe<string> | undefined, overview: string) => (
+  const renderDetails = (releaseDate: string | null | undefined, overview: string) => (
     <div className='p-4'>
       <h3 className='cursor-pointer'>{titleName}</h3>
       <p>{releaseDate ? CommonMethods.formatDate(releaseDate) : 'Date Not Available'}</p>

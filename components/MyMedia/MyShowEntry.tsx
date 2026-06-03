@@ -4,9 +4,10 @@ import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import type { UserShow } from 'graphql/generated/code-gen/runtimeEnums';
-import { WatchStatusTypes } from 'graphql/generated/code-gen/runtimeEnums';
+import type { UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
 import Link from 'next/link';
+
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 interface Props {
   myShow: UserShow;
@@ -74,8 +75,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
       <td className='border-x-2 border-gray-200 text-center align-middle'>
         <p className='text-lg'>
-          {myShow.status === WatchStatusTypes.PlanToWatch ? 0 : myShow.current_episode}/
-          {myShow.status === WatchStatusTypes.Completed
+          {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}/
+          {myShow.status === 'COMPLETED'
             ? myShow.current_episode
             : showData?.showDetails?.number_of_episodes}
         </p>

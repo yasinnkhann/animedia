@@ -7,11 +7,14 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
-import { UserShow, UserMovie } from 'graphql/generated/code-gen/runtimeEnums';
 import { TContent } from '@ts/types';
 import { ExtractStrict } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import type { UsersMoviesQuery, UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
+
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 interface Props {
   items: IRelatedMedia[];

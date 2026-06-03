@@ -1,58 +1,14 @@
-import {
-  PopularMoviesQuery,
-  PopularShowsQuery,
-  MoviesInTheatresQuery,
-  TrendingMoviesQuery,
-  TrendingShowsQuery,
-  PopularMoviesByGenreQuery,
-  TopRatedMoviesByGenreQuery,
-  PopularShowsByGenreQuery,
-  TopRatedShowsByGenreQuery,
-  PopularGamesByGenreQuery,
-  TopRatedGamesByGenreQuery,
-} from 'graphql/generated/code-gen/graphql';
-import {
-  MoviesRes,
-  ShowsRes,
-  PeopleRes,
-  MovieResult,
-  ShowResult,
-} from 'graphql/generated/code-gen/runtimeEnums';
-
 export type NullablePartial<T, K extends keyof T> = {
   [P in keyof T]: P extends K ? T[P] | null | undefined : T[P];
 };
 
 export type ExtractStrict<T, U extends T> = U;
 
-export type THomeHorizontalScrollerData = MovieResult[] | ShowResult[];
-
 export type TStatusParam = 'watching' | 'completed' | 'on-hold' | 'dropped' | 'plan-to-watch';
 
 const _searchResultsConst = ['movies', 'shows', 'people', 'games'] as const;
 
 export type TSearchResults = (typeof _searchResultsConst)[number];
-
-export type TWhatsPopularData =
-  | PopularMoviesQuery['popularMovies']
-  | PopularShowsQuery['popularShows']
-  | MoviesInTheatresQuery['moviesInTheatres'];
-
-export type TTrendingData =
-  | TrendingMoviesQuery['trendingMovies']
-  | TrendingShowsQuery['trendingShows'];
-
-export type TMoviesGenreData =
-  | PopularMoviesByGenreQuery['popularMoviesByGenre']
-  | TopRatedMoviesByGenreQuery['topRatedMoviesByGenre'];
-
-export type TShowsGenreData =
-  | PopularShowsByGenreQuery['popularShowsByGenre']
-  | TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
-
-export type TGamesGenreData =
-  | PopularGamesByGenreQuery['popularGamesByGenre']
-  | TopRatedGamesByGenreQuery['topRatedGamesByGenre'];
 
 export type TDropDownSearchResult = NullablePartial<
   {
@@ -78,8 +34,6 @@ const _contentConst = [
 ] as const;
 
 export type TContent = (typeof _contentConst)[number];
-
-export type TTheMovieDBRes = MoviesRes | ShowsRes | PeopleRes;
 
 const _igdbImageSizesConst = [
   'cover_small',

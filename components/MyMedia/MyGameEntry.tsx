@@ -4,8 +4,10 @@ import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { UserGame } from 'graphql/generated/code-gen/runtimeEnums';
+import type { UsersGamesQuery } from '@/graphql/generated/code-gen/graphql';
 import Link from 'next/link';
+
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
 
 interface Props {
   myGame: UserGame;

@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
-import { PersonResult } from '../../graphql/generated/code-gen/runtimeEnums';
+import type { PopularPeopleQuery } from '@/graphql/generated/code-gen/graphql';
+
+type PersonResult = PopularPeopleQuery['popularPeople']['results'][number];
 
 interface Props {
   person: PersonResult;

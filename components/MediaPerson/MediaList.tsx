@@ -6,7 +6,15 @@ import ShowCard from './ShowCard';
 import GameCard from './GameCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
-import { GamesRes, MoviesRes, ShowsRes } from '../../graphql/generated/code-gen/runtimeEnums';
+import type {
+  PopularGamesQuery,
+  PopularMoviesQuery,
+  PopularShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
+
+type GamesRes = NonNullable<PopularGamesQuery['popularGames']>;
+type MoviesRes = PopularMoviesQuery['popularMovies'];
+type ShowsRes = PopularShowsQuery['popularShows'];
 
 interface Props {
   mediaData: MoviesRes | ShowsRes | GamesRes;

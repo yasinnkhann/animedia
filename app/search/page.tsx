@@ -10,8 +10,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { TSearchResults } from '@ts/types';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { useQuery } from '@apollo/client/react';
-import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/runtimeEnums';
 import _ from 'lodash';
+import type {
+  UsersGamesQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
+
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 export default function Search() {
   const router = useRouter();

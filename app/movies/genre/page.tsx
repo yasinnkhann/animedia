@@ -11,18 +11,22 @@ import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import type {
-  PopularMoviesByGenreQuery,
-  TopRatedMoviesByGenreQuery,
-} from '@/graphql/generated/code-gen/graphql';
-import {
   MovieGenreTypes as GQLMovieGenreTypes,
-  Exact,
-  InputMaybe,
-} from '@/graphql/generated/code-gen/runtimeEnums';
+  PopularMoviesByGenreQuery,
+  PopularMoviesByGenreQueryVariables,
+  TopRatedMoviesByGenreQuery,
+  TopRatedMoviesByGenreQueryVariables,
+} from '@/graphql/generated/code-gen/graphql';
 import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
-import { TMoviesGenreData } from '@ts/types';
 
 const { Option } = Select;
+
+type MoviesGenreData =
+  | PopularMoviesByGenreQuery['popularMoviesByGenre']
+  | TopRatedMoviesByGenreQuery['topRatedMoviesByGenre'];
+type MoviesGenreVariables =
+  | PopularMoviesByGenreQueryVariables
+  | TopRatedMoviesByGenreQueryVariables;
 
 const Genre = () => {
   const router = useRouter();
@@ -31,18 +35,10 @@ const Genre = () => {
   const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
 
   const [sortByQueryType, setSortByQueryType] = useState<
-    TypedDocumentNode<
-      PopularMoviesByGenreQuery | TopRatedMoviesByGenreQuery,
-      Exact<{
-        page?: InputMaybe<number> | undefined;
-        genre: GQLMovieGenreTypes;
-      }>
-    >
+    TypedDocumentNode<PopularMoviesByGenreQuery | TopRatedMoviesByGenreQuery, MoviesGenreVariables>
   >(Queries.POPULAR_MOVIES_BY_GENRE);
 
-  const [movieGenreType, setMovieGenreType] = useState<GQLMovieGenreTypes>(
-    GQLMovieGenreTypes.Action
-  );
+  const [movieGenreType, setMovieGenreType] = useState<GQLMovieGenreTypes>('Action');
 
   const { data: genreOfMoviesData } = useQuery(sortByQueryType, {
     variables: { genre: movieGenreType, page: parseInt(page, 10) },
@@ -112,13 +108,13 @@ const Genre = () => {
 
         {(genreOfMoviesData?.[
           Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-        ] as unknown as TMoviesGenreData) ? (
+        ] as unknown as MoviesGenreData) ? (
           <div>
             <MediaList
               mediaData={
                 genreOfMoviesData?.[
                   Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-                ] as unknown as TMoviesGenreData
+                ] as unknown as MoviesGenreData
               }
               pageNum={currPage}
               title={`${
@@ -133,7 +129,7 @@ const Genre = () => {
                 (
                   genreOfMoviesData?.[
                     Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-                  ] as unknown as TMoviesGenreData
+                  ] as unknown as MoviesGenreData
                 ).total_results
               }
               itemsPerPage={RESULTS_PER_PAGE}

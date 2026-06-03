@@ -1,6 +1,8 @@
 import PersonCard from './PersonCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
-import { PeopleRes } from '../../graphql/generated/code-gen/runtimeEnums';
+import type { PopularPeopleQuery } from '@/graphql/generated/code-gen/graphql';
+
+type PeopleRes = PopularPeopleQuery['popularPeople'];
 
 interface Props {
   peopleData: PeopleRes;

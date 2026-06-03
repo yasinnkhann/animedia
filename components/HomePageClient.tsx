@@ -7,40 +7,46 @@ import * as Queries from '../graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { TypedDocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { THomeHorizontalScrollerData, TWhatsPopularData } from '@ts/types';
 import { CommonMethods } from '../utils/CommonMethods';
-import {
+import type {
   PopularMoviesQuery,
+  PopularMoviesQueryVariables,
   PopularShowsQuery,
+  PopularShowsQueryVariables,
   MoviesInTheatresQuery,
+  MoviesInTheatresQueryVariables,
   TrendingMoviesQuery,
+  TrendingMoviesQueryVariables,
   TrendingShowsQuery,
+  TrendingShowsQueryVariables,
+  TimeWindowTypes,
 } from '../graphql/generated/code-gen/graphql';
-import { TimeWindowTypes, Exact, InputMaybe } from '../graphql/generated/code-gen/runtimeEnums';
+
+type WhatsPopularQuery = PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery;
+type WhatsPopularQueryVariables =
+  | PopularMoviesQueryVariables
+  | PopularShowsQueryVariables
+  | MoviesInTheatresQueryVariables;
+type TrendingQuery = TrendingMoviesQuery | TrendingShowsQuery;
+type TrendingQueryVariables = TrendingMoviesQueryVariables | TrendingShowsQueryVariables;
+type HomeListData =
+  | PopularMoviesQuery['popularMovies']
+  | PopularShowsQuery['popularShows']
+  | MoviesInTheatresQuery['moviesInTheatres']
+  | TrendingMoviesQuery['trendingMovies']
+  | TrendingShowsQuery['trendingShows'];
+type HomeScrollerData = HomeListData['results'];
 
 const HomePageClient = () => {
   const [whatsPopularQueryType, setWhatsPopularQueryType] = useState<
-    TypedDocumentNode<
-      PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery,
-      Exact<{
-        page?: InputMaybe<number> | undefined;
-      }>
-    >
+    TypedDocumentNode<WhatsPopularQuery, WhatsPopularQueryVariables>
   >(Queries.POPULAR_MOVIES);
 
   const [trendingQueryType, setTrendingQueryType] = useState<
-    TypedDocumentNode<
-      TrendingMoviesQuery | TrendingShowsQuery,
-      Exact<{
-        timeWindow: TimeWindowTypes;
-        page?: InputMaybe<number> | undefined;
-      }>
-    >
+    TypedDocumentNode<TrendingQuery, TrendingQueryVariables>
   >(Queries.TRENDING_MOVIES);
 
-  const [trendingTimeWindow, setTrendingTimeWindow] = useState<TimeWindowTypes>(
-    TimeWindowTypes.Day
-  );
+  const [trendingTimeWindow, setTrendingTimeWindow] = useState<TimeWindowTypes>('day');
 
   const searchBarRef = useRef<HTMLInputElement>(null);
 
@@ -58,19 +64,19 @@ const HomePageClient = () => {
 
   useQuery(Queries.TRENDING_MOVIES, {
     variables: {
-      timeWindow: TimeWindowTypes.Week,
+      timeWindow: 'week',
     },
   });
 
   useQuery(Queries.TRENDING_SHOWS, {
     variables: {
-      timeWindow: TimeWindowTypes.Day,
+      timeWindow: 'day',
     },
   });
 
   useQuery(Queries.TRENDING_SHOWS, {
     variables: {
-      timeWindow: TimeWindowTypes.Week,
+      timeWindow: 'week',
     },
   });
 
@@ -82,24 +88,13 @@ const HomePageClient = () => {
   );
 
   const handleChangePopularQueryType = (
-    queryType: TypedDocumentNode<
-      PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery,
-      Exact<{
-        page?: InputMaybe<number> | undefined;
-      }>
-    >
+    queryType: TypedDocumentNode<WhatsPopularQuery, WhatsPopularQueryVariables>
   ) => {
     setWhatsPopularQueryType(queryType);
   };
 
   const handleChangeTrendingQueryType = (
-    queryType: TypedDocumentNode<
-      TrendingMoviesQuery | TrendingShowsQuery,
-      Exact<{
-        timeWindow: TimeWindowTypes;
-        page?: InputMaybe<number> | undefined;
-      }>
-    >
+    queryType: TypedDocumentNode<TrendingQuery, TrendingQueryVariables>
   ) => {
     setTrendingQueryType(queryType);
   };
@@ -160,8 +155,8 @@ const HomePageClient = () => {
               <HomeHorizontalScroller
                 items={(() => {
                   const data = whatsPopularData!;
-                  return (CommonMethods.extractGraphQLData(data) as unknown as TWhatsPopularData)
-                    .results as THomeHorizontalScrollerData;
+                  return (CommonMethods.extractGraphQLData(data) as unknown as HomeListData)
+                    .results as HomeScrollerData;
                 })()}
               />
             </section>
@@ -198,7 +193,7 @@ const HomePageClient = () => {
                     className={`mr-4 cursor-pointer md:mr-20 ${
                       trendingTimeWindow === 'day' ? 'border-b-4 border-indigo-500' : ''
                     }`}
-                    onClick={() => setTrendingTimeWindow(TimeWindowTypes.Day)}
+                    onClick={() => setTrendingTimeWindow('day')}
                   >
                     Today
                   </li>
@@ -206,7 +201,7 @@ const HomePageClient = () => {
                     className={`cursor-pointer ${
                       trendingTimeWindow === 'week' ? 'border-b-4 border-indigo-500' : ''
                     }`}
-                    onClick={() => setTrendingTimeWindow(TimeWindowTypes.Week)}
+                    onClick={() => setTrendingTimeWindow('week')}
                   >
                     This Week
                   </li>
@@ -218,8 +213,8 @@ const HomePageClient = () => {
               <HomeHorizontalScroller
                 items={(() => {
                   const data = trendingData!;
-                  return (CommonMethods.extractGraphQLData(data) as unknown as TWhatsPopularData)
-                    .results as THomeHorizontalScrollerData;
+                  return (CommonMethods.extractGraphQLData(data) as unknown as HomeListData)
+                    .results as HomeScrollerData;
                 })()}
               />
             </section>

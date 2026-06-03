@@ -8,7 +8,9 @@ import { useSearchParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { UserGame } from 'graphql/generated/code-gen/runtimeEnums';
+import type { UsersGamesQuery } from '@/graphql/generated/code-gen/graphql';
+
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
 
 const MyGames = () => {
   const { status } = useSession();

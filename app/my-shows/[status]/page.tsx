@@ -9,20 +9,22 @@ import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@apollo/client/react';
-import { UserShow, WatchStatusTypes } from 'graphql/generated/code-gen/runtimeEnums';
+import type { UsersShowsQuery, WatchStatusTypes } from '@/graphql/generated/code-gen/graphql';
+
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 function watchStatusFromParam(statusParam: string): WatchStatusTypes | undefined {
   switch (statusParam) {
     case 'watching':
-      return WatchStatusTypes.Watching;
+      return 'WATCHING';
     case 'completed':
-      return WatchStatusTypes.Completed;
+      return 'COMPLETED';
     case 'on-hold':
-      return WatchStatusTypes.OnHold;
+      return 'ON_HOLD';
     case 'dropped':
-      return WatchStatusTypes.Dropped;
+      return 'DROPPED';
     case 'plan-to-watch':
-      return WatchStatusTypes.PlanToWatch;
+      return 'PLAN_TO_WATCH';
     default:
       return undefined;
   }

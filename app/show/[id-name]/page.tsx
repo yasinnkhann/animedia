@@ -15,7 +15,7 @@ import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { WatchStatusTypes } from '@/graphql/generated/code-gen/runtimeEnums';
+import type { WatchStatusTypes } from '@/graphql/generated/code-gen/graphql';
 import _ from 'lodash';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
@@ -64,7 +64,7 @@ const ShowDetails = () => {
   });
 
   const usersShow = usersShowData?.usersShow;
-  const watchStatus = watchStatusInput ?? usersShow?.status ?? WatchStatusTypes.NotWatching;
+  const watchStatus = watchStatusInput ?? usersShow?.status ?? 'NOT_WATCHING';
   const rating = ratingInput ?? usersShow?.rating ?? '';
   const currEp = currEpInput ?? String(usersShow?.current_episode ?? '0');
 
@@ -236,30 +236,27 @@ const ShowDetails = () => {
     };
 
     if (usersShow) {
-      if (value === WatchStatusTypes.NotWatching) {
+      if (value === 'NOT_WATCHING') {
         deleteShow({ variables: { showId: showVariables.showId } });
-      } else if (
-        value === WatchStatusTypes.Watching &&
-        usersShow.status === WatchStatusTypes.Completed
-      ) {
+      } else if (value === 'WATCHING' && usersShow.status === 'COMPLETED') {
         updateShow({
           variables: {
             ...showVariables,
             currentEpisode: currTotalEpCount - 1,
           },
         });
-      } else if (value === WatchStatusTypes.PlanToWatch) {
+      } else if (value === 'PLAN_TO_WATCH') {
         updateShow({
           variables: {
             ...showVariables,
-            watchStatus: WatchStatusTypes.PlanToWatch,
+            watchStatus: 'PLAN_TO_WATCH',
           },
         });
-      } else if (value === WatchStatusTypes.Completed) {
+      } else if (value === 'COMPLETED') {
         updateShow({
           variables: {
             ...showVariables,
-            watchStatus: WatchStatusTypes.Completed,
+            watchStatus: 'COMPLETED',
             currentEpisode: currTotalEpCount,
             showRating: usersShow.rating ?? null,
           },
@@ -277,7 +274,7 @@ const ShowDetails = () => {
       const addShowVariables = {
         ...showVariables,
         showName: showDetailsData.showDetails.name,
-        currentEpisode: value === WatchStatusTypes.Completed ? currTotalEpCount : +currEp,
+        currentEpisode: value === 'COMPLETED' ? currTotalEpCount : +currEp,
       };
       addShow({ variables: addShowVariables });
     }
@@ -364,7 +361,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: +currEp,
         },
       });
@@ -396,7 +393,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: totalEpisode,
         },
       });
@@ -434,13 +431,13 @@ const ShowDetails = () => {
     if (currEp === '' || +currEp > currTotalEpCount || !showDetailsData?.showDetails?.id) return;
 
     if (+currEp === currTotalEpCount) {
-      setWatchStatus(WatchStatusTypes.Completed);
+      setWatchStatus('COMPLETED');
 
       updateShow({
         variables: {
           showId: String(showDetailsData.showDetails.id),
           showRating: typeof rating === 'string' ? null : rating,
-          watchStatus: WatchStatusTypes.Completed,
+          watchStatus: 'COMPLETED',
           currentEpisode: currTotalEpCount,
         },
       });
@@ -475,7 +472,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: +totalEpCount,
         },
       });
@@ -484,7 +481,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showRating: typeof rating === 'string' ? null : rating,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: +totalEpCount,
         },
       });
@@ -514,7 +511,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: totalEpCount,
         },
       });
@@ -523,7 +520,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showRating: typeof rating === 'string' ? null : rating,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: totalEpCount,
         },
       });
@@ -540,14 +537,14 @@ const ShowDetails = () => {
       if (e.target.value === '' || +e.target.value > currTotalEpCount) {
         setCurrEpWithSeasonEpisode(String(usersShowData?.usersShow.current_episode ?? '0'));
       } else {
-        if (watchStatus === WatchStatusTypes.Watching && +e.target.value === currTotalEpCount) {
-          setWatchStatus(WatchStatusTypes.Completed);
+        if (watchStatus === 'WATCHING' && +e.target.value === currTotalEpCount) {
+          setWatchStatus('COMPLETED');
 
           updateShow({
             variables: {
               showId: showDetailsData.showDetails.id,
               showRating: typeof rating === 'string' ? null : rating,
-              watchStatus: WatchStatusTypes.Completed,
+              watchStatus: 'COMPLETED',
               currentEpisode: currTotalEpCount,
             },
           });
@@ -568,10 +565,7 @@ const ShowDetails = () => {
           variables: {
             showId: showDetailsData.showDetails.id,
             showName: showDetailsData.showDetails.name,
-            watchStatus:
-              e.target.valueAsNumber === currTotalEpCount
-                ? WatchStatusTypes.Completed
-                : WatchStatusTypes.Watching,
+            watchStatus: e.target.valueAsNumber === currTotalEpCount ? 'COMPLETED' : 'WATCHING',
             currentEpisode: +currEp,
           },
         });
@@ -599,18 +593,18 @@ const ShowDetails = () => {
           variables: {
             ...updateShowVariables,
             showName: showDetailsData.showDetails.name,
-            watchStatus: WatchStatusTypes.Watching,
+            watchStatus: 'WATCHING',
           },
         });
       } else if (
-        usersShowData.usersShow.status === WatchStatusTypes.PlanToWatch ||
-        usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
-        usersShowData.usersShow.status === WatchStatusTypes.OnHold
+        usersShowData.usersShow.status === 'PLAN_TO_WATCH' ||
+        usersShowData.usersShow.status === 'DROPPED' ||
+        usersShowData.usersShow.status === 'ON_HOLD'
       ) {
         updateShow({
           variables: {
             ...updateShowVariables,
-            watchStatus: WatchStatusTypes.Watching,
+            watchStatus: 'WATCHING',
           },
         });
       } else {
@@ -623,13 +617,13 @@ const ShowDetails = () => {
       }
     } else if (epPostAction < currTotalEpCount && usersShowData?.usersShow?.status) {
       if (
-        usersShowData.usersShow.status === WatchStatusTypes.Dropped ||
-        usersShowData.usersShow.status === WatchStatusTypes.OnHold
+        usersShowData.usersShow.status === 'DROPPED' ||
+        usersShowData.usersShow.status === 'ON_HOLD'
       ) {
         updateShow({
           variables: {
             ...updateShowVariables,
-            watchStatus: WatchStatusTypes.Watching,
+            watchStatus: 'WATCHING',
           },
         });
       } else {
@@ -644,7 +638,7 @@ const ShowDetails = () => {
       updateShow({
         variables: {
           ...updateShowVariables,
-          watchStatus: WatchStatusTypes.Completed,
+          watchStatus: 'COMPLETED',
         },
       });
     }
@@ -671,7 +665,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
         },
       });
@@ -679,7 +673,7 @@ const ShowDetails = () => {
       updateShow({
         variables: {
           showId: showDetailsData.showDetails.id,
-          watchStatus: WatchStatusTypes.Watching,
+          watchStatus: 'WATCHING',
           currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
         },
       });
@@ -714,10 +708,7 @@ const ShowDetails = () => {
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus:
-            totalEpisode === currTotalEpCount
-              ? WatchStatusTypes.Completed
-              : WatchStatusTypes.Watching,
+          watchStatus: totalEpisode === currTotalEpCount ? 'COMPLETED' : 'WATCHING',
           currentEpisode: totalEpisode,
         },
       });
@@ -725,10 +716,7 @@ const ShowDetails = () => {
       updateShow({
         variables: {
           showId: showDetailsData.showDetails.id,
-          watchStatus:
-            totalEpisode === currTotalEpCount
-              ? WatchStatusTypes.Completed
-              : WatchStatusTypes.Watching,
+          watchStatus: totalEpisode === currTotalEpCount ? 'COMPLETED' : 'WATCHING',
           currentEpisode: totalEpisode,
         },
       });
@@ -755,27 +743,27 @@ const ShowDetails = () => {
     if (usersShow && typeof usersShow.current_episode === 'number') {
       if (
         usersShow.current_episode === currTotalEpCount &&
-        usersShow.status === WatchStatusTypes.Watching &&
+        usersShow.status === 'WATCHING' &&
         totalEpCountGathered
       ) {
         updateShow({
           variables: {
             showId: String(showDetailsData.showDetails.id),
             showRating: usersShow.rating ?? null,
-            watchStatus: WatchStatusTypes.Completed,
+            watchStatus: 'COMPLETED',
             currentEpisode: currTotalEpCount,
           },
         });
       } else if (
         usersShow.current_episode >= 0 &&
         usersShow.current_episode < currTotalEpCount &&
-        usersShow.status === WatchStatusTypes.Completed
+        usersShow.status === 'COMPLETED'
       ) {
         updateShow({
           variables: {
             showId: String(showDetailsData.showDetails.id),
             showRating: usersShow.rating ?? null,
-            watchStatus: WatchStatusTypes.Watching,
+            watchStatus: 'WATCHING',
             currentEpisode: usersShow.current_episode,
           },
         });

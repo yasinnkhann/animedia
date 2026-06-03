@@ -2,8 +2,16 @@ import { Fragment, type ReactElement } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
-import { UserGame, UserMovie, UserShow } from 'graphql/generated/code-gen/runtimeEnums';
+import type {
+  UsersGamesQuery,
+  UsersMoviesQuery,
+  UsersShowsQuery,
+} from '@/graphql/generated/code-gen/graphql';
 import MyGameEntry from './MyGameEntry';
+
+type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
 
 interface Props {
   status: TStatusParam;

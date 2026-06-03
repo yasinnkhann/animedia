@@ -5,7 +5,9 @@ import * as Queries from '../../graphql/queries';
 import * as Mutations from '../../graphql/mutations';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { UserMovie } from 'graphql/generated/code-gen/runtimeEnums';
+import type { UsersMoviesQuery } from '@/graphql/generated/code-gen/graphql';
+
+type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
 
 interface Props {
   myMovie: UserMovie;
