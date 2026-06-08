@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState, lazy, Suspense } from 'react';
+import { useMemo, useState, Suspense } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -15,8 +16,7 @@ import {
   MAX_SUMMARY_WORD_LENGTH,
 } from '../../../utils/constants';
 import RelatedHorizontalScroller from '../../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
-
-const Modal = lazy(() => import('../../../components/Modal'));
+import Modal from '../../../components/Modal';
 
 export default function PersonDetailsPage() {
   const params = useParams();
@@ -236,18 +236,20 @@ export default function PersonDetailsPage() {
         </section>
       </div>
 
-      {showFullDescription && (
-        <Suspense fallback={null}>
-          <Modal closeModal={() => setShowFullDescription(false)}>
-            <div className='p-2'>
-              <h3 className='mb-6 border-b pb-4 text-3xl font-bold text-gray-900'>Biography</h3>
-              <div className='max-h-[70vh] overflow-y-auto whitespace-pre-line pr-4 text-lg leading-relaxed text-gray-700'>
-                {person.biography}
+      <AnimatePresence mode='wait'>
+        {showFullDescription && (
+          <Suspense fallback={null}>
+            <Modal closeModal={() => setShowFullDescription(false)}>
+              <div className='p-2'>
+                <h3 className='mb-6 border-b pb-4 text-3xl font-bold text-gray-900'>Biography</h3>
+                <div className='max-h-[70vh] overflow-y-auto whitespace-pre-line pr-4 text-lg leading-relaxed text-gray-700'>
+                  {person.biography}
+                </div>
               </div>
-            </div>
-          </Modal>
-        </Suspense>
-      )}
+            </Modal>
+          </Suspense>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

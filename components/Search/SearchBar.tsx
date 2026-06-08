@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useState, useEffect, RefObject } from 'react';
+import { motion } from 'framer-motion';
 import { CommonMethods } from 'utils/CommonMethods';
 import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/navigation';
@@ -166,12 +167,35 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         </button>
 
         {!_.isEmpty(dropDownSearchResults) && (
-          <div className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'>
-            {dropDownSearchResults.map(result => (
-              <div
+          <motion.div
+            className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'
+            initial='hidden'
+            animate='visible'
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.05,
+                  delayChildren: 0.05,
+                },
+              },
+            }}
+          >
+            {dropDownSearchResults.map((result, idx) => (
+              <motion.div
                 key={result.id}
                 className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
                 onClick={() => handleDropdownResultsClick(result)}
+                variants={{
+                  hidden: { opacity: 0, x: -10 },
+                  visible: {
+                    opacity: 1,
+                    x: 0,
+                    transition: { duration: 0.2 },
+                  },
+                }}
+                whileHover={{ backgroundColor: 'rgba(75, 85, 99, 1)' }}
               >
                 <span className='text-white'>{result.titleName} || </span>
                 <span className='text-gray-300'> {CommonMethods.toTitleCase(result.type!)}</span>
@@ -180,9 +204,9 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
                     result.releaseDate ?? result.firstAirDate ?? result.knownForDepartment
                   )}
                 </span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </form>
     );
