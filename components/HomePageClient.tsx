@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import HomeHorizontalScroller from './HorizontalScroller/Home/HomeHorizontalScroller';
 import * as Queries from '../graphql/queries';
@@ -119,34 +120,40 @@ const HomePageClient = () => {
               </div>
               <ul className='flex w-[15rem] justify-around md:w-[25rem]'>
                 <li
-                  className={`cursor-pointer ${
-                    whatsPopularQueryType === Queries.POPULAR_MOVIES
-                      ? 'border-b-4 border-indigo-500'
-                      : ''
-                  }`}
+                  className='relative cursor-pointer pb-1'
                   onClick={() => handleChangePopularQueryType(Queries.POPULAR_MOVIES)}
                 >
                   Movies
+                  {whatsPopularQueryType === Queries.POPULAR_MOVIES && (
+                    <motion.div
+                      layoutId='popular-tab'
+                      className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                    />
+                  )}
                 </li>
                 <li
-                  className={`cursor-pointer ${
-                    whatsPopularQueryType === Queries.POPULAR_SHOWS
-                      ? 'border-b-4 border-indigo-500'
-                      : ''
-                  }`}
+                  className='relative cursor-pointer pb-1'
                   onClick={() => handleChangePopularQueryType(Queries.POPULAR_SHOWS)}
                 >
                   Shows
+                  {whatsPopularQueryType === Queries.POPULAR_SHOWS && (
+                    <motion.div
+                      layoutId='popular-tab'
+                      className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                    />
+                  )}
                 </li>
                 <li
-                  className={`cursor-pointer ${
-                    whatsPopularQueryType === Queries.MOVIES_IN_THEATRES
-                      ? 'border-b-4 border-indigo-500'
-                      : ''
-                  }`}
+                  className='relative cursor-pointer pb-1'
                   onClick={() => handleChangePopularQueryType(Queries.MOVIES_IN_THEATRES)}
                 >
                   In Theatres
+                  {whatsPopularQueryType === Queries.MOVIES_IN_THEATRES && (
+                    <motion.div
+                      layoutId='popular-tab'
+                      className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                    />
+                  )}
                 </li>
               </ul>
             </section>
@@ -168,42 +175,54 @@ const HomePageClient = () => {
               <section className='flex w-full justify-around'>
                 <ul className='flex justify-around'>
                   <li
-                    className={`mr-4 cursor-pointer md:mr-20 ${
-                      trendingQueryType === Queries.TRENDING_MOVIES
-                        ? 'border-b-4 border-indigo-500'
-                        : ''
-                    }`}
+                    className='relative mr-4 cursor-pointer pb-1 md:mr-20'
                     onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_MOVIES)}
                   >
                     Movies
+                    {trendingQueryType === Queries.TRENDING_MOVIES && (
+                      <motion.div
+                        layoutId='trending-type-tab'
+                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                      />
+                    )}
                   </li>
                   <li
-                    className={`cursor-pointer ${
-                      trendingQueryType === Queries.TRENDING_SHOWS
-                        ? 'border-b-4 border-indigo-500'
-                        : ''
-                    }`}
+                    className='relative cursor-pointer pb-1'
                     onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_SHOWS)}
                   >
                     Shows
+                    {trendingQueryType === Queries.TRENDING_SHOWS && (
+                      <motion.div
+                        layoutId='trending-type-tab'
+                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                      />
+                    )}
                   </li>
                 </ul>
                 <ul className='flex justify-around'>
                   <li
-                    className={`mr-4 cursor-pointer md:mr-20 ${
-                      trendingTimeWindow === 'day' ? 'border-b-4 border-indigo-500' : ''
-                    }`}
+                    className='relative mr-4 cursor-pointer pb-1 md:mr-20'
                     onClick={() => setTrendingTimeWindow('day')}
                   >
                     Today
+                    {trendingTimeWindow === 'day' && (
+                      <motion.div
+                        layoutId='trending-time-tab'
+                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                      />
+                    )}
                   </li>
                   <li
-                    className={`cursor-pointer ${
-                      trendingTimeWindow === 'week' ? 'border-b-4 border-indigo-500' : ''
-                    }`}
+                    className='relative cursor-pointer pb-1'
                     onClick={() => setTrendingTimeWindow('week')}
                   >
                     This Week
+                    {trendingTimeWindow === 'week' && (
+                      <motion.div
+                        layoutId='trending-time-tab'
+                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                      />
+                    )}
                   </li>
                 </ul>
               </section>
