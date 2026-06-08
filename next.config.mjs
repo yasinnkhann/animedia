@@ -13,15 +13,6 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
-  experimental: {
-    // Limit CPU allocation and workers locally to prevent machine freezes
-    ...(process.env.CI
-      ? {}
-      : {
-          cpus: 4,
-          workerThreads: false,
-        }),
-  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,

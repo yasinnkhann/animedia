@@ -20,8 +20,6 @@ import type {
   TopRatedShowsByGenreQueryVariables,
 } from '@/graphql/generated/code-gen/graphql';
 
-const { Option } = Select;
-
 type ShowsGenreData =
   | PopularShowsByGenreQuery['popularShowsByGenre']
   | TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
@@ -79,15 +77,13 @@ const Genre = () => {
             <Select
               className='!w-[10rem]'
               id='sort-by-dropdown'
-              defaultValue='Popular'
+              value={sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE ? 'Popular' : 'Top Rated'}
+              options={SORT_BY_OPTIONS.map(option => ({
+                value: option.value,
+                label: option.text,
+              }))}
               onChange={handleSortByChange}
-            >
-              {SORT_BY_OPTIONS.map(option => (
-                <Option key={option.value} value={option.value}>
-                  {option.text}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
 
           <div>
@@ -98,15 +94,13 @@ const Genre = () => {
               className='!w-[10rem]'
               id='genre-type-dropdown'
               size='middle'
-              defaultValue='Action_AMPERSAND_Adventure'
+              value={showGenreType}
+              options={SHOW_GENRE_TYPE_OPTIONS.map(option => ({
+                value: option.value,
+                label: option.text,
+              }))}
               onChange={handleGenreTypeChange}
-            >
-              {SHOW_GENRE_TYPE_OPTIONS.map(option => (
-                <Option key={option.value} value={option.value}>
-                  {option.text}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
         </section>
 

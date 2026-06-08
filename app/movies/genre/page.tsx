@@ -19,8 +19,6 @@ import type {
 } from '@/graphql/generated/code-gen/graphql';
 import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 
-const { Option } = Select;
-
 type MoviesGenreData =
   | PopularMoviesByGenreQuery['popularMoviesByGenre']
   | TopRatedMoviesByGenreQuery['topRatedMoviesByGenre'];
@@ -75,15 +73,13 @@ const Genre = () => {
             <Select
               className='!w-[10rem]'
               id='sort-by-dropdown'
-              defaultValue='Popular'
+              value={sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE ? 'Popular' : 'Top Rated'}
+              options={SORT_BY_OPTIONS.map(option => ({
+                value: option.value,
+                label: option.text,
+              }))}
               onChange={handleSortByChange}
-            >
-              {SORT_BY_OPTIONS.map(option => (
-                <Option key={option.value} value={option.value}>
-                  {option.text}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
 
           <div>
@@ -94,15 +90,13 @@ const Genre = () => {
               className='!w-[10rem]'
               id='genre-type-dropdown'
               size='middle'
-              defaultValue='Action'
+              value={movieGenreType}
+              options={MOVIE_GENRE_TYPE_OPTIONS.map(option => ({
+                value: option.value,
+                label: option.text,
+              }))}
               onChange={handleGenreTypeChange}
-            >
-              {MOVIE_GENRE_TYPE_OPTIONS.map(option => (
-                <Option key={option.value} value={option.value}>
-                  {option.text}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
         </section>
 

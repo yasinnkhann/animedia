@@ -24,8 +24,6 @@ type GamesGenreData =
   | NonNullable<PopularGamesByGenreQuery['popularGamesByGenre']>
   | NonNullable<TopRatedGamesByGenreQuery['topRatedGamesByGenre']>;
 
-const { Option } = Select;
-
 const Genre = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -104,15 +102,13 @@ const Genre = () => {
             <Select
               className='!w-[10rem]'
               id='sort-by-dropdown'
-              defaultValue='Popular'
+              value={sortByQueryType === Queries.POPULAR_GAMES_BY_GENRE ? 'Popular' : 'Top Rated'}
+              options={SORT_BY_OPTIONS.map(option => ({
+                value: option.value,
+                label: option.text,
+              }))}
               onChange={handleSortByChange}
-            >
-              {SORT_BY_OPTIONS.map(option => (
-                <Option key={option.value} value={option.value}>
-                  {option.text}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
 
           <div>
@@ -123,15 +119,13 @@ const Genre = () => {
               className='!w-[10rem]'
               id='genre-type-dropdown'
               size='middle'
-              defaultValue={activeGenre.name}
+              value={activeGenre.id}
+              options={gameGenresData.gameGenres.map(option => ({
+                value: option.id,
+                label: option.name,
+              }))}
               onChange={handleGenreTypeChange}
-            >
-              {gameGenresData.gameGenres.map(option => (
-                <Option key={option.id} value={option.id}>
-                  {option.name}
-                </Option>
-              ))}
-            </Select>
+            />
           </div>
         </section>
 
