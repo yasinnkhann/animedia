@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, lazy, Suspense } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import _ from 'lodash';
 import Image from 'next/image';
@@ -105,7 +106,9 @@ const PersonDetails = () => {
       );
     }
 
-    return allKnownFor.sort((a, b) => b.popularity - a.popularity).slice(0, KNOWN_FOR_CARDS_LIMIT);
+    return _.uniqBy(allKnownFor, item => `${item.type}-${item.id}`)
+      .sort((a, b) => b.popularity - a.popularity)
+      .slice(0, KNOWN_FOR_CARDS_LIMIT);
   }, [knownForMoviesData, knownForShowsData]);
 
   if (personDetailsLoading || !personDetailsData?.personDetails) {
@@ -196,14 +199,16 @@ const PersonDetails = () => {
           )}
         </section>
       </main>
-      {showFullDescription && person.biography && (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Modal closeModal={() => setShowFullDescription(false)}>
-            <h3 className='mb-4 text-xl font-semibold'>Biography</h3>
-            <p>{person.biography}</p>
-          </Modal>
-        </Suspense>
-      )}
+      <AnimatePresence mode='wait'>
+        {showFullDescription && person.biography && (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Modal closeModal={() => setShowFullDescription(false)}>
+              <h3 className='mb-4 text-xl font-semibold'>Biography</h3>
+              <p>{person.biography}</p>
+            </Modal>
+          </Suspense>
+        )}
+      </AnimatePresence>
     </>
   );
 };

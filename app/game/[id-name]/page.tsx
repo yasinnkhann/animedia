@@ -1,6 +1,7 @@
 'use client';
 
 import { lazy, Suspense, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import * as Queries from '@/graphql/queries';
@@ -490,14 +491,16 @@ const GameDetails = () => {
             </section>
           )}
       </section>
-      {showFullDescription && (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Modal closeModal={() => setShowFullDescription(false)}>
-            <h3 className='mb-4 text-xl font-semibold'>Storyline</h3>
-            <p>{game.storyline}</p>
-          </Modal>
-        </Suspense>
-      )}
+      <AnimatePresence mode='wait'>
+        {showFullDescription && (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Modal closeModal={() => setShowFullDescription(false)}>
+              <h3 className='mb-4 text-xl font-semibold'>Storyline</h3>
+              <p>{game.storyline}</p>
+            </Modal>
+          </Suspense>
+        )}
+      </AnimatePresence>
     </main>
   );
 };
