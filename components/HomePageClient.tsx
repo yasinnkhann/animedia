@@ -109,7 +109,12 @@ const HomePageClient = () => {
   }
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+    <motion.main
+      className='mt-[calc(var(--header-height-mobile)+1rem)]'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       {allDataLoaded && (
         <div>
           <SearchBar ref={searchBarRef} />
@@ -240,7 +245,7 @@ const HomePageClient = () => {
           </section>
         </div>
       )}
-    </main>
+    </motion.main>
   );
 };
 

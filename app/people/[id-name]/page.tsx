@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, lazy, Suspense } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import _ from 'lodash';
 import Image from 'next/image';
@@ -123,7 +123,12 @@ const PersonDetails = () => {
 
   return (
     <>
-      <main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
+      <motion.main
+        className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
           <Image
             className='rounded-lg'
@@ -198,7 +203,7 @@ const PersonDetails = () => {
             </section>
           )}
         </section>
-      </main>
+      </motion.main>
       <AnimatePresence mode='wait'>
         {showFullDescription && person.biography && (
           <Suspense fallback={<div>Loading...</div>}>

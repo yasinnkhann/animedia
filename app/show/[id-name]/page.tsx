@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -799,7 +800,12 @@ const ShowDetails = () => {
     );
   }
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'>
+    <motion.main
+      className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
         <Image
           className='rounded-lg'
@@ -1122,7 +1128,7 @@ const ShowDetails = () => {
             </section>
           )}
       </section>
-    </main>
+    </motion.main>
   );
 };
 

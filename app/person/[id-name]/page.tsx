@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, Suspense } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import _ from 'lodash';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -127,7 +127,12 @@ export default function PersonDetailsPage() {
   const person = personDetailsData.personDetails;
 
   return (
-    <main className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] max-w-7xl px-4 sm:px-6 lg:px-8'>
+    <motion.main
+      className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] max-w-7xl px-4 sm:px-6 lg:px-8'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]'>
         {/* Left Column: Image & Personal Info */}
         <aside className='flex flex-col gap-8'>
@@ -250,6 +255,6 @@ export default function PersonDetailsPage() {
           </Suspense>
         )}
       </AnimatePresence>
-    </main>
+    </motion.main>
   );
 }
