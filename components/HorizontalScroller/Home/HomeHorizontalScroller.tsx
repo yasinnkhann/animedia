@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import MotionItem from '../MotionItem';
 import HomeCard from './HomeCard';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
@@ -79,14 +80,21 @@ const HomeHorizontalScroller = ({ items }: Props) => {
       onMouseMove={handleDrag}
       scrollContainerClassName='!h-[26rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
     >
-      {items.map(item => (
-        <HomeCard
+      {items.map((item, idx) => (
+        <MotionItem
           key={item.id}
           itemId={item.id}
-          item={item}
-          dragging={dragging}
-          userMatchedMedias={userMatchedMedias}
-        />
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: idx * 0.05 }}
+        >
+          <HomeCard
+            itemId={item.id}
+            item={item}
+            dragging={dragging}
+            userMatchedMedias={userMatchedMedias}
+          />
+        </MotionItem>
       ))}
     </ScrollMenu>
   );

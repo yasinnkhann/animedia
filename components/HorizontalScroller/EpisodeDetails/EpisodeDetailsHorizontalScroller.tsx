@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import MotionItem from '../MotionItem';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
@@ -89,7 +90,15 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
       {groupSeasonsAndEps()
         .slice(0, episodesToShow)
         .map((item, idx) => (
-          <EpisodeDetailsCard item={item} key={idx} itemId={`${item.season}-${item.episode}`} />
+          <MotionItem
+            key={idx}
+            itemId={`${item.season}-${item.episode}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: idx * 0.05 }}
+          >
+            <EpisodeDetailsCard item={item} itemId={`${item.season}-${item.episode}`} />
+          </MotionItem>
         ))}
     </ScrollMenu>
   );
