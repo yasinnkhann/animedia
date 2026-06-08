@@ -1,9 +1,9 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from '@apollo/client';
+import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from '@apollo/client';
 import { relayStylePagination } from '@apollo/client/utilities';
-import { onError } from '@apollo/client/link/error';
+import { ErrorLink } from '@apollo/client/link/error';
 import { SERVER_BASE_URL } from 'utils/constants';
 
-const errorLink = onError(({ graphQLErrors, networkError }: any) => {
+const errorLink = new ErrorLink(({ graphQLErrors, networkError }: any) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((err: any) => {
       const { locations, message, path } = err;
@@ -16,7 +16,7 @@ const errorLink = onError(({ graphQLErrors, networkError }: any) => {
   }
 });
 
-const link = from([
+const link = ApolloLink.from([
   errorLink,
   new HttpLink({
     uri: SERVER_BASE_URL,

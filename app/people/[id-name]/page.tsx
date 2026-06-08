@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState, lazy, Suspense } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import _ from 'lodash';
 import Image from 'next/image';
