@@ -29,7 +29,6 @@ declare global {
       REDIS_PORT: string;
       REDIS_PASSWORD: string;
       CRON_SECRET: string;
-      LOG_LEVEL: string;
       NEXT_PUBLIC_SENTRY_DSN: string;
       SENTRY_ORG: string;
       SENTRY_PROJECT: string;
@@ -37,7 +36,6 @@ declare global {
       SENTRY_SEND_DEFAULT_PII: string;
       SENTRY_INCLUDE_LOCAL_VARIABLES: string;
       NEXT_PUBLIC_SENTRY_SEND_DEFAULT_PII: string;
-      NEXTAUTH_DEBUG: string;
     }
   }
 }

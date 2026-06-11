@@ -3,7 +3,7 @@ import { __prod__ } from 'utils/constants';
 import crypto from 'crypto';
 
 // Environment-based log level
-const LOG_LEVEL = process.env.LOG_LEVEL || (__prod__ ? 'warn' : 'info');
+const LOG_LEVEL = __prod__ ? 'warn' : 'info';
 
 // Sensitive data filter
 const sensitiveDataFilter = format(info => {

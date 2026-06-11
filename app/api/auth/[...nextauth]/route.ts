@@ -9,10 +9,11 @@ import { verify } from 'argon2';
 import { CommonMethods } from '../../../../utils/CommonMethods';
 import * as Sentry from '@sentry/nextjs';
 import logger from '@lib/logger';
+import { __prod__ } from '@/utils/constants';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  debug: process.env.NEXTAUTH_DEBUG === 'true',
+  debug: __prod__ ? false : true,
   secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
