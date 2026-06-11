@@ -33,9 +33,6 @@ declare global {
       SENTRY_ORG: string;
       SENTRY_PROJECT: string;
       SENTRY_AUTH_TOKEN: string;
-      SENTRY_SEND_DEFAULT_PII: string;
-      SENTRY_INCLUDE_LOCAL_VARIABLES: string;
-      NEXT_PUBLIC_SENTRY_SEND_DEFAULT_PII: string;
     }
   }
 }
