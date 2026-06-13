@@ -2,39 +2,34 @@
 
 import { useState } from 'react';
 import { Oval } from 'react-loading-icons';
-import { useMutation } from '@apollo/client/react';
-import * as Mutations from '../../../graphql/mutations';
 import _ from 'lodash';
+import { sendVerificationEmailAction } from '../../actions/auth';
 
 interface Props {
   userId: string;
 }
 
 export default function VerificationEmailSentClient({ userId }: Props) {
+  const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{
     type: 'success' | 'error';
     message: string;
   } | null>(null);
 
-  const [sendVerificationEmail, { loading }] = useMutation(Mutations.SEND_VERIFICATION_EMAIL);
-
   const handleResendLink = async () => {
+    setLoading(true);
     try {
-      const res = await sendVerificationEmail({
-        variables: { userId },
-      });
+      const res = await sendVerificationEmailAction({ id: userId });
 
-      if (res.data?.sendVerificationEmail?.userId) {
+      if (res.userId) {
         setStatusMessage({
           type: 'success',
           message: 'Verification link has been resent! Please check your inbox.',
         });
-      } else if (!_.isEmpty(res.data?.sendVerificationEmail?.errors)) {
+      } else if (res.errors && !_.isEmpty(res.errors)) {
         setStatusMessage({
           type: 'error',
-          message:
-            res.data?.sendVerificationEmail?.errors?.[0]?.message ??
-            'Error occurred while resending link.',
+          message: res.errors[0]?.message ?? 'Error occurred while resending link.',
         });
       }
     } catch (err) {
@@ -43,6 +38,8 @@ export default function VerificationEmailSentClient({ userId }: Props) {
         type: 'error',
         message: 'An unexpected error occurred. Please try again later.',
       });
+    } finally {
+      setLoading(false);
     }
   };
 

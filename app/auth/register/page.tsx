@@ -1,15 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import * as Mutations from '../../../graphql/mutations';
 import { useState } from 'react';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useFormik } from 'formik';
 import { registerValidate } from '../../../lib/nextAuth/account-validate';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@apollo/client/react';
 import _ from 'lodash';
+import { registerUserAction, sendVerificationEmailAction } from '../../actions/auth';
 
 type ErrorRes = {
   message: string;
@@ -23,6 +22,9 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
+  const [registerErrs, setRegisterErrs] = useState<ErrorRes[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -34,48 +36,33 @@ export default function RegisterPage() {
     onSubmit,
   });
 
-  const [registerErrs, setRegisterErrs] = useState<ErrorRes[]>([]);
-
-  const [registerUser, { loading: registerLoading }] = useMutation(Mutations.REGISTER_USER);
-
-  const [sendVerificationEmail] = useMutation(Mutations.SEND_VERIFICATION_EMAIL);
-
   async function onSubmit() {
+    setLoading(true);
+    setRegisterErrs([]);
     const { name, email, password } = formik.values;
     try {
-      const registerUserRes = await registerUser({
-        variables: {
-          name,
-          email,
-          password,
-        },
-      });
+      const registerRes = await registerUserAction({ name, email, password });
 
-      if (registerUserRes.data?.registerUser?.createdUser?.id) {
-        const sendVerificationEmailRes = await sendVerificationEmail({
-          variables: {
-            userId: registerUserRes.data.registerUser.createdUser.id,
-          },
-        });
-        if (
-          sendVerificationEmailRes.data?.sendVerificationEmail?.userId &&
-          sendVerificationEmailRes.data?.sendVerificationEmail?.token
-        ) {
+      if (registerRes.createdUser?.id) {
+        const emailRes = await sendVerificationEmailAction({ id: registerRes.createdUser.id });
+
+        if (emailRes.userId && emailRes.token) {
           router.push(
-            `/auth/verification-email-sent?uid=${sendVerificationEmailRes.data.sendVerificationEmail.userId}&token=${sendVerificationEmailRes.data.sendVerificationEmail.token}`
+            `/auth/verification-email-sent?uid=${emailRes.userId}&token=${emailRes.token}`
           );
+        } else if (emailRes.errors && !_.isEmpty(emailRes.errors)) {
+          setRegisterErrs(emailRes.errors);
         } else {
           throw new Error('Could not send verification email');
         }
-      }
-      if (
-        registerUserRes.data?.registerUser &&
-        !_.isEmpty(registerUserRes.data.registerUser.errors)
-      ) {
-        setRegisterErrs(registerUserRes.data.registerUser.errors ?? []);
+      } else if (registerRes.errors && !_.isEmpty(registerRes.errors)) {
+        setRegisterErrs(registerRes.errors);
       }
     } catch (err) {
       console.error(err);
+      setRegisterErrs([{ message: 'An unexpected error occurred.' }]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -188,10 +175,10 @@ export default function RegisterPage() {
 
           <button
             type='submit'
-            disabled={registerLoading}
+            disabled={loading}
             className='mt-2 rounded-lg bg-blue-600 py-3 font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none active:scale-[0.98] disabled:opacity-50'
           >
-            {registerLoading ? 'Creating account...' : 'Sign Up'}
+            {loading ? 'Creating account...' : 'Sign Up'}
           </button>
         </form>
 

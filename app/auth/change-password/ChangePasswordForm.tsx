@@ -2,11 +2,13 @@
 
 import { useFormik } from 'formik';
 import { newPasswordValidate } from '../../../lib/nextAuth/account-validate';
-import { useMutation } from '@apollo/client/react';
-import * as Mutations from '../../../graphql/mutations';
 import { Oval } from 'react-loading-icons';
 import _ from 'lodash';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { changePasswordAction } from '../../actions/auth';
+
+type ErrorRes = { message: string };
 
 interface Props {
   userId: string;
@@ -15,6 +17,9 @@ interface Props {
 
 export default function ChangePasswordForm({ userId, token }: Props) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<{ errors?: ErrorRes[] } | null>(null);
+
   const formik = useFormik({
     initialValues: {
       newPassword: '',
@@ -23,21 +28,23 @@ export default function ChangePasswordForm({ userId, token }: Props) {
     onSubmit,
   });
 
-  const [changePassword, { loading, data }] = useMutation(Mutations.CHANGE_PASSWORD);
-
   async function onSubmit() {
+    setLoading(true);
+    setData(null);
     const { newPassword } = formik.values;
     try {
-      const res = await changePassword({
-        variables: { userId, newPassword, token },
-      });
-      if (res.data?.changePassword && _.isEmpty(res.data.changePassword.errors)) {
+      const res = await changePasswordAction({ userId, newPassword }, token);
+      setData(res);
+      if (res && _.isEmpty(res.errors)) {
         setTimeout(() => {
           router.push('/auth/login');
         }, 2000);
       }
     } catch (err) {
       console.error(err);
+      setData({ errors: [{ message: 'An unexpected error occurred.' }] });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -83,9 +90,9 @@ export default function ChangePasswordForm({ userId, token }: Props) {
           </div>
         )}
 
-        {!loading && data && !_.isEmpty(data.changePassword?.errors) && (
+        {!loading && data && !_.isEmpty(data.errors) && (
           <div className='rounded-lg bg-rose-50 p-3'>
-            {data.changePassword?.errors?.map((err, idx: number) => (
+            {data.errors!.map((err, idx: number) => (
               <p key={idx} className='text-center text-sm font-medium text-rose-600'>
                 {err.message}
               </p>
@@ -93,7 +100,7 @@ export default function ChangePasswordForm({ userId, token }: Props) {
           </div>
         )}
 
-        {!loading && data && _.isEmpty(data.changePassword?.errors) && (
+        {!loading && data && _.isEmpty(data.errors) && (
           <div className='rounded-lg bg-green-50 p-4 text-center'>
             <p className='text-sm font-medium text-green-800'>Your password has been changed!</p>
             <p className='mt-1 text-xs text-green-700'>Redirecting to login page...</p>

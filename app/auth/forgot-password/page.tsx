@@ -1,16 +1,17 @@
 'use client';
 
-import { useMutation } from '@apollo/client/react';
 import { useFormik } from 'formik';
 import { forgotPasswordValidate } from '../../../lib/nextAuth/account-validate';
-import * as Mutations from '../../../graphql/mutations';
 import { Oval } from 'react-loading-icons';
 import _ from 'lodash';
+import { useState } from 'react';
+import { sendForgotPasswordEmailAction } from '../../actions/auth';
+
+type ErrorRes = { message: string };
 
 export default function ForgotPasswordPage() {
-  const [sendForgotPasswordEmail, { loading, data }] = useMutation(
-    Mutations.SEND_FORGOT_PASSWORD_EMAIL
-  );
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<{ errors?: ErrorRes[] } | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -21,15 +22,17 @@ export default function ForgotPasswordPage() {
   });
 
   async function onSubmit() {
+    setLoading(true);
+    setData(null);
     const { email } = formik.values;
     try {
-      await sendForgotPasswordEmail({
-        variables: {
-          email,
-        },
-      });
+      const res = await sendForgotPasswordEmailAction({ email });
+      setData(res);
     } catch (err) {
       console.error(err);
+      setData({ errors: [{ message: 'An unexpected error occurred.' }] });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -78,7 +81,7 @@ export default function ForgotPasswordPage() {
             </div>
           )}
 
-          {!loading && data && _.isEmpty(data.sendForgotPasswordEmail?.errors) && (
+          {!loading && data && _.isEmpty(data.errors) && (
             <div className='rounded-lg bg-green-50 p-4 text-center'>
               <p className='text-sm font-medium text-green-800'>Reset link has been sent!</p>
               <p className='mt-1 text-xs text-green-700'>
@@ -89,8 +92,8 @@ export default function ForgotPasswordPage() {
 
           {!loading &&
             data &&
-            !_.isEmpty(data.sendForgotPasswordEmail?.errors) &&
-            data.sendForgotPasswordEmail?.errors.map((err, idx: number) => (
+            !_.isEmpty(data.errors) &&
+            data.errors!.map((err, idx: number) => (
               <div key={idx} className='rounded-lg bg-rose-50 p-3'>
                 <p className='text-center text-sm font-medium text-rose-600'>{err.message}</p>
               </div>
