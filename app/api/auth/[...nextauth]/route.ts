@@ -47,11 +47,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
         try {
-          const result: any = await prisma.user.findUnique({
+          const result = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
 
-          if (!result) return null;
+          if (!result || !result.password) return null;
 
           const checkPassword = await verify(result.password, credentials.password);
 

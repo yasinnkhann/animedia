@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
           {!loading &&
             data &&
             !_.isEmpty(data.sendForgotPasswordEmail?.errors) &&
-            data.sendForgotPasswordEmail?.errors.map((err: any, idx: number) => (
+            data.sendForgotPasswordEmail?.errors.map((err, idx: number) => (
               <div key={idx} className='rounded-lg bg-rose-50 p-3'>
                 <p className='text-center text-sm font-medium text-rose-600'>{err.message}</p>
               </div>

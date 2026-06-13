@@ -85,7 +85,7 @@ export default function ChangePasswordForm({ userId, token }: Props) {
 
         {!loading && data && !_.isEmpty(data.changePassword?.errors) && (
           <div className='rounded-lg bg-rose-50 p-3'>
-            {data.changePassword?.errors?.map((err: any, idx: number) => (
+            {data.changePassword?.errors?.map((err, idx: number) => (
               <p key={idx} className='text-center text-sm font-medium text-rose-600'>
                 {err.message}
               </p>

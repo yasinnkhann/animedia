@@ -57,7 +57,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
     useDebounce(
       () => {
-        let allResults: any[] = [];
+        let allResults: TDropDownSearchResult[] = [];
         if (
           searchedMoviesData?.searchedMovies.results &&
           searchedShowsData?.searchedShows.results &&
@@ -65,29 +65,29 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
           searchedPeopleData?.searchedPeople.results
         ) {
           const movieResults = searchedMoviesData.searchedMovies.results
-            .map((movie: any) => ({
+            .map(movie => ({
               id: movie.id,
               titleName: movie.title,
               releaseDate: movie.release_date,
-              type: 'movie',
+              type: 'movie' as const,
             }))
             .slice(0, 5);
 
           const showsResults = searchedShowsData.searchedShows.results
-            .map((show: any) => ({
+            .map(show => ({
               id: show.id,
               titleName: show.name,
               firstAirDate: show.first_air_date,
-              type: 'show',
+              type: 'show' as const,
             }))
             .slice(0, 5);
 
           const peopleResults = searchedPeopleData.searchedPeople.results
-            .map((person: any) => ({
+            .map(person => ({
               id: person.id,
               titleName: person.name,
               knownForDepartment: person.known_for_department,
-              type: 'person',
+              type: 'person' as const,
             }))
             .slice(0, 5);
 
@@ -98,7 +98,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
               releaseDate: game.first_release_date
                 ? new Date(game.first_release_date * 1000).toISOString()
                 : undefined,
-              type: 'game',
+              type: 'game' as const,
             }))
             .slice(0, 5);
 
