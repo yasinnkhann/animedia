@@ -1,8 +1,6 @@
-import request from 'graphql-request';
 import { redirect } from 'next/navigation';
-import { SERVER_BASE_URL } from '../../../utils/constants';
-import * as Queries from '../../../graphql/queries';
-import _ from 'lodash';
+import { VERIFICATION_EMAIL_PREFIX } from '../../../utils/constants';
+import { redis } from '../../../lib/redis';
 import VerificationEmailSentClient from './VerificationEmailSentClient';
 
 interface PageProps {
@@ -17,18 +15,9 @@ export default async function VerificationEmailSentPage({ searchParams }: PagePr
   }
 
   try {
-    const verifyTokenRes: any = await request(
-      SERVER_BASE_URL,
-      Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-      {
-        token: token,
-        userId: uid,
-      }
-    );
+    const storedToken = await redis.get(`${VERIFICATION_EMAIL_PREFIX}:${uid}`);
 
-    const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
-
-    if (!verifyTokenData || !_.isEmpty(verifyTokenData.errors)) {
+    if (!storedToken || storedToken !== token) {
       redirect('/');
     }
   } catch (err) {

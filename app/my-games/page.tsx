@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import MyMediaList from 'components/MyMedia/MyMediaList';
-import * as Queries from '../../graphql/queries';
+import MyMediaList from '@components/MyMedia/MyMediaList';
+import * as Queries from '@graphql/queries';
 import { Circles } from 'react-loading-icons';
 import { useSearchParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';

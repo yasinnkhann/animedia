@@ -1,13 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import * as Queries from '../../../graphql/queries';
+import * as Queries from '@graphql/queries';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { IEPDetails } from '@ts/interfaces';
-import { CommonMethods } from 'utils/CommonMethods';
-import RoundProgressBar from 'components/RoundProgressBar';
-import Modal from 'components/Modal';
+import { CommonMethods } from '@utils/CommonMethods';
+import RoundProgressBar from '@components/RoundProgressBar';
+import Modal from '@components/Modal';
 import commaNumber from 'comma-number';
 import { Suspense } from 'react';
 import { Puff } from 'react-loading-icons';

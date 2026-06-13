@@ -6,8 +6,8 @@ import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { IEPDetails } from '@ts/interfaces';
-import { RESULTS_PER_EPISODES_SLIDER } from 'utils/constants';
-import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
+import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
 import type { ShowDetailsQuery } from '@/graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -19,7 +19,7 @@ interface Props {
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
   const { handleDrag, handleMouseDown, handleMouseUp, handleWheel } = useHorizontalScroller();
-  const [episodesToShow, setEpisodesToShow] = useState(RESULTS_PER_EPISODES_SLIDER);
+  const [episodesToShow, setEpisodesToShow] = useState<number>(RESULTS_PER_EPISODES_SLIDER);
   const isLoadingMore = useRef(false);
   const scrollContainerRef = useRef<scrollVisibilityApiType>(
     null

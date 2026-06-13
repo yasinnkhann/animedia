@@ -14,16 +14,14 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@ts/*": ["models/ts/*"],
-      "@lib/*": ["lib/*"],
-      "@graphql/*": ["graphql/*"],
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"]
+      "@ts/*": ["./models/ts/*"],
+      "@lib/*": ["./lib/*"],
+      "@graphql/*": ["./graphql/*"],
+      "@components/*": ["./components/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@utils/*": ["./utils/*"]
     },
     "plugins": [
       {

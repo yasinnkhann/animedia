@@ -1,8 +1,6 @@
-import request from 'graphql-request';
 import { redirect } from 'next/navigation';
-import { SERVER_BASE_URL } from '../../../utils/constants';
-import * as Queries from '../../../graphql/queries';
-import _ from 'lodash';
+import { FORGOT_PASSWORD_EMAIL_PREFIX } from '../../../utils/constants';
+import { redis } from '../../../lib/redis';
 import ChangePasswordForm from './ChangePasswordForm';
 
 interface PageProps {
@@ -17,18 +15,9 @@ export default async function ChangePasswordPage({ searchParams }: PageProps) {
   }
 
   try {
-    const checkForgotPWTokenRes: any = await request(
-      SERVER_BASE_URL,
-      Queries.CHECK_FORGOT_PASSWORD_TOKEN,
-      {
-        token: token,
-        userId: uid,
-      }
-    );
+    const storedToken = await redis.get(`${FORGOT_PASSWORD_EMAIL_PREFIX}:${uid}`);
 
-    const checkForgotPWTokenData = checkForgotPWTokenRes.checkForgotPasswordToken;
-
-    if (!checkForgotPWTokenData || !_.isEmpty(checkForgotPWTokenData.errors)) {
+    if (!storedToken || storedToken !== token) {
       redirect('/');
     }
   } catch (err) {

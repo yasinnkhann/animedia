@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import { __prod__ } from 'utils/constants';
+import { __prod__ } from '@utils/constants';
 import crypto from 'crypto';
 
 // Environment-based log level

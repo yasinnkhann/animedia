@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ICast } from '@ts/interfaces';
-import { CommonMethods } from 'utils/CommonMethods';
+import { CommonMethods } from '@utils/CommonMethods';
 
 const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; itemId: string }) => {
   const body = (

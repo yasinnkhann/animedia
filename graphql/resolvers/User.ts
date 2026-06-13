@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
 import { extendType, stringArg, nonNull, idArg, intArg, booleanArg } from 'nexus';
-import { WatchStatusTypes } from 'graphql/models/enums';
+import { WatchStatusTypes } from '@graphql/models/enums';
 import Mail from 'nodemailer/lib/mailer';
-import { sendEmail } from 'graphql/utils';
+import { sendEmail } from '@graphql/utils';
 import {
   __prod__,
   CLIENT_BASE_URL,
@@ -14,7 +14,7 @@ import {
   FORGOT_PASSWORD_EMAIL_COUNT_PREFIX,
   FORGOT_PASSWORD_EMAIL_COUNT_LIMIT,
   FORGOT_PASSWORD_EMAIL_PREFIX,
-} from 'utils/constants';
+} from '@utils/constants';
 import { safeResolver } from '../utils/resolver-helpers';
 import {
   parseInput,

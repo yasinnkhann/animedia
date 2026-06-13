@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import * as Queries from '@/graphql/queries';
-import MyMediaList from 'components/MyMedia/MyMediaList';
+import * as Queries from '@graphql/queries';
+import MyMediaList from '@components/MyMedia/MyMediaList';
 import { Circles } from 'react-loading-icons';
-import { CommonMethods } from 'utils/CommonMethods';
+import { CommonMethods } from '@utils/CommonMethods';
 import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';

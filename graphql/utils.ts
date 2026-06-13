@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { IGDB_ACCESS_TOKEN_PREFIX, IGDB_BASE_API_URL, __prod__ } from 'utils/constants';
+import { IGDB_ACCESS_TOKEN_PREFIX, IGDB_BASE_API_URL, __prod__ } from '@utils/constants';
 import { redis } from '../lib/redis';
 import logger from '../lib/logger';
 import { TIGDBImageSizes } from '@ts/types';

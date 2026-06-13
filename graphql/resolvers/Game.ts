@@ -1,4 +1,4 @@
-import { IGDB_BASE_API_URL } from 'utils/constants';
+import { IGDB_BASE_API_URL } from '@utils/constants';
 import { postIGDB, addIGDBCoverUrl, addIGDBMugShotUrl } from '../utils';
 import { extendType, nonNull, stringArg, list, intArg, idArg, objectType } from 'nexus';
 import { safeResolver } from '../utils/resolver-helpers';

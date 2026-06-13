@@ -8,7 +8,7 @@ import { LeftArrow, RightArrow } from '../Arrows';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
 import { useSession } from 'next-auth/react';
-import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
 import type {
   PopularMoviesQuery,
   PopularShowsQuery,

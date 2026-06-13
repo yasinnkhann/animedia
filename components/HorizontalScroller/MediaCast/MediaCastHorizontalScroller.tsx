@@ -1,6 +1,6 @@
 import MediaCastCard from './MediaCastCard';
 import MotionItem from '../MotionItem';
-import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import { LeftArrow, RightArrow } from '../Arrows';
 import { ICast } from '@ts/interfaces';

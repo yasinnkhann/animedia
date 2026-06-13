@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { IRelatedMedia } from '@ts/interfaces';
-import { CommonMethods } from 'utils/CommonMethods';
+import { CommonMethods } from '@utils/CommonMethods';
 import type { UsersMoviesQuery, UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
 
 type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;

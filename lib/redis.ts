@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { __prod__, REDIS_MB_THRESHOLD } from 'utils/constants';
+import { __prod__, REDIS_MB_THRESHOLD } from '@utils/constants';
 import logger from './logger';
 
 export const redis = __prod__

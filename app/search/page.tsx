@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { Circles } from 'react-loading-icons';
-import Pagination from 'components/Pagination';
+import Pagination from '@components/Pagination';
 import SearchBar from '@/components/Search/SearchBar';
 import SearchResult from '@/components/Search/SearchResult';
 import * as Queries from '@/graphql/queries';

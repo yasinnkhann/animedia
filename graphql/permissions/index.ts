@@ -22,6 +22,5 @@ export const permissions = shield({
     updateMovie: isAuthenticated,
     updateShow: isAuthenticated,
     updateGame: isAuthenticated,
-    changePassword: isAuthenticated,
   },
 });

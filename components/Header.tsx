@@ -11,7 +11,7 @@ import { TbSearch } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
 import SearchBar from './Search/SearchBar';
 import { motion } from 'framer-motion';
-import { MY_MEDIA_ITEMS, MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS } from 'models/dropDownOptions';
+import { MY_MEDIA_ITEMS, MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS } from '@/models/dropDownOptions';
 
 const Header = () => {
   const pathname = usePathname();

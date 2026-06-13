@@ -1,9 +1,10 @@
-import request from 'graphql-request';
 import { redirect } from 'next/navigation';
-import { SERVER_BASE_URL } from '../../../utils/constants';
-import * as Queries from '../../../graphql/queries';
-import * as Mutations from '../../../graphql/mutations';
-import _ from 'lodash';
+import {
+  VERIFICATION_EMAIL_PREFIX,
+  VERIFICATION_EMAIL_COUNT_PREFIX,
+} from '../../../utils/constants';
+import { redis } from '../../../lib/redis';
+import { prisma } from '../../../lib/prisma';
 import Link from 'next/link';
 
 interface PageProps {
@@ -18,31 +19,19 @@ export default async function VerificationEmailPage({ searchParams }: PageProps)
   }
 
   try {
-    const verifyTokenRes: any = await request(
-      SERVER_BASE_URL,
-      Queries.CHECK_EMAIL_VERIFICATION_TOKEN,
-      {
-        token: token,
-        userId: uid,
-      }
-    );
+    const storedToken = await redis.get(`${VERIFICATION_EMAIL_PREFIX}:${uid}`);
 
-    const verifyTokenData = verifyTokenRes.checkEmailVerificationToken;
-
-    if (!verifyTokenData?.userId || !_.isEmpty(verifyTokenData.errors)) {
+    if (!storedToken || storedToken !== token) {
       redirect('/');
     }
 
-    const verifyUserEmailRes: any = await request(SERVER_BASE_URL, Mutations.VERIFY_USER_EMAIL, {
-      userId: verifyTokenData.userId,
+    await prisma.user.update({
+      where: { id: uid },
+      data: { emailVerified: new Date() },
     });
 
-    if (
-      !verifyUserEmailRes.verifyUserEmail ||
-      !_.isEmpty(verifyUserEmailRes.verifyUserEmail?.errors)
-    ) {
-      redirect('/');
-    }
+    await redis.del(`${VERIFICATION_EMAIL_PREFIX}:${uid}`);
+    await redis.del(`${VERIFICATION_EMAIL_COUNT_PREFIX}:${uid}`);
   } catch (err) {
     console.error(err);
     redirect('/');

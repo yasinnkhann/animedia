@@ -2,15 +2,15 @@
 
 import { forwardRef, useState, useEffect, RefObject } from 'react';
 import { motion } from 'framer-motion';
-import { CommonMethods } from 'utils/CommonMethods';
+import { CommonMethods } from '@utils/CommonMethods';
 import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/navigation';
 import { FaSearch } from 'react-icons/fa';
-import { useDebounce } from 'hooks/useDebounce';
+import { useDebounce } from '@hooks/useDebounce';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../graphql/queries';
 import _ from 'lodash';
-import { RESULTS_PER_PAGE } from 'utils/constants';
+import { RESULTS_PER_PAGE } from '@utils/constants';
 
 interface Props {
   closeSearch?: () => void;

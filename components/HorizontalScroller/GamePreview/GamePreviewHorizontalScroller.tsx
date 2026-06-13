@@ -1,7 +1,7 @@
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import MotionItem from '../MotionItem';
 import { LeftArrow, RightArrow } from '../Arrows';
-import { useHorizontalScroller } from 'hooks/useHorizontalScroller';
+import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
 import GamePreviewCard from './GamePreviewCard';
 import { IGamePreview } from '@ts/interfaces';
 
