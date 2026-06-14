@@ -11,7 +11,7 @@ import type { MenuProps } from 'antd';
 
 interface Props {
   items: {
-    label: string;
+    label: string | React.ReactNode;
     key: string;
   }[];
   name?: string;
@@ -47,11 +47,15 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
   };
 
   const handleMenuClick: MenuProps['onClick'] = e => {
+    if (e.key === 'theme-switcher') {
+      return;
+    }
+
     setOpen(false);
 
     if (routeType) {
       router.push(`/${routeType}/${e.key}`);
-    } else {
+    } else if (e.key === 'log-out') {
       signOut({
         callbackUrl: '/',
       });

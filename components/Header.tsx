@@ -54,9 +54,11 @@ const Header = () => {
               </li>
             </ul>
             <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
-              <li className='mr-4'>
-                <ThemeSwitcher />
-              </li>
+              {status !== 'authenticated' && (
+                <li className='mr-4'>
+                  <ThemeSwitcher />
+                </li>
+              )}
               <li
                 className={`!flex !w-full !items-center ${
                   status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
@@ -114,7 +116,19 @@ const Header = () => {
                   <DropDownItem
                     items={[
                       {
-                        label: 'Log Out',
+                        label: (
+                          <div
+                            className='flex w-full items-center justify-between'
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <span className='mr-4 font-medium'>Theme</span>
+                            <ThemeSwitcher />
+                          </div>
+                        ),
+                        key: 'theme-switcher',
+                      },
+                      {
+                        label: <span className='font-medium text-red-500'>Log Out</span>,
                         key: 'log-out',
                       },
                     ]}
