@@ -1,46 +1,48 @@
 'use client';
 
 import Link from 'next/link';
-import { loginValidate } from '../../../lib/nextAuth/account-validate';
-import * as Queries from '../../../graphql/queries';
 import { FaGoogle, FaFacebook, FaDiscord } from 'react-icons/fa';
 import _ from 'lodash';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { signIn } from 'next-auth/react';
-import { Field, Form, Formik, FormikErrors, FormikHelpers } from 'formik';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginUserInput } from '@/utils/validations';
+import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import { useLazyQuery } from '@apollo/client/react';
-import { ILogin } from '../../../models/ts/interfaces';
 import { ThreeDots } from 'react-loading-icons';
 import { CommonMethods } from '../../../utils/CommonMethods';
 import { ACCOUNT_NOT_FOUND_MESSAGE } from '../../../utils/constants';
+import { checkAccountVerifiedAction } from '../../actions/auth';
+
+type FormValues = z.infer<typeof LoginUserInput>;
 
 export default function LoginPage() {
   const [showPW, setShowPW] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  const [fetchAccountVerifiedData, { loading, error }] = useLazyQuery(Queries.ACCOUNT_VERIFIED);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(LoginUserInput),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const handleSubmitBtnClick = (
-    formikErrors: FormikErrors<{
-      email: string;
-      password: string;
-    }>
-  ) => {
-    if (formikErrors.email || formikErrors.password) {
-      CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
-    }
-  };
+  const onSubmit = async (data: FormValues) => {
+    const { email, password } = data;
 
-  const handleSubmit = async (values: ILogin, _formikHelpers: FormikHelpers<ILogin>) => {
-    const { email, password } = values;
+    setLoading(true);
+    const res = await checkAccountVerifiedAction(email);
+    setLoading(false);
 
-    const { data: { accountVerified } = {} } = await fetchAccountVerifiedData({
-      variables: { email },
-    });
-
-    if (error || (accountVerified && accountVerified.errors.length > 0)) {
+    if (res.errors && res.errors.length > 0) {
       CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
       return;
     }
@@ -54,7 +56,13 @@ export default function LoginPage() {
 
     if (status?.ok && status.url) {
       router.push(status.url);
+    } else {
+      CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
     }
+  };
+
+  const onErrors = () => {
+    CommonMethods.notifyError(ACCOUNT_NOT_FOUND_MESSAGE, 'bottom-center', 3000);
   };
 
   return (
@@ -65,63 +73,62 @@ export default function LoginPage() {
           <p className='text-sm text-gray-500'>Welcome back! Please login to your account.</p>
         </div>
 
-        <Formik
-          initialValues={{
-            email: '',
-            password: '',
-          }}
-          validate={loginValidate}
-          onSubmit={(values, formikHelpers) => {
-            handleSubmit(values, formikHelpers);
-          }}
-        >
-          {formikProps => (
-            <Form className='flex flex-col gap-5'>
-              <div className='relative'>
-                <Field
-                  name='email'
-                  type='email'
-                  placeholder='Email Address'
-                  className='w-full rounded-lg border border-gray-300 bg-gray-50 py-3 pl-4 pr-4 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100'
-                />
+        <form className='flex flex-col gap-5' onSubmit={handleSubmit(onSubmit, onErrors)}>
+          <div className='flex flex-col gap-1'>
+            <div className='relative'>
+              <input
+                {...register('email')}
+                type='email'
+                placeholder='Email Address'
+                className={`w-full rounded-lg border py-3 pl-4 pr-4 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
+                  errors.email ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+                }`}
+              />
+            </div>
+            {errors.email && (
+              <span className='text-xs font-medium text-rose-600'>{errors.email.message}</span>
+            )}
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <div className='relative'>
+              <input
+                {...register('password')}
+                type={showPW ? 'text' : 'password'}
+                placeholder='Password'
+                className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
+                  errors.password ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+                }`}
+              />
+              <div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
+                <button
+                  type='button'
+                  onClick={() => setShowPW(!showPW)}
+                  className='flex items-center justify-center text-gray-400 hover:text-blue-500 focus:outline-none'
+                >
+                  {showPW ? <BsFillEyeSlashFill size={20} /> : <BsFillEyeFill size={20} />}
+                </button>
               </div>
+            </div>
+            {errors.password && (
+              <span className='text-xs font-medium text-rose-600'>{errors.password.message}</span>
+            )}
+          </div>
 
-              <div className='relative'>
-                <Field
-                  type={showPW ? 'text' : 'password'}
-                  name='password'
-                  placeholder='Password'
-                  className='w-full rounded-lg border border-gray-300 bg-gray-50 py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100'
-                />
-
-                <div className='absolute right-3 top-1/2 -translate-y-1/2 transform'>
-                  <button
-                    type='button'
-                    onClick={() => setShowPW(!showPW)}
-                    className='flex items-center justify-center text-gray-400 hover:text-blue-500 focus:outline-none'
-                  >
-                    {showPW ? <BsFillEyeSlashFill size={20} /> : <BsFillEyeFill size={20} />}
-                  </button>
-                </div>
+          <button
+            className='mt-2 rounded-lg bg-blue-600 py-3 font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none active:scale-[0.98]'
+            type='submit'
+            disabled={loading}
+          >
+            {loading ? (
+              <div className='flex items-center justify-center'>
+                <ThreeDots className='h-6 w-12' stroke='#ffffff' />
               </div>
-
-              <button
-                className='mt-2 rounded-lg bg-blue-600 py-3 font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none active:scale-[0.98]'
-                type='submit'
-                onClick={() => handleSubmitBtnClick(formikProps.errors)}
-                disabled={loading}
-              >
-                {loading ? (
-                  <div className='flex items-center justify-center'>
-                    <ThreeDots className='h-6 w-12' stroke='#ffffff' />
-                  </div>
-                ) : (
-                  'Login'
-                )}
-              </button>
-            </Form>
-          )}
-        </Formik>
+            ) : (
+              'Login'
+            )}
+          </button>
+        </form>
 
         <div className='relative my-8'>
           <div className='absolute inset-0 flex items-center'>

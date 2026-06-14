@@ -7,23 +7,15 @@ import {
   THE_MOVIE_DB_BASE_IMG_URL,
   THE_MOVIE_DB_BASE_API_URL,
 } from '../utils/constants';
-import type {
-  MovieDetailsQuery,
-  MovieGenreTypes,
-  ShowDetailsQuery,
-  ShowGenreTypes,
-  UsersGamesQuery,
-  UsersMoviesQuery,
-  UsersShowsQuery,
-  WatchStatusTypes,
-} from '@/graphql/generated/code-gen/graphql';
+type MovieGenreTypes = string;
+type ShowGenreTypes = string;
+type WatchStatusTypes = string;
+
 import toast, { ToastPosition } from 'react-hot-toast';
 
-type MovieDetailsGenre = MovieDetailsQuery['movieDetails']['genres'][number];
-type ShowDetailsGenre = ShowDetailsQuery['showDetails']['genres'][number];
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
-type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
+type MovieDetailsGenre = { id: string; name: string };
+type ShowDetailsGenre = { id: string; name: string };
+import type { Movie, Show, Game } from '@prisma/client';
 
 export class CommonMethods {
   public static formatDate = (dateStr: string | null | undefined) => {
@@ -134,15 +126,13 @@ export class CommonMethods {
   };
 
   public static getUserStatusFromMedia = (
-    userMatchedMedias: (UserShow | UserMovie | UserGame)[],
+    userMatchedMedias: (Show | Movie | Game)[],
     item: {
       id: string;
       [key: string]: any;
     }
   ) => {
-    const dataFound = userMatchedMedias.find(
-      (data: UserShow | UserMovie | UserGame) => data.id === item.id
-    );
+    const dataFound = userMatchedMedias.find((data: Show | Movie | Game) => data.id === item.id);
 
     if (dataFound) {
       if ('status' in dataFound) {

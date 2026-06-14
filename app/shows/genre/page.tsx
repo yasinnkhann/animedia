@@ -1,147 +1,34 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Pagination from '@/components/Pagination';
-import MediaList from '@/components/MediaPerson/MediaList';
-import * as Queries from '@/graphql/queries';
-import { Select } from 'antd';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
-import { Circles } from 'react-loading-icons';
-import { TypedDocumentNode } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { tmdbClient } from '@/lib/api';
+import GenreBrowseClient from '@/components/GenreBrowseClient';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { SORT_BY_OPTIONS, SHOW_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
-import type {
-  ShowGenreTypes as GQLShowGenreTypes,
-  PopularShowsByGenreQuery,
-  PopularShowsByGenreQueryVariables,
-  TopRatedShowsByGenreQuery,
-  TopRatedShowsByGenreQueryVariables,
-} from '@/graphql/generated/code-gen/graphql';
 
-type ShowsGenreData =
-  | PopularShowsByGenreQuery['popularShowsByGenre']
-  | TopRatedShowsByGenreQuery['topRatedShowsByGenre'];
-type ShowsGenreVariables = PopularShowsByGenreQueryVariables | TopRatedShowsByGenreQueryVariables;
+export default async function GenreShows(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
-const Genre = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
-  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
+  const sortBy = typeof searchParams.sortBy === 'string' ? searchParams.sortBy : 'Popular';
+  const genre = typeof searchParams.genre === 'string' ? searchParams.genre : 'Action_&_Adventure';
 
-  const [sortByQueryType, setSortByQueryType] = useState<
-    TypedDocumentNode<PopularShowsByGenreQuery | TopRatedShowsByGenreQuery, ShowsGenreVariables>
-  >(Queries.POPULAR_SHOWS_BY_GENRE);
+  const genreIdStr = await CommonMethods.getGenreID(genre as any, 'tv');
+  const genreId = parseInt(genreIdStr, 10);
 
-  const [showGenreType, setShowGenreType] = useState<GQLShowGenreTypes>(
-    'Action_AMPERSAND_Adventure'
-  );
+  const apiSortBy = sortBy === 'Popular' ? 'popularity.desc' : 'vote_average.desc';
 
-  const { data: genreOfShowsData } = useQuery(sortByQueryType, {
-    variables: {
-      genre: showGenreType,
-      page: parseInt(page, 10),
-    },
-  });
-
-  const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
-    if (value === 'Popular') {
-      setSortByQueryType(Queries.POPULAR_SHOWS_BY_GENRE);
-    } else {
-      setSortByQueryType(Queries.TOP_RATED_SHOWS_BY_GENRE);
-    }
-  };
-
-  const handleGenreTypeChange = (value: string) => {
-    setShowGenreType(value as GQLShowGenreTypes);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page]);
+  const genreShows = await tmdbClient.discoverShowsByGenre(genreId, apiSortBy, page);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-      <section className='grid grid-cols-[20%_60%_20%]'>
-        <section className='m-4 justify-self-center'>
-          <div className='mb-2'>
-            <label className='mb-1 block text-blue-500' htmlFor='sort-by-dropdown'>
-              Sort By:
-            </label>
-            <Select
-              className='!w-[10rem]'
-              id='sort-by-dropdown'
-              value={sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE ? 'Popular' : 'Top Rated'}
-              options={SORT_BY_OPTIONS.map(option => ({
-                value: option.value,
-                label: option.text,
-              }))}
-              onChange={handleSortByChange}
-            />
-          </div>
-
-          <div>
-            <label className='mb-1 block text-blue-500' htmlFor='genre-type-dropdown'>
-              Genre Type:
-            </label>
-            <Select
-              className='!w-[10rem]'
-              id='genre-type-dropdown'
-              size='middle'
-              value={showGenreType}
-              options={SHOW_GENRE_TYPE_OPTIONS.map(option => ({
-                value: option.value,
-                label: option.text,
-              }))}
-              onChange={handleGenreTypeChange}
-            />
-          </div>
-        </section>
-
-        {(CommonMethods.extractGraphQLData(genreOfShowsData ?? {}) as unknown as ShowsGenreData) ? (
-          <div>
-            <MediaList
-              mediaData={
-                CommonMethods.extractGraphQLData(
-                  genreOfShowsData ?? {}
-                ) as unknown as ShowsGenreData
-              }
-              pageNum={currPage}
-              title={`${
-                sortByQueryType === Queries.POPULAR_SHOWS_BY_GENRE ? 'Popular' : 'Top Rated'
-              } ${CommonMethods.unParseSpecialChars(showGenreType)} Shows`}
-              genrePage
-            />
-
-            <Pagination
-              currPage={currPage}
-              totalItems={
-                (
-                  CommonMethods.extractGraphQLData(
-                    genreOfShowsData ?? {}
-                  ) as unknown as ShowsGenreData
-                ).total_results
-              }
-              itemsPerPage={RESULTS_PER_PAGE}
-              paginate={(pageNum: number) => router.push(`/shows/genre?page=${pageNum}`)}
-              siblingCount={1}
-              maxPageNum={500}
-            />
-          </div>
-        ) : (
-          <section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
-            <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-          </section>
-        )}
-      </section>
-    </main>
+    <GenreBrowseClient
+      mediaData={genreShows}
+      currPage={page}
+      sortBy={sortBy}
+      genre={genre}
+      basePath='/shows/genre'
+      sortByOptions={SORT_BY_OPTIONS}
+      genreOptions={SHOW_GENRE_TYPE_OPTIONS}
+    />
   );
-};
-
-export default Genre;
+}

@@ -2,28 +2,12 @@ import { ExtractStrict, TContent } from '@ts/types';
 import Image from 'next/image';
 import { CommonMethods } from '../../utils/CommonMethods';
 import Link from 'next/link';
-import type {
-  SearchedGamesQuery,
-  SearchedMoviesQuery,
-  SearchedPeopleQuery,
-  SearchedShowsQuery,
-  UsersGamesQuery,
-  UsersMoviesQuery,
-  UsersShowsQuery,
-} from '@/graphql/generated/code-gen/graphql';
-
-type MovieResult = SearchedMoviesQuery['searchedMovies']['results'][number];
-type ShowResult = SearchedShowsQuery['searchedShows']['results'][number];
-type PersonResult = SearchedPeopleQuery['searchedPeople']['results'][number];
-type GameResult = SearchedGamesQuery['searchedGames']['results'][number];
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
-type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
+import type { Movie, Show, Game } from '@prisma/client';
 
 interface Props {
-  result: MovieResult | ShowResult | PersonResult | GameResult;
+  result: any;
   searchedResultType: ExtractStrict<TContent, 'movie' | 'show' | 'person' | 'game'>;
-  userMatchedMedias: UserMovie[] | UserShow[] | UserGame[];
+  userMatchedMedias: Movie[] | Show[] | Game[];
 }
 
 const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) => {
@@ -75,7 +59,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
   const renderSearchResult = () => {
     let searchResult;
     if (searchedResultType === 'movie') {
-      searchResult = result as MovieResult;
+      searchResult = result;
       return (
         <>
           {renderImage(searchResult.poster_path, titleName, 'the-movie-db')}
@@ -83,7 +67,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
         </>
       );
     } else if (searchedResultType === 'show') {
-      searchResult = result as ShowResult;
+      searchResult = result;
       return (
         <>
           {renderImage(searchResult.poster_path, titleName, 'the-movie-db')}
@@ -91,7 +75,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
         </>
       );
     } else if (searchedResultType === 'person') {
-      searchResult = result as PersonResult;
+      searchResult = result;
       return (
         <>
           {renderImage(searchResult.profile_path, titleName, 'the-movie-db')}
@@ -101,7 +85,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
         </>
       );
     } else {
-      searchResult = result as GameResult;
+      searchResult = result;
       return (
         <>
           {renderImage(searchResult.coverUrl, titleName, 'igdb')}

@@ -2,50 +2,30 @@
 
 import { useMemo } from 'react';
 import HomeCard from './HomeCard';
-import { useQuery } from '@apollo/client/react';
-import * as Queries from '../../../graphql/queries';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
-import type {
-  PopularMoviesQuery,
-  PopularShowsQuery,
-  UsersMoviesQuery,
-  UsersShowsQuery,
-} from '@/graphql/generated/code-gen/graphql';
-
-type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
-type ShowResult = PopularShowsQuery['popularShows']['results'][number];
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import { useUserMedia } from '../../UserMediaProvider';
+import type { Movie, Show } from '@prisma/client';
 
 interface Props {
-  items: MovieResult[] | ShowResult[];
+  items: any[];
 }
 
 const HomeHorizontalScroller = ({ items }: Props) => {
   const { status } = useSession();
   const shouldFetchUserMedia = status === 'authenticated';
-
-  const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
-    skip: !shouldFetchUserMedia || items.length === 0 || 'title' in items[0],
-    fetchPolicy: 'network-only',
-  });
-
-  const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
-    skip: !shouldFetchUserMedia || items.length === 0 || 'name' in items[0],
-    fetchPolicy: 'network-only',
-  });
+  const { userMovies, userShows } = useUserMedia();
 
   const userMatchedMedias = useMemo(() => {
     if (!shouldFetchUserMedia || items.length === 0) {
       return [];
     }
 
-    const matchedMedias: Array<UserShow | UserMovie> = [];
-    const usersMediaDict = new Map<string, UserShow | UserMovie>();
+    const matchedMedias: Array<Show | Movie> = [];
+    const usersMediaDict = new Map<string, Show | Movie>();
 
     const isMovie = 'title' in items[0];
-    const userDataArr = isMovie ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
+    const userDataArr = isMovie ? userMovies : userShows;
 
     if (!userDataArr) return [];
 
@@ -62,11 +42,11 @@ const HomeHorizontalScroller = ({ items }: Props) => {
     }
 
     return matchedMedias;
-  }, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items, shouldFetchUserMedia]);
+  }, [userShows, userMovies, items, shouldFetchUserMedia]);
 
   return (
-    <BaseHorizontalScroller<MovieResult | ShowResult>
-      items={items as (MovieResult | ShowResult)[]}
+    <BaseHorizontalScroller<any>
+      items={items}
       keyExtractor={item => item.id}
       renderItem={(item, _idx, dragging) => (
         <HomeCard

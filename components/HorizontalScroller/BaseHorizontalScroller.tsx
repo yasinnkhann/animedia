@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import MotionItem from './MotionItem';
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';

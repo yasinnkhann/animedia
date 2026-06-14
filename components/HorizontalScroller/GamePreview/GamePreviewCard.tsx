@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { IGamePreview } from '@ts/interfaces';
 

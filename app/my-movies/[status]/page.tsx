@@ -1,19 +1,16 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import * as Queries from '@graphql/queries';
 import MyMediaList from '@components/MyMedia/MyMediaList';
 import { Circles } from 'react-loading-icons';
 import { CommonMethods } from '@utils/CommonMethods';
 import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@apollo/client/react';
-import type { UsersMoviesQuery, WatchStatusTypes } from '@/graphql/generated/code-gen/graphql';
+import { useUserMedia } from '@/components/UserMediaProvider';
+import type { WatchStatus } from '@prisma/client';
 
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-
-function watchStatusFromParam(statusParam: string): WatchStatusTypes | undefined {
+function watchStatusFromParam(statusParam: string): WatchStatus | undefined {
   switch (statusParam) {
     case 'watching':
       return 'WATCHING';
@@ -38,20 +35,16 @@ const Status = () => {
 
   const statusParam = params.status as string;
 
-  const { data: usersMoviesData, loading: usersMoviesLoading } = useQuery(Queries.USERS_MOVIES, {
-    fetchPolicy: 'network-only',
-  });
+  const { userMovies } = useUserMedia();
 
   const watchStatus = statusParam ? watchStatusFromParam(statusParam) : undefined;
 
-  const myMovies = useMemo((): UserMovie[] => {
-    if (!usersMoviesData?.usersMovies || watchStatus === undefined) {
+  const myMovies = useMemo(() => {
+    if (!userMovies || watchStatus === undefined) {
       return [];
     }
-    return usersMoviesData.usersMovies.filter(
-      movie => movie?.status === watchStatus
-    ) as UserMovie[];
-  }, [usersMoviesData, watchStatus]);
+    return userMovies.filter(movie => movie?.status === watchStatus);
+  }, [userMovies, watchStatus]);
 
   useEffect(() => {
     if (sessionStatus && sessionStatus !== 'loading' && statusParam) {
@@ -61,7 +54,7 @@ const Status = () => {
     }
   }, [router, session, sessionStatus, statusParam]);
 
-  if (usersMoviesLoading || sessionStatus === 'loading' || statusParam === undefined) {
+  if (sessionStatus === 'loading' || statusParam === undefined) {
     return (
       <section className='flex h-screen items-center justify-center'>
         <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />

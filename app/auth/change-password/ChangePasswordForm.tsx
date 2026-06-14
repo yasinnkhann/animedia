@@ -1,7 +1,9 @@
 'use client';
 
-import { useFormik } from 'formik';
-import { newPasswordValidate } from '../../../lib/nextAuth/account-validate';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChangePasswordFormSchema } from '@/utils/validations';
+import { z } from 'zod';
 import { Oval } from 'react-loading-icons';
 import _ from 'lodash';
 import { useRouter } from 'next/navigation';
@@ -15,23 +17,28 @@ interface Props {
   token: string;
 }
 
+type FormValues = z.infer<typeof ChangePasswordFormSchema>;
+
 export default function ChangePasswordForm({ userId, token }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{ errors?: ErrorRes[] } | null>(null);
 
-  const formik = useFormik({
-    initialValues: {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(ChangePasswordFormSchema),
+    defaultValues: {
       newPassword: '',
     },
-    validate: newPasswordValidate,
-    onSubmit,
   });
 
-  async function onSubmit() {
+  async function onSubmit(formData: FormValues) {
     setLoading(true);
     setData(null);
-    const { newPassword } = formik.values;
+    const { newPassword } = formData;
     try {
       const res = await changePasswordAction({ userId, newPassword }, token);
       setData(res);
@@ -55,24 +62,22 @@ export default function ChangePasswordForm({ userId, token }: Props) {
         <p className='mt-3 text-sm text-gray-500'>Please enter your new password below.</p>
       </div>
 
-      <form className='flex flex-col gap-6' onSubmit={formik.handleSubmit}>
+      <form className='flex flex-col gap-6' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col gap-1'>
           <label htmlFor='newPassword' className='text-sm font-medium text-gray-700'>
             New Password
           </label>
           <input
-            {...formik.getFieldProps('newPassword')}
+            {...register('newPassword')}
             type='password'
             id='newPassword'
             placeholder='••••••••'
             className={`w-full rounded-lg border px-4 py-3 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-              formik.errors.newPassword && formik.touched.newPassword
-                ? 'border-rose-600 bg-rose-50'
-                : 'border-gray-300 bg-gray-50'
+              errors.newPassword ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
             }`}
           />
-          {formik.errors.newPassword && formik.touched.newPassword && (
-            <span className='text-xs font-medium text-rose-600'>{formik.errors.newPassword}</span>
+          {errors.newPassword && (
+            <span className='text-xs font-medium text-rose-600'>{errors.newPassword.message}</span>
           )}
         </div>
 

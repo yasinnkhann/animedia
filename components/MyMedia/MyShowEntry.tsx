@@ -1,37 +1,26 @@
 import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
-import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
-import { CommonMethods } from '../../utils/CommonMethods';
-import { useMutation, useQuery } from '@apollo/client/react';
-import type { UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
-import Link from 'next/link';
 
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import { CommonMethods } from '../../utils/CommonMethods';
+import { useState, useEffect } from 'react';
+import type { Show } from '@prisma/client';
+import Link from 'next/link';
+import { deleteShow } from '@/app/actions/media';
+import { getShowDetailsAction } from '@/lib/actions/tmdbActions';
 
 interface Props {
-  myShow: UserShow;
+  myShow: Show;
   count: number;
 }
 
 const MyShowEntry = ({ myShow, count }: Props) => {
-  const { data: showData } = useQuery(Queries.SHOW_DETAILS, {
-    variables: {
-      showDetailsId: myShow.id!,
-    },
-  });
+  const [showData, setShowData] = useState<any>(null);
 
-  const [deleteShow] = useMutation(Mutations.DELETE_SHOW, {
-    variables: {
-      showId: myShow.id!,
-    },
-    refetchQueries: () => [
-      {
-        query: Queries.USERS_SHOWS,
-      },
-      'UsersShows',
-    ],
-  });
+  useEffect(() => {
+    getShowDetailsAction(myShow.id).then(data => {
+      setShowData(data);
+    });
+  }, [myShow.id]);
 
   return (
     <tr className='border-2'>
@@ -41,29 +30,29 @@ const MyShowEntry = ({ myShow, count }: Props) => {
 
       <td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
         <Link
-          href={CommonMethods.getDetailsPageRoute('show', myShow.id!, myShow.name!)}
+          href={CommonMethods.getDetailsPageRoute('show', myShow.id, myShow.name)}
           className='text-inherit no-underline'
         >
           <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
             <Image
               className='rounded-lg'
-              src={CommonMethods.getTheMovieDbImage(showData?.showDetails?.poster_path)}
+              src={CommonMethods.getTheMovieDbImage(showData?.poster_path)}
               priority
-              alt={showData?.showDetails?.name ?? ''}
+              alt={showData?.name ?? ''}
               fill
             />
           </section>
         </Link>
         <section className='col-start-2 pl-4'>
           <Link
-            href={CommonMethods.getDetailsPageRoute('show', myShow.id!, myShow.name!)}
+            href={CommonMethods.getDetailsPageRoute('show', myShow.id, myShow.name)}
             className='text-inherit no-underline'
           >
             <h3 className='cursor-pointer'>{myShow.name}</h3>
           </Link>
           <p>
-            {showData?.showDetails?.first_air_date
-              ? CommonMethods.formatDate(showData.showDetails?.first_air_date)
+            {showData?.first_air_date
+              ? CommonMethods.formatDate(showData?.first_air_date)
               : 'First Air Date Not Available'}
           </p>
         </section>
@@ -76,24 +65,23 @@ const MyShowEntry = ({ myShow, count }: Props) => {
       <td className='border-x-2 border-gray-200 text-center align-middle'>
         <p className='text-lg'>
           {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}/
-          {myShow.status === 'COMPLETED'
-            ? myShow.current_episode
-            : showData?.showDetails?.number_of_episodes}
+          {myShow.status === 'COMPLETED' ? myShow.current_episode : showData?.number_of_episodes}
         </p>
       </td>
 
       <td className='border-x-2 border-gray-200 text-center align-middle'>
-        <BsFillTrashFill
-          size={20}
-          className='w-full cursor-pointer text-red-500'
-          onClick={() => {
-            deleteShow({
-              variables: {
-                showId: myShow.id as string,
-              },
-            });
+        <form
+          action={async () => {
+            await deleteShow(myShow.id);
           }}
-        />
+        >
+          <button
+            type='submit'
+            className='m-0 flex w-full items-center justify-center border-0 bg-transparent p-0 focus:outline-none'
+          >
+            <BsFillTrashFill size={20} className='cursor-pointer text-red-500' />
+          </button>
+        </form>
       </td>
     </tr>
   );

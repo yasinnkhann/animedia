@@ -1,145 +1,34 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Pagination from '@/components/Pagination';
-import MediaList from '@/components/MediaPerson/MediaList';
-import * as Queries from '@/graphql/queries';
-import { Select } from 'antd';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
-import { Circles } from 'react-loading-icons';
-import { TypedDocumentNode } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
-import type {
-  MovieGenreTypes as GQLMovieGenreTypes,
-  PopularMoviesByGenreQuery,
-  PopularMoviesByGenreQueryVariables,
-  TopRatedMoviesByGenreQuery,
-  TopRatedMoviesByGenreQueryVariables,
-} from '@/graphql/generated/code-gen/graphql';
+import { tmdbClient } from '@/lib/api';
+import GenreBrowseClient from '@/components/GenreBrowseClient';
+import { CommonMethods } from '@/utils/CommonMethods';
 import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
 
-type MoviesGenreData =
-  | PopularMoviesByGenreQuery['popularMoviesByGenre']
-  | TopRatedMoviesByGenreQuery['topRatedMoviesByGenre'];
-type MoviesGenreVariables =
-  | PopularMoviesByGenreQueryVariables
-  | TopRatedMoviesByGenreQueryVariables;
+export default async function GenreMovies(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
-const Genre = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
-  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
+  const sortBy = typeof searchParams.sortBy === 'string' ? searchParams.sortBy : 'Popular';
+  const genre = typeof searchParams.genre === 'string' ? searchParams.genre : 'Action';
 
-  const [sortByQueryType, setSortByQueryType] = useState<
-    TypedDocumentNode<PopularMoviesByGenreQuery | TopRatedMoviesByGenreQuery, MoviesGenreVariables>
-  >(Queries.POPULAR_MOVIES_BY_GENRE);
+  const genreIdStr = await CommonMethods.getGenreID(genre as any, 'movie');
+  const genreId = parseInt(genreIdStr, 10);
 
-  const [movieGenreType, setMovieGenreType] = useState<GQLMovieGenreTypes>('Action');
+  const apiSortBy = sortBy === 'Popular' ? 'popularity.desc' : 'vote_average.desc';
 
-  const { data: genreOfMoviesData } = useQuery(sortByQueryType, {
-    variables: { genre: movieGenreType, page: parseInt(page, 10) },
-  });
-
-  const handleSortByChange = (value: 'Popular' | 'Top Rated') => {
-    if (value === 'Popular') {
-      setSortByQueryType(Queries.POPULAR_MOVIES_BY_GENRE);
-    } else {
-      setSortByQueryType(Queries.TOP_RATED_MOVIES_BY_GENRE);
-    }
-  };
-
-  const handleGenreTypeChange = (value: string) => {
-    setMovieGenreType(value as GQLMovieGenreTypes);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page]);
+  const genreMovies = await tmdbClient.discoverMoviesByGenre(genreId, apiSortBy, page);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-      <section className='grid grid-cols-[20%_60%_20%]'>
-        <section className='mt-4 justify-self-center'>
-          <div className='mb-2'>
-            <label className='mb-1 block text-blue-500' htmlFor='sort-by-dropdown'>
-              Sort By:
-            </label>
-            <Select
-              className='!w-[10rem]'
-              id='sort-by-dropdown'
-              value={sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE ? 'Popular' : 'Top Rated'}
-              options={SORT_BY_OPTIONS.map(option => ({
-                value: option.value,
-                label: option.text,
-              }))}
-              onChange={handleSortByChange}
-            />
-          </div>
-
-          <div>
-            <label className='mb-1 block text-blue-500' htmlFor='genre-type-dropdown'>
-              Genre Type:
-            </label>
-            <Select
-              className='!w-[10rem]'
-              id='genre-type-dropdown'
-              size='middle'
-              value={movieGenreType}
-              options={MOVIE_GENRE_TYPE_OPTIONS.map(option => ({
-                value: option.value,
-                label: option.text,
-              }))}
-              onChange={handleGenreTypeChange}
-            />
-          </div>
-        </section>
-
-        {(genreOfMoviesData?.[
-          Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-        ] as unknown as MoviesGenreData) ? (
-          <div>
-            <MediaList
-              mediaData={
-                genreOfMoviesData?.[
-                  Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-                ] as unknown as MoviesGenreData
-              }
-              pageNum={currPage}
-              title={`${
-                sortByQueryType === Queries.POPULAR_MOVIES_BY_GENRE ? 'Popular' : 'Top Rated'
-              } ${movieGenreType} Movies`}
-              genrePage
-            />
-
-            <Pagination
-              currPage={currPage}
-              totalItems={
-                (
-                  genreOfMoviesData?.[
-                    Object.keys(genreOfMoviesData)[0] as keyof typeof genreOfMoviesData
-                  ] as unknown as MoviesGenreData
-                ).total_results
-              }
-              itemsPerPage={RESULTS_PER_PAGE}
-              paginate={(pageNum: number) => router.push(`/movies/genre?page=${pageNum}`)}
-              siblingCount={1}
-              maxPageNum={500}
-            />
-          </div>
-        ) : (
-          <div className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
-            <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-          </div>
-        )}
-      </section>
-    </main>
+    <GenreBrowseClient
+      mediaData={genreMovies}
+      currPage={page}
+      sortBy={sortBy}
+      genre={genre}
+      basePath='/movies/genre'
+      sortByOptions={SORT_BY_OPTIONS}
+      genreOptions={MOVIE_GENRE_TYPE_OPTIONS}
+    />
   );
-};
-
-export default Genre;
+}

@@ -2,20 +2,12 @@ import { Fragment, type ReactElement } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
-import type {
-  UsersGamesQuery,
-  UsersMoviesQuery,
-  UsersShowsQuery,
-} from '@/graphql/generated/code-gen/graphql';
 import MyGameEntry from './MyGameEntry';
-
-type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import type { Movie, Show, Game } from '@prisma/client';
 
 interface Props {
   status: TStatusParam;
-  myMedias: UserMovie[] | UserShow[] | UserGame[];
+  myMedias: Movie[] | Show[] | Game[];
   mediaType: Uppercase<ExtractStrict<TContent, 'movies' | 'shows' | 'games'>>;
 }
 
@@ -57,15 +49,15 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
               let myMediaComp: ReactElement;
               if (mediaType === 'MOVIES') {
                 myMediaComp = (
-                  <MyMovieEntry key={myMedia.id} myMovie={myMedia as UserMovie} count={idx + 1} />
+                  <MyMovieEntry key={myMedia.id} myMovie={myMedia as Movie} count={idx + 1} />
                 );
               } else if (mediaType === 'SHOWS') {
                 myMediaComp = (
-                  <MyShowEntry key={myMedia.id} myShow={myMedia as UserShow} count={idx + 1} />
+                  <MyShowEntry key={myMedia.id} myShow={myMedia as Show} count={idx + 1} />
                 );
               } else if (mediaType === 'GAMES') {
                 myMediaComp = (
-                  <MyGameEntry key={myMedia.id} myGame={myMedia as UserGame} count={idx + 1} />
+                  <MyGameEntry key={myMedia.id} myGame={myMedia as Game} count={idx + 1} />
                 );
               } else {
                 myMediaComp = <></>;

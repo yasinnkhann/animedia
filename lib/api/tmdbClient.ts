@@ -151,6 +151,16 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Movies in theatres
+   */
+  async getMoviesInTheatres(page?: number, language: string = 'en-US') {
+    return this.fetchPaginated('/movie/now_playing', {
+      page: page ?? 1,
+      language,
+    });
+  }
+
+  /**
    * Search shows
    */
   async searchShows(query: string, page?: number, language: string = 'en-US') {
@@ -336,6 +346,20 @@ export class TMDBClient extends HTTPClient {
     });
   }
 
+  async discoverMoviesByGenre(
+    genreId: number,
+    sortBy: string,
+    page?: number,
+    language: string = 'en-US'
+  ) {
+    return this.fetchPaginated('/discover/movie', {
+      with_genres: genreId,
+      sort_by: sortBy,
+      page,
+      language,
+    });
+  }
+
   /**
    * Discover shows by keyword
    */
@@ -344,6 +368,20 @@ export class TMDBClient extends HTTPClient {
       with_keywords: keywordId,
       sort_by: 'popularity.desc',
       page: page ?? 1,
+      language,
+    });
+  }
+
+  async discoverShowsByGenre(
+    genreId: number,
+    sortBy: string,
+    page?: number,
+    language: string = 'en-US'
+  ) {
+    return this.fetchPaginated('/discover/tv', {
+      with_genres: genreId,
+      sort_by: sortBy,
+      page,
       language,
     });
   }

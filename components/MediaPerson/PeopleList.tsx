@@ -1,18 +1,15 @@
 import PersonCard from './PersonCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
-import type { PopularPeopleQuery } from '@/graphql/generated/code-gen/graphql';
-
-type PeopleRes = PopularPeopleQuery['popularPeople'];
 
 interface Props {
-  peopleData: PeopleRes;
+  peopleData: any;
   pageNum: number;
 }
 
 const PeopleList = ({ peopleData, pageNum }: Props) => {
   return (
     <section className='mb-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
-      {peopleData.results.map((person, idx) => (
+      {peopleData.results.map((person: any, idx: number) => (
         <section key={person.id}>
           <PersonCard
             person={person}

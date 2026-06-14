@@ -6,18 +6,8 @@ import ShowCard from './ShowCard';
 import GameCard from './GameCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
-import type {
-  PopularGamesQuery,
-  PopularMoviesQuery,
-  PopularShowsQuery,
-} from '@/graphql/generated/code-gen/graphql';
-
-type GamesRes = NonNullable<PopularGamesQuery['popularGames']>;
-type MoviesRes = PopularMoviesQuery['popularMovies'];
-type ShowsRes = PopularShowsQuery['popularShows'];
-
 interface Props {
-  mediaData: MoviesRes | ShowsRes | GamesRes;
+  mediaData: any;
   pageNum: number;
   title: string;
   genrePage?: boolean;
@@ -40,7 +30,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
                   Rank
                 </th>
                 <th className='border-r-2 border-gray-200 px-2  py-2 lg:px-4 lg:py-4'>
-                  {mediaData.__typename === 'MoviesRes' ? 'Title' : 'Name'}
+                  {title.toLowerCase().includes('movie') ? 'Title' : 'Name'}
                 </th>
                 <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
                   Rating
@@ -52,35 +42,45 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
                     </th>
 
                     <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
-                      {mediaData.__typename === 'GamesRes' ? 'In Wishlist' : 'Status'}
+                      {title.toLowerCase().includes('game') ? 'In Wishlist' : 'Status'}
                     </th>
                   </>
                 )}
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-200'>
-              {mediaData.results.map((media, idx) => {
+              {mediaData.results.map((media: any, idx: number) => {
                 let mediaComp = <></>;
 
-                if (media.__typename === 'MovieResult') {
+                let isMovie = false;
+                let isShow = false;
+                let isGame = false;
+
+                if (media.media_type) {
+                  isMovie = media.media_type === 'movie';
+                  isShow = media.media_type === 'tv';
+                } else {
+                  isMovie = 'title' in media;
+                  isGame =
+                    'released' in media || 'background_image' in media || 'playtime' in media;
+                  isShow = 'name' in media && !isGame;
+                }
+
+                if (isMovie) {
                   mediaComp = (
                     <MovieCard
                       movie={media}
                       rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
                     />
                   );
-                }
-
-                if (media.__typename === 'ShowResult') {
+                } else if (isShow) {
                   mediaComp = (
                     <ShowCard
                       show={media}
                       rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
                     />
                   );
-                }
-
-                if (media.__typename === 'GameResult') {
+                } else if (isGame) {
                   mediaComp = (
                     <GameCard
                       game={media}

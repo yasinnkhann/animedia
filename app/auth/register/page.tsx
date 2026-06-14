@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { HiAtSymbol, HiOutlineUser } from 'react-icons/hi';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { useFormik } from 'formik';
-import { registerValidate } from '../../../lib/nextAuth/account-validate';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterFormSchema } from '@/utils/validations';
+import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import _ from 'lodash';
 import { registerUserAction, sendVerificationEmailAction } from '../../actions/auth';
@@ -13,6 +15,8 @@ import { registerUserAction, sendVerificationEmailAction } from '../../actions/a
 type ErrorRes = {
   message: string;
 };
+
+type FormValues = z.infer<typeof RegisterFormSchema>;
 
 export default function RegisterPage() {
   const [showPW, setShowPW] = useState({
@@ -25,21 +29,24 @@ export default function RegisterPage() {
   const [registerErrs, setRegisterErrs] = useState<ErrorRes[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(RegisterFormSchema),
+    defaultValues: {
       name: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
-    validate: registerValidate,
-    onSubmit,
   });
 
-  async function onSubmit() {
+  async function onSubmit(data: FormValues) {
     setLoading(true);
     setRegisterErrs([]);
-    const { name, email, password } = formik.values;
+    const { name, email, password } = data;
     try {
       const registerRes = await registerUserAction({ name, email, password });
 
@@ -74,59 +81,53 @@ export default function RegisterPage() {
           <p className='text-sm text-gray-500'>Create your account to join Animedia.</p>
         </div>
 
-        <form className='flex flex-col gap-5' onSubmit={formik.handleSubmit}>
+        <form className='flex flex-col gap-5' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-1'>
             <div className='relative'>
               <input
-                {...formik.getFieldProps('name')}
+                {...register('name')}
                 type='text'
                 placeholder='Full Name'
                 className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  formik.errors.name && formik.touched.name
-                    ? 'border-rose-600 bg-rose-50'
-                    : 'border-gray-300 bg-gray-50'
+                  errors.name ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
                 }`}
               />
               <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400'>
                 <HiOutlineUser size={24} />
               </span>
             </div>
-            {formik.errors.name && formik.touched.name && (
-              <span className='text-xs font-medium text-rose-600'>{formik.errors.name}</span>
+            {errors.name && (
+              <span className='text-xs font-medium text-rose-600'>{errors.name.message}</span>
             )}
           </div>
 
           <div className='flex flex-col gap-1'>
             <div className='relative'>
               <input
-                {...formik.getFieldProps('email')}
+                {...register('email')}
                 type='email'
                 placeholder='Email Address'
                 className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  formik.errors.email && formik.touched.email
-                    ? 'border-rose-600 bg-rose-50'
-                    : 'border-gray-300 bg-gray-50'
+                  errors.email ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
                 }`}
               />
               <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400'>
                 <HiAtSymbol size={24} />
               </span>
             </div>
-            {formik.errors.email && formik.touched.email && (
-              <span className='text-xs font-medium text-rose-600'>{formik.errors.email}</span>
+            {errors.email && (
+              <span className='text-xs font-medium text-rose-600'>{errors.email.message}</span>
             )}
           </div>
 
           <div className='flex flex-col gap-1'>
             <div className='relative'>
               <input
-                {...formik.getFieldProps('password')}
+                {...register('password')}
                 type={showPW.password ? 'text' : 'password'}
                 placeholder='Password'
                 className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  formik.errors.password && formik.touched.password
-                    ? 'border-rose-600 bg-rose-50'
-                    : 'border-gray-300 bg-gray-50'
+                  errors.password ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
                 }`}
               />
               <button
@@ -137,19 +138,19 @@ export default function RegisterPage() {
                 {showPW.password ? <BsFillEyeSlashFill size={20} /> : <BsFillEyeFill size={20} />}
               </button>
             </div>
-            {formik.errors.password && formik.touched.password && (
-              <span className='text-xs font-medium text-rose-600'>{formik.errors.password}</span>
+            {errors.password && (
+              <span className='text-xs font-medium text-rose-600'>{errors.password.message}</span>
             )}
           </div>
 
           <div className='flex flex-col gap-1'>
             <div className='relative'>
               <input
-                {...formik.getFieldProps('confirmPassword')}
+                {...register('confirmPassword')}
                 type={showPW.confirmPassword ? 'text' : 'password'}
                 placeholder='Confirm Password'
                 className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  formik.errors.confirmPassword && formik.touched.confirmPassword
+                  errors.confirmPassword
                     ? 'border-rose-600 bg-rose-50'
                     : 'border-gray-300 bg-gray-50'
                 }`}
@@ -166,9 +167,9 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
-            {formik.errors.confirmPassword && formik.touched.confirmPassword && (
+            {errors.confirmPassword && (
               <span className='text-xs font-medium text-rose-600'>
-                {formik.errors.confirmPassword}
+                {errors.confirmPassword.message}
               </span>
             )}
           </div>

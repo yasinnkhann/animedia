@@ -1,7 +1,9 @@
 'use client';
 
-import { useFormik } from 'formik';
-import { forgotPasswordValidate } from '../../../lib/nextAuth/account-validate';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { EmailInput } from '@/utils/validations';
+import { z } from 'zod';
 import { Oval } from 'react-loading-icons';
 import _ from 'lodash';
 import { useState } from 'react';
@@ -9,22 +11,27 @@ import { sendForgotPasswordEmailAction } from '../../actions/auth';
 
 type ErrorRes = { message: string };
 
+type FormValues = z.infer<typeof EmailInput>;
+
 export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{ errors?: ErrorRes[] } | null>(null);
 
-  const formik = useFormik({
-    initialValues: {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(EmailInput),
+    defaultValues: {
       email: '',
     },
-    validate: forgotPasswordValidate,
-    onSubmit,
   });
 
-  async function onSubmit() {
+  async function onSubmit(formData: FormValues) {
     setLoading(true);
     setData(null);
-    const { email } = formik.values;
+    const { email } = formData;
     try {
       const res = await sendForgotPasswordEmailAction({ email });
       setData(res);
@@ -46,24 +53,22 @@ export default function ForgotPasswordPage() {
           </p>
         </div>
 
-        <form className='flex flex-col gap-6' onSubmit={formik.handleSubmit}>
+        <form className='flex flex-col gap-6' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-1'>
             <label htmlFor='email' className='text-sm font-medium text-gray-700'>
               Email Address
             </label>
             <input
-              {...formik.getFieldProps('email')}
+              {...register('email')}
               type='email'
               id='email'
               placeholder='you@example.com'
               className={`w-full rounded-lg border px-4 py-3 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                formik.errors.email && formik.touched.email
-                  ? 'border-rose-600 bg-rose-50'
-                  : 'border-gray-300 bg-gray-50'
+                errors.email ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
               }`}
             />
-            {formik.errors.email && formik.touched.email && (
-              <span className='text-xs font-medium text-rose-600'>{formik.errors.email}</span>
+            {errors.email && (
+              <span className='text-xs font-medium text-rose-600'>{errors.email.message}</span>
             )}
           </div>
 

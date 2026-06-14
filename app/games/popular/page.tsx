@@ -1,68 +1,22 @@
-'use client';
+import { igdbClient } from '@/lib/api';
+import BrowseClient from '@/components/BrowseClient';
+import { RESULTS_PER_PAGE } from '@/utils/constants';
 
-import { useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Pagination from '../../../components/Pagination';
-import MediaList from '../../../components/MediaPerson/MediaList';
-import * as Queries from '../../../graphql/queries';
-import { RESULTS_PER_PAGE } from '../../../utils/constants';
-import { Circles } from 'react-loading-icons';
-import { useQuery } from '@apollo/client/react';
+export default async function PopularGames(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
-const PopularGames = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
-  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
-
-  const { data: popularGamesData, loading: popularGamesLoading } = useQuery(Queries.POPULAR_GAMES, {
-    variables: {
-      limit: RESULTS_PER_PAGE,
-      page: parseInt(page),
-    },
-  });
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page]);
-
-  if (!popularGamesData?.popularGames || popularGamesLoading) {
-    return (
-      <section className='flex h-screen items-center justify-center'>
-        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-      </section>
-    );
-  }
+  const popularGames = await igdbClient.getPopularGames(RESULTS_PER_PAGE, page);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-      {popularGamesData ? (
-        <section className='flex flex-col items-center'>
-          <MediaList
-            mediaData={popularGamesData.popularGames}
-            pageNum={currPage}
-            title='Popular Games'
-          />
-          <Pagination
-            currPage={currPage}
-            totalItems={popularGamesData.popularGames.total_results}
-            itemsPerPage={RESULTS_PER_PAGE}
-            paginate={(pageNum: number) => router.push(`/games/popular?page=${pageNum}`)}
-            siblingCount={1}
-            maxPageNum={500}
-          />
-        </section>
-      ) : (
-        <section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
-          <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-        </section>
-      )}
-    </main>
+    <BrowseClient
+      mediaData={popularGames}
+      currPage={page}
+      title='Popular Games'
+      basePath='/games/popular'
+    />
   );
-};
-
-export default PopularGames;
+}

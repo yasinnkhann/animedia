@@ -1,8 +1,6 @@
-import type {
-  MovieGenreTypes,
-  ShowGenreTypes,
-  WatchStatusTypes,
-} from '@/graphql/generated/code-gen/graphql';
+export type MovieGenreTypes = string;
+export type ShowGenreTypes = string;
+export type WatchStatusTypes = string;
 
 export const SORT_BY_OPTIONS = [
   {

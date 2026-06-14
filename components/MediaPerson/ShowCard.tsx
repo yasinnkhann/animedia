@@ -2,27 +2,20 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@apollo/client/react';
-import type { PopularShowsQuery } from '@/graphql/generated/code-gen/graphql';
-
-type ShowResult = PopularShowsQuery['popularShows']['results'][number];
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
-  show: ShowResult;
+  show: any;
   rank: number;
 }
 
 const ShowCard = ({ show, rank }: Props) => {
   const { data: session } = useSession();
 
-  const { data: usersShowData } = useQuery(Queries.USERS_SHOW, {
-    variables: {
-      showId: show.id,
-    },
-  });
+  const { userShows } = useUserMedia();
+  const usersShow = userShows?.find(userShow => userShow.id === show.id);
 
   return (
     <tr className='border'>
@@ -67,13 +60,11 @@ const ShowCard = ({ show, rank }: Props) => {
       {session && (
         <>
           <td className='border-x-2 border-gray-200 text-center align-middle'>
-            <p>{usersShowData?.usersShow?.rating ? usersShowData.usersShow.rating : 'N/A'}</p>
+            <p>{usersShow?.rating ? usersShow.rating : 'N/A'}</p>
           </td>
           <td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
             <p>
-              {usersShowData?.usersShow?.status
-                ? CommonMethods.renderTableStatus(usersShowData.usersShow.status)
-                : 'N/A'}
+              {usersShow?.status ? CommonMethods.renderTableStatus(usersShow.status as any) : 'N/A'}
             </p>
           </td>
         </>

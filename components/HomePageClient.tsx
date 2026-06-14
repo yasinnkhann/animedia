@@ -1,112 +1,28 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import HomeHorizontalScroller from './HorizontalScroller/Home/HomeHorizontalScroller';
-import * as Queries from '../graphql/queries';
-import { Circles } from 'react-loading-icons';
-import { TypedDocumentNode } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
-import { CommonMethods } from '../utils/CommonMethods';
-import type {
-  PopularMoviesQuery,
-  PopularMoviesQueryVariables,
-  PopularShowsQuery,
-  PopularShowsQueryVariables,
-  MoviesInTheatresQuery,
-  MoviesInTheatresQueryVariables,
-  TrendingMoviesQuery,
-  TrendingMoviesQueryVariables,
-  TrendingShowsQuery,
-  TrendingShowsQueryVariables,
-  TimeWindowTypes,
-} from '../graphql/generated/code-gen/graphql';
+import { useRouter } from 'next/navigation';
 
-type WhatsPopularQuery = PopularMoviesQuery | PopularShowsQuery | MoviesInTheatresQuery;
-type WhatsPopularQueryVariables =
-  | PopularMoviesQueryVariables
-  | PopularShowsQueryVariables
-  | MoviesInTheatresQueryVariables;
-type TrendingQuery = TrendingMoviesQuery | TrendingShowsQuery;
-type TrendingQueryVariables = TrendingMoviesQueryVariables | TrendingShowsQueryVariables;
-type HomeListData =
-  | PopularMoviesQuery['popularMovies']
-  | PopularShowsQuery['popularShows']
-  | MoviesInTheatresQuery['moviesInTheatres']
-  | TrendingMoviesQuery['trendingMovies']
-  | TrendingShowsQuery['trendingShows'];
-type HomeScrollerData = HomeListData['results'];
+interface Props {
+  popular: 'movies' | 'shows' | 'theatres';
+  trending: 'movies' | 'shows';
+  time: 'day' | 'week';
+  popularData: any[];
+  trendingData: any[];
+}
 
-const HomePageClient = () => {
-  const [whatsPopularQueryType, setWhatsPopularQueryType] = useState<
-    TypedDocumentNode<WhatsPopularQuery, WhatsPopularQueryVariables>
-  >(Queries.POPULAR_MOVIES);
-
-  const [trendingQueryType, setTrendingQueryType] = useState<
-    TypedDocumentNode<TrendingQuery, TrendingQueryVariables>
-  >(Queries.TRENDING_MOVIES);
-
-  const [trendingTimeWindow, setTrendingTimeWindow] = useState<TimeWindowTypes>('day');
-
+const HomePageClient = ({ popular, trending, time, popularData, trendingData }: Props) => {
+  const router = useRouter();
   const searchBarRef = useRef<HTMLInputElement>(null);
 
-  const { data: whatsPopularData, loading: whatsPopularLoading } = useQuery(whatsPopularQueryType);
-
-  const { data: trendingData, loading: trendingLoading } = useQuery(trendingQueryType, {
-    variables: {
-      timeWindow: trendingTimeWindow,
-    },
-  });
-
-  useQuery(Queries.POPULAR_SHOWS);
-
-  useQuery(Queries.MOVIES_IN_THEATRES);
-
-  useQuery(Queries.TRENDING_MOVIES, {
-    variables: {
-      timeWindow: 'week',
-    },
-  });
-
-  useQuery(Queries.TRENDING_SHOWS, {
-    variables: {
-      timeWindow: 'day',
-    },
-  });
-
-  useQuery(Queries.TRENDING_SHOWS, {
-    variables: {
-      timeWindow: 'week',
-    },
-  });
-
-  const allDataLoaded: boolean = !!(
-    whatsPopularData &&
-    !whatsPopularLoading &&
-    trendingData &&
-    !trendingLoading
-  );
-
-  const handleChangePopularQueryType = (
-    queryType: TypedDocumentNode<WhatsPopularQuery, WhatsPopularQueryVariables>
-  ) => {
-    setWhatsPopularQueryType(queryType);
+  const handleUpdateParams = (key: string, value: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set(key, value);
+    router.push(`/?${params.toString()}`, { scroll: false });
   };
-
-  const handleChangeTrendingQueryType = (
-    queryType: TypedDocumentNode<TrendingQuery, TrendingQueryVariables>
-  ) => {
-    setTrendingQueryType(queryType);
-  };
-
-  if (trendingLoading || whatsPopularLoading) {
-    return (
-      <section className='flex h-screen items-center justify-center'>
-        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-      </section>
-    );
-  }
 
   return (
     <motion.main
@@ -115,136 +31,122 @@ const HomePageClient = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      {allDataLoaded && (
-        <div>
-          <SearchBar ref={searchBarRef} />
+      <div>
+        <SearchBar ref={searchBarRef} />
+        <section className='mt-4'>
+          <section className='ml-[3rem] flex w-full items-end'>
+            <div>
+              <h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
+            </div>
+            <ul className='flex w-[15rem] justify-around md:w-[25rem]'>
+              <li
+                className='relative cursor-pointer pb-1'
+                onClick={() => handleUpdateParams('popular', 'movies')}
+              >
+                Movies
+                {popular === 'movies' && (
+                  <motion.div
+                    layoutId='popular-tab'
+                    className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                  />
+                )}
+              </li>
+              <li
+                className='relative cursor-pointer pb-1'
+                onClick={() => handleUpdateParams('popular', 'shows')}
+              >
+                Shows
+                {popular === 'shows' && (
+                  <motion.div
+                    layoutId='popular-tab'
+                    className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                  />
+                )}
+              </li>
+              <li
+                className='relative cursor-pointer pb-1'
+                onClick={() => handleUpdateParams('popular', 'theatres')}
+              >
+                In Theatres
+                {popular === 'theatres' && (
+                  <motion.div
+                    layoutId='popular-tab'
+                    className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                  />
+                )}
+              </li>
+            </ul>
+          </section>
+
           <section className='mt-4'>
-            <section className='ml-[3rem] flex w-full items-end'>
-              <div>
-                <h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
-              </div>
-              <ul className='flex w-[15rem] justify-around md:w-[25rem]'>
+            <HomeHorizontalScroller items={popularData} />
+          </section>
+
+          <section className='ml-[3rem] mt-4 flex items-end'>
+            <div>
+              <h1 className='text-xl sm:text-3xl'>Trending</h1>
+            </div>
+            <section className='flex w-full justify-around'>
+              <ul className='flex justify-around'>
                 <li
-                  className='relative cursor-pointer pb-1'
-                  onClick={() => handleChangePopularQueryType(Queries.POPULAR_MOVIES)}
+                  className='relative mr-4 cursor-pointer pb-1 md:mr-20'
+                  onClick={() => handleUpdateParams('trending', 'movies')}
                 >
                   Movies
-                  {whatsPopularQueryType === Queries.POPULAR_MOVIES && (
+                  {trending === 'movies' && (
                     <motion.div
-                      layoutId='popular-tab'
+                      layoutId='trending-type-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
                     />
                   )}
                 </li>
                 <li
                   className='relative cursor-pointer pb-1'
-                  onClick={() => handleChangePopularQueryType(Queries.POPULAR_SHOWS)}
+                  onClick={() => handleUpdateParams('trending', 'shows')}
                 >
                   Shows
-                  {whatsPopularQueryType === Queries.POPULAR_SHOWS && (
+                  {trending === 'shows' && (
                     <motion.div
-                      layoutId='popular-tab'
+                      layoutId='trending-type-tab'
+                      className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
+                    />
+                  )}
+                </li>
+              </ul>
+              <ul className='flex justify-around'>
+                <li
+                  className='relative mr-4 cursor-pointer pb-1 md:mr-20'
+                  onClick={() => handleUpdateParams('time', 'day')}
+                >
+                  Today
+                  {time === 'day' && (
+                    <motion.div
+                      layoutId='trending-time-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
                     />
                   )}
                 </li>
                 <li
                   className='relative cursor-pointer pb-1'
-                  onClick={() => handleChangePopularQueryType(Queries.MOVIES_IN_THEATRES)}
+                  onClick={() => handleUpdateParams('time', 'week')}
                 >
-                  In Theatres
-                  {whatsPopularQueryType === Queries.MOVIES_IN_THEATRES && (
+                  This Week
+                  {time === 'week' && (
                     <motion.div
-                      layoutId='popular-tab'
+                      layoutId='trending-time-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
                     />
                   )}
                 </li>
               </ul>
             </section>
-
-            <section className='mt-4'>
-              <HomeHorizontalScroller
-                items={(() => {
-                  const data = whatsPopularData!;
-                  return (CommonMethods.extractGraphQLData(data) as unknown as HomeListData)
-                    .results as HomeScrollerData;
-                })()}
-              />
-            </section>
-
-            <section className='ml-[3rem] mt-4 flex items-end'>
-              <div>
-                <h1 className='text-xl sm:text-3xl'>Trending</h1>
-              </div>
-              <section className='flex w-full justify-around'>
-                <ul className='flex justify-around'>
-                  <li
-                    className='relative mr-4 cursor-pointer pb-1 md:mr-20'
-                    onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_MOVIES)}
-                  >
-                    Movies
-                    {trendingQueryType === Queries.TRENDING_MOVIES && (
-                      <motion.div
-                        layoutId='trending-type-tab'
-                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
-                      />
-                    )}
-                  </li>
-                  <li
-                    className='relative cursor-pointer pb-1'
-                    onClick={() => handleChangeTrendingQueryType(Queries.TRENDING_SHOWS)}
-                  >
-                    Shows
-                    {trendingQueryType === Queries.TRENDING_SHOWS && (
-                      <motion.div
-                        layoutId='trending-type-tab'
-                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
-                      />
-                    )}
-                  </li>
-                </ul>
-                <ul className='flex justify-around'>
-                  <li
-                    className='relative mr-4 cursor-pointer pb-1 md:mr-20'
-                    onClick={() => setTrendingTimeWindow('day')}
-                  >
-                    Today
-                    {trendingTimeWindow === 'day' && (
-                      <motion.div
-                        layoutId='trending-time-tab'
-                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
-                      />
-                    )}
-                  </li>
-                  <li
-                    className='relative cursor-pointer pb-1'
-                    onClick={() => setTrendingTimeWindow('week')}
-                  >
-                    This Week
-                    {trendingTimeWindow === 'week' && (
-                      <motion.div
-                        layoutId='trending-time-tab'
-                        className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
-                      />
-                    )}
-                  </li>
-                </ul>
-              </section>
-            </section>
-
-            <section className='mt-4'>
-              <HomeHorizontalScroller
-                items={(() => {
-                  const data = trendingData!;
-                  return (CommonMethods.extractGraphQLData(data) as unknown as HomeListData)
-                    .results as HomeScrollerData;
-                })()}
-              />
-            </section>
           </section>
-        </div>
-      )}
+
+          <section className='mt-4'>
+            <HomeHorizontalScroller items={trendingData} />
+          </section>
+        </section>
+      </div>
     </motion.main>
   );
 };

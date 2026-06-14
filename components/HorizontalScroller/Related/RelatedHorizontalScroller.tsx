@@ -3,16 +3,12 @@
 import { useMemo } from 'react';
 import RelatedCard from './RelatedCard';
 import { IRelatedMedia } from '@ts/interfaces';
-import { useQuery } from '@apollo/client/react';
-import * as Queries from '../../../graphql/queries';
 import { TContent } from '@ts/types';
 import { ExtractStrict } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
-import type { UsersMoviesQuery, UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
-
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import { useUserMedia } from '../../UserMediaProvider';
+import type { Movie, Show, Game } from '@prisma/client';
 
 interface Props {
   items: IRelatedMedia[];
@@ -22,28 +18,18 @@ interface Props {
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
   const { status } = useSession();
   const shouldFetchUserMedia = status === 'authenticated';
-
-  const { data: usersShowsData } = useQuery(Queries.USERS_SHOWS, {
-    skip: !shouldFetchUserMedia || mediaType === 'movies',
-    fetchPolicy: 'network-only',
-  });
-
-  const { data: usersMoviesData } = useQuery(Queries.USERS_MOVIES, {
-    skip: !shouldFetchUserMedia || mediaType === 'shows',
-    fetchPolicy: 'network-only',
-  });
+  const { userMovies, userShows, userGames } = useUserMedia();
 
   const userMatchedMedias = useMemo(() => {
     if (!shouldFetchUserMedia) {
       return [];
     }
 
-    const matchedMedias: Array<UserShow | UserMovie> = [];
+    const matchedMedias: Array<Show | Movie | Game> = [];
 
     if (mediaType) {
-      const usersMediaMap = new Map<string, UserShow | UserMovie>();
-      const userDataArr =
-        mediaType === 'movies' ? usersMoviesData?.usersMovies : usersShowsData?.usersShows;
+      const usersMediaMap = new Map<string, Show | Movie | Game>();
+      const userDataArr = mediaType === 'movies' ? userMovies : userShows;
 
       if (userDataArr) {
         for (const userDataObj of userDataArr) {
@@ -59,18 +45,21 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
         }
       }
     } else {
-      const usersMovies = usersMoviesData?.usersMovies ?? [];
-      const usersShows = usersShowsData?.usersShows ?? [];
+      const usersMoviesList = userMovies ?? [];
+      const usersShowsList = userShows ?? [];
+      const usersGamesList = userGames ?? [];
 
-      const usersMoviesMap = new Map(
-        usersMovies.filter((u): u is UserMovie => !!u?.id).map(u => [u.id, u])
-      );
-      const usersShowsMap = new Map(
-        usersShows.filter((u): u is UserShow => !!u?.id).map(u => [u.id, u])
-      );
+      const usersMoviesMap = new Map(usersMoviesList.map(u => [u.id, u]));
+      const usersShowsMap = new Map(usersShowsList.map(u => [u.id, u]));
+      const usersGamesMap = new Map(usersGamesList.map(u => [u.id, u]));
 
       for (const item of items) {
-        const map = item.type === 'movie' ? usersMoviesMap : usersShowsMap;
+        const map =
+          item.type === 'movie'
+            ? usersMoviesMap
+            : item.type === 'show'
+              ? usersShowsMap
+              : usersGamesMap;
         const matched = map.get(item.id);
         if (matched) {
           matchedMedias.push(matched);
@@ -79,13 +68,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
     }
 
     return matchedMedias;
-  }, [
-    usersShowsData?.usersShows,
-    usersMoviesData?.usersMovies,
-    items,
-    mediaType,
-    shouldFetchUserMedia,
-  ]);
+  }, [userShows, userMovies, userGames, items, mediaType, shouldFetchUserMedia]);
 
   return (
     <BaseHorizontalScroller

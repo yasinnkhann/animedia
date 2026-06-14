@@ -1,11 +1,10 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { IRelatedMedia } from '@ts/interfaces';
 import { CommonMethods } from '@utils/CommonMethods';
-import type { UsersMoviesQuery, UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
-
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import type { Movie, Show, Game } from '@prisma/client';
 
 const RelatedCard = ({
   item,
@@ -14,7 +13,7 @@ const RelatedCard = ({
 }: {
   item: IRelatedMedia;
   dragging: boolean;
-  userMatchedMedias: Array<UserShow | UserMovie>;
+  userMatchedMedias: Array<Show | Movie | Game>;
   itemId: string;
 }) => {
   const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);

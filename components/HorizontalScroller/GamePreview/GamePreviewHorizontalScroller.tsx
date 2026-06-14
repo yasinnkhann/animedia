@@ -1,3 +1,5 @@
+'use client';
+
 import GamePreviewCard from './GamePreviewCard';
 import { IGamePreview } from '@ts/interfaces';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';

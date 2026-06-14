@@ -1,37 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsFillTrashFill } from 'react-icons/bs';
-import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
-import { CommonMethods } from '../../utils/CommonMethods';
-import { useMutation, useQuery } from '@apollo/client/react';
-import type { UsersMoviesQuery } from '@/graphql/generated/code-gen/graphql';
 
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
+import { CommonMethods } from '../../utils/CommonMethods';
+import { useState, useEffect } from 'react';
+import type { Movie } from '@prisma/client';
+import { deleteMovie } from '@/app/actions/media';
+import { getMovieDetailsAction } from '@/lib/actions/tmdbActions';
 
 interface Props {
-  myMovie: UserMovie;
+  myMovie: Movie;
   count: number;
 }
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
-  const { data: movieData } = useQuery(Queries.MOVIE_DETAILS, {
-    variables: {
-      movieDetailsId: myMovie.id!,
-    },
-  });
+  const [movieData, setMovieData] = useState<any>(null);
 
-  const [deleteMovie] = useMutation(Mutations.DELETE_MOVIE, {
-    variables: {
-      movieId: myMovie.id!,
-    },
-    refetchQueries: () => [
-      {
-        query: Queries.USERS_MOVIES,
-      },
-      'UsersMovies',
-    ],
-  });
+  useEffect(() => {
+    getMovieDetailsAction(myMovie.id).then(data => {
+      setMovieData(data);
+    });
+  }, [myMovie.id]);
 
   return (
     <tr className='border-2'>
@@ -41,15 +30,15 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
       <td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
         <Link
-          href={CommonMethods.getDetailsPageRoute('movie', myMovie.id!, myMovie.name as string)}
+          href={CommonMethods.getDetailsPageRoute('movie', myMovie.id, myMovie.name)}
           className='text-inherit no-underline'
         >
           <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
             <Image
               className='rounded-lg'
-              src={CommonMethods.getTheMovieDbImage(movieData?.movieDetails?.poster_path)}
+              src={CommonMethods.getTheMovieDbImage(movieData?.poster_path)}
               priority
-              alt={movieData?.movieDetails?.title ?? ''}
+              alt={movieData?.title ?? ''}
               fill
             />
           </section>
@@ -57,14 +46,14 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
 
         <section className='col-start-2 pl-4'>
           <Link
-            href={CommonMethods.getDetailsPageRoute('movie', myMovie.id!, myMovie.name as string)}
+            href={CommonMethods.getDetailsPageRoute('movie', myMovie.id, myMovie.name)}
             className='text-inherit no-underline'
           >
             <h3 className='cursor-pointer'>{myMovie.name}</h3>
           </Link>
           <p>
-            {movieData?.movieDetails?.release_date
-              ? CommonMethods.formatDate(movieData.movieDetails?.release_date)
+            {movieData?.release_date
+              ? CommonMethods.formatDate(movieData?.release_date)
               : 'Release Date Not Available'}
           </p>
         </section>
@@ -75,17 +64,18 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
       </td>
 
       <td className='border-x-2 border-gray-200 text-center align-middle'>
-        <BsFillTrashFill
-          size={20}
-          className='w-full cursor-pointer text-red-500'
-          onClick={() => {
-            deleteMovie({
-              variables: {
-                movieId: myMovie.id as string,
-              },
-            });
+        <form
+          action={async () => {
+            await deleteMovie(myMovie.id);
           }}
-        />
+        >
+          <button
+            type='submit'
+            className='m-0 flex w-full items-center justify-center border-0 bg-transparent p-0 focus:outline-none'
+          >
+            <BsFillTrashFill size={20} className='cursor-pointer text-red-500' />
+          </button>
+        </form>
       </td>
     </tr>
   );

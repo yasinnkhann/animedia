@@ -3,7 +3,7 @@
 import { v4 } from 'uuid';
 import { hash } from 'argon2';
 import Mail from 'nodemailer/lib/mailer';
-import { sendEmail } from '../../graphql/utils';
+import { sendEmail } from '../../utils/igdbUtils';
 import {
   __prod__,
   CLIENT_BASE_URL,
@@ -23,7 +23,7 @@ import {
   RegisterUserInput,
   ChangePasswordInput,
   EmailInput,
-} from '../../graphql/validations/inputs';
+} from '../../utils/validations';
 
 export async function registerUserAction(input: unknown) {
   try {
@@ -53,6 +53,27 @@ export async function registerUserAction(input: unknown) {
     };
   } catch (err: any) {
     return { errors: [{ message: err.message || 'An error occurred during registration.' }] };
+  }
+}
+
+export async function checkAccountVerifiedAction(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, emailVerified: true },
+    });
+
+    if (!user) {
+      return { errors: [{ message: 'Account Not Found' }] };
+    }
+
+    if (!user.emailVerified) {
+      return { errors: [{ message: 'Account Not Verified' }] };
+    }
+
+    return { errors: [], success: true };
+  } catch (err: any) {
+    return { errors: [{ message: err.message || 'An error occurred.' }] };
   }
 }
 

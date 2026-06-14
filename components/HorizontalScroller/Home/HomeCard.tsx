@@ -1,27 +1,19 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
 import { CommonMethods } from '../../../utils/CommonMethods';
-import type {
-  PopularMoviesQuery,
-  PopularShowsQuery,
-  UsersMoviesQuery,
-  UsersShowsQuery,
-} from '@/graphql/generated/code-gen/graphql';
-
-type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
-type ShowResult = PopularShowsQuery['popularShows']['results'][number];
-type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
-type UserShow = NonNullable<NonNullable<UsersShowsQuery['usersShows']>[number]>;
+import type { Movie, Show } from '@prisma/client';
 
 const HomeCard = ({
   item,
   dragging,
   userMatchedMedias,
 }: {
-  item: MovieResult | ShowResult;
+  item: any;
   dragging: boolean;
-  userMatchedMedias: Array<UserShow | UserMovie>;
+  userMatchedMedias: Array<Show | Movie>;
   itemId: string;
 }) => {
   const isMovie = 'title' in item;

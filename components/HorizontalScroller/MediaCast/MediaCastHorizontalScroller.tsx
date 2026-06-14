@@ -1,3 +1,5 @@
+'use client';
+
 import MediaCastCard from './MediaCastCard';
 import { ICast } from '@ts/interfaces';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';

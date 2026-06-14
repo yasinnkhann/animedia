@@ -7,10 +7,8 @@ import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/navigation';
 import { FaSearch } from 'react-icons/fa';
 import { useDebounce } from '@hooks/useDebounce';
-import { useQuery } from '@apollo/client/react';
-import * as Queries from '../../graphql/queries';
 import _ from 'lodash';
-import { RESULTS_PER_PAGE } from '@utils/constants';
+import { globalSearchAction } from '@/lib/actions/searchActions';
 
 interface Props {
   closeSearch?: () => void;
@@ -25,95 +23,61 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
     const [dropDownSearchResults, setDropDownSearchResults] = useState<TDropDownSearchResult[]>([]);
 
-    const { data: searchedMoviesData } = useQuery(Queries.SEARCHED_MOVIES, {
-      variables: {
-        q: searchQuery,
-      },
-      skip: _.isEmpty(searchQuery),
-    });
-
-    const { data: searchedShowsData } = useQuery(Queries.SEARCHED_SHOWS, {
-      variables: {
-        q: searchQuery,
-      },
-      skip: _.isEmpty(searchQuery),
-    });
-
-    const { data: searchedGamesData } = useQuery(Queries.SEARCHED_GAMES, {
-      variables: {
-        q: searchQuery,
-        limit: RESULTS_PER_PAGE,
-        page: 1,
-      },
-      skip: _.isEmpty(searchQuery),
-    });
-
-    const { data: searchedPeopleData } = useQuery(Queries.SEARCHED_PEOPLE, {
-      variables: {
-        q: searchQuery,
-      },
-      skip: _.isEmpty(searchQuery),
-    });
-
     useDebounce(
       () => {
-        let allResults: TDropDownSearchResult[] = [];
-        if (
-          searchedMoviesData?.searchedMovies.results &&
-          searchedShowsData?.searchedShows.results &&
-          searchedGamesData?.searchedGames.results &&
-          searchedPeopleData?.searchedPeople.results
-        ) {
-          const movieResults = searchedMoviesData.searchedMovies.results
-            .map(movie => ({
-              id: movie.id,
-              titleName: movie.title,
-              releaseDate: movie.release_date,
-              type: 'movie' as const,
-            }))
-            .slice(0, 5);
-
-          const showsResults = searchedShowsData.searchedShows.results
-            .map(show => ({
-              id: show.id,
-              titleName: show.name,
-              firstAirDate: show.first_air_date,
-              type: 'show' as const,
-            }))
-            .slice(0, 5);
-
-          const peopleResults = searchedPeopleData.searchedPeople.results
-            .map(person => ({
-              id: person.id,
-              titleName: person.name,
-              knownForDepartment: person.known_for_department,
-              type: 'person' as const,
-            }))
-            .slice(0, 5);
-
-          const gameResults = searchedGamesData.searchedGames.results
-            .map(game => ({
-              id: game.id,
-              titleName: game.name,
-              releaseDate: game.first_release_date
-                ? new Date(game.first_release_date * 1000).toISOString()
-                : undefined,
-              type: 'game' as const,
-            }))
-            .slice(0, 5);
-
-          allResults = [...movieResults, ...showsResults, ...gameResults, ...peopleResults];
+        if (_.isEmpty(searchQuery)) {
+          setDropDownSearchResults([]);
+          return;
         }
-        setDropDownSearchResults(allResults as TDropDownSearchResult[]);
+
+        globalSearchAction(searchQuery).then(data => {
+          let allResults: TDropDownSearchResult[] = [];
+          if (data) {
+            const movieResults = data.movies
+              .map((movie: any) => ({
+                id: movie.id,
+                titleName: movie.title,
+                releaseDate: movie.release_date,
+                type: 'movie' as const,
+              }))
+              .slice(0, 5);
+
+            const showsResults = data.shows
+              .map((show: any) => ({
+                id: show.id,
+                titleName: show.name,
+                firstAirDate: show.first_air_date,
+                type: 'show' as const,
+              }))
+              .slice(0, 5);
+
+            const peopleResults = data.people
+              .map((person: any) => ({
+                id: person.id,
+                titleName: person.name,
+                knownForDepartment: person.known_for_department,
+                type: 'person' as const,
+              }))
+              .slice(0, 5);
+
+            const gameResults = data.games
+              .map((game: any) => ({
+                id: game.id,
+                titleName: game.name,
+                releaseDate: game.first_release_date
+                  ? new Date(game.first_release_date * 1000).toISOString()
+                  : undefined,
+                type: 'game' as const,
+              }))
+              .slice(0, 5);
+
+            allResults = [...movieResults, ...showsResults, ...gameResults, ...peopleResults];
+          }
+          setDropDownSearchResults(allResults as TDropDownSearchResult[]);
+        });
       },
       _.isEmpty(searchQuery) ? 0 : 2000,
-      [
-        searchQuery,
-        searchedMoviesData?.searchedMovies,
-        searchedShowsData?.searchedShows,
-        searchedGamesData?.searchedGames,
-        searchedPeopleData?.searchedPeople,
-      ]
+      [searchQuery]
     );
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -182,7 +146,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
               },
             }}
           >
-            {dropDownSearchResults.map((result, idx) => (
+            {dropDownSearchResults.map(result => (
               <motion.div
                 key={result.id}
                 className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'

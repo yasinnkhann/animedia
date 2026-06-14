@@ -1,60 +1,21 @@
-'use client';
+import { tmdbClient } from '@/lib/api';
+import BrowseClient from '@/components/BrowseClient';
 
-import { useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Pagination from '@/components/Pagination';
-import MediaList from '@/components/MediaPerson/MediaList';
-import * as Queries from '@/graphql/queries';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
-import { Circles } from 'react-loading-icons';
-import { useQuery } from '@apollo/client/react';
+export default async function TopRatedMovies(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
-const TopRatedMovies = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
-  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
-
-  const { data: topRatedMoviesData } = useQuery(Queries.TOP_RATED_MOVIES, {
-    variables: {
-      page: parseInt(page, 10),
-    },
-  });
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page]);
+  const topRatedMovies = await tmdbClient.getTopRatedMovies(page);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-      {topRatedMoviesData ? (
-        <section className='flex flex-col items-center'>
-          <MediaList
-            mediaData={topRatedMoviesData.topRatedMovies}
-            pageNum={currPage}
-            title='Top Rated Movies'
-          />
-
-          <Pagination
-            currPage={currPage}
-            totalItems={topRatedMoviesData.topRatedMovies.total_results}
-            itemsPerPage={RESULTS_PER_PAGE}
-            paginate={(pageNum: number) => router.push(`/movies/top-rated?page=${pageNum}`)}
-            siblingCount={1}
-            maxPageNum={500}
-          />
-        </section>
-      ) : (
-        <section className='flex h-[calc(100vh-var(--header-height-mobile))] items-center justify-center'>
-          <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-        </section>
-      )}
-    </main>
+    <BrowseClient
+      mediaData={topRatedMovies}
+      currPage={page}
+      title='Top Rated Movies'
+      basePath='/movies/top-rated'
+    />
   );
-};
-
-export default TopRatedMovies;
+}

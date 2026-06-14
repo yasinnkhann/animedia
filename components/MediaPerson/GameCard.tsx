@@ -4,25 +4,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@apollo/client/react';
-import * as Queries from '../../graphql/queries';
-import type { SearchedGamesQuery } from '@/graphql/generated/code-gen/graphql';
-
-type GameResult = SearchedGamesQuery['searchedGames']['results'][number];
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
-  game: GameResult;
+  game: any;
   rank: number;
 }
 
 const GameCard = ({ game, rank }: Props) => {
   const { data: session } = useSession();
 
-  const { data: usersGameData } = useQuery(Queries.USERS_GAME, {
-    variables: {
-      gameId: game.id,
-    },
-  });
+  const { userGames } = useUserMedia();
+  const usersGame = userGames?.find(userGame => userGame.id === game.id);
 
   return (
     <tr className='border-2'>
@@ -65,11 +58,11 @@ const GameCard = ({ game, rank }: Props) => {
       {session && (
         <>
           <td className='border-x-2 border-gray-200 text-center align-middle'>
-            <p>{usersGameData?.usersGame?.rating ?? 'N/A'}</p>
+            <p>{usersGame?.rating ?? 'N/A'}</p>
           </td>
 
           <td className='border-x-2 border-gray-200 text-center align-middle'>
-            <p>{usersGameData?.usersGame?.wishlist ? 'Yes' : 'No'}</p>
+            <p>{usersGame?.wishlist ? 'Yes' : 'No'}</p>
           </td>
         </>
       )}

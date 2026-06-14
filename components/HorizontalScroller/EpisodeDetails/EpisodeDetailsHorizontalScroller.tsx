@@ -6,12 +6,10 @@ import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { IEPDetails } from '@ts/interfaces';
 import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
-import type { ShowDetailsQuery } from '@/graphql/generated/code-gen/graphql';
-
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
-  seasons: ShowDetailsQuery['showDetails']['seasons'];
+  seasons: any[];
   showId: string;
 }
 

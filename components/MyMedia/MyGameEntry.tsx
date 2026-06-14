@@ -1,37 +1,26 @@
 import Image from 'next/image';
 import { BsFillTrashFill } from 'react-icons/bs';
-import * as Queries from '../../graphql/queries';
-import * as Mutations from '../../graphql/mutations';
-import { CommonMethods } from '../../utils/CommonMethods';
-import { useMutation, useQuery } from '@apollo/client/react';
-import type { UsersGamesQuery } from '@/graphql/generated/code-gen/graphql';
-import Link from 'next/link';
 
-type UserGame = NonNullable<NonNullable<UsersGamesQuery['usersGames']>[number]>;
+import { CommonMethods } from '../../utils/CommonMethods';
+import { useState, useEffect } from 'react';
+import type { Game } from '@prisma/client';
+import Link from 'next/link';
+import { deleteGame } from '@/app/actions/media';
+import { getGameDetailsAction } from '@/lib/actions/igdbActions';
 
 interface Props {
-  myGame: UserGame;
+  myGame: Game;
   count: number;
 }
 
 const MyGameEntry = ({ myGame, count }: Props) => {
-  const { data: gameData } = useQuery(Queries.GAME_DETAILS, {
-    variables: {
-      gameId: myGame.id!,
-    },
-  });
+  const [gameData, setGameData] = useState<any>(null);
 
-  const [deleteGame] = useMutation(Mutations.DELETE_GAME, {
-    variables: {
-      gameId: myGame.id!,
-    },
-    refetchQueries: () => [
-      {
-        query: Queries.USERS_GAMES,
-      },
-      'UsersGames',
-    ],
-  });
+  useEffect(() => {
+    getGameDetailsAction(myGame.id).then(data => {
+      setGameData(data);
+    });
+  }, [myGame.id]);
 
   return (
     <tr className='border-2'>
@@ -41,31 +30,29 @@ const MyGameEntry = ({ myGame, count }: Props) => {
 
       <td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
         <Link
-          href={CommonMethods.getDetailsPageRoute('game', myGame.id!, myGame.name!)}
+          href={CommonMethods.getDetailsPageRoute('game', myGame.id, myGame.name)}
           className='text-inherit no-underline'
         >
           <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
             <Image
               className='rounded-lg'
-              src={CommonMethods.getIgdbImage(gameData?.gameDetails?.results[0].coverUrl)}
+              src={CommonMethods.getIgdbImage(gameData.coverUrl)}
               priority
-              alt={gameData?.gameDetails?.results[0].name ?? ''}
+              alt={gameData.name ?? ''}
               fill
             />
           </section>
         </Link>
         <section className='col-start-2 pl-4'>
           <Link
-            href={CommonMethods.getDetailsPageRoute('game', myGame.id!, myGame.name!)}
+            href={CommonMethods.getDetailsPageRoute('game', myGame.id, myGame.name)}
             className='text-inherit no-underline'
           >
             <h3 className='cursor-pointer'>{myGame.name}</h3>
           </Link>
           <p>
-            {gameData?.gameDetails?.results[0].first_release_date
-              ? CommonMethods.formatDate(
-                  new Date(gameData.gameDetails.results[0].first_release_date * 1000).toISOString()
-                )
+            {gameData?.first_release_date
+              ? CommonMethods.formatDate(new Date(gameData.first_release_date * 1000).toISOString())
               : 'Release Date Not Available'}
           </p>
         </section>
@@ -80,17 +67,18 @@ const MyGameEntry = ({ myGame, count }: Props) => {
       </td>
 
       <td className='border-x-2 border-gray-200 text-center align-middle'>
-        <BsFillTrashFill
-          size={20}
-          className='w-full cursor-pointer text-red-500'
-          onClick={() => {
-            deleteGame({
-              variables: {
-                gameId: myGame.id as string,
-              },
-            });
+        <form
+          action={async () => {
+            await deleteGame(myGame.id);
           }}
-        />
+        >
+          <button
+            type='submit'
+            className='m-0 flex w-full items-center justify-center border-0 bg-transparent p-0 focus:outline-none'
+          >
+            <BsFillTrashFill size={20} className='cursor-pointer text-red-500' />
+          </button>
+        </form>
       </td>
     </tr>
   );

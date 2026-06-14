@@ -2,27 +2,20 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import * as Queries from '../../graphql/queries';
 import { CommonMethods } from '../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@apollo/client/react';
-import type { PopularMoviesQuery } from '@/graphql/generated/code-gen/graphql';
-
-type MovieResult = PopularMoviesQuery['popularMovies']['results'][number];
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
-  movie: MovieResult;
+  movie: any;
   rank: number;
 }
 
 const MovieCard = ({ movie, rank }: Props) => {
   const { data: session } = useSession();
 
-  const { data: usersMovieData } = useQuery(Queries.USERS_MOVIE, {
-    variables: {
-      movieId: movie.id,
-    },
-  });
+  const { userMovies } = useUserMedia();
+  const usersMovie = userMovies?.find(userMovie => userMovie.id === movie.id);
 
   return (
     <tr className='border-2'>
@@ -65,13 +58,13 @@ const MovieCard = ({ movie, rank }: Props) => {
       {session && (
         <>
           <td className='border-x-2 border-gray-200 text-center align-middle'>
-            <p>{usersMovieData?.usersMovie?.rating ? usersMovieData.usersMovie.rating : 'N/A'}</p>
+            <p>{usersMovie?.rating ? usersMovie.rating : 'N/A'}</p>
           </td>
 
           <td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
             <p>
-              {usersMovieData?.usersMovie?.status
-                ? CommonMethods.renderTableStatus(usersMovieData.usersMovie.status)
+              {usersMovie?.status
+                ? CommonMethods.renderTableStatus(usersMovie.status as any)
                 : 'N/A'}
             </p>
           </td>

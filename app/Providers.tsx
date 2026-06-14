@@ -1,27 +1,30 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { ApolloProvider } from '@apollo/client/react';
 import { SessionProvider } from 'next-auth/react';
 import { Analytics } from '@vercel/analytics/react';
-import { client } from '../lib/apollo';
 import Layout from '../components/Layout';
+import { UserMediaProvider } from '../components/UserMediaProvider';
+import type { Movie, Show, Game } from '@prisma/client';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import '../styles/globals.css';
 
 interface Props {
   children: ReactNode;
+  userMovies: Movie[];
+  userShows: Show[];
+  userGames: Game[];
 }
 
-export default function Providers({ children }: Props) {
+export default function Providers({ children, userMovies, userShows, userGames }: Props) {
   return (
     <SessionProvider>
-      <ApolloProvider client={client}>
+      <UserMediaProvider userMovies={userMovies} userShows={userShows} userGames={userGames}>
         <Layout>
           {children}
           <Analytics />
         </Layout>
-      </ApolloProvider>
+      </UserMediaProvider>
     </SessionProvider>
   );
 }
