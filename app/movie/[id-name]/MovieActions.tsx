@@ -19,7 +19,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
   const [ratingInput, setRating] = useState<number | string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const { userMovies } = useUserMedia();
+  const { userMovies, isLoading, refetchUserMedia } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
 
   const watchStatus = watchStatusInput ?? usersMovie?.status ?? 'NOT_WATCHING';
@@ -47,6 +47,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
           await addMovie(movieId, movieTitle, newWatchStatus as WatchStatus);
         }
       }
+      await refetchUserMedia();
     });
   };
 
@@ -62,10 +63,36 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
         watchStatus as WatchStatus,
         isNaN(parseInt(value)) ? undefined : parseInt(value)
       );
+      await refetchUserMedia();
     });
   };
 
   if (status !== 'authenticated' || !session) return null;
+
+  if (isLoading) {
+    return (
+      <section className='my-4 flex items-center space-x-4'>
+        <div className='relative'>
+          <select
+            disabled
+            className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+          >
+            <option>Loading...</option>
+          </select>
+          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+        </div>
+        <div className='relative'>
+          <select
+            disabled
+            className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+          >
+            <option>Loading...</option>
+          </select>
+          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className='my-4 flex items-center space-x-4'>

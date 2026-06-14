@@ -9,22 +9,26 @@ import type { Movie, Show, Game } from '@prisma/client';
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import '../styles/globals.css';
 
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 interface Props {
   children: ReactNode;
-  userMovies: Movie[];
-  userShows: Show[];
-  userGames: Game[];
 }
 
-export default function Providers({ children, userMovies, userShows, userGames }: Props) {
+export default function Providers({ children }: Props) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <SessionProvider>
-      <UserMediaProvider userMovies={userMovies} userShows={userShows} userGames={userGames}>
-        <Layout>
-          {children}
-          <Analytics />
-        </Layout>
-      </UserMediaProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <UserMediaProvider>
+          <Layout>
+            {children}
+            <Analytics />
+          </Layout>
+        </UserMediaProvider>
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }

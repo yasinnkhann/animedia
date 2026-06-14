@@ -1,9 +1,7 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Providers from './Providers';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
-import { getUserMovies, getUserShows, getUserGames } from '@/lib/services/userMedia';
+
 import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
@@ -20,23 +18,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user?.id;
-
-  const [userMovies, userShows, userGames] = await Promise.all([
-    getUserMovies(userId),
-    getUserShows(userId),
-    getUserGames(userId),
-  ]);
-
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+        <link rel='preconnect' href='https://image.tmdb.org' />
+        <link rel='preconnect' href='https://images.igdb.com' />
+      </head>
       <body suppressHydrationWarning>
         <NextTopLoader color='#00b3ff' showSpinner={false} />
-        <Providers userMovies={userMovies} userShows={userShows} userGames={userGames}>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

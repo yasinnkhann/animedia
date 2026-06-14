@@ -53,43 +53,55 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
   const showDetails = showDetailsData?.showDetails;
-  const showId = showDetails?.id ?? '';
+  const showId = String(showDetails?.id ?? '');
   const showName = showDetails?.name ?? '';
 
-  const { userShows } = useUserMedia();
+  const { userShows, isLoading, refetchUserMedia } = useUserMedia();
   const usersShow = userShows?.find(show => show.id === showId);
 
   const watchStatus = watchStatusInput ?? usersShow?.status ?? 'NOT_WATCHING';
   const rating = ratingInput ?? usersShow?.rating ?? '';
   const currEp = currEpInput ?? String(usersShow?.current_episode ?? '0');
 
-  const addShow = useCallback(({ variables }: { variables: any }) => {
-    startTransition(async () => {
-      await addShowAction(
-        variables.showId,
-        variables.showName,
-        variables.watchStatus,
-        variables.currentEpisode
-      );
-    });
-  }, []);
+  const addShow = useCallback(
+    ({ variables }: { variables: any }) => {
+      startTransition(async () => {
+        await addShowAction(
+          variables.showId,
+          variables.showName,
+          variables.watchStatus,
+          variables.currentEpisode
+        );
+        await refetchUserMedia();
+      });
+    },
+    [refetchUserMedia]
+  );
 
-  const updateShow = useCallback(({ variables }: { variables: any }) => {
-    startTransition(async () => {
-      await updateShowAction(
-        variables.showId,
-        variables.watchStatus,
-        variables.showRating ?? undefined,
-        variables.currentEpisode ?? undefined
-      );
-    });
-  }, []);
+  const updateShow = useCallback(
+    ({ variables }: { variables: any }) => {
+      startTransition(async () => {
+        await updateShowAction(
+          variables.showId,
+          variables.watchStatus,
+          variables.showRating ?? undefined,
+          variables.currentEpisode ?? undefined
+        );
+        await refetchUserMedia();
+      });
+    },
+    [refetchUserMedia]
+  );
 
-  const deleteShow = useCallback(({ variables }: { variables: any }) => {
-    startTransition(async () => {
-      await deleteShowAction(variables.showId);
-    });
-  }, []);
+  const deleteShow = useCallback(
+    ({ variables }: { variables: any }) => {
+      startTransition(async () => {
+        await deleteShowAction(variables.showId);
+        await refetchUserMedia();
+      });
+    },
+    [refetchUserMedia]
+  );
 
   const isDBPending = isPending;
   const isInitialUsersShowLoading = false;
@@ -786,166 +798,189 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
           )}
         </section>
 
-        {status === 'authenticated' && session && (
-          <section className='my-4 flex items-center space-x-4'>
-            <div className='relative'>
-              <select
-                className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
-                value={watchStatus}
-                onChange={handleChangeWatchStatus}
-                disabled={isDBPending}
-              >
-                {watchStatusOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.text}
-                  </option>
-                ))}
-              </select>
-              <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
-            </div>
-
-            <div className='relative'>
-              <select
-                className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
-                value={rating}
-                onChange={handleChangeRating}
-                disabled={
-                  watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isDBPending
-                }
-              >
-                {ratingOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.text}
-                  </option>
-                ))}
-              </select>
-              <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
-            </div>
-
-            {episodeCountDisplay === 'total-episodes' && (
-              <form
-                className='flex items-center rounded border border-gray-300'
-                onSubmit={handleEpisodeSubmit}
-              >
-                <span className='px-3 text-gray-700'>Episodes:</span>
-                <button
-                  className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                  onClick={() => handleTotalEpisodeBtn('decrement')}
-                  type='button'
-                  disabled={+currEp <= 0 || isDBPending}
+        {status === 'authenticated' &&
+          session &&
+          (isLoading ? (
+            <section className='my-4 flex items-center space-x-4'>
+              <div className='relative'>
+                <select
+                  disabled
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
                 >
-                  <FaMinus className={`${+currEp <= 0 ? 'text-gray-500' : 'text-blue-500'}`} />
-                </button>
-                <input
-                  className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
-                  type='text'
-                  value={currEp}
-                  onChange={handleEpisodeChange}
-                  onBlur={handleEpisodeOnBlur}
-                  disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
-                />
-                <span className='px-1 text-gray-700'>/</span>{' '}
-                <span className='px-1 text-gray-700'>{currTotalEpCount}</span>
-                <button
-                  className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                  onClick={() => handleTotalEpisodeBtn('increment')}
-                  type='button'
-                  disabled={+currEp >= currTotalEpCount || isDBPending}
+                  <option>Loading...</option>
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+              </div>
+              <div className='relative'>
+                <select
+                  disabled
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
                 >
-                  <FaPlus
-                    className={`${+currEp >= currTotalEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+                  <option>Loading...</option>
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+              </div>
+            </section>
+          ) : (
+            <section className='my-4 flex flex-wrap items-center gap-4'>
+              <div className='relative'>
+                <select
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  value={watchStatus}
+                  onChange={handleChangeWatchStatus}
+                  disabled={isDBPending}
+                >
+                  {watchStatusOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.text}
+                    </option>
+                  ))}
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+              </div>
+
+              <div className='relative'>
+                <select
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  value={rating}
+                  onChange={handleChangeRating}
+                  disabled={
+                    watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isDBPending
+                  }
+                >
+                  {ratingOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.text}
+                    </option>
+                  ))}
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+              </div>
+
+              {episodeCountDisplay === 'total-episodes' && (
+                <form
+                  className='flex items-center rounded border border-gray-300'
+                  onSubmit={handleEpisodeSubmit}
+                >
+                  <span className='px-3 text-gray-700'>Episodes:</span>
+                  <button
+                    className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                    onClick={() => handleTotalEpisodeBtn('decrement')}
+                    type='button'
+                    disabled={+currEp <= 0 || isDBPending}
+                  >
+                    <FaMinus className={`${+currEp <= 0 ? 'text-gray-500' : 'text-blue-500'}`} />
+                  </button>
+                  <input
+                    className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                    type='text'
+                    value={currEp}
+                    onChange={handleEpisodeChange}
+                    onBlur={handleEpisodeOnBlur}
+                    disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
                   />
-                </button>
-              </form>
-            )}
-
-            {episodeCountDisplay === 'season-episode' && (
-              <>
-                <form
-                  className='flex items-center rounded border border-gray-300'
-                  onSubmit={handleSeasonSubmit}
-                >
-                  <div>
-                    <span className='px-3 text-gray-700'>Season:</span>
-                    <button
-                      className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                      onClick={() => handleSeasonBtn('decrement')}
-                      type='button'
-                      disabled={+currSeasonEp.seasonNo <= 1 || isDBPending}
-                    >
-                      <FaMinus
-                        className={`${+currSeasonEp.seasonNo <= 1 ? 'text-gray-500' : 'text-blue-500'}`}
-                      />
-                    </button>
-                    <input
-                      className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
-                      type='text'
-                      value={currSeasonEp.seasonNo}
-                      onChange={handleSeasonChange}
-                      onBlur={handleSeasonOnBlur}
-                      disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
-                    />
-                    <span className='px-1 text-gray-700'>/</span>{' '}
-                    <span className='px-1 text-gray-700'>{currTotalSeasonCount}</span>
-                  </div>
-
+                  <span className='px-1 text-gray-700'>/</span>{' '}
+                  <span className='px-1 text-gray-700'>{currTotalEpCount}</span>
                   <button
                     className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                    onClick={() => handleSeasonBtn('increment')}
+                    onClick={() => handleTotalEpisodeBtn('increment')}
                     type='button'
                     disabled={+currEp >= currTotalEpCount || isDBPending}
                   >
                     <FaPlus
-                      className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-gray-500' : 'text-blue-500'}`}
+                      className={`${+currEp >= currTotalEpCount ? 'text-gray-500' : 'text-blue-500'}`}
                     />
                   </button>
                 </form>
+              )}
 
-                <form
-                  className='flex items-center rounded border border-gray-300'
-                  onSubmit={handleSeasonEpisodeSubmit}
-                >
-                  <div>
-                    <span className='px-3 text-gray-700'>Episode:</span>
+              {episodeCountDisplay === 'season-episode' && (
+                <>
+                  <form
+                    className='flex items-center rounded border border-gray-300'
+                    onSubmit={handleSeasonSubmit}
+                  >
+                    <div>
+                      <span className='px-3 text-gray-700'>Season:</span>
+                      <button
+                        className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                        onClick={() => handleSeasonBtn('decrement')}
+                        type='button'
+                        disabled={+currSeasonEp.seasonNo <= 1 || isDBPending}
+                      >
+                        <FaMinus
+                          className={`${+currSeasonEp.seasonNo <= 1 ? 'text-gray-500' : 'text-blue-500'}`}
+                        />
+                      </button>
+                      <input
+                        className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                        type='text'
+                        value={currSeasonEp.seasonNo}
+                        onChange={handleSeasonChange}
+                        onBlur={handleSeasonOnBlur}
+                        disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+                      />
+                      <span className='px-1 text-gray-700'>/</span>{' '}
+                      <span className='px-1 text-gray-700'>{currTotalSeasonCount}</span>
+                    </div>
+
                     <button
                       className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                      onClick={() => handleSeasonEpisodeBtn('decrement')}
+                      onClick={() => handleSeasonBtn('increment')}
                       type='button'
-                      disabled={+currSeasonEp.episode <= 0 || isDBPending}
+                      disabled={+currEp >= currTotalEpCount || isDBPending}
                     >
-                      <FaMinus
-                        className={`${+currSeasonEp.episode <= 0 ? 'text-gray-500' : 'text-blue-500'}`}
+                      <FaPlus
+                        className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-gray-500' : 'text-blue-500'}`}
                       />
                     </button>
-                    <input
-                      className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
-                      type='text'
-                      value={currSeasonEp.episode}
-                      onChange={handleSeasonEpisodeChange}
-                      onBlur={handleSeasonEpisodeOnBlur}
-                      disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
-                    />
-                    <span className='px-1 text-gray-700'>/</span>{' '}
-                    <span className='px-1 text-gray-700'>
-                      {calculateSeasonEpisodeNumber().seasonEpCount}
-                    </span>
-                  </div>
+                  </form>
 
-                  <button
-                    className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
-                    onClick={() => handleSeasonEpisodeBtn('increment')}
-                    type='button'
-                    disabled={+currEp >= currTotalEpCount || isDBPending}
+                  <form
+                    className='flex items-center rounded border border-gray-300'
+                    onSubmit={handleSeasonEpisodeSubmit}
                   >
-                    <FaPlus
-                      className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-gray-500' : 'text-blue-500'}`}
-                    />
-                  </button>
-                </form>
-              </>
-            )}
-          </section>
-        )}
+                    <div>
+                      <span className='px-3 text-gray-700'>Episode:</span>
+                      <button
+                        className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                        onClick={() => handleSeasonEpisodeBtn('decrement')}
+                        type='button'
+                        disabled={+currSeasonEp.episode <= 0 || isDBPending}
+                      >
+                        <FaMinus
+                          className={`${+currSeasonEp.episode <= 0 ? 'text-gray-500' : 'text-blue-500'}`}
+                        />
+                      </button>
+                      <input
+                        className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                        type='text'
+                        value={currSeasonEp.episode}
+                        onChange={handleSeasonEpisodeChange}
+                        onBlur={handleSeasonEpisodeOnBlur}
+                        disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+                      />
+                      <span className='px-1 text-gray-700'>/</span>{' '}
+                      <span className='px-1 text-gray-700'>
+                        {calculateSeasonEpisodeNumber().seasonEpCount}
+                      </span>
+                    </div>
+
+                    <button
+                      className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                      onClick={() => handleSeasonEpisodeBtn('increment')}
+                      type='button'
+                      disabled={+currEp >= currTotalEpCount || isDBPending}
+                    >
+                      <FaPlus
+                        className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+                      />
+                    </button>
+                  </form>
+                </>
+              )}
+            </section>
+          ))}
 
         <section className='pb-32'>
           <h1>{showDetailsData.showDetails.name}</h1>

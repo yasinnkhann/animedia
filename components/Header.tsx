@@ -20,7 +20,11 @@ const Header = () => {
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   if (status === 'loading') {
-    return <></>;
+    return (
+      <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center bg-gray-100 !font-[Rubik] !text-base'>
+        <nav className='ml-[4rem] !flex w-full !items-center'></nav>
+      </header>
+    );
   }
 
   return (

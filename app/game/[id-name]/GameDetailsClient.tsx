@@ -60,7 +60,7 @@ const GameDetailsClient = ({
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const { userGames } = useUserMedia();
+  const { userGames, isLoading, refetchUserMedia } = useUserMedia();
   const usersGame = userGames?.find(game => game.id === id);
 
   const rating = ratingInput ?? usersGame?.rating ?? ratingOptions[0].value;
@@ -78,6 +78,7 @@ const GameDetailsClient = ({
         variables.wishlist ?? undefined,
         variables.rating ?? undefined
       );
+      await refetchUserMedia();
     });
   };
 
@@ -88,12 +89,14 @@ const GameDetailsClient = ({
         variables.wishlist ?? undefined,
         variables.rating ?? undefined
       );
+      await refetchUserMedia();
     });
   };
 
   const deleteGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
       await deleteGameAction(variables.gameId);
+      await refetchUserMedia();
     });
   };
 
@@ -227,39 +230,62 @@ const GameDetailsClient = ({
           </p>
         </section>
 
-        {status === 'authenticated' && session && (
-          <section className='my-4 flex items-center space-x-4'>
-            <div className='relative'>
-              <Button
-                onClick={handleWishlist}
-                type='primary'
-                disabled={isDBPending}
-                style={{
-                  backgroundColor: addToWishlist ? '#52c41a' : '',
-                  borderColor: addToWishlist ? '#52c41a' : '',
-                }}
-              >
-                {addToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
-              </Button>
-            </div>
+        {status === 'authenticated' &&
+          session &&
+          (isLoading ? (
+            <section className='my-4 flex items-center space-x-4'>
+              <div className='relative'>
+                <Button
+                  disabled
+                  type='primary'
+                  style={{ backgroundColor: 'gray', borderColor: 'gray' }}
+                >
+                  Loading...
+                </Button>
+              </div>
+              <div className='relative'>
+                <select
+                  disabled
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+                >
+                  <option>Loading...</option>
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+              </div>
+            </section>
+          ) : (
+            <section className='my-4 flex items-center space-x-4'>
+              <div className='relative'>
+                <Button
+                  onClick={handleWishlist}
+                  type='primary'
+                  disabled={isDBPending}
+                  style={{
+                    backgroundColor: addToWishlist ? '#52c41a' : '',
+                    borderColor: addToWishlist ? '#52c41a' : '',
+                  }}
+                >
+                  {addToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
+                </Button>
+              </div>
 
-            <div className='relative'>
-              <select
-                className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
-                value={rating}
-                onChange={handleChangeRating}
-                disabled={isDBPending}
-              >
-                {ratingOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.text}
-                  </option>
-                ))}
-              </select>
-              <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
-            </div>
-          </section>
-        )}
+              <div className='relative'>
+                <select
+                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  value={rating}
+                  onChange={handleChangeRating}
+                  disabled={isDBPending}
+                >
+                  {ratingOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.text}
+                    </option>
+                  ))}
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+              </div>
+            </section>
+          ))}
 
         <section className='pb-32'>
           <h1>{game.name}</h1>

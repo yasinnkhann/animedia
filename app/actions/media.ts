@@ -12,7 +12,7 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
 
   const movie = await prisma.movie.create({
     data: {
-      id: movieId,
+      id: String(movieId),
       name: movieName,
       status: watchStatus,
       userId: session.user.id,
@@ -33,7 +33,7 @@ export async function addShow(
 
   const show = await prisma.show.create({
     data: {
-      id: showId,
+      id: String(showId),
       name: showName,
       status: watchStatus,
       current_episode: currentEpisode ?? 0,
@@ -55,7 +55,7 @@ export async function addGame(
 
   const game = await prisma.game.create({
     data: {
-      id: gameId,
+      id: String(gameId),
       name: gameName,
       wishlist: wishlist ?? false,
       rating,
@@ -73,7 +73,7 @@ export async function updateMovie(movieId: string, watchStatus: WatchStatus, mov
   const movie = await prisma.movie.update({
     where: {
       id_userId: {
-        id: movieId,
+        id: String(movieId),
         userId: session.user.id,
       },
     },
@@ -98,7 +98,7 @@ export async function updateShow(
   const show = await prisma.show.update({
     where: {
       id_userId: {
-        id: showId,
+        id: String(showId),
         userId: session.user.id,
       },
     },
@@ -119,7 +119,7 @@ export async function updateGame(gameId: string, wishlist?: boolean, rating?: nu
   const game = await prisma.game.update({
     where: {
       id_userId: {
-        id: gameId,
+        id: String(gameId),
         userId: session.user.id,
       },
     },
@@ -139,7 +139,7 @@ export async function deleteMovie(movieId: string) {
   const movie = await prisma.movie.delete({
     where: {
       id_userId: {
-        id: movieId,
+        id: String(movieId),
         userId: session.user.id,
       },
     },
@@ -155,7 +155,7 @@ export async function deleteShow(showId: string) {
   const show = await prisma.show.delete({
     where: {
       id_userId: {
-        id: showId,
+        id: String(showId),
         userId: session.user.id,
       },
     },
@@ -171,7 +171,7 @@ export async function deleteGame(gameId: string) {
   const game = await prisma.game.delete({
     where: {
       id_userId: {
-        id: gameId,
+        id: String(gameId),
         userId: session.user.id,
       },
     },
