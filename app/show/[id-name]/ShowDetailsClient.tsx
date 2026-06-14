@@ -33,11 +33,11 @@ import {
 
 interface Props {
   showDetailsData: any;
-  recShowsData: any;
-  showsCastCrewData: any;
+  castNode: React.ReactNode;
+  relatedNode: React.ReactNode;
 }
 
-const ShowDetailsClient = ({ showDetailsData, recShowsData, showsCastCrewData }: Props) => {
+const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) => {
   const { data: session, status } = useSession();
 
   const [watchStatusInput, setWatchStatus] = useState<WatchStatus | 'NOT_WATCHING' | null>(null);
@@ -1033,39 +1033,8 @@ const ShowDetailsClient = ({ showDetailsData, recShowsData, showsCastCrewData }:
           </section>
         )}
 
-        {showsCastCrewData?.showsCastCrew && showsCastCrewData.showsCastCrew.cast?.length && (
-          <section>
-            <h3 className='mb-4 ml-8 mt-4'>Cast</h3>
-            <MediaCastHorizontalScroller
-              items={
-                showsCastCrewData.showsCastCrew?.cast
-                  .map((cast: any) => ({
-                    id: cast.id,
-                    name: cast.name,
-                    character: cast.character,
-                    profile_path: cast.profile_path,
-                    type: 'character',
-                  }))
-                  .slice(0, RESULTS_PER_PAGE) as ICast[]
-              }
-            />
-          </section>
-        )}
-        {recShowsData?.recommendedShows && !_.isEmpty(recShowsData.recommendedShows.results) && (
-          <section className='pb-4'>
-            <h3 className='mb-4 ml-8 mt-4'>Recommended Shows</h3>
-            <RelatedHorizontalScroller
-              items={recShowsData.recommendedShows.results.map((show: any) => ({
-                id: show.id,
-                imagePath: show.poster_path,
-                name: show.name,
-                popularity: show.popularity ?? 0,
-                type: 'show',
-              }))}
-              mediaType={'shows'}
-            />
-          </section>
-        )}
+        {castNode}
+        {relatedNode}
       </section>
     </motion.main>
   );

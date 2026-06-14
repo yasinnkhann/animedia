@@ -2,6 +2,9 @@ import { Metadata } from 'next';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { tmdbClient } from '@/lib/api';
 import PersonDetailsClient from './PersonDetailsClient';
+import { Suspense } from 'react';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+import PersonCreditsServer from '@/components/person/PersonCreditsServer';
 
 export async function generateMetadata({
   params,
@@ -54,17 +57,18 @@ export default async function PersonDetails({
 
   if (!id) return null;
 
-  const [personDetails, knownForMovies, knownForShows] = await Promise.all([
-    tmdbClient.getPersonDetails(id),
-    tmdbClient.getPersonMovieCredits(id),
-    tmdbClient.getPersonShowCredits(id),
-  ]);
+  const personDetails = await tmdbClient.getPersonDetails(id);
+
+  const personDetailsData = { personDetails };
 
   return (
     <PersonDetailsClient
-      personDetailsData={{ personDetails }}
-      knownForMoviesData={{ personsKnownForMovie: knownForMovies }}
-      knownForShowsData={{ personsKnownForShow: knownForShows }}
+      personDetailsData={personDetailsData}
+      creditsNode={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <PersonCreditsServer personId={id} />
+        </Suspense>
+      }
     />
   );
 }

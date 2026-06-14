@@ -1,6 +1,10 @@
 import { Metadata } from 'next';
 import { igdbClient } from '@/lib/api';
 import GameDetailsClient from './GameDetailsClient';
+import { Suspense } from 'react';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+import GamePreviewsServer from '@/components/game/GamePreviewsServer';
+import GameRelatedServer from '@/components/game/GameRelatedServer';
 
 export async function generateMetadata({
   params,
@@ -40,34 +44,17 @@ export default async function GameDetails({ params }: { params: Promise<{ 'id-na
 
   if (!id) return null;
 
-  const [
-    gameDetails,
-    gamePlatforms,
-    gameCompany,
-    gameThemes,
-    gameCollections,
-    gamePreviews,
-    gameGenres,
-  ] = await Promise.all([
+  const [gameDetails, gamePlatforms, gameCompany, gameThemes, gameGenres] = await Promise.all([
     igdbClient.getGameDetails(id),
     igdbClient.getGamePlatforms(),
     igdbClient.getGameCompany(id),
     igdbClient.getGameThemes(),
-    igdbClient.getGameCollections(id),
-    igdbClient.getGamePreviews(id),
     igdbClient.getGameGenres(),
   ]);
 
   const similarGamesIds = gameDetails?.results?.[0]?.similar_games ?? [];
-  const similarGames =
-    similarGamesIds.length > 0 ? await igdbClient.getSimilarGames(similarGamesIds) : [];
-
   const gameIdForCharacters = gameDetails?.results?.[0]?.id ?? '0';
-  const gameCharacters =
-    gameIdForCharacters !== '0' ? await igdbClient.getGameCharacters(gameIdForCharacters) : [];
-
   const dlcGamesIds = gameDetails?.results?.[0]?.dlcs ?? [];
-  const dlcGames = dlcGamesIds.length > 0 ? await igdbClient.getDlcGames(dlcGamesIds) : [];
 
   return (
     <GameDetailsClient
@@ -75,12 +62,21 @@ export default async function GameDetails({ params }: { params: Promise<{ 'id-na
       gamePlatformsData={{ gamePlatforms }}
       gameCompanyData={{ gameCompany }}
       gameThemesData={{ gameThemes }}
-      gameCollectionsData={{ gameCollections }}
-      similarGamesData={{ similarGames }}
-      gameCharactersData={{ gameCharacters }}
-      dlcGamesData={{ dlcGames }}
-      gamePreviewsData={{ gamePreviews }}
       gameGenresData={{ gameGenres }}
+      previewsNode={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <GamePreviewsServer gameId={id} gameIdForCharacters={gameIdForCharacters} />
+        </Suspense>
+      }
+      relatedNode={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <GameRelatedServer
+            gameId={id}
+            dlcGamesIds={dlcGamesIds}
+            similarGamesIds={similarGamesIds}
+          />
+        </Suspense>
+      }
     />
   );
 }

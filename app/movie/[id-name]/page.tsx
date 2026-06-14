@@ -4,14 +4,13 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
-import _ from 'lodash';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
-import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import MediaCastHorizontalScroller from '@/components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { tmdbClient } from '@/lib/api';
 import MovieActions from './MovieActions';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
-import { ICast } from '@ts/interfaces';
+import { Suspense } from 'react';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+import MovieCastServer from '@/components/movie/MovieCastServer';
+import MovieRelatedServer from '@/components/movie/MovieRelatedServer';
 
 import { Metadata } from 'next';
 
@@ -54,11 +53,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   if (!id) return null;
 
-  const [movieDetails, moviesCastCrew, recMovies] = await Promise.all([
-    tmdbClient.getMovieDetails(id),
-    tmdbClient.getMovieCredits(id),
-    tmdbClient.getRecommendedMovies(id),
-  ]);
+  const movieDetails = await tmdbClient.getMovieDetails(id);
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
   const movieTitle = movieDetails?.title ?? '';
@@ -130,40 +125,13 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
       </section>
 
       <section className='col-start-2 mt-4'>
-        {moviesCastCrew?.cast?.length > 0 && (
-          <section>
-            <h3 className='mb-4 ml-8'>Cast</h3>
-            <MediaCastHorizontalScroller
-              items={
-                moviesCastCrew.cast
-                  .map((cast: any) => ({
-                    id: cast.id,
-                    name: cast.name,
-                    character: cast.character,
-                    profile_path: cast.profile_path,
-                    type: 'character',
-                  }))
-                  .slice(0, RESULTS_PER_PAGE) as ICast[]
-              }
-            />
-          </section>
-        )}
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <MovieCastServer movieId={id} />
+        </Suspense>
 
-        {recMovies?.results && !_.isEmpty(recMovies.results) && (
-          <section className='pb-4'>
-            <h3 className='mb-4 ml-8 mt-4'>Recommended Movies</h3>
-            <RelatedHorizontalScroller
-              items={recMovies.results.map((movie: any) => ({
-                id: movie.id,
-                imagePath: movie.poster_path,
-                name: movie.title,
-                popularity: movie.popularity ?? 0,
-                type: 'movie',
-              }))}
-              mediaType={'movies'}
-            />
-          </section>
-        )}
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <MovieRelatedServer movieId={id} />
+        </Suspense>
       </section>
     </PageAnimationWrapper>
   );

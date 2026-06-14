@@ -20,67 +20,15 @@ import Modal from '../../../components/Modal';
 
 interface Props {
   personDetailsData: any;
-  knownForMoviesData: any;
-  knownForShowsData: any;
+  creditsNode: React.ReactNode;
 }
 
-export default function PersonDetailsClient({
-  personDetailsData,
-  knownForMoviesData,
-  knownForShowsData,
-}: Props) {
+export default function PersonDetailsClient({ personDetailsData, creditsNode }: Props) {
   const params = useParams();
   const idName = params?.['id-name'] as string;
   const id = idName?.split('-')[0] ?? '';
 
   const [showFullDescription, setShowFullDescription] = useState(false);
-
-  const memoMappedMedia = useMemo(() => {
-    if (!knownForMoviesData && !knownForShowsData) return [];
-
-    const uniqueMovies: Set<string> = new Set();
-    const mappedMoviesCast: IRelatedMedia[] = [];
-
-    for (const castObj of knownForMoviesData?.personsKnownForMovie?.cast ?? []) {
-      if (castObj && !uniqueMovies.has(castObj.id)) {
-        uniqueMovies.add(castObj.id);
-
-        mappedMoviesCast.push({
-          id: castObj.id,
-          imagePath: castObj.poster_path,
-          name: castObj.title,
-          popularity: castObj.popularity,
-          type: 'movie',
-        });
-      }
-    }
-
-    const uniqueShows: Set<string> = new Set();
-    const mappedShowsCast: IRelatedMedia[] = [];
-
-    for (const castObj of knownForShowsData?.personsKnownForShow?.cast ?? []) {
-      if (
-        castObj &&
-        !uniqueShows.has(castObj.id) &&
-        (castObj.episode_count ?? 0) > KNOWN_FOR_MIN_EP_COUNT
-      ) {
-        uniqueShows.add(castObj.id);
-
-        mappedShowsCast.push({
-          id: castObj.id,
-          imagePath: castObj.poster_path,
-          name: castObj.name,
-          popularity: castObj.popularity,
-          type: 'show',
-        });
-      }
-    }
-
-    return mappedMoviesCast
-      .concat(mappedShowsCast)
-      .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, KNOWN_FOR_CARDS_LIMIT);
-  }, [knownForMoviesData, knownForShowsData]);
 
   const getAge = (dateStr: string) => {
     const today = new Date();
@@ -207,14 +155,7 @@ export default function PersonDetailsClient({
             </div>
           </div>
 
-          {!_.isEmpty(memoMappedMedia) && (
-            <div className='mt-8'>
-              <h2 className='mb-6 text-2xl font-bold text-gray-800'>Known For</h2>
-              <div className='-mx-4 sm:-mx-0'>
-                <RelatedHorizontalScroller items={memoMappedMedia} />
-              </div>
-            </div>
-          )}
+          {creditsNode}
         </section>
       </div>
 

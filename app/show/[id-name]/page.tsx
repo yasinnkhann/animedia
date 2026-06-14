@@ -2,6 +2,10 @@ import { Metadata } from 'next';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { tmdbClient } from '@/lib/api';
 import ShowDetailsClient from './ShowDetailsClient';
+import { Suspense } from 'react';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+import ShowCastServer from '@/components/show/ShowCastServer';
+import ShowRelatedServer from '@/components/show/ShowRelatedServer';
 
 export async function generateMetadata({
   params,
@@ -41,22 +45,24 @@ export default async function ShowDetails({ params }: { params: Promise<{ 'id-na
 
   if (!id) return null;
 
-  const [showDetails, showsCastCrew, recShows] = await Promise.all([
-    tmdbClient.getShowDetails(id),
-    tmdbClient.getShowCredits(id),
-    tmdbClient.getRecommendedShows(id),
-  ]);
+  const showDetails = await tmdbClient.getShowDetails(id);
 
   // Transform tmdbClient responses to match what Apollo would have returned so the client component works seamlessly
   const showDetailsData = { showDetails };
-  const showsCastCrewData = { showsCastCrew };
-  const recShowsData = { recommendedShows: recShows };
 
   return (
     <ShowDetailsClient
       showDetailsData={showDetailsData}
-      showsCastCrewData={showsCastCrewData}
-      recShowsData={recShowsData}
+      castNode={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <ShowCastServer showId={id} />
+        </Suspense>
+      }
+      relatedNode={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <ShowRelatedServer showId={id} />
+        </Suspense>
+      }
     />
   );
 }

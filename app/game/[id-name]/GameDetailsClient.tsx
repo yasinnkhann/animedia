@@ -34,12 +34,9 @@ interface Props {
   gamePlatformsData: any;
   gameCompanyData: any;
   gameThemesData: any;
-  gameCollectionsData: any;
-  similarGamesData: any;
-  gameCharactersData: any;
-  dlcGamesData: any;
-  gamePreviewsData: any;
   gameGenresData: any;
+  previewsNode: React.ReactNode;
+  relatedNode: React.ReactNode;
 }
 
 const GameDetailsClient = ({
@@ -47,12 +44,9 @@ const GameDetailsClient = ({
   gamePlatformsData,
   gameCompanyData,
   gameThemesData,
-  gameCollectionsData,
-  similarGamesData,
-  gameCharactersData,
-  dlcGamesData,
-  gamePreviewsData,
   gameGenresData,
+  previewsNode,
+  relatedNode,
 }: Props) => {
   const { data: session, status } = useSession();
 
@@ -364,76 +358,8 @@ const GameDetailsClient = ({
       </section>
 
       <section className='col-start-2 mt-4'>
-        {gamePreviewsData?.gamePreviews && !_.isEmpty(gamePreviewsData.gamePreviews) && (
-          <section className='pb-4'>
-            <h3 className='mb-4 ml-8 mt-4'>Preview</h3>
-            <GamePreviewHorizontalScroller items={gamePreviewsData.gamePreviews} />
-          </section>
-        )}
-
-        {gameCharactersData?.gameCharacters && !_.isEmpty(gameCharactersData.gameCharacters) && (
-          <section>
-            <h3 className='mb-4 ml-8'>Characters</h3>
-            <MediaCastHorizontalScroller
-              items={
-                gameCharactersData.gameCharacters
-                  .map((char: any) => ({
-                    id: char.id,
-                    name: char.name,
-                    profile_path: char.mugShotUrl,
-                    type: 'character',
-                  }))
-                  .slice(0, RESULTS_PER_PAGE) as ICast[]
-              }
-            />
-          </section>
-        )}
-
-        {dlcGamesData?.dlcGames && !_.isEmpty(dlcGamesData.dlcGames) && (
-          <section className='pb-4'>
-            <h3 className='mb-4 ml-8 mt-4'>DLC</h3>
-            <RelatedHorizontalScroller
-              items={dlcGamesData.dlcGames.map((dlc: any) => ({
-                id: dlc.id,
-                imagePath: dlc.coverUrl,
-                name: dlc.name,
-                popularity: dlc.rating ?? 0,
-                type: 'game',
-              }))}
-            />
-          </section>
-        )}
-
-        {gameCollectionsData?.gameCollections &&
-          !_.isEmpty(gameCollectionsData.gameCollections.games) && (
-            <section className='pb-4'>
-              <h3 className='mb-4 ml-8 mt-4'>Check out the series</h3>
-              <RelatedHorizontalScroller
-                items={gameCollectionsData.gameCollections.games.map((game: any) => ({
-                  id: game.id,
-                  imagePath: game.coverUrl,
-                  name: game.name,
-                  popularity: game.rating ?? 0,
-                  type: 'game',
-                }))}
-              />
-            </section>
-          )}
-
-        {similarGamesData?.similarGames && !_.isEmpty(similarGamesData.similarGames) && (
-          <section className='pb-4'>
-            <h3 className='mb-4 ml-8 mt-4'>Games you might like</h3>
-            <RelatedHorizontalScroller
-              items={similarGamesData.similarGames.map((game: any) => ({
-                id: game.id,
-                imagePath: game.coverUrl,
-                name: game.name,
-                popularity: game.rating ?? 0,
-                type: 'game',
-              }))}
-            />
-          </section>
-        )}
+        {previewsNode}
+        {relatedNode}
       </section>
       <AnimatePresence mode='wait'>
         {showFullDescription && (
