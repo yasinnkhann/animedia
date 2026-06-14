@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useMemo, useState } from 'react';
-import { Circles } from 'react-loading-icons';
 import SearchBar from '@/components/Search/SearchBar';
 import SearchResult from '@/components/Search/SearchResult';
+import SearchResultSkeleton from '@/components/Skeletons/SearchResultSkeleton';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -255,10 +255,13 @@ export default function SearchClient({
                   />
                 ))}
 
-                <div ref={ref} className='my-8 flex justify-center'>
-                  {activeQuery.isFetchingNextPage && (
-                    <Circles className='h-8 w-8' stroke='#00b3ff' />
-                  )}
+                {activeQuery.isFetchingNextPage &&
+                  Array.from({ length: 10 }).map((_, idx) => (
+                    <SearchResultSkeleton key={`skeleton-${idx}`} />
+                  ))}
+
+                <div className='my-8 flex justify-center'>
+                  <div ref={ref} className='h-1 w-full'></div>
                 </div>
               </section>
             </section>

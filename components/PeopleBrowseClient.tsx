@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { Circles } from 'react-loading-icons';
 import PeopleList from './MediaPerson/PeopleList';
 
 interface Props {
@@ -45,10 +44,10 @@ const PeopleBrowseClient = ({ initialData, title, queryKey, fetchNextPageAction 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
       <h3 className='mb-4'>{title}</h3>
-      <PeopleList results={allResults} />
+      <PeopleList results={allResults} isFetchingNextPage={isFetchingNextPage} />
 
-      <div ref={ref} className='my-8 flex justify-center'>
-        {isFetchingNextPage && <Circles className='h-8 w-8' stroke='#00b3ff' />}
+      <div className='my-8 flex justify-center'>
+        <div ref={ref} className='h-1 w-full'></div>
       </div>
     </main>
   );

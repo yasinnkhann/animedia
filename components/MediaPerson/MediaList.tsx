@@ -4,15 +4,17 @@ import { Fragment } from 'react';
 import MovieCard from './MovieCard';
 import ShowCard from './ShowCard';
 import GameCard from './GameCard';
+import MediaCardSkeleton from '../Skeletons/MediaCardSkeleton';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 interface Props {
   results: any[];
   title: string;
   genrePage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
-const MediaList = ({ results, title, genrePage }: Props) => {
+const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => {
   const { data: session } = useSession();
 
   return (
@@ -74,6 +76,10 @@ const MediaList = ({ results, title, genrePage }: Props) => {
                 }
                 return <Fragment key={`${media.id}-${idx}`}>{mediaComp}</Fragment>;
               })}
+              {isFetchingNextPage &&
+                Array.from({ length: 20 }).map((_, idx) => (
+                  <MediaCardSkeleton key={`skeleton-${idx}`} />
+                ))}
             </tbody>
           </table>
         </div>

@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { Circles } from 'react-loading-icons';
 import MediaList from './MediaPerson/MediaList';
 import { Select } from 'antd';
 
@@ -112,10 +111,11 @@ const GenreBrowseClient = ({
             results={allResults}
             title={`${sortBy} ${genre} ${basePath.includes('show') ? 'Shows' : basePath.includes('game') ? 'Games' : 'Movies'}`}
             genrePage
+            isFetchingNextPage={isFetchingNextPage}
           />
 
-          <div ref={ref} className='my-8 flex justify-center'>
-            {isFetchingNextPage && <Circles className='h-8 w-8' stroke='#00b3ff' />}
+          <div className='my-8 flex justify-center'>
+            <div ref={ref} className='h-1 w-full'></div>
           </div>
         </section>
       </section>

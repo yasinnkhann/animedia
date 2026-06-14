@@ -4,7 +4,6 @@ import { useEffect, useMemo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import MediaList from './MediaPerson/MediaList';
-import { Circles } from 'react-loading-icons';
 
 interface Props {
   initialData: any;
@@ -45,10 +44,10 @@ const BrowseClient = ({ initialData, title, queryKey, fetchNextPageAction }: Pro
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
       <section className='flex flex-col items-center'>
-        <MediaList results={allResults} title={title} />
+        <MediaList results={allResults} title={title} isFetchingNextPage={isFetchingNextPage} />
 
-        <div ref={ref} className='my-8 flex justify-center'>
-          {isFetchingNextPage && <Circles className='h-8 w-8' stroke='#00b3ff' />}
+        <div className='my-8 flex justify-center'>
+          <div ref={ref} className='h-1 w-full'></div>
         </div>
       </section>
     </main>
