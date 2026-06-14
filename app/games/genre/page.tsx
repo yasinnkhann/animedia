@@ -7,9 +7,6 @@ export default async function GenreGames(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
-
   const sortBy = typeof searchParams.sortBy === 'string' ? searchParams.sortBy : 'Popular';
 
   // Fetch game genres
@@ -21,17 +18,19 @@ export default async function GenreGames(props: {
     typeof searchParams.genre === 'string' ? searchParams.genre : (genreOptions[0]?.value ?? '0');
   const genreId = parseInt(genreStr, 10) || 0;
 
-  // Resolve actual genre name to pass to client
-  const resolvedGenreName = gameGenres.find((g: any) => g.id === genreId)?.name ?? 'Genre';
-
   const apiSortBy = sortBy === 'Popular' ? 'rating_count' : 'rating';
 
-  const genreGames = await igdbClient.getGamesByGenre(genreId, apiSortBy, RESULTS_PER_PAGE, page);
+  const initialData = await igdbClient.getGamesByGenre(genreId, apiSortBy, RESULTS_PER_PAGE, 1);
+
+  async function fetchNextPage(page: number) {
+    'use server';
+    return await igdbClient.getGamesByGenre(genreId, apiSortBy, RESULTS_PER_PAGE, page);
+  }
 
   return (
     <GenreBrowseClient
-      mediaData={genreGames}
-      currPage={page}
+      initialData={initialData}
+      fetchNextPageAction={fetchNextPage}
       sortBy={sortBy}
       genre={genreStr}
       basePath='/games/genre'

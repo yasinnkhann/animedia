@@ -7,8 +7,6 @@ export default async function Search(props: {
 }) {
   const searchParams = await props.searchParams;
   const q = typeof searchParams.q === 'string' ? searchParams.q : '';
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
   if (!q) {
     return (
@@ -22,11 +20,31 @@ export default async function Search(props: {
   }
 
   const [searchedMovies, searchedShows, searchedPeople, searchedGames] = await Promise.all([
-    tmdbClient.searchMovies(q, page),
-    tmdbClient.searchShows(q, page),
-    tmdbClient.searchPeople(q, page),
-    igdbClient.searchGames(q, RESULTS_PER_PAGE, page),
+    tmdbClient.searchMovies(q, 1),
+    tmdbClient.searchShows(q, 1),
+    tmdbClient.searchPeople(q, 1),
+    igdbClient.searchGames(q, RESULTS_PER_PAGE, 1),
   ]);
+
+  async function fetchNextPageMovies(page: number) {
+    'use server';
+    return await tmdbClient.searchMovies(q, page);
+  }
+
+  async function fetchNextPageShows(page: number) {
+    'use server';
+    return await tmdbClient.searchShows(q, page);
+  }
+
+  async function fetchNextPagePeople(page: number) {
+    'use server';
+    return await tmdbClient.searchPeople(q, page);
+  }
+
+  async function fetchNextPageGames(page: number) {
+    'use server';
+    return await igdbClient.searchGames(q, RESULTS_PER_PAGE, page);
+  }
 
   return (
     <SearchClient
@@ -34,6 +52,10 @@ export default async function Search(props: {
       searchedShowsData={{ searchedShows }}
       searchedPeopleData={{ searchedPeople }}
       searchedGamesData={{ searchedGames }}
+      fetchNextPageMovies={fetchNextPageMovies}
+      fetchNextPageShows={fetchNextPageShows}
+      fetchNextPagePeople={fetchNextPagePeople}
+      fetchNextPageGames={fetchNextPageGames}
     />
   );
 }

@@ -2,19 +2,15 @@ import PersonCard from './PersonCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 
 interface Props {
-  peopleData: any;
-  pageNum: number;
+  results: any[];
 }
 
-const PeopleList = ({ peopleData, pageNum }: Props) => {
+const PeopleList = ({ results }: Props) => {
   return (
     <section className='mb-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
-      {peopleData.results.map((person: any, idx: number) => (
-        <section key={person.id}>
-          <PersonCard
-            person={person}
-            rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
-          />
+      {results.map((person: any, idx: number) => (
+        <section key={`${person.id}-${idx}`}>
+          <PersonCard person={person} rank={idx + 1} />
         </section>
       ))}
     </section>

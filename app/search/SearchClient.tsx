@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { Circles } from 'react-loading-icons';
-import Pagination from '@components/Pagination';
 import SearchBar from '@/components/Search/SearchBar';
 import SearchResult from '@/components/Search/SearchResult';
+import { useInView } from 'react-intersection-observer';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { TSearchResults } from '@ts/types';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
 
 import _ from 'lodash';
 import { useUserMedia } from '@/components/UserMediaProvider';
@@ -19,6 +19,10 @@ interface Props {
   searchedShowsData: any;
   searchedPeopleData: any;
   searchedGamesData: any;
+  fetchNextPageMovies?: (page: number) => Promise<any>;
+  fetchNextPageShows?: (page: number) => Promise<any>;
+  fetchNextPagePeople?: (page: number) => Promise<any>;
+  fetchNextPageGames?: (page: number) => Promise<any>;
 }
 
 export default function SearchClient({
@@ -26,28 +30,23 @@ export default function SearchClient({
   searchedShowsData,
   searchedPeopleData,
   searchedGamesData,
+  fetchNextPageMovies,
+  fetchNextPageShows,
+  fetchNextPagePeople,
+  fetchNextPageGames,
 }: Props) {
-  const router = useRouter();
   const searchParams = useSearchParams();
-
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   const q = searchParams.get('q') ?? '';
-  const page = searchParams.get('page') ?? '1';
-  const currPage = Math.max(1, Number.parseInt(page, 10) || 1);
-
-  const paginateSearch = (pageNum: number) => {
-    router.push(`/search?q=${encodeURIComponent(q)}&page=${pageNum}`);
-  };
 
   const [manualCategory, setManualCategory] = useState<{
     q: string;
-    page: string;
     category: TSearchResults | null;
-  }>({ q, page, category: null });
+  }>({ q, category: null });
 
-  if (manualCategory.q !== q || manualCategory.page !== page) {
-    setManualCategory({ q, page, category: null });
+  if (manualCategory.q !== q) {
+    setManualCategory({ q, category: null });
   }
 
   const activeCategory = useMemo<TSearchResults>(() => {
@@ -81,31 +80,75 @@ export default function SearchClient({
 
   const searchResultsType = activeCategory;
 
-  const { userMovies, userShows, userGames } = useUserMedia();
+  const moviesQuery = useInfiniteQuery({
+    queryKey: ['search', 'movies', q],
+    queryFn: ({ pageParam = 1 }) => fetchNextPageMovies?.(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any) =>
+      lastPage && lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialData: { pages: [searchedMoviesData?.searchedMovies], pageParams: [1] },
+    enabled: !!fetchNextPageMovies,
+  });
+
+  const showsQuery = useInfiniteQuery({
+    queryKey: ['search', 'shows', q],
+    queryFn: ({ pageParam = 1 }) => fetchNextPageShows?.(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any) =>
+      lastPage && lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialData: { pages: [searchedShowsData?.searchedShows], pageParams: [1] },
+    enabled: !!fetchNextPageShows,
+  });
+
+  const gamesQuery = useInfiniteQuery({
+    queryKey: ['search', 'games', q],
+    queryFn: ({ pageParam = 1 }) => fetchNextPageGames?.(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any) =>
+      lastPage && lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialData: { pages: [searchedGamesData?.searchedGames], pageParams: [1] },
+    enabled: !!fetchNextPageGames,
+  });
+
+  const peopleQuery = useInfiniteQuery({
+    queryKey: ['search', 'people', q],
+    queryFn: ({ pageParam = 1 }) => fetchNextPagePeople?.(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: any) =>
+      lastPage && lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    initialData: { pages: [searchedPeopleData?.searchedPeople], pageParams: [1] },
+    enabled: !!fetchNextPagePeople,
+  });
+
+  const activeQuery = useMemo(() => {
+    switch (searchResultsType) {
+      case 'movies':
+        return moviesQuery;
+      case 'shows':
+        return showsQuery;
+      case 'games':
+        return gamesQuery;
+      case 'people':
+        return peopleQuery;
+      default:
+        return moviesQuery;
+    }
+  }, [searchResultsType, moviesQuery, showsQuery, gamesQuery, peopleQuery]);
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && activeQuery.hasNextPage && !activeQuery.isFetchingNextPage) {
+      activeQuery.fetchNextPage();
+    }
+  }, [inView, activeQuery.hasNextPage, activeQuery.isFetchingNextPage, activeQuery]);
 
   const activeSearchPayload = useMemo(() => {
-    if (searchResultsType === 'movies' && searchedMoviesData?.searchedMovies) {
-      return searchedMoviesData.searchedMovies;
-    }
+    const results = activeQuery.data?.pages.flatMap((page: any) => page?.results || []) || [];
+    return { results };
+  }, [activeQuery.data]);
 
-    if (searchResultsType === 'shows' && searchedShowsData?.searchedShows) {
-      return searchedShowsData.searchedShows;
-    }
-
-    if (searchResultsType === 'people' && searchedPeopleData?.searchedPeople) {
-      return searchedPeopleData.searchedPeople;
-    }
-
-    if (searchResultsType === 'games' && searchedGamesData?.searchedGames) {
-      return searchedGamesData.searchedGames;
-    }
-  }, [
-    searchResultsType,
-    searchedMoviesData,
-    searchedShowsData,
-    searchedPeopleData,
-    searchedGamesData,
-  ]);
+  const { userMovies, userShows, userGames } = useUserMedia();
 
   const userMatchedMedias = useMemo(() => {
     const matchedMedias: Array<Movie | Show | Game> = [];
@@ -143,14 +186,6 @@ export default function SearchClient({
 
     return matchedMedias;
   }, [activeSearchPayload, searchResultsType, userMovies, userShows, userGames]);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [page]);
 
   useEffect(() => {
     const el = searchBarRef.current;
@@ -196,9 +231,7 @@ export default function SearchClient({
                   ].map(cat => (
                     <li
                       key={cat.id}
-                      onClick={() =>
-                        setManualCategory({ q, page, category: cat.id as TSearchResults })
-                      }
+                      onClick={() => setManualCategory({ q, category: cat.id as TSearchResults })}
                       className='flex w-full cursor-pointer items-center justify-between py-1'
                     >
                       <span className={`${activeCategory === cat.id ? 'underline' : ''}`}>
@@ -211,9 +244,9 @@ export default function SearchClient({
               </section>
 
               <section className='m-4'>
-                {activeSearchPayload?.results.map((result: any) => (
+                {activeSearchPayload?.results.map((result: any, idx: number) => (
                   <SearchResult
-                    key={result.id}
+                    key={`${result.id}-${idx}`}
                     result={result}
                     searchedResultType={
                       searchResultsType.replace(/s$/, '') as 'movie' | 'show' | 'game' | 'person'
@@ -221,15 +254,14 @@ export default function SearchClient({
                     userMatchedMedias={userMatchedMedias as Movie[] | Show[] | Game[]}
                   />
                 ))}
+
+                <div ref={ref} className='my-8 flex justify-center'>
+                  {activeQuery.isFetchingNextPage && (
+                    <Circles className='h-8 w-8' stroke='#00b3ff' />
+                  )}
+                </div>
               </section>
             </section>
-            <Pagination
-              currPage={currPage}
-              paginate={paginateSearch}
-              totalItems={activeSearchPayload?.total_results ?? 0}
-              itemsPerPage={RESULTS_PER_PAGE}
-              siblingCount={1}
-            />
           </>
         )}
     </main>

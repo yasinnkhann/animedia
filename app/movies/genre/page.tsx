@@ -7,9 +7,6 @@ export default async function GenreMovies(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
-
   const sortBy = typeof searchParams.sortBy === 'string' ? searchParams.sortBy : 'Popular';
   const genre = typeof searchParams.genre === 'string' ? searchParams.genre : 'Action';
 
@@ -18,12 +15,17 @@ export default async function GenreMovies(props: {
 
   const apiSortBy = sortBy === 'Popular' ? 'popularity.desc' : 'vote_average.desc';
 
-  const genreMovies = await tmdbClient.discoverMoviesByGenre(genreId, apiSortBy, page);
+  const initialData = await tmdbClient.discoverMoviesByGenre(genreId, apiSortBy, 1);
+
+  async function fetchNextPage(page: number) {
+    'use server';
+    return await tmdbClient.discoverMoviesByGenre(genreId, apiSortBy, page);
+  }
 
   return (
     <GenreBrowseClient
-      mediaData={genreMovies}
-      currPage={page}
+      initialData={initialData}
+      fetchNextPageAction={fetchNextPage}
       sortBy={sortBy}
       genre={genre}
       basePath='/movies/genre'

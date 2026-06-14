@@ -1,21 +1,20 @@
 import { tmdbClient } from '@/lib/api';
 import BrowseClient from '@/components/BrowseClient';
 
-export default async function TopRatedMovies(props: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
+export default async function TopRatedMovies() {
+  const initialData = await tmdbClient.getTopRatedMovies(1);
 
-  const topRatedMovies = await tmdbClient.getTopRatedMovies(page);
+  async function fetchNextPage(page: number) {
+    'use server';
+    return await tmdbClient.getTopRatedMovies(page);
+  }
 
   return (
     <BrowseClient
-      mediaData={topRatedMovies}
-      currPage={page}
+      initialData={initialData}
+      fetchNextPageAction={fetchNextPage}
       title='Top Rated Movies'
-      basePath='/movies/top-rated'
+      queryKey={['movies', 'top-rated']}
     />
   );
 }

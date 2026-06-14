@@ -87,7 +87,11 @@ export class CommonMethods {
     if (!imagePath) {
       return imageNotFound;
     }
-    return imagePath;
+    const cleanPath = imagePath.trim();
+    if (cleanPath.startsWith('//')) {
+      return `https:${cleanPath}`;
+    }
+    return cleanPath;
   };
 
   public static getKeywordId = async (q: string) => {

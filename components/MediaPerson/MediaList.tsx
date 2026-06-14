@@ -7,13 +7,12 @@ import GameCard from './GameCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 interface Props {
-  mediaData: any;
-  pageNum: number;
+  results: any[];
   title: string;
   genrePage?: boolean;
 }
 
-const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
+const MediaList = ({ results, title, genrePage }: Props) => {
   const { data: session } = useSession();
 
   return (
@@ -49,7 +48,7 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-200'>
-              {mediaData.results.map((media: any, idx: number) => {
+              {results.map((media: any, idx: number) => {
                 let mediaComp = <></>;
 
                 let isMovie = false;
@@ -67,28 +66,13 @@ const MediaList = ({ mediaData, pageNum, title, genrePage }: Props) => {
                 }
 
                 if (isMovie) {
-                  mediaComp = (
-                    <MovieCard
-                      movie={media}
-                      rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
-                    />
-                  );
+                  mediaComp = <MovieCard movie={media} rank={idx + 1} />;
                 } else if (isShow) {
-                  mediaComp = (
-                    <ShowCard
-                      show={media}
-                      rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
-                    />
-                  );
+                  mediaComp = <ShowCard show={media} rank={idx + 1} />;
                 } else if (isGame) {
-                  mediaComp = (
-                    <GameCard
-                      game={media}
-                      rank={pageNum * RESULTS_PER_PAGE - (RESULTS_PER_PAGE - idx) + 1}
-                    />
-                  );
+                  mediaComp = <GameCard game={media} rank={idx + 1} />;
                 }
-                return <Fragment key={media.id}>{mediaComp}</Fragment>;
+                return <Fragment key={`${media.id}-${idx}`}>{mediaComp}</Fragment>;
               })}
             </tbody>
           </table>

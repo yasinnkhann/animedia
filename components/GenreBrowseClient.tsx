@@ -1,46 +1,71 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import Pagination from './Pagination';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import { Circles } from 'react-loading-icons';
 import MediaList from './MediaPerson/MediaList';
 import { Select } from 'antd';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
 
 interface Props {
-  mediaData: any;
-  currPage: number;
+  initialData: any;
   sortBy: string;
   genre: string;
   basePath: string;
-  sortByOptions: { value: string; text: string }[];
-  genreOptions: { value: string; text: string }[];
+  sortByOptions: { text: string; value: string }[];
+  genreOptions: { text: string; value: string }[];
+  fetchNextPageAction: (page: number) => Promise<any>;
 }
 
 const GenreBrowseClient = ({
-  mediaData,
-  currPage,
+  initialData,
   sortBy,
   genre,
   basePath,
   sortByOptions,
   genreOptions,
+  fetchNextPageAction,
 }: Props) => {
   const router = useRouter();
 
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: [basePath, genre, sortBy],
+    queryFn: ({ pageParam = 1 }) => fetchNextPageAction(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage && lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
+    initialData: {
+      pages: [initialData],
+      pageParams: [1],
+    },
+  });
+
+  const { ref, inView } = useInView();
+
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }, [currPage]);
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const allResults = useMemo(() => {
+    return data?.pages.flatMap(page => page?.results || []) || [];
+  }, [data]);
 
   const handleSortByChange = (value: string) => {
     router.push(
-      `${basePath}?page=1&sortBy=${encodeURIComponent(value)}&genre=${encodeURIComponent(genre)}`
+      `${basePath}?sortBy=${encodeURIComponent(value)}&genre=${encodeURIComponent(genre)}`
     );
   };
 
   const handleGenreTypeChange = (value: string) => {
     router.push(
-      `${basePath}?page=1&sortBy=${encodeURIComponent(sortBy)}&genre=${encodeURIComponent(value)}`
+      `${basePath}?sortBy=${encodeURIComponent(sortBy)}&genre=${encodeURIComponent(value)}`
     );
   };
 
@@ -84,24 +109,14 @@ const GenreBrowseClient = ({
 
         <section className='flex flex-col items-center'>
           <MediaList
-            mediaData={mediaData}
-            pageNum={currPage}
+            results={allResults}
             title={`${sortBy} ${genre} ${basePath.includes('show') ? 'Shows' : basePath.includes('game') ? 'Games' : 'Movies'}`}
             genrePage
           />
 
-          <Pagination
-            currPage={currPage}
-            totalItems={mediaData.total_results}
-            itemsPerPage={RESULTS_PER_PAGE}
-            paginate={(pageNum: number) =>
-              router.push(
-                `${basePath}?page=${pageNum}&sortBy=${encodeURIComponent(sortBy)}&genre=${encodeURIComponent(genre)}`
-              )
-            }
-            siblingCount={1}
-            maxPageNum={500}
-          />
+          <div ref={ref} className='my-8 flex justify-center'>
+            {isFetchingNextPage && <Circles className='h-8 w-8' stroke='#00b3ff' />}
+          </div>
         </section>
       </section>
     </main>

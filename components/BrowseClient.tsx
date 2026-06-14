@@ -1,38 +1,55 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Pagination from './Pagination';
+import { useEffect, useMemo } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
 import MediaList from './MediaPerson/MediaList';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
+import { Circles } from 'react-loading-icons';
 
 interface Props {
-  mediaData: any;
-  currPage: number;
+  initialData: any;
   title: string;
-  basePath: string;
+  queryKey: string[];
+  fetchNextPageAction: (page: number) => Promise<any>;
 }
 
-const BrowseClient = ({ mediaData, currPage, title, basePath }: Props) => {
-  const router = useRouter();
+const BrowseClient = ({ initialData, title, queryKey, fetchNextPageAction }: Props) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam = 1 }) => fetchNextPageAction(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage && lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
+    initialData: {
+      pages: [initialData],
+      pageParams: [1],
+    },
+  });
+
+  const { ref, inView } = useInView();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }, [currPage]);
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const allResults = useMemo(() => {
+    return data?.pages.flatMap(page => page?.results || []) || [];
+  }, [data]);
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
       <section className='flex flex-col items-center'>
-        <MediaList mediaData={mediaData} pageNum={currPage} title={title} />
+        <MediaList results={allResults} title={title} />
 
-        <Pagination
-          currPage={currPage}
-          totalItems={mediaData.total_results}
-          itemsPerPage={RESULTS_PER_PAGE}
-          paginate={(pageNum: number) => router.push(`${basePath}?page=${pageNum}`)}
-          siblingCount={1}
-          maxPageNum={500}
-        />
+        <div ref={ref} className='my-8 flex justify-center'>
+          {isFetchingNextPage && <Circles className='h-8 w-8' stroke='#00b3ff' />}
+        </div>
       </section>
     </main>
   );

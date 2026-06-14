@@ -1,26 +1,27 @@
 import { tmdbClient } from '@/lib/api';
 import BrowseClient from '@/components/BrowseClient';
 
-export default async function PopularAnimeMovies(props: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
-
+export default async function PopularAnimeMovies() {
   const keywordSearchResults = await tmdbClient.searchKeyword('anime');
   const keywordId = keywordSearchResults.results?.[0]?.id;
 
-  const popularAnimeMovies = keywordId
-    ? await tmdbClient.discoverMoviesByKeyword(keywordId, page)
+  const initialData = keywordId
+    ? await tmdbClient.discoverMoviesByKeyword(keywordId, 1)
     : { results: [], total_results: 0 };
+
+  async function fetchNextPage(page: number) {
+    'use server';
+    return keywordId
+      ? await tmdbClient.discoverMoviesByKeyword(keywordId, page)
+      : { results: [], total_results: 0 };
+  }
 
   return (
     <BrowseClient
-      mediaData={popularAnimeMovies}
-      currPage={page}
+      initialData={initialData}
+      fetchNextPageAction={fetchNextPage}
       title='Popular Anime Movies'
-      basePath='/movies/popular-anime'
+      queryKey={['movies', 'popular-anime']}
     />
   );
 }

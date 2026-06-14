@@ -2,21 +2,20 @@ import { igdbClient } from '@/lib/api';
 import BrowseClient from '@/components/BrowseClient';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 
-export default async function PopularGames(props: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
-  const pageStr = typeof searchParams.page === 'string' ? searchParams.page : '1';
-  const page = Math.max(1, parseInt(pageStr, 10) || 1);
+export default async function PopularGames() {
+  const initialData = await igdbClient.getPopularGames(RESULTS_PER_PAGE, 1);
 
-  const popularGames = await igdbClient.getPopularGames(RESULTS_PER_PAGE, page);
+  async function fetchNextPage(page: number) {
+    'use server';
+    return await igdbClient.getPopularGames(RESULTS_PER_PAGE, page);
+  }
 
   return (
     <BrowseClient
-      mediaData={popularGames}
-      currPage={page}
+      initialData={initialData}
+      fetchNextPageAction={fetchNextPage}
       title='Popular Games'
-      basePath='/games/popular'
+      queryKey={['games', 'popular']}
     />
   );
 }
