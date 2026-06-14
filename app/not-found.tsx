@@ -8,11 +8,11 @@ export default function NotFound() {
         <FiHelpCircle className='h-16 w-16 text-blue-500' />
       </div>
 
-      <h1 className='mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl'>
+      <h1 className='mb-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl'>
         404 - Lost in the Void
       </h1>
 
-      <p className='mb-8 max-w-md text-lg text-gray-400'>
+      <p className='mb-8 max-w-md text-lg text-slate-600'>
         We couldn&apos;t find the page or media you were looking for. It might have been removed, or
         the link might be broken.
       </p>

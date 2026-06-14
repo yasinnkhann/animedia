@@ -23,11 +23,11 @@ export default function Error({
         <FiAlertOctagon className='h-16 w-16 text-red-500' />
       </div>
 
-      <h1 className='mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl'>
+      <h1 className='mb-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl'>
         Oops, something went wrong!
       </h1>
 
-      <p className='mb-8 max-w-md text-lg text-gray-400'>
+      <p className='mb-8 max-w-md text-lg text-slate-600'>
         We&apos;ve logged the error and are looking into it. Please try again or return to the
         homepage.
       </p>
