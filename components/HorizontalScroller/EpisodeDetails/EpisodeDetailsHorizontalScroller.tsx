@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import MotionItem from '../MotionItem';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from '../Arrows';
+import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { IEPDetails } from '@ts/interfaces';
 import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
-import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
+import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import type { ShowDetailsQuery } from '@/graphql/generated/code-gen/graphql';
 
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
@@ -18,12 +16,11 @@ interface Props {
 }
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
-  const { handleDrag, handleMouseDown, handleMouseUp, handleWheel } = useHorizontalScroller();
   const [episodesToShow, setEpisodesToShow] = useState<number>(RESULTS_PER_EPISODES_SLIDER);
   const isLoadingMore = useRef(false);
   const scrollContainerRef = useRef<scrollVisibilityApiType>(
     null
-  ) as React.MutableRefObject<scrollVisibilityApiType>;
+  ) as React.RefObject<scrollVisibilityApiType | null>;
 
   const groupSeasonsAndEps = () => {
     const groupedArr: IEPDetails[] = [];
@@ -77,30 +74,15 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
   }, []);
 
   return (
-    <ScrollMenu
-      LeftArrow={LeftArrow}
-      RightArrow={RightArrow}
-      onWheel={handleWheel}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleDrag}
-      scrollContainerClassName='!h-[14rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+    <BaseHorizontalScroller
+      items={groupSeasonsAndEps().slice(0, episodesToShow)}
+      keyExtractor={item => `${item.season}-${item.episode}`}
       apiRef={scrollContainerRef}
-    >
-      {groupSeasonsAndEps()
-        .slice(0, episodesToShow)
-        .map((item, idx) => (
-          <MotionItem
-            key={idx}
-            itemId={`${item.season}-${item.episode}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: idx * 0.05 }}
-          >
-            <EpisodeDetailsCard item={item} itemId={`${item.season}-${item.episode}`} />
-          </MotionItem>
-        ))}
-    </ScrollMenu>
+      scrollContainerClassName='!h-[14rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+      renderItem={item => (
+        <EpisodeDetailsCard item={item} itemId={`${item.season}-${item.episode}`} />
+      )}
+    />
   );
 };
 

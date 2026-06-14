@@ -1,17 +1,14 @@
 'use client';
 
 import { useMemo } from 'react';
-import MotionItem from '../MotionItem';
 import RelatedCard from './RelatedCard';
-import { ScrollMenu } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from '../Arrows';
 import { IRelatedMedia } from '@ts/interfaces';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
 import { TContent } from '@ts/types';
 import { ExtractStrict } from '@ts/types';
 import { useSession } from 'next-auth/react';
-import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
+import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import type { UsersMoviesQuery, UsersShowsQuery } from '@/graphql/generated/code-gen/graphql';
 
 type UserMovie = NonNullable<NonNullable<UsersMoviesQuery['usersMovies']>[number]>;
@@ -35,9 +32,6 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
     skip: !shouldFetchUserMedia || mediaType === 'shows',
     fetchPolicy: 'network-only',
   });
-
-  const { dragging, handleDrag, handleMouseDown, handleMouseUp, handleWheel } =
-    useHorizontalScroller();
 
   const userMatchedMedias = useMemo(() => {
     if (!shouldFetchUserMedia) {
@@ -94,32 +88,19 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
   ]);
 
   return (
-    <ScrollMenu
-      LeftArrow={LeftArrow}
-      RightArrow={RightArrow}
-      onWheel={handleWheel}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleDrag}
+    <BaseHorizontalScroller
+      items={items}
+      keyExtractor={item => item.id}
       scrollContainerClassName='!h-[22rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
-    >
-      {items.map((item, idx) => (
-        <MotionItem
-          key={item.id}
+      renderItem={(item, _idx, dragging) => (
+        <RelatedCard
           itemId={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: idx * 0.05 }}
-        >
-          <RelatedCard
-            itemId={item.id}
-            item={item}
-            dragging={dragging}
-            userMatchedMedias={userMatchedMedias}
-          />
-        </MotionItem>
-      ))}
-    </ScrollMenu>
+          item={item}
+          dragging={dragging}
+          userMatchedMedias={userMatchedMedias}
+        />
+      )}
+    />
   );
 };
 

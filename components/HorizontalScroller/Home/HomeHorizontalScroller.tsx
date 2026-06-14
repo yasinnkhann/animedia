@@ -1,14 +1,11 @@
 'use client';
 
 import { useMemo } from 'react';
-import MotionItem from '../MotionItem';
 import HomeCard from './HomeCard';
-import { ScrollMenu } from 'react-horizontal-scrolling-menu';
-import { LeftArrow, RightArrow } from '../Arrows';
 import { useQuery } from '@apollo/client/react';
 import * as Queries from '../../../graphql/queries';
 import { useSession } from 'next-auth/react';
-import { useHorizontalScroller } from '@hooks/useHorizontalScroller';
+import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import type {
   PopularMoviesQuery,
   PopularShowsQuery,
@@ -39,9 +36,6 @@ const HomeHorizontalScroller = ({ items }: Props) => {
     fetchPolicy: 'network-only',
   });
 
-  const { dragging, handleDrag, handleMouseDown, handleMouseUp, handleWheel } =
-    useHorizontalScroller();
-
   const userMatchedMedias = useMemo(() => {
     if (!shouldFetchUserMedia || items.length === 0) {
       return [];
@@ -71,32 +65,18 @@ const HomeHorizontalScroller = ({ items }: Props) => {
   }, [usersShowsData?.usersShows, usersMoviesData?.usersMovies, items, shouldFetchUserMedia]);
 
   return (
-    <ScrollMenu
-      LeftArrow={LeftArrow}
-      RightArrow={RightArrow}
-      onWheel={handleWheel}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleDrag}
-      scrollContainerClassName='!h-[26rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
-    >
-      {items.map((item, idx) => (
-        <MotionItem
-          key={item.id}
+    <BaseHorizontalScroller<MovieResult | ShowResult>
+      items={items as (MovieResult | ShowResult)[]}
+      keyExtractor={item => item.id}
+      renderItem={(item, _idx, dragging) => (
+        <HomeCard
           itemId={item.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: idx * 0.05 }}
-        >
-          <HomeCard
-            itemId={item.id}
-            item={item}
-            dragging={dragging}
-            userMatchedMedias={userMatchedMedias}
-          />
-        </MotionItem>
-      ))}
-    </ScrollMenu>
+          item={item}
+          dragging={dragging}
+          userMatchedMedias={userMatchedMedias}
+        />
+      )}
+    />
   );
 };
 
