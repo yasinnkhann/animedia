@@ -133,9 +133,7 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
         {/* Right Column: Bio & Credits */}
         <section className='flex min-w-0 flex-col gap-8'>
           <div>
-            <h1 className='mb-6 text-5xl font-black tracking-tight text-foreground'>
-              {person.name}
-            </h1>
+            <h1 className='mb-6 text-5xl tracking-tight text-foreground'>{person.name}</h1>
             <h2 className='mb-4 text-2xl font-bold text-foreground'>Biography</h2>
             <div className='text-lg leading-relaxed text-muted-foreground'>
               {person.biography ? (
