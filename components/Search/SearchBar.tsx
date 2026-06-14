@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { CommonMethods } from '@utils/CommonMethods';
 import { TDropDownSearchResult } from '@ts/types';
 import { useRouter } from 'next/navigation';
-import { FaSearch } from 'react-icons/fa';
-import { useDebounce } from '@hooks/useDebounce';
+import { FaSearch, FaSpinner } from 'react-icons/fa';
+import { useDebounceValue } from '@hooks/useDebounceValue';
 import _ from 'lodash';
 import { globalSearchAction } from '@/lib/actions/searchActions';
 
@@ -23,14 +23,24 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
     const [dropDownSearchResults, setDropDownSearchResults] = useState<TDropDownSearchResult[]>([]);
 
-    useDebounce(
-      () => {
-        if (_.isEmpty(searchQuery)) {
-          setDropDownSearchResults([]);
-          return;
-        }
+    const [isSearching, setIsSearching] = useState(false);
+    const debouncedSearchQuery = useDebounceValue(searchQuery, 400);
 
-        globalSearchAction(searchQuery).then(data => {
+    useEffect(() => {
+      if (_.isEmpty(debouncedSearchQuery)) {
+        setDropDownSearchResults([]);
+        setIsSearching(false);
+        return;
+      }
+
+      setIsSearching(true);
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      globalSearchAction(debouncedSearchQuery)
+        .then(data => {
+          if (signal.aborted) return;
+
           let allResults: TDropDownSearchResult[] = [];
           if (data) {
             const movieResults = data.movies
@@ -74,11 +84,16 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
             allResults = [...movieResults, ...showsResults, ...gameResults, ...peopleResults];
           }
           setDropDownSearchResults(allResults as TDropDownSearchResult[]);
+          setIsSearching(false);
+        })
+        .catch(() => {
+          if (!signal.aborted) setIsSearching(false);
         });
-      },
-      _.isEmpty(searchQuery) ? 0 : 2000,
-      [searchQuery]
-    );
+
+      return () => {
+        controller.abort();
+      };
+    }, [debouncedSearchQuery]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -120,14 +135,22 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
           type='text'
           placeholder='Search for a movie, tv show, game, or person...'
           ref={ref}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={e => {
+            setSearchQuery(e.target.value);
+            if (_.isEmpty(e.target.value)) {
+              setDropDownSearchResults([]);
+              setIsSearching(false);
+            } else {
+              setIsSearching(true);
+            }
+          }}
         />
 
         <button
           className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-muted-foreground transition-all hover:scale-125 hover:cursor-pointer hover:text-primary focus:text-primary focus:outline-none'
           type='submit'
         >
-          <FaSearch />
+          {isSearching ? <FaSpinner className='animate-spin' /> : <FaSearch />}
         </button>
 
         {!_.isEmpty(dropDownSearchResults) && (
