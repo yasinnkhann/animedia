@@ -36,6 +36,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
               src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
               alt={epDetailsCardData.name ?? ''}
               fill
+              sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
             />
           </div>
           <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
@@ -116,6 +117,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
                         src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
                         alt={epDetailsCardData.name ?? ''}
                         fill
+                        sizes='(max-width: 768px) 100vw, 50vw'
                         className='object-cover'
                       />
                     </div>

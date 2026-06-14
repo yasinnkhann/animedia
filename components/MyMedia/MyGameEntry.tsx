@@ -36,10 +36,11 @@ const MyGameEntry = ({ myGame, count }: Props) => {
           <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
             <Image
               className='rounded-lg'
-              src={CommonMethods.getIgdbImage(gameData.coverUrl)}
+              src={CommonMethods.getIgdbImage(gameData?.coverUrl)}
               priority
-              alt={gameData.name ?? ''}
+              alt={gameData?.name ?? ''}
               fill
+              sizes='(max-width: 768px) 15vw, 10vw'
             />
           </section>
         </Link>

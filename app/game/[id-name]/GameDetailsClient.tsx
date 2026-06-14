@@ -212,7 +212,8 @@ const GameDetailsClient = ({
           src={CommonMethods.getIgdbImage(game.coverUrl)}
           alt={game.name}
           fill
-          sizes='100vw'
+          priority
+          sizes='(max-width: 768px) 100vw, 30vw'
         />
       </section>
 

@@ -35,7 +35,7 @@ const RelatedCard = ({
             }
             alt={item.name}
             fill
-            sizes='100vw'
+            sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
           />
           {userWatchStatusFromMedia && (
             <div

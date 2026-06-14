@@ -36,6 +36,7 @@ const HomeCard = ({
             alt={titleName}
             fill
             priority
+            sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
           />
 
           {userWatchStatusFromMedia && (

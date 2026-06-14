@@ -33,6 +33,7 @@ const GameCard = ({ game, rank }: Props) => {
               src={CommonMethods.getIgdbImage(game.coverUrl)}
               alt={game.name}
               fill
+              sizes='(max-width: 768px) 15vw, 10vw'
             />
           </section>
         </Link>

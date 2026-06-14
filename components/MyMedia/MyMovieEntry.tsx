@@ -40,6 +40,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
               priority
               alt={movieData?.title ?? ''}
               fill
+              sizes='(max-width: 768px) 15vw, 10vw'
             />
           </section>
         </Link>

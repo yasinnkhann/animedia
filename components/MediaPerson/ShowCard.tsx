@@ -32,8 +32,9 @@ const ShowCard = ({ show, rank }: Props) => {
             <Image
               className='rounded-lg'
               src={CommonMethods.getTheMovieDbImage(show.poster_path)}
-              alt={show.name}
+              alt={show.name ?? ''}
               fill
+              sizes='(max-width: 768px) 15vw, 10vw'
             />
           </section>
         </Link>

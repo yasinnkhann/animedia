@@ -20,6 +20,7 @@ const PersonCard = ({ person }: Props) => {
             src={CommonMethods.getTheMovieDbImage(person.profile_path)}
             alt={person.name}
             fill
+            sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
           />
         </div>
 

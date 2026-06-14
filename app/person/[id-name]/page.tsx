@@ -65,7 +65,7 @@ export default async function PersonDetails({
     <PersonDetailsClient
       personDetailsData={personDetailsData}
       creditsNode={
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='credits' fallback={<HorizontalScrollerSkeleton />}>
           <PersonCreditsServer personId={id} />
         </Suspense>
       }

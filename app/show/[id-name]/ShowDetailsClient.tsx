@@ -755,7 +755,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
           src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
           alt={showDetailsData.showDetails.name}
           fill
-          sizes='100vw'
+          priority
+          sizes='(max-width: 768px) 100vw, 30vw'
         />
       </section>
 

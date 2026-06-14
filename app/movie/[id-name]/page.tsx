@@ -66,7 +66,8 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
           src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
           alt={movieDetails?.title ?? ''}
           fill
-          sizes='100vw'
+          priority
+          sizes='(max-width: 768px) 100vw, 30vw'
         />
       </section>
 
@@ -125,11 +126,11 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
       </section>
 
       <section className='col-start-2 mt-4'>
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
           <MovieCastServer movieId={id} />
         </Suspense>
 
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='related' fallback={<HorizontalScrollerSkeleton />}>
           <MovieRelatedServer movieId={id} />
         </Suspense>
       </section>

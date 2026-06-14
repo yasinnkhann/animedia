@@ -18,6 +18,7 @@ const MediaCastCard = ({ item, dragging }: { item: ICast; dragging: boolean; ite
           }
           alt={item.name}
           fill
+          sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
         />
       </div>
 

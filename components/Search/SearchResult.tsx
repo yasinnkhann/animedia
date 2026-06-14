@@ -30,6 +30,7 @@ const SearchResult = ({ result, searchedResultType, userMatchedMedias }: Props) 
         }
         alt={altText}
         fill
+        sizes='(max-width: 768px) 20vw, 15vw'
         priority
       />
       {userStatusFromMedia && (

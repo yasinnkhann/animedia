@@ -40,6 +40,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
               priority
               alt={showData?.name ?? ''}
               fill
+              sizes='(max-width: 768px) 15vw, 10vw'
             />
           </section>
         </Link>

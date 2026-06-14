@@ -14,7 +14,15 @@ const GamePreviewCard = ({ item }: { item: IGamePreview; dragging: boolean; item
             className='h-full w-full'
           ></iframe>
         )}
-        {item.url && <Image className='rounded-lg' src={item.url} alt='' fill />}
+        {item.url && (
+          <Image
+            className='rounded-lg'
+            src={item.url}
+            alt=''
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          />
+        )}
       </div>
     </section>
   );

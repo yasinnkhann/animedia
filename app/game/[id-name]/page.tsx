@@ -64,12 +64,12 @@ export default async function GameDetails({ params }: { params: Promise<{ 'id-na
       gameThemesData={{ gameThemes }}
       gameGenresData={{ gameGenres }}
       previewsNode={
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='previews' fallback={<HorizontalScrollerSkeleton />}>
           <GamePreviewsServer gameId={id} gameIdForCharacters={gameIdForCharacters} />
         </Suspense>
       }
       relatedNode={
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='related' fallback={<HorizontalScrollerSkeleton />}>
           <GameRelatedServer
             gameId={id}
             dlcGamesIds={dlcGamesIds}

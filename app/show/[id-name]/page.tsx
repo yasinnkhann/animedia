@@ -54,12 +54,12 @@ export default async function ShowDetails({ params }: { params: Promise<{ 'id-na
     <ShowDetailsClient
       showDetailsData={showDetailsData}
       castNode={
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
           <ShowCastServer showId={id} />
         </Suspense>
       }
       relatedNode={
-        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='related' fallback={<HorizontalScrollerSkeleton />}>
           <ShowRelatedServer showId={id} />
         </Suspense>
       }
