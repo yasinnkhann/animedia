@@ -2,6 +2,7 @@ import MediaCastHorizontalScroller from '@/components/HorizontalScroller/MediaCa
 import { tmdbClient } from '@/lib/api';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { ICast } from '@ts/interfaces';
+import _ from 'lodash';
 
 export default async function ShowCastServer({ showId }: { showId: string }) {
   const showsCastCrew = await tmdbClient.getShowCredits(showId);
@@ -13,7 +14,7 @@ export default async function ShowCastServer({ showId }: { showId: string }) {
       <h3 className='mb-4 ml-8'>Cast</h3>
       <MediaCastHorizontalScroller
         items={
-          showsCastCrew.cast
+          _.uniqBy(showsCastCrew.cast, 'id')
             .map((cast: any) => ({
               id: cast.id,
               name: cast.name,

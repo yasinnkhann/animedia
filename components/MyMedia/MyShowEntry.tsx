@@ -16,7 +16,7 @@ interface Props {
 
 const MyShowEntry = ({ myShow, count }: Props) => {
   const [showData, setShowData] = useState<any>(null);
-  const { refetchUserMedia } = useUserMedia();
+  const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
     getShowDetailsAction(myShow.id).then(data => {
@@ -25,8 +25,8 @@ const MyShowEntry = ({ myShow, count }: Props) => {
   }, [myShow.id]);
 
   return (
-    <tr className='border-2'>
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+    <tr className='hover:bg-muted/30'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{count}</p>
       </td>
 
@@ -61,22 +61,33 @@ const MyShowEntry = ({ myShow, count }: Props) => {
         </section>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{myShow.rating ?? 'N/A'}</p>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>
           {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}/
           {myShow.status === 'COMPLETED' ? myShow.current_episode : showData?.number_of_episodes}
         </p>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <form
           action={async () => {
-            await deleteShow(myShow.id);
-            await refetchUserMedia();
+            const previousData = getUserMediaCache();
+            mutateUserMediaCache((old: any) => {
+              if (!old) return old;
+              return {
+                ...old,
+                userShows: old.userShows.filter((s: Show) => s.id !== myShow.id),
+              };
+            });
+            try {
+              await deleteShow(myShow.id);
+            } catch (err) {
+              mutateUserMediaCache(() => previousData);
+            }
           }}
         >
           <button

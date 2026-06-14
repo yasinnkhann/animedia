@@ -60,7 +60,7 @@ const GameDetailsClient = ({
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const { userGames, isLoading, refetchUserMedia } = useUserMedia();
+  const { userGames, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersGame = userGames?.find(game => game.id === id);
 
   const rating = ratingInput ?? usersGame?.rating ?? ratingOptions[0].value;
@@ -72,35 +72,80 @@ const GameDetailsClient = ({
 
   const addGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
-      await addGameAction(
-        variables.gameId,
-        variables.gameName,
-        variables.wishlist ?? undefined,
-        variables.rating ?? undefined
-      );
-      await refetchUserMedia();
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newGames = [...old.userGames];
+        newGames.push({
+          id: variables.gameId,
+          name: variables.gameName,
+          wishlist: variables.wishlist ?? false,
+          rating: variables.rating ?? null,
+        });
+        return { ...old, userGames: newGames };
+      });
+
+      try {
+        await addGameAction(
+          variables.gameId,
+          variables.gameName,
+          variables.wishlist ?? undefined,
+          variables.rating ?? undefined
+        );
+      } catch (err) {
+        mutateUserMediaCache(() => previousData);
+      }
     });
   };
 
   const updateGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
-      await updateGameAction(
-        variables.gameId,
-        variables.wishlist ?? undefined,
-        variables.rating ?? undefined
-      );
-      await refetchUserMedia();
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newGames = [...old.userGames];
+        const index = newGames.findIndex((g: any) => g.id === variables.gameId);
+        if (index !== -1) {
+          newGames[index] = {
+            ...newGames[index],
+            wishlist:
+              variables.wishlist !== undefined ? variables.wishlist : newGames[index].wishlist,
+            rating: variables.rating !== undefined ? variables.rating : newGames[index].rating,
+          };
+        }
+        return { ...old, userGames: newGames };
+      });
+
+      try {
+        await updateGameAction(
+          variables.gameId,
+          variables.wishlist ?? undefined,
+          variables.rating ?? undefined
+        );
+      } catch (err) {
+        mutateUserMediaCache(() => previousData);
+      }
     });
   };
 
   const deleteGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
-      await deleteGameAction(variables.gameId);
-      await refetchUserMedia();
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          userGames: old.userGames.filter((g: any) => g.id !== variables.gameId),
+        };
+      });
+
+      try {
+        await deleteGameAction(variables.gameId);
+      } catch (err) {
+        mutateUserMediaCache(() => previousData);
+      }
     });
   };
-
-  const isDBPending = isPending;
 
   const handleWishlist = () => {
     if (usersGame?.id && usersGame.wishlist && !usersGame.rating) {
@@ -259,7 +304,7 @@ const GameDetailsClient = ({
                 <Button
                   onClick={handleWishlist}
                   type='primary'
-                  disabled={isDBPending}
+                  disabled={false}
                   style={{
                     backgroundColor: addToWishlist ? '#52c41a' : '',
                     borderColor: addToWishlist ? '#52c41a' : '',
@@ -274,7 +319,7 @@ const GameDetailsClient = ({
                   className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={rating}
                   onChange={handleChangeRating}
-                  disabled={isDBPending}
+                  disabled={false}
                 >
                   {ratingOptions.map(option => (
                     <option key={option.value} value={option.value}>

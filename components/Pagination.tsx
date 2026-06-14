@@ -55,7 +55,9 @@ const Pagination = ({
       <div className='px-2'>
         <button
           className={`cursor-pointer border-none bg-none p-0 font-sans text-inherit outline-inherit ${
-            currPage === 1 ? 'cursor-default !text-gray-500' : '!text-green-700'
+            currPage === 1
+              ? 'cursor-default !text-muted-foreground'
+              : '!text-primary hover:text-primary/80'
           }`}
           onClick={goToPrevPage}
           disabled={currPage === 1}
@@ -78,7 +80,9 @@ const Pagination = ({
           return (
             <button
               className={`${
-                pageNumber === currPage ? 'cursor-default text-red-500' : 'cursor-pointer'
+                pageNumber === currPage
+                  ? 'cursor-default font-bold text-foreground'
+                  : 'cursor-pointer hover:text-primary'
               } px-2`}
               key={idx}
               onClick={() => {
@@ -94,7 +98,9 @@ const Pagination = ({
       <div className='px-2'>
         <button
           className={`cursor-pointer border-none bg-none p-0 font-sans text-inherit outline-inherit ${
-            currPage === lastPage ? 'cursor-default !text-gray-500' : '!text-green-700'
+            currPage === lastPage
+              ? 'cursor-default !text-muted-foreground'
+              : '!text-primary hover:text-primary/80'
           }`}
           onClick={goToNextPage}
           disabled={currPage === lastPage}

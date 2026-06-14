@@ -45,17 +45,19 @@ export default function ForgotPasswordPage() {
 
   return (
     <main className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] flex w-full items-center justify-center px-4'>
-      <section className='w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg'>
+      <section className='w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-lg'>
         <div className='mb-8 text-center'>
-          <h2 className='text-3xl font-extrabold tracking-tight text-gray-900'>Forgot Password</h2>
-          <p className='mt-3 text-sm text-gray-500'>
+          <h2 className='text-3xl font-extrabold tracking-tight text-foreground'>
+            Forgot Password
+          </h2>
+          <p className='mt-3 text-sm text-muted-foreground'>
             Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
 
         <form className='flex flex-col gap-6' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-1'>
-            <label htmlFor='email' className='text-sm font-medium text-gray-700'>
+            <label htmlFor='email' className='text-sm font-medium text-foreground'>
               Email Address
             </label>
             <input
@@ -63,8 +65,8 @@ export default function ForgotPasswordPage() {
               type='email'
               id='email'
               placeholder='you@example.com'
-              className={`w-full rounded-lg border px-4 py-3 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                errors.email ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+              className={`w-full rounded-lg border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                errors.email ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
               }`}
             />
             {errors.email && (

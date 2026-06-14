@@ -75,10 +75,10 @@ export default function RegisterPage() {
 
   return (
     <main className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] flex w-full items-center justify-center px-4'>
-      <section className='w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg'>
+      <section className='w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-lg'>
         <div className='mb-8 flex flex-col items-center justify-center gap-2'>
-          <h1 className='text-4xl font-bold tracking-tight text-gray-900'>Register</h1>
-          <p className='text-sm text-gray-500'>Create your account to join Animedia.</p>
+          <h1 className='text-4xl font-bold tracking-tight text-foreground'>Register</h1>
+          <p className='text-sm text-muted-foreground'>Create your account to join Animedia.</p>
         </div>
 
         <form className='flex flex-col gap-5' onSubmit={handleSubmit(onSubmit)}>
@@ -88,11 +88,11 @@ export default function RegisterPage() {
                 {...register('name')}
                 type='text'
                 placeholder='Full Name'
-                className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  errors.name ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+                className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                  errors.name ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
                 }`}
               />
-              <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400'>
+              <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground'>
                 <HiOutlineUser size={24} />
               </span>
             </div>
@@ -107,11 +107,11 @@ export default function RegisterPage() {
                 {...register('email')}
                 type='email'
                 placeholder='Email Address'
-                className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  errors.email ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+                className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                  errors.email ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
                 }`}
               />
-              <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400'>
+              <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground'>
                 <HiAtSymbol size={24} />
               </span>
             </div>
@@ -126,14 +126,14 @@ export default function RegisterPage() {
                 {...register('password')}
                 type={showPW.password ? 'text' : 'password'}
                 placeholder='Password'
-                className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-                  errors.password ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+                className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                  errors.password ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
                 }`}
               />
               <button
                 type='button'
                 onClick={() => setShowPW({ ...showPW, password: !showPW.password })}
-                className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400 hover:text-blue-500 focus:outline-none'
+                className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground hover:text-primary focus:outline-none'
               >
                 {showPW.password ? <BsFillEyeSlashFill size={20} /> : <BsFillEyeFill size={20} />}
               </button>
@@ -149,16 +149,16 @@ export default function RegisterPage() {
                 {...register('confirmPassword')}
                 type={showPW.confirmPassword ? 'text' : 'password'}
                 placeholder='Confirm Password'
-                className={`w-full rounded-lg border py-3 pl-4 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
+                className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
                   errors.confirmPassword
-                    ? 'border-rose-600 bg-rose-50'
-                    : 'border-gray-300 bg-gray-50'
+                    ? 'border-red-500 bg-red-500/10'
+                    : 'border-border bg-muted/30'
                 }`}
               />
               <button
                 type='button'
                 onClick={() => setShowPW({ ...showPW, confirmPassword: !showPW.confirmPassword })}
-                className='absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-400 hover:text-blue-500 focus:outline-none'
+                className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground hover:text-primary focus:outline-none'
               >
                 {showPW.confirmPassword ? (
                   <BsFillEyeSlashFill size={20} />
@@ -196,7 +196,7 @@ export default function RegisterPage() {
         <div className='mt-8 flex flex-col items-center gap-2'>
           <Link
             href='/auth/login'
-            className='text-sm font-medium text-blue-600 hover:text-blue-800'
+            className='text-sm font-medium text-primary hover:text-primary/80'
           >
             Already have an account? Login
           </Link>

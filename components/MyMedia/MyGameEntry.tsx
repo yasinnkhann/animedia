@@ -16,7 +16,7 @@ interface Props {
 
 const MyGameEntry = ({ myGame, count }: Props) => {
   const [gameData, setGameData] = useState<any>(null);
-  const { refetchUserMedia } = useUserMedia();
+  const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
     getGameDetailsAction(myGame.id).then(data => {
@@ -25,8 +25,8 @@ const MyGameEntry = ({ myGame, count }: Props) => {
   }, [myGame.id]);
 
   return (
-    <tr className='border-2'>
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+    <tr className='hover:bg-muted/30'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{count}</p>
       </td>
 
@@ -61,19 +61,30 @@ const MyGameEntry = ({ myGame, count }: Props) => {
         </section>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{myGame.rating ?? 'N/A'}</p>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{myGame.wishlist ? 'Yes' : 'No'}</p>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <form
           action={async () => {
-            await deleteGame(myGame.id);
-            await refetchUserMedia();
+            const previousData = getUserMediaCache();
+            mutateUserMediaCache((old: any) => {
+              if (!old) return old;
+              return {
+                ...old,
+                userGames: old.userGames.filter((g: Game) => g.id !== myGame.id),
+              };
+            });
+            try {
+              await deleteGame(myGame.id);
+            } catch (err) {
+              mutateUserMediaCache(() => previousData);
+            }
           }}
         >
           <button

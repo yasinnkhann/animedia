@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import RoundProgressBar from '@/components/RoundProgressBar';
-import { Circles, SpinningCircles } from 'react-loading-icons';
+import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import { useSession } from 'next-auth/react';
 import { ICast, ICurrentSeasonEpisode } from '@ts/interfaces';
@@ -56,7 +56,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const showId = String(showDetails?.id ?? '');
   const showName = showDetails?.name ?? '';
 
-  const { userShows, isLoading, refetchUserMedia } = useUserMedia();
+  const { userShows, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersShow = userShows?.find(show => show.id === showId);
 
   const watchStatus = watchStatusInput ?? usersShow?.status ?? 'NOT_WATCHING';
@@ -65,45 +65,99 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
   const addShow = useCallback(
     ({ variables }: { variables: any }) => {
+      setCurrEp(null);
+      setCurrSeasonEp(null);
       startTransition(async () => {
-        await addShowAction(
-          variables.showId,
-          variables.showName,
-          variables.watchStatus,
-          variables.currentEpisode
-        );
-        await refetchUserMedia();
+        const previousData = getUserMediaCache();
+        mutateUserMediaCache((old: any) => {
+          if (!old) return old;
+          const newShows = [...old.userShows];
+          newShows.push({
+            id: String(variables.showId),
+            name: variables.showName,
+            status: variables.watchStatus,
+            current_episode: variables.currentEpisode ?? 0,
+            rating: variables.showRating ?? null,
+          });
+          return { ...old, userShows: newShows };
+        });
+
+        try {
+          await addShowAction(
+            variables.showId,
+            variables.showName,
+            variables.watchStatus,
+            variables.currentEpisode
+          );
+        } catch (err) {
+          mutateUserMediaCache(() => previousData);
+        }
       });
     },
-    [refetchUserMedia]
+    [mutateUserMediaCache, getUserMediaCache]
   );
 
   const updateShow = useCallback(
     ({ variables }: { variables: any }) => {
+      setCurrEp(null);
+      setCurrSeasonEp(null);
       startTransition(async () => {
-        await updateShowAction(
-          variables.showId,
-          variables.watchStatus,
-          variables.showRating ?? undefined,
-          variables.currentEpisode ?? undefined
-        );
-        await refetchUserMedia();
+        const previousData = getUserMediaCache();
+        mutateUserMediaCache((old: any) => {
+          if (!old) return old;
+          const newShows = [...old.userShows];
+          const index = newShows.findIndex((s: any) => s.id === String(variables.showId));
+          if (index !== -1) {
+            newShows[index] = {
+              ...newShows[index],
+              status: variables.watchStatus ?? newShows[index].status,
+              current_episode: variables.currentEpisode ?? newShows[index].current_episode,
+              rating:
+                variables.showRating !== undefined ? variables.showRating : newShows[index].rating,
+            };
+          }
+          return { ...old, userShows: newShows };
+        });
+
+        try {
+          await updateShowAction(
+            variables.showId,
+            variables.watchStatus,
+            variables.showRating ?? undefined,
+            variables.currentEpisode ?? undefined
+          );
+        } catch (err) {
+          mutateUserMediaCache(() => previousData);
+        }
       });
     },
-    [refetchUserMedia]
+    [mutateUserMediaCache, getUserMediaCache]
   );
 
   const deleteShow = useCallback(
     ({ variables }: { variables: any }) => {
+      setCurrEp(null);
+      setCurrSeasonEp(null);
       startTransition(async () => {
-        await deleteShowAction(variables.showId);
-        await refetchUserMedia();
+        const previousData = getUserMediaCache();
+        mutateUserMediaCache((old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            userShows: old.userShows.filter((s: any) => s.id !== String(variables.showId)),
+          };
+        });
+
+        try {
+          await deleteShowAction(variables.showId);
+        } catch (err) {
+          mutateUserMediaCache(() => previousData);
+        }
       });
     },
-    [refetchUserMedia]
+    [mutateUserMediaCache, getUserMediaCache]
   );
 
-  const isDBPending = isPending;
   const isInitialUsersShowLoading = false;
 
   const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
@@ -582,7 +636,11 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         });
       }
     } else if (epPostAction < currTotalEpCount && usersShow?.status) {
-      if (usersShow.status === 'DROPPED' || usersShow.status === 'ON_HOLD') {
+      if (
+        usersShow.status === 'DROPPED' ||
+        usersShow.status === 'ON_HOLD' ||
+        usersShow.status === 'COMPLETED'
+      ) {
         updateShow({
           variables: {
             ...updateShowVariables,
@@ -601,7 +659,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       updateShow({
         variables: {
           ...updateShowVariables,
-          watchStatus: 'COMPLETED',
+          watchStatus: totalEpCountGathered ? 'COMPLETED' : usersShow.status,
         },
       });
     }
@@ -623,21 +681,37 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
     const seasonPostAction = action === 'increment' ? prevSeason + 1 : prevSeason - 1;
 
+    const totalEpisodeForSeason = Number(getTotalEpCountForChangedSeason(seasonPostAction));
+
     if (!usersShow) {
       addShow({
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: 'WATCHING',
-          currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
+          watchStatus:
+            totalEpisodeForSeason === currTotalEpCount && totalEpCountGathered
+              ? 'COMPLETED'
+              : 'WATCHING',
+          currentEpisode: totalEpisodeForSeason,
         },
       });
     } else {
+      let newWatchStatus = usersShow.status;
+      if (totalEpisodeForSeason === currTotalEpCount && totalEpCountGathered) {
+        newWatchStatus = 'COMPLETED';
+      } else if (
+        usersShow.status === 'COMPLETED' ||
+        usersShow.status === 'DROPPED' ||
+        usersShow.status === 'ON_HOLD'
+      ) {
+        newWatchStatus = 'WATCHING';
+      }
+
       updateShow({
         variables: {
           showId: showDetailsData.showDetails.id,
-          watchStatus: 'WATCHING',
-          currentEpisode: Number(getTotalEpCountForChangedSeason(seasonPostAction)),
+          watchStatus: newWatchStatus,
+          currentEpisode: totalEpisodeForSeason,
         },
       });
     }
@@ -671,15 +745,27 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: totalEpisode === currTotalEpCount ? 'COMPLETED' : 'WATCHING',
+          watchStatus:
+            totalEpisode === currTotalEpCount && totalEpCountGathered ? 'COMPLETED' : 'WATCHING',
           currentEpisode: totalEpisode,
         },
       });
     } else {
+      let newWatchStatus = usersShow.status;
+      if (totalEpisode === currTotalEpCount && totalEpCountGathered) {
+        newWatchStatus = 'COMPLETED';
+      } else if (
+        usersShow.status === 'COMPLETED' ||
+        usersShow.status === 'DROPPED' ||
+        usersShow.status === 'ON_HOLD'
+      ) {
+        newWatchStatus = 'WATCHING';
+      }
+
       updateShow({
         variables: {
           showId: showDetailsData.showDetails.id,
-          watchStatus: totalEpisode === currTotalEpCount ? 'COMPLETED' : 'WATCHING',
+          watchStatus: newWatchStatus,
           currentEpisode: totalEpisode,
         },
       });
@@ -699,40 +785,6 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       return;
     }
   };
-
-  useEffect(() => {
-    if (!showDetailsData?.showDetails) return;
-
-    if (usersShow && typeof usersShow.current_episode === 'number') {
-      if (
-        usersShow.current_episode === currTotalEpCount &&
-        usersShow.status === 'WATCHING' &&
-        totalEpCountGathered
-      ) {
-        updateShow({
-          variables: {
-            showId: String(showDetailsData.showDetails.id),
-            showRating: usersShow.rating ?? null,
-            watchStatus: 'COMPLETED',
-            currentEpisode: currTotalEpCount,
-          },
-        });
-      } else if (
-        usersShow.current_episode >= 0 &&
-        usersShow.current_episode < currTotalEpCount &&
-        usersShow.status === 'COMPLETED'
-      ) {
-        updateShow({
-          variables: {
-            showId: String(showDetailsData.showDetails.id),
-            showRating: usersShow.rating ?? null,
-            watchStatus: 'WATCHING',
-            currentEpisode: usersShow.current_episode,
-          },
-        });
-      }
-    }
-  }, [currTotalEpCount, showDetailsData?.showDetails, totalEpCountGathered, updateShow, usersShow]);
 
   useEffect(() => {
     const checkEpisodeCountDisplay = () => {
@@ -792,12 +844,6 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               <FiSliders size={20} />
             </button>
           </div>
-
-          {isDBPending && (
-            <div className='absolute left-1/2 top-12 -translate-x-1/2 transform'>
-              <SpinningCircles height={50} stroke='#00b3ff' />
-            </div>
-          )}
         </section>
 
         {status === 'authenticated' &&
@@ -830,7 +876,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={watchStatus}
                   onChange={handleChangeWatchStatus}
-                  disabled={isDBPending}
+                  disabled={false}
                 >
                   {watchStatusOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -846,9 +892,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={rating}
                   onChange={handleChangeRating}
-                  disabled={
-                    watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isDBPending
-                  }
+                  disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH'}
                 >
                   {ratingOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -869,7 +913,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                     onClick={() => handleTotalEpisodeBtn('decrement')}
                     type='button'
-                    disabled={+currEp <= 0 || isDBPending}
+                    disabled={+currEp <= 0}
                   >
                     <FaMinus
                       className={`${+currEp <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
@@ -881,7 +925,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     value={currEp}
                     onChange={handleEpisodeChange}
                     onBlur={handleEpisodeOnBlur}
-                    disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+                    disabled={watchStatus === 'PLAN_TO_WATCH'}
                   />
                   <span className='px-1 text-foreground'>/</span>{' '}
                   <span className='px-1 text-foreground'>{currTotalEpCount}</span>
@@ -889,7 +933,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                     onClick={() => handleTotalEpisodeBtn('increment')}
                     type='button'
-                    disabled={+currEp >= currTotalEpCount || isDBPending}
+                    disabled={+currEp >= currTotalEpCount}
                   >
                     <FaPlus
                       className={`${+currEp >= currTotalEpCount ? 'text-muted-foreground' : 'text-primary'}`}
@@ -910,7 +954,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                         className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                         onClick={() => handleSeasonBtn('decrement')}
                         type='button'
-                        disabled={+currSeasonEp.seasonNo <= 1 || isDBPending}
+                        disabled={+currSeasonEp.seasonNo <= 1}
                       >
                         <FaMinus
                           className={`${+currSeasonEp.seasonNo <= 1 ? 'text-muted-foreground' : 'text-primary'}`}
@@ -922,7 +966,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                         value={currSeasonEp.seasonNo}
                         onChange={handleSeasonChange}
                         onBlur={handleSeasonOnBlur}
-                        disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+                        disabled={watchStatus === 'PLAN_TO_WATCH'}
                       />
                       <span className='px-1 text-foreground'>/</span>{' '}
                       <span className='px-1 text-foreground'>{currTotalSeasonCount}</span>
@@ -932,7 +976,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                       className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                       onClick={() => handleSeasonBtn('increment')}
                       type='button'
-                      disabled={+currEp >= currTotalEpCount || isDBPending}
+                      disabled={+currEp >= currTotalEpCount}
                     >
                       <FaPlus
                         className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-muted-foreground' : 'text-primary'}`}
@@ -950,7 +994,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                         className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                         onClick={() => handleSeasonEpisodeBtn('decrement')}
                         type='button'
-                        disabled={+currSeasonEp.episode <= 0 || isDBPending}
+                        disabled={+currSeasonEp.episode <= 0}
                       >
                         <FaMinus
                           className={`${+currSeasonEp.episode <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
@@ -962,7 +1006,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                         value={currSeasonEp.episode}
                         onChange={handleSeasonEpisodeChange}
                         onBlur={handleSeasonEpisodeOnBlur}
-                        disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
+                        disabled={watchStatus === 'PLAN_TO_WATCH'}
                       />
                       <span className='px-1 text-foreground'>/</span>{' '}
                       <span className='px-1 text-foreground'>
@@ -974,7 +1018,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                       className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                       onClick={() => handleSeasonEpisodeBtn('increment')}
                       type='button'
-                      disabled={+currEp >= currTotalEpCount || isDBPending}
+                      disabled={+currEp >= currTotalEpCount}
                     >
                       <FaPlus
                         className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-muted-foreground' : 'text-primary'}`}

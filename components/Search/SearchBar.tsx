@@ -116,7 +116,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         onSubmit={handleSubmit}
       >
         <input
-          className='w-[calc(100%-2rem)] rounded-md border-none bg-gray-300 py-4 pl-12 pr-4 text-base text-gray-700 transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
+          className='w-[calc(100%-2rem)] rounded-md border-none bg-muted/50 py-4 pl-12 pr-4 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
           type='text'
           placeholder='Search for a movie, tv show, game, or person...'
           ref={ref}
@@ -124,7 +124,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         />
 
         <button
-          className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-gray-700 transition-all hover:scale-125 hover:cursor-pointer hover:text-black focus:text-black focus:outline-none'
+          className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-muted-foreground transition-all hover:scale-125 hover:cursor-pointer hover:text-primary focus:text-primary focus:outline-none'
           type='submit'
         >
           <FaSearch />
@@ -132,7 +132,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
         {!_.isEmpty(dropDownSearchResults) && (
           <motion.div
-            className='max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md bg-gray-700 bg-opacity-80 p-4 shadow-md transition-all duration-300'
+            className='bg-popover max-h-52 w-[calc(100%-2rem)] overflow-y-auto rounded-md p-4 shadow-md transition-all duration-300'
             initial='hidden'
             animate='visible'
             variants={{
@@ -149,7 +149,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
             {dropDownSearchResults.map(result => (
               <motion.div
                 key={result.id}
-                className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-gray-600'
+                className='mb-2 cursor-pointer rounded-md p-2 transition-all duration-300 hover:bg-muted'
                 onClick={() => handleDropdownResultsClick(result)}
                 variants={{
                   hidden: { opacity: 0, x: -10 },
@@ -159,11 +159,14 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
                     transition: { duration: 0.2 },
                   },
                 }}
-                whileHover={{ backgroundColor: 'rgba(75, 85, 99, 1)' }}
+                whileHover={{ backgroundColor: 'hsl(var(--muted))' }}
               >
-                <span className='text-white'>{result.titleName} || </span>
-                <span className='text-gray-300'> {CommonMethods.toTitleCase(result.type!)}</span>
-                <span className='float-right text-white'>
+                <span className='text-foreground'>{result.titleName} || </span>
+                <span className='text-muted-foreground'>
+                  {' '}
+                  {CommonMethods.toTitleCase(result.type!)}
+                </span>
+                <span className='float-right text-foreground'>
                   {CommonMethods.formatDate(
                     result.releaseDate ?? result.firstAirDate ?? result.knownForDepartment
                   )}

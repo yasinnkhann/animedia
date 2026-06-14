@@ -44,7 +44,7 @@ export default function VerificationEmailSentClient({ userId }: Props) {
   };
 
   return (
-    <section className='w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg'>
+    <section className='w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-lg'>
       <div className='mb-8 text-center'>
         <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50'>
           <svg
@@ -61,8 +61,8 @@ export default function VerificationEmailSentClient({ userId }: Props) {
             />
           </svg>
         </div>
-        <h2 className='text-3xl font-extrabold tracking-tight text-gray-900'>Check your email</h2>
-        <p className='mt-3 text-sm text-gray-500'>
+        <h2 className='text-3xl font-extrabold tracking-tight text-foreground'>Check your email</h2>
+        <p className='mt-3 text-sm text-muted-foreground'>
           A verification link has been sent to your email. If you cannot find it, be sure to check
           your spam folder.
         </p>

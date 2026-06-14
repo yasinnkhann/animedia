@@ -20,7 +20,7 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className='flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-800 transition-all hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+      className='flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all hover:bg-muted/80 hover:text-foreground'
       aria-label='Toggle Dark Mode'
     >
       {theme === 'dark' ? <BsSun size={18} /> : <BsMoon size={18} />}

@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useSession } from 'next-auth/react';
 import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
-import type { WatchStatus } from '@prisma/client';
+import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { addMovie, updateMovie, deleteMovie } from '@/app/actions/media';
@@ -19,7 +19,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
   const [ratingInput, setRating] = useState<number | string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const { userMovies, isLoading, refetchUserMedia } = useUserMedia();
+  const { userMovies, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
 
   const watchStatus = watchStatusInput ?? usersMovie?.status ?? 'NOT_WATCHING';
@@ -34,20 +34,50 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
     setWatchStatus(newWatchStatus);
 
     startTransition(async () => {
-      if (usersMovie) {
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newMovies = [...old.userMovies];
+        const index = newMovies.findIndex((m: Movie) => m.id === movieId);
         if (newWatchStatus === 'NOT_WATCHING') {
-          await deleteMovie(movieId);
-        } else if (newWatchStatus === 'PLAN_TO_WATCH') {
-          await updateMovie(movieId, newWatchStatus as WatchStatus, undefined);
+          if (index !== -1) newMovies.splice(index, 1);
         } else {
-          await updateMovie(movieId, newWatchStatus as WatchStatus, usersMovie.rating ?? undefined);
+          if (index !== -1) {
+            newMovies[index] = { ...newMovies[index], status: newWatchStatus };
+          } else {
+            newMovies.push({
+              id: movieId,
+              name: movieTitle,
+              status: newWatchStatus,
+              rating: rating === '' ? null : rating,
+            });
+          }
         }
-      } else {
-        if (newWatchStatus !== 'NOT_WATCHING') {
-          await addMovie(movieId, movieTitle, newWatchStatus as WatchStatus);
+        return { ...old, userMovies: newMovies };
+      });
+
+      try {
+        if (usersMovie) {
+          if (newWatchStatus === 'NOT_WATCHING') {
+            await deleteMovie(movieId);
+          } else if (newWatchStatus === 'PLAN_TO_WATCH') {
+            await updateMovie(movieId, newWatchStatus as WatchStatus, undefined);
+          } else {
+            await updateMovie(
+              movieId,
+              newWatchStatus as WatchStatus,
+              usersMovie.rating ?? undefined
+            );
+          }
+        } else {
+          if (newWatchStatus !== 'NOT_WATCHING') {
+            await addMovie(movieId, movieTitle, newWatchStatus as WatchStatus);
+          }
         }
+      } catch (err) {
+        mutateUserMediaCache(() => previousData);
+        setWatchStatus(watchStatus);
       }
-      await refetchUserMedia();
     });
   };
 
@@ -58,12 +88,25 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
     setRating(value === '' ? '' : +value);
 
     startTransition(async () => {
-      await updateMovie(
-        movieId,
-        watchStatus as WatchStatus,
-        isNaN(parseInt(value)) ? undefined : parseInt(value)
-      );
-      await refetchUserMedia();
+      const previousData = getUserMediaCache();
+      const parsedRating = isNaN(parseInt(value)) ? undefined : parseInt(value);
+
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newMovies = [...old.userMovies];
+        const index = newMovies.findIndex((m: Movie) => m.id === movieId);
+        if (index !== -1) {
+          newMovies[index] = { ...newMovies[index], rating: parsedRating ?? null };
+        }
+        return { ...old, userMovies: newMovies };
+      });
+
+      try {
+        await updateMovie(movieId, watchStatus as WatchStatus, parsedRating);
+      } catch (err) {
+        mutateUserMediaCache(() => previousData);
+        setRating(rating);
+      }
     });
   };
 
@@ -101,7 +144,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
           className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
           value={watchStatus}
           onChange={handleChangeWatchStatus}
-          disabled={isPending}
+          disabled={false}
         >
           {watchStatusOptions.map(option => (
             <option key={option.value} value={option.value}>
@@ -117,7 +160,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
           className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
           value={rating}
           onChange={handleChangeRating}
-          disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isPending}
+          disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH'}
         >
           {ratingOptions.map(option => (
             <option key={option.value} value={option.value}>

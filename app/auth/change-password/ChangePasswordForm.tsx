@@ -56,15 +56,15 @@ export default function ChangePasswordForm({ userId, token }: Props) {
   }
 
   return (
-    <section className='w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg'>
+    <section className='w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-lg'>
       <div className='mb-8 text-center'>
-        <h2 className='text-3xl font-extrabold tracking-tight text-gray-900'>New Password</h2>
-        <p className='mt-3 text-sm text-gray-500'>Please enter your new password below.</p>
+        <h2 className='text-3xl font-extrabold tracking-tight text-foreground'>New Password</h2>
+        <p className='mt-3 text-sm text-muted-foreground'>Please enter your new password below.</p>
       </div>
 
       <form className='flex flex-col gap-6' onSubmit={handleSubmit(onSubmit)}>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='newPassword' className='text-sm font-medium text-gray-700'>
+          <label htmlFor='newPassword' className='text-sm font-medium text-foreground'>
             New Password
           </label>
           <input
@@ -72,8 +72,8 @@ export default function ChangePasswordForm({ userId, token }: Props) {
             type='password'
             id='newPassword'
             placeholder='••••••••'
-            className={`w-full rounded-lg border px-4 py-3 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-100 ${
-              errors.newPassword ? 'border-rose-600 bg-rose-50' : 'border-gray-300 bg-gray-50'
+            className={`w-full rounded-lg border bg-background px-4 py-3 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+              errors.newPassword ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
             }`}
           />
           {errors.newPassword && (

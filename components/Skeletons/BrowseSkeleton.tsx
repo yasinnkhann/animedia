@@ -11,7 +11,7 @@ export default function BrowseSkeleton() {
       <section className='flex flex-col items-center'>
         <section className='w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
           <section className='flex flex-col'>
-            <div className='mb-2 ml-4 h-7 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700' />
+            <div className='mb-2 ml-4 h-7 w-48 animate-pulse rounded bg-muted' />
             <div className='overflow-x-auto'>
               <table className='w-full table-auto text-left text-sm sm:text-base'>
                 <thead>

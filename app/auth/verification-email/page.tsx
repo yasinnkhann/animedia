@@ -39,7 +39,7 @@ export default async function VerificationEmailPage({ searchParams }: PageProps)
 
   return (
     <main className='mx-auto mt-[calc(var(--header-height-mobile)+2rem)] flex w-full items-center justify-center px-4'>
-      <section className='w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 shadow-lg'>
+      <section className='w-full max-w-md rounded-xl border border-border bg-card p-8 shadow-lg'>
         <div className='mb-8 text-center'>
           <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-50'>
             <svg
@@ -56,8 +56,8 @@ export default async function VerificationEmailPage({ searchParams }: PageProps)
               />
             </svg>
           </div>
-          <h2 className='text-3xl font-extrabold tracking-tight text-gray-900'>Verified!</h2>
-          <p className='mt-3 text-sm text-gray-500'>
+          <h2 className='text-3xl font-extrabold tracking-tight text-foreground'>Verified!</h2>
+          <p className='mt-3 text-sm text-muted-foreground'>
             You have been successfully verified! You can now login to your account.
           </p>
         </div>

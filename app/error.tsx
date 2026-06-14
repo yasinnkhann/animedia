@@ -23,11 +23,11 @@ export default function Error({
         <FiAlertOctagon className='h-16 w-16 text-red-500' />
       </div>
 
-      <h1 className='mb-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl'>
+      <h1 className='mb-4 text-4xl font-bold tracking-tight text-foreground sm:text-5xl'>
         Oops, something went wrong!
       </h1>
 
-      <p className='mb-8 max-w-md text-lg text-slate-600'>
+      <p className='mb-8 max-w-md text-lg text-muted-foreground'>
         We&apos;ve logged the error and are looking into it. Please try again or return to the
         homepage.
       </p>
@@ -35,7 +35,7 @@ export default function Error({
       <div className='flex flex-col gap-4 sm:flex-row'>
         <button
           onClick={() => reset()}
-          className='group inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:ring-4 hover:ring-blue-600/30'
+          className='text-primary-foreground group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold transition-all hover:bg-primary/90 hover:ring-4 hover:ring-primary/30'
         >
           <FiRotateCcw className='h-5 w-5 transition-transform group-hover:-rotate-90' />
           Try Again
@@ -43,7 +43,7 @@ export default function Error({
 
         <Link
           href='/'
-          className='group inline-flex items-center justify-center gap-2 rounded-full bg-gray-800 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-gray-700 hover:ring-4 hover:ring-gray-800/30'
+          className='group inline-flex items-center justify-center gap-2 rounded-full bg-muted px-8 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-muted/80 hover:ring-4 hover:ring-muted/30'
         >
           <FiHome className='h-5 w-5 transition-transform group-hover:-translate-y-0.5' />
           Return Home

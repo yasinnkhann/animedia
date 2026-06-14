@@ -1,5 +1,6 @@
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import { tmdbClient } from '@/lib/api';
+import _ from 'lodash';
 
 export default async function PersonKnownForShowsServer({ personId }: { personId: string }) {
   const knownForShows = await tmdbClient.getPersonShowCredits(personId);
@@ -10,7 +11,7 @@ export default async function PersonKnownForShowsServer({ personId }: { personId
     <section className='pb-4'>
       <h3 className='mb-4 ml-8 mt-4'>Known For Shows</h3>
       <RelatedHorizontalScroller
-        items={knownForShows.cast.map((show: any) => ({
+        items={_.uniqBy(knownForShows.cast, 'id').map((show: any) => ({
           id: show.id,
           imagePath: show.poster_path,
           name: show.name,

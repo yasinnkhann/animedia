@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Movie, Show, Game } from '@prisma/client';
 import { fetchUserMedia } from '@/app/actions/userMediaActions';
 
@@ -12,6 +12,8 @@ interface UserMediaContextType {
   userGames: Game[];
   isLoading: boolean;
   refetchUserMedia: () => Promise<any>;
+  mutateUserMediaCache: (updater: (oldData: any) => any) => void;
+  getUserMediaCache: () => any;
 }
 
 const UserMediaContext = createContext<UserMediaContextType>({
@@ -20,6 +22,8 @@ const UserMediaContext = createContext<UserMediaContextType>({
   userGames: [],
   isLoading: false,
   refetchUserMedia: async () => {},
+  mutateUserMediaCache: () => {},
+  getUserMediaCache: () => null,
 });
 
 export const useUserMedia = () => useContext(UserMediaContext);
@@ -30,6 +34,7 @@ interface Props {
 
 export const UserMediaProvider = ({ children }: Props) => {
   const { status } = useSession();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['userMedia'],
@@ -41,9 +46,25 @@ export const UserMediaProvider = ({ children }: Props) => {
   const userShows = data?.userShows ?? [];
   const userGames = data?.userGames ?? [];
 
+  const mutateUserMediaCache = (updater: (oldData: any) => any) => {
+    queryClient.setQueryData(['userMedia'], updater);
+  };
+
+  const getUserMediaCache = () => {
+    return queryClient.getQueryData(['userMedia']);
+  };
+
   return (
     <UserMediaContext.Provider
-      value={{ userMovies, userShows, userGames, isLoading, refetchUserMedia: refetch }}
+      value={{
+        userMovies,
+        userShows,
+        userGames,
+        isLoading,
+        refetchUserMedia: refetch,
+        mutateUserMediaCache,
+        getUserMediaCache,
+      }}
     >
       {children}
     </UserMediaContext.Provider>

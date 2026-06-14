@@ -16,7 +16,7 @@ interface Props {
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
   const [movieData, setMovieData] = useState<any>(null);
-  const { refetchUserMedia } = useUserMedia();
+  const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
     getMovieDetailsAction(myMovie.id).then(data => {
@@ -25,8 +25,8 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
   }, [myMovie.id]);
 
   return (
-    <tr className='border-2'>
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+    <tr className='hover:bg-muted/30'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{count}</p>
       </td>
 
@@ -62,15 +62,26 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
         </section>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{myMovie.rating ?? 'N/A'}</p>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <form
           action={async () => {
-            await deleteMovie(myMovie.id);
-            await refetchUserMedia();
+            const previousData = getUserMediaCache();
+            mutateUserMediaCache((old: any) => {
+              if (!old) return old;
+              return {
+                ...old,
+                userMovies: old.userMovies.filter((m: Movie) => m.id !== myMovie.id),
+              };
+            });
+            try {
+              await deleteMovie(myMovie.id);
+            } catch (err) {
+              mutateUserMediaCache(() => previousData);
+            }
           }}
         >
           <button
