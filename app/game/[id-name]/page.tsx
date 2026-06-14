@@ -1,5 +1,38 @@
+import { Metadata } from 'next';
 import { igdbClient } from '@/lib/api';
 import GameDetailsClient from './GameDetailsClient';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ 'id-name': string }>;
+}): Promise<Metadata> {
+  const resolvedParams = await params;
+  const id = resolvedParams?.['id-name']?.split('-')[0] ?? '';
+
+  if (!id) {
+    return {
+      title: 'Game Not Found | AniMedia',
+    };
+  }
+
+  const gameRes = await igdbClient.getGameDetails(id);
+  const gameDetails = gameRes.results?.[0];
+
+  const title = gameDetails?.name ? `${gameDetails.name} | AniMedia` : 'Game | AniMedia';
+  const description = gameDetails?.summary || 'View game details on AniMedia.';
+  const images = gameDetails?.cover_url ? [gameDetails.cover_url] : [];
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images,
+    },
+  };
+}
 
 export default async function GameDetails({ params }: { params: Promise<{ 'id-name': string }> }) {
   const resolvedParams = await params;

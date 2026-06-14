@@ -13,6 +13,41 @@ import MovieActions from './MovieActions';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import { ICast } from '@ts/interfaces';
 
+import { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ 'id-name': string }>;
+}): Promise<Metadata> {
+  const resolvedParams = await params;
+  const id = resolvedParams?.['id-name']?.split('-')[0] ?? '';
+
+  if (!id) {
+    return {
+      title: 'Movie Not Found | AniMedia',
+    };
+  }
+
+  const movieDetails = await tmdbClient.getMovieDetails(id);
+  const title = movieDetails?.title ? `${movieDetails.title} | AniMedia` : 'Movie | AniMedia';
+  const description =
+    movieDetails?.overview || movieDetails?.tagline || 'View movie details on AniMedia.';
+  const images = movieDetails?.poster_path
+    ? [CommonMethods.getTheMovieDbImage(movieDetails.poster_path) as string]
+    : [];
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images,
+    },
+  };
+}
+
 export default async function MovieDetails({ params }: { params: Promise<{ 'id-name': string }> }) {
   const resolvedParams = await params;
   const id = resolvedParams?.['id-name']?.split('-')[0] ?? '';
