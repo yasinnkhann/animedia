@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import type { Movie } from '@prisma/client';
 import { deleteMovie } from '@/app/actions/media';
 import { getMovieDetailsAction } from '@/lib/actions/tmdbActions';
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
   myMovie: Movie;
@@ -15,6 +16,7 @@ interface Props {
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
   const [movieData, setMovieData] = useState<any>(null);
+  const { refetchUserMedia } = useUserMedia();
 
   useEffect(() => {
     getMovieDetailsAction(myMovie.id).then(data => {
@@ -68,6 +70,7 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
         <form
           action={async () => {
             await deleteMovie(myMovie.id);
+            await refetchUserMedia();
           }}
         >
           <button

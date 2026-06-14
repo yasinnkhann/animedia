@@ -7,6 +7,7 @@ import type { Show } from '@prisma/client';
 import Link from 'next/link';
 import { deleteShow } from '@/app/actions/media';
 import { getShowDetailsAction } from '@/lib/actions/tmdbActions';
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
   myShow: Show;
@@ -15,6 +16,7 @@ interface Props {
 
 const MyShowEntry = ({ myShow, count }: Props) => {
   const [showData, setShowData] = useState<any>(null);
+  const { refetchUserMedia } = useUserMedia();
 
   useEffect(() => {
     getShowDetailsAction(myShow.id).then(data => {
@@ -74,6 +76,7 @@ const MyShowEntry = ({ myShow, count }: Props) => {
         <form
           action={async () => {
             await deleteShow(myShow.id);
+            await refetchUserMedia();
           }}
         >
           <button

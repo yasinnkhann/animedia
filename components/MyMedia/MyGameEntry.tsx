@@ -7,6 +7,7 @@ import type { Game } from '@prisma/client';
 import Link from 'next/link';
 import { deleteGame } from '@/app/actions/media';
 import { getGameDetailsAction } from '@/lib/actions/igdbActions';
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 interface Props {
   myGame: Game;
@@ -15,6 +16,7 @@ interface Props {
 
 const MyGameEntry = ({ myGame, count }: Props) => {
   const [gameData, setGameData] = useState<any>(null);
+  const { refetchUserMedia } = useUserMedia();
 
   useEffect(() => {
     getGameDetailsAction(myGame.id).then(data => {
@@ -71,6 +73,7 @@ const MyGameEntry = ({ myGame, count }: Props) => {
         <form
           action={async () => {
             await deleteGame(myGame.id);
+            await refetchUserMedia();
           }}
         >
           <button
