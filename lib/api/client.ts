@@ -170,6 +170,10 @@ export class HTTPClient {
     try {
       const response = await fetch(url, {
         ...options,
+        next: {
+          revalidate: 3600, // Cache globally for 1 hour
+          ...options.next,
+        },
         signal: controller.signal,
       });
       clearTimeout(timeoutId);

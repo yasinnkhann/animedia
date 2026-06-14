@@ -124,6 +124,9 @@ export const postIGDB = async (
           Authorization: `Bearer ${accessToken}`,
         },
         body,
+        next: {
+          revalidate: 3600, // Cache globally for 1 hour
+        },
       });
       if (response.ok) {
         return await response.json();
