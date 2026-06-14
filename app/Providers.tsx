@@ -11,6 +11,7 @@ import '../styles/globals.css';
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
 
 interface Props {
   children: ReactNode;
@@ -21,14 +22,16 @@ export default function Providers({ children }: Props) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>
-        <UserMediaProvider>
-          <Layout>
-            {children}
-            <Analytics />
-          </Layout>
-        </UserMediaProvider>
-      </SessionProvider>
+      <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+        <SessionProvider>
+          <UserMediaProvider>
+            <Layout>
+              {children}
+              <Analytics />
+            </Layout>
+          </UserMediaProvider>
+        </SessionProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

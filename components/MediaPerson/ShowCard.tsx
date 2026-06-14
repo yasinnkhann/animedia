@@ -18,8 +18,8 @@ const ShowCard = ({ show, rank }: Props) => {
   const usersShow = userShows?.find(userShow => userShow.id === show.id);
 
   return (
-    <tr className='border'>
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+    <tr className='group border-b border-border transition-colors hover:bg-muted/50'>
+      <td className='text-center align-middle'>
         <p className='text-lg'>{rank}</p>
       </td>
 
@@ -28,9 +28,9 @@ const ShowCard = ({ show, rank }: Props) => {
           href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
           className='text-inherit no-underline'
         >
-          <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+          <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer overflow-hidden rounded-lg'>
             <Image
-              className='rounded-lg'
+              className='rounded-lg object-cover transition-transform duration-300 group-hover:scale-105'
               src={CommonMethods.getTheMovieDbImage(show.poster_path)}
               alt={show.name ?? ''}
               fill
@@ -42,11 +42,11 @@ const ShowCard = ({ show, rank }: Props) => {
         <section className='col-start-2 pl-4'>
           <Link
             href={CommonMethods.getDetailsPageRoute('show', show.id, show.name)}
-            className='text-inherit no-underline'
+            className='text-inherit no-underline transition-colors hover:text-primary'
           >
             <h3 className='cursor-pointer'>{show.name}</h3>
           </Link>
-          <p>
+          <p className='text-muted-foreground'>
             {show.first_air_date
               ? CommonMethods.formatDate(show.first_air_date)
               : 'First Air Date Not Available'}
@@ -54,16 +54,16 @@ const ShowCard = ({ show, rank }: Props) => {
         </section>
       </td>
 
-      <td className='border-x-2 border-gray-200 text-center align-middle'>
+      <td className='text-center align-middle'>
         <p className='text-base'>{(show.vote_average ?? 0).toFixed(1)}</p>
       </td>
 
       {session && (
         <>
-          <td className='border-x-2 border-gray-200 text-center align-middle'>
+          <td className='text-center align-middle'>
             <p>{usersShow?.rating ? usersShow.rating : 'N/A'}</p>
           </td>
-          <td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
+          <td className='px-4 text-center align-middle'>
             <p>
               {usersShow?.status ? CommonMethods.renderTableStatus(usersShow.status as any) : 'N/A'}
             </p>

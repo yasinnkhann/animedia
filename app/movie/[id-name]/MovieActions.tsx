@@ -75,20 +75,20 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
         <div className='relative'>
           <select
             disabled
-            className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+            className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
           >
             <option>Loading...</option>
           </select>
-          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
         </div>
         <div className='relative'>
           <select
             disabled
-            className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+            className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
           >
             <option>Loading...</option>
           </select>
-          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+          <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
         </div>
       </section>
     );
@@ -98,7 +98,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
     <section className='my-4 flex items-center space-x-4'>
       <div className='relative'>
         <select
-          className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+          className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
           value={watchStatus}
           onChange={handleChangeWatchStatus}
           disabled={isPending}
@@ -109,12 +109,12 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
             </option>
           ))}
         </select>
-        <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+        <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
       </div>
 
       <div className='relative'>
         <select
-          className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+          className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
           value={rating}
           onChange={handleChangeRating}
           disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH' || isPending}
@@ -125,7 +125,7 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
             </option>
           ))}
         </select>
-        <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+        <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
       </div>
     </section>
   );

@@ -72,31 +72,35 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
             />
           </div>
 
-          <div className='rounded-xl border border-gray-100 bg-gray-50 p-6 shadow-sm'>
-            <h3 className='mb-4 border-b pb-2 text-xl font-bold text-gray-900'>Personal Info</h3>
+          <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
+            <h3 className='mb-4 border-b border-border pb-2 text-xl font-bold text-foreground'>
+              Personal Info
+            </h3>
 
             <div className='space-y-4'>
               <div>
-                <h4 className='text-sm font-semibold uppercase tracking-wider text-gray-500'>
+                <h4 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
                   Known For
                 </h4>
-                <p className='font-medium text-gray-900'>{person.known_for_department || 'N/A'}</p>
+                <p className='font-medium text-foreground'>
+                  {person.known_for_department || 'N/A'}
+                </p>
               </div>
 
               <div>
-                <h4 className='text-sm font-semibold uppercase tracking-wider text-gray-500'>
+                <h4 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
                   Gender
                 </h4>
-                <p className='font-medium text-gray-900'>
+                <p className='font-medium text-foreground'>
                   {person.gender === 1 ? 'Female' : person.gender === 2 ? 'Male' : 'Unknown'}
                 </p>
               </div>
 
               <div>
-                <h4 className='text-sm font-semibold uppercase tracking-wider text-gray-500'>
+                <h4 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
                   Birthday
                 </h4>
-                <p className='font-medium text-gray-900'>
+                <p className='font-medium text-foreground'>
                   {person.birthday
                     ? `${CommonMethods.formatDate(person.birthday)}${!person.deathday ? ` (${getAge(person.birthday)} years old)` : ''}`
                     : 'Unknown'}
@@ -105,19 +109,19 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
 
               {person.place_of_birth && (
                 <div>
-                  <h4 className='text-sm font-semibold uppercase tracking-wider text-gray-500'>
+                  <h4 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
                     Place of Birth
                   </h4>
-                  <p className='font-medium text-gray-900'>{person.place_of_birth}</p>
+                  <p className='font-medium text-foreground'>{person.place_of_birth}</p>
                 </div>
               )}
 
               {person.deathday && (
                 <div>
-                  <h4 className='text-sm font-semibold uppercase tracking-wider text-gray-500'>
+                  <h4 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
                     Date of Death
                   </h4>
-                  <p className='font-medium text-gray-900'>
+                  <p className='font-medium text-foreground'>
                     {`${CommonMethods.formatDate(person.deathday)} (${person.birthday ? getAge(person.birthday) - getAge(person.deathday) : 'Unknown'} years old)`}
                   </p>
                 </div>
@@ -129,9 +133,11 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
         {/* Right Column: Bio & Credits */}
         <section className='flex min-w-0 flex-col gap-8'>
           <div>
-            <h1 className='mb-6 text-5xl font-black tracking-tight text-gray-900'>{person.name}</h1>
-            <h2 className='mb-4 text-2xl font-bold text-gray-800'>Biography</h2>
-            <div className='text-lg leading-relaxed text-gray-700'>
+            <h1 className='mb-6 text-5xl font-black tracking-tight text-foreground'>
+              {person.name}
+            </h1>
+            <h2 className='mb-4 text-2xl font-bold text-foreground'>Biography</h2>
+            <div className='text-lg leading-relaxed text-muted-foreground'>
               {person.biography ? (
                 person.biography.split(' ').length <= MAX_SUMMARY_WORD_LENGTH ? (
                   person.biography
@@ -142,7 +148,7 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
                         '...'}
                     </p>
                     <button
-                      className='mt-3 font-bold text-blue-600 transition-colors hover:text-blue-800'
+                      className='mt-3 font-bold text-primary transition-colors hover:text-primary/80'
                       onClick={() => setShowFullDescription(true)}
                     >
                       Read Full Biography →
@@ -150,7 +156,9 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
                   </div>
                 )
               ) : (
-                <p className='italic text-gray-400'>No biography available for this person.</p>
+                <p className='italic text-muted-foreground'>
+                  No biography available for this person.
+                </p>
               )}
             </div>
           </div>
@@ -164,8 +172,10 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
           <Suspense fallback={null}>
             <Modal closeModal={() => setShowFullDescription(false)}>
               <div className='p-2'>
-                <h3 className='mb-6 border-b pb-4 text-3xl font-bold text-gray-900'>Biography</h3>
-                <div className='max-h-[70vh] overflow-y-auto whitespace-pre-line pr-4 text-lg leading-relaxed text-gray-700'>
+                <h3 className='mb-6 border-b border-border pb-4 text-3xl font-bold text-foreground'>
+                  Biography
+                </h3>
+                <div className='max-h-[70vh] overflow-y-auto whitespace-pre-line pr-4 text-lg leading-relaxed text-muted-foreground'>
                   {person.biography}
                 </div>
               </div>

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { GrClose } from 'react-icons/gr';
+import { IoClose } from 'react-icons/io5';
 
 interface Props {
   children?: ReactNode;
@@ -76,7 +76,7 @@ const Modal = ({ children, closeModal }: Props) => {
       exit='exit'
     >
       <motion.div
-        className='relative m-auto h-[85vh] w-[70vw] overflow-scroll rounded bg-white p-4 scrollbar-hide'
+        className='relative m-auto h-[85vh] w-[70vw] overflow-scroll rounded-xl border border-border bg-card p-4 text-card-foreground shadow-2xl scrollbar-hide'
         ref={contentRef}
         variants={modalVariants}
         initial='hidden'
@@ -89,7 +89,7 @@ const Modal = ({ children, closeModal }: Props) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <GrClose className='h-6 w-6 text-gray-500 transition duration-300 hover:text-gray-700' />
+          <IoClose className='h-6 w-6 text-muted-foreground transition duration-300 hover:text-foreground' />
         </motion.button>
         {children}
       </motion.div>

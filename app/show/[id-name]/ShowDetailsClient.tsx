@@ -19,7 +19,7 @@ import _ from 'lodash';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { FaPlus, FaMinus } from 'react-icons/fa';
-import { AiFillControl } from 'react-icons/ai';
+import { FiSliders } from 'react-icons/fi';
 import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import MediaCastHorizontalScroller from '@/components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
@@ -784,11 +784,13 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               {commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
             </p>
 
-            <AiFillControl
-              size={35}
+            <button
               onClick={toggleEpisodeCountDisplay}
-              className='ml-8 cursor-pointer'
-            />
+              className='ml-8 cursor-pointer rounded-md border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none'
+              title='Toggle Episode Display Mode'
+            >
+              <FiSliders size={20} />
+            </button>
           </div>
 
           {isDBPending && (
@@ -805,27 +807,27 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               <div className='relative'>
                 <select
                   disabled
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
                 >
                   <option>Loading...</option>
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
               </div>
               <div className='relative'>
                 <select
                   disabled
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
                 >
                   <option>Loading...</option>
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
               </div>
             </section>
           ) : (
             <section className='my-4 flex flex-wrap items-center gap-4'>
               <div className='relative'>
                 <select
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={watchStatus}
                   onChange={handleChangeWatchStatus}
                   disabled={isDBPending}
@@ -836,12 +838,12 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     </option>
                   ))}
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
               </div>
 
               <div className='relative'>
                 <select
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={rating}
                   onChange={handleChangeRating}
                   disabled={
@@ -854,41 +856,43 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     </option>
                   ))}
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
               </div>
 
               {episodeCountDisplay === 'total-episodes' && (
                 <form
-                  className='flex items-center rounded border border-gray-300'
+                  className='flex items-center rounded border border-border'
                   onSubmit={handleEpisodeSubmit}
                 >
-                  <span className='px-3 text-gray-700'>Episodes:</span>
+                  <span className='px-3 text-foreground'>Episodes:</span>
                   <button
-                    className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                    className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                     onClick={() => handleTotalEpisodeBtn('decrement')}
                     type='button'
                     disabled={+currEp <= 0 || isDBPending}
                   >
-                    <FaMinus className={`${+currEp <= 0 ? 'text-gray-500' : 'text-blue-500'}`} />
+                    <FaMinus
+                      className={`${+currEp <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
+                    />
                   </button>
                   <input
-                    className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                    className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
                     type='text'
                     value={currEp}
                     onChange={handleEpisodeChange}
                     onBlur={handleEpisodeOnBlur}
                     disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
                   />
-                  <span className='px-1 text-gray-700'>/</span>{' '}
-                  <span className='px-1 text-gray-700'>{currTotalEpCount}</span>
+                  <span className='px-1 text-foreground'>/</span>{' '}
+                  <span className='px-1 text-foreground'>{currTotalEpCount}</span>
                   <button
-                    className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                    className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                     onClick={() => handleTotalEpisodeBtn('increment')}
                     type='button'
                     disabled={+currEp >= currTotalEpCount || isDBPending}
                   >
                     <FaPlus
-                      className={`${+currEp >= currTotalEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+                      className={`${+currEp >= currTotalEpCount ? 'text-muted-foreground' : 'text-primary'}`}
                     />
                   </button>
                 </form>
@@ -897,83 +901,83 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               {episodeCountDisplay === 'season-episode' && (
                 <>
                   <form
-                    className='flex items-center rounded border border-gray-300'
+                    className='flex items-center rounded border border-border'
                     onSubmit={handleSeasonSubmit}
                   >
                     <div>
-                      <span className='px-3 text-gray-700'>Season:</span>
+                      <span className='px-3 text-foreground'>Season:</span>
                       <button
-                        className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                        className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                         onClick={() => handleSeasonBtn('decrement')}
                         type='button'
                         disabled={+currSeasonEp.seasonNo <= 1 || isDBPending}
                       >
                         <FaMinus
-                          className={`${+currSeasonEp.seasonNo <= 1 ? 'text-gray-500' : 'text-blue-500'}`}
+                          className={`${+currSeasonEp.seasonNo <= 1 ? 'text-muted-foreground' : 'text-primary'}`}
                         />
                       </button>
                       <input
-                        className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                        className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
                         type='text'
                         value={currSeasonEp.seasonNo}
                         onChange={handleSeasonChange}
                         onBlur={handleSeasonOnBlur}
                         disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
                       />
-                      <span className='px-1 text-gray-700'>/</span>{' '}
-                      <span className='px-1 text-gray-700'>{currTotalSeasonCount}</span>
+                      <span className='px-1 text-foreground'>/</span>{' '}
+                      <span className='px-1 text-foreground'>{currTotalSeasonCount}</span>
                     </div>
 
                     <button
-                      className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                      className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                       onClick={() => handleSeasonBtn('increment')}
                       type='button'
                       disabled={+currEp >= currTotalEpCount || isDBPending}
                     >
                       <FaPlus
-                        className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-gray-500' : 'text-blue-500'}`}
+                        className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-muted-foreground' : 'text-primary'}`}
                       />
                     </button>
                   </form>
 
                   <form
-                    className='flex items-center rounded border border-gray-300'
+                    className='flex items-center rounded border border-border'
                     onSubmit={handleSeasonEpisodeSubmit}
                   >
                     <div>
-                      <span className='px-3 text-gray-700'>Episode:</span>
+                      <span className='px-3 text-foreground'>Episode:</span>
                       <button
-                        className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                        className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                         onClick={() => handleSeasonEpisodeBtn('decrement')}
                         type='button'
                         disabled={+currSeasonEp.episode <= 0 || isDBPending}
                       >
                         <FaMinus
-                          className={`${+currSeasonEp.episode <= 0 ? 'text-gray-500' : 'text-blue-500'}`}
+                          className={`${+currSeasonEp.episode <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
                         />
                       </button>
                       <input
-                        className='w-12 bg-transparent px-2 py-2 leading-tight text-gray-700 focus:border-blue-500 focus:bg-transparent focus:outline-none'
+                        className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
                         type='text'
                         value={currSeasonEp.episode}
                         onChange={handleSeasonEpisodeChange}
                         onBlur={handleSeasonEpisodeOnBlur}
                         disabled={watchStatus === 'PLAN_TO_WATCH' || isDBPending}
                       />
-                      <span className='px-1 text-gray-700'>/</span>{' '}
-                      <span className='px-1 text-gray-700'>
+                      <span className='px-1 text-foreground'>/</span>{' '}
+                      <span className='px-1 text-foreground'>
                         {calculateSeasonEpisodeNumber().seasonEpCount}
                       </span>
                     </div>
 
                     <button
-                      className='cursor-pointer px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none'
+                      className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
                       onClick={() => handleSeasonEpisodeBtn('increment')}
                       type='button'
                       disabled={+currEp >= currTotalEpCount || isDBPending}
                     >
                       <FaPlus
-                        className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-gray-500' : 'text-blue-500'}`}
+                        className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-muted-foreground' : 'text-primary'}`}
                       />
                     </button>
                   </form>

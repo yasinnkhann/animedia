@@ -11,12 +11,12 @@ const PersonCard = ({ person }: Props) => {
   return (
     <Link
       href={CommonMethods.getDetailsPageRoute('person', person.id, person.name)}
-      className='text-inherit no-underline'
+      className='group text-inherit no-underline'
     >
-      <section>
-        <div className='relative h-[20rem] cursor-pointer'>
+      <section className='rounded-lg pb-4 transition-colors hover:bg-muted/50'>
+        <div className='relative h-[20rem] cursor-pointer overflow-hidden rounded-t-lg'>
           <Image
-            className='rounded-lg'
+            className='rounded-t-lg object-cover transition-transform duration-300 group-hover:scale-105'
             src={CommonMethods.getTheMovieDbImage(person.profile_path)}
             alt={person.name}
             fill
@@ -25,7 +25,9 @@ const PersonCard = ({ person }: Props) => {
         </div>
 
         <div className='ml-4 mt-2'>
-          <h3 className='cursor-pointer'>{person.name}</h3>
+          <h3 className='cursor-pointer transition-colors group-hover:text-primary'>
+            {person.name}
+          </h3>
         </div>
       </section>
     </Link>

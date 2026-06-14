@@ -60,9 +60,11 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
             }
           >
             <Modal closeModal={() => setShowModal(false)}>
-              <div className='w-full rounded-lg bg-white'>
-                <div className='flex items-center justify-between border-b border-gray-300 px-6 py-4'>
-                  <h2 className='text-lg font-semibold'>{epDetailsCardData.name}</h2>
+              <div className='w-full rounded-lg bg-transparent'>
+                <div className='flex items-center justify-between border-b border-border px-6 py-4'>
+                  <h2 className='text-lg font-semibold text-foreground'>
+                    {epDetailsCardData.name}
+                  </h2>
                 </div>
                 <div className='p-6'>
                   <div className='flex items-center space-x-4'>
@@ -71,30 +73,30 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
                         percentageVal={+(epDetailsCardData.vote_average ?? 0).toFixed(1) * 10}
                       />
                     </div>
-                    <p className='text-sm text-gray-600'>
+                    <p className='text-sm text-muted-foreground'>
                       {commaNumber(epDetailsCardData.vote_count ?? 0)} voted users
                     </p>
                   </div>
                   <div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-2'>
                     <div>
-                      <h4 className='font-semibold'>Season</h4>
-                      <p>{epDetailsCardData.season_number}</p>
+                      <h4 className='font-semibold text-foreground'>Season</h4>
+                      <p className='text-muted-foreground'>{epDetailsCardData.season_number}</p>
                     </div>
                     <div>
-                      <h4 className='font-semibold'>Episode</h4>
-                      <p>{epDetailsCardData.episode_number}</p>
+                      <h4 className='font-semibold text-foreground'>Episode</h4>
+                      <p className='text-muted-foreground'>{epDetailsCardData.episode_number}</p>
                     </div>
                     <div>
-                      <h4 className='font-semibold'>Runtime</h4>
-                      <p>
+                      <h4 className='font-semibold text-foreground'>Runtime</h4>
+                      <p className='text-muted-foreground'>
                         {epDetailsCardData.runtime
                           ? `${epDetailsCardData.runtime} min`
                           : 'Runtime Not Available'}
                       </p>
                     </div>
                     <div>
-                      <h4 className='font-semibold'>Air Date</h4>
-                      <p>
+                      <h4 className='font-semibold text-foreground'>Air Date</h4>
+                      <p className='text-muted-foreground'>
                         {epDetailsCardData.air_date
                           ? CommonMethods.formatDate(epDetailsCardData.air_date)
                           : 'Air Date Not Available'}
@@ -102,8 +104,8 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
                     </div>
                   </div>
                   <div className='mt-6'>
-                    <h4 className='mb-2 font-semibold'>Description:</h4>
-                    <p>
+                    <h4 className='mb-2 font-semibold text-foreground'>Description:</h4>
+                    <p className='text-muted-foreground'>
                       {epDetailsCardData.overview
                         ? epDetailsCardData.overview
                         : 'No Description Available'}
@@ -111,7 +113,7 @@ const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
                   </div>
                 </div>
                 {epDetailsCardData.still_path && (
-                  <div className='relative h-[35rem] w-full overflow-hidden rounded-lg border'>
+                  <div className='relative mt-4 h-[35rem] w-full overflow-hidden rounded-lg border border-border'>
                     <div className='relative h-full'>
                       <Image
                         src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}

@@ -246,11 +246,11 @@ const GameDetailsClient = ({
               <div className='relative'>
                 <select
                   disabled
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-400 focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
                 >
                   <option>Loading...</option>
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-gray-400' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
               </div>
             </section>
           ) : (
@@ -271,7 +271,7 @@ const GameDetailsClient = ({
 
               <div className='relative'>
                 <select
-                  className='appearance-none rounded border border-gray-300 bg-transparent px-2 py-2 pr-8 leading-tight text-gray-700 focus:bg-transparent focus:outline-none'
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
                   value={rating}
                   onChange={handleChangeRating}
                   disabled={isDBPending}
@@ -282,7 +282,7 @@ const GameDetailsClient = ({
                     </option>
                   ))}
                 </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-black' />
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
               </div>
             </section>
           ))}

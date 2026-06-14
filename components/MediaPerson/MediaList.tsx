@@ -24,32 +24,32 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
       <section className='flex flex-col'>
         <h3 className='mb-2 ml-4 text-lg lg:text-xl'>{title.split('_').join(' ')}</h3>
         <div className='overflow-x-auto'>
-          <table className='w-full table-auto text-sm sm:text-base'>
+          <table className='w-full table-auto text-left text-sm sm:text-base'>
             <thead>
-              <tr className='border-2 border-gray-200'>
-                <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+              <tr className='border-b border-border bg-muted/20 text-muted-foreground'>
+                <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
                   Rank
                 </th>
-                <th className='border-r-2 border-gray-200 px-2  py-2 lg:px-4 lg:py-4'>
+                <th className='px-4 py-4 text-xs font-semibold uppercase tracking-wider'>
                   {title.toLowerCase().includes('movie') ? 'Title' : 'Name'}
                 </th>
-                <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+                <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
                   Rating
                 </th>
                 {session && (
                   <>
-                    <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
                       My Rating
                     </th>
 
-                    <th className='w-1/6 border-r-2 border-gray-200 px-2 py-2 lg:w-1/12 lg:px-4 lg:py-4'>
+                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
                       {title.toLowerCase().includes('game') ? 'In Wishlist' : 'Status'}
                     </th>
                   </>
                 )}
               </tr>
             </thead>
-            <tbody className='divide-y divide-gray-200'>
+            <tbody className='divide-y divide-border'>
               {results.map((media: any, idx: number) => {
                 let mediaComp = <></>;
 

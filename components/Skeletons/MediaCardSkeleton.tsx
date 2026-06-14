@@ -6,8 +6,8 @@ export default function MediaCardSkeleton() {
   const { data: session } = useSession();
 
   return (
-    <tr className='animate-pulse border-2'>
-      <td className='border-x-2 border-gray-200 p-4 text-center align-middle'>
+    <tr className='animate-pulse border-b border-border'>
+      <td className='p-4 text-center align-middle'>
         <div className='mx-auto h-6 w-8 rounded bg-gray-200 dark:bg-gray-700' />
       </td>
 
@@ -19,16 +19,16 @@ export default function MediaCardSkeleton() {
         </section>
       </td>
 
-      <td className='border-x-2 border-gray-200 p-4 text-center align-middle'>
+      <td className='p-4 text-center align-middle'>
         <div className='mx-auto h-5 w-8 rounded bg-gray-200 dark:bg-gray-700' />
       </td>
 
       {session && (
         <>
-          <td className='border-x-2 border-gray-200 p-4 text-center align-middle'>
+          <td className='p-4 text-center align-middle'>
             <div className='mx-auto h-5 w-8 rounded bg-gray-200 dark:bg-gray-700' />
           </td>
-          <td className='border-x-2 border-gray-200 px-4 text-center align-middle'>
+          <td className='px-4 text-center align-middle'>
             <div className='mx-auto h-5 w-16 rounded bg-gray-200 dark:bg-gray-700' />
           </td>
         </>

@@ -57,7 +57,7 @@ export default async function PersonCreditsServer({ personId }: { personId: stri
 
   return (
     <div className='mt-8'>
-      <h2 className='mb-6 text-2xl font-bold text-gray-800'>Known For</h2>
+      <h2 className='mb-6 text-2xl font-bold text-foreground'>Known For</h2>
       <div className='-mx-4 sm:-mx-0'>
         <RelatedHorizontalScroller items={memoMappedMedia} />
       </div>

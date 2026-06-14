@@ -13,6 +13,8 @@ import SearchBar from './Search/SearchBar';
 import { motion } from 'framer-motion';
 import { MY_MEDIA_ITEMS, MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS } from '@/models/dropDownOptions';
 
+import ThemeSwitcher from './ThemeSwitcher';
+
 const Header = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
@@ -21,7 +23,7 @@ const Header = () => {
 
   if (status === 'loading') {
     return (
-      <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center bg-gray-100 !font-[Rubik] !text-base'>
+      <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center border-b border-border bg-background/80 !font-[Rubik] !text-base backdrop-blur-md transition-colors duration-300'>
         <nav className='ml-[4rem] !flex w-full !items-center'></nav>
       </header>
     );
@@ -29,10 +31,10 @@ const Header = () => {
 
   return (
     <>
-      <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center bg-gray-100 !font-[Rubik] !text-base'>
+      <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center border-b border-border bg-background/80 !font-[Rubik] !text-base backdrop-blur-md transition-colors duration-300'>
         <nav className='ml-[4rem] !flex w-full !items-center'>
           <section>
-            <Link href='/' className='!mb-0 text-black hover:text-black'>
+            <Link href='/' className='!mb-0 text-foreground transition-colors hover:text-primary'>
               <AiFillHome size={25} onClick={() => setIsSearchBtnClicked(false)} />
             </Link>
           </section>
@@ -51,7 +53,10 @@ const Header = () => {
                 <DropDownItem items={PEOPLE_ITEMS} name='People' routeType='people' />
               </li>
             </ul>
-            <ul id='right-section' className='!mr-4 !flex !w-[30rem] !justify-around'>
+            <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
+              <li className='mr-4'>
+                <ThemeSwitcher />
+              </li>
               <li
                 className={`!flex !w-full !items-center ${
                   status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
@@ -73,7 +78,7 @@ const Header = () => {
                   pathname !== '/auth/register' &&
                   (!isSearchBtnClicked ? (
                     <TbSearch
-                      className='mr-4 cursor-pointer'
+                      className='mr-4 cursor-pointer text-foreground transition-colors hover:text-primary'
                       size={25}
                       onClick={() => {
                         setIsSearchBtnClicked(curr => !curr);
@@ -87,7 +92,7 @@ const Header = () => {
                     />
                   ) : (
                     <RxCross1
-                      className='mr-4 cursor-pointer'
+                      className='mr-4 cursor-pointer text-foreground transition-colors hover:text-primary'
                       size={25}
                       onClick={() => {
                         setIsSearchBtnClicked(curr => !curr);
@@ -97,7 +102,10 @@ const Header = () => {
                   ))}
 
                 {status === 'unauthenticated' && pathname !== '/auth/login' && (
-                  <div className='flex cursor-pointer items-center' onClick={() => signIn()}>
+                  <div
+                    className='flex cursor-pointer items-center text-foreground transition-colors hover:text-primary'
+                    onClick={() => signIn()}
+                  >
                     <BiLogIn size={30} />
                   </div>
                 )}

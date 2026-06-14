@@ -2,46 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --header-height-mobile: 3.5rem;
-  --header-height-2xl: 5rem;
-}
-
-* {
-  @apply box-border;
-}
-
 @layer base {
+  :root {
+    --header-height-mobile: 3.5rem;
+    --header-height-2xl: 5rem;
+    
+    --background: 240 5% 96%; /* bg-gray-100 */
+    --foreground: 240 10% 10%;
+    --primary: 198 100% 50%; /* #00b3ff */
+    --muted: 240 5% 84%;
+    --muted-foreground: 240 5% 45%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+    --border: 240 6% 90%;
+  }
+
+  .dark {
+    --header-height-mobile: 3.5rem;
+    --header-height-2xl: 5rem;
+    
+    --background: 222 47% 11%; /* softer slate dark mode */
+    --foreground: 210 40% 98%;
+    --primary: 198 100% 50%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --card: 217 33% 15%;
+    --card-foreground: 210 40% 98%;
+    --border: 217 33% 20%;
+  }
+
+  * {
+    @apply box-border border-border;
+  }
+
   body {
-    @apply hide-scrollbar h-[90vh] bg-gray-100;
+    @apply hide-scrollbar h-[90vh] bg-background text-foreground transition-colors duration-300;
   }
 
-  h1 {
-    @apply text-3xl;
-  }
-
-  h2 {
-    @apply text-2xl;
-  }
-
-  h3 {
-    @apply text-xl;
-  }
-
-  h4 {
-    @apply text-lg;
-  }
-
-  h5 {
-    @apply text-base;
-  }
-
-  h6 {
-    @apply text-sm;
-  }
+  h1 { @apply text-3xl font-bold; }
+  h2 { @apply text-2xl font-semibold; }
+  h3 { @apply text-xl font-semibold; }
+  h4 { @apply text-lg font-medium; }
+  h5 { @apply text-base font-medium; }
+  h6 { @apply text-sm font-medium; }
 
   a {
-    @apply text-blue-500 underline;
+    @apply text-primary underline transition-colors;
   }
 
   input[type='number']::-webkit-inner-spin-button,
