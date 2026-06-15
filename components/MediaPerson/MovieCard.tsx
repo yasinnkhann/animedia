@@ -27,14 +27,30 @@ const MovieCard = ({ movie, rank }: Props) => {
           href={CommonMethods.getDetailsPageRoute('movie', movie.id, movie.title)}
           className='text-inherit no-underline'
         >
-          <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer overflow-hidden rounded-lg'>
+          <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer overflow-hidden rounded-lg shadow-sm transition-shadow duration-300 group-hover:shadow-md group-hover:shadow-primary/20'>
             <Image
-              className='rounded-lg object-cover transition-transform duration-300 group-hover:scale-105'
+              className='rounded-lg object-cover transition-transform duration-500 ease-out group-hover:scale-110'
               src={CommonMethods.getTheMovieDbImage(movie.poster_path)}
               alt={movie.title ?? ''}
               fill
               sizes='(max-width: 768px) 15vw, 10vw'
             />
+            <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+              <div className='translate-y-2 rounded-full bg-primary/90 p-1.5 text-white opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 24 24'
+                  fill='currentColor'
+                  className='h-4 w-4'
+                >
+                  <path
+                    fillRule='evenodd'
+                    d='M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z'
+                    clipRule='evenodd'
+                  />
+                </svg>
+              </div>
+            </div>
           </section>
         </Link>
         <section className='col-start-2 pl-4'>
