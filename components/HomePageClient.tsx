@@ -31,7 +31,7 @@ const HomePageClient = ({ popular, trending, time, popularData, trendingData }: 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div>
+      <div className='relative z-50'>
         <SearchBar ref={searchBarRef} />
         <section className='mt-4'>
           <section className='ml-[3rem] flex w-full items-end'>

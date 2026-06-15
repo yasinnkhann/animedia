@@ -200,7 +200,9 @@ export default function SearchClient({
         searchedShowsData?.searchedShows &&
         searchedPeopleData?.searchedPeople && (
           <>
-            <SearchBar ref={searchBarRef} />
+            <div className='relative z-[999]'>
+              <SearchBar ref={searchBarRef} />
+            </div>
             <section className='grid grid-cols-[20%_80%]'>
               <section className='m-4 flex flex-col items-center'>
                 <div className='mb-4 w-full'>

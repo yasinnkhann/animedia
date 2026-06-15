@@ -17,9 +17,10 @@ export type TDropDownSearchResult = NullablePartial<
     releaseDate?: string;
     firstAirDate?: string;
     knownForDepartment?: string;
+    imagePath?: string;
     type: 'movie' | 'show' | 'game' | 'person';
   },
-  'titleName' | 'releaseDate' | 'firstAirDate' | 'knownForDepartment' | 'type'
+  'titleName' | 'releaseDate' | 'firstAirDate' | 'knownForDepartment' | 'imagePath' | 'type'
 >;
 
 const _contentConst = [
