@@ -53,7 +53,7 @@ const ForYouScroller = ({ items }: Props) => {
   return (
     <BaseHorizontalScroller<any>
       items={items}
-      keyExtractor={item => item.id}
+      keyExtractor={item => `${item.title ? 'movie' : 'show'}-${item.id}`}
       renderItem={(item, _idx, dragging) => (
         <ForYouCard item={item} dragging={dragging} userMatchedMedias={userMatchedMedias} />
       )}

@@ -4,8 +4,8 @@ import type { Movie, Show } from '@prisma/client';
 
 export async function getForYouRecommendations(userMovies: Movie[], userShows: Show[]) {
   // We don't want to overwhelm the API, so pick up to 3 recent items (movies/shows) to base recommendations on
-  const moviesToUse = userMovies.slice(-2);
-  const showsToUse = userShows.slice(-2);
+  const moviesToUse = userMovies.slice(-4);
+  const showsToUse = userShows.slice(-4);
 
   const recommendedPromises: Promise<any>[] = [];
 
@@ -40,8 +40,8 @@ export async function getForYouRecommendations(userMovies: Movie[], userShows: S
   const resultsArrays = await Promise.all(recommendedPromises);
   const allResults = resultsArrays.flat();
 
-  // Deduplicate based on id
-  const uniqueResults = _.uniqBy(allResults, 'id');
+  // Deduplicate based on type and id
+  const uniqueResults = _.uniqBy(allResults, item => `${item.title ? 'movie' : 'show'}-${item.id}`);
 
   // Filter out any items the user is already tracking!
   const trackedMovieIds = new Set(userMovies.map(m => String(m.id)));
@@ -54,6 +54,6 @@ export async function getForYouRecommendations(userMovies: Movie[], userShows: S
     return true;
   });
 
-  // Shuffle or take top 20
-  return _.shuffle(finalRecommendations).slice(0, 20);
+  // Shuffle or take top 60
+  return _.shuffle(finalRecommendations).slice(0, 60);
 }
