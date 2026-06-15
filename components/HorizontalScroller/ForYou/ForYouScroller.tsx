@@ -1,0 +1,64 @@
+'use client';
+
+import { useMemo } from 'react';
+import ForYouCard from './ForYouCard';
+import { useSession } from 'next-auth/react';
+import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
+import { useUserMedia } from '../../UserMediaProvider';
+import type { Movie, Show } from '@prisma/client';
+
+interface Props {
+  items: any[];
+}
+
+const ForYouScroller = ({ items }: Props) => {
+  const { status } = useSession();
+  const shouldFetchUserMedia = status === 'authenticated';
+  const { userMovies, userShows } = useUserMedia();
+
+  const userMatchedMedias = useMemo(() => {
+    if (!shouldFetchUserMedia || items.length === 0) {
+      return [];
+    }
+
+    const matchedMedias: Array<Show | Movie> = [];
+    const usersMediaDict = new Map<string, Show | Movie>();
+
+    if (userMovies) {
+      for (const userDataObj of userMovies) {
+        if (userDataObj?.id) {
+          usersMediaDict.set(String(userDataObj.id), userDataObj);
+        }
+      }
+    }
+
+    if (userShows) {
+      for (const userDataObj of userShows) {
+        if (userDataObj?.id) {
+          usersMediaDict.set(String(userDataObj.id), userDataObj);
+        }
+      }
+    }
+
+    for (const item of items) {
+      const matched = usersMediaDict.get(String(item.id));
+      if (matched) {
+        matchedMedias.push(matched);
+      }
+    }
+
+    return matchedMedias;
+  }, [userShows, userMovies, items, shouldFetchUserMedia]);
+
+  return (
+    <BaseHorizontalScroller<any>
+      items={items}
+      keyExtractor={item => item.id}
+      renderItem={(item, _idx, dragging) => (
+        <ForYouCard item={item} dragging={dragging} userMatchedMedias={userMatchedMedias} />
+      )}
+    />
+  );
+};
+
+export default ForYouScroller;

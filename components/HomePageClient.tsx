@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import HomeHorizontalScroller from './HorizontalScroller/Home/HomeHorizontalScroller';
+import ForYouScroller from './HorizontalScroller/ForYou/ForYouScroller';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -12,9 +13,17 @@ interface Props {
   time: 'day' | 'week';
   popularData: any[];
   trendingData: any[];
+  forYouData?: any[];
 }
 
-const HomePageClient = ({ popular, trending, time, popularData, trendingData }: Props) => {
+const HomePageClient = ({
+  popular,
+  trending,
+  time,
+  popularData,
+  trendingData,
+  forYouData,
+}: Props) => {
   const router = useRouter();
   const searchBarRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +42,22 @@ const HomePageClient = ({ popular, trending, time, popularData, trendingData }: 
     >
       <div className='relative z-50'>
         <SearchBar ref={searchBarRef} />
-        <section className='mt-4'>
+
+        {forYouData && forYouData.length > 0 && (
+          <section className='mt-8'>
+            <div className='ml-[3rem]'>
+              <h1 className='text-xl sm:text-3xl'>Recommended For You</h1>
+              <p className='mt-1 text-sm text-muted-foreground'>
+                Based on what you&apos;re tracking
+              </p>
+            </div>
+            <section className='mt-4'>
+              <ForYouScroller items={forYouData} />
+            </section>
+          </section>
+        )}
+
+        <section className='mt-8'>
           <section className='ml-[3rem] flex w-full items-end'>
             <div>
               <h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>

@@ -1,5 +1,7 @@
 import HomePageClient from '../components/HomePageClient';
 import { tmdbClient } from '@/lib/api';
+import { fetchUserMedia } from '@/app/actions/userMediaActions';
+import { getForYouRecommendations } from '@/lib/recommendations';
 
 export const metadata = {
   title: 'Home',
@@ -18,14 +20,20 @@ export default async function Home(props: {
   const trending = searchParams.trending === 'shows' ? 'shows' : 'movies';
   const time = searchParams.time === 'week' ? 'week' : 'day';
 
-  const [popularData, trendingData] = await Promise.all([
+  const [popularData, trendingData, userMedia] = await Promise.all([
     popular === 'movies'
       ? tmdbClient.getPopularMovies()
       : popular === 'shows'
         ? tmdbClient.getPopularShows()
         : tmdbClient.getMoviesInTheatres(),
     tmdbClient.getTrending(trending === 'movies' ? 'movie' : 'tv', time),
+    fetchUserMedia(),
   ]);
+
+  let forYouData: any[] = [];
+  if (userMedia && (userMedia.userMovies.length > 0 || userMedia.userShows.length > 0)) {
+    forYouData = await getForYouRecommendations(userMedia.userMovies, userMedia.userShows);
+  }
 
   return (
     <HomePageClient
@@ -34,6 +42,7 @@ export default async function Home(props: {
       time={time}
       popularData={popularData.results ?? []}
       trendingData={trendingData.results ?? []}
+      forYouData={forYouData}
     />
   );
 }
