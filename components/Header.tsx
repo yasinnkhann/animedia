@@ -117,6 +117,17 @@ const Header = () => {
                     items={[
                       {
                         label: (
+                          <Link
+                            href='/stats'
+                            className='block w-full font-medium text-foreground no-underline hover:text-primary'
+                          >
+                            Watchlist Stats
+                          </Link>
+                        ),
+                        key: 'stats',
+                      },
+                      {
+                        label: (
                           <div
                             className='flex w-full items-center justify-between'
                             onClick={e => e.stopPropagation()}
