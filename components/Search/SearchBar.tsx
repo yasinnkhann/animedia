@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useState, useEffect, RefObject, useRef } from 'react';
+import { forwardRef, useState, useEffect, RefObject, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { CommonMethods } from '@utils/CommonMethods';
 import { TDropDownSearchResult } from '@ts/types';
@@ -124,6 +124,31 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
 
     const formRef = useRef<HTMLFormElement>(null);
 
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+
+    const flattenedResults = useMemo(() => {
+      if (!dropDownSearchResults) return [];
+      return [
+        ...(dropDownSearchResults.movies || []),
+        ...(dropDownSearchResults.shows || []),
+        ...(dropDownSearchResults.games || []),
+        ...(dropDownSearchResults.people || []),
+      ];
+    }, [dropDownSearchResults]);
+
+    useEffect(() => {
+      setSelectedIndex(-1);
+    }, [dropDownSearchResults]);
+
+    useEffect(() => {
+      if (selectedIndex >= 0) {
+        const el = document.getElementById(`search-result-${selectedIndex}`);
+        if (el) {
+          el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      }
+    }, [selectedIndex]);
+
     useEffect(() => {
       if (isSearchBtnClicked) {
         (ref as RefObject<HTMLInputElement>).current?.focus();
@@ -157,6 +182,21 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         ref={formRef}
         className='relative z-50 flex w-full flex-col items-center justify-center'
         onSubmit={handleSubmit}
+        onKeyDown={e => {
+          if (!dropDownSearchResults || flattenedResults.length === 0) return;
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setSelectedIndex(prev => Math.min(prev + 1, flattenedResults.length - 1));
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setSelectedIndex(prev => Math.max(prev - 1, -1));
+          } else if (e.key === 'Enter') {
+            if (selectedIndex >= 0 && selectedIndex < flattenedResults.length) {
+              e.preventDefault();
+              handleDropdownResultsClick(flattenedResults[selectedIndex]);
+            }
+          }
+        }}
       >
         <input
           className='w-[calc(100%-2rem)] rounded-md border-none bg-muted/50 py-4 pl-12 pr-4 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
@@ -201,80 +241,90 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
                 },
               }}
             >
-              {[
-                { title: 'Movies', results: dropDownSearchResults.movies },
-                { title: 'Shows', results: dropDownSearchResults.shows },
-                { title: 'Games', results: dropDownSearchResults.games },
-                { title: 'People', results: dropDownSearchResults.people },
-              ].map(
-                section =>
-                  section.results.length > 0 && (
-                    <div key={section.title} className='mb-4 last:mb-0'>
-                      <h4 className='mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
-                        {section.title}
-                      </h4>
-                      {section.results.map(result => (
-                        <motion.div
-                          key={result.id}
-                          className='mb-1 flex cursor-pointer items-center gap-3 rounded-md p-2 transition-all duration-300 hover:bg-muted'
-                          onClick={() => handleDropdownResultsClick(result)}
-                          variants={{
-                            hidden: { opacity: 0, x: -10 },
-                            visible: {
-                              opacity: 1,
-                              x: 0,
-                              transition: { duration: 0.2 },
-                            },
-                          }}
-                        >
-                          <div className='relative h-[45px] w-[30px] flex-shrink-0 overflow-hidden rounded'>
-                            <Image
-                              src={
-                                result.type === 'game'
-                                  ? result.imagePath
-                                    ? `https://images.igdb.com/igdb/image/upload/t_cover_small/${result.imagePath}.jpg`
-                                    : CommonMethods.getIgdbImage(undefined)
-                                  : CommonMethods.getTheMovieDbImage(result.imagePath)
-                              }
-                              alt={result.titleName!}
-                              fill
-                              className='object-cover'
-                              sizes='30px'
-                            />
-                          </div>
+              {(() => {
+                let globalIndex = -1;
+                return [
+                  { title: 'Movies', results: dropDownSearchResults.movies },
+                  { title: 'Shows', results: dropDownSearchResults.shows },
+                  { title: 'Games', results: dropDownSearchResults.games },
+                  { title: 'People', results: dropDownSearchResults.people },
+                ].map(
+                  section =>
+                    section.results.length > 0 && (
+                      <div key={section.title} className='mb-4 last:mb-0'>
+                        <h4 className='mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                          {section.title}
+                        </h4>
+                        {section.results.map(result => {
+                          globalIndex++;
+                          const isSelected = globalIndex === selectedIndex;
+                          return (
+                            <motion.div
+                              key={result.id}
+                              id={`search-result-${globalIndex}`}
+                              className={`mb-1 flex cursor-pointer items-center gap-3 rounded-md p-2 transition-all duration-300 ${
+                                isSelected ? 'bg-muted shadow-sm' : 'hover:bg-muted'
+                              }`}
+                              onClick={() => handleDropdownResultsClick(result)}
+                              variants={{
+                                hidden: { opacity: 0, x: -10 },
+                                visible: {
+                                  opacity: 1,
+                                  x: 0,
+                                  transition: { duration: 0.2 },
+                                },
+                              }}
+                            >
+                              <div className='relative h-[45px] w-[30px] flex-shrink-0 overflow-hidden rounded'>
+                                <Image
+                                  src={
+                                    result.type === 'game'
+                                      ? result.imagePath
+                                        ? `https://images.igdb.com/igdb/image/upload/t_cover_small/${result.imagePath}.jpg`
+                                        : CommonMethods.getIgdbImage(undefined)
+                                      : CommonMethods.getTheMovieDbImage(result.imagePath)
+                                  }
+                                  alt={result.titleName!}
+                                  fill
+                                  className='object-cover'
+                                  sizes='30px'
+                                />
+                              </div>
 
-                          <div className='flex flex-grow flex-col overflow-hidden'>
-                            <span className='truncate text-sm font-medium text-foreground'>
-                              {result.titleName}
-                            </span>
-                            <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-                              <span
-                                className={`rounded px-1.5 py-0.5 text-[0.65rem] font-bold ${
-                                  result.type === 'movie'
-                                    ? 'bg-blue-500/20 text-blue-500'
-                                    : result.type === 'show'
-                                      ? 'bg-purple-500/20 text-purple-500'
-                                      : result.type === 'game'
-                                        ? 'bg-green-500/20 text-green-500'
-                                        : 'bg-orange-500/20 text-orange-500'
-                                }`}
-                              >
-                                {CommonMethods.toTitleCase(result.type!)}
-                              </span>
-                              <span>
-                                {result.releaseDate || result.firstAirDate
-                                  ? new Date(
-                                      result.releaseDate ?? result.firstAirDate!
-                                    ).getFullYear()
-                                  : result.knownForDepartment}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )
-              )}
+                              <div className='flex flex-grow flex-col overflow-hidden'>
+                                <span className='truncate text-sm font-medium text-foreground'>
+                                  {result.titleName}
+                                </span>
+                                <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                                  <span
+                                    className={`rounded px-1.5 py-0.5 text-[0.65rem] font-bold ${
+                                      result.type === 'movie'
+                                        ? 'bg-blue-500/20 text-blue-500'
+                                        : result.type === 'show'
+                                          ? 'bg-purple-500/20 text-purple-500'
+                                          : result.type === 'game'
+                                            ? 'bg-green-500/20 text-green-500'
+                                            : 'bg-orange-500/20 text-orange-500'
+                                    }`}
+                                  >
+                                    {CommonMethods.toTitleCase(result.type!)}
+                                  </span>
+                                  <span>
+                                    {result.releaseDate || result.firstAirDate
+                                      ? new Date(
+                                          result.releaseDate ?? result.firstAirDate!
+                                        ).getFullYear()
+                                      : result.knownForDepartment}
+                                  </span>
+                                </div>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+                      </div>
+                    )
+                );
+              })()}
             </motion.div>
           )}
       </form>
