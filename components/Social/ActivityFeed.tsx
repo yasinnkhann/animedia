@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ActivityType, MediaType } from '@prisma/client';
 import { Avatar } from 'antd';
 import { CommonMethods } from '@/utils/CommonMethods';
+import { BiMovie, BiTv, BiJoystick } from 'react-icons/bi';
 
 interface Activity {
   id: string;
@@ -99,60 +100,34 @@ export function ActivityFeed() {
       {activities.map(activity => (
         <div
           key={activity.id}
-          className='flex flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-md sm:flex-row sm:items-center sm:p-5'
+          className='flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-md sm:gap-5 sm:p-5'
         >
-          <div className='flex items-center gap-4 sm:w-1/3'>
-            <Link href={`/user/${activity.user.id}`}>
-              <Avatar src={activity.user.image} size={48} className='bg-primary text-lg text-white'>
-                {activity.user.name?.[0]?.toUpperCase()}
-              </Avatar>
-            </Link>
-            <div>
+          <Link href={`/user/${activity.user.id}`} className='shrink-0'>
+            <Avatar
+              src={activity.user.image}
+              size={50}
+              className='bg-primary text-xl font-bold text-white'
+            >
+              {activity.user.name?.[0]?.toUpperCase()}
+            </Avatar>
+          </Link>
+
+          <div className='flex flex-1 flex-col gap-1'>
+            <div className='flex flex-wrap items-baseline gap-x-1.5'>
               <Link
                 href={`/user/${activity.user.id}`}
-                className='font-bold transition-colors hover:text-primary'
+                className='text-[15px] font-bold transition-colors hover:text-primary'
               >
                 {activity.user.name?.split(' ')[0]}
               </Link>
-              <div className='text-xs text-muted-foreground'>
-                {new Date(activity.createdAt).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className='flex flex-1 items-center gap-4 border-t border-border pt-4 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0'>
-            {activity.mediaImage ? (
-              <div className='relative h-[4.5rem] w-12 shrink-0 overflow-hidden rounded-md shadow-sm'>
-                <Image
-                  src={activity.mediaImage}
-                  alt={activity.mediaTitle}
-                  fill
-                  className='object-cover'
-                  sizes='48px'
-                />
-              </div>
-            ) : (
-              <div className='flex h-[4.5rem] w-12 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-bold text-muted-foreground'>
-                No Img
-              </div>
-            )}
-
-            <div className='flex flex-col gap-1'>
-              <p className='text-sm'>
-                <span className='text-muted-foreground'>{getActionText(activity)} </span>
-                <span className='text-xs font-semibold uppercase tracking-wider text-primary'>
-                  {activity.mediaType === 'MOVIE'
-                    ? 'Movie'
-                    : activity.mediaType === 'SHOW'
-                      ? 'Show'
-                      : 'Game'}
-                </span>
-              </p>
+              <span className='text-sm text-muted-foreground'>{getActionText(activity)}</span>
+              <span className='text-[10px] font-bold uppercase tracking-wider text-primary'>
+                {activity.mediaType === 'MOVIE'
+                  ? 'Movie'
+                  : activity.mediaType === 'SHOW'
+                    ? 'Show'
+                    : 'Game'}
+              </span>
               <Link
                 href={CommonMethods.getDetailsPageRoute(
                   activity.mediaType === 'GAME'
@@ -163,32 +138,79 @@ export function ActivityFeed() {
                   activity.mediaId,
                   activity.mediaTitle
                 )}
-                className='line-clamp-1 font-bold transition-colors hover:text-primary'
+                className='text-[15px] font-bold transition-colors hover:text-primary'
               >
                 {activity.mediaTitle}
               </Link>
+            </div>
 
-              {/* Extra Meta Info */}
+            <div className='mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground'>
+              <span>
+                {new Date(activity.createdAt).toLocaleDateString(undefined, {
+                  month: 'short',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                })}
+              </span>
+
               {activity.metadata && (
-                <div className='mt-1 flex flex-wrap gap-2'>
+                <>
                   {activity.metadata.rating && (
-                    <span className='inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary'>
-                      ⭐ {activity.metadata.rating}/10
-                    </span>
+                    <>
+                      <span className='text-muted-foreground/50'>•</span>
+                      <span className='inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 font-bold text-primary'>
+                        ⭐ {activity.metadata.rating}/10
+                      </span>
+                    </>
                   )}
                   {activity.metadata.status && (
-                    <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-foreground'>
-                      Status: {getStatusText(activity.metadata.status)}
-                    </span>
+                    <>
+                      <span className='text-muted-foreground/50'>•</span>
+                      <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground'>
+                        {getStatusText(activity.metadata.status)}
+                      </span>
+                    </>
                   )}
                   {activity.metadata.wishlist !== undefined && (
-                    <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-foreground'>
-                      {activity.metadata.wishlist ? 'Added to Wishlist' : 'Removed from Wishlist'}
-                    </span>
+                    <>
+                      <span className='text-muted-foreground/50'>•</span>
+                      <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground'>
+                        {activity.metadata.wishlist ? 'Added to Wishlist' : 'Removed from Wishlist'}
+                      </span>
+                    </>
                   )}
-                </div>
+                </>
               )}
             </div>
+          </div>
+
+          <div className='shrink-0 pl-2 sm:pl-4'>
+            {activity.mediaImage ? (
+              <div className='relative h-[4.5rem] w-12 shrink-0 overflow-hidden rounded-md shadow-sm sm:h-24 sm:w-16'>
+                <Image
+                  src={
+                    activity.mediaImage.startsWith('//')
+                      ? `https:${activity.mediaImage}`
+                      : activity.mediaImage
+                  }
+                  alt={activity.mediaTitle}
+                  fill
+                  className='object-cover'
+                  sizes='(max-width: 640px) 48px, 64px'
+                />
+              </div>
+            ) : (
+              <div className='flex h-[4.5rem] w-12 shrink-0 items-center justify-center rounded-md bg-muted text-2xl text-muted-foreground sm:h-24 sm:w-16 sm:text-3xl'>
+                {activity.mediaType === 'MOVIE' ? (
+                  <BiMovie />
+                ) : activity.mediaType === 'SHOW' ? (
+                  <BiTv />
+                ) : (
+                  <BiJoystick />
+                )}
+              </div>
+            )}
           </div>
         </div>
       ))}
