@@ -11,7 +11,13 @@ import { TbSearch } from 'react-icons/tb';
 import { RxCross1 } from 'react-icons/rx';
 import SearchBar from './Search/SearchBar';
 import { motion } from 'framer-motion';
-import { MY_MEDIA_ITEMS, MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS } from '@/models/dropDownOptions';
+import {
+  MY_MEDIA_ITEMS,
+  MOVIES_ITEMS,
+  SHOWS_ITEMS,
+  PEOPLE_ITEMS,
+  GAME_ITEMS,
+} from '@/models/dropDownOptions';
 
 import ThemeSwitcher from './ThemeSwitcher';
 
@@ -46,9 +52,9 @@ const Header = () => {
               <li>
                 <DropDownItem items={SHOWS_ITEMS} name='Shows' routeType='shows' />
               </li>
-              {/* <li>
-								<DropDownItem items={GAME_ITEMS} name='Games' routeType='games' />
-							</li> */}
+              <li>
+                <DropDownItem items={GAME_ITEMS} name='Games' routeType='games' />
+              </li>
               <li>
                 <DropDownItem items={PEOPLE_ITEMS} name='People' routeType='people' />
               </li>
@@ -68,9 +74,9 @@ const Header = () => {
                   <>
                     <DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' routeType='my-shows' />
                     <DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
-                    {/* <Link href='/my-games' className='cursor-pointer no-underline' passHref>
-											<a className='no-underline'>My Games</a>
-										</Link> */}
+                    <Link href='/my-games' className='cursor-pointer no-underline'>
+                      <p className='text-base'>My Games</p>
+                    </Link>
                   </>
                 )}
 

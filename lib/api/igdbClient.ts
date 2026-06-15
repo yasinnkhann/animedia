@@ -63,11 +63,19 @@ export class IGDBClient {
     const finalRes = { results: [] as any[] };
     const res = await postIGDB(
       `${IGDB_BASE_API_URL}/games`,
-      `fields name, cover, rating; where id = (${gameIds.join(',')});`
+      `fields name, cover, rating, first_release_date; where id = (${gameIds.join(',')}); limit 50;`
     );
     await addIGDBCoverUrl(res, '1080p');
     finalRes.results = res;
     return finalRes;
+  }
+
+  async getRecommendedGames(gameId: string) {
+    const details = await this.getGameDetails(gameId);
+    const similarIds = details.results[0]?.similar_games;
+    if (!similarIds || similarIds.length === 0) return { results: [] };
+
+    return await this.getSimilarGames(similarIds);
   }
 
   async getGameCharacters(gameId: string) {

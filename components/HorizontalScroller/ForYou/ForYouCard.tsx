@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
 import { CommonMethods } from '../../../utils/CommonMethods';
-import type { Movie, Show } from '@prisma/client';
+import type { Movie, Show, Game } from '@prisma/client';
 
 const ForYouCard = ({
   item,
@@ -13,15 +13,28 @@ const ForYouCard = ({
 }: {
   item: any;
   dragging: boolean;
-  userMatchedMedias: Array<Show | Movie>;
+  userMatchedMedias: Array<Show | Movie | Game>;
 }) => {
-  const isMovie = 'title' in item;
+  const isGame = item.mediaType === 'game';
+  const isMovie = item.mediaType === 'movie';
   const titleName = isMovie ? item.title : item.name;
-  const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
+  const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(
+    userMatchedMedias as any,
+    item
+  );
+
+  let routeType = isGame ? 'game' : isMovie ? 'movie' : 'show';
+  let imageSrc = isGame ? item.coverUrl : CommonMethods.getTheMovieDbImage(item.poster_path);
+  if (imageSrc && imageSrc.startsWith('//')) {
+    imageSrc = `https:${imageSrc}`;
+  }
+  const ratingValue = isGame
+    ? Math.round(item.rating ?? 0)
+    : +(item.vote_average ?? 0).toFixed(1) * 10;
 
   return (
     <Link
-      href={CommonMethods.getDetailsPageRoute(isMovie ? 'movie' : 'show', item.id, titleName)}
+      href={CommonMethods.getDetailsPageRoute(routeType as any, item.id, titleName)}
       className='group block text-inherit no-underline transition-all duration-300 active:scale-95'
       onClick={e => dragging && e.preventDefault()}
     >
@@ -29,7 +42,7 @@ const ForYouCard = ({
         <div className='relative h-full w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'>
           <Image
             className='rounded-lg object-cover transition-transform duration-500 ease-out group-hover:scale-110'
-            src={CommonMethods.getTheMovieDbImage(item.poster_path)}
+            src={imageSrc}
             alt={titleName}
             fill
             sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
@@ -54,7 +67,7 @@ const ForYouCard = ({
 
         <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
           <div className='relative bottom-[1rem] left-4 h-[2.5rem] w-[2.5rem]'>
-            <RoundProgressBar percentageVal={+(item.vote_average ?? 0).toFixed(1) * 10} />
+            <RoundProgressBar percentageVal={ratingValue} />
           </div>
 
           <div className='m-0 flex w-full flex-col'>

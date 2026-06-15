@@ -11,7 +11,6 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
   Legend,
 } from 'recharts';
 import { motion } from 'framer-motion';
@@ -98,17 +97,18 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
       counts[status] = (counts[status] || 0) + 1;
     });
 
-    return Object.keys(counts).map(key => ({
+    return Object.keys(counts).map((key, index) => ({
       name: WatchStatusLabels[key] || key,
       value: counts[key],
+      fill: COLORS[index % COLORS.length],
     }));
   }, [allMedia]);
 
   // 4. Media Type Split
   const mediaTypeData = [
-    { name: 'Movies', value: totalMovies },
-    { name: 'Shows', value: totalShows },
-    { name: 'Games', value: totalGames },
+    { name: 'Movies', value: totalMovies, fill: MEDIA_COLORS[0] },
+    { name: 'Shows', value: totalShows, fill: MEDIA_COLORS[1] },
+    { name: 'Games', value: totalGames, fill: MEDIA_COLORS[2] },
   ].filter(d => d.value > 0);
 
   if (totalTracked === 0) {
@@ -187,11 +187,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
                   outerRadius={100}
                   paddingAngle={2}
                   dataKey='value'
-                >
-                  {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
+                />
                 <Tooltip content={CustomTooltip} />
                 <Legend iconType='circle' wrapperStyle={{ fontSize: '12px' }} />
               </PieChart>
@@ -212,11 +208,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
                   outerRadius={100}
                   paddingAngle={2}
                   dataKey='value'
-                >
-                  {mediaTypeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={MEDIA_COLORS[index % MEDIA_COLORS.length]} />
-                  ))}
-                </Pie>
+                />
                 <Tooltip content={CustomTooltip} />
                 <Legend iconType='circle' wrapperStyle={{ fontSize: '12px' }} />
               </PieChart>

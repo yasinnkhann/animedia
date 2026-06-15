@@ -60,10 +60,16 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
                 if (media.media_type) {
                   isMovie = media.media_type === 'movie';
                   isShow = media.media_type === 'tv';
+                  isGame = media.media_type === 'game';
                 } else {
                   isMovie = 'title' in media;
                   isGame =
-                    'released' in media || 'background_image' in media || 'playtime' in media;
+                    'released' in media ||
+                    'background_image' in media ||
+                    'playtime' in media ||
+                    'first_release_date' in media ||
+                    'cover' in media ||
+                    'coverUrl' in media;
                   isShow = 'name' in media && !isGame;
                 }
 

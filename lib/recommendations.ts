@@ -1,11 +1,16 @@
-import { tmdbClient } from '@/lib/api';
+import { tmdbClient, igdbClient } from '@/lib/api';
 import _ from 'lodash';
-import type { Movie, Show } from '@prisma/client';
+import type { Movie, Show, Game } from '@prisma/client';
 
-export async function getForYouRecommendations(userMovies: Movie[], userShows: Show[]) {
-  // We don't want to overwhelm the API, so pick up to 3 recent items (movies/shows) to base recommendations on
-  const moviesToUse = userMovies.slice(-4);
-  const showsToUse = userShows.slice(-4);
+export async function getForYouRecommendations(
+  userMovies: Movie[],
+  userShows: Show[],
+  userGames: Game[]
+) {
+  // We don't want to overwhelm the API, so pick up to 3 recent items to base recommendations on
+  const moviesToUse = userMovies.slice(-3);
+  const showsToUse = userShows.slice(-3);
+  const gamesToUse = userGames.slice(-3);
 
   const recommendedPromises: Promise<any>[] = [];
 
@@ -16,6 +21,7 @@ export async function getForYouRecommendations(userMovies: Movie[], userShows: S
         .then(res =>
           (res.results || []).map((item: any) => ({
             ...item,
+            mediaType: 'movie',
             recommendedReason: `Because you tracked ${movie.name}`,
           }))
         )
@@ -30,7 +36,23 @@ export async function getForYouRecommendations(userMovies: Movie[], userShows: S
         .then(res =>
           (res.results || []).map((item: any) => ({
             ...item,
+            mediaType: 'show',
             recommendedReason: `Because you tracked ${show.name}`,
+          }))
+        )
+        .catch(() => [])
+    );
+  }
+
+  for (const game of gamesToUse) {
+    recommendedPromises.push(
+      igdbClient
+        .getRecommendedGames(game.id)
+        .then(res =>
+          (res.results || []).map((item: any) => ({
+            ...item,
+            mediaType: 'game',
+            recommendedReason: `Because you tracked ${game.name}`,
           }))
         )
         .catch(() => [])
@@ -41,19 +63,20 @@ export async function getForYouRecommendations(userMovies: Movie[], userShows: S
   const allResults = resultsArrays.flat();
 
   // Deduplicate based on type and id
-  const uniqueResults = _.uniqBy(allResults, item => `${item.title ? 'movie' : 'show'}-${item.id}`);
+  const uniqueResults = _.uniqBy(allResults, item => `${item.mediaType}-${item.id}`);
 
   // Filter out any items the user is already tracking!
   const trackedMovieIds = new Set(userMovies.map(m => String(m.id)));
   const trackedShowIds = new Set(userShows.map(s => String(s.id)));
+  const trackedGameIds = new Set(userGames.map(g => String(g.id)));
 
   const finalRecommendations = uniqueResults.filter((item: any) => {
-    // TMDB items have 'title' if movie, 'name' if show
-    if (item.title && trackedMovieIds.has(String(item.id))) return false;
-    if (item.name && trackedShowIds.has(String(item.id))) return false;
+    if (item.mediaType === 'movie' && trackedMovieIds.has(String(item.id))) return false;
+    if (item.mediaType === 'show' && trackedShowIds.has(String(item.id))) return false;
+    if (item.mediaType === 'game' && trackedGameIds.has(String(item.id))) return false;
     return true;
   });
 
-  // Shuffle or take top 60
-  return _.shuffle(finalRecommendations).slice(0, 60);
+  // Shuffle
+  return _.shuffle(finalRecommendations);
 }

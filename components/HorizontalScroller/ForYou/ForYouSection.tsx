@@ -8,7 +8,7 @@ interface Props {
 }
 
 const ForYouSection = ({ forYouData }: Props) => {
-  const [filterType, setFilterType] = useState<'all' | 'movie' | 'show'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'movie' | 'show' | 'game'>('all');
   const [sortBy, setSortBy] = useState<'recommended' | 'newest' | 'rating'>('recommended');
 
   const filteredAndSortedData = useMemo(() => {
@@ -16,22 +16,25 @@ const ForYouSection = ({ forYouData }: Props) => {
 
     // Filter by Type
     if (filterType !== 'all') {
-      result = result.filter(item => {
-        const isMovie = 'title' in item;
-        return filterType === 'movie' ? isMovie : !isMovie;
-      });
+      result = result.filter(item => item.mediaType === filterType);
     }
 
     // Sort By
     if (sortBy === 'newest') {
       result.sort((a, b) => {
-        const dateA = new Date(a.release_date || a.first_air_date || 0).getTime();
-        const dateB = new Date(b.release_date || b.first_air_date || 0).getTime();
-        return dateB - dateA; // Descending
+        const getDate = (item: any) => {
+          if (item.mediaType === 'game') return (item.first_release_date || 0) * 1000;
+          return new Date(item.release_date || item.first_air_date || 0).getTime();
+        };
+        return getDate(b) - getDate(a); // Descending
       });
     } else if (sortBy === 'rating') {
       result.sort((a, b) => {
-        return (b.vote_average ?? 0) - (a.vote_average ?? 0); // Descending
+        const getRating = (item: any) => {
+          if (item.mediaType === 'game') return (item.rating || 0) / 10;
+          return item.vote_average || 0;
+        };
+        return getRating(b) - getRating(a); // Descending
       });
     }
     // 'recommended' keeps the original shuffled/API order, no action needed
@@ -52,7 +55,7 @@ const ForYouSection = ({ forYouData }: Props) => {
         {/* Filters & Sorting Controls */}
         <div className='mt-4 flex flex-wrap items-center gap-3 text-sm md:mt-0'>
           <div className='flex items-center gap-2 rounded-md bg-muted/50 p-1'>
-            {['all', 'movie', 'show'].map(type => (
+            {['all', 'movie', 'show', 'game'].map(type => (
               <button
                 key={type}
                 onClick={() => setFilterType(type as any)}
