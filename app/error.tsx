@@ -34,8 +34,8 @@ export default function Error({
 
       <div className='flex flex-col gap-4 sm:flex-row'>
         <button
-          onClick={() => reset()}
-          className='text-primary-foreground group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold transition-all hover:bg-primary/90 hover:ring-4 hover:ring-primary/30'
+          onClick={reset}
+          className='group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:ring-4 hover:ring-primary/30'
         >
           <FiRotateCcw className='h-5 w-5 transition-transform group-hover:-rotate-90' />
           Try Again

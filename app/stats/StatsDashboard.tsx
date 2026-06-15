@@ -19,6 +19,7 @@ interface Props {
   userMovies: Movie[];
   userShows: Show[];
   userGames: Game[];
+  userName?: string;
 }
 
 const COLORS = ['#00b3ff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
@@ -45,7 +46,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export default function StatsDashboard({ userMovies, userShows, userGames }: Props) {
+export default function StatsDashboard({ userMovies, userShows, userGames, userName }: Props) {
   const allMedia = useMemo(
     () => [...userMovies, ...userShows, ...userGames],
     [userMovies, userShows, userGames]
@@ -114,8 +115,9 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
   if (totalTracked === 0) {
     return (
       <div className='flex h-[40vh] items-center justify-center text-muted-foreground'>
-        You haven&apos;t tracked any media yet! Start adding movies, shows, or games to see your
-        stats.
+        {userName
+          ? `${userName.split(' ')[0]} hasn't tracked any media yet.`
+          : "You haven't tracked any media yet! Start adding movies, shows, or games to see your stats."}
       </div>
     );
   }
@@ -152,7 +154,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
         <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
           <h3 className='mb-6 text-lg font-bold'>Rating Distribution</h3>
           <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%'>
+            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
               <BarChart data={ratingData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis
                   dataKey='rating'
@@ -177,7 +179,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
         <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
           <h3 className='mb-6 text-lg font-bold'>Watch Status Breakdown</h3>
           <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%'>
+            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
               <PieChart>
                 <Pie
                   data={statusData}
@@ -199,7 +201,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames }: Pro
         <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
           <h3 className='mb-6 text-lg font-bold'>Media Type Split</h3>
           <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%'>
+            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
               <PieChart>
                 <Pie
                   data={mediaTypeData}

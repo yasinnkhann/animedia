@@ -77,6 +77,9 @@ const Header = () => {
                     <Link href='/my-games' className='cursor-pointer no-underline'>
                       <p className='text-base'>My Games</p>
                     </Link>
+                    <Link href='/users' className='cursor-pointer no-underline'>
+                      <p className='text-base'>Find Friends</p>
+                    </Link>
                   </>
                 )}
 

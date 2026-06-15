@@ -19,7 +19,7 @@ export default function NotFound() {
 
       <Link
         href='/'
-        className='text-primary-foreground group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold transition-all hover:bg-primary/90 hover:ring-4 hover:ring-primary/30'
+        className='group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:ring-4 hover:ring-primary/30'
       >
         <FiHome className='h-5 w-5 transition-transform group-hover:-translate-y-0.5' />
         Return Home

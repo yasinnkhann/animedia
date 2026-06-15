@@ -48,6 +48,20 @@ model User {
   movie         Movie[]
   show          Show[]
   game          Game[]
+  followers     Follows[] @relation("following")
+  following     Follows[] @relation("follower")
+}
+
+model Follows {
+  followerId  String @map("follower_id")
+  followingId String @map("following_id")
+  follower    User   @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(now())
+
+  @@id([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
 }
 
 model VerificationToken {
