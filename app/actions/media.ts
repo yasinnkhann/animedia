@@ -5,19 +5,75 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { revalidatePath } from 'next/cache';
 import { WatchStatus } from '@prisma/client';
+import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
+import { getGameDetailsAction } from '@/lib/actions/igdbActions';
+import { CommonMethods } from '@/utils/CommonMethods';
+
+async function logActivity(
+  userId: string,
+  type: 'ADDED' | 'RATED' | 'STATUS_CHANGED',
+  mediaType: 'MOVIE' | 'SHOW' | 'GAME',
+  mediaId: string,
+  mediaTitle: string,
+  metadata?: any
+) {
+  try {
+    let mediaImage = null;
+    if (mediaType === 'MOVIE') {
+      const details = await getMovieDetailsAction(mediaId);
+      if (details?.poster_path) mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path);
+    } else if (mediaType === 'SHOW') {
+      const details = await getShowDetailsAction(mediaId);
+      if (details?.poster_path) mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path);
+    } else if (mediaType === 'GAME') {
+      const details = await getGameDetailsAction(mediaId);
+      if (details?.coverUrl) mediaImage = details.coverUrl;
+    }
+
+    await prisma.activity.create({
+      data: {
+        userId,
+        type,
+        mediaType,
+        mediaId,
+        mediaTitle,
+        mediaImage,
+        metadata: metadata ? metadata : undefined,
+      },
+    });
+  } catch (err) {
+    console.error('Failed to log activity:', err);
+  }
+}
 
 export async function addMovie(movieId: string, movieName: string, watchStatus: WatchStatus) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
-  const movie = await prisma.movie.create({
-    data: {
+  const movie = await prisma.movie.upsert({
+    where: {
+      id_userId: {
+        id: String(movieId),
+        userId: session.user.id,
+      },
+    },
+    update: {
+      name: movieName,
+      status: watchStatus,
+    },
+    create: {
       id: String(movieId),
       name: movieName,
       status: watchStatus,
       userId: session.user.id,
     },
   });
+
+  // Background activity logging
+  logActivity(session.user.id, 'ADDED', 'MOVIE', String(movieId), movieName, {
+    status: watchStatus,
+  });
+
   revalidatePath('/');
   return movie;
 }
@@ -31,8 +87,19 @@ export async function addShow(
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
-  const show = await prisma.show.create({
-    data: {
+  const show = await prisma.show.upsert({
+    where: {
+      id_userId: {
+        id: String(showId),
+        userId: session.user.id,
+      },
+    },
+    update: {
+      name: showName,
+      status: watchStatus,
+      current_episode: currentEpisode ?? 0,
+    },
+    create: {
       id: String(showId),
       name: showName,
       status: watchStatus,
@@ -40,6 +107,9 @@ export async function addShow(
       userId: session.user.id,
     },
   });
+
+  logActivity(session.user.id, 'ADDED', 'SHOW', String(showId), showName, { status: watchStatus });
+
   revalidatePath('/');
   return show;
 }
@@ -53,8 +123,19 @@ export async function addGame(
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
-  const game = await prisma.game.create({
-    data: {
+  const game = await prisma.game.upsert({
+    where: {
+      id_userId: {
+        id: String(gameId),
+        userId: session.user.id,
+      },
+    },
+    update: {
+      name: gameName,
+      wishlist: wishlist ?? false,
+      rating,
+    },
+    create: {
       id: String(gameId),
       name: gameName,
       wishlist: wishlist ?? false,
@@ -62,6 +143,9 @@ export async function addGame(
       userId: session.user.id,
     },
   });
+
+  logActivity(session.user.id, 'ADDED', 'GAME', String(gameId), gameName);
+
   revalidatePath('/');
   return game;
 }
@@ -82,6 +166,13 @@ export async function updateMovie(movieId: string, watchStatus: WatchStatus, mov
       rating: movieRating,
     },
   });
+
+  const type = movieRating ? 'RATED' : 'STATUS_CHANGED';
+  logActivity(session.user.id, type, 'MOVIE', String(movieId), movie.name, {
+    status: watchStatus,
+    rating: movieRating,
+  });
+
   revalidatePath('/');
   return movie;
 }
@@ -108,6 +199,14 @@ export async function updateShow(
       current_episode: currentEpisode,
     },
   });
+
+  const type = showRating ? 'RATED' : 'STATUS_CHANGED';
+  logActivity(session.user.id, type, 'SHOW', String(showId), show.name, {
+    status: watchStatus,
+    rating: showRating,
+    current_episode: currentEpisode,
+  });
+
   revalidatePath('/');
   return show;
 }
@@ -128,6 +227,10 @@ export async function updateGame(gameId: string, wishlist?: boolean, rating?: nu
       rating,
     },
   });
+
+  const type = rating ? 'RATED' : 'STATUS_CHANGED';
+  logActivity(session.user.id, type, 'GAME', String(gameId), game.name, { wishlist, rating });
+
   revalidatePath('/');
   return game;
 }

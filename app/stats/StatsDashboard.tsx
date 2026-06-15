@@ -114,7 +114,7 @@ export default function StatsDashboard({ userMovies, userShows, userGames, userN
 
   if (totalTracked === 0) {
     return (
-      <div className='flex h-[40vh] items-center justify-center text-muted-foreground'>
+      <div className='flex flex-1 items-center justify-center text-muted-foreground'>
         {userName
           ? `${userName.split(' ')[0]} hasn't tracked any media yet.`
           : "You haven't tracked any media yet! Start adding movies, shows, or games to see your stats."}

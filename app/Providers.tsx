@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react';
 import { SessionProvider } from 'next-auth/react';
-import { Analytics } from '@vercel/analytics/react';
 import Layout from '../components/Layout';
 import { UserMediaProvider } from '../components/UserMediaProvider';
 import type { Movie, Show, Game } from '@prisma/client';
@@ -25,10 +24,7 @@ export default function Providers({ children }: Props) {
       <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
         <SessionProvider>
           <UserMediaProvider>
-            <Layout>
-              {children}
-              <Analytics />
-            </Layout>
+            <Layout>{children}</Layout>
           </UserMediaProvider>
         </SessionProvider>
       </ThemeProvider>

@@ -50,6 +50,7 @@ model User {
   game          Game[]
   followers     Follows[] @relation("following")
   following     Follows[] @relation("follower")
+  activities    Activity[]
 }
 
 model Follows {
@@ -116,4 +117,32 @@ enum WatchStatus {
   COMPLETED
   ON_HOLD
   DROPPED
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  userId      String       @map("user_id")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        ActivityType
+  mediaType   MediaType
+  mediaId     String
+  mediaTitle  String
+  mediaImage  String?
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+enum ActivityType {
+  ADDED
+  RATED
+  STATUS_CHANGED
+}
+
+enum MediaType {
+  MOVIE
+  SHOW
+  GAME
 }

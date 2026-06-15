@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import HomeHorizontalScroller from './HorizontalScroller/Home/HomeHorizontalScroller';
 import ForYouSection from './HorizontalScroller/ForYou/ForYouSection';
+import { ActivityFeed } from './Social/ActivityFeed';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -157,6 +158,11 @@ const HomePageClient = ({
           <section className='mt-4'>
             <HomeHorizontalScroller items={trendingData} />
           </section>
+        </section>
+
+        <section className='ml-[3rem] mr-[3rem] mt-16'>
+          <h2 className='mb-6 text-xl font-bold sm:text-3xl'>Friends Activity</h2>
+          <ActivityFeed />
         </section>
       </div>
     </motion.main>

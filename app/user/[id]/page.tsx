@@ -85,28 +85,28 @@ export default function UserProfilePage() {
   const isSelf = session?.user?.id === user.id;
 
   return (
-    <main className='min-h-screen px-4 pb-10 pt-[calc(var(--header-height-mobile)+2.5rem)] sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
-      <div className='mx-auto max-w-5xl pt-4'>
+    <main className='flex min-h-screen flex-col px-4 pb-10 pt-[calc(var(--header-height-mobile)+2.5rem)] sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
+      <div className='mx-auto flex w-full max-w-5xl flex-1 flex-col pt-4'>
         {/* Profile Header */}
         <div className='mb-12 flex flex-col items-center justify-between gap-6 rounded-2xl border border-border bg-card p-8 shadow-sm sm:flex-row'>
-          <div className='flex items-center gap-6'>
+          <div className='flex flex-col items-center gap-6 sm:flex-row'>
             <Avatar src={user.image} size={100} className='bg-primary text-3xl text-white'>
               {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
             </Avatar>
-            <div className='flex flex-col'>
+            <div className='text-center sm:text-left'>
               <h1 className='text-3xl font-bold'>{user.name || 'Anonymous User'}</h1>
-              <p className='text-muted-foreground'>
+              <p className='text-sm text-muted-foreground'>
                 Joined {new Date(user.created_at).toLocaleDateString()}
               </p>
-              <div className='mt-3 flex gap-4 text-sm font-medium'>
-                <div>
-                  <span className='text-lg font-bold text-primary'>{user._count.followers}</span>{' '}
-                  Followers
-                </div>
-                <div>
-                  <span className='text-lg font-bold text-primary'>{user._count.following}</span>{' '}
-                  Following
-                </div>
+              <div className='mt-4 flex justify-center gap-4 sm:justify-start'>
+                <p>
+                  <span className='font-bold text-primary'>{user._count?.followers || 0}</span>{' '}
+                  <span className='text-sm text-foreground'>Followers</span>
+                </p>
+                <p>
+                  <span className='font-bold text-primary'>{user._count?.following || 0}</span>{' '}
+                  <span className='text-sm text-foreground'>Following</span>
+                </p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ export default function UserProfilePage() {
 
         {/* Stats Dashboard */}
         <h2 className='mb-6 text-2xl font-bold'>{user.name?.split(' ')[0]}&apos;s Stats</h2>
-        <div className='rounded-2xl border border-border bg-card p-4 sm:p-8'>
+        <div className='flex flex-1 flex-col rounded-2xl border border-border bg-card p-4 sm:p-8'>
           <StatsDashboard
             userMovies={media.userMovies}
             userShows={media.userShows}
