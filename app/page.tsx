@@ -31,12 +31,7 @@ export default async function Home(props: {
   ]);
 
   let forYouData: any[] = [];
-  if (
-    userMedia &&
-    (userMedia.userMovies.length > 0 ||
-      userMedia.userShows.length > 0 ||
-      userMedia.userGames.length > 0)
-  ) {
+  if (userMedia) {
     forYouData = await getForYouRecommendations(
       userMedia.userMovies,
       userMedia.userShows,

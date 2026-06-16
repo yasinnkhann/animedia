@@ -70,12 +70,78 @@ export async function getForYouRecommendations(
   const trackedShowIds = new Set(userShows.map(s => String(s.id)));
   const trackedGameIds = new Set(userGames.map(g => String(g.id)));
 
-  const finalRecommendations = uniqueResults.filter((item: any) => {
+  let finalRecommendations = uniqueResults.filter((item: any) => {
     if (item.mediaType === 'movie' && trackedMovieIds.has(String(item.id))) return false;
     if (item.mediaType === 'show' && trackedShowIds.has(String(item.id))) return false;
     if (item.mediaType === 'game' && trackedGameIds.has(String(item.id))) return false;
     return true;
   });
+
+  // --- Fallback Content for Empty States ---
+  const hasMovies = finalRecommendations.some((r: any) => r.mediaType === 'movie');
+  const hasShows = finalRecommendations.some((r: any) => r.mediaType === 'show');
+  const hasGames = finalRecommendations.some((r: any) => r.mediaType === 'game');
+
+  const fallbackPromises: Promise<any>[] = [];
+
+  if (!hasMovies) {
+    fallbackPromises.push(
+      tmdbClient
+        .getTrending('movie', 'week')
+        .then(res =>
+          (res.results || []).map((item: any) => ({
+            ...item,
+            mediaType: 'movie',
+            recommendedReason: 'Trending movies this week',
+          }))
+        )
+        .catch(() => [])
+    );
+  }
+
+  if (!hasShows) {
+    fallbackPromises.push(
+      tmdbClient
+        .getTrending('tv', 'week')
+        .then(res =>
+          (res.results || []).map((item: any) => ({
+            ...item,
+            mediaType: 'show',
+            recommendedReason: 'Trending shows this week',
+          }))
+        )
+        .catch(() => [])
+    );
+  }
+
+  if (!hasGames) {
+    fallbackPromises.push(
+      igdbClient
+        .getPopularGames(20, 1)
+        .then(res =>
+          (res.results || []).map((item: any) => ({
+            ...item,
+            mediaType: 'game',
+            recommendedReason: 'Popular games right now',
+          }))
+        )
+        .catch(() => [])
+    );
+  }
+
+  if (fallbackPromises.length > 0) {
+    const fallbackResults = await Promise.all(fallbackPromises);
+    const flatFallbacks = fallbackResults.flat();
+
+    const filteredFallbacks = flatFallbacks.filter((item: any) => {
+      if (item.mediaType === 'movie' && trackedMovieIds.has(String(item.id))) return false;
+      if (item.mediaType === 'show' && trackedShowIds.has(String(item.id))) return false;
+      if (item.mediaType === 'game' && trackedGameIds.has(String(item.id))) return false;
+      return true;
+    });
+
+    finalRecommendations = [...finalRecommendations, ...filteredFallbacks];
+  }
 
   // Shuffle
   return _.shuffle(finalRecommendations);
