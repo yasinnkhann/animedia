@@ -20,7 +20,15 @@ export async function generateMetadata({
     };
   }
 
-  const personDetails = await tmdbClient.getPersonDetails(id);
+  let personDetails;
+  try {
+    personDetails = await tmdbClient.getPersonDetails(id);
+  } catch (e) {
+    return {
+      title: 'Person Not Found | AniMedia',
+    };
+  }
+
   const title = personDetails?.name ? `${personDetails.name} | AniMedia` : 'Person | AniMedia';
 
   // Truncate biography if it's too long
@@ -57,7 +65,13 @@ export default async function PersonDetails({
 
   if (!id) return null;
 
-  const personDetails = await tmdbClient.getPersonDetails(id);
+  let personDetails;
+  try {
+    personDetails = await tmdbClient.getPersonDetails(id);
+  } catch (e) {
+    const { notFound } = await import('next/navigation');
+    notFound();
+  }
 
   const personDetailsData = { personDetails };
 

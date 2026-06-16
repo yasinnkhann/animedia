@@ -80,6 +80,17 @@ export class HTTPClient {
           throw lastError;
         }
 
+        // Don't retry on client errors (4xx) except Rate Limits (429)
+        if (
+          lastError instanceof APIError &&
+          lastError.statusCode &&
+          lastError.statusCode >= 400 &&
+          lastError.statusCode < 500 &&
+          lastError.statusCode !== 429
+        ) {
+          throw lastError;
+        }
+
         // Check for rate limit
         if (lastError instanceof RateLimitError) {
           if (attempt < retries) {

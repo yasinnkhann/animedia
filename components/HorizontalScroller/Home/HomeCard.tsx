@@ -10,11 +10,13 @@ const HomeCard = ({
   item,
   dragging,
   userMatchedMedias,
+  priority = false,
 }: {
   item: any;
   dragging: boolean;
   userMatchedMedias: Array<Show | Movie>;
   itemId: string;
+  priority?: boolean;
 }) => {
   const isMovie = 'title' in item;
 
@@ -35,7 +37,7 @@ const HomeCard = ({
             src={CommonMethods.getTheMovieDbImage(item.poster_path)}
             alt={titleName}
             fill
-            priority
+            priority={priority}
             sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
           />
 

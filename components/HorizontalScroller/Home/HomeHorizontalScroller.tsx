@@ -54,6 +54,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
           item={item}
           dragging={dragging}
           userMatchedMedias={userMatchedMedias}
+          priority={_idx < 5}
         />
       )}
     />

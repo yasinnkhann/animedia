@@ -63,7 +63,12 @@ const ForYouScroller = ({ items }: Props) => {
       items={items}
       keyExtractor={item => `${item.mediaType}-${item.id}`}
       renderItem={(item, _idx, dragging) => (
-        <ForYouCard item={item} dragging={dragging} userMatchedMedias={userMatchedMedias} />
+        <ForYouCard
+          item={item}
+          dragging={dragging}
+          userMatchedMedias={userMatchedMedias}
+          priority={_idx < 5}
+        />
       )}
     />
   );

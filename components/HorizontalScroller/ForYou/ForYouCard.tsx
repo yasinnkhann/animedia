@@ -10,10 +10,12 @@ const ForYouCard = ({
   item,
   dragging,
   userMatchedMedias,
+  priority = false,
 }: {
   item: any;
   dragging: boolean;
   userMatchedMedias: Array<Show | Movie | Game>;
+  priority?: boolean;
 }) => {
   const isGame = item.mediaType === 'game';
   const isMovie = item.mediaType === 'movie';
@@ -45,6 +47,7 @@ const ForYouCard = ({
             src={imageSrc}
             alt={titleName}
             fill
+            priority={priority}
             sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
           />
 

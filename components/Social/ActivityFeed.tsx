@@ -97,7 +97,7 @@ export function ActivityFeed() {
 
   return (
     <div className='space-y-4'>
-      {activities.map(activity => (
+      {activities.map((activity, index) => (
         <div
           key={activity.id}
           className='flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-md sm:gap-5 sm:p-5'
@@ -196,6 +196,7 @@ export function ActivityFeed() {
                   }
                   alt={activity.mediaTitle}
                   fill
+                  priority={index < 4}
                   className='object-cover'
                   sizes='(max-width: 640px) 48px, 64px'
                 />
