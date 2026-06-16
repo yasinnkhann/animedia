@@ -1,7 +1,9 @@
 import HomePageClient from '../components/HomePageClient';
-import { tmdbClient } from '@/lib/api';
-import { fetchUserMedia } from '@/app/actions/userMediaActions';
-import { getForYouRecommendations } from '@/lib/recommendations';
+import { Suspense } from 'react';
+import PopularServerSection from '@/components/Home/PopularServerSection';
+import TrendingServerSection from '@/components/Home/TrendingServerSection';
+import ForYouServerSection from '@/components/Home/ForYouServerSection';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 
 export const metadata = {
   title: 'Home',
@@ -20,33 +22,26 @@ export default async function Home(props: {
   const trending = searchParams.trending === 'shows' ? 'shows' : 'movies';
   const time = searchParams.time === 'week' ? 'week' : 'day';
 
-  const [popularData, trendingData, userMedia] = await Promise.all([
-    popular === 'movies'
-      ? tmdbClient.getPopularMovies()
-      : popular === 'shows'
-        ? tmdbClient.getPopularShows()
-        : tmdbClient.getMoviesInTheatres(),
-    tmdbClient.getTrending(trending === 'movies' ? 'movie' : 'tv', time),
-    fetchUserMedia(),
-  ]);
-
-  let forYouData: any[] = [];
-  if (userMedia) {
-    forYouData = await getForYouRecommendations(
-      userMedia.userMovies,
-      userMedia.userShows,
-      userMedia.userGames
-    );
-  }
-
   return (
     <HomePageClient
       popular={popular}
       trending={trending}
       time={time}
-      popularData={popularData.results ?? []}
-      trendingData={trendingData.results ?? []}
-      forYouData={forYouData}
+      forYouContent={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <ForYouServerSection />
+        </Suspense>
+      }
+      popularContent={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <PopularServerSection popular={popular} />
+        </Suspense>
+      }
+      trendingContent={
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <TrendingServerSection trending={trending} time={time} />
+        </Suspense>
+      }
     />
   );
 }

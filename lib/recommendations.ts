@@ -2,6 +2,9 @@ import { tmdbClient, igdbClient } from '@/lib/api';
 import _ from 'lodash';
 import type { Movie, Show, Game } from '@prisma/client';
 
+const recCache = new Map<string, { data: any[]; expiresAt: number }>();
+const CACHE_TTL = 60000; // 1 minute cache
+
 export async function getForYouRecommendations(
   userMovies: Movie[],
   userShows: Show[],
@@ -11,6 +14,17 @@ export async function getForYouRecommendations(
   const moviesToUse = userMovies.slice(-3);
   const showsToUse = userShows.slice(-3);
   const gamesToUse = userGames.slice(-3);
+
+  const cacheKey = [
+    ...moviesToUse.map(m => `m${m.id}`),
+    ...showsToUse.map(s => `s${s.id}`),
+    ...gamesToUse.map(g => `g${g.id}`),
+  ].join(',');
+
+  const cached = recCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.data;
+  }
 
   const recommendedPromises: Promise<any>[] = [];
 
@@ -144,5 +158,7 @@ export async function getForYouRecommendations(
   }
 
   // Shuffle
-  return _.shuffle(finalRecommendations);
+  const shuffled = _.shuffle(finalRecommendations);
+  recCache.set(cacheKey, { data: shuffled, expiresAt: Date.now() + CACHE_TTL });
+  return shuffled;
 }

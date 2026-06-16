@@ -1,42 +1,73 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, ReactNode, useTransition, useState } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
-import HomeHorizontalScroller from './HorizontalScroller/Home/HomeHorizontalScroller';
-import ForYouSection from './HorizontalScroller/ForYou/ForYouSection';
 import { ActivityFeed } from './Social/ActivityFeed';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
   popular: 'movies' | 'shows' | 'theatres';
   trending: 'movies' | 'shows';
   time: 'day' | 'week';
-  popularData: any[];
-  trendingData: any[];
-  forYouData?: any[];
+  forYouContent: ReactNode;
+  popularContent: ReactNode;
+  trendingContent: ReactNode;
 }
 
 const HomePageClient = ({
   popular,
   trending,
   time,
-  popularData,
-  trendingData,
-  forYouData,
+  forYouContent,
+  popularContent,
+  trendingContent,
 }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const searchBarRef = useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
+
+  // Optimistic UI state for tabs
+  const [localPopular, setLocalPopular] = useState(popular);
+  const [prevPopular, setPrevPopular] = useState(popular);
+
+  const [localTrending, setLocalTrending] = useState(trending);
+  const [prevTrending, setPrevTrending] = useState(trending);
+
+  const [localTime, setLocalTime] = useState(time);
+  const [prevTime, setPrevTime] = useState(time);
+
+  // Sync with actual props if they change externally (e.g., via browser back button)
+  if (popular !== prevPopular) {
+    setPrevPopular(popular);
+    setLocalPopular(popular);
+  }
+  if (trending !== prevTrending) {
+    setPrevTrending(trending);
+    setLocalTrending(trending);
+  }
+  if (time !== prevTime) {
+    setPrevTime(time);
+    setLocalTime(time);
+  }
 
   const handleUpdateParams = (key: string, value: string) => {
-    const params = new URLSearchParams(window.location.search);
+    // Optimistic UI update
+    if (key === 'popular') setLocalPopular(value as any);
+    if (key === 'trending') setLocalTrending(value as any);
+    if (key === 'time') setLocalTime(value as any);
+
+    const params = new URLSearchParams(searchParams?.toString());
     params.set(key, value);
-    router.push(`/?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`/?${params.toString()}`, { scroll: false });
+    });
   };
 
   return (
     <motion.main
-      className='mt-[calc(var(--header-height-mobile)+1rem)]'
+      className={`mt-[calc(var(--header-height-mobile)+1rem)] transition-opacity duration-300 ${isPending ? 'opacity-70' : 'opacity-100'}`}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -44,7 +75,7 @@ const HomePageClient = ({
       <div className='relative z-50'>
         <SearchBar ref={searchBarRef} />
 
-        <ForYouSection forYouData={forYouData} />
+        {forYouContent}
 
         <section className='mt-8'>
           <section className='ml-[3rem] flex w-full items-end'>
@@ -57,7 +88,7 @@ const HomePageClient = ({
                 onClick={() => handleUpdateParams('popular', 'movies')}
               >
                 Movies
-                {popular === 'movies' && (
+                {localPopular === 'movies' && (
                   <motion.div
                     layoutId='popular-tab'
                     className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -69,7 +100,7 @@ const HomePageClient = ({
                 onClick={() => handleUpdateParams('popular', 'shows')}
               >
                 Shows
-                {popular === 'shows' && (
+                {localPopular === 'shows' && (
                   <motion.div
                     layoutId='popular-tab'
                     className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -81,7 +112,7 @@ const HomePageClient = ({
                 onClick={() => handleUpdateParams('popular', 'theatres')}
               >
                 In Theatres
-                {popular === 'theatres' && (
+                {localPopular === 'theatres' && (
                   <motion.div
                     layoutId='popular-tab'
                     className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -91,9 +122,7 @@ const HomePageClient = ({
             </ul>
           </section>
 
-          <section className='mt-4'>
-            <HomeHorizontalScroller items={popularData} />
-          </section>
+          <section className='mt-4'>{popularContent}</section>
 
           <section className='ml-[3rem] mt-4 flex items-end'>
             <div>
@@ -106,7 +135,7 @@ const HomePageClient = ({
                   onClick={() => handleUpdateParams('trending', 'movies')}
                 >
                   Movies
-                  {trending === 'movies' && (
+                  {localTrending === 'movies' && (
                     <motion.div
                       layoutId='trending-type-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -118,7 +147,7 @@ const HomePageClient = ({
                   onClick={() => handleUpdateParams('trending', 'shows')}
                 >
                   Shows
-                  {trending === 'shows' && (
+                  {localTrending === 'shows' && (
                     <motion.div
                       layoutId='trending-type-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -132,7 +161,7 @@ const HomePageClient = ({
                   onClick={() => handleUpdateParams('time', 'day')}
                 >
                   Today
-                  {time === 'day' && (
+                  {localTime === 'day' && (
                     <motion.div
                       layoutId='trending-time-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -144,7 +173,7 @@ const HomePageClient = ({
                   onClick={() => handleUpdateParams('time', 'week')}
                 >
                   This Week
-                  {time === 'week' && (
+                  {localTime === 'week' && (
                     <motion.div
                       layoutId='trending-time-tab'
                       className='absolute bottom-0 left-0 right-0 h-1 rounded-t-sm bg-indigo-500'
@@ -155,9 +184,7 @@ const HomePageClient = ({
             </section>
           </section>
 
-          <section className='mt-4'>
-            <HomeHorizontalScroller items={trendingData} />
-          </section>
+          <section className='mt-4'>{trendingContent}</section>
         </section>
 
         <section className='ml-[3rem] mr-[3rem] mt-16'>
