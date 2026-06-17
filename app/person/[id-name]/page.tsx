@@ -40,9 +40,16 @@ export async function generateMetadata({
         : personDetails.biography;
   }
 
-  const images = personDetails?.profile_path
-    ? [CommonMethods.getTheMovieDbImage(personDetails.profile_path) as string]
-    : [];
+  const posterUrl = personDetails?.profile_path
+    ? (CommonMethods.getTheMovieDbImage(personDetails.profile_path) as string)
+    : '';
+
+  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  ogUrl.searchParams.set('title', personDetails?.name || 'Person');
+  if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  ogUrl.searchParams.set('type', 'PERSON');
+
+  const images = [ogUrl.toString()];
 
   return {
     title,

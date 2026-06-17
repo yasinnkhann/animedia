@@ -25,7 +25,17 @@ export async function generateMetadata({
 
   const title = gameDetails?.name ? `${gameDetails.name} | AniMedia` : 'Game | AniMedia';
   const description = gameDetails?.summary || 'View game details on AniMedia.';
-  const images = gameDetails?.cover_url ? [gameDetails.cover_url] : [];
+  const posterUrl = gameDetails?.cover_url || '';
+
+  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  ogUrl.searchParams.set('title', gameDetails?.name || 'Game');
+  if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (gameDetails?.rating) {
+    ogUrl.searchParams.set('rating', String(Math.round(gameDetails.rating)));
+  }
+  ogUrl.searchParams.set('type', 'GAME');
+
+  const images = [ogUrl.toString()];
 
   return {
     title,

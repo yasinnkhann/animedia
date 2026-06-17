@@ -32,9 +32,19 @@ export async function generateMetadata({
   const title = movieDetails?.title ? `${movieDetails.title} | AniMedia` : 'Movie | AniMedia';
   const description =
     movieDetails?.overview || movieDetails?.tagline || 'View movie details on AniMedia.';
-  const images = movieDetails?.poster_path
-    ? [CommonMethods.getTheMovieDbImage(movieDetails.poster_path) as string]
-    : [];
+  const posterUrl = movieDetails?.poster_path
+    ? (CommonMethods.getTheMovieDbImage(movieDetails.poster_path) as string)
+    : '';
+
+  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  ogUrl.searchParams.set('title', movieDetails?.title || 'Movie');
+  if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (movieDetails?.vote_average) {
+    ogUrl.searchParams.set('rating', String(+(movieDetails.vote_average ?? 0).toFixed(1) * 10));
+  }
+  ogUrl.searchParams.set('type', 'MOVIE');
+
+  const images = [ogUrl.toString()];
 
   return {
     title,

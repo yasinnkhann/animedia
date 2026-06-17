@@ -24,9 +24,19 @@ export async function generateMetadata({
   const showDetails = await tmdbClient.getShowDetails(id);
   const title = showDetails?.name ? `${showDetails.name} | AniMedia` : 'Show | AniMedia';
   const description = showDetails?.overview || 'View show details on AniMedia.';
-  const images = showDetails?.poster_path
-    ? [CommonMethods.getTheMovieDbImage(showDetails.poster_path) as string]
-    : [];
+  const posterUrl = showDetails?.poster_path
+    ? (CommonMethods.getTheMovieDbImage(showDetails.poster_path) as string)
+    : '';
+
+  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  ogUrl.searchParams.set('title', showDetails?.name || 'Show');
+  if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (showDetails?.vote_average) {
+    ogUrl.searchParams.set('rating', String(+(showDetails.vote_average ?? 0).toFixed(1) * 10));
+  }
+  ogUrl.searchParams.set('type', 'SHOW');
+
+  const images = [ogUrl.toString()];
 
   return {
     title,
