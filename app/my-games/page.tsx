@@ -9,19 +9,9 @@ import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
 
 const MyGamesContent = () => {
-  const { status } = useSession();
-
   const searchParams = useSearchParams();
 
   const { userGames } = useUserMedia();
-
-  if (status === 'loading') {
-    return (
-      <section className='flex h-screen items-center justify-center'>
-        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-      </section>
-    );
-  }
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

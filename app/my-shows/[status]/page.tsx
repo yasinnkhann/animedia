@@ -47,23 +47,12 @@ const Status = () => {
   }, [userShows, watchStatus]);
 
   useEffect(() => {
-    if (sessionStatus && sessionStatus !== 'loading' && statusParam) {
-      if (!session || !CommonMethods.statusParams.has(statusParam)) {
-        router.push('/');
-      }
+    if (statusParam && !CommonMethods.statusParams.has(statusParam)) {
+      router.push('/');
     }
-  }, [router, session, sessionStatus, statusParam]);
+  }, [router, statusParam]);
 
-  if (sessionStatus === 'loading' || statusParam === undefined) {
-    return (
-      <section className='flex h-screen items-center justify-center'>
-        <Circles className='h-[8rem] w-[8rem]' stroke='#00b3ff' />
-      </section>
-    );
-  }
-
-  if (!CommonMethods.statusParams.has(statusParam) || !session) {
-    router.push('/');
+  if (statusParam === undefined || !CommonMethods.statusParams.has(statusParam)) {
     return null;
   }
 

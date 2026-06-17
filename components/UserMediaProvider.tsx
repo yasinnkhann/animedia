@@ -40,6 +40,7 @@ export const UserMediaProvider = ({ children }: Props) => {
     queryKey: ['userMedia'],
     queryFn: fetchUserMedia,
     enabled: status === 'authenticated',
+    staleTime: Infinity,
   });
 
   const userMovies = data?.userMovies ?? [];

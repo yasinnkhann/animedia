@@ -11,11 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default async function StatsPage() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect('/auth/signin');
-  }
-
   const { userMovies, userShows, userGames } = await fetchUserMedia();
 
   return (
