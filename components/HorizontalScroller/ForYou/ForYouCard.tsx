@@ -49,6 +49,10 @@ const ForYouCard = ({
             fill
             priority={priority}
             sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
+            {...(item.blurDataUrl && {
+              placeholder: 'blur',
+              blurDataURL: item.blurDataUrl,
+            })}
           />
 
           <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'>

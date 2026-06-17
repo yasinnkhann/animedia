@@ -136,7 +136,9 @@ export class CommonMethods {
       [key: string]: any;
     }
   ) => {
-    const dataFound = userMatchedMedias.find((data: Show | Movie | Game) => data.id === item.id);
+    const dataFound = userMatchedMedias.find(
+      (data: Show | Movie | Game) => String(data.id) === String(item.id)
+    );
 
     if (dataFound) {
       if ('status' in dataFound) {
