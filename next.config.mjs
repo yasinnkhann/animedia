@@ -4,6 +4,9 @@ import * as Sentry from '@sentry/nextjs';
 const nextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: ['192.168.1.73'],
+  experimental: {
+    optimizePackageImports: ['react-icons', 'lodash', 'antd', 'react-loading-icons'],
+  },
   images: {
     remotePatterns: [
       {
