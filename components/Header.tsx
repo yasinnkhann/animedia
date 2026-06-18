@@ -58,6 +58,16 @@ const Header = () => {
               <li>
                 <DropDownItem items={PEOPLE_ITEMS} name='People' routeType='people' />
               </li>
+              <li>
+                <Link
+                  href='/discover'
+                  className='cursor-pointer text-foreground no-underline transition-colors hover:text-primary'
+                >
+                  <p className='bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-base font-medium text-transparent transition-all hover:brightness-125'>
+                    AI Discover
+                  </p>
+                </Link>
+              </li>
             </ul>
             <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
               {status !== 'authenticated' && (
