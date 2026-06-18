@@ -70,11 +70,6 @@ const Header = () => {
               </li>
             </ul>
             <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
-              {status !== 'authenticated' && (
-                <li className='mr-4'>
-                  <ThemeSwitcher />
-                </li>
-              )}
               <li
                 className={`!flex !w-full !items-center ${
                   status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
@@ -122,12 +117,17 @@ const Header = () => {
                     />
                   ))}
 
-                {status === 'unauthenticated' && pathname !== '/auth/login' && (
-                  <div
-                    className='flex cursor-pointer items-center text-foreground transition-colors hover:text-primary'
-                    onClick={() => signIn()}
-                  >
-                    <BiLogIn size={30} />
+                {status === 'unauthenticated' && (
+                  <div className='flex items-center gap-6'>
+                    <ThemeSwitcher />
+                    {pathname !== '/auth/login' && (
+                      <div
+                        className='flex cursor-pointer items-center text-foreground transition-colors hover:text-primary'
+                        onClick={() => signIn()}
+                      >
+                        <BiLogIn size={30} />
+                      </div>
+                    )}
                   </div>
                 )}
 

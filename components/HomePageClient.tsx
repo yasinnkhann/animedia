@@ -4,6 +4,7 @@ import { useRef, ReactNode, useTransition, useState } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import { ActivityFeed } from './Social/ActivityFeed';
+import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
@@ -25,6 +26,7 @@ const HomePageClient = ({
 }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
   const searchBarRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -187,10 +189,12 @@ const HomePageClient = ({
           <section className='mt-4'>{trendingContent}</section>
         </section>
 
-        <section className='ml-[3rem] mr-[3rem] mt-16'>
-          <h2 className='mb-6 text-xl font-bold sm:text-3xl'>Friends Activity</h2>
-          <ActivityFeed />
-        </section>
+        {session && (
+          <section className='ml-[3rem] mr-[3rem] mt-16'>
+            <h2 className='mb-6 text-xl font-bold sm:text-3xl'>Friends Activity</h2>
+            <ActivityFeed />
+          </section>
+        )}
       </div>
     </motion.main>
   );

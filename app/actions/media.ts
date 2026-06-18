@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/authOptions';
 import { revalidatePath } from 'next/cache';
 import { WatchStatus } from '@prisma/client';
 import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
