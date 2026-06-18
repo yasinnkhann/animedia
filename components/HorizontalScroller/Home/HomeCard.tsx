@@ -5,6 +5,7 @@ import Link from 'next/link';
 import RoundProgressBar from '../../RoundProgressBar';
 import { CommonMethods } from '../../../utils/CommonMethods';
 import type { Movie, Show } from '@prisma/client';
+import { IMediaItem } from '@/models/ts/interfaces';
 
 const HomeCard = ({
   item,
@@ -12,7 +13,7 @@ const HomeCard = ({
   userMatchedMedias,
   priority = false,
 }: {
-  item: any;
+  item: IMediaItem;
   dragging: boolean;
   userMatchedMedias: Array<Show | Movie>;
   itemId: string;
@@ -20,7 +21,7 @@ const HomeCard = ({
 }) => {
   const isMovie = 'title' in item;
 
-  const titleName = isMovie ? item.title : item.name;
+  const titleName = (isMovie ? item.title : item.name) || 'Unknown';
 
   const userWatchStatusFromMedia = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
 

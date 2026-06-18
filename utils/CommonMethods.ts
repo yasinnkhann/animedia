@@ -36,7 +36,7 @@ export class CommonMethods {
     }).format(date);
   };
 
-  public static getDetailsPageRoute = (mediaType: TContent, id: string, title: string) => {
+  public static getDetailsPageRoute = (mediaType: TContent, id: string | number, title: string) => {
     const cleanTitle = unidecode(title)
       .toLowerCase()
       .replace(/[^\w\s'_]+/g, '-')
@@ -132,7 +132,7 @@ export class CommonMethods {
   public static getUserStatusFromMedia = (
     userMatchedMedias: (Show | Movie | Game)[],
     item: {
-      id: string;
+      id: string | number;
       [key: string]: any;
     }
   ) => {
