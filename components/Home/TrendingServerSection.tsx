@@ -1,5 +1,6 @@
 import { tmdbClient } from '@/lib/api';
 import HomeHorizontalScroller from '../HorizontalScroller/Home/HomeHorizontalScroller';
+import { getCachedBlurDataUrl } from '@/lib/getImageBlur';
 import { CommonMethods } from '@/utils/CommonMethods';
 
 interface Props {
@@ -11,9 +12,13 @@ export default async function TrendingServerSection({ trending, time }: Props) {
   const data = await tmdbClient.getTrending(trending === 'movies' ? 'movie' : 'tv', time);
 
   const items = data.results ?? [];
-  const enrichedItems = items.map((item: any) => {
-    return { ...item };
-  });
+  const enrichedItems = await Promise.all(
+    items.map(async (item: any) => {
+      const imageUrl = CommonMethods.getTheMovieDbImage(item.poster_path);
+      const blurDataUrl = await getCachedBlurDataUrl(imageUrl);
+      return { ...item, blurDataUrl };
+    })
+  );
 
   return <HomeHorizontalScroller items={enrichedItems} />;
 }
