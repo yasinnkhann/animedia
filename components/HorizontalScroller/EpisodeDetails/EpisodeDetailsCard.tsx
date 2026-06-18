@@ -14,10 +14,10 @@ const EpisodeDetailsCardSkeleton = () => {
   return (
     <div className='relative mx-4 h-[7rem] w-[15rem] select-none'>
       <div className='relative h-full w-full'>
-        <div className='h-[5rem] w-full animate-pulse rounded-lg bg-muted' />
+        <div className='h-full w-full animate-pulse rounded-lg bg-muted' />
         <div className='mt-2 flex flex-col items-center gap-1'>
-          <div className='h-3 w-1/2 animate-pulse rounded bg-muted' />
-          <div className='h-3 w-3/4 animate-pulse rounded bg-muted' />
+          <div className='h-4 w-1/2 animate-pulse rounded bg-muted' />
+          <div className='h-4 w-3/4 animate-pulse rounded bg-muted' />
         </div>
       </div>
     </div>
@@ -41,17 +41,17 @@ const EpisodeDetailsCard = ({
     <>
       <section className='relative mx-4 h-[7rem] w-[15rem] select-none' role='button' tabIndex={0}>
         <section className='relative h-full w-full' onClick={() => setShowModal(true)}>
-          <div className='relative h-[5rem] w-full'>
+          <div className='relative h-full w-full'>
             <Image
-              className='rounded-lg object-cover'
+              className='rounded-lg object-contain'
               src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
               alt={epDetailsCardData.name ?? ''}
               fill
               sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
             />
           </div>
-          <div className='relative mt-1 flex w-full flex-wrap content-start whitespace-normal'>
-            <h2 className='m-0 w-full break-words text-center text-xs'>
+          <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
+            <h2 className='m-0 w-full break-words text-center text-base'>
               <p>
                 Season {epDetailsCardData.season_number} Ep. {epDetailsCardData.episode_number}
               </p>
