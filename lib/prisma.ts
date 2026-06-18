@@ -8,6 +8,10 @@ if (!connectionString) {
   throw new Error('DATABASE_URL or DIRECT_URL must be provided for Prisma adapter');
 }
 
+const prismaAdapter = new PrismaPg({
+  connectionString,
+});
+
 declare global {
   var prisma: PrismaClient | undefined;
 }
@@ -15,10 +19,7 @@ declare global {
 export const prisma =
   global.prisma ||
   new PrismaClient({
-    adapter: new PrismaPg({
-      connectionString,
-      max: 1, // Critical for serverless environments with PgBouncer
-    }),
+    adapter: prismaAdapter,
     log: !__prod__ ? ['query', 'error', 'warn'] : ['error'],
   });
 
