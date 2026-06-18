@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { recommendMedia } from '@/app/actions/ai';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import HomeCard from '@/components/HorizontalScroller/Home/HomeCard';
-import { FaRobot, FaSearch } from 'react-icons/fa';
+import { BaseHorizontalScroller } from '@/components/HorizontalScroller/BaseHorizontalScroller';
+import { FaRobot, FaSearch, FaFilm, FaTv, FaGamepad } from 'react-icons/fa';
 
 export default function DiscoverClient() {
   const [prompt, setPrompt] = useState('');
+  const [mediaType, setMediaType] = useState<'MOVIE' | 'SHOW' | 'GAME'>('MOVIE');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Array<{ type: string; data: any }>>([]);
   const { userMovies, userShows, userGames } = useUserMedia();
@@ -20,7 +22,7 @@ export default function DiscoverClient() {
     setResults([]);
 
     try {
-      const recommendations = await recommendMedia(prompt);
+      const recommendations = await recommendMedia(prompt, mediaType);
       setResults(recommendations);
     } catch (error) {
       console.error('Failed to fetch recommendations:', error);
@@ -39,6 +41,42 @@ export default function DiscoverClient() {
 
   return (
     <div className='w-full'>
+      <div className='mb-8 flex justify-center space-x-4'>
+        <button
+          onClick={() => setMediaType('MOVIE')}
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+            mediaType === 'MOVIE'
+              ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/50'
+              : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
+          }`}
+        >
+          <FaFilm />
+          <span>Movies</span>
+        </button>
+        <button
+          onClick={() => setMediaType('SHOW')}
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+            mediaType === 'SHOW'
+              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/50'
+              : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
+          }`}
+        >
+          <FaTv />
+          <span>Shows</span>
+        </button>
+        <button
+          onClick={() => setMediaType('GAME')}
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+            mediaType === 'GAME'
+              ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/50'
+              : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
+          }`}
+        >
+          <FaGamepad />
+          <span>Games</span>
+        </button>
+      </div>
+
       <form onSubmit={handleSearch} className='relative mx-auto mb-16 max-w-2xl'>
         <div className='group relative'>
           <div className='absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-25 blur transition duration-1000 group-hover:opacity-75 group-hover:duration-200' />
@@ -75,20 +113,21 @@ export default function DiscoverClient() {
       )}
 
       {!loading && results.length > 0 && (
-        <div className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
-          {results.map((item, idx) => (
-            <div key={`${item.data.id}-${idx}`} className='flex flex-col items-center'>
-              <div className='mb-2 text-xs font-bold uppercase tracking-widest text-blue-400'>
-                {item.type}
+        <div className='mx-auto max-w-full overflow-hidden'>
+          <BaseHorizontalScroller
+            items={results}
+            keyExtractor={item => String(item.data.id)}
+            renderItem={(item, idx, dragging) => (
+              <div className='px-2'>
+                <HomeCard
+                  item={{ ...item.data, mediaType: item.type.toLowerCase() }}
+                  dragging={dragging}
+                  userMatchedMedias={getMatchedMedias(item.type) as any}
+                  itemId={String(item.data.id)}
+                />
               </div>
-              <HomeCard
-                item={item.data}
-                dragging={false}
-                userMatchedMedias={getMatchedMedias(item.type) as any}
-                itemId={String(item.data.id)}
-              />
-            </div>
-          ))}
+            )}
+          />
         </div>
       )}
     </div>

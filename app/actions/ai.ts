@@ -4,23 +4,30 @@ import { createGroq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
 import { tmdbClient, igdbClient } from '@/lib/api';
 
-export async function recommendMedia(prompt: string): Promise<Array<{ type: string; data: any }>> {
+export async function recommendMedia(
+  prompt: string,
+  mediaType: 'MOVIE' | 'SHOW' | 'GAME'
+): Promise<Array<{ type: string; data: any }>> {
   if (!process.env.GROQ_API_KEY) {
     throw new Error('GROQ_API_KEY is not set in environment variables.');
   }
 
   const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 
-  const chatPrompt = `You are an expert in movies, TV shows (anime included), and video games.
+  const mediaTypeMapping = {
+    MOVIE: 'movies',
+    SHOW: 'TV shows (anime included)',
+    GAME: 'video games',
+  };
+
+  const chatPrompt = `You are an expert in ${mediaTypeMapping[mediaType]}.
 Given the following user prompt, recommend exactly 6 items that perfectly match their criteria.
 User prompt: "${prompt}"
 
 IMPORTANT: You must return ONLY a JSON object exactly matching this structure, with no markdown formatting, no backticks, and no extra text:
 {
   "recommendations": [
-    { "type": "MOVIE", "title": "Exactly spelled movie title" },
-    { "type": "SHOW", "title": "Exactly spelled show title" },
-    { "type": "GAME", "title": "Exactly spelled game title" }
+    { "title": "Exactly spelled title" }
   ]
 }`;
 
@@ -35,17 +42,17 @@ IMPORTANT: You must return ONLY a JSON object exactly matching this structure, w
   const results = await Promise.all(
     object.recommendations.map(async (rec: any) => {
       try {
-        if (rec.type === 'MOVIE') {
+        if (mediaType === 'MOVIE') {
           const res = await tmdbClient.searchMovies(rec.title, 1);
           if (res?.results?.[0]) {
             return { type: 'MOVIE', data: res.results[0] };
           }
-        } else if (rec.type === 'SHOW') {
+        } else if (mediaType === 'SHOW') {
           const res = await tmdbClient.searchShows(rec.title, 1);
           if (res?.results?.[0]) {
             return { type: 'SHOW', data: res.results[0] };
           }
-        } else if (rec.type === 'GAME') {
+        } else if (mediaType === 'GAME') {
           const res = await igdbClient.searchGames(rec.title, 1, 1);
           if (res?.results?.[0]) {
             return { type: 'GAME', data: res.results[0] };

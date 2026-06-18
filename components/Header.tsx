@@ -68,6 +68,9 @@ const Header = () => {
                   </p>
                 </Link>
               </li>
+              <li className='flex items-center'>
+                <ThemeSwitcher />
+              </li>
             </ul>
             <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
               <li
@@ -119,7 +122,6 @@ const Header = () => {
 
                 {status === 'unauthenticated' && (
                   <div className='flex items-center gap-6'>
-                    <ThemeSwitcher />
                     {pathname !== '/auth/login' && (
                       <div
                         className='flex cursor-pointer items-center text-foreground transition-colors hover:text-primary'
@@ -144,18 +146,6 @@ const Header = () => {
                           </Link>
                         ),
                         key: 'stats',
-                      },
-                      {
-                        label: (
-                          <div
-                            className='flex w-full items-center justify-between'
-                            onClick={e => e.stopPropagation()}
-                          >
-                            <span className='mr-4 font-medium'>Theme</span>
-                            <ThemeSwitcher />
-                          </div>
-                        ),
-                        key: 'theme-switcher',
                       },
                       {
                         label: <span className='font-medium text-red-500'>Log Out</span>,
