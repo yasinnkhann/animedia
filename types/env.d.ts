@@ -33,6 +33,7 @@ declare global {
       SENTRY_ORG: string;
       SENTRY_PROJECT: string;
       SENTRY_AUTH_TOKEN: string;
+      GROQ_API_KEY: string;
     }
   }
 }

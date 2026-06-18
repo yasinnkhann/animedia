@@ -4,6 +4,7 @@ export default withAuth({
   pages: {
     signIn: '/auth/login',
   },
+  secret: process.env.JWT_SECRET,
 });
 
 export const config = {

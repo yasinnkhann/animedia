@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaGoogle, FaFacebook, FaDiscord } from 'react-icons/fa';
+import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import _ from 'lodash';
 import { useState } from 'react';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
@@ -158,15 +158,6 @@ export default function LoginPage() {
           >
             <FaFacebook className='h-5 w-5 text-blue-600' />
             <span>Facebook</span>
-          </button>
-
-          <button
-            className='flex items-center justify-center gap-3 rounded-lg border border-border bg-card py-3 text-sm font-semibold text-foreground transition-all hover:bg-muted focus:outline-none active:bg-muted/80'
-            type='button'
-            onClick={() => signIn('discord', { callbackUrl: '/' })}
-          >
-            <FaDiscord className='h-5 w-5 text-indigo-500' />
-            <span>Discord</span>
           </button>
         </div>
 
