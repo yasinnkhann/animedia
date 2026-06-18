@@ -27,24 +27,9 @@ export default async function Home(props: {
       popular={popular}
       trending={trending}
       time={time}
-      forYouContent={
-        <Suspense key='foryou-scroller' fallback={<HorizontalScrollerSkeleton />}>
-          <ForYouServerSection />
-        </Suspense>
-      }
-      popularContent={
-        <Suspense key={`popular-scroller-${popular}`} fallback={<HorizontalScrollerSkeleton />}>
-          <PopularServerSection popular={popular} />
-        </Suspense>
-      }
-      trendingContent={
-        <Suspense
-          key={`trending-scroller-${trending}-${time}`}
-          fallback={<HorizontalScrollerSkeleton />}
-        >
-          <TrendingServerSection trending={trending} time={time} />
-        </Suspense>
-      }
+      forYouContent={null}
+      popularContent={null}
+      trendingContent={null}
     />
   );
 }
