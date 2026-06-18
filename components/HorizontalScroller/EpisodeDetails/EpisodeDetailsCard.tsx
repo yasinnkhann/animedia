@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { IEPDetails } from '@ts/interfaces';
+import { useState } from 'react';
 import { CommonMethods } from '@utils/CommonMethods';
 import RoundProgressBar from '@components/RoundProgressBar';
 import Modal from '@components/Modal';
@@ -10,37 +9,49 @@ import commaNumber from 'comma-number';
 import { Suspense } from 'react';
 import { Puff } from 'react-loading-icons';
 import { AnimatePresence } from 'framer-motion';
-import { getEpisodeDetailsAction } from '@/lib/actions/tmdbActions';
 
-const EpisodeDetailsCard = ({ item }: { item: IEPDetails; itemId: string }) => {
+const EpisodeDetailsCardSkeleton = () => {
+  return (
+    <div className='relative mx-4 h-[7rem] w-[15rem] select-none'>
+      <div className='relative h-full w-full'>
+        <div className='h-[5rem] w-full animate-pulse rounded-lg bg-muted' />
+        <div className='mt-2 flex flex-col items-center gap-1'>
+          <div className='h-3 w-1/2 animate-pulse rounded bg-muted' />
+          <div className='h-3 w-3/4 animate-pulse rounded bg-muted' />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EpisodeDetailsCard = ({
+  epDetailsCardData,
+  isLoading,
+}: {
+  epDetailsCardData?: any;
+  isLoading?: boolean;
+}) => {
   const [showModal, setShowModal] = useState(false);
-  const [epDetailsCardData, setEpDetailsCardData] = useState<any>(null);
 
-  useEffect(() => {
-    getEpisodeDetailsAction(item.showId, item.season, item.episode).then(data => {
-      if (data) {
-        setEpDetailsCardData(data);
-      }
-    });
-  }, [item.showId, item.season, item.episode]);
-
-  if (!epDetailsCardData?.id) return <></>;
+  if (isLoading || !epDetailsCardData?.id) {
+    return <EpisodeDetailsCardSkeleton />;
+  }
 
   return (
     <>
       <section className='relative mx-4 h-[7rem] w-[15rem] select-none' role='button' tabIndex={0}>
         <section className='relative h-full w-full' onClick={() => setShowModal(true)}>
-          <div className='relative h-full w-full'>
+          <div className='relative h-[5rem] w-full'>
             <Image
-              className='rounded-lg object-contain'
+              className='rounded-lg object-cover'
               src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
               alt={epDetailsCardData.name ?? ''}
               fill
               sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
             />
           </div>
-          <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
-            <h2 className='m-0 w-full break-words text-center text-base'>
+          <div className='relative mt-1 flex w-full flex-wrap content-start whitespace-normal'>
+            <h2 className='m-0 w-full break-words text-center text-xs'>
               <p>
                 Season {epDetailsCardData.season_number} Ep. {epDetailsCardData.episode_number}
               </p>

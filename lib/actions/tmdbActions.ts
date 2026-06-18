@@ -16,6 +16,19 @@ export async function getEpisodeDetailsAction(
   }
 }
 
+export async function getSeasonDetailsAction(showId: string, seasonNum: number) {
+  try {
+    const res = await tmdbClient.getSeasonDetails(showId, seasonNum);
+    console.log(
+      `[getSeasonDetailsAction] showId=${showId}, seasonNum=${seasonNum}, res.id=${res?.id}, episodes=${res?.episodes?.length}`
+    );
+    return res;
+  } catch (error) {
+    console.error('Error fetching season details:', error);
+    return null;
+  }
+}
+
 export async function getMovieDetailsAction(movieId: string) {
   try {
     return await tmdbClient.getMovieDetails(movieId);

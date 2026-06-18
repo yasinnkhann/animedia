@@ -270,6 +270,15 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Season details
+   */
+  async getSeasonDetails(showId: string | number, seasonNum: number, language: string = 'en-US') {
+    return this.fetchDetails(`/tv/${showId}/season/${seasonNum}`, {
+      language,
+    });
+  }
+
+  /**
    * Top rated movies
    */
   async getTopRatedMovies(page?: number, language: string = 'en-US') {
