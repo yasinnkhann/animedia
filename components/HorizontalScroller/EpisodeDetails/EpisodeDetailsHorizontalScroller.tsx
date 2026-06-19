@@ -107,7 +107,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
       scrollContainerClassName='!h-[14rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={item => {
         const epData = seasonData[item.season]?.[item.episode];
-        const isLoading = !epData;
+        const isLoading = seasonData[item.season] === undefined;
         return <EpisodeDetailsCard epDetailsCardData={epData} isLoading={isLoading} />;
       }}
     />

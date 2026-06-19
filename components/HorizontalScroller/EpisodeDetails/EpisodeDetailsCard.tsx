@@ -10,6 +10,8 @@ import { Suspense } from 'react';
 import { Puff } from 'react-loading-icons';
 import { AnimatePresence } from 'framer-motion';
 
+const FALLBACK_IMAGE = '/episode-no-preview.png';
+
 const EpisodeDetailsCardSkeleton = () => {
   return (
     <div className='relative mx-4 h-[7rem] w-[15rem] select-none'>
@@ -32,6 +34,17 @@ const EpisodeDetailsCard = ({
   isLoading?: boolean;
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  const imageSrc = epDetailsCardData?.still_path
+    ? CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)
+    : FALLBACK_IMAGE;
+
+  const [prevImageSrc, setPrevImageSrc] = useState(imageSrc);
+  if (prevImageSrc !== imageSrc) {
+    setPrevImageSrc(imageSrc);
+    setImgLoaded(false);
+  }
 
   if (isLoading || !epDetailsCardData?.id) {
     return <EpisodeDetailsCardSkeleton />;
@@ -39,17 +52,34 @@ const EpisodeDetailsCard = ({
 
   return (
     <>
-      <section className='relative mx-4 h-[7rem] w-[15rem] select-none' role='button' tabIndex={0}>
+      <section
+        className='group relative mx-4 h-[7rem] w-[15rem] cursor-pointer select-none'
+        role='button'
+        tabIndex={0}
+      >
         <section className='relative h-full w-full' onClick={() => setShowModal(true)}>
-          <div className='relative h-full w-full'>
+          <div className='relative h-full w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'>
+            {/* Pulse skeleton visible beneath image while it loads */}
+            {!imgLoaded && <div className='absolute inset-0 animate-pulse rounded-lg bg-muted' />}
+
             <Image
-              className='rounded-lg object-contain'
-              src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
+              className='rounded-lg object-cover transition-all duration-500 ease-in-out group-hover:scale-105'
+              style={{ opacity: imgLoaded ? 1 : 0 }}
+              src={imageSrc}
               alt={epDetailsCardData.name ?? ''}
               fill
               sizes='(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw'
+              onLoad={() => setImgLoaded(true)}
             />
+
+            {/* Hover gradient overlay with "View Details" pill — matches HomeCard */}
+            <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+              <div className='mb-2 translate-y-4 rounded-full bg-primary/90 px-3 py-0.5 text-xs font-semibold text-white opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+                View Details
+              </div>
+            </div>
           </div>
+
           <div className='relative flex w-full flex-wrap content-start whitespace-normal'>
             <h2 className='m-0 w-full break-words text-center text-base'>
               <p>
@@ -123,19 +153,17 @@ const EpisodeDetailsCard = ({
                     </p>
                   </div>
                 </div>
-                {epDetailsCardData.still_path && (
-                  <div className='relative mt-4 h-[35rem] w-full overflow-hidden rounded-lg border border-border'>
-                    <div className='relative h-full'>
-                      <Image
-                        src={CommonMethods.getTheMovieDbImage(epDetailsCardData.still_path)}
-                        alt={epDetailsCardData.name ?? ''}
-                        fill
-                        sizes='(max-width: 768px) 100vw, 50vw'
-                        className='object-cover'
-                      />
-                    </div>
+                <div className='relative mt-4 h-[20rem] w-full overflow-hidden rounded-lg border border-border sm:h-[28rem]'>
+                  <div className='relative h-full'>
+                    <Image
+                      src={imageSrc}
+                      alt={epDetailsCardData.name ?? ''}
+                      fill
+                      sizes='(max-width: 768px) 100vw, 50vw'
+                      className='object-cover'
+                    />
                   </div>
-                )}
+                </div>
               </div>
             </Modal>
           </Suspense>
