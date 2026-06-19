@@ -113,7 +113,7 @@ export default function DiscoverClient() {
       )}
 
       {!loading && results.length > 0 && (
-        <div className='mx-auto max-w-full overflow-hidden'>
+        <div className='mx-auto max-w-full overflow-hidden text-left'>
           <BaseHorizontalScroller
             items={results}
             keyExtractor={item => String(item.data.id)}

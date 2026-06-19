@@ -2,13 +2,10 @@
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { IEPDetails } from '@ts/interfaces';
 import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import { getSeasonDetailsAction } from '@/lib/actions/tmdbActions';
-
-type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 interface Props {
   seasons: any[];
@@ -17,12 +14,10 @@ interface Props {
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
   const [episodesToShow, setEpisodesToShow] = useState<number>(RESULTS_PER_EPISODES_SLIDER);
-  const scrollContainerRef = useRef<scrollVisibilityApiType>(
-    null
-  ) as React.RefObject<scrollVisibilityApiType | null>;
 
   const fetchedSeasonsRef = useRef<Set<number>>(new Set());
   const [seasonData, setSeasonData] = useState<Record<number, any>>({});
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const allEpisodes = useMemo(() => {
     // Filter out Season 0 (TMDB uses it for Specials/Extras/Trailers)
@@ -81,15 +76,15 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
       fetchSeasonsForItems(nextBatch);
     }
   }, [allEpisodes, episodesToShow, fetchSeasonsForItems]);
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current?.scrollContainer?.current;
-    if (!scrollContainer) return;
 
-    let timeoutId: NodeJS.Timeout;
+  const handleScroll = useCallback(
+    (e: React.UIEvent<HTMLDivElement>) => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+      const scrollContainer = e.currentTarget;
 
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      timeoutIdRef.current = setTimeout(() => {
         const { scrollLeft, clientWidth, scrollWidth } = scrollContainer;
         if ((scrollLeft + clientWidth) / scrollWidth > 0.8) {
           setEpisodesToShow(prev =>
@@ -97,22 +92,24 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
           );
         }
       }, 150);
-    };
+    },
+    [allEpisodes.length]
+  );
 
-    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
-
+  useEffect(() => {
     return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeoutId);
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
     };
-  }, [allEpisodes.length]);
+  }, []);
 
   return (
     <BaseHorizontalScroller
       items={visibleItems}
       keyExtractor={item => `${item.season}-${item.episode}`}
-      apiRef={scrollContainerRef}
-      scrollContainerClassName='!h-[14rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+      onScroll={handleScroll}
+      scrollContainerClassName='!h-[14rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={item => {
         const epData = seasonData[item.season]?.[item.episode];
         const isLoading = seasonData[item.season] === undefined;

@@ -5,7 +5,6 @@ import { SessionProvider } from 'next-auth/react';
 import Layout from '../components/Layout';
 import { UserMediaProvider } from '../components/UserMediaProvider';
 import type { Movie, Show, Game } from '@prisma/client';
-import 'react-horizontal-scrolling-menu/dist/styles.css';
 import '../styles/globals.css';
 
 import { useState } from 'react';
