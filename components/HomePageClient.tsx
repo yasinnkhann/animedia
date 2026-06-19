@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, ReactNode, useTransition, useState } from 'react';
+import { useRef, ReactNode, useTransition, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import { ActivityFeed } from './Social/ActivityFeed';
@@ -29,6 +29,9 @@ const HomePageClient = ({
   const { data: session } = useSession();
   const searchBarRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
+  // Track which section triggered the pending transition so we only
+  // show the skeleton on the affected scroller, not both.
+  const [pendingSection, setPendingSection] = useState<'popular' | 'trending' | null>(null);
 
   // Optimistic UI state for tabs
   const [localPopular, setLocalPopular] = useState(popular);
@@ -54,22 +57,28 @@ const HomePageClient = ({
     setLocalTime(time);
   }
 
-  const handleUpdateParams = (key: string, value: string) => {
-    // Optimistic UI update
-    if (key === 'popular') setLocalPopular(value as any);
-    if (key === 'trending') setLocalTrending(value as any);
-    if (key === 'time') setLocalTime(value as any);
+  const handleUpdateParams = useCallback(
+    (key: string, value: string) => {
+      // Optimistic UI update
+      if (key === 'popular') setLocalPopular(value as any);
+      if (key === 'trending') setLocalTrending(value as any);
+      if (key === 'time') setLocalTime(value as any);
 
-    const params = new URLSearchParams(searchParams?.toString());
-    params.set(key, value);
-    startTransition(() => {
-      router.push(`/?${params.toString()}`, { scroll: false });
-    });
-  };
+      // Record which section is loading so only its skeleton shows
+      setPendingSection(key === 'popular' ? 'popular' : 'trending');
+
+      const params = new URLSearchParams(searchParams?.toString());
+      params.set(key, value);
+      startTransition(() => {
+        router.push(`/?${params.toString()}`, { scroll: false });
+      });
+    },
+    [searchParams, router]
+  );
 
   return (
     <motion.main
-      className={`mt-[calc(var(--header-height-mobile)+1rem)] transition-opacity duration-300 ${isPending ? 'opacity-70' : 'opacity-100'}`}
+      className='mt-[calc(var(--header-height-mobile)+1rem)]'
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -124,7 +133,15 @@ const HomePageClient = ({
             </ul>
           </section>
 
-          <section className='mt-4'>{popularContent}</section>
+          <section className='relative mt-4'>
+            {popularContent}
+            {isPending && pendingSection === 'popular' && (
+              <div className='absolute inset-0 z-10 overflow-hidden rounded-xl'>
+                <div className='h-full w-full animate-pulse bg-background/70 backdrop-blur-sm' />
+                <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent' />
+              </div>
+            )}
+          </section>
 
           <section className='ml-[3rem] mt-4 flex items-end'>
             <div>
@@ -186,7 +203,15 @@ const HomePageClient = ({
             </section>
           </section>
 
-          <section className='mt-4'>{trendingContent}</section>
+          <section className='relative mt-4'>
+            {trendingContent}
+            {isPending && pendingSection === 'trending' && (
+              <div className='absolute inset-0 z-10 overflow-hidden rounded-xl'>
+                <div className='h-full w-full animate-pulse bg-background/70 backdrop-blur-sm' />
+                <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent' />
+              </div>
+            )}
+          </section>
         </section>
 
         {session && (

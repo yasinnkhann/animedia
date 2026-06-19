@@ -26,12 +26,18 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
   const [seasonData, setSeasonData] = useState<Record<number, any>>({});
 
   const allEpisodes = useMemo(() => {
+    // Filter out Season 0 (TMDB uses it for Specials/Extras/Trailers)
+    const mainSeasons = seasons.filter(s => s.season_number !== 0);
     const groupedArr: IEPDetails[] = [];
-    Array.from({ length: seasons.length }, (_, idx) =>
-      new Array(seasons[idx]?.episode_count || 0).fill(0)
+    Array.from({ length: mainSeasons.length }, (_, idx) =>
+      new Array(mainSeasons[idx]?.episode_count || 0).fill(0)
     ).forEach((season, seasonNum) =>
       season.forEach((_, idx) =>
-        groupedArr.unshift({ season: seasons[seasonNum].season_number, episode: idx + 1, showId })
+        groupedArr.unshift({
+          season: mainSeasons[seasonNum].season_number,
+          episode: idx + 1,
+          showId,
+        })
       )
     );
     return groupedArr;

@@ -36,7 +36,7 @@
   }
 
   body {
-    @apply hide-scrollbar h-[90vh] bg-background text-foreground transition-colors duration-300;
+    @apply hide-scrollbar min-h-screen bg-background text-foreground transition-colors duration-300;
   }
 
   h1 { @apply text-3xl font-bold; }
