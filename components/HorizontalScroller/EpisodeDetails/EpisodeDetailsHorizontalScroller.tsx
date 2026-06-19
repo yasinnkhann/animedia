@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { VisibilityContext } from 'react-horizontal-scrolling-menu';
 import { IEPDetails } from '@ts/interfaces';
@@ -17,7 +17,6 @@ interface Props {
 
 const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
   const [episodesToShow, setEpisodesToShow] = useState<number>(RESULTS_PER_EPISODES_SLIDER);
-  const isLoadingMore = useRef(false);
   const scrollContainerRef = useRef<scrollVisibilityApiType>(
     null
   ) as React.RefObject<scrollVisibilityApiType | null>;
@@ -43,67 +42,70 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
     return groupedArr;
   }, [seasons, showId]);
 
-  const visibleItems = useMemo(() => {
-    return allEpisodes.slice(0, episodesToShow);
-  }, [allEpisodes, episodesToShow]);
+  const visibleItems = useMemo(
+    () => allEpisodes.slice(0, episodesToShow),
+    [allEpisodes, episodesToShow]
+  );
+
+  const fetchSeasonsForItems = useCallback(
+    (items: IEPDetails[]) => {
+      const uniqueSeasons = new Set(items.map(item => item.season));
+      uniqueSeasons.forEach(seasonNum => {
+        if (!fetchedSeasonsRef.current.has(seasonNum)) {
+          fetchedSeasonsRef.current.add(seasonNum);
+          getSeasonDetailsAction(showId, seasonNum).then(data => {
+            if (data && data.episodes) {
+              const episodesMap = data.episodes.reduce((acc: any, ep: any, index: number) => {
+                acc[index + 1] = ep;
+                return acc;
+              }, {});
+              setSeasonData(prev => ({ ...prev, [seasonNum]: episodesMap }));
+            } else {
+              setSeasonData(prev => ({ ...prev, [seasonNum]: {} }));
+            }
+          });
+        }
+      });
+    },
+    [showId]
+  );
 
   useEffect(() => {
-    const visibleSeasons = new Set(visibleItems.map(item => item.season));
-    visibleSeasons.forEach(seasonNum => {
-      if (!fetchedSeasonsRef.current.has(seasonNum)) {
-        fetchedSeasonsRef.current.add(seasonNum);
-        getSeasonDetailsAction(showId, seasonNum).then(data => {
-          if (data && data.episodes) {
-            const episodesMap = data.episodes.reduce((acc: any, ep: any, index: number) => {
-              acc[index + 1] = ep;
-              return acc;
-            }, {});
-            setSeasonData(prev => ({ ...prev, [seasonNum]: episodesMap }));
-          } else {
-            // Mark as empty object to prevent infinite skeleton if season fetch fails or has no episodes
-            setSeasonData(prev => ({ ...prev, [seasonNum]: {} }));
-          }
-        });
-      }
-    });
-  }, [visibleItems, showId]);
+    fetchSeasonsForItems(allEpisodes.slice(0, episodesToShow));
 
+    const nextBatch = allEpisodes.slice(
+      episodesToShow,
+      episodesToShow + RESULTS_PER_EPISODES_SLIDER
+    );
+    if (nextBatch.length > 0) {
+      fetchSeasonsForItems(nextBatch);
+    }
+  }, [allEpisodes, episodesToShow, fetchSeasonsForItems]);
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current?.scrollContainer?.current;
     if (!scrollContainer) return;
 
     let timeoutId: NodeJS.Timeout;
 
-    const isNearEnd = (container: HTMLElement) => {
-      const scrollLeft = container.scrollLeft;
-      const clientWidth = container.clientWidth;
-      const scrollWidth = container.scrollWidth;
-
-      const scrollPercent = (scrollLeft + clientWidth) / scrollWidth;
-      return scrollPercent > 0.8; // Trigger at 80% scrolled
-    };
-
     const handleScroll = () => {
-      if (!scrollContainerRef.current?.scrollContainer?.current) return;
-      const container = scrollContainerRef.current.scrollContainer.current;
-
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        if (isNearEnd(container) && !isLoadingMore.current) {
-          isLoadingMore.current = true;
-          setEpisodesToShow(prev => prev + RESULTS_PER_EPISODES_SLIDER);
-          isLoadingMore.current = false;
+        const { scrollLeft, clientWidth, scrollWidth } = scrollContainer;
+        if ((scrollLeft + clientWidth) / scrollWidth > 0.8) {
+          setEpisodesToShow(prev =>
+            Math.min(prev + RESULTS_PER_EPISODES_SLIDER, allEpisodes.length)
+          );
         }
-      }, 100);
+      }, 150);
     };
 
-    scrollContainer.addEventListener('scroll', handleScroll);
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll);
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, [allEpisodes.length]);
 
   return (
     <BaseHorizontalScroller
