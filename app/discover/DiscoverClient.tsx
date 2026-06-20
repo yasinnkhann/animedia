@@ -11,6 +11,7 @@ export default function DiscoverClient() {
   const [prompt, setPrompt] = useState('');
   const [mediaType, setMediaType] = useState<'MOVIE' | 'SHOW' | 'GAME'>('MOVIE');
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [results, setResults] = useState<Array<{ type: string; data: any }>>([]);
   const { userMovies, userShows, userGames } = useUserMedia();
 
@@ -24,11 +25,32 @@ export default function DiscoverClient() {
     try {
       const recommendations = await recommendMedia(prompt, mediaType);
       setResults(recommendations);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to fetch recommendations:', error);
-      alert('Ensure you have set the GROQ_API_KEY environment variable.');
+      alert(error?.message || 'An error occurred fetching recommendations.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenerateMore = async () => {
+    if (!prompt.trim() || loading || loadingMore) return;
+
+    setLoadingMore(true);
+
+    try {
+      const excludedTitles = results.map(r => r.data.name || r.data.title).filter(Boolean);
+      const moreRecommendations = await recommendMedia(prompt, mediaType, excludedTitles);
+      setResults(prev => {
+        const existingIds = new Set(prev.map(p => p.data.id));
+        const uniqueNewItems = moreRecommendations.filter(rec => !existingIds.has(rec.data.id));
+        return [...prev, ...uniqueNewItems];
+      });
+    } catch (error: any) {
+      console.error('Failed to fetch more recommendations:', error);
+      alert(error?.message || 'An error occurred fetching recommendations.');
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -128,6 +150,26 @@ export default function DiscoverClient() {
               </div>
             )}
           />
+
+          <div className='mt-8 flex justify-center pb-8'>
+            <button
+              onClick={handleGenerateMore}
+              disabled={loadingMore}
+              className='flex items-center space-x-2 rounded-full bg-slate-800 px-6 py-3 font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-50'
+            >
+              {loadingMore ? (
+                <>
+                  <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent' />
+                  <span>Loading more...</span>
+                </>
+              ) : (
+                <>
+                  <FaRobot />
+                  <span>Generate More</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       )}
     </div>
