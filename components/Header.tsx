@@ -20,11 +20,14 @@ import {
 } from '@/models/dropDownOptions';
 
 import ThemeSwitcher from './ThemeSwitcher';
+import { HiMenu } from 'react-icons/hi';
+import MobileNav from './MobileNav';
 
 const Header = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const [isSearchBtnClicked, setIsSearchBtnClicked] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   if (status === 'loading') {
@@ -45,7 +48,7 @@ const Header = () => {
             </Link>
           </section>
           <section className='ml-[4rem] !flex w-full !items-center justify-between'>
-            <ul id='left-section' className='!mb-0 !flex w-[50%] justify-around'>
+            <ul id='left-section' className='!mb-0 hidden w-[50%] justify-around lg:!flex'>
               <li>
                 <DropDownItem items={MOVIES_ITEMS} name='Movies' routeType='movies' />
               </li>
@@ -72,7 +75,10 @@ const Header = () => {
                 <ThemeSwitcher />
               </li>
             </ul>
-            <ul id='right-section' className='!mr-4 !flex !w-[30rem] items-center !justify-around'>
+            <ul
+              id='right-section'
+              className='!mr-4 hidden !w-[30rem] items-center !justify-around lg:!flex'
+            >
               <li
                 className={`!flex !w-full !items-center ${
                   status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
@@ -157,6 +163,14 @@ const Header = () => {
                 )}
               </li>
             </ul>
+            <div className='flex w-full justify-end pr-4 lg:hidden'>
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className='text-foreground transition-colors hover:text-primary'
+              >
+                <HiMenu size={28} />
+              </button>
+            </div>
           </section>
         </nav>
       </header>
@@ -178,6 +192,7 @@ const Header = () => {
           </div>
         </motion.div>
       )}
+      <MobileNav isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
     </>
   );
 };

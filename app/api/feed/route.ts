@@ -22,9 +22,6 @@ export async function GET(req: Request) {
 
     const followingIds = follows.map(f => f.followingId);
 
-    // Also include the user's own activity
-    followingIds.push(session.user.id);
-
     const activities = await prisma.activity.findMany({
       where: {
         userId: { in: followingIds },
