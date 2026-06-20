@@ -76,7 +76,7 @@ const DropdownMenu = ({ items, onClick, children, placement = 'bottom' }: Dropdo
         {items.map(item => (
           <div
             key={item.key}
-            className='cursor-pointer px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted'
+            className='cursor-pointer whitespace-nowrap px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted'
             onClick={() => handleItemClick(item.key)}
           >
             {item.label}
