@@ -46,13 +46,13 @@ const RoundProgressBar = ({ percentageVal }: Props) => {
         // Customize the text
         text: {
           // Text color
-          fill: 'hsl(var(--foreground))',
+          fill: 'white',
           // Text size
           fontSize: '1.5rem',
         },
         // Customize background - only used when the `background` prop is true
         background: {
-          fill: 'hsl(var(--background))',
+          fill: '#002331',
         },
       }}
     />

@@ -32,7 +32,7 @@ function Arrow({
 
 export function LeftArrow({ isVisible, onClick }: { isVisible: boolean; onClick: VoidFunction }) {
   return (
-    <section className='relative flex h-full shrink-0 items-center pl-10'>
+    <section className='relative hidden h-full shrink-0 items-center pl-10 md:flex'>
       <Arrow handleDisabled={!isVisible} handleOnClick={onClick}>
         <FaArrowLeft className='absolute left-3 text-xl' />
       </Arrow>
@@ -42,7 +42,7 @@ export function LeftArrow({ isVisible, onClick }: { isVisible: boolean; onClick:
 
 export function RightArrow({ isVisible, onClick }: { isVisible: boolean; onClick: VoidFunction }) {
   return (
-    <section className='relative flex h-full shrink-0 items-center pr-10'>
+    <section className='relative hidden h-full shrink-0 items-center pr-10 md:flex'>
       <Arrow handleDisabled={!isVisible} handleOnClick={onClick}>
         <FaArrowRight className='absolute right-3 text-xl' />
       </Arrow>

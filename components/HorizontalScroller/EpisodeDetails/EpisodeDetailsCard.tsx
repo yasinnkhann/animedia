@@ -56,8 +56,15 @@ const EpisodeDetailsCard = ({
         className='group relative mx-4 h-[7rem] w-[15rem] cursor-pointer select-none'
         role='button'
         tabIndex={0}
+        onClick={() => setShowModal(true)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setShowModal(true);
+          }
+        }}
       >
-        <section className='relative h-full w-full' onClick={() => setShowModal(true)}>
+        <section className='relative h-full w-full'>
           <div className='relative h-full w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'>
             {/* Pulse skeleton visible beneath image while it loads */}
             {!imgLoaded && <div className='absolute inset-0 animate-pulse rounded-lg bg-muted' />}
