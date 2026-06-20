@@ -14,15 +14,35 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AniMedia',
+    default: 'AniMedia - Track Movies, Shows & Games',
     template: '%s | AniMedia',
   },
   description:
-    'Track your movies, TV shows, and games. Discover trending content and manage your watchlist with AniMedia.',
+    'Track your movies, TV shows, and games. Discover trending content, see what your friends are watching, and manage your watchlist with AniMedia.',
+  keywords: [
+    'animedia',
+    'anime',
+    'movies tracker',
+    'tv shows tracker',
+    'video games tracker',
+    'watchlist',
+    'discover',
+  ],
+  authors: [{ name: 'Yasin Khan' }],
+  creator: 'Yasin Khan',
   openGraph: {
-    title: 'AniMedia',
-    description: 'Track your movies, TV shows, and games.',
+    title: 'AniMedia - Track Movies, Shows & Games',
+    description:
+      'Track your movies, TV shows, and games. Discover trending content, see what your friends are watching, and manage your watchlist with AniMedia.',
     type: 'website',
+    siteName: 'AniMedia',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AniMedia - Track Movies, Shows & Games',
+    description:
+      'Track your movies, TV shows, and games. Discover trending content, see what your friends are watching, and manage your watchlist with AniMedia.',
   },
 };
 

@@ -89,7 +89,7 @@ const HomePageClient = ({
         {forYouContent}
 
         <section className='mt-8'>
-          <section className='ml-[3rem] flex w-full items-end'>
+          <section className='flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
             <div>
               <h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
             </div>
@@ -143,7 +143,7 @@ const HomePageClient = ({
             )}
           </section>
 
-          <section className='ml-[3rem] mt-4 flex items-end'>
+          <section className='mt-4 flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
             <div>
               <h1 className='text-xl sm:text-3xl'>Trending</h1>
             </div>
