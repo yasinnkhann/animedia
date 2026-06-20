@@ -76,7 +76,7 @@ const Modal = ({ children, closeModal }: Props) => {
       exit='exit'
     >
       <motion.div
-        className='relative m-auto h-[85vh] w-[70vw] overflow-scroll rounded-xl border border-border bg-card p-4 text-card-foreground shadow-2xl scrollbar-hide'
+        className='relative m-auto max-h-[85vh] w-[70vw] overflow-scroll rounded-xl border border-border bg-card p-4 text-card-foreground shadow-2xl scrollbar-hide'
         ref={contentRef}
         variants={modalVariants}
         initial='hidden'
