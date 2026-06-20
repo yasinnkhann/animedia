@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from '@/utils/constants';
 import { ICast } from '@ts/interfaces';
 import { ratingOptions } from '@/models/dropDownOptions';
-import { Button } from 'antd';
+import Button from '@/components/ui/Button';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import RoundProgressBar from '@/components/RoundProgressBar';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
@@ -280,11 +280,7 @@ const GameDetailsClient = ({
           (isLoading ? (
             <section className='my-4 flex items-center space-x-4'>
               <div className='relative'>
-                <Button
-                  disabled
-                  type='primary'
-                  style={{ backgroundColor: 'gray', borderColor: 'gray' }}
-                >
+                <Button disabled variant='primary' className='!bg-gray-500'>
                   Loading...
                 </Button>
               </div>
@@ -303,12 +299,10 @@ const GameDetailsClient = ({
               <div className='relative'>
                 <Button
                   onClick={handleWishlist}
-                  type='primary'
-                  disabled={false}
-                  style={{
-                    backgroundColor: addToWishlist ? '#52c41a' : '',
-                    borderColor: addToWishlist ? '#52c41a' : '',
-                  }}
+                  variant='primary'
+                  className={
+                    addToWishlist ? '!border-green-600 !bg-green-600 hover:!bg-green-500' : ''
+                  }
                 >
                   {addToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
                 </Button>

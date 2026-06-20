@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
-import { Avatar } from 'antd';
+import Avatar from '@/components/ui/Avatar';
 import StatsDashboard from '@/app/stats/StatsDashboard';
 
 export default function UserProfilePage() {
@@ -90,9 +90,12 @@ export default function UserProfilePage() {
         {/* Profile Header */}
         <div className='mb-12 flex flex-col items-center justify-between gap-6 rounded-2xl border border-border bg-card p-8 shadow-sm sm:flex-row'>
           <div className='flex flex-col items-center gap-6 sm:flex-row'>
-            <Avatar src={user.image} size={100} className='bg-primary text-3xl text-white'>
-              {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
-            </Avatar>
+            <Avatar
+              src={user.image}
+              size={100}
+              initials={user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+              backgroundColor='hsl(var(--primary))'
+            />
             <div className='text-center sm:text-left'>
               <h1 className='text-3xl font-bold'>{user.name || 'Anonymous User'}</h1>
               <p className='text-sm text-muted-foreground'>

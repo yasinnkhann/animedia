@@ -31,7 +31,6 @@
     "@vercel/speed-insights": "^2.0.0",
     "ai": "^6.0.207",
     "all-iso-language-codes": "^1.0.21",
-    "antd": "^6.3.7",
     "argon2": "^0.44.0",
     "comma-number": "^2.1.0",
     "framer-motion": "^12.38.0",

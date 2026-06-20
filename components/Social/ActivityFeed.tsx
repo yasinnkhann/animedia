@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ActivityType, MediaType } from '@prisma/client';
-import { Avatar } from 'antd';
+import Avatar from '@/components/ui/Avatar';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { BiMovie, BiTv, BiJoystick } from 'react-icons/bi';
 
@@ -106,10 +106,9 @@ export function ActivityFeed() {
             <Avatar
               src={activity.user.image}
               size={50}
-              className='bg-primary text-xl font-bold text-white'
-            >
-              {activity.user.name?.[0]?.toUpperCase()}
-            </Avatar>
+              initials={activity.user.name?.[0]?.toUpperCase()}
+              backgroundColor='hsl(var(--primary))'
+            />
           </Link>
 
           <div className='flex flex-1 flex-col gap-1'>

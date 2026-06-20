@@ -140,7 +140,7 @@ const Header = () => {
                         label: (
                           <Link
                             href='/stats'
-                            className='block w-full font-medium text-foreground no-underline hover:text-primary'
+                            className='block w-full font-medium text-foreground no-underline'
                           >
                             Watchlist Stats
                           </Link>

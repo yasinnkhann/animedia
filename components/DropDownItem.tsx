@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { Dropdown } from 'antd';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { Avatar } from 'antd';
 import tinycolor from 'tinycolor2';
 import { useSession } from 'next-auth/react';
-import type { MenuProps } from 'antd';
+import { useState } from 'react';
+
+import Avatar from '@/components/ui/Avatar';
+import DropdownMenu from '@/components/ui/DropdownMenu';
 
 interface Props {
   items: {
@@ -24,9 +24,7 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
-
-  const [color, _setColor] = useState(() => {
+  const [color] = useState(() => {
     while (true) {
       const randomBetween = function (min: number, max: number) {
         return min + Math.floor(Math.random() * (max - min + 1));
@@ -42,16 +40,10 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
     }
   });
 
-  const handleOpenChange = (flag: boolean) => {
-    setOpen(flag);
-  };
-
-  const handleMenuClick: MenuProps['onClick'] = e => {
+  const handleMenuClick = (e: { key: string }) => {
     if (e.key === 'theme-switcher') {
       return;
     }
-
-    setOpen(false);
 
     if (routeType) {
       router.push(`/${routeType}/${e.key}`);
@@ -64,53 +56,23 @@ const DropDownItem = ({ items, isProfile, name, routeType }: Props) => {
 
   const renderAvatar = () => {
     if (session?.user?.image || (session as any)?.token?.picture) {
-      return (
-        <Avatar
-          onClick={() => setOpen(currOpen => !currOpen)}
-          src={session?.user?.image || (session as any)?.token?.picture}
-          size='large'
-        />
-      );
+      return <Avatar src={session?.user?.image || (session as any)?.token?.picture} size='large' />;
     } else {
       const initials =
         session?.user?.name?.[0]?.toUpperCase() ??
         (session as any)?.token?.name?.[0]?.toUpperCase() ??
         '';
 
-      return (
-        <Avatar
-          onClick={() => setOpen(currOpen => !currOpen)}
-          style={{
-            backgroundColor: color,
-            verticalAlign: 'middle',
-            fontSize: '1.3rem',
-          }}
-          size='large'
-        >
-          {initials}
-        </Avatar>
-      );
+      return <Avatar backgroundColor={color} initials={initials} size='large' />;
     }
   };
 
   return (
-    <Dropdown
-      menu={{ items, onClick: handleMenuClick }}
-      placement='bottom'
-      arrow={{ pointAtCenter: true }}
-      onOpenChange={handleOpenChange}
-      open={open}
-    >
-      <a className='cursor-pointer no-underline' onClick={e => e.preventDefault()}>
-        {isProfile ? (
-          renderAvatar()
-        ) : (
-          <p className='text-base' onClick={() => setOpen(currOpen => !currOpen)}>
-            {name}
-          </p>
-        )}
-      </a>
-    </Dropdown>
+    <DropdownMenu items={items} onClick={handleMenuClick} placement='bottom'>
+      <div className='cursor-pointer'>
+        {isProfile ? renderAvatar() : <p className='m-0 text-base text-primary'>{name}</p>}
+      </div>
+    </DropdownMenu>
   );
 };
 

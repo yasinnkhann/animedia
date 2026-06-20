@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import MediaList from './MediaPerson/MediaList';
-import { Select } from 'antd';
+import Select from '@/components/ui/Select';
 
 interface Props {
   initialData: any;
@@ -77,7 +77,6 @@ const GenreBrowseClient = ({
               Sort By:
             </label>
             <Select
-              className='!w-[10rem]'
               id='sort-by-dropdown'
               value={sortBy}
               options={sortByOptions.map(option => ({
@@ -85,6 +84,7 @@ const GenreBrowseClient = ({
                 label: option.text,
               }))}
               onChange={handleSortByChange}
+              className='!w-[10rem]'
             />
           </div>
 
@@ -93,15 +93,14 @@ const GenreBrowseClient = ({
               Genre Type:
             </label>
             <Select
-              className='!w-[10rem]'
               id='genre-type-dropdown'
-              size='middle'
               value={genre}
               options={genreOptions.map(option => ({
                 value: option.value,
                 label: option.text,
               }))}
               onChange={handleGenreTypeChange}
+              className='!w-[10rem]'
             />
           </div>
         </section>

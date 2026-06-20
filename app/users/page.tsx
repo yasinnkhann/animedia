@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { TbSearch } from 'react-icons/tb';
-import { Avatar } from 'antd';
+import Avatar from '@/components/ui/Avatar';
 
 export default function UsersPage() {
   const { status } = useSession();
@@ -85,9 +85,12 @@ export default function UsersPage() {
                 href={`/user/${user.id}`}
                 className='flex items-center gap-4 text-inherit no-underline'
               >
-                <Avatar src={user.image} size={60} className='bg-primary text-xl text-white'>
-                  {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
-                </Avatar>
+                <Avatar
+                  src={user.image}
+                  size={60}
+                  initials={user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                  backgroundColor='hsl(var(--primary))'
+                />
                 <div className='flex flex-col'>
                   <span className='text-xl font-medium transition-colors group-hover:text-primary'>
                     {user.name || 'Anonymous User'}
