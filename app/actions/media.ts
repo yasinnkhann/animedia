@@ -50,6 +50,10 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
+  const details = await getMovieDetailsAction(movieId);
+  const image = details?.poster_path || null;
+  const release_date = details?.release_date || null;
+
   const movie = await prisma.movie.upsert({
     where: {
       id_userId: {
@@ -60,11 +64,15 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
     update: {
       name: movieName,
       status: watchStatus,
+      image,
+      release_date,
     },
     create: {
       id: String(movieId),
       name: movieName,
       status: watchStatus,
+      image,
+      release_date,
       userId: session.user.id,
     },
   });
@@ -89,6 +97,11 @@ export async function addShow(
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
+  const details = await getShowDetailsAction(showId);
+  const image = details?.poster_path || null;
+  const release_date = details?.first_air_date || null;
+  const total_episodes = details?.number_of_episodes || null;
+
   const show = await prisma.show.upsert({
     where: {
       id_userId: {
@@ -100,12 +113,18 @@ export async function addShow(
       name: showName,
       status: watchStatus,
       current_episode: currentEpisode ?? 0,
+      image,
+      release_date,
+      total_episodes,
     },
     create: {
       id: String(showId),
       name: showName,
       status: watchStatus,
       current_episode: currentEpisode ?? 0,
+      image,
+      release_date,
+      total_episodes,
       userId: session.user.id,
     },
   });
@@ -127,6 +146,13 @@ export async function addGame(
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
 
+  const details = await getGameDetailsAction(gameId);
+  const image = details?.coverUrl || null;
+  let release_date = null;
+  if (details?.first_release_date) {
+    release_date = new Date(details.first_release_date * 1000).toISOString();
+  }
+
   const game = await prisma.game.upsert({
     where: {
       id_userId: {
@@ -138,12 +164,16 @@ export async function addGame(
       name: gameName,
       wishlist: wishlist ?? false,
       rating,
+      image,
+      release_date,
     },
     create: {
       id: String(gameId),
       name: gameName,
       wishlist: wishlist ?? false,
       rating,
+      image,
+      release_date,
       userId: session.user.id,
     },
   });

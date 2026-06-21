@@ -15,7 +15,7 @@ import toast, { ToastPosition } from 'react-hot-toast';
 
 type MovieDetailsGenre = { id: string; name: string };
 type ShowDetailsGenre = { id: string; name: string };
-import type { Movie, Show, Game } from '@prisma/client';
+import type { Movie, Show, Game, WatchStatus } from '@prisma/client';
 
 export class CommonMethods {
   public static formatDate = (dateStr: string | null | undefined) => {
@@ -191,6 +191,7 @@ export class CommonMethods {
     'on-hold',
     'dropped',
     'plan-to-watch',
+    'wishlist',
   ]);
 
   public static unParseSpecialChars = (str: string) => {
@@ -244,5 +245,22 @@ export class CommonMethods {
   public static extractGraphQLData = <T extends Record<string, any>>(data: T) => {
     const key = Object.keys(data).find(k => k !== '__typename');
     return key ? data[key] : undefined;
+  };
+
+  public static watchStatusFromParam = (statusParam: string): WatchStatus | undefined => {
+    switch (statusParam) {
+      case 'watching':
+        return 'WATCHING';
+      case 'completed':
+        return 'COMPLETED';
+      case 'on-hold':
+        return 'ON_HOLD';
+      case 'dropped':
+        return 'DROPPED';
+      case 'plan-to-watch':
+        return 'PLAN_TO_WATCH';
+      default:
+        return undefined;
+    }
   };
 }

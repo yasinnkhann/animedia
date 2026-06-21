@@ -19,11 +19,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     CredentialsProvider({
@@ -74,7 +76,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    redirect: async ({ url, baseUrl }) => {
+    redirect: async ({ url }) => {
       if (url.startsWith('/')) return `${CLIENT_BASE_URL}${url}`;
       try {
         if (new URL(url).origin === CLIENT_BASE_URL) return url;
@@ -84,23 +86,19 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user, account, profile }) => {
       try {
         if (user) {
-          if (profile?.email_verified && user.id) {
-            const isEmailVerifiedUpdated = await prisma.user.findUnique({
+          if (profile?.email_verified && user.id && !user.emailVerified) {
+            await prisma.user.update({
               where: { id: user.id },
-              select: { emailVerified: true },
+              data: {
+                emailVerified: new Date(),
+              },
             });
-
-            if (!isEmailVerifiedUpdated?.emailVerified) {
-              await prisma.user.update({
-                where: { id: user.id },
-                data: {
-                  emailVerified: new Date(),
-                },
-              });
-            }
+            user.emailVerified = new Date();
           }
           token.user = user;
-          delete token.user.password;
+          if (token.user.password) {
+            delete token.user.password;
+          }
         }
 
         if (account) {
@@ -121,17 +119,6 @@ export const authOptions: NextAuthOptions = {
     session: async ({ session, token }) => {
       try {
         const tokenUser = token.user;
-
-        if (tokenUser?.id && !tokenUser.emailVerified) {
-          const isEmailVerifiedUpdatedInDB = await prisma.user.findUnique({
-            where: { id: tokenUser.id },
-            select: { emailVerified: true },
-          });
-
-          if (isEmailVerifiedUpdatedInDB?.emailVerified) {
-            tokenUser.emailVerified = isEmailVerifiedUpdatedInDB?.emailVerified;
-          }
-        }
 
         if (tokenUser) {
           session.user = {

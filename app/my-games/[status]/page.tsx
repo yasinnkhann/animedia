@@ -1,41 +1,37 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import MyMediaList from '@components/MyMedia/MyMediaList';
-import { Circles } from 'react-loading-icons';
 import { CommonMethods } from '@utils/CommonMethods';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams, redirect } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
-import { redirect } from 'next/navigation';
 
 const Status = () => {
   const { data: session, status: sessionStatus } = useSession();
 
-  const router = useRouter();
   const params = useParams();
-
   const statusParam = params.status as string;
 
-  const { userMovies } = useUserMedia();
+  const { userGames } = useUserMedia();
 
   if (!statusParam || !CommonMethods.statusParams.has(statusParam)) {
     redirect('/');
   }
 
-  const watchStatus = CommonMethods.watchStatusFromParam(statusParam);
-
-  const myMovies = useMemo(() => {
-    if (!userMovies || watchStatus === undefined) {
-      return [];
+  const myGames = useMemo(() => {
+    if (!userGames) return [];
+    if (statusParam === 'wishlist') {
+      return userGames.filter(game => game?.wishlist);
     }
-    return userMovies.filter(movie => movie?.status === watchStatus);
-  }, [userMovies, watchStatus]);
+    // If other statuses are requested for games, they return empty for now
+    return [];
+  }, [userGames, statusParam]);
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
-      <MyMediaList status={statusParam as TStatusParam} myMedias={myMovies} mediaType='MOVIES' />
+      <MyMediaList status={statusParam as TStatusParam} myMedias={myGames} mediaType='GAMES' />
     </main>
   );
 };

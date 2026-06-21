@@ -198,7 +198,7 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   onClose={onClose}
                 />
                 <Link
-                  href='/my-games'
+                  href='/my-games/wishlist'
                   onClick={onClose}
                   className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
                 >

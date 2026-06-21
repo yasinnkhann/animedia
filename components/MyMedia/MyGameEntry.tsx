@@ -15,14 +15,19 @@ interface Props {
 }
 
 const MyGameEntry = ({ myGame, count }: Props) => {
-  const [gameData, setGameData] = useState<any>(null);
+  const [gameData, setGameData] = useState<any>({
+    coverUrl: myGame.image ?? null,
+    release_date: myGame.release_date ?? null,
+  });
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    getGameDetailsAction(myGame.id).then(data => {
-      setGameData(data);
-    });
-  }, [myGame.id]);
+    if (!myGame.image || !myGame.release_date) {
+      getGameDetailsAction(myGame.id).then(data => {
+        if (data) setGameData(data);
+      });
+    }
+  }, [myGame.id, myGame.image, myGame.release_date]);
 
   return (
     <tr className='hover:bg-muted/30'>
@@ -54,9 +59,13 @@ const MyGameEntry = ({ myGame, count }: Props) => {
             <h3 className='cursor-pointer'>{myGame.name}</h3>
           </Link>
           <p>
-            {gameData?.first_release_date
-              ? CommonMethods.formatDate(new Date(gameData.first_release_date * 1000).toISOString())
-              : 'Release Date Not Available'}
+            {gameData?.release_date
+              ? CommonMethods.formatDate(gameData.release_date)
+              : gameData?.first_release_date
+                ? CommonMethods.formatDate(
+                    new Date(gameData.first_release_date * 1000).toISOString()
+                  )
+                : 'Release Date Not Available'}
           </p>
         </section>
       </td>

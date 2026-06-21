@@ -15,14 +15,19 @@ interface Props {
 }
 
 const MyMovieEntry = ({ myMovie, count }: Props) => {
-  const [movieData, setMovieData] = useState<any>(null);
+  const [movieData, setMovieData] = useState<any>({
+    poster_path: myMovie.image ?? null,
+    release_date: myMovie.release_date ?? null,
+  });
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    getMovieDetailsAction(myMovie.id).then(data => {
-      setMovieData(data);
-    });
-  }, [myMovie.id]);
+    if (!myMovie.image || !myMovie.release_date) {
+      getMovieDetailsAction(myMovie.id).then(data => {
+        if (data) setMovieData(data);
+      });
+    }
+  }, [myMovie.id, myMovie.image, myMovie.release_date]);
 
   return (
     <tr className='hover:bg-muted/30'>

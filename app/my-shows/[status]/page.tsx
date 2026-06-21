@@ -8,24 +8,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
-import type { WatchStatus } from '@prisma/client';
-
-function watchStatusFromParam(statusParam: string): WatchStatus | undefined {
-  switch (statusParam) {
-    case 'watching':
-      return 'WATCHING';
-    case 'completed':
-      return 'COMPLETED';
-    case 'on-hold':
-      return 'ON_HOLD';
-    case 'dropped':
-      return 'DROPPED';
-    case 'plan-to-watch':
-      return 'PLAN_TO_WATCH';
-    default:
-      return undefined;
-  }
-}
+import { redirect } from 'next/navigation';
 
 const Status = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -37,7 +20,11 @@ const Status = () => {
 
   const { userShows } = useUserMedia();
 
-  const watchStatus = statusParam ? watchStatusFromParam(statusParam) : undefined;
+  if (!statusParam || !CommonMethods.statusParams.has(statusParam)) {
+    redirect('/');
+  }
+
+  const watchStatus = CommonMethods.watchStatusFromParam(statusParam);
 
   const myShows = useMemo(() => {
     if (!userShows || watchStatus === undefined) {
@@ -45,16 +32,6 @@ const Status = () => {
     }
     return userShows.filter(show => show?.status === watchStatus);
   }, [userShows, watchStatus]);
-
-  useEffect(() => {
-    if (statusParam && !CommonMethods.statusParams.has(statusParam)) {
-      router.push('/');
-    }
-  }, [router, statusParam]);
-
-  if (statusParam === undefined || !CommonMethods.statusParams.has(statusParam)) {
-    return null;
-  }
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

@@ -88,7 +88,7 @@ const Header = () => {
                   <>
                     <DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' routeType='my-shows' />
                     <DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
-                    <Link href='/my-games' className='cursor-pointer no-underline'>
+                    <Link href='/my-games/wishlist' className='cursor-pointer no-underline'>
                       <p className='text-base'>My Games</p>
                     </Link>
                     <Link href='/users' className='cursor-pointer no-underline'>

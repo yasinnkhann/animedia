@@ -15,14 +15,20 @@ interface Props {
 }
 
 const MyShowEntry = ({ myShow, count }: Props) => {
-  const [showData, setShowData] = useState<any>(null);
+  const [showData, setShowData] = useState<any>({
+    poster_path: myShow.image ?? null,
+    first_air_date: myShow.release_date ?? null,
+    number_of_episodes: myShow.total_episodes ?? null,
+  });
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    getShowDetailsAction(myShow.id).then(data => {
-      setShowData(data);
-    });
-  }, [myShow.id]);
+    if (!myShow.image || !myShow.release_date || !myShow.total_episodes) {
+      getShowDetailsAction(myShow.id).then(data => {
+        if (data) setShowData(data);
+      });
+    }
+  }, [myShow.id, myShow.image, myShow.release_date, myShow.total_episodes]);
 
   return (
     <tr className='hover:bg-muted/30'>

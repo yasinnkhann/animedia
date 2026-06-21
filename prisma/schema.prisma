@@ -79,6 +79,8 @@ model Movie {
   name   String
   status WatchStatus
   rating Int?
+  image  String?
+  release_date String?
   userId String      @map("user_id")
   user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -92,6 +94,9 @@ model Show {
   current_episode Int         @default(0)
   status          WatchStatus
   rating          Int?
+  image           String?
+  release_date    String?
+  total_episodes  Int?
   userId          String      @map("user_id")
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -104,6 +109,8 @@ model Game {
   name   String
   rating Int?
   wishlist Boolean @default(false)
+  image  String?
+  release_date String?
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
