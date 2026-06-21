@@ -9,6 +9,7 @@ import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { redirect } from 'next/navigation';
+import Loading from './loading';
 
 const Status = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -18,7 +19,7 @@ const Status = () => {
 
   const statusParam = params.status as string;
 
-  const { userMovies } = useUserMedia();
+  const { userMovies, isLoading } = useUserMedia();
 
   if (!statusParam || !CommonMethods.statusParams.has(statusParam)) {
     redirect('/');
@@ -32,6 +33,10 @@ const Status = () => {
     }
     return userMovies.filter(movie => movie?.status === watchStatus);
   }, [userMovies, watchStatus]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

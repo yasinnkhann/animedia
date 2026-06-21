@@ -44,10 +44,13 @@ const MyGameEntry = ({ myGame, count }: Props) => {
             <Image
               className='rounded-lg object-cover'
               src={CommonMethods.getIgdbImage(gameData?.coverUrl)}
-              priority
               alt={gameData?.name ?? ''}
               fill
               sizes='(max-width: 768px) 15vw, 10vw'
+              {...((myGame as any).blurDataUrl && {
+                placeholder: 'blur',
+                blurDataURL: (myGame as any).blurDataUrl,
+              })}
             />
           </section>
         </Link>

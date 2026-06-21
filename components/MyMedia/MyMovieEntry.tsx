@@ -44,10 +44,13 @@ const MyMovieEntry = ({ myMovie, count }: Props) => {
             <Image
               className='rounded-lg object-cover'
               src={CommonMethods.getTheMovieDbImage(movieData?.poster_path)}
-              priority
               alt={movieData?.title ?? ''}
               fill
               sizes='(max-width: 768px) 15vw, 10vw'
+              {...((myMovie as any).blurDataUrl && {
+                placeholder: 'blur',
+                blurDataURL: (myMovie as any).blurDataUrl,
+              })}
             />
           </section>
         </Link>

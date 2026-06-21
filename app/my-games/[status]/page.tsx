@@ -7,6 +7,7 @@ import { useParams, redirect } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
+import Loading from './loading';
 
 const Status = () => {
   const { data: session, status: sessionStatus } = useSession();
@@ -14,7 +15,7 @@ const Status = () => {
   const params = useParams();
   const statusParam = params.status as string;
 
-  const { userGames } = useUserMedia();
+  const { userGames, isLoading } = useUserMedia();
 
   if (!statusParam || !CommonMethods.statusParams.has(statusParam)) {
     redirect('/');
@@ -28,6 +29,10 @@ const Status = () => {
     // If other statuses are requested for games, they return empty for now
     return [];
   }, [userGames, statusParam]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>

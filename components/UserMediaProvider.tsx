@@ -36,12 +36,18 @@ export const UserMediaProvider = ({ children }: Props) => {
   const { status } = useSession();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, refetch } = useQuery({
+  const {
+    data,
+    isLoading: queryLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['userMedia'],
     queryFn: fetchUserMedia,
     enabled: status === 'authenticated',
     staleTime: Infinity,
   });
+
+  const isLoading = status === 'loading' || queryLoading;
 
   const userMovies = data?.userMovies ?? [];
   const userShows = data?.userShows ?? [];
