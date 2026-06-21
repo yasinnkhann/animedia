@@ -155,7 +155,8 @@ export const UpdateGameInput = z.object({
 });
 
 export const RegisterUserInput = z.object({
-  name: z.string().min(1, 'Name required').max(100),
+  firstName: z.string().min(1, 'First name required').max(50),
+  lastName: z.string().min(1, 'Last name required').max(50),
   email: z.string().email('Valid email required'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });

@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: 'AI Discover | AniMedia',
   description:
     'Use Google Gemini to discover new movies, shows, and games based on natural language prompts.',
+  openGraph: {
+    title: 'AI Discover | AniMedia',
+    description:
+      'Use AI to discover new movies, shows, and games based on natural language prompts.',
+  },
 };
 
 export default function DiscoverPage() {

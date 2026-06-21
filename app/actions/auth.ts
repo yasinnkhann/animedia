@@ -39,7 +39,7 @@ export async function registerUserAction(input: unknown) {
 
     const newUser = await prisma.user.create({
       data: {
-        name: parsedInput.name,
+        name: `${parsedInput.firstName} ${parsedInput.lastName}`,
         email: parsedInput.email,
         password: await hash(parsedInput.password),
       },

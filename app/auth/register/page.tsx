@@ -36,7 +36,8 @@ export default function RegisterPage() {
   } = useForm<FormValues>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -46,9 +47,9 @@ export default function RegisterPage() {
   async function onSubmit(data: FormValues) {
     setLoading(true);
     setRegisterErrs([]);
-    const { name, email, password } = data;
+    const { firstName, lastName, email, password } = data;
     try {
-      const registerRes = await registerUserAction({ name, email, password });
+      const registerRes = await registerUserAction({ firstName, lastName, email, password });
 
       if (registerRes.createdUser?.id) {
         const emailRes = await sendVerificationEmailAction({ id: registerRes.createdUser.id });
@@ -82,23 +83,46 @@ export default function RegisterPage() {
         </div>
 
         <form className='flex flex-col gap-5' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex flex-col gap-1'>
-            <div className='relative'>
-              <input
-                {...register('name')}
-                type='text'
-                placeholder='Full Name'
-                className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-                  errors.name ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
-                }`}
-              />
-              <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground'>
-                <HiOutlineUser size={24} />
-              </span>
+          <div className='flex w-full gap-3'>
+            <div className='flex w-1/2 flex-col gap-1'>
+              <div className='relative'>
+                <input
+                  {...register('firstName')}
+                  type='text'
+                  placeholder='First Name'
+                  className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                    errors.firstName ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
+                  }`}
+                />
+                <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground'>
+                  <HiOutlineUser size={24} />
+                </span>
+              </div>
+              {errors.firstName && (
+                <span className='text-xs font-medium text-rose-600'>
+                  {errors.firstName.message}
+                </span>
+              )}
             </div>
-            {errors.name && (
-              <span className='text-xs font-medium text-rose-600'>{errors.name.message}</span>
-            )}
+
+            <div className='flex w-1/2 flex-col gap-1'>
+              <div className='relative'>
+                <input
+                  {...register('lastName')}
+                  type='text'
+                  placeholder='Last Name'
+                  className={`w-full rounded-lg border bg-background py-3 pl-4 pr-12 text-foreground transition-all focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                    errors.lastName ? 'border-red-500 bg-red-500/10' : 'border-border bg-muted/30'
+                  }`}
+                />
+                <span className='absolute right-3 top-1/2 -translate-y-1/2 transform text-muted-foreground'>
+                  <HiOutlineUser size={24} />
+                </span>
+              </div>
+              {errors.lastName && (
+                <span className='text-xs font-medium text-rose-600'>{errors.lastName.message}</span>
+              )}
+            </div>
           </div>
 
           <div className='flex flex-col gap-1'>

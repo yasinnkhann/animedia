@@ -20,7 +20,7 @@ export async function GET(req: Request) {
       select: { followingId: true },
     });
 
-    const followingIds = follows.map(f => f.followingId);
+    const followingIds = follows.map(f => f.followingId).filter(id => id !== session?.user?.id);
 
     const activities = await prisma.activity.findMany({
       where: {

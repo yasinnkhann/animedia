@@ -51,7 +51,7 @@ const AccordionItem = ({ title, items, routeType, onClose }: any) => {
                   key={item.key}
                   href={`/${routeType}/${item.key}`}
                   onClick={onClose}
-                  className='text-base text-muted-foreground transition-colors hover:text-primary'
+                  className='truncate whitespace-nowrap text-base text-muted-foreground transition-colors hover:text-primary'
                 >
                   {item.label}
                 </Link>

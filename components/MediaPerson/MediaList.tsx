@@ -22,7 +22,9 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
       className={`w-full ${!genrePage ? 'px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24' : ''}`}
     >
       <section className='flex flex-col'>
-        <h3 className='mb-2 ml-4 text-lg lg:text-xl'>{title.split('_').join(' ')}</h3>
+        <h3 className='mb-2 ml-4 truncate whitespace-nowrap text-lg lg:text-xl'>
+          {title.split('_').join(' ')}
+        </h3>
         <div className='overflow-x-auto'>
           <table className='w-full table-auto text-left text-sm sm:text-base'>
             <thead>

@@ -91,7 +91,9 @@ const HomePageClient = ({
         <section className='mt-8'>
           <section className='flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
             <div>
-              <h1 className='text-xl sm:text-3xl'>What&apos;s Popular</h1>
+              <h1 className='truncate whitespace-nowrap text-xl sm:text-3xl'>
+                What&apos;s Popular
+              </h1>
             </div>
             <ul className='flex w-[15rem] justify-around md:w-[25rem]'>
               <li
@@ -145,7 +147,7 @@ const HomePageClient = ({
 
           <section className='mt-4 flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
             <div>
-              <h1 className='text-xl sm:text-3xl'>Trending</h1>
+              <h1 className='truncate whitespace-nowrap text-xl sm:text-3xl'>Trending</h1>
             </div>
             <section className='flex w-full justify-around'>
               <ul className='flex justify-around'>
@@ -216,7 +218,9 @@ const HomePageClient = ({
 
         {session && (
           <section className='ml-[3rem] mr-[3rem] mt-16'>
-            <h2 className='mb-6 text-xl font-bold sm:text-3xl'>Friends Activity</h2>
+            <h2 className='mb-6 truncate whitespace-nowrap text-xl font-bold sm:text-3xl'>
+              Friends Activity
+            </h2>
             <ActivityFeed />
           </section>
         )}
