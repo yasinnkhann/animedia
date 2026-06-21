@@ -23,8 +23,8 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
           </h4>
           <h4 className='ml-2 text-foreground'>{myMedias.length}</h4>
         </div>
-        <table>
-          <thead>
+        <table className='block w-full sm:table'>
+          <thead className='hidden sm:table-header-group'>
             <tr className='border-b border-border text-muted-foreground'>
               <th className='w-[5rem] p-4 font-medium'>#</th>
 
@@ -40,7 +40,7 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
             </tr>
           </thead>
 
-          <tbody className='divide-y divide-border border-b border-border'>
+          <tbody className='flex flex-col gap-4 divide-y divide-border p-4 sm:table-row-group sm:gap-0 sm:divide-y-0 sm:divide-border sm:border-b sm:border-border sm:p-0'>
             {myMedias?.map((myMedia, idx) => {
               let myMediaComp: ReactElement;
               if (mediaType === 'MOVIES') {

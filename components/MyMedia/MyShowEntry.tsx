@@ -31,19 +31,19 @@ const MyShowEntry = ({ myShow, count }: Props) => {
   }, [myShow.id, myShow.image, myShow.release_date, myShow.total_episodes]);
 
   return (
-    <tr className='hover:bg-muted/30'>
-      <td className='text-center align-middle'>
+    <tr className='flex flex-col rounded-lg border border-border bg-card p-4 shadow-sm hover:bg-muted/30 sm:table-row sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none'>
+      <td className='hidden text-center align-middle sm:table-cell'>
         <p className='text-lg'>{count}</p>
       </td>
 
-      <td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
+      <td className='mb-4 flex break-words p-0 sm:mb-0 sm:table-cell sm:grid sm:grid-cols-[5rem_calc(100%-5rem)] sm:grid-rows-[100%] sm:p-4'>
         <Link
           href={CommonMethods.getDetailsPageRoute('show', myShow.id, myShow.name)}
-          className='text-inherit no-underline'
+          className='shrink-0 text-inherit no-underline'
         >
-          <section className='relative row-start-1 h-[7rem] w-[5rem] cursor-pointer'>
+          <section className='relative h-[7rem] w-[5rem] cursor-pointer sm:row-start-1'>
             <Image
-              className='rounded-lg'
+              className='rounded-lg object-cover'
               src={CommonMethods.getTheMovieDbImage(showData?.poster_path)}
               priority
               alt={showData?.name ?? ''}
@@ -52,14 +52,16 @@ const MyShowEntry = ({ myShow, count }: Props) => {
             />
           </section>
         </Link>
-        <section className='col-start-2 pl-4'>
+        <section className='flex flex-col justify-center pl-4 sm:col-start-2'>
           <Link
             href={CommonMethods.getDetailsPageRoute('show', myShow.id, myShow.name)}
             className='text-inherit no-underline'
           >
-            <h3 className='cursor-pointer'>{myShow.name}</h3>
+            <h3 className='cursor-pointer text-lg font-semibold sm:text-base sm:font-normal'>
+              {myShow.name}
+            </h3>
           </Link>
-          <p>
+          <p className='mt-1 text-sm text-muted-foreground sm:mt-0'>
             {showData?.first_air_date
               ? CommonMethods.formatDate(showData?.first_air_date)
               : 'First Air Date Not Available'}
@@ -67,18 +69,21 @@ const MyShowEntry = ({ myShow, count }: Props) => {
         </section>
       </td>
 
-      <td className='text-center align-middle'>
+      <td className='flex items-center justify-between border-t border-border py-2 text-center align-middle sm:table-cell sm:border-0 sm:py-0'>
+        <span className='font-medium text-muted-foreground sm:hidden'>My Rating</span>
         <p className='text-lg'>{myShow.rating ?? 'N/A'}</p>
       </td>
 
-      <td className='text-center align-middle'>
+      <td className='flex items-center justify-between border-t border-border py-2 text-center align-middle sm:table-cell sm:border-0 sm:py-0'>
+        <span className='font-medium text-muted-foreground sm:hidden'>Current Ep.</span>
         <p className='text-lg'>
           {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}/
           {myShow.status === 'COMPLETED' ? myShow.current_episode : showData?.number_of_episodes}
         </p>
       </td>
 
-      <td className='text-center align-middle'>
+      <td className='flex items-center justify-between border-t border-border py-2 text-center align-middle sm:table-cell sm:border-0 sm:py-0'>
+        <span className='font-medium text-muted-foreground sm:hidden'>Remove</span>
         <form
           action={async () => {
             const previousData = getUserMediaCache();
@@ -100,7 +105,10 @@ const MyShowEntry = ({ myShow, count }: Props) => {
             type='submit'
             className='m-0 flex w-full items-center justify-center border-0 bg-transparent p-0 focus:outline-none'
           >
-            <BsFillTrashFill size={20} className='cursor-pointer text-red-500' />
+            <BsFillTrashFill
+              size={20}
+              className='cursor-pointer text-red-500 transition-colors hover:text-red-600'
+            />
           </button>
         </form>
       </td>
