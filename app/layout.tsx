@@ -6,6 +6,7 @@ import Providers from './Providers';
 import NextTopLoader from 'nextjs-toploader';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
+import { CLIENT_BASE_URL } from '@/utils/constants';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -13,7 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || ''),
+  metadataBase: new URL(CLIENT_BASE_URL),
   title: {
     default: 'AniMedia - Track Movies, Shows & Games',
     template: '%s | AniMedia',

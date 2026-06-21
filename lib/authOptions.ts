@@ -8,7 +8,7 @@ import { verify } from 'argon2';
 import { CommonMethods } from '@/utils/CommonMethods';
 import * as Sentry from '@sentry/nextjs';
 import logger from '@lib/logger';
-import { __prod__ } from '@/utils/constants';
+import { __prod__, CLIENT_BASE_URL } from '@/utils/constants';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -74,6 +74,13 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    redirect: async ({ url, baseUrl }) => {
+      if (url.startsWith('/')) return `${CLIENT_BASE_URL}${url}`;
+      try {
+        if (new URL(url).origin === CLIENT_BASE_URL) return url;
+      } catch (e) {}
+      return CLIENT_BASE_URL;
+    },
     jwt: async ({ token, user, account, profile }) => {
       try {
         if (user) {
