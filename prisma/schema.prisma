@@ -51,6 +51,7 @@ model User {
   followers     Follows[] @relation("following")
   following     Follows[] @relation("follower")
   activities    Activity[]
+  reviews       Review[]
 }
 
 model Follows {
@@ -145,4 +146,21 @@ enum MediaType {
   MOVIE
   SHOW
   GAME
+}
+
+model Review {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mediaType   MediaType
+  mediaId     String
+  mediaTitle  String
+  mediaImage  String?
+  content     String    @db.Text
+  rating      Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([mediaType, mediaId])
 }

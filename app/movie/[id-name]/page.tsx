@@ -11,6 +11,7 @@ import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 import MovieCastServer from '@/components/movie/MovieCastServer';
 import MovieRelatedServer from '@/components/movie/MovieRelatedServer';
+import ReviewSection from '@/components/Reviews/ReviewSection';
 
 import { Metadata } from 'next';
 
@@ -143,6 +144,15 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
         <Suspense key='related' fallback={<HorizontalScrollerSkeleton />}>
           <MovieRelatedServer movieId={id} />
         </Suspense>
+
+        <section className='mt-16 pb-16'>
+          <ReviewSection
+            mediaType='MOVIE'
+            mediaId={movieId}
+            mediaTitle={movieTitle}
+            mediaImage={movieDetails?.poster_path}
+          />
+        </section>
       </section>
     </PageAnimationWrapper>
   );

@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { WatchStatus } from '@prisma/client';
 import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
 import { getGameDetailsAction } from '@/lib/actions/igdbActions';
@@ -75,6 +75,8 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
   });
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return movie;
 }
 
@@ -111,6 +113,8 @@ export async function addShow(
   logActivity(session.user.id, 'ADDED', 'SHOW', String(showId), showName, { status: watchStatus });
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return show;
 }
 
@@ -147,6 +151,8 @@ export async function addGame(
   logActivity(session.user.id, 'ADDED', 'GAME', String(gameId), gameName);
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return game;
 }
 
@@ -174,6 +180,8 @@ export async function updateMovie(movieId: string, watchStatus: WatchStatus, mov
   });
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return movie;
 }
 
@@ -208,6 +216,8 @@ export async function updateShow(
   });
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return show;
 }
 
@@ -232,6 +242,8 @@ export async function updateGame(gameId: string, wishlist?: boolean, rating?: nu
   logActivity(session.user.id, type, 'GAME', String(gameId), game.name, { wishlist, rating });
 
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return game;
 }
 
@@ -248,6 +260,8 @@ export async function deleteMovie(movieId: string) {
     },
   });
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return movie;
 }
 
@@ -264,6 +278,8 @@ export async function deleteShow(showId: string) {
     },
   });
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return show;
 }
 
@@ -280,5 +296,7 @@ export async function deleteGame(gameId: string) {
     },
   });
   revalidatePath('/');
+  // @ts-ignore
+  revalidateTag('user-media');
   return game;
 }

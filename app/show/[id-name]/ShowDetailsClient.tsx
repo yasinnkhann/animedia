@@ -12,6 +12,7 @@ import commaNumber from 'comma-number';
 import { useSession } from 'next-auth/react';
 import { ICast, ICurrentSeasonEpisode } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
+import ReviewSection from '@/components/Reviews/ReviewSection';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
 import type { WatchStatus } from '@prisma/client';
@@ -310,7 +311,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
     updateShow({
       variables: {
         showId: String(showDetailsData.showDetails.id),
-        showRating: +value,
+        showRating: value === '' ? null : +value,
         watchStatus,
         currentEpisode: +currEp,
       },
@@ -1119,6 +1120,15 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
         {castNode}
         {relatedNode}
+
+        <section className='mt-16 pb-16'>
+          <ReviewSection
+            mediaType='SHOW'
+            mediaId={String(showDetailsData.showDetails.id)}
+            mediaTitle={showDetailsData.showDetails.name}
+            mediaImage={showDetailsData.showDetails.poster_path}
+          />
+        </section>
       </section>
     </motion.main>
   );

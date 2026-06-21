@@ -20,6 +20,7 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import GamePreviewHorizontalScroller from '../../../components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
 import MediaCastHorizontalScroller from '../../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
+import ReviewSection from '@/components/Reviews/ReviewSection';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import {
   addGame as addGameAction,
@@ -426,6 +427,15 @@ const GameDetailsClient = ({
       <section className='col-start-2 mt-4'>
         {previewsNode}
         {relatedNode}
+
+        <section className='mt-16 pb-16'>
+          <ReviewSection
+            mediaType='GAME'
+            mediaId={String(game.id)}
+            mediaTitle={game.name}
+            mediaImage={game.cover?.url?.replace('t_thumb', 't_cover_big') ?? null}
+          />
+        </section>
       </section>
       <AnimatePresence mode='wait'>
         {showFullDescription && (
