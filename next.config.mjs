@@ -35,6 +35,7 @@ const nextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    unoptimized: true,
   },
   webpack(config) {
     config.module.rules.push({
