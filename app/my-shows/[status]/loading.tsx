@@ -1,4 +1,5 @@
 'use client';
+import MediaCardSkeleton from '@/components/Skeletons/MediaCardSkeleton';
 
 export default function Loading() {
   return (
@@ -12,18 +13,9 @@ export default function Loading() {
           ))}
         </div>
 
-        <div className='flex flex-col gap-4'>
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className='flex h-[9rem] w-full items-center rounded-lg border border-border bg-card/50 p-4'
-            >
-              <div className='h-[7rem] w-[5rem] shrink-0 rounded-lg bg-muted' />
-              <div className='ml-4 flex flex-1 flex-col justify-center space-y-3'>
-                <div className='h-5 w-3/4 max-w-[200px] rounded bg-muted' />
-                <div className='h-4 w-1/2 max-w-[150px] rounded bg-muted' />
-              </div>
-            </div>
+        <div className='mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+          {[...Array(15)].map((_, i) => (
+            <MediaCardSkeleton key={`loading-${i}`} />
           ))}
         </div>
       </div>

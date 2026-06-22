@@ -79,9 +79,9 @@ const EpisodeDetailsCard = ({
               onLoad={() => setImgLoaded(true)}
             />
 
-            {/* Hover gradient overlay with "View Details" pill — matches HomeCard */}
-            <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-              <div className='mb-2 translate-y-4 rounded-full bg-primary/90 px-3 py-0.5 text-xs font-semibold text-white opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+            {/* Hover glassmorphism overlay — matches MediaCard */}
+            <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-black/40 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100'>
+              <div className='mb-2 translate-y-4 rounded-full border border-white/30 bg-white/20 px-4 py-1.5 text-xs font-semibold text-white opacity-0 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
                 View Details
               </div>
             </div>

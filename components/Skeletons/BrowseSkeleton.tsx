@@ -12,37 +12,10 @@ export default function BrowseSkeleton() {
         <section className='w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
           <section className='flex flex-col'>
             <div className='mb-2 ml-4 h-7 w-48 animate-pulse rounded bg-muted' />
-            <div className='overflow-x-auto'>
-              <table className='w-full table-auto text-left text-sm sm:text-base'>
-                <thead>
-                  <tr className='border-b border-border bg-muted/20 text-muted-foreground'>
-                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                      Rank
-                    </th>
-                    <th className='px-4 py-4 text-xs font-semibold uppercase tracking-wider'>
-                      Title
-                    </th>
-                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                      Rating
-                    </th>
-                    {session && (
-                      <>
-                        <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                          My Rating
-                        </th>
-                        <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                          Status
-                        </th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className='divide-y divide-border'>
-                  {Array.from({ length: 15 }).map((_, idx) => (
-                    <MediaCardSkeleton key={`loading-skeleton-${idx}`} />
-                  ))}
-                </tbody>
-              </table>
+            <div className='mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+              {Array.from({ length: 15 }).map((_, idx) => (
+                <MediaCardSkeleton key={`loading-skeleton-${idx}`} />
+              ))}
             </div>
           </section>
         </section>
