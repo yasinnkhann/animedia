@@ -8,7 +8,9 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { addMovie, updateMovie, deleteMovie } from '@/app/actions/media';
 import { BiCollection } from 'react-icons/bi';
+import { BiShare } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
+import RecommendModal from '@/components/Notifications/RecommendModal';
 
 interface Props {
   movieId: string;
@@ -22,6 +24,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
   const [ratingInput, setRating] = useState<number | string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+  const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
 
   const { userMovies, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
@@ -183,6 +186,14 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
         <BiCollection size={20} />
       </button>
 
+      <button
+        onClick={() => setIsRecommendModalOpen(true)}
+        className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
+        title='Recommend to a Friend'
+      >
+        <BiShare size={20} />
+      </button>
+
       <AddToCollectionModal
         mediaType='MOVIE'
         mediaId={movieId}
@@ -190,6 +201,15 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
         mediaImage={usersMovie?.image ?? movieImage}
         isOpen={isCollectionModalOpen}
         onClose={() => setIsCollectionModalOpen(false)}
+      />
+
+      <RecommendModal
+        mediaType='MOVIE'
+        mediaId={movieId}
+        mediaTitle={movieTitle}
+        mediaImage={usersMovie?.image ?? movieImage}
+        isOpen={isRecommendModalOpen}
+        onClose={() => setIsRecommendModalOpen(false)}
       />
     </section>
   );

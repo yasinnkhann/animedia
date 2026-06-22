@@ -53,6 +53,8 @@ model User {
   activities    Activity[]
   reviews       Review[]
   collections   Collection[]
+  NotificationsReceived Notification[] @relation("UserNotifications")
+  NotificationsSent     Notification[] @relation("NotificationSender")
 }
 
 model Follows {
@@ -199,4 +201,27 @@ model CollectionItem {
 
   @@unique([collectionId, mediaType, mediaId])
   @@index([collectionId])
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String           @map("user_id") // Recipient
+  user        User             @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  senderId    String?          @map("sender_id") // Sender
+  sender      User?            @relation("NotificationSender", fields: [senderId], references: [id], onDelete: SetNull)
+  type        NotificationType
+  mediaId     String?
+  mediaType   MediaType?
+  mediaTitle  String?
+  mediaImage  String?
+  message     String?
+  isRead      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+
+  @@index([userId])
+}
+
+enum NotificationType {
+  RECOMMENDATION
+  FOLLOW
 }

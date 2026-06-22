@@ -22,6 +22,7 @@ import {
 import ThemeSwitcher from './ThemeSwitcher';
 import { HiMenu } from 'react-icons/hi';
 import MobileNav from './MobileNav';
+import NotificationDropdown from './Notifications/NotificationDropdown';
 
 const Header = () => {
   const pathname = usePathname();
@@ -143,26 +144,29 @@ const Header = () => {
                 )}
 
                 {status === 'authenticated' && (
-                  <DropDownItem
-                    items={[
-                      {
-                        label: (
-                          <Link
-                            href='/stats'
-                            className='block w-full font-medium text-foreground no-underline'
-                          >
-                            Watchlist Stats
-                          </Link>
-                        ),
-                        key: 'stats',
-                      },
-                      {
-                        label: <span className='font-medium text-red-500'>Log Out</span>,
-                        key: 'log-out',
-                      },
-                    ]}
-                    isProfile={true}
-                  />
+                  <div className='flex items-center gap-4'>
+                    <NotificationDropdown />
+                    <DropDownItem
+                      items={[
+                        {
+                          label: (
+                            <Link
+                              href='/stats'
+                              className='block w-full font-medium text-foreground no-underline'
+                            >
+                              Watchlist Stats
+                            </Link>
+                          ),
+                          key: 'stats',
+                        },
+                        {
+                          label: <span className='font-medium text-red-500'>Log Out</span>,
+                          key: 'log-out',
+                        },
+                      ]}
+                      isProfile={true}
+                    />
+                  </div>
                 )}
               </li>
             </ul>

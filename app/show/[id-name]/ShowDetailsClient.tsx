@@ -32,7 +32,9 @@ import {
   deleteShow as deleteShowAction,
 } from '@/app/actions/media';
 import { BiCollection } from 'react-icons/bi';
+import { BiShare } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
+import RecommendModal from '@/components/Notifications/RecommendModal';
 
 interface Props {
   showDetailsData: any;
@@ -54,6 +56,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const [isPending, startTransition] = useTransition();
 
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
+
+  const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
 
   const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
@@ -1053,6 +1057,28 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                 }
                 isOpen={isCollectionModalOpen}
                 onClose={() => setIsCollectionModalOpen(false)}
+              />
+
+              <button
+                onClick={() => setIsRecommendModalOpen(true)}
+                className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
+                title='Recommend to a Friend'
+              >
+                <BiShare size={20} />
+              </button>
+
+              <RecommendModal
+                mediaType='SHOW'
+                mediaId={showId}
+                mediaTitle={showName}
+                mediaImage={
+                  usersShow?.image ??
+                  (showDetails?.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
+                    : null)
+                }
+                isOpen={isRecommendModalOpen}
+                onClose={() => setIsRecommendModalOpen(false)}
               />
             </section>
           ))}
