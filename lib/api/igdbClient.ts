@@ -109,11 +109,12 @@ export class IGDBClient {
   }
 
   async searchGames(q: string, limit: number, page: number) {
-    const finalRes = { results: [] as any[], total_results: 0 };
+    const finalRes = { results: [] as any[], total_results: 0, page, total_pages: 0 };
 
     const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`, `search "${q}";`);
 
     finalRes.total_results = count;
+    finalRes.total_pages = Math.ceil(count / limit);
 
     const res = await postIGDB(
       `${IGDB_BASE_API_URL}/games`,
@@ -126,9 +127,10 @@ export class IGDBClient {
   }
 
   async getPopularGames(limit: number, page: number) {
-    const finalRes = { results: [] as any[], total_results: 0 };
+    const finalRes = { results: [] as any[], total_results: 0, page, total_pages: 0 };
     const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`);
     finalRes.total_results = count;
+    finalRes.total_pages = Math.ceil(count / limit);
 
     const res = await postIGDB(
       `${IGDB_BASE_API_URL}/games`,
@@ -141,9 +143,10 @@ export class IGDBClient {
   }
 
   async getTopRatedGames(limit: number, page: number) {
-    const finalRes = { results: [] as any[], total_results: 0 };
+    const finalRes = { results: [] as any[], total_results: 0, page, total_pages: 0 };
     const { count } = await postIGDB(`${IGDB_BASE_API_URL}/games/count`);
     finalRes.total_results = count;
+    finalRes.total_pages = Math.ceil(count / limit);
 
     const res = await postIGDB(
       `${IGDB_BASE_API_URL}/games`,
@@ -156,12 +159,13 @@ export class IGDBClient {
   }
 
   async getGamesByGenre(genreId: number, sortBy: string, limit: number, page: number) {
-    const finalRes = { results: [] as any[], total_results: 0 };
+    const finalRes = { results: [] as any[], total_results: 0, page, total_pages: 0 };
     const { count } = await postIGDB(
       `${IGDB_BASE_API_URL}/games/count`,
       `where genres = ${genreId};`
     );
     finalRes.total_results = count;
+    finalRes.total_pages = Math.ceil(count / limit);
 
     const res = await postIGDB(
       `${IGDB_BASE_API_URL}/games`,
