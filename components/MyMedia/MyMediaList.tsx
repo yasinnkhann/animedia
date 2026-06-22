@@ -98,11 +98,13 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
             {filteredMedias?.map((myMedia, idx) => {
               let myMediaComp: ReactElement;
               if (mediaType === 'MOVIES') {
-                myMediaComp = <MyMovieEntry key={myMedia.id} myMovie={myMedia as Movie} />;
+                myMediaComp = (
+                  <MyMovieEntry key={myMedia.id} movie={myMedia as Movie} index={idx} />
+                );
               } else if (mediaType === 'SHOWS') {
-                myMediaComp = <MyShowEntry key={myMedia.id} myShow={myMedia as Show} />;
+                myMediaComp = <MyShowEntry key={myMedia.id} myShow={myMedia as Show} index={idx} />;
               } else if (mediaType === 'GAMES') {
-                myMediaComp = <MyGameEntry key={myMedia.id} myGame={myMedia as Game} />;
+                myMediaComp = <MyGameEntry key={myMedia.id} game={myMedia as Game} index={idx} />;
               } else {
                 myMediaComp = <></>;
               }

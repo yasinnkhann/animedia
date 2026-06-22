@@ -6,33 +6,24 @@ export default function MediaCardSkeleton() {
   const { data: session } = useSession();
 
   return (
-    <tr className='animate-pulse border-b border-border'>
-      <td className='p-4 text-center align-middle'>
-        <div className='mx-auto h-6 w-8 rounded bg-muted' />
-      </td>
+    <div className='relative flex h-full min-h-[18rem] w-full flex-col overflow-hidden rounded-xl bg-card shadow-md'>
+      {/* Image Skeleton */}
+      <div className='relative aspect-[2/3] w-full animate-pulse bg-muted'>
+        {/* Rating Badge Skeleton */}
+        <div className='absolute bottom-3 left-3 h-8 w-8 rounded-full bg-background/50' />
+      </div>
 
-      <td className='grid grid-cols-[5rem_calc(100%-5rem)] grid-rows-[100%] break-words p-4'>
-        <section className='relative row-start-1 h-[7rem] w-[5rem] rounded-lg bg-muted' />
-        <section className='col-start-2 pl-4'>
-          <div className='h-5 w-3/4 rounded bg-muted' />
-          <div className='h-4 w-1/2 rounded bg-muted' />
-        </section>
-      </td>
+      {/* Content Skeleton */}
+      <div className='flex flex-1 flex-col justify-between p-3'>
+        <div className='space-y-2'>
+          {/* Title Skeleton */}
+          <div className='h-4 w-3/4 animate-pulse rounded bg-muted' />
+          <div className='h-4 w-1/2 animate-pulse rounded bg-muted' />
 
-      <td className='p-4 text-center align-middle'>
-        <div className='mx-auto h-5 w-8 rounded bg-muted' />
-      </td>
-
-      {session && (
-        <>
-          <td className='p-4 text-center align-middle'>
-            <div className='mx-auto h-5 w-8 rounded bg-muted' />
-          </td>
-          <td className='px-4 py-2 align-middle'>
-            <div className='mx-auto h-5 w-16 rounded bg-muted' />
-          </td>
-        </>
-      )}
-    </tr>
+          {/* Date Skeleton */}
+          <div className='mt-2 h-3 w-1/3 animate-pulse rounded bg-muted/80' />
+        </div>
+      </div>
+    </div>
   );
 }

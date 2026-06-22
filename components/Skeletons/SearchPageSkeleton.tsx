@@ -1,6 +1,6 @@
 'use client';
 
-import SearchResultSkeleton from './SearchResultSkeleton';
+import MediaCardSkeleton from './MediaCardSkeleton';
 
 export default function SearchPageSkeleton() {
   return (
@@ -24,9 +24,11 @@ export default function SearchPageSkeleton() {
         </section>
 
         <section className='m-4'>
-          {Array.from({ length: 10 }).map((_, idx) => (
-            <SearchResultSkeleton key={`search-loading-${idx}`} />
-          ))}
+          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+            {Array.from({ length: 10 }).map((_, idx) => (
+              <MediaCardSkeleton key={`search-loading-${idx}`} />
+            ))}
+          </div>
         </section>
       </section>
     </main>

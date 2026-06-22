@@ -8,40 +8,43 @@ import { useUserMedia } from '@/components/UserMediaProvider';
 import { IoMdClose } from 'react-icons/io';
 
 interface Props {
-  myGame: Game;
+  game: Game;
+  index: number;
 }
 
-const MyGameEntry = ({ myGame }: Props) => {
+const MyGameEntry = ({ game, index }: Props) => {
   const [gameData, setGameData] = useState<any>({
-    coverUrl: myGame.image ?? null,
-    release_date: myGame.release_date ?? null,
+    coverUrl: game.image ?? null,
+    release_date: game.release_date ?? null,
   });
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    if (!myGame.image || !myGame.release_date) {
-      getGameDetailsAction(myGame.id).then(data => {
+    if (!game.image || !game.release_date) {
+      getGameDetailsAction(game.id).then(data => {
         if (data) setGameData(data);
       });
     }
-  }, [myGame.id, myGame.image, myGame.release_date]);
+  }, [game.id, game.image, game.release_date]);
 
   return (
     <MediaCard
-      item={{ ...myGame, ...gameData }}
+      item={{ ...game, ...gameData }}
       mediaType='GAME'
-      userRating={myGame.rating}
+      variant='responsive'
+      userRating={game.rating}
+      index={index}
       onRemove={async () => {
         const previousData = getUserMediaCache();
         mutateUserMediaCache((old: any) => {
           if (!old) return old;
           return {
             ...old,
-            userGames: old.userGames.filter((g: Game) => g.id !== myGame.id),
+            userGames: old.userGames.filter((g: Game) => g.id !== game.id),
           };
         });
         try {
-          await deleteGame(myGame.id);
+          await deleteGame(game.id);
         } catch (err) {
           mutateUserMediaCache(() => previousData);
         }

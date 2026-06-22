@@ -8,40 +8,44 @@ import { useUserMedia } from '@/components/UserMediaProvider';
 import { IoMdClose } from 'react-icons/io';
 
 interface Props {
-  myMovie: Movie;
+  movie: Movie;
+  index: number;
 }
 
-const MyMovieEntry = ({ myMovie }: Props) => {
+const MyMovieEntry = ({ movie, index }: Props) => {
   const [movieData, setMovieData] = useState<any>({
-    poster_path: myMovie.image ?? null,
-    release_date: myMovie.release_date ?? null,
+    poster_path: movie.image ?? null,
+    release_date: movie.release_date ?? null,
   });
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    if (!myMovie.image || !myMovie.release_date) {
-      getMovieDetailsAction(myMovie.id).then(data => {
+    if (!movie.image || !movie.release_date) {
+      getMovieDetailsAction(movie.id).then(data => {
         if (data) setMovieData(data);
       });
     }
-  }, [myMovie.id, myMovie.image, myMovie.release_date]);
+  }, [movie.id, movie.image, movie.release_date]);
 
   return (
     <MediaCard
-      item={{ ...myMovie, ...movieData }}
+      item={{ ...movie, ...movieData }}
       mediaType='MOVIE'
-      userRating={myMovie.rating}
+      variant='responsive'
+      userStatus={movie.status}
+      userRating={movie.rating}
+      index={index}
       onRemove={async () => {
         const previousData = getUserMediaCache();
         mutateUserMediaCache((old: any) => {
           if (!old) return old;
           return {
             ...old,
-            userMovies: old.userMovies.filter((m: Movie) => m.id !== myMovie.id),
+            userMovies: old.userMovies.filter((m: Movie) => m.id !== movie.id),
           };
         });
         try {
-          await deleteMovie(myMovie.id);
+          await deleteMovie(movie.id);
         } catch (err) {
           mutateUserMediaCache(() => previousData);
         }

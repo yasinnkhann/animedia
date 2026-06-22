@@ -17,7 +17,13 @@ const MediaCastHorizontalScroller = ({ items }: Props) => {
       keyExtractor={item => item.id}
       scrollContainerClassName={`${heightClass} !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl`}
       renderItem={(item, _idx, dragging) => (
-        <MediaCard item={item} mediaType='PERSON' dragging={dragging} variant='fixed' />
+        <MediaCard
+          item={item}
+          mediaType='PERSON'
+          dragging={dragging}
+          variant='fixed'
+          index={_idx}
+        />
       )}
     />
   );

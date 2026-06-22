@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useMemo, useState } from 'react';
-import SearchBar from '@/components/Search/SearchBar';
-import SearchResult from '@/components/Search/SearchResult';
-import SearchResultSkeleton from '@/components/Skeletons/SearchResultSkeleton';
+import SearchBar from '@components/Search/SearchBar';
+import MediaCard from '@/components/MediaCard/MediaCard';
+import MediaCardSkeleton from '@/components/Skeletons/MediaCardSkeleton';
+import { CommonMethods } from '@/utils/CommonMethods';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -195,72 +196,95 @@ export default function SearchClient({
   }, [q]);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+    <main className='mt-[calc(var(--header-height-mobile)+1rem)] px-4 sm:px-10 lg:px-20'>
       {searchedMoviesData?.searchedMovies &&
         searchedShowsData?.searchedShows &&
         searchedPeopleData?.searchedPeople && (
           <>
-            <div className='relative z-[999]'>
+            <div className='relative z-[999] mb-8'>
               <SearchBar ref={searchBarRef} />
             </div>
-            <section className='grid grid-cols-[20%_80%]'>
-              <section className='m-4 flex flex-col items-center'>
-                <div className='mb-4 w-full'>
-                  <h3>Search Results</h3>
+            <section className='flex flex-col gap-8 md:flex-row'>
+              {/* Sidebar */}
+              <aside className='w-full flex-shrink-0 md:w-64'>
+                <div className='sticky top-[calc(var(--header-height-mobile)+2rem)] rounded-xl border border-border bg-card/50 p-6 shadow-lg backdrop-blur-md'>
+                  <h3 className='mb-6 text-xl font-bold text-foreground'>Search Results</h3>
+                  <ul className='flex flex-col gap-2'>
+                    {[
+                      {
+                        id: 'movies',
+                        label: 'Movies',
+                        count: searchedMoviesData.searchedMovies.total_results,
+                      },
+                      {
+                        id: 'shows',
+                        label: 'Shows',
+                        count: searchedShowsData.searchedShows.total_results,
+                      },
+                      {
+                        id: 'games',
+                        label: 'Games',
+                        count: searchedGamesData?.searchedGames.total_results ?? 0,
+                      },
+                      {
+                        id: 'people',
+                        label: 'People',
+                        count: searchedPeopleData.searchedPeople.total_results,
+                      },
+                    ].map(cat => {
+                      const isActive = activeCategory === cat.id;
+                      return (
+                        <li
+                          key={cat.id}
+                          onClick={() => {
+                            setManualCategory({ q, category: cat.id as TSearchResults });
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className={`flex cursor-pointer items-center justify-between rounded-lg px-4 py-3 font-medium transition-all duration-200 ${
+                            isActive
+                              ? 'text-primary-foreground bg-primary shadow-md'
+                              : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                          }`}
+                        >
+                          <span>{cat.label}</span>
+                          <span
+                            className={`flex h-6 items-center justify-center rounded-full px-2.5 text-xs font-semibold ${
+                              isActive
+                                ? 'bg-primary-foreground/20 text-primary-foreground'
+                                : 'bg-muted text-muted-foreground'
+                            }`}
+                          >
+                            {cat.count}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
-                <ul className='w-full'>
-                  {[
-                    {
-                      id: 'movies',
-                      label: 'Movies',
-                      count: searchedMoviesData.searchedMovies.total_results,
-                    },
-                    {
-                      id: 'shows',
-                      label: 'Shows',
-                      count: searchedShowsData.searchedShows.total_results,
-                    },
-                    {
-                      id: 'games',
-                      label: 'Games',
-                      count: searchedGamesData?.searchedGames.total_results ?? 0,
-                    },
-                    {
-                      id: 'people',
-                      label: 'People',
-                      count: searchedPeopleData.searchedPeople.total_results,
-                    },
-                  ].map(cat => (
-                    <li
-                      key={cat.id}
-                      onClick={() => setManualCategory({ q, category: cat.id as TSearchResults })}
-                      className='flex w-full cursor-pointer items-center justify-between py-1'
-                    >
-                      <span className={`${activeCategory === cat.id ? 'underline' : ''}`}>
-                        {cat.label}
-                      </span>
-                      <span>{cat.count}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+              </aside>
 
-              <section className='m-4'>
-                {activeSearchPayload?.results.map((result: any, idx: number) => (
-                  <SearchResult
-                    key={`${result.id}-${idx}`}
-                    result={result}
-                    searchedResultType={
-                      searchResultsType.replace(/s$/, '') as 'movie' | 'show' | 'game' | 'person'
-                    }
-                    userMatchedMedias={userMatchedMedias as Movie[] | Show[] | Game[]}
-                  />
-                ))}
+              {/* Main Results Grid */}
+              <section className='flex-1'>
+                <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+                  {activeSearchPayload?.results.map((result: any, idx: number) => {
+                    const mediaType = searchResultsType.replace(/s$/, '').toUpperCase() as any;
+                    return (
+                      <MediaCard
+                        key={`${result.id}-${idx}`}
+                        item={result}
+                        mediaType={mediaType}
+                        variant='responsive'
+                        index={idx}
+                        userStatus={CommonMethods.getUserStatusFromMedia(userMatchedMedias, result)}
+                      />
+                    );
+                  })}
 
-                {activeQuery.isFetchingNextPage &&
-                  Array.from({ length: 10 }).map((_, idx) => (
-                    <SearchResultSkeleton key={`skeleton-${idx}`} />
-                  ))}
+                  {activeQuery.isFetchingNextPage &&
+                    Array.from({ length: 10 }).map((_, idx) => (
+                      <MediaCardSkeleton key={`skeleton-${idx}`} />
+                    ))}
+                </div>
 
                 <div className='my-8 flex justify-center'>
                   <div ref={ref} className='h-1 w-full'></div>

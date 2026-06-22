@@ -5,6 +5,7 @@ import Link from 'next/link';
 import RoundProgressBar from '@/components/RoundProgressBar';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { IoMdClose } from 'react-icons/io';
+import { motion } from 'framer-motion';
 
 export type MediaCardVariant = 'fixed' | 'responsive';
 export type MediaType = 'MOVIE' | 'SHOW' | 'GAME' | 'PERSON';
@@ -15,6 +16,7 @@ interface MediaCardProps {
   variant?: MediaCardVariant;
   dragging?: boolean;
   priority?: boolean;
+  index?: number;
 
   userStatus?: string | null;
   userRating?: number | null;
@@ -28,6 +30,7 @@ export default function MediaCard({
   variant = 'responsive',
   dragging = false,
   priority = false,
+  index = 0,
   userStatus,
   userRating,
   onRemove,
@@ -111,7 +114,12 @@ export default function MediaCard({
   };
 
   return (
-    <div className={containerClasses}>
+    <motion.div
+      className={containerClasses}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut', delay: Math.min(index * 0.05, 0.5) }}
+    >
       <div className={imageWrapperClasses}>
         <Link
           href={detailsRoute}
@@ -136,8 +144,8 @@ export default function MediaCard({
           />
 
           {!onRemove && (
-            <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
-              <div className='mb-4 translate-y-4 rounded-full bg-primary/90 px-4 py-1 text-sm font-semibold text-white opacity-0 shadow-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
+            <div className='absolute inset-0 flex flex-col items-center justify-end rounded-lg bg-black/40 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100'>
+              <div className='mb-6 translate-y-4 rounded-full border border-white/30 bg-white/20 px-6 py-2 text-sm font-semibold text-white opacity-0 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
                 {isPerson && item.type !== 'GameCharacter' ? 'View Profile' : 'View Details'}
               </div>
             </div>
@@ -177,7 +185,7 @@ export default function MediaCard({
       {variant === 'fixed' ? (
         <div className='relative flex w-full flex-wrap content-start whitespace-normal pt-2'>
           {!isPerson && (
-            <div className='relative bottom-[1.5rem] left-2 h-[2.5rem] w-[2.5rem]'>
+            <div className='relative bottom-[1.5rem] left-2 h-[2.5rem] w-[2.5rem] rounded-full border border-white/10 bg-background/60 shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md dark:border-white/5'>
               <RoundProgressBar percentageVal={ratingVal} />
             </div>
           )}
@@ -206,7 +214,7 @@ export default function MediaCard({
       ) : (
         <div className='relative flex w-full flex-col pt-1'>
           {!isPerson && (
-            <div className='absolute -top-[2rem] left-2 h-[2.5rem] w-[2.5rem] rounded-full bg-background shadow-sm'>
+            <div className='absolute -top-[2rem] left-2 h-[2.5rem] w-[2.5rem] rounded-full border border-white/10 bg-background/60 shadow-[0_4px_12px_rgba(0,0,0,0.5)] backdrop-blur-md dark:border-white/5'>
               <RoundProgressBar percentageVal={ratingVal} />
             </div>
           )}
@@ -222,6 +230,6 @@ export default function MediaCard({
           </Link>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

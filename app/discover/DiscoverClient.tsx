@@ -221,6 +221,7 @@ export default function DiscoverClient() {
                   item={{ ...item.data, mediaType: item.type.toLowerCase() }}
                   dragging={dragging}
                   variant='fixed'
+                  index={idx}
                   userStatus={CommonMethods.getUserStatusFromMedia(
                     getMatchedMedias(item.type) as any,
                     item.data

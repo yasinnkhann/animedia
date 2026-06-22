@@ -9,9 +9,10 @@ import { IoMdClose } from 'react-icons/io';
 
 interface Props {
   myShow: Show;
+  index: number;
 }
 
-const MyShowEntry = ({ myShow }: Props) => {
+const MyShowEntry = ({ myShow, index }: Props) => {
   const [showData, setShowData] = useState<any>({
     poster_path: myShow.image ?? null,
     first_air_date: myShow.release_date ?? null,
@@ -33,6 +34,7 @@ const MyShowEntry = ({ myShow }: Props) => {
         item={{ ...myShow, ...showData }}
         mediaType='SHOW'
         userRating={myShow.rating}
+        index={index}
         onRemove={async () => {
           const previousData = getUserMediaCache();
           mutateUserMediaCache((old: any) => {

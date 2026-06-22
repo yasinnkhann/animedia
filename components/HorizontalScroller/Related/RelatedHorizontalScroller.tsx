@@ -91,6 +91,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
             dragging={dragging}
             variant='fixed'
             userStatus={userStatus}
+            index={_idx}
           />
         );
       }}

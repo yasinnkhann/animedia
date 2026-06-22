@@ -12,7 +12,7 @@ const PeopleList = ({ results, isFetchingNextPage }: Props) => {
     <section className='mb-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
       {results.map((person: any, idx: number) => (
         <section key={`${person.id}-${idx}`}>
-          <MediaCard item={person} mediaType='PERSON' variant='responsive' />
+          <MediaCard item={person} mediaType='PERSON' variant='responsive' index={idx} />
         </section>
       ))}
       {isFetchingNextPage &&

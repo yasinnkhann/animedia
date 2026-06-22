@@ -53,7 +53,7 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
 
             return (
               <Fragment key={`${media.id}-${idx}`}>
-                <MediaCard item={media} mediaType={mediaType} variant='responsive' />
+                <MediaCard item={media} mediaType={mediaType} variant='responsive' index={idx} />
               </Fragment>
             );
           })}

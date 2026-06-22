@@ -58,6 +58,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
             variant='fixed'
             priority={_idx < 5}
             userStatus={userStatus}
+            index={_idx}
           />
         );
       }}
