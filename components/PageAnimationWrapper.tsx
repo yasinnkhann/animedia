@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 export default function PageAnimationWrapper({
   children,
@@ -9,6 +10,10 @@ export default function PageAnimationWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   return (
     <motion.main
       className={className}
