@@ -52,6 +52,7 @@ model User {
   following     Follows[] @relation("follower")
   activities    Activity[]
   reviews       Review[]
+  collections   Collection[]
 }
 
 model Follows {
@@ -170,4 +171,32 @@ model Review {
 
   @@index([userId])
   @@index([mediaType, mediaId])
+}
+
+model Collection {
+  id          String           @id @default(cuid())
+  userId      String           @map("user_id")
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  isPublic    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  items       CollectionItem[]
+
+  @@index([userId])
+}
+
+model CollectionItem {
+  id            String     @id @default(cuid())
+  collectionId  String     @map("collection_id")
+  collection    Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  mediaType     MediaType
+  mediaId       String
+  mediaTitle    String
+  mediaImage    String?
+  addedAt       DateTime   @default(now())
+
+  @@unique([collectionId, mediaType, mediaId])
+  @@index([collectionId])
 }

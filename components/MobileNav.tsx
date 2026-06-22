@@ -205,6 +205,13 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   My Games
                 </Link>
                 <Link
+                  href='/collections'
+                  onClick={onClose}
+                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
+                >
+                  My Collections
+                </Link>
+                <Link
                   href='/users'
                   onClick={onClose}
                   className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'

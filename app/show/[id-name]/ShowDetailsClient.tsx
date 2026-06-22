@@ -31,6 +31,8 @@ import {
   updateShow as updateShowAction,
   deleteShow as deleteShowAction,
 } from '@/app/actions/media';
+import { BiCollection } from 'react-icons/bi';
+import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 
 interface Props {
   showDetailsData: any;
@@ -50,6 +52,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const [currSeasonEpInput, setCurrSeasonEp] = useState<ICurrentSeasonEpisode | null>(null);
 
   const [isPending, startTransition] = useTransition();
+
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
@@ -1028,6 +1032,28 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   </form>
                 </>
               )}
+
+              <button
+                onClick={() => setIsCollectionModalOpen(true)}
+                className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
+                title='Add to Collection'
+              >
+                <BiCollection size={20} />
+              </button>
+
+              <AddToCollectionModal
+                mediaType='SHOW'
+                mediaId={showId}
+                mediaTitle={showName}
+                mediaImage={
+                  usersShow?.image ??
+                  (showDetails?.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
+                    : null)
+                }
+                isOpen={isCollectionModalOpen}
+                onClose={() => setIsCollectionModalOpen(false)}
+              />
             </section>
           ))}
 

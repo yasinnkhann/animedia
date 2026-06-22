@@ -77,7 +77,7 @@ const Header = () => {
             </ul>
             <ul
               id='right-section'
-              className='!mr-4 hidden !w-[30rem] items-center !justify-around lg:!flex'
+              className='!mr-4 hidden !w-[38rem] items-center !justify-around lg:!flex'
             >
               <li
                 className={`!flex !w-full !items-center ${
@@ -90,6 +90,9 @@ const Header = () => {
                     <DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
                     <Link href='/my-games/wishlist' className='cursor-pointer no-underline'>
                       <p className='text-base'>My Games</p>
+                    </Link>
+                    <Link href='/collections' className='cursor-pointer no-underline'>
+                      <p className='text-base'>My Collections</p>
                     </Link>
                     <Link href='/users' className='cursor-pointer no-underline'>
                       <p className='text-base'>Find Friends</p>

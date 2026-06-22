@@ -7,17 +7,21 @@ import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { addMovie, updateMovie, deleteMovie } from '@/app/actions/media';
+import { BiCollection } from 'react-icons/bi';
+import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 
 interface Props {
   movieId: string;
   movieTitle: string;
+  movieImage: string | null;
 }
 
-export default function MovieActions({ movieId, movieTitle }: Props) {
+export default function MovieActions({ movieId, movieTitle, movieImage }: Props) {
   const { data: session, status } = useSession();
   const [watchStatusInput, setWatchStatus] = useState<WatchStatus | 'NOT_WATCHING' | null>(null);
   const [ratingInput, setRating] = useState<number | string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const { userMovies, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
@@ -170,6 +174,23 @@ export default function MovieActions({ movieId, movieTitle }: Props) {
         </select>
         <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
       </div>
+
+      <button
+        onClick={() => setIsCollectionModalOpen(true)}
+        className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
+        title='Add to Collection'
+      >
+        <BiCollection size={20} />
+      </button>
+
+      <AddToCollectionModal
+        mediaType='MOVIE'
+        mediaId={movieId}
+        mediaTitle={movieTitle}
+        mediaImage={usersMovie?.image ?? movieImage}
+        isOpen={isCollectionModalOpen}
+        onClose={() => setIsCollectionModalOpen(false)}
+      />
     </section>
   );
 }

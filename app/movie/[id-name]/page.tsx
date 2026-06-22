@@ -92,7 +92,15 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
           </p>
         </section>
 
-        <MovieActions movieId={movieId} movieTitle={movieTitle} />
+        <MovieActions
+          movieId={movieId}
+          movieTitle={movieTitle}
+          movieImage={
+            movieDetails?.poster_path
+              ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+              : null
+          }
+        />
 
         <section className='pb-32'>
           <h1>{movieDetails?.title}</h1>
