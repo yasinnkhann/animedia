@@ -27,15 +27,35 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
   return (
     <section className='w-full px-4 sm:px-10 md:px-20 lg:px-40'>
       <section className='flex flex-col pb-4'>
-        <div className='relative mt-8 flex h-[3rem] items-center justify-center rounded-t-lg bg-muted/30'>
-          <h4 className='text-center text-primary'>
-            {adjustedStatus ? `${adjustedStatus} ${mediaType}` : mediaType}
-          </h4>
-          <h4 className='ml-2 text-foreground'>{myMedias.length}</h4>
+        <div className='mb-6 mt-8 flex flex-col items-center justify-between gap-4 sm:flex-row'>
+          <div className='flex items-center gap-3'>
+            <h1 className='text-2xl font-bold text-foreground'>
+              {adjustedStatus ? `${adjustedStatus} ${mediaType}` : mediaType}
+            </h1>
+            <span className='flex h-6 items-center justify-center rounded-full bg-primary/10 px-2.5 text-sm font-semibold text-primary'>
+              {myMedias.length}
+            </span>
+          </div>
+
+          {/* Search Filter */}
+          {myMedias.length > 0 && (
+            <div className='relative w-full sm:w-72'>
+              <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+                <TbSearch className='text-muted-foreground' size={18} />
+              </div>
+              <input
+                type='text'
+                className='block w-full rounded-full border border-border bg-card p-2 pl-10 text-sm text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary'
+                placeholder={`Search ${mediaType.toLowerCase()}...`}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+            </div>
+          )}
         </div>
 
         {mediaType !== 'GAMES' && (
-          <div className='mb-6 mt-4 flex flex-wrap justify-center gap-2 sm:justify-start'>
+          <div className='mb-6 flex flex-wrap justify-center gap-2 sm:justify-start'>
             {[
               { label: 'Watching', value: 'watching' },
               { label: 'Completed', value: 'completed' },
@@ -60,22 +80,6 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
                 </Link>
               );
             })}
-          </div>
-        )}
-
-        {/* Search Filter */}
-        {myMedias.length > 0 && (
-          <div className='relative mb-6 mt-4 w-full sm:w-96'>
-            <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-              <TbSearch className='text-muted-foreground' size={20} />
-            </div>
-            <input
-              type='text'
-              className='block w-full rounded-lg border border-border bg-card p-2.5 pl-10 text-sm text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary'
-              placeholder={`Search in your ${mediaType.toLowerCase()}...`}
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
           </div>
         )}
 
