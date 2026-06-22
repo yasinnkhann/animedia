@@ -1,10 +1,7 @@
 'use client';
 
 import { Fragment } from 'react';
-import MovieCard from './MovieCard';
-import ShowCard from './ShowCard';
-import GameCard from './GameCard';
-import MediaCardSkeleton from '../Skeletons/MediaCardSkeleton';
+import MediaCard from '../MediaCard/MediaCard';
 import { RESULTS_PER_PAGE } from '../../utils/constants';
 import { useSession } from 'next-auth/react';
 interface Props {
@@ -25,71 +22,48 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
         <h3 className='mb-2 ml-4 truncate whitespace-nowrap text-lg lg:text-xl'>
           {title.split('_').join(' ')}
         </h3>
-        <div className='overflow-x-auto'>
-          <table className='w-full table-auto text-left text-sm sm:text-base'>
-            <thead>
-              <tr className='border-b border-border bg-muted/20 text-muted-foreground'>
-                <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                  Rank
-                </th>
-                <th className='px-4 py-4 text-xs font-semibold uppercase tracking-wider'>
-                  {title.toLowerCase().includes('movie') ? 'Title' : 'Name'}
-                </th>
-                <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                  Rating
-                </th>
-                {session && (
-                  <>
-                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                      My Rating
-                    </th>
+        <div className='mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+          {results.map((media: any, idx: number) => {
+            let isMovie = false;
+            let isShow = false;
+            let isGame = false;
+            let mediaType: 'MOVIE' | 'SHOW' | 'GAME' | 'PERSON' = 'MOVIE';
 
-                    <th className='w-1/6 px-4 py-4 text-center text-xs font-semibold uppercase tracking-wider'>
-                      {title.toLowerCase().includes('game') ? 'In Wishlist' : 'Status'}
-                    </th>
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody className='divide-y divide-border'>
-              {results.map((media: any, idx: number) => {
-                let mediaComp = <></>;
+            if (media.media_type) {
+              isMovie = media.media_type === 'movie';
+              isShow = media.media_type === 'tv';
+              isGame = media.media_type === 'game';
+              if (isMovie) mediaType = 'MOVIE';
+              else if (isShow) mediaType = 'SHOW';
+              else if (isGame) mediaType = 'GAME';
+            } else {
+              isMovie = 'title' in media;
+              isGame =
+                'released' in media ||
+                'background_image' in media ||
+                'playtime' in media ||
+                'first_release_date' in media ||
+                'cover' in media ||
+                'coverUrl' in media;
+              isShow = 'name' in media && !isGame;
+              if (isMovie) mediaType = 'MOVIE';
+              else if (isShow) mediaType = 'SHOW';
+              else if (isGame) mediaType = 'GAME';
+            }
 
-                let isMovie = false;
-                let isShow = false;
-                let isGame = false;
-
-                if (media.media_type) {
-                  isMovie = media.media_type === 'movie';
-                  isShow = media.media_type === 'tv';
-                  isGame = media.media_type === 'game';
-                } else {
-                  isMovie = 'title' in media;
-                  isGame =
-                    'released' in media ||
-                    'background_image' in media ||
-                    'playtime' in media ||
-                    'first_release_date' in media ||
-                    'cover' in media ||
-                    'coverUrl' in media;
-                  isShow = 'name' in media && !isGame;
-                }
-
-                if (isMovie) {
-                  mediaComp = <MovieCard movie={media} rank={idx + 1} />;
-                } else if (isShow) {
-                  mediaComp = <ShowCard show={media} rank={idx + 1} />;
-                } else if (isGame) {
-                  mediaComp = <GameCard game={media} rank={idx + 1} />;
-                }
-                return <Fragment key={`${media.id}-${idx}`}>{mediaComp}</Fragment>;
-              })}
-              {isFetchingNextPage &&
-                Array.from({ length: 20 }).map((_, idx) => (
-                  <MediaCardSkeleton key={`skeleton-${idx}`} />
-                ))}
-            </tbody>
-          </table>
+            return (
+              <Fragment key={`${media.id}-${idx}`}>
+                <MediaCard item={media} mediaType={mediaType} variant='responsive' />
+              </Fragment>
+            );
+          })}
+          {isFetchingNextPage &&
+            Array.from({ length: 20 }).map((_, idx) => (
+              <div
+                key={`skeleton-${idx}`}
+                className='aspect-[2/3] w-full animate-pulse rounded-xl bg-muted/50'
+              ></div>
+            ))}
         </div>
       </section>
     </section>

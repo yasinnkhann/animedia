@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import HomeCard from './HomeCard';
+import { CommonMethods } from '../../../utils/CommonMethods';
+import MediaCard from '../../MediaCard/MediaCard';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import { useUserMedia } from '../../UserMediaProvider';
@@ -48,15 +49,18 @@ const HomeHorizontalScroller = ({ items }: Props) => {
     <BaseHorizontalScroller<any>
       items={items}
       keyExtractor={item => item.id}
-      renderItem={(item, _idx, dragging) => (
-        <HomeCard
-          itemId={item.id}
-          item={item}
-          dragging={dragging}
-          userMatchedMedias={userMatchedMedias}
-          priority={_idx < 5}
-        />
-      )}
+      renderItem={(item, _idx, dragging) => {
+        const userStatus = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
+        return (
+          <MediaCard
+            item={item}
+            dragging={dragging}
+            variant='fixed'
+            priority={_idx < 5}
+            userStatus={userStatus}
+          />
+        );
+      }}
     />
   );
 };

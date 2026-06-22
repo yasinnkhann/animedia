@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import RelatedCard from './RelatedCard';
+import MediaCard from '../../MediaCard/MediaCard';
+import { CommonMethods } from '../../../utils/CommonMethods';
 import { IRelatedMedia } from '@ts/interfaces';
 import { TContent } from '@ts/types';
 import { ExtractStrict } from '@ts/types';
@@ -75,14 +76,24 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
       items={items}
       keyExtractor={item => item.id}
       scrollContainerClassName='!h-[22rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
-      renderItem={(item, _idx, dragging) => (
-        <RelatedCard
-          itemId={item.id}
-          item={item}
-          dragging={dragging}
-          userMatchedMedias={userMatchedMedias}
-        />
-      )}
+      renderItem={(item, _idx, dragging) => {
+        const userStatus = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
+        const mappedItem = {
+          ...item,
+          media_type: item.type === 'show' ? 'tv' : item.type,
+          title: item.name, // MediaCard expects title for movies
+          poster_path: item.imagePath, // MediaCard checks poster_path or profile_path or coverUrl
+          coverUrl: item.imagePath,
+        };
+        return (
+          <MediaCard
+            item={mappedItem}
+            dragging={dragging}
+            variant='fixed'
+            userStatus={userStatus}
+          />
+        );
+      }}
     />
   );
 };

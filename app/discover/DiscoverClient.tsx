@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useUserMedia } from '@/components/UserMediaProvider';
-import HomeCard from '@/components/HorizontalScroller/Home/HomeCard';
+import MediaCard from '@/components/MediaCard/MediaCard';
+import { CommonMethods } from '@/utils/CommonMethods';
 import { BaseHorizontalScroller } from '@/components/HorizontalScroller/BaseHorizontalScroller';
 import { FaRobot, FaSearch, FaFilm, FaTv, FaGamepad } from 'react-icons/fa';
 
@@ -216,11 +217,14 @@ export default function DiscoverClient() {
             keyExtractor={item => String(item.data.id)}
             renderItem={(item, idx, dragging) => (
               <div className='px-2'>
-                <HomeCard
+                <MediaCard
                   item={{ ...item.data, mediaType: item.type.toLowerCase() }}
                   dragging={dragging}
-                  userMatchedMedias={getMatchedMedias(item.type) as any}
-                  itemId={String(item.data.id)}
+                  variant='fixed'
+                  userStatus={CommonMethods.getUserStatusFromMedia(
+                    getMatchedMedias(item.type) as any,
+                    item.data
+                  )}
                 />
               </div>
             )}

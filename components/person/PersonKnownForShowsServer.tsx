@@ -17,6 +17,8 @@ export default async function PersonKnownForShowsServer({ personId }: { personId
           name: show.name,
           popularity: show.popularity ?? 0,
           type: 'show',
+          first_air_date: show.first_air_date,
+          vote_average: show.vote_average,
         }))}
         mediaType={'shows'}
       />

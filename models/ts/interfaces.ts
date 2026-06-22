@@ -26,6 +26,10 @@ export interface IRelatedMedia {
   name: string;
   popularity: number;
   type: 'movie' | 'show' | 'game';
+  release_date?: string;
+  first_air_date?: string;
+  vote_average?: number;
+  rating?: number;
 }
 
 export interface ICast {

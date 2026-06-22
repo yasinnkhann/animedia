@@ -17,6 +17,8 @@ export default async function MovieRelatedServer({ movieId }: { movieId: string 
           name: movie.title,
           popularity: movie.popularity ?? 0,
           type: 'movie',
+          release_date: movie.release_date,
+          vote_average: movie.vote_average,
         }))}
         mediaType={'movies'}
       />

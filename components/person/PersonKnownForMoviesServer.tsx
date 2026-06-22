@@ -17,6 +17,8 @@ export default async function PersonKnownForMoviesServer({ personId }: { personI
           name: movie.title,
           popularity: movie.popularity ?? 0,
           type: 'movie',
+          release_date: movie.release_date,
+          vote_average: movie.vote_average,
         }))}
         mediaType={'movies'}
       />

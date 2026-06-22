@@ -23,6 +23,8 @@ export default async function PersonCreditsServer({ personId }: { personId: stri
         name: castObj.title,
         popularity: castObj.popularity,
         type: 'movie',
+        release_date: castObj.release_date,
+        vote_average: castObj.vote_average,
       });
     }
   }
@@ -44,6 +46,8 @@ export default async function PersonCreditsServer({ personId }: { personId: stri
         name: castObj.name,
         popularity: castObj.popularity,
         type: 'show',
+        first_air_date: castObj.first_air_date,
+        vote_average: castObj.vote_average,
       });
     }
   }
