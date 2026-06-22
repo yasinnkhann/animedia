@@ -1,6 +1,9 @@
-import { Fragment, type ReactElement } from 'react';
+'use client';
+
+import { Fragment, useState, type ReactElement } from 'react';
 import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
 import { BsInbox } from 'react-icons/bs';
+import { TbSearch } from 'react-icons/tb';
 import Link from 'next/link';
 import MyMovieEntry from './MyMovieEntry';
 import MyShowEntry from './MyShowEntry';
@@ -14,7 +17,12 @@ interface Props {
 }
 
 const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
+  const [searchQuery, setSearchQuery] = useState('');
   const adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
+
+  const filteredMedias = myMedias.filter(media =>
+    media.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <section className='w-full px-4 sm:px-10 md:px-20 lg:px-40'>
@@ -55,7 +63,23 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
           </div>
         )}
 
-        {myMedias.length === 0 ? (
+        {/* Search Filter */}
+        {myMedias.length > 0 && (
+          <div className='relative mb-6 mt-4 w-full sm:w-96'>
+            <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+              <TbSearch className='text-muted-foreground' size={20} />
+            </div>
+            <input
+              type='text'
+              className='block w-full rounded-lg border border-border bg-card p-2.5 pl-10 text-sm text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary'
+              placeholder={`Search in your ${mediaType.toLowerCase()}...`}
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+        )}
+
+        {filteredMedias.length === 0 ? (
           <div className='flex flex-col items-center justify-center rounded-lg border border-border bg-card py-20 text-center shadow-sm'>
             <BsInbox className='mb-4 text-6xl text-muted-foreground opacity-50' />
             <h3 className='mb-2 text-xl font-semibold text-foreground'>
@@ -66,45 +90,21 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
             </p>
           </div>
         ) : (
-          <table className='block w-full sm:table'>
-            <thead className='hidden sm:table-header-group'>
-              <tr className='border-b border-border text-muted-foreground'>
-                <th className='w-[5rem] p-4 font-medium'>#</th>
-
-                <th className='p-4 text-left font-medium'>Title</th>
-
-                <th className='w-[7rem] p-4 font-medium'>My Rating</th>
-
-                {mediaType === 'SHOWS' && <th className='w-[8rem] p-4 font-medium'>Current Ep.</th>}
-
-                {mediaType === 'GAMES' && <th className='w-[8rem] p-4 font-medium'>In Wishlist</th>}
-
-                <th className='w-[7rem] p-4 font-medium'>Remove</th>
-              </tr>
-            </thead>
-
-            <tbody className='flex flex-col gap-4 divide-y divide-border p-4 sm:table-row-group sm:gap-0 sm:divide-y-0 sm:divide-border sm:border-b sm:border-border sm:p-0'>
-              {myMedias?.map((myMedia, idx) => {
-                let myMediaComp: ReactElement;
-                if (mediaType === 'MOVIES') {
-                  myMediaComp = (
-                    <MyMovieEntry key={myMedia.id} myMovie={myMedia as Movie} count={idx + 1} />
-                  );
-                } else if (mediaType === 'SHOWS') {
-                  myMediaComp = (
-                    <MyShowEntry key={myMedia.id} myShow={myMedia as Show} count={idx + 1} />
-                  );
-                } else if (mediaType === 'GAMES') {
-                  myMediaComp = (
-                    <MyGameEntry key={myMedia.id} myGame={myMedia as Game} count={idx + 1} />
-                  );
-                } else {
-                  myMediaComp = <></>;
-                }
-                return <Fragment key={myMedia.id}>{myMediaComp}</Fragment>;
-              })}
-            </tbody>
-          </table>
+          <div className='mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+            {filteredMedias?.map((myMedia, idx) => {
+              let myMediaComp: ReactElement;
+              if (mediaType === 'MOVIES') {
+                myMediaComp = <MyMovieEntry key={myMedia.id} myMovie={myMedia as Movie} />;
+              } else if (mediaType === 'SHOWS') {
+                myMediaComp = <MyShowEntry key={myMedia.id} myShow={myMedia as Show} />;
+              } else if (mediaType === 'GAMES') {
+                myMediaComp = <MyGameEntry key={myMedia.id} myGame={myMedia as Game} />;
+              } else {
+                myMediaComp = <></>;
+              }
+              return <Fragment key={myMedia.id}>{myMediaComp}</Fragment>;
+            })}
+          </div>
         )}
       </section>
     </section>
