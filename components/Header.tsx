@@ -179,6 +179,7 @@ const Header = () => {
       </header>
       {isSearchBtnClicked && (
         <motion.div
+          className='relative z-[998]'
           initial={{ y: 0 }}
           animate={{ y: 75 }}
           transition={{
