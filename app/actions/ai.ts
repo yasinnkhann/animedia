@@ -1,14 +1,14 @@
 'use server';
 
 import { createGroq } from '@ai-sdk/groq';
-import { generateText } from 'ai';
+import { streamText } from 'ai';
 import { tmdbClient, igdbClient } from '@/lib/api';
 
-export async function recommendMedia(
+export async function* recommendMediaStream(
   prompt: string,
   mediaType: 'MOVIE' | 'SHOW' | 'GAME',
   excludedTitles: string[] = []
-): Promise<Array<{ type: string; data: any }>> {
+): AsyncGenerator<{ type: string; data: any }, void, unknown> {
   if (!process.env.GROQ_API_KEY) {
     throw new Error('GROQ_API_KEY is not set in environment variables.');
   }
@@ -37,62 +37,45 @@ IMPORTANT: You must return ONLY a JSON object exactly matching this structure, w
   ]
 }`;
 
-  const { text } = await generateText({
+  const { textStream } = streamText({
     model: groq('llama-3.1-8b-instant'),
     prompt: chatPrompt,
   });
 
-  // Extract just the JSON part in case Llama wrapped it in markdown backticks
-  let cleanText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+  const fetchedTitles = new Set<string>();
+  let fullText = '';
 
-  // Remove bad control characters (like unescaped newlines or tabs) that break JSON.parse
-  cleanText = cleanText.replace(/[\u0000-\u001F]/g, '');
+  for await (const chunk of textStream) {
+    fullText += chunk;
 
-  let titles: string[] = [];
-  try {
-    const object = JSON.parse(cleanText);
-    titles = object.recommendations.map((r: any) => r.title);
-  } catch (e) {
-    console.warn(
-      'JSON parsing failed due to Llama hallucination, falling back to regex extraction',
-      e
-    );
     const regex = /"title"\s*:\s*"([^"]+)"/gi;
     let match;
-    while ((match = regex.exec(text)) !== null) {
-      titles.push(match[1]);
-    }
-  }
+    while ((match = regex.exec(fullText)) !== null) {
+      const title = match[1];
+      if (fetchedTitles.has(title)) continue;
 
-  // Map the LLM's titles to real TMDB/IGDB data
-  const results = await Promise.all(
-    titles.map(async (title: string) => {
+      fetchedTitles.add(title);
+
       try {
         if (mediaType === 'MOVIE') {
           const res = await tmdbClient.searchMovies(title, 1);
           if (res?.results?.[0]) {
-            return { type: 'MOVIE', data: res.results[0] };
+            yield { type: 'MOVIE', data: res.results[0] };
           }
         } else if (mediaType === 'SHOW') {
           const res = await tmdbClient.searchShows(title, 1);
           if (res?.results?.[0]) {
-            return { type: 'SHOW', data: res.results[0] };
+            yield { type: 'SHOW', data: res.results[0] };
           }
         } else if (mediaType === 'GAME') {
           const res = await igdbClient.searchGames(title, 1, 1);
           if (res?.results?.[0]) {
-            return { type: 'GAME', data: res.results[0] };
+            yield { type: 'GAME', data: res.results[0] };
           }
         }
       } catch (err) {
         console.error(`Error fetching ${title}:`, err);
       }
-      return null;
-    })
-  );
-
-  return results.filter(r => r !== null && r.data !== undefined) as Array<{
-    type: string;
-    data: any;
-  }>;
+    }
+  }
 }

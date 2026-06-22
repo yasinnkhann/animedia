@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { recommendMedia } from '@/app/actions/ai';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import HomeCard from '@/components/HorizontalScroller/Home/HomeCard';
 import { BaseHorizontalScroller } from '@/components/HorizontalScroller/BaseHorizontalScroller';
@@ -23,8 +22,41 @@ export default function DiscoverClient() {
     setResults([]);
 
     try {
-      const recommendations = await recommendMedia(prompt, mediaType);
-      setResults(recommendations);
+      const response = await fetch('/api/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, mediaType }),
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.body) throw new Error('No readable stream returned');
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep the last incomplete line in the buffer
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const recommendation = JSON.parse(line);
+              setResults(prev => {
+                if (prev.some(r => r.data.id === recommendation.data.id)) return prev;
+                return [...prev, recommendation];
+              });
+            } catch (e) {
+              console.error('Failed to parse line:', line);
+            }
+          }
+        }
+      }
     } catch (error: any) {
       console.error('Failed to fetch recommendations:', error);
       alert(error?.message || 'An error occurred fetching recommendations.');
@@ -40,12 +72,41 @@ export default function DiscoverClient() {
 
     try {
       const excludedTitles = results.map(r => r.data.name || r.data.title).filter(Boolean);
-      const moreRecommendations = await recommendMedia(prompt, mediaType, excludedTitles);
-      setResults(prev => {
-        const existingIds = new Set(prev.map(p => p.data.id));
-        const uniqueNewItems = moreRecommendations.filter(rec => !existingIds.has(rec.data.id));
-        return [...prev, ...uniqueNewItems];
+      const response = await fetch('/api/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, mediaType, excludedTitles }),
       });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.body) throw new Error('No readable stream returned');
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.trim()) {
+            try {
+              const recommendation = JSON.parse(line);
+              setResults(prev => {
+                if (prev.some(r => r.data.id === recommendation.data.id)) return prev;
+                return [...prev, recommendation];
+              });
+            } catch (e) {
+              console.error('Failed to parse line:', line);
+            }
+          }
+        }
+      }
     } catch (error: any) {
       console.error('Failed to fetch more recommendations:', error);
       alert(error?.message || 'An error occurred fetching recommendations.');
@@ -125,7 +186,7 @@ export default function DiscoverClient() {
         </div>
       </form>
 
-      {loading && (
+      {loading && results.length === 0 && (
         <div className='flex flex-col items-center justify-center space-y-4 py-20 opacity-70'>
           <div className='h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent' />
           <p className='animate-pulse text-lg font-medium text-blue-400'>
@@ -134,8 +195,22 @@ export default function DiscoverClient() {
         </div>
       )}
 
-      {!loading && results.length > 0 && (
-        <div className='mx-auto max-w-full overflow-hidden text-left'>
+      {results.length > 0 && (
+        <div
+          className={`mx-auto max-w-full overflow-hidden text-left transition-all duration-700 ease-in-out ${
+            loading || loadingMore
+              ? 'rounded-2xl py-6 shadow-[0_0_80px_-20px_rgba(59,130,246,0.4)] ring-1 ring-blue-400/30'
+              : 'py-2'
+          }`}
+        >
+          {(loading || loadingMore) && (
+            <div className='mb-6 flex items-center justify-center space-x-3 text-center font-medium tracking-wide text-blue-400'>
+              <div className='h-4 w-4 animate-spin rounded-full border-2 border-blue-400 border-t-transparent shadow-[0_0_10px_rgba(59,130,246,0.8)]' />
+              <span className='animate-pulse drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]'>
+                AI is streaming your customized recommendations...
+              </span>
+            </div>
+          )}
           <BaseHorizontalScroller
             items={results}
             keyExtractor={item => String(item.data.id)}
@@ -154,7 +229,7 @@ export default function DiscoverClient() {
           <div className='mt-8 flex justify-center pb-8'>
             <button
               onClick={handleGenerateMore}
-              disabled={loadingMore}
+              disabled={loading || loadingMore}
               className='flex items-center space-x-2 rounded-full bg-slate-800 px-6 py-3 font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-50'
             >
               {loadingMore ? (
