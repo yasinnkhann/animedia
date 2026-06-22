@@ -6,6 +6,7 @@ import { MediaType } from '@prisma/client';
 import ReviewCard, { Review } from './ReviewCard';
 import ReviewComposer from './ReviewComposer';
 import { BiMessageSquareDetail } from 'react-icons/bi';
+import { BsStars } from 'react-icons/bs';
 
 interface Props {
   mediaType: MediaType;
@@ -27,6 +28,9 @@ export default function ReviewSection({
 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState('');
+  const [isSummarizing, setIsSummarizing] = useState(false);
+  const [hasSummarized, setHasSummarized] = useState(false);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -62,6 +66,42 @@ export default function ReviewSection({
 
   const userHasReviewed = reviews.some(r => r.userId === currentUserId);
 
+  const handleSummarize = async () => {
+    setIsSummarizing(true);
+    setSummary('');
+    setHasSummarized(true);
+
+    try {
+      const response = await fetch('/api/summarize-reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mediaTitle,
+          reviews: reviews.map(r => r.content),
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to summarize');
+      if (!response.body) return;
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = decoder.decode(value, { stream: true });
+        setSummary(prev => prev + text);
+      }
+    } catch (err) {
+      console.error('Error summarizing reviews:', err);
+      setSummary('Failed to generate summary.');
+    } finally {
+      setIsSummarizing(false);
+    }
+  };
+
   return (
     <div className='flex w-full max-w-4xl flex-col gap-6'>
       <div className='flex items-center gap-2'>
@@ -92,6 +132,48 @@ export default function ReviewSection({
         </div>
       ) : (
         <div className='flex flex-col gap-4'>
+          {reviews.length >= 2 && !hasSummarized && (
+            <div className='flex justify-end'>
+              <button
+                onClick={handleSummarize}
+                className='flex items-center gap-2 rounded-lg bg-blue-600/20 px-4 py-2 text-sm font-medium text-blue-400 transition-colors hover:bg-blue-600/30'
+              >
+                <BsStars />
+                Summarize Reviews with AI
+              </button>
+            </div>
+          )}
+
+          {hasSummarized && (
+            <div
+              className={`mx-auto mb-4 w-full overflow-hidden text-left transition-all duration-700 ease-in-out ${
+                isSummarizing
+                  ? 'rounded-2xl px-6 py-6 shadow-[0_0_80px_-20px_rgba(6,182,212,0.4)] ring-1 ring-cyan-400/30'
+                  : 'rounded-2xl border border-cyan-900/50 bg-cyan-950/10 px-6 py-6'
+              }`}
+            >
+              <div className='mb-4 flex items-center gap-2 text-cyan-400'>
+                <BsStars
+                  size={20}
+                  className={
+                    isSummarizing ? 'animate-spin shadow-[0_0_10px_rgba(6,182,212,0.8)]' : ''
+                  }
+                />
+                <h3
+                  className={`font-semibold ${isSummarizing ? 'animate-pulse drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]' : ''}`}
+                >
+                  AI Community Consensus
+                </h3>
+              </div>
+              <p className='leading-relaxed text-slate-800 dark:text-slate-200'>
+                {summary}
+                {isSummarizing && (
+                  <span className='animate-pulse text-cyan-500 dark:text-cyan-400'>...</span>
+                )}
+              </p>
+            </div>
+          )}
+
           {reviews.map(review => (
             <ReviewCard
               key={review.id}
