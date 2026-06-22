@@ -69,14 +69,14 @@ const Modal = ({ children, closeModal }: Props) => {
   return (
     <motion.section
       onClick={handleClickOutside}
-      className='fixed left-0 top-0 z-[1] block h-full w-full overflow-auto bg-black bg-black/[0.4] pt-20'
+      className='fixed left-0 top-0 z-[1] flex h-full w-full items-center justify-center overflow-auto bg-black/60 pt-20 backdrop-blur-sm'
       variants={backdropVariants}
       initial='hidden'
       animate='visible'
       exit='exit'
     >
       <motion.div
-        className='relative m-auto max-h-[85vh] w-[70vw] overflow-scroll rounded-xl border border-border bg-card p-4 text-card-foreground shadow-2xl scrollbar-hide'
+        className='relative m-auto max-h-[85vh] w-[90vw] overflow-hidden rounded-2xl border border-white/10 bg-card/80 text-card-foreground shadow-2xl backdrop-blur-xl md:w-[70vw] lg:w-[50vw]'
         ref={contentRef}
         variants={modalVariants}
         initial='hidden'
@@ -85,13 +85,13 @@ const Modal = ({ children, closeModal }: Props) => {
       >
         <motion.button
           onClick={() => closeModal()}
-          className='float-right'
+          className='absolute right-4 top-4 z-50 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-md transition-colors hover:bg-black/80'
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <IoClose className='h-6 w-6 text-muted-foreground transition duration-300 hover:text-foreground' />
+          <IoClose className='h-5 w-5' />
         </motion.button>
-        {children}
+        <div className='max-h-[85vh] overflow-y-auto scrollbar-hide'>{children}</div>
       </motion.div>
     </motion.section>
   );

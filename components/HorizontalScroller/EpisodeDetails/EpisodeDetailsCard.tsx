@@ -108,67 +108,69 @@ const EpisodeDetailsCard = ({
             }
           >
             <Modal closeModal={() => setShowModal(false)}>
-              <div className='w-full rounded-lg bg-transparent'>
-                <div className='flex items-center justify-between border-b border-border px-6 py-4'>
-                  <h2 className='text-lg font-semibold text-foreground'>
-                    {epDetailsCardData.name}
-                  </h2>
-                </div>
-                <div className='p-6'>
-                  <div className='flex items-center space-x-4'>
-                    <div className='h-16 w-16'>
-                      <RoundProgressBar
-                        percentageVal={+(epDetailsCardData.vote_average ?? 0).toFixed(1) * 10}
-                      />
+              <div className='flex w-full flex-col bg-transparent'>
+                {/* Hero Image Header */}
+                <div className='relative h-[16rem] w-full shrink-0 sm:h-[22rem]'>
+                  <Image
+                    src={imageSrc}
+                    alt={epDetailsCardData.name ?? 'Episode Image'}
+                    fill
+                    sizes='(max-width: 768px) 100vw, 50vw'
+                    className='object-cover'
+                    priority
+                  />
+                  {/* Gradient Overlay */}
+                  <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent' />
+
+                  {/* Title and Rating on top of the image gradient */}
+                  <div className='absolute bottom-0 left-0 w-full p-6 pb-4'>
+                    <div className='flex items-end justify-between gap-4'>
+                      <h2 className='text-2xl font-bold text-white drop-shadow-md sm:text-3xl'>
+                        {epDetailsCardData.name}
+                      </h2>
+                      <div className='flex shrink-0 items-center space-x-3 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-md'>
+                        <div className='h-10 w-10'>
+                          <RoundProgressBar
+                            percentageVal={+(epDetailsCardData.vote_average ?? 0).toFixed(1) * 10}
+                          />
+                        </div>
+                        <p className='hidden text-xs font-medium text-white/90 sm:block'>
+                          {commaNumber(epDetailsCardData.vote_count ?? 0)} votes
+                        </p>
+                      </div>
                     </div>
-                    <p className='text-sm text-muted-foreground'>
-                      {commaNumber(epDetailsCardData.vote_count ?? 0)} voted users
-                    </p>
-                  </div>
-                  <div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-2'>
-                    <div>
-                      <h4 className='font-semibold text-foreground'>Season</h4>
-                      <p className='text-muted-foreground'>{epDetailsCardData.season_number}</p>
-                    </div>
-                    <div>
-                      <h4 className='font-semibold text-foreground'>Episode</h4>
-                      <p className='text-muted-foreground'>{epDetailsCardData.episode_number}</p>
-                    </div>
-                    <div>
-                      <h4 className='font-semibold text-foreground'>Runtime</h4>
-                      <p className='text-muted-foreground'>
-                        {epDetailsCardData.runtime
-                          ? `${epDetailsCardData.runtime} min`
-                          : 'Runtime Not Available'}
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className='font-semibold text-foreground'>Air Date</h4>
-                      <p className='text-muted-foreground'>
-                        {epDetailsCardData.air_date
-                          ? CommonMethods.formatDate(epDetailsCardData.air_date)
-                          : 'Air Date Not Available'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className='mt-6'>
-                    <h4 className='mb-2 font-semibold text-foreground'>Description:</h4>
-                    <p className='text-muted-foreground'>
-                      {epDetailsCardData.overview
-                        ? epDetailsCardData.overview
-                        : 'No Description Available'}
-                    </p>
                   </div>
                 </div>
-                <div className='relative mt-4 h-[20rem] w-full overflow-hidden rounded-lg border border-border sm:h-[28rem]'>
-                  <div className='relative h-full'>
-                    <Image
-                      src={imageSrc}
-                      alt={epDetailsCardData.name ?? ''}
-                      fill
-                      sizes='(max-width: 768px) 100vw, 50vw'
-                      className='object-cover'
-                    />
+
+                {/* Main Content Body */}
+                <div className='flex flex-col gap-6 p-6'>
+                  {/* Sleek Metadata Badges */}
+                  <div className='flex flex-wrap gap-3'>
+                    <div className='rounded-full border border-border bg-muted/50 px-3 py-1 text-sm font-medium text-foreground'>
+                      Season {epDetailsCardData.season_number}
+                    </div>
+                    <div className='rounded-full border border-border bg-muted/50 px-3 py-1 text-sm font-medium text-foreground'>
+                      Episode {epDetailsCardData.episode_number}
+                    </div>
+                    {epDetailsCardData.runtime && (
+                      <div className='rounded-full border border-border bg-muted/50 px-3 py-1 text-sm font-medium text-foreground'>
+                        {epDetailsCardData.runtime} min
+                      </div>
+                    )}
+                    {epDetailsCardData.air_date && (
+                      <div className='rounded-full border border-border bg-muted/50 px-3 py-1 text-sm font-medium text-foreground'>
+                        {CommonMethods.formatDate(epDetailsCardData.air_date)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <div className='text-lg leading-relaxed text-muted-foreground'>
+                    {epDetailsCardData.overview ? (
+                      <p>{epDetailsCardData.overview}</p>
+                    ) : (
+                      <p className='italic text-muted-foreground/60'>No Description Available</p>
+                    )}
                   </div>
                 </div>
               </div>
