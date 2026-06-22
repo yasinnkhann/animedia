@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { BiGlobe, BiLockAlt, BiUser, BiCollection } from 'react-icons/bi';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import RemoveItemButton from '@/components/Collections/RemoveItemButton';
+import InviteCollaboratorsButton from '@/components/Collections/InviteCollaboratorsButton';
+import ToggleWatchedButton from '@/components/Collections/ToggleWatchedButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
@@ -57,12 +59,16 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
     where: { id },
     include: {
       user: { select: { name: true, image: true } },
+      collaborators: { select: { id: true, name: true, image: true } },
       items: { orderBy: { addedAt: 'desc' } },
     },
   });
 
   const session = await getServerSession(authOptions);
-  const isOwner = session?.user?.id === collection?.userId;
+  const isOwner = !!(session?.user?.id && session.user.id === collection?.userId);
+  const isCollaborator = !!(
+    session?.user?.id && collection?.collaborators.some(c => c.id === session?.user?.id)
+  );
 
   if (!collection) {
     return (
@@ -109,8 +115,37 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
               ) : (
                 <BiUser size={20} />
               )}
-              <span>Curated by {collection.user.name || 'User'}</span>
+              <span>Owner: {collection.user.name || 'User'}</span>
             </div>
+
+            {collection.collaborators.length > 0 && (
+              <div className='flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-2'>
+                <div className='flex -space-x-2'>
+                  {collection.collaborators.map(collab => (
+                    <div
+                      key={collab.id}
+                      className='relative h-6 w-6 overflow-hidden rounded-full border border-border bg-card'
+                    >
+                      {collab.image ? (
+                        <Image
+                          src={collab.image}
+                          alt={collab.name || 'User'}
+                          fill
+                          className='object-cover'
+                        />
+                      ) : (
+                        <div className='flex h-full w-full items-center justify-center bg-slate-500 text-[10px] font-bold text-white'>
+                          {collab.name?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <span>Collaborators</span>
+              </div>
+            )}
+
+            {isOwner && <InviteCollaboratorsButton collectionId={collection.id} />}
             <div className='flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-2'>
               <BiGlobe size={20} className='text-primary' />
               <span>Public</span>
@@ -140,13 +175,20 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
               return (
                 <Link key={item.id} href={linkUrl} className='group relative flex flex-col gap-2'>
                   <div className='relative aspect-[2/3] w-full overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-transform duration-300 group-hover:-translate-y-2 group-hover:border-primary/50 group-hover:shadow-xl group-hover:shadow-primary/20'>
-                    {isOwner && (
+                    {(isOwner || isCollaborator) && (
                       <RemoveItemButton
                         collectionId={collection.id}
                         mediaType={item.mediaType}
                         mediaId={item.mediaId}
                       />
                     )}
+
+                    <ToggleWatchedButton
+                      collectionId={collection.id}
+                      itemId={item.id}
+                      initialWatched={item.watched}
+                      canToggle={isOwner || isCollaborator}
+                    />
                     {item.mediaImage ? (
                       <Image
                         src={item.mediaImage}

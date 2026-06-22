@@ -19,6 +19,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         user: {
           select: { name: true, image: true },
         },
+        collaborators: {
+          select: { id: true, name: true, image: true },
+        },
       },
     });
 
@@ -26,7 +29,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: 'Collection not found' }, { status: 404 });
     }
 
-    if (!collection.isPublic && collection.userId !== userId) {
+    const isCollaborator = collection.collaborators.some((c: any) => c.id === userId);
+
+    if (!collection.isPublic && collection.userId !== userId && !isCollaborator) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 

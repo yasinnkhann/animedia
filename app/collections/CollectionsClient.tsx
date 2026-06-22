@@ -2,10 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { BiCollection, BiTrash, BiLockAlt, BiGlobe, BiLinkExternal } from 'react-icons/bi';
+import { BiCollection, BiTrash, BiLockAlt, BiGlobe, BiLinkExternal, BiGroup } from 'react-icons/bi';
 import Image from 'next/image';
 
-export default function CollectionsClient({ initialCollections }: { initialCollections: any[] }) {
+export default function CollectionsClient({
+  initialCollections,
+  currentUserId,
+}: {
+  initialCollections: any[];
+  currentUserId: string;
+}) {
   const [collections, setCollections] = useState(initialCollections);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
@@ -112,7 +118,17 @@ export default function CollectionsClient({ initialCollections }: { initialColle
                 href={`/collection/${collection.id}`}
                 className='transition-colors hover:text-primary'
               >
-                <h3 className='line-clamp-1 text-xl font-bold'>{collection.name}</h3>
+                <div className='flex items-center gap-2'>
+                  <h3 className='line-clamp-1 text-xl font-bold'>{collection.name}</h3>
+                  {collection.userId !== currentUserId && (
+                    <span className='rounded bg-blue-500/20 px-1.5 py-0.5 text-xs font-semibold text-blue-500'>
+                      Shared
+                    </span>
+                  )}
+                  {collection.userId === currentUserId && collection.collaborators?.length > 0 && (
+                    <BiGroup size={20} className='text-primary' title='Collaborative Collection' />
+                  )}
+                </div>
               </Link>
               <div className='flex gap-2'>
                 {collection.isPublic && (
@@ -124,14 +140,16 @@ export default function CollectionsClient({ initialCollections }: { initialColle
                     <BiLinkExternal size={20} />
                   </button>
                 )}
-                <button
-                  onClick={() => handleDelete(collection.id)}
-                  disabled={isDeleting === collection.id}
-                  className='text-slate-400 transition-colors hover:text-red-500 disabled:opacity-50'
-                  title='Delete Collection'
-                >
-                  <BiTrash size={20} />
-                </button>
+                {collection.userId === currentUserId && (
+                  <button
+                    onClick={() => handleDelete(collection.id)}
+                    disabled={isDeleting === collection.id}
+                    className='text-slate-400 transition-colors hover:text-red-500 disabled:opacity-50'
+                    title='Delete Collection'
+                  >
+                    <BiTrash size={20} />
+                  </button>
+                )}
               </div>
             </div>
             {collection.description && (

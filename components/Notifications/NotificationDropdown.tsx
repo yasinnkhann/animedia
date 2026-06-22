@@ -66,13 +66,15 @@ export default function NotificationDropdown() {
     }
   };
 
-  const getMediaUrl = (type: string, id: string) => {
+  const getMediaUrl = (notification: any) => {
+    if (notification.type === 'COLLECTION_INVITE') return `/collection/${notification.mediaId}`;
+    if (notification.type === 'FOLLOW') return `/profile/${notification.mediaId}`;
     const mediaTypeMap: Record<string, string> = {
       MOVIE: 'movie',
       SHOW: 'show',
       GAME: 'game',
     };
-    return `/${mediaTypeMap[type] || 'movie'}/${id}-redirect`; // We need to handle this simple route or just use the id-name formatting
+    return `/${mediaTypeMap[notification.mediaType] || 'movie'}/${notification.mediaId}-redirect`;
   };
 
   return (
@@ -110,7 +112,7 @@ export default function NotificationDropdown() {
                 notifications.map(notification => (
                   <Link
                     key={notification.id}
-                    href={getMediaUrl(notification.mediaType, notification.mediaId)}
+                    href={getMediaUrl(notification)}
                     onClick={() => handleNotificationClick(notification)}
                     className={`flex items-start gap-4 border-b border-border p-4 transition-colors hover:bg-muted ${
                       !notification.isRead ? 'bg-primary/5' : ''
@@ -125,9 +127,23 @@ export default function NotificationDropdown() {
                     </div>
                     <div className='flex-1'>
                       <p className='text-sm text-foreground'>
-                        <span className='font-semibold'>{notification.sender?.name}</span> thinks
-                        you should check out{' '}
-                        <span className='font-semibold'>{notification.mediaTitle}</span>!
+                        {notification.type === 'COLLECTION_INVITE' ? (
+                          <>
+                            <span className='font-semibold'>{notification.sender?.name}</span>{' '}
+                            invited you to collaborate on their collection!
+                          </>
+                        ) : notification.type === 'FOLLOW' ? (
+                          <>
+                            <span className='font-semibold'>{notification.sender?.name}</span>{' '}
+                            started following you.
+                          </>
+                        ) : (
+                          <>
+                            <span className='font-semibold'>{notification.sender?.name}</span>{' '}
+                            thinks you should check out{' '}
+                            <span className='font-semibold'>{notification.mediaTitle}</span>!
+                          </>
+                        )}
                       </p>
                       <p className='mt-1 text-xs text-muted-foreground'>
                         {CommonMethods.formatDate(notification.createdAt)}

@@ -52,7 +52,8 @@ model User {
   following     Follows[] @relation("follower")
   activities    Activity[]
   reviews       Review[]
-  collections   Collection[]
+  collections   Collection[] @relation("CollectionOwner")
+  collaborations Collection[] @relation("CollectionCollaborators")
   NotificationsReceived Notification[] @relation("UserNotifications")
   NotificationsSent     Notification[] @relation("NotificationSender")
 }
@@ -178,13 +179,14 @@ model Review {
 model Collection {
   id          String           @id @default(cuid())
   userId      String           @map("user_id")
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User             @relation("CollectionOwner", fields: [userId], references: [id], onDelete: Cascade)
   name        String
   description String?
   isPublic    Boolean          @default(true)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   items       CollectionItem[]
+  collaborators User[]         @relation("CollectionCollaborators")
 
   @@index([userId])
 }
@@ -197,6 +199,7 @@ model CollectionItem {
   mediaId       String
   mediaTitle    String
   mediaImage    String?
+  watched       Boolean    @default(false)
   addedAt       DateTime   @default(now())
 
   @@unique([collectionId, mediaType, mediaId])
@@ -224,4 +227,5 @@ model Notification {
 enum NotificationType {
   RECOMMENDATION
   FOLLOW
+  COLLECTION_INVITE
 }

@@ -22,7 +22,9 @@ export default async function CollectionsPage() {
   }
 
   const collections = await prisma.collection.findMany({
-    where: { userId: session.user.id },
+    where: {
+      OR: [{ userId: session.user.id }, { collaborators: { some: { id: session.user.id } } }],
+    },
     include: {
       _count: {
         select: { items: true },
@@ -31,6 +33,8 @@ export default async function CollectionsPage() {
         take: 4,
         orderBy: { addedAt: 'desc' },
       },
+      user: { select: { name: true, image: true } },
+      collaborators: { select: { id: true, name: true, image: true } },
     },
     orderBy: { createdAt: 'desc' },
   });
@@ -49,7 +53,7 @@ export default async function CollectionsPage() {
           </div>
         </div>
 
-        <CollectionsClient initialCollections={collections} />
+        <CollectionsClient initialCollections={collections} currentUserId={session.user.id} />
       </div>
     </PageAnimationWrapper>
   );

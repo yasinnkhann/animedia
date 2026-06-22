@@ -18,10 +18,14 @@ export async function GET(req: Request) {
     const isOwner = queryUserId === session.user.id;
 
     const collections = await prisma.collection.findMany({
-      where: {
-        userId: queryUserId,
-        ...(isOwner ? {} : { isPublic: true }),
-      },
+      where: isOwner
+        ? {
+            OR: [{ userId: queryUserId }, { collaborators: { some: { id: queryUserId } } }],
+          }
+        : {
+            userId: queryUserId,
+            isPublic: true,
+          },
       include: {
         _count: {
           select: { items: true },
@@ -29,6 +33,12 @@ export async function GET(req: Request) {
         items: {
           take: 4,
           orderBy: { addedAt: 'desc' },
+        },
+        collaborators: {
+          select: { id: true, name: true, image: true },
+        },
+        user: {
+          select: { name: true, image: true },
         },
       },
       orderBy: { createdAt: 'desc' },

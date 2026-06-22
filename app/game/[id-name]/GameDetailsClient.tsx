@@ -344,14 +344,10 @@ const GameDetailsClient = ({
               <AddToCollectionModal
                 mediaType='GAME'
                 mediaId={id}
-                mediaTitle={gameDetailsData?.gameDetails[0].name}
+                mediaTitle={game.name}
                 mediaImage={
                   usersGame?.image ??
-                  (gameDetailsData?.gameDetails[0].cover
-                    ? CommonMethods.getIgdbImage(
-                        gameDetailsData?.gameDetails[0].cover.url
-                      ).toString()
-                    : null)
+                  (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
                 }
                 isOpen={isCollectionModalOpen}
                 onClose={() => setIsCollectionModalOpen(false)}
@@ -368,14 +364,10 @@ const GameDetailsClient = ({
               <RecommendModal
                 mediaType='GAME'
                 mediaId={id}
-                mediaTitle={gameDetailsData?.gameDetails[0].name}
+                mediaTitle={game.name}
                 mediaImage={
                   usersGame?.image ??
-                  (gameDetailsData?.gameDetails[0].cover
-                    ? CommonMethods.getIgdbImage(
-                        gameDetailsData?.gameDetails[0].cover.url
-                      ).toString()
-                    : null)
+                  (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
                 }
                 isOpen={isRecommendModalOpen}
                 onClose={() => setIsRecommendModalOpen(false)}

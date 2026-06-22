@@ -11,8 +11,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const collection = await prisma.collection.findUnique({ where: { id: collectionId } });
-    if (!collection || collection.userId !== session.user.id) {
+    const collection = await prisma.collection.findUnique({
+      where: { id: collectionId },
+      include: { collaborators: { select: { id: true } } },
+    });
+
+    if (!collection) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+    const isOwner = collection.userId === session.user?.id;
+    const isCollaborator = collection.collaborators.some((c: any) => c.id === session.user?.id);
+
+    if (!isOwner && !isCollaborator) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -48,8 +57,17 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const collection = await prisma.collection.findUnique({ where: { id: collectionId } });
-    if (!collection || collection.userId !== session.user.id) {
+    const collection = await prisma.collection.findUnique({
+      where: { id: collectionId },
+      include: { collaborators: { select: { id: true } } },
+    });
+
+    if (!collection) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+    const isOwner = collection.userId === session.user?.id;
+    const isCollaborator = collection.collaborators.some((c: any) => c.id === session.user?.id);
+
+    if (!isOwner && !isCollaborator) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
