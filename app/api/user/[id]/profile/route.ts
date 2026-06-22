@@ -30,10 +30,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const [userMovies, userShows, userGames] = await Promise.all([
+    const [userMovies, userShows, userGames, activities] = await Promise.all([
       prisma.movie.findMany({ where: { userId: targetUserId } }),
       prisma.show.findMany({ where: { userId: targetUserId } }),
       prisma.game.findMany({ where: { userId: targetUserId } }),
+      prisma.activity.findMany({
+        where: { userId: targetUserId },
+        orderBy: { createdAt: 'desc' },
+        take: 20,
+      }),
     ]);
 
     let isFollowing = false;
@@ -56,6 +61,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         userShows,
         userGames,
       },
+      activities,
       isFollowing,
     });
   } catch (error) {

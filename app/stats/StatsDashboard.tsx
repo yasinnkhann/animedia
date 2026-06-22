@@ -131,88 +131,103 @@ export default function StatsDashboard({ userMovies, userShows, userGames, userN
     >
       {/* Summary Cards */}
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='text-sm font-medium text-muted-foreground'>Total Tracked</h3>
-          <p className='mt-2 text-3xl font-bold text-primary'>{totalTracked}</p>
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-card/60'>
+          <h3 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
+            Total Tracked
+          </h3>
+          <p className='mt-2 text-4xl font-extrabold text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]'>
+            {totalTracked}
+          </p>
         </div>
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='text-sm font-medium text-muted-foreground'>Average Rating</h3>
-          <p className='mt-2 text-3xl font-bold text-primary'>{avgRating} / 10</p>
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-card/60'>
+          <h3 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
+            Average Rating
+          </h3>
+          <p className='mt-2 text-4xl font-extrabold text-yellow-500 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]'>
+            {avgRating} <span className='text-2xl text-muted-foreground'>/ 10</span>
+          </p>
         </div>
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='text-sm font-medium text-muted-foreground'>Total Movies</h3>
-          <p className='mt-2 text-3xl font-bold text-foreground'>{totalMovies}</p>
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-card/60'>
+          <h3 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
+            Total Movies
+          </h3>
+          <p className='mt-2 text-4xl font-extrabold text-foreground'>{totalMovies}</p>
         </div>
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='text-sm font-medium text-muted-foreground'>Total Shows</h3>
-          <p className='mt-2 text-3xl font-bold text-foreground'>{totalShows}</p>
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md transition-all hover:scale-105 hover:bg-card/60'>
+          <h3 className='text-sm font-semibold uppercase tracking-wider text-muted-foreground'>
+            Total Shows
+          </h3>
+          <p className='mt-2 text-4xl font-extrabold text-foreground'>{totalShows}</p>
         </div>
       </div>
-
+      {/* Charts Section */}
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-2'>
         {/* Rating Bar Chart */}
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md'>
           <h3 className='mb-6 text-lg font-bold'>Rating Distribution</h3>
           <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
+            <ResponsiveContainer width='100%' height='100%'>
               <BarChart data={ratingData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <XAxis
                   dataKey='rating'
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fill: '#888888', fontSize: 12 }}
+                  stroke='hsl(var(--muted-foreground))'
+                  tick={{ fill: 'hsl(var(--foreground))' }}
                 />
                 <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fill: '#888888', fontSize: 12 }}
-                  allowDecimals={false}
+                  stroke='hsl(var(--muted-foreground))'
+                  tick={{ fill: 'hsl(var(--foreground))' }}
                 />
-                <Tooltip content={CustomTooltip} cursor={{ fill: 'transparent' }} />
-                <Bar dataKey='count' fill='#00b3ff' radius={[4, 4, 0, 0]} />
+                <Tooltip
+                  content={<CustomTooltip />}
+                  cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
+                />
+                <Bar dataKey='count' fill='hsl(var(--primary))' radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Status Pie Chart */}
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='mb-6 text-lg font-bold'>Watch Status Breakdown</h3>
+        {/* Media Type Donut Chart */}
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md'>
+          <h3 className='mb-6 text-lg font-bold'>Media Breakdown</h3>
           <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx='50%'
-                  cy='50%'
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={2}
-                  dataKey='value'
-                />
-                <Tooltip content={CustomTooltip} />
-                <Legend iconType='circle' wrapperStyle={{ fontSize: '12px' }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Media Type Pie Chart */}
-        <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-          <h3 className='mb-6 text-lg font-bold'>Media Type Split</h3>
-          <div className='h-[300px] w-full'>
-            <ResponsiveContainer width='100%' height='100%' minWidth={0} minHeight={0}>
+            <ResponsiveContainer width='100%' height='100%'>
               <PieChart>
                 <Pie
                   data={mediaTypeData}
                   cx='50%'
                   cy='50%'
+                  innerRadius={70}
                   outerRadius={100}
-                  paddingAngle={2}
+                  paddingAngle={5}
                   dataKey='value'
+                  stroke='none'
                 />
-                <Tooltip content={CustomTooltip} />
-                <Legend iconType='circle' wrapperStyle={{ fontSize: '12px' }} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend verticalAlign='bottom' height={36} wrapperStyle={{ paddingTop: '20px' }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Status Split (Donut Chart) */}
+        <div className='rounded-xl border border-white/10 bg-card/40 p-6 shadow-lg backdrop-blur-md lg:col-span-2'>
+          <h3 className='mb-6 text-lg font-bold'>Watch Status</h3>
+          <div className='h-[300px] w-full'>
+            <ResponsiveContainer width='100%' height='100%'>
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx='50%'
+                  cy='50%'
+                  innerRadius={80}
+                  outerRadius={110}
+                  paddingAngle={5}
+                  dataKey='value'
+                  stroke='none'
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend verticalAlign='bottom' height={36} wrapperStyle={{ paddingTop: '20px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>

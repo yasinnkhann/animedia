@@ -62,14 +62,19 @@ export default function MediaCard({
   const titleName = item.title || item.name || 'Unknown';
 
   let imageUrl = '';
-  if (item.image) imageUrl = item.image;
-  else if (isGame)
-    imageUrl = (CommonMethods.getIgdbImage(item.coverUrl || item.profile_path) as string) || '';
-  else if (isPerson && item.type === 'GameCharacter')
-    imageUrl = (CommonMethods.getIgdbImage(item.profile_path) as string) || '';
-  else
+
+  if (isGame) {
     imageUrl =
-      (CommonMethods.getTheMovieDbImage(item.poster_path || item.profile_path) as string) || '';
+      (CommonMethods.getIgdbImage(item.image || item.coverUrl || item.profile_path) as string) ||
+      '';
+  } else if (isPerson && item.type === 'GameCharacter') {
+    imageUrl = (CommonMethods.getIgdbImage(item.profile_path || item.image) as string) || '';
+  } else {
+    imageUrl =
+      (CommonMethods.getTheMovieDbImage(
+        item.image || item.poster_path || item.profile_path
+      ) as string) || '';
+  }
 
   let releaseDateText = '';
   if (isGame) {
@@ -90,8 +95,22 @@ export default function MediaCard({
   }
 
   let ratingVal = 0;
-  if (isGame) ratingVal = Math.round(item.rating ?? 0);
-  else ratingVal = +(item.vote_average ?? 0).toFixed(1) * 10;
+  if (item.rating !== undefined && item.rating !== null) {
+    if (isGame) {
+      // Game ratings are stored out of 100 in IGDB, but in our DB we might store them differently?
+      // Let's check userRating from DB. Wait, if it's a user rating (1-10), we multiply by 10.
+      // If it's IGDB rating (already 0-100), we just use it.
+      // We will check if it's a user rating which is <= 10.
+      if (item.rating <= 10 && item.rating > 0) ratingVal = item.rating * 10;
+      else ratingVal = Math.round(item.rating);
+    } else {
+      // For TMDB it is vote_average (0-10) or user rating (0-10)
+      if (item.rating <= 10 && item.rating > 0) ratingVal = item.rating * 10;
+      else ratingVal = Math.round(item.rating);
+    }
+  } else if (item.vote_average !== undefined) {
+    ratingVal = +(item.vote_average ?? 0).toFixed(1) * 10;
+  }
 
   const detailsRoute = CommonMethods.getDetailsPageRoute(
     isGame ? 'game' : isMovie ? 'movie' : isShow ? 'show' : 'person',
