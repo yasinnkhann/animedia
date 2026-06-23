@@ -30,6 +30,10 @@ export async function GET(req: Request) {
         user: {
           select: { id: true, name: true, image: true },
         },
+        likes: true,
+        _count: {
+          select: { comments: true },
+        },
       },
       orderBy: { createdAt: 'desc' },
       take: limit,

@@ -56,6 +56,8 @@ model User {
   collaborations Collection[] @relation("CollectionCollaborators")
   NotificationsReceived Notification[] @relation("UserNotifications")
   NotificationsSent     Notification[] @relation("NotificationSender")
+  activityLikes         ActivityLike[]
+  activityComments      ActivityComment[]
 }
 
 model Follows {
@@ -142,6 +144,8 @@ model Activity {
   mediaImage  String?
   metadata    Json?
   createdAt   DateTime     @default(now())
+  likes       ActivityLike[]
+  comments    ActivityComment[]
 
   @@index([userId])
   @@index([createdAt])
@@ -228,4 +232,31 @@ enum NotificationType {
   RECOMMENDATION
   FOLLOW
   COLLECTION_INVITE
+  ACTIVITY_LIKE
+  ACTIVITY_COMMENT
+}
+
+model ActivityLike {
+  id         String   @id @default(cuid())
+  activityId String   @map("activity_id")
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([activityId, userId])
+  @@index([activityId])
+}
+
+model ActivityComment {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+  activityId String   @map("activity_id")
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([activityId])
 }

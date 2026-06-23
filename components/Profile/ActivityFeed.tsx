@@ -15,7 +15,11 @@ interface Activity {
   mediaImage: string | null;
   metadata: any;
   createdAt: string;
+  likes?: { userId: string }[];
+  _count?: { comments: number };
 }
+
+import ActivityInteractions from '../Social/ActivityInteractions';
 
 interface Props {
   activities: Activity[];
@@ -110,6 +114,12 @@ const ActivityFeed = ({ activities, userName }: Props) => {
                 {activity.mediaTitle}
               </Link>
               {detailText && <div className='mt-1'>{detailText}</div>}
+
+              <ActivityInteractions
+                activityId={activity.id}
+                initialLikes={activity.likes || []}
+                initialCommentCount={activity._count?.comments || 0}
+              />
             </div>
           </div>
         );

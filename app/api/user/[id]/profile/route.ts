@@ -38,6 +38,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         where: { userId: targetUserId },
         orderBy: { createdAt: 'desc' },
         take: 20,
+        include: {
+          likes: true,
+          _count: {
+            select: { comments: true },
+          },
+        },
       }),
     ]);
 

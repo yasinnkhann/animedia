@@ -78,7 +78,7 @@ const Header = () => {
             </ul>
             <ul
               id='right-section'
-              className='!mr-4 hidden !w-[38rem] items-center !justify-around lg:!flex'
+              className='!mr-12 hidden !w-[38rem] items-center !justify-around lg:!flex'
             >
               <li
                 className={`!flex !w-full !items-center ${
@@ -94,9 +94,6 @@ const Header = () => {
                     </Link>
                     <Link href='/collections' className='cursor-pointer no-underline'>
                       <p className='text-base'>My Collections</p>
-                    </Link>
-                    <Link href='/users' className='cursor-pointer no-underline'>
-                      <p className='text-base'>Find Friends</p>
                     </Link>
                   </>
                 )}
@@ -151,13 +148,35 @@ const Header = () => {
                         {
                           label: (
                             <Link
-                              href='/stats'
+                              href={`/user/${session?.user?.id}`}
                               className='block w-full font-medium text-foreground no-underline'
                             >
-                              Watchlist Stats
+                              My Profile
                             </Link>
                           ),
-                          key: 'stats',
+                          key: 'my-profile',
+                        },
+                        {
+                          label: (
+                            <Link
+                              href='/friends'
+                              className='block w-full font-medium text-foreground no-underline'
+                            >
+                              My Friends
+                            </Link>
+                          ),
+                          key: 'my-friends',
+                        },
+                        {
+                          label: (
+                            <Link
+                              href='/users'
+                              className='block w-full font-medium text-foreground no-underline'
+                            >
+                              Find Friends
+                            </Link>
+                          ),
+                          key: 'find-friends',
                         },
                         {
                           label: <span className='font-medium text-red-500'>Log Out</span>,

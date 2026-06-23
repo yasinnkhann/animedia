@@ -25,7 +25,7 @@ export async function GET(req: Request) {
           { name: { contains: query, mode: 'insensitive' } },
           { email: { contains: query, mode: 'insensitive' } },
         ],
-        id: { not: userId }, // Don't return the logged-in user
+        // Allow returning the logged-in user so they can search for themselves
       },
       select: {
         id: true,

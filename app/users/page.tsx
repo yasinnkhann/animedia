@@ -91,11 +91,11 @@ export default function UsersPage() {
                   initials={user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
                   backgroundColor='hsl(var(--primary))'
                 />
-                <div className='flex flex-col'>
-                  <span className='text-xl font-medium transition-colors group-hover:text-primary'>
+                <div className='flex flex-1 flex-col justify-center gap-1 overflow-hidden'>
+                  <span className='truncate text-xl font-medium transition-colors group-hover:text-primary'>
                     {user.name || 'Anonymous User'}
                   </span>
-                  <span className='text-sm text-muted-foreground'>{user.email}</span>
+                  <span className='truncate text-sm text-muted-foreground'>{user.email}</span>
                 </div>
               </Link>
             </li>

@@ -137,6 +137,18 @@ export default function NotificationDropdown() {
                             <span className='font-semibold'>{notification.sender?.name}</span>{' '}
                             started following you.
                           </>
+                        ) : notification.type === 'ACTIVITY_LIKE' ? (
+                          <>
+                            <span className='font-semibold'>{notification.sender?.name}</span> liked
+                            your activity about{' '}
+                            <span className='font-semibold'>{notification.mediaTitle}</span>.
+                          </>
+                        ) : notification.type === 'ACTIVITY_COMMENT' ? (
+                          <>
+                            <span className='font-semibold'>{notification.sender?.name}</span>{' '}
+                            commented on your activity: &quot;
+                            <span className='italic'>{notification.message}</span>&quot;
+                          </>
                         ) : (
                           <>
                             <span className='font-semibold'>{notification.sender?.name}</span>{' '}

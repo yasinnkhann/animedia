@@ -24,6 +24,8 @@ export interface Activity {
   mediaImage: string | null;
   metadata: any;
   createdAt: string;
+  likes?: { userId: string }[];
+  _count?: { comments: number };
 }
 
 export interface BatchedActivity {
@@ -48,6 +50,8 @@ export const getActionText = (activity: Activity) => {
 export const getStatusText = (status: string) => {
   return status.replace(/_/g, ' ').toLowerCase();
 };
+
+import ActivityInteractions from './ActivityInteractions';
 
 export function SingleActivityRow({
   activity,
@@ -129,7 +133,7 @@ export function SingleActivityRow({
                   </span>
                 </>
               )}
-              {activity.metadata.status && (
+              {activity.metadata.status && activity.type !== 'STATUS_CHANGED' && (
                 <>
                   <span className='text-muted-foreground/50'>•</span>
                   <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground'>
@@ -148,6 +152,14 @@ export function SingleActivityRow({
             </>
           )}
         </div>
+
+        {!compact && (
+          <ActivityInteractions
+            activityId={activity.id}
+            initialLikes={activity.likes || []}
+            initialCommentCount={activity._count?.comments || 0}
+          />
+        )}
       </div>
 
       <div className='shrink-0 pl-2 sm:pl-4'>

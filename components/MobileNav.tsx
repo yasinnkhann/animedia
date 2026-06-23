@@ -212,18 +212,18 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   My Collections
                 </Link>
                 <Link
+                  href='/friends'
+                  onClick={onClose}
+                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
+                >
+                  My Friends
+                </Link>
+                <Link
                   href='/users'
                   onClick={onClose}
                   className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
                 >
                   Find Friends
-                </Link>
-                <Link
-                  href='/stats'
-                  onClick={onClose}
-                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
-                >
-                  Watchlist Stats
                 </Link>
               </>
             )}
