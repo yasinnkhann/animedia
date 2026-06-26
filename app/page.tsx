@@ -30,21 +30,22 @@ export default async function Home(props: {
       trending={trending}
       time={time}
       forYouContent={
-        <Suspense key='foryou-scroller' fallback={<ForYouScrollerSkeleton />}>
+        <Suspense fallback={<ForYouScrollerSkeleton />}>
           <ForYouServerSection />
         </Suspense>
       }
       popularContent={
-        <Suspense key={`popular-scroller-${popular}`} fallback={<HorizontalScrollerSkeleton />}>
-          <PopularServerSection popular={popular} />
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <PopularServerSection key={`popular-${popular}`} popular={popular} />
         </Suspense>
       }
       trendingContent={
-        <Suspense
-          key={`trending-scroller-${trending}-${time}`}
-          fallback={<HorizontalScrollerSkeleton />}
-        >
-          <TrendingServerSection trending={trending} time={time} />
+        <Suspense fallback={<HorizontalScrollerSkeleton />}>
+          <TrendingServerSection
+            key={`trending-${trending}-${time}`}
+            trending={trending}
+            time={time}
+          />
         </Suspense>
       }
     />
