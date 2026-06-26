@@ -5,6 +5,8 @@ import TrendingServerSection from '@/components/Home/TrendingServerSection';
 import ForYouServerSection from '@/components/Home/ForYouServerSection';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 
+import ForYouScrollerSkeleton from '@/components/Skeletons/ForYouScrollerSkeleton';
+
 export const metadata = {
   title: 'Home',
 };
@@ -28,7 +30,7 @@ export default async function Home(props: {
       trending={trending}
       time={time}
       forYouContent={
-        <Suspense key='foryou-scroller' fallback={<HorizontalScrollerSkeleton />}>
+        <Suspense key='foryou-scroller' fallback={<ForYouScrollerSkeleton />}>
           <ForYouServerSection />
         </Suspense>
       }
