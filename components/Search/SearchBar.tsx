@@ -199,7 +199,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         }}
       >
         <input
-          className='w-[calc(100%-2rem)] rounded-md border-none bg-muted/50 py-4 pl-12 pr-4 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
+          className='w-full rounded-md border-none bg-muted/50 py-4 pl-12 pr-4 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
           type='text'
           placeholder='Search for a movie, tv show, game, or person...'
           ref={ref}
@@ -227,7 +227,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
             dropDownSearchResults.games.length > 0 ||
             dropDownSearchResults.people.length > 0) && (
             <motion.div
-              className='absolute left-0 right-0 top-[4rem] z-50 mx-auto max-h-[28rem] w-[calc(100%-2rem)] overflow-y-auto rounded-md border border-border bg-background p-4 shadow-xl transition-all duration-300'
+              className='absolute left-0 right-0 top-[4rem] z-50 mx-auto max-h-[28rem] w-full overflow-y-auto rounded-md border border-border bg-background p-4 shadow-xl transition-all duration-300'
               initial='hidden'
               animate='visible'
               variants={{

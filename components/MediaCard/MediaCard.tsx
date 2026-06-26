@@ -173,9 +173,9 @@ export default function MediaCard({
 
         {userStatus && !onRemove && (
           <div
-            className={`absolute right-0 top-0 z-10 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
+            className={`absolute -right-px -top-px z-10 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
               userStatus as any
-            )} text-base text-white shadow-sm ${variant === 'fixed' ? '' : 'rounded-bl-xl rounded-tr-xl'}`}
+            )} text-base text-white shadow-sm ${variant === 'fixed' ? '' : 'rounded-bl-xl'}`}
           >
             {userStatus}
           </div>

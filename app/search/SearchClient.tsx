@@ -179,7 +179,7 @@ export default function SearchClient({
     }
 
     for (const item of activeSearchPayload.results) {
-      const matched = usersMediaMap.get(item.id);
+      const matched = usersMediaMap.get(String(item.id));
       if (matched) {
         matchedMedias.push(matched);
       }

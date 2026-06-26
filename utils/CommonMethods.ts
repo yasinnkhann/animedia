@@ -133,12 +133,25 @@ export class CommonMethods {
     userMatchedMedias: (Show | Movie | Game)[],
     item: {
       id: string | number;
+      mediaType?: string;
       [key: string]: any;
     }
   ) => {
-    const dataFound = userMatchedMedias.find(
-      (data: Show | Movie | Game) => String(data.id) === String(item.id)
-    );
+    const dataFound = userMatchedMedias.find((data: any) => {
+      if (String(data.id) !== String(item.id)) return false;
+
+      let dataType = 'unknown';
+      if ('current_episode' in data) dataType = 'show';
+      else if ('wishlist' in data) dataType = 'game';
+      else if ('status' in data) dataType = 'movie';
+
+      const itemType = item.mediaType || item.type;
+      if (itemType) {
+        return dataType === itemType || dataType === 'unknown';
+      }
+
+      return true;
+    });
 
     if (dataFound) {
       if ('status' in dataFound) {
@@ -156,7 +169,7 @@ export class CommonMethods {
         }
       }
 
-      if ('wishlist' in dataFound) {
+      if ('wishlist' in dataFound && dataFound.wishlist) {
         return 'WL';
       }
     }

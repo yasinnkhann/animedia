@@ -39,7 +39,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
           }
         }
         for (const item of items) {
-          const matched = usersMediaMap.get(item.id);
+          const matched = usersMediaMap.get(String(item.id));
           if (matched) {
             matchedMedias.push(matched);
           }
@@ -61,7 +61,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
             : item.type === 'show'
               ? usersShowsMap
               : usersGamesMap;
-        const matched = map.get(item.id);
+        const matched = map.get(String(item.id));
         if (matched) {
           matchedMedias.push(matched);
         }

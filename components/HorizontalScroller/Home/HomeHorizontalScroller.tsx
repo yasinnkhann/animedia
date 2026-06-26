@@ -36,7 +36,7 @@ const HomeHorizontalScroller = ({ items }: Props) => {
       }
     }
     for (const item of items) {
-      const matched = usersMediaDict.get(item.id);
+      const matched = usersMediaDict.get(String(item.id));
       if (matched) {
         matchedMedias.push(matched);
       }
