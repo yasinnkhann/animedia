@@ -822,7 +822,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <section className='relative mx-auto mt-4 aspect-[2/3] w-2/3 max-w-sm lg:mx-4 lg:w-auto lg:max-w-none'>
+      <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
         <Image
           className='rounded-lg'
           src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
@@ -833,15 +833,16 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         />
       </section>
 
-      <section className='mt-4 min-w-0'>
-        <section className='relative mb-8 mt-8 flex items-center'>
+      <section className='mt-4 flex min-w-0 flex-col'>
+        <h1 className='mb-2 text-3xl font-bold sm:text-4xl'>{showDetailsData.showDetails.name}</h1>
+        <section className='relative mb-6 mt-4 flex items-center'>
           <div className='flex items-center'>
-            <section className='h-[5rem] w-[5rem]'>
+            <section className='h-[4rem] w-[4rem] sm:h-[5rem] sm:w-[5rem]'>
               <RoundProgressBar
                 percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
               />
             </section>
-            <p className='ml-[.5rem] text-base font-medium'>
+            <p className='ml-4 text-sm font-medium sm:text-base'>
               {commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
             </p>
 
@@ -858,7 +859,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         {status === 'authenticated' &&
           session &&
           (isLoading ? (
-            <section className='my-4 flex items-center space-x-4'>
+            <section className='my-4 flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
               <div className='relative'>
                 <select
                   disabled
@@ -1083,8 +1084,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
             </section>
           ))}
 
-        <section className='pb-32'>
-          <h1>{showDetailsData.showDetails.name}</h1>
+        <section className='mt-6 pb-8 lg:pb-32'>
           <h4 className='my-4'>{showDetailsData.showDetails.tagline}</h4>
           <p>{showDetailsData.showDetails.overview}</p>
         </section>

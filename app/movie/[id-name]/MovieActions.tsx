@@ -121,7 +121,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
 
   if (isLoading) {
     return (
-      <section className='my-4 flex items-center space-x-4'>
+      <section className='my-4 flex flex-wrap items-center gap-4'>
         <div className='relative'>
           <select
             disabled
@@ -145,7 +145,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
   }
 
   return (
-    <section className='my-4 flex items-center space-x-4'>
+    <section className='my-4 flex flex-wrap items-center gap-4'>
       <div className='relative'>
         <select
           className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'

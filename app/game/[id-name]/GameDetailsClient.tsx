@@ -263,7 +263,7 @@ const GameDetailsClient = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <section className='relative mx-auto mt-4 aspect-[2/3] w-2/3 max-w-sm lg:mx-4 lg:w-auto lg:max-w-none'>
+      <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
         <Image
           className='rounded-lg'
           src={CommonMethods.getIgdbImage(game.coverUrl)}
@@ -274,12 +274,13 @@ const GameDetailsClient = ({
         />
       </section>
 
-      <section className='mt-4'>
-        <section className='mb-8 mt-8 flex items-center'>
-          <section className='h-[5rem] w-[5rem]'>
+      <section className='mt-4 flex flex-col'>
+        <h1 className='mb-2 text-3xl font-bold sm:text-4xl'>{game.name}</h1>
+        <section className='mb-6 mt-4 flex items-center'>
+          <section className='h-[4rem] w-[4rem] sm:h-[5rem] sm:w-[5rem]'>
             <RoundProgressBar percentageVal={+(game.rating ?? 0).toFixed(1)} />
           </section>
-          <p className='ml-[.5rem] text-base font-medium'>
+          <p className='ml-4 text-sm font-medium sm:text-base'>
             {commaNumber(game.rating_count ?? 0)} voted users
           </p>
         </section>
@@ -304,7 +305,7 @@ const GameDetailsClient = ({
               </div>
             </section>
           ) : (
-            <section className='my-4 flex items-center space-x-4'>
+            <section className='my-4 flex flex-wrap items-center gap-4'>
               <div className='relative'>
                 <Button
                   onClick={handleWishlist}
@@ -375,8 +376,7 @@ const GameDetailsClient = ({
             </section>
           ))}
 
-        <section className='pb-32'>
-          <h1>{game.name}</h1>
+        <section className='mt-6 pb-8 lg:pb-32'>
           <div>
             {gameSummary ? (
               gameSummary.split(' ').length <= MAX_SUMMARY_WORD_LENGTH ? (

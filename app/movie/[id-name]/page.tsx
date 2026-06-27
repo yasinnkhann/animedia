@@ -71,7 +71,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   return (
     <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'>
-      <section className='relative mx-auto mt-4 aspect-[2/3] w-2/3 max-w-sm lg:mx-4 lg:w-auto lg:max-w-none'>
+      <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
         <Image
           className='rounded-lg'
           src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
@@ -82,12 +82,13 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
         />
       </section>
 
-      <section className='mt-4'>
-        <section className='mb-8 mt-8 flex items-center'>
-          <section className='h-[5rem] w-[5rem]'>
+      <section className='mt-4 flex flex-col'>
+        <h1 className='mb-2 text-3xl font-bold sm:text-4xl'>{movieDetails?.title}</h1>
+        <section className='mb-6 mt-4 flex items-center'>
+          <section className='h-[4rem] w-[4rem] sm:h-[5rem] sm:w-[5rem]'>
             <RoundProgressBar percentageVal={+(movieDetails?.vote_average ?? 0).toFixed(1) * 10} />
           </section>
-          <p className='ml-[.5rem] text-base font-medium'>
+          <p className='ml-4 text-sm font-medium sm:text-base'>
             {commaNumber(movieDetails?.vote_count ?? 0)} voted users
           </p>
         </section>
@@ -102,8 +103,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
           }
         />
 
-        <section className='pb-32'>
-          <h1>{movieDetails?.title}</h1>
+        <section className='mt-6 pb-8 lg:pb-32'>
           <h4 className='my-4'>{movieDetails?.tagline}</h4>
           <p>{movieDetails?.overview}</p>
         </section>

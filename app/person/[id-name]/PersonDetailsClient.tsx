@@ -58,10 +58,13 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
+      <h1 className='mb-6 text-center text-4xl font-bold tracking-tight text-foreground lg:hidden'>
+        {person.name}
+      </h1>
       <div className='grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]'>
         {/* Left Column: Image & Personal Info */}
         <aside className='flex flex-col gap-8'>
-          <div className='relative aspect-[2/3] w-full overflow-hidden rounded-xl shadow-2xl'>
+          <div className='relative mx-auto aspect-[2/3] w-[14rem] overflow-hidden rounded-xl shadow-2xl sm:w-[16rem] lg:mx-0 lg:w-full'>
             <Image
               className='object-cover'
               src={CommonMethods.getTheMovieDbImage(person.profile_path)}
@@ -133,7 +136,9 @@ export default function PersonDetailsClient({ personDetailsData, creditsNode }: 
         {/* Right Column: Bio & Credits */}
         <section className='flex min-w-0 flex-col gap-8'>
           <div>
-            <h1 className='mb-6 text-5xl tracking-tight text-foreground'>{person.name}</h1>
+            <h1 className='mb-6 hidden text-5xl font-bold tracking-tight text-foreground lg:block'>
+              {person.name}
+            </h1>
             <h2 className='mb-4 text-2xl font-bold text-foreground'>Biography</h2>
             <div className='text-lg leading-relaxed text-muted-foreground'>
               {person.biography ? (
