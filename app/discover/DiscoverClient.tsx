@@ -125,7 +125,7 @@ export default function DiscoverClient() {
 
   return (
     <div className='w-full'>
-      <div className='mb-8 flex justify-center space-x-4'>
+      <div className='mb-8 flex flex-wrap justify-center gap-3 sm:gap-4'>
         <button
           onClick={() => setMediaType('MOVIE')}
           className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
@@ -169,7 +169,7 @@ export default function DiscoverClient() {
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
             placeholder='e.g., A dark fantasy anime similar to Berserk but with more magic...'
-            className='relative w-full rounded-full border border-gray-700 bg-slate-900 px-8 py-6 pl-14 text-lg text-white shadow-2xl placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50'
+            className='relative w-full text-ellipsis rounded-full border border-gray-700 bg-slate-900 py-6 pl-14 pr-20 text-lg text-white shadow-2xl placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50'
             disabled={loading}
           />
           <FaRobot className='absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-blue-500' />

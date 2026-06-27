@@ -34,7 +34,7 @@ const Header = () => {
   if (status === 'loading') {
     return (
       <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center border-b border-border bg-background/80 font-sans !text-base backdrop-blur-md transition-colors duration-300'>
-        <nav className='ml-[4rem] !flex w-full !items-center'></nav>
+        <nav className='ml-4 !flex w-full !items-center lg:ml-[4rem]'></nav>
       </header>
     );
   }
@@ -42,7 +42,7 @@ const Header = () => {
   return (
     <>
       <header className='fixed top-0 z-[999] !flex h-[var(--header-height-mobile)] w-full !items-center border-b border-border bg-background/80 font-sans !text-base backdrop-blur-md transition-colors duration-300'>
-        <nav className='ml-[4rem] !flex w-full !items-center'>
+        <nav className='ml-4 !flex w-full !items-center lg:ml-[4rem]'>
           <section>
             <Link href='/' className='!mb-0 text-foreground transition-colors hover:text-primary'>
               <AiFillHome size={25} onClick={() => setIsSearchBtnClicked(false)} />
