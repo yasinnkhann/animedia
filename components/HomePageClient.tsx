@@ -84,7 +84,7 @@ const HomePageClient = ({
       transition={{ duration: 0.4 }}
     >
       <div className='relative z-50'>
-        <div className='hidden lg:block'>
+        <div className='hidden px-4 md:px-[3rem] lg:block'>
           <SearchBar ref={searchBarRef} />
         </div>
 

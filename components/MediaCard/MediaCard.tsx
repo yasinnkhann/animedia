@@ -78,10 +78,15 @@ export default function MediaCard({
 
   let releaseDateText = '';
   if (isGame) {
-    releaseDateText = item.first_release_date
-      ? CommonMethods.formatDate(new Date(item.first_release_date * 1000).toISOString()) ||
-        'Release Date Not Available'
-      : 'Release Date Not Available';
+    if (item.first_release_date) {
+      releaseDateText =
+        CommonMethods.formatDate(new Date(item.first_release_date * 1000).toISOString()) ||
+        'Release Date Not Available';
+    } else if (item.release_date) {
+      releaseDateText = CommonMethods.formatDate(item.release_date) || 'Release Date Not Available';
+    } else {
+      releaseDateText = 'Release Date Not Available';
+    }
   } else if (isMovie) {
     releaseDateText = item.release_date
       ? CommonMethods.formatDate(item.release_date) || 'Release Date Not Available'
