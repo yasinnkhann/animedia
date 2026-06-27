@@ -49,8 +49,20 @@ const BottomNav = () => {
               isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            {isActive ? item.activeIcon : item.inactiveIcon}
-            <span className='mt-1 text-[10px] font-medium'>{item.name}</span>
+            <div
+              className={`relative flex flex-col items-center justify-center transition-all duration-300 ${
+                isActive ? 'scale-110 drop-shadow-[0_0_8px_currentColor]' : 'scale-100'
+              }`}
+            >
+              {isActive ? item.activeIcon : item.inactiveIcon}
+            </div>
+            <span
+              className={`mt-1 text-[10px] transition-all duration-300 ${
+                isActive ? 'font-bold tracking-wide' : 'font-medium'
+              }`}
+            >
+              {item.name}
+            </span>
           </Link>
         );
       })}
