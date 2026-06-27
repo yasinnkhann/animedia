@@ -182,8 +182,9 @@ export default function MediaCard({
         )}
 
         {userRating && (
-          <div className='absolute left-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-xs font-bold text-yellow-400 shadow-sm backdrop-blur-md'>
-            ★ {userRating}
+          <div className='absolute left-2 top-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-bold text-yellow-400 shadow-sm backdrop-blur-md'>
+            <span>★</span>
+            <span>{userRating}</span>
           </div>
         )}
 
