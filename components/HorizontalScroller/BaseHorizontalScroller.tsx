@@ -18,7 +18,7 @@ export function BaseHorizontalScroller<T>({
   items,
   renderItem,
   keyExtractor,
-  scrollContainerClassName = '!h-[26rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl',
+  scrollContainerClassName = 'py-4 !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl',
   onScroll,
 }: BaseHorizontalScrollerProps<T>) {
   const {

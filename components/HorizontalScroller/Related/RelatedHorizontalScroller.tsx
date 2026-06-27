@@ -75,7 +75,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
     <BaseHorizontalScroller
       items={items}
       keyExtractor={item => item.id}
-      scrollContainerClassName='!h-[22rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+      scrollContainerClassName='py-4 !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={(item, _idx, dragging) => {
         const userStatus = CommonMethods.getUserStatusFromMedia(userMatchedMedias, item);
         const mappedItem = {

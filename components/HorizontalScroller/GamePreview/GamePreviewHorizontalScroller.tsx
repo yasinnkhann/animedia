@@ -13,7 +13,7 @@ const GamePreviewHorizontalScroller = ({ items }: Props) => {
     <BaseHorizontalScroller
       items={items}
       keyExtractor={item => item.id}
-      scrollContainerClassName='!h-[22rem] !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+      scrollContainerClassName='py-4 !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={(item, _idx, dragging) => (
         <GamePreviewCard itemId={item.id} item={item} dragging={dragging} />
       )}

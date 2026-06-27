@@ -46,7 +46,7 @@ const ForYouSection = ({ forYouData }: Props) => {
 
   return (
     <section className='mt-8'>
-      <div className='mx-[3rem] flex flex-col justify-between md:flex-row md:items-end'>
+      <div className='flex flex-col justify-between px-4 md:flex-row md:items-end md:px-[3rem]'>
         <div>
           <h1 className='text-xl sm:text-3xl'>Recommended For You</h1>
           <p className='mt-1 text-sm text-muted-foreground'>Based on what you&apos;re tracking</p>
@@ -86,7 +86,7 @@ const ForYouSection = ({ forYouData }: Props) => {
         {filteredAndSortedData.length > 0 ? (
           <ForYouScroller items={filteredAndSortedData} />
         ) : (
-          <div className='ml-[3rem] flex h-[15rem] items-center text-muted-foreground'>
+          <div className='flex h-[15rem] items-center px-4 text-muted-foreground md:px-[3rem]'>
             No recommendations found matching your filters.
           </div>
         )}

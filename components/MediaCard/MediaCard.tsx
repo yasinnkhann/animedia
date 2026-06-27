@@ -120,12 +120,12 @@ export default function MediaCard({
 
   const containerClasses =
     variant === 'fixed'
-      ? 'relative mx-4 h-[15rem] w-[10rem] select-none flex-shrink-0 group'
+      ? 'relative mx-3 flex w-[9rem] flex-col select-none flex-shrink-0 group sm:mx-4 sm:w-[10rem]'
       : 'relative flex flex-col gap-2 w-full group';
 
   const imageWrapperClasses =
     variant === 'fixed'
-      ? 'relative h-full w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'
+      ? 'relative aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'
       : 'relative aspect-[2/3] w-full overflow-hidden rounded-xl border border-border bg-card shadow-lg transition-transform duration-300 group-hover:-translate-y-1 group-hover:border-primary/50 group-hover:shadow-xl group-hover:shadow-primary/20';
 
   const handleClick = (e: React.MouseEvent) => {

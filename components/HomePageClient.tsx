@@ -84,18 +84,20 @@ const HomePageClient = ({
       transition={{ duration: 0.4 }}
     >
       <div className='relative z-50'>
-        <SearchBar ref={searchBarRef} />
+        <div className='hidden lg:block'>
+          <SearchBar ref={searchBarRef} />
+        </div>
 
         {forYouContent}
 
         <section className='mt-8'>
-          <section className='flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
+          <section className='flex w-full flex-col items-start gap-3 px-4 sm:flex-row sm:items-end md:px-[3rem]'>
             <div>
               <h1 className='truncate whitespace-nowrap text-xl sm:text-3xl'>
                 What&apos;s Popular
               </h1>
             </div>
-            <ul className='flex w-[15rem] justify-around md:w-[25rem]'>
+            <ul className='flex gap-6 text-sm sm:w-[25rem] sm:justify-around sm:gap-0 sm:text-base'>
               <li
                 className='relative cursor-pointer pb-1'
                 onClick={() => handleUpdateParams('popular', 'movies')}
@@ -145,14 +147,14 @@ const HomePageClient = ({
             )}
           </section>
 
-          <section className='mt-4 flex w-full items-end pl-4 pr-4 md:pl-[3rem]'>
+          <section className='mt-4 flex w-full flex-col items-start gap-3 px-4 sm:flex-row sm:items-end md:px-[3rem]'>
             <div>
               <h1 className='truncate whitespace-nowrap text-xl sm:text-3xl'>Trending</h1>
             </div>
-            <section className='flex w-full justify-around'>
-              <ul className='flex justify-around'>
+            <section className='flex w-full flex-wrap gap-x-8 gap-y-3 sm:w-auto sm:flex-1 sm:flex-nowrap sm:justify-around sm:gap-x-0'>
+              <ul className='flex gap-6 text-sm sm:text-base'>
                 <li
-                  className='relative mr-4 cursor-pointer pb-1 md:mr-20'
+                  className='relative cursor-pointer pb-1'
                   onClick={() => handleUpdateParams('trending', 'movies')}
                 >
                   Movies
@@ -176,9 +178,9 @@ const HomePageClient = ({
                   )}
                 </li>
               </ul>
-              <ul className='flex justify-around'>
+              <ul className='flex gap-6 text-sm sm:text-base'>
                 <li
-                  className='relative mr-4 cursor-pointer pb-1 md:mr-20'
+                  className='relative cursor-pointer pb-1'
                   onClick={() => handleUpdateParams('time', 'day')}
                 >
                   Today
@@ -217,7 +219,7 @@ const HomePageClient = ({
         </section>
 
         {session && (
-          <section className='ml-[3rem] mr-[3rem] mt-16'>
+          <section className='mt-16 px-4 lg:px-12'>
             <h2 className='mb-6 truncate whitespace-nowrap text-xl font-bold sm:text-3xl'>
               Friends Activity
             </h2>

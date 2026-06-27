@@ -109,7 +109,7 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
       items={visibleItems}
       keyExtractor={item => `${item.season}-${item.episode}`}
       onScroll={handleScroll}
-      scrollContainerClassName='!h-[14rem] !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
+      scrollContainerClassName='py-4 !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={item => {
         const epData = seasonData[item.season]?.[item.episode];
         const isLoading = seasonData[item.season] === undefined;

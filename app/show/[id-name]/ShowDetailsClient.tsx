@@ -817,12 +817,12 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   }
   return (
     <motion.main
-      className='mt-[calc(var(--header-height-mobile)+1rem)] grid grid-cols-[30%_70%] px-16'
+      className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <section className='aspect-h-16 aspect-w-16 relative mx-4 mt-4'>
+      <section className='relative mx-auto mt-4 aspect-[2/3] w-2/3 max-w-sm lg:mx-4 lg:w-auto lg:max-w-none'>
         <Image
           className='rounded-lg'
           src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
@@ -1090,7 +1090,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         </section>
       </section>
 
-      <section className='my-4 ml-8'>
+      <section className='my-4 lg:ml-8'>
         <h3 className='mb-4 underline underline-offset-4'>Details</h3>
         <h4 className='mt-4'>No. of Seasons</h4>
         <p className='ml-1'>{currTotalSeasonCount}</p>
@@ -1157,7 +1157,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         )}
       </section>
 
-      <section className='col-start-2 mt-4'>
+      <section className='mt-4 lg:col-start-2'>
         {!_.isEmpty(showDetailsData.showDetails.seasons) && (
           <section>
             <h3 className='mb-4 ml-8'>Episodes</h3>
