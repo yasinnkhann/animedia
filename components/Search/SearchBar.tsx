@@ -199,7 +199,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         }}
       >
         <input
-          className='w-full rounded-md border-none bg-muted/50 py-4 pl-12 pr-4 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
+          className='w-full text-ellipsis rounded-md border-none bg-muted/50 py-4 pl-12 pr-14 text-base text-foreground transition duration-300 focus:border-0 focus:shadow-[0_1px_12px_#5272a2] focus:outline-none'
           type='text'
           placeholder='Search for a movie, tv show, game, or person...'
           ref={ref}
@@ -215,7 +215,7 @@ const SearchBar = forwardRef<HTMLInputElement, Props>(
         />
 
         <button
-          className='absolute left-[calc(100%-3.5rem)] top-3.5 z-10 border-none bg-transparent text-[1.5rem] text-muted-foreground transition-all hover:scale-125 hover:cursor-pointer hover:text-primary focus:text-primary focus:outline-none'
+          className='absolute right-4 top-1/2 z-10 -translate-y-1/2 border-none bg-transparent text-[1.5rem] text-muted-foreground transition-all hover:scale-125 hover:cursor-pointer hover:text-primary focus:text-primary focus:outline-none'
           type='submit'
         >
           {isSearching ? <FaSpinner className='animate-spin' /> : <FaSearch />}

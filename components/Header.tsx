@@ -202,7 +202,7 @@ const Header = () => {
       </header>
       {isSearchBtnClicked && (
         <motion.div
-          className='relative z-[998]'
+          className='relative z-50'
           initial={{ y: 0 }}
           animate={{ y: 75 }}
           transition={{
