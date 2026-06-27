@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { MediaType } from '@prisma/client';
 import ReviewCard, { Review } from './ReviewCard';
@@ -26,42 +27,41 @@ export default function ReviewSection({
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
 
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [summary, setSummary] = useState('');
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [hasSummarized, setHasSummarized] = useState(false);
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch(`/api/reviews?mediaType=${mediaType}&mediaId=${mediaId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setReviews(data.reviews);
-        }
-      } catch (err) {
-        console.error('Error fetching reviews:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchReviews();
-  }, [mediaType, mediaId]);
+  const { data: reviews = [], isLoading: loading } = useQuery({
+    queryKey: ['reviews', mediaType, mediaId],
+    queryFn: async () => {
+      const res = await fetch(`/api/reviews?mediaType=${mediaType}&mediaId=${mediaId}`);
+      if (!res.ok) throw new Error('Failed to fetch reviews');
+      const data = await res.json();
+      return data.reviews as Review[];
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    try {
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
       const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        setReviews(prev => prev.filter(r => r.id !== id));
-      }
-    } catch (err) {
-      console.error('Failed to delete review');
-    }
+      if (!res.ok) throw new Error('Failed to delete review');
+    },
+    onSuccess: (_, id) => {
+      queryClient.setQueryData(['reviews', mediaType, mediaId], (old: Review[]) =>
+        old ? old.filter(r => r.id !== id) : []
+      );
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   const handleReviewSubmitted = (review: Review) => {
-    setReviews([review, ...reviews]);
+    queryClient.setQueryData(['reviews', mediaType, mediaId], (old: Review[]) =>
+      old ? [review, ...old] : [review]
+    );
   };
 
   const userHasReviewed = reviews.some(r => r.userId === currentUserId);

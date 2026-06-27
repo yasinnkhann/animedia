@@ -1,34 +1,29 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Activity, BatchedActivity, ActivityBatchItem } from './ActivityBatchItem';
 
 export function ActivityFeed() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isAuthed, setIsAuthed] = useState(true);
+  const {
+    data: activities = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['activityFeed'],
+    queryFn: async () => {
+      const res = await fetch('/api/feed');
+      if (res.status === 401) throw new Error('Unauthorized');
+      if (!res.ok) throw new Error('Failed to load feed');
+      const data = await res.json();
+      return data.activities as Activity[];
+    },
+    retry: false,
+  });
 
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const res = await fetch('/api/feed');
-        if (res.status === 401) {
-          setIsAuthed(false);
-          return;
-        }
-        if (res.ok) {
-          const data = await res.json();
-          setActivities(data.activities);
-        }
-      } catch (err) {
-        console.error('Failed to load feed:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchActivities();
-  }, []);
+  const isAuthed = !(isError && error?.message === 'Unauthorized');
 
   const groupedActivities = useMemo(() => {
     const batches: BatchedActivity[] = [];
@@ -60,7 +55,7 @@ export function ActivityFeed() {
 
   if (!isAuthed) return null;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className='flex h-40 w-full items-center justify-center'>
         <div className='h-8 w-8 animate-spin rounded-full border-b-2 border-primary'></div>

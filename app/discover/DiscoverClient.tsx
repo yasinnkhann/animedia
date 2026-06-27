@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import MediaCard from '@/components/MediaCard/MediaCard';
 import { CommonMethods } from '@/utils/CommonMethods';
@@ -10,69 +11,15 @@ import { FaRobot, FaSearch, FaFilm, FaTv, FaGamepad } from 'react-icons/fa';
 export default function DiscoverClient() {
   const [prompt, setPrompt] = useState('');
   const [mediaType, setMediaType] = useState<'MOVIE' | 'SHOW' | 'GAME'>('MOVIE');
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [results, setResults] = useState<Array<{ type: string; data: any }>>([]);
   const { userMovies, userShows, userGames } = useUserMedia();
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!prompt.trim()) return;
+  const discoverMutation = useMutation({
+    mutationFn: async ({ isMore = false }: { isMore?: boolean } = {}) => {
+      const excludedTitles = isMore
+        ? results.map(r => r.data.name || r.data.title).filter(Boolean)
+        : undefined;
 
-    setLoading(true);
-    setResults([]);
-
-    try {
-      const response = await fetch('/api/discover', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, mediaType }),
-      });
-
-      if (!response.ok) throw new Error('Network response was not ok');
-      if (!response.body) throw new Error('No readable stream returned');
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Keep the last incomplete line in the buffer
-
-        for (const line of lines) {
-          if (line.trim()) {
-            try {
-              const recommendation = JSON.parse(line);
-              setResults(prev => {
-                if (prev.some(r => r.data.id === recommendation.data.id)) return prev;
-                return [...prev, recommendation];
-              });
-            } catch (e) {
-              console.error('Failed to parse line:', line);
-            }
-          }
-        }
-      }
-    } catch (error: any) {
-      console.error('Failed to fetch recommendations:', error);
-      alert(error?.message || 'An error occurred fetching recommendations.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGenerateMore = async () => {
-    if (!prompt.trim() || loading || loadingMore) return;
-
-    setLoadingMore(true);
-
-    try {
-      const excludedTitles = results.map(r => r.data.name || r.data.title).filter(Boolean);
       const response = await fetch('/api/discover', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -108,12 +55,26 @@ export default function DiscoverClient() {
           }
         }
       }
-    } catch (error: any) {
-      console.error('Failed to fetch more recommendations:', error);
+    },
+    onError: (error: any) => {
+      console.error('Failed to fetch recommendations:', error);
       alert(error?.message || 'An error occurred fetching recommendations.');
-    } finally {
-      setLoadingMore(false);
-    }
+    },
+  });
+
+  const loading = discoverMutation.isPending && !discoverMutation.variables?.isMore;
+  const loadingMore = discoverMutation.isPending && discoverMutation.variables?.isMore;
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!prompt.trim() || discoverMutation.isPending) return;
+    setResults([]);
+    discoverMutation.mutate({ isMore: false });
+  };
+
+  const handleGenerateMore = () => {
+    if (!prompt.trim() || discoverMutation.isPending) return;
+    discoverMutation.mutate({ isMore: true });
   };
 
   const getMatchedMedias = (type: string) => {

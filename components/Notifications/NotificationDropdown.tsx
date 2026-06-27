@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BiBell } from 'react-icons/bi';
 import Link from 'next/link';
@@ -10,33 +11,36 @@ import { CommonMethods } from '@/utils/CommonMethods';
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<any[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    let mounted = true;
-    const doFetch = async () => {
-      try {
-        const res = await fetch('/api/notifications');
-        if (res.ok && mounted) {
-          const data = await res.json();
-          setNotifications(data);
-        }
-      } catch (err) {
-        console.error('Error:', err);
-      }
-    };
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const res = await fetch('/api/notifications');
+      if (!res.ok) throw new Error('Failed to load notifications');
+      return res.json();
+    },
+    refetchInterval: 60000,
+  });
 
-    // Defer the initial fetch to avoid synchronous state update in effect
-    const timeoutId = setTimeout(doFetch, 0);
-    const interval = setInterval(doFetch, 60000);
-
-    return () => {
-      mounted = false;
-      clearTimeout(timeoutId);
-      clearInterval(interval);
-    };
-  }, []);
+  const markAsReadMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/notifications/${id}`, { method: 'PATCH' });
+      if (!res.ok) throw new Error('Failed to mark as read');
+    },
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: ['notifications'] });
+      const previousNotifications = queryClient.getQueryData(['notifications']);
+      queryClient.setQueryData(['notifications'], (old: any[]) =>
+        old ? old.map(n => (n.id === id ? { ...n, isRead: true } : n)) : []
+      );
+      return { previousNotifications };
+    },
+    onError: (err, id, context) => {
+      queryClient.setQueryData(['notifications'], context?.previousNotifications);
+    },
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,19 +54,12 @@ export default function NotificationDropdown() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter((n: any) => !n.isRead).length;
 
-  const handleNotificationClick = async (notification: any) => {
+  const handleNotificationClick = (notification: any) => {
     setIsOpen(false);
     if (!notification.isRead) {
-      try {
-        await fetch(`/api/notifications/${notification.id}`, { method: 'PATCH' });
-        setNotifications(prev =>
-          prev.map(n => (n.id === notification.id ? { ...n, isRead: true } : n))
-        );
-      } catch (error) {
-        console.error('Error marking notification read:', error);
-      }
+      markAsReadMutation.mutate(notification.id);
     }
   };
 
@@ -109,7 +106,7 @@ export default function NotificationDropdown() {
                   No notifications yet.
                 </div>
               ) : (
-                notifications.map(notification => (
+                notifications.map((notification: any) => (
                   <Link
                     key={notification.id}
                     href={getMediaUrl(notification)}

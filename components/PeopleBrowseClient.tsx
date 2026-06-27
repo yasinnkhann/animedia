@@ -42,7 +42,7 @@ const PeopleBrowseClient = ({ initialData, title, queryKey, fetchNextPageAction 
   }, [data]);
 
   return (
-    <main className='mt-[calc(var(--header-height-mobile)+1rem)] px-48'>
+    <main className='mt-[calc(var(--header-height-mobile)+1rem)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
       <h3 className='mb-4'>{title}</h3>
       <PeopleList results={allResults} isFetchingNextPage={isFetchingNextPage} />
 
