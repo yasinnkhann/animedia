@@ -120,8 +120,8 @@ export default function MediaCard({
 
   const containerClasses =
     variant === 'fixed'
-      ? 'relative mx-3 flex w-[9rem] flex-col select-none flex-shrink-0 group sm:mx-4 sm:w-[10rem]'
-      : 'relative flex flex-col gap-2 w-full group';
+      ? 'relative mx-3 flex w-[9rem] flex-col select-none flex-shrink-0 group sm:mx-4 sm:w-[10rem] transition-transform active:scale-95'
+      : 'relative flex flex-col gap-2 w-full group transition-transform active:scale-95';
 
   const imageWrapperClasses =
     variant === 'fixed'

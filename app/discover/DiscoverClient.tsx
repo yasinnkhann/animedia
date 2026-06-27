@@ -128,7 +128,7 @@ export default function DiscoverClient() {
       <div className='mb-8 flex flex-wrap justify-center gap-3 sm:gap-4'>
         <button
           onClick={() => setMediaType('MOVIE')}
-          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all active:scale-95 ${
             mediaType === 'MOVIE'
               ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/50'
               : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
@@ -139,7 +139,7 @@ export default function DiscoverClient() {
         </button>
         <button
           onClick={() => setMediaType('SHOW')}
-          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all active:scale-95 ${
             mediaType === 'SHOW'
               ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/50'
               : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
@@ -150,7 +150,7 @@ export default function DiscoverClient() {
         </button>
         <button
           onClick={() => setMediaType('GAME')}
-          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all ${
+          className={`flex items-center space-x-2 rounded-full px-6 py-3 font-semibold transition-all active:scale-95 ${
             mediaType === 'GAME'
               ? 'bg-pink-600 text-white shadow-lg shadow-pink-500/50'
               : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-white'
@@ -176,7 +176,7 @@ export default function DiscoverClient() {
           <button
             type='submit'
             disabled={loading || !prompt.trim()}
-            className='absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-blue-600 text-white transition-colors hover:bg-blue-500 disabled:bg-gray-700'
+            className='absolute right-3 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-blue-600 text-white transition-all hover:bg-blue-500 active:scale-95 disabled:bg-gray-700'
           >
             {loading ? (
               <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent' />

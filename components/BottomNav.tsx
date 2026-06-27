@@ -45,7 +45,7 @@ const BottomNav = () => {
           <Link
             key={item.name}
             href={item.href}
-            className={`flex h-full w-full flex-col items-center justify-center transition-colors ${
+            className={`flex h-full w-full flex-col items-center justify-center transition-all active:scale-95 ${
               isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
