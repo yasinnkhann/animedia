@@ -17,10 +17,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@ai-sdk/google": "^3.0.83",
     "@ai-sdk/groq": "^3.0.42",
-    "@ai-sdk/openai": "^3.0.72",
-    "@google/genai": "^2.8.0",
     "@hookform/resolvers": "^5.4.0",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@prisma/adapter-pg": "7.8.0",

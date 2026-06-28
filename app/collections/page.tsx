@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 import CollectionsClient from './CollectionsClient';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
+import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -40,21 +41,26 @@ export default async function CollectionsPage() {
   });
 
   return (
-    <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] px-4 pb-32 md:px-16'>
-      <div className='mx-auto max-w-6xl'>
-        <div className='mb-8 flex items-center justify-between'>
-          <div>
-            <h1 className='text-4xl font-extrabold tracking-tight text-foreground'>
-              My Collections
-            </h1>
-            <p className='mt-2 text-muted-foreground'>
-              Curate your favorite movies, shows, and games into shareable lists.
-            </p>
-          </div>
-        </div>
-
-        <CollectionsClient initialCollections={collections} currentUserId={session.user.id} />
+    <>
+      <div className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+        <LibraryNav currentTab='collections' />
       </div>
-    </PageAnimationWrapper>
+      <PageAnimationWrapper className='px-4 pb-32 pt-8 md:px-16'>
+        <div className='mx-auto max-w-6xl'>
+          <div className='mb-8 flex items-center justify-between'>
+            <div>
+              <h1 className='text-4xl font-extrabold tracking-tight text-foreground'>
+                My Collections
+              </h1>
+              <p className='mt-2 text-muted-foreground'>
+                Curate your favorite movies, shows, and games into shareable lists.
+              </p>
+            </div>
+          </div>
+
+          <CollectionsClient initialCollections={collections} currentUserId={session.user.id} />
+        </div>
+      </PageAnimationWrapper>
+    </>
   );
 }

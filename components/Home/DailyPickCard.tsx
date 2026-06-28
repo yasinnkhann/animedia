@@ -3,6 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BiBot, BiRightArrowAlt } from 'react-icons/bi';
 import { DailyPick } from '@prisma/client';
+import { CommonMethods } from '@/utils/CommonMethods';
+import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
+import { getGameDetailsAction } from '@/lib/actions/igdbActions';
 
 export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
   // Fetch media details based on type
@@ -16,7 +19,12 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
     });
     if (media) {
       mediaTitle = media.name;
-      mediaImage = media.image || '';
+      let imgPath = media.image;
+      if (!imgPath) {
+        const details = await getMovieDetailsAction(media.id);
+        if (details) imgPath = details.poster_path;
+      }
+      mediaImage = CommonMethods.getTheMovieDbImage(imgPath) as string;
       mediaLink = `/movie/${media.id}`;
     }
   } else if (pick.mediaType === 'SHOW') {
@@ -25,7 +33,12 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
     });
     if (media) {
       mediaTitle = media.name;
-      mediaImage = media.image || '';
+      let imgPath = media.image;
+      if (!imgPath) {
+        const details = await getShowDetailsAction(media.id);
+        if (details) imgPath = details.poster_path;
+      }
+      mediaImage = CommonMethods.getTheMovieDbImage(imgPath) as string;
       mediaLink = `/show/${media.id}`;
     }
   } else if (pick.mediaType === 'GAME') {
@@ -34,7 +47,12 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
     });
     if (media) {
       mediaTitle = media.name;
-      mediaImage = media.image || '';
+      let imgPath = media.image;
+      if (!imgPath) {
+        const details = await getGameDetailsAction(media.id);
+        if (details) imgPath = details.coverUrl;
+      }
+      mediaImage = CommonMethods.getIgdbImage(imgPath) as string;
       mediaLink = `/game/${media.id}`;
     }
   }

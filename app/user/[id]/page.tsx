@@ -4,6 +4,15 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import Avatar from '@/components/ui/Avatar';
+import {
+  BiMoviePlay,
+  BiTv,
+  BiJoystick,
+  BiStar,
+  BiCollection,
+  BiRightArrowAlt,
+} from 'react-icons/bi';
+import Link from 'next/link';
 import StatsDashboard from '@/app/stats/StatsDashboard';
 import ActivityFeed from '@/components/Profile/ActivityFeed';
 import MediaCard from '@/components/MediaCard/MediaCard';
@@ -116,7 +125,7 @@ export default function UserProfilePage() {
 
   if (!profile || !profile.user) return null;
 
-  const { user, media, activities } = profile;
+  const { user, media, stats, activities } = profile;
   const isSelf = session?.user?.id === user.id;
 
   const allMedia = [
@@ -188,6 +197,78 @@ export default function UserProfilePage() {
             </button>
           )}
         </div>
+
+        {/* My Library Quick Links (Only visible to the owner) */}
+        {isSelf && (
+          <div className='mb-12'>
+            <h2 className='mb-6 text-2xl font-bold'>My Library</h2>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
+              <Link
+                href='/my-shows/watching'
+                className='group flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md'
+              >
+                <div className='mb-4 flex items-center justify-between text-primary'>
+                  <div className='rounded-full bg-primary/10 p-3'>
+                    <BiTv size={28} />
+                  </div>
+                  <BiRightArrowAlt
+                    size={24}
+                    className='opacity-0 transition-opacity group-hover:opacity-100'
+                  />
+                </div>
+                <h3 className='text-lg font-bold'>My Shows</h3>
+              </Link>
+
+              <Link
+                href='/my-movies/watching'
+                className='group flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md'
+              >
+                <div className='mb-4 flex items-center justify-between text-primary'>
+                  <div className='rounded-full bg-primary/10 p-3'>
+                    <BiMoviePlay size={28} />
+                  </div>
+                  <BiRightArrowAlt
+                    size={24}
+                    className='opacity-0 transition-opacity group-hover:opacity-100'
+                  />
+                </div>
+                <h3 className='text-lg font-bold'>My Movies</h3>
+              </Link>
+
+              <Link
+                href='/my-games/wishlist'
+                className='group flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md'
+              >
+                <div className='mb-4 flex items-center justify-between text-primary'>
+                  <div className='rounded-full bg-primary/10 p-3'>
+                    <BiJoystick size={28} />
+                  </div>
+                  <BiRightArrowAlt
+                    size={24}
+                    className='opacity-0 transition-opacity group-hover:opacity-100'
+                  />
+                </div>
+                <h3 className='text-lg font-bold'>My Games</h3>
+              </Link>
+
+              <Link
+                href='/collections'
+                className='group flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md'
+              >
+                <div className='mb-4 flex items-center justify-between text-primary'>
+                  <div className='rounded-full bg-primary/10 p-3'>
+                    <BiCollection size={28} />
+                  </div>
+                  <BiRightArrowAlt
+                    size={24}
+                    className='opacity-0 transition-opacity group-hover:opacity-100'
+                  />
+                </div>
+                <h3 className='text-lg font-bold'>Collections</h3>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Top Rated Showcase */}
         {topRated.length > 0 && (

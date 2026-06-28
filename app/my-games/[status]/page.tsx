@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import MyMediaList from '@components/MyMedia/MyMediaList';
 import { CommonMethods } from '@utils/CommonMethods';
+import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { useParams, redirect } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
@@ -36,6 +37,7 @@ const Status = () => {
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+      <LibraryNav currentTab='games' />
       <MyMediaList status={statusParam as TStatusParam} myMedias={myGames} mediaType='GAMES' />
     </main>
   );

@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import MyMediaList from '@components/MyMedia/MyMediaList';
 import { Circles } from 'react-loading-icons';
 import { CommonMethods } from '@utils/CommonMethods';
+import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { useRouter, useParams } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
 import { useSession } from 'next-auth/react';
@@ -40,6 +41,7 @@ const Status = () => {
 
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
+      <LibraryNav currentTab='movies' />
       <MyMediaList status={statusParam as TStatusParam} myMedias={myMovies} mediaType='MOVIES' />
     </main>
   );

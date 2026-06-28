@@ -9,7 +9,12 @@ import { MediaType } from '@prisma/client';
 export default async function DailyPickServerSection() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return null;
-  if (!process.env.GROQ_API_KEY) return null; // Gracefully disable if no key
+  if (!process.env.GROQ_API_KEY)
+    return (
+      <div className='mb-12 rounded-3xl border border-red-500/30 bg-red-500/10 p-6 text-center text-red-500'>
+        Error: GROQ_API_KEY is not set in this environment.
+      </div>
+    );
 
   // Use today's date as cache key string
   const today = new Date();
@@ -58,7 +63,13 @@ export default async function DailyPickServerSection() {
   });
 
   const totalPtw = ptwMovies.length + ptwShows.length + ptwGames.length;
-  if (totalPtw === 0) return null; // Nothing to recommend!
+  if (totalPtw === 0)
+    return (
+      <div className='mb-12 rounded-3xl border border-border bg-card p-6 text-center text-muted-foreground'>
+        Add some Movies, Shows, or Games to your Plan to Watch list to get a personalized AI Daily
+        Pick!
+      </div>
+    );
 
   // 4. Construct prompt for Gemini
   const completedText = `
@@ -92,6 +103,7 @@ Respond ONLY with a valid JSON object matching this schema, nothing else:
 `;
 
   let newPick;
+  let errorMsg = '';
   try {
     const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
     const { text } = await generateText({
@@ -104,22 +116,30 @@ Respond ONLY with a valid JSON object matching this schema, nothing else:
 
     if (!parsed.id || !parsed.type || !parsed.pitch) {
       console.error('Invalid Groq response format:', parsed);
-      return null;
+      errorMsg = 'AI returned an invalid response format. Check Vercel logs.';
+    } else {
+      // Save to database as DailyPick
+      newPick = await prisma.dailyPick.create({
+        data: {
+          userId: session.user.id,
+          date: dateString,
+          mediaId: String(parsed.id),
+          mediaType: parsed.type as MediaType,
+          pitch: parsed.pitch,
+        },
+      });
     }
-
-    // Save to database as DailyPick
-    newPick = await prisma.dailyPick.create({
-      data: {
-        userId: session.user.id,
-        date: dateString,
-        mediaId: parsed.id,
-        mediaType: parsed.type as MediaType,
-        pitch: parsed.pitch,
-      },
-    });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating daily pick:', error);
-    return null; // Fail gracefully
+    errorMsg = error?.message || 'Unknown error';
+  }
+
+  if (errorMsg) {
+    return (
+      <div className='mb-12 rounded-3xl border border-red-500/30 bg-red-500/10 p-6 text-center text-red-500'>
+        Error generating daily pick: {errorMsg}
+      </div>
+    );
   }
 
   if (newPick) {
