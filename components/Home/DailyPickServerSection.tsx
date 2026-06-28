@@ -34,32 +34,41 @@ export default async function DailyPickServerSection() {
     return <DailyPickCard pick={existingPick} />;
   }
 
-  // 2. Fetch user's completed items to feed to Gemini
+  // 2. Fetch user's completed items to feed to Groq (Limit to top 30 highly rated)
   const completedMovies = await prisma.movie.findMany({
     where: { userId: session.user.id, status: 'COMPLETED' },
     select: { name: true, rating: true },
+    orderBy: { rating: 'desc' },
+    take: 30,
   });
   const completedShows = await prisma.show.findMany({
     where: { userId: session.user.id, status: 'COMPLETED' },
     select: { name: true, rating: true },
+    orderBy: { rating: 'desc' },
+    take: 30,
   });
   const completedGames = await prisma.game.findMany({
     where: { userId: session.user.id, wishlist: false }, // Assume non-wishlist games with rating are played
     select: { name: true, rating: true },
+    orderBy: { rating: 'desc' },
+    take: 30,
   });
 
-  // 3. Fetch user's PTW / Backlog to pick from
+  // 3. Fetch user's PTW / Backlog to pick from (Limit to 40 each)
   const ptwMovies = await prisma.movie.findMany({
     where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
     select: { id: true, name: true },
+    take: 40,
   });
   const ptwShows = await prisma.show.findMany({
     where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
     select: { id: true, name: true },
+    take: 40,
   });
   const ptwGames = await prisma.game.findMany({
     where: { userId: session.user.id, wishlist: true },
     select: { id: true, name: true },
+    take: 40,
   });
 
   const totalPtw = ptwMovies.length + ptwShows.length + ptwGames.length;
