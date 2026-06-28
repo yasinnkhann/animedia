@@ -234,6 +234,7 @@ enum NotificationType {
   COLLECTION_INVITE
   ACTIVITY_LIKE
   ACTIVITY_COMMENT
+  RELEASE_ALERT
 }
 
 model ActivityLike {

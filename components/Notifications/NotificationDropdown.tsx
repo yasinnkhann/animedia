@@ -117,8 +117,16 @@ export default function NotificationDropdown() {
                   >
                     <div className='shrink-0'>
                       <Avatar
-                        src={notification.sender?.image}
-                        initials={notification.sender?.name?.charAt(0).toUpperCase()}
+                        src={
+                          notification.type === 'RELEASE_ALERT'
+                            ? notification.mediaImage
+                            : notification.sender?.image
+                        }
+                        initials={
+                          notification.type === 'RELEASE_ALERT'
+                            ? notification.mediaTitle?.charAt(0).toUpperCase()
+                            : notification.sender?.name?.charAt(0).toUpperCase()
+                        }
                         size={40}
                       />
                     </div>
@@ -145,6 +153,11 @@ export default function NotificationDropdown() {
                             <span className='font-semibold'>{notification.sender?.name}</span>{' '}
                             commented on your activity: &quot;
                             <span className='italic'>{notification.message}</span>&quot;
+                          </>
+                        ) : notification.type === 'RELEASE_ALERT' ? (
+                          <>
+                            🎉 <span className='font-semibold'>{notification.mediaTitle}</span>{' '}
+                            releases today! Time to dive in.
                           </>
                         ) : (
                           <>
