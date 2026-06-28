@@ -54,6 +54,7 @@ model User {
   reviews       Review[]
   collections   Collection[] @relation("CollectionOwner")
   collaborations Collection[] @relation("CollectionCollaborators")
+  dailyPicks    DailyPick[]
   NotificationsReceived Notification[] @relation("UserNotifications")
   NotificationsSent     Notification[] @relation("NotificationSender")
   activityLikes         ActivityLike[]
@@ -225,6 +226,19 @@ model Notification {
   isRead      Boolean          @default(false)
   createdAt   DateTime         @default(now())
 
+  @@index([userId])
+}
+
+model DailyPick {
+  id         String    @id @default(cuid())
+  userId     String    @map("user_id")
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mediaId    String
+  mediaType  MediaType
+  pitch      String
+  date       String    // e.g., "2026-06-27"
+
+  @@unique([userId, date])
   @@index([userId])
 }
 

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import PopularServerSection from '@/components/Home/PopularServerSection';
 import TrendingServerSection from '@/components/Home/TrendingServerSection';
 import ForYouServerSection from '@/components/Home/ForYouServerSection';
+import DailyPickServerSection from '@/components/Home/DailyPickServerSection';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 
 import ForYouScrollerSkeleton from '@/components/Skeletons/ForYouScrollerSkeleton';
@@ -32,6 +33,11 @@ export default async function Home(props: {
       forYouContent={
         <Suspense fallback={<ForYouScrollerSkeleton />}>
           <ForYouServerSection />
+        </Suspense>
+      }
+      dailyPickContent={
+        <Suspense fallback={<div className='h-32 w-full animate-pulse rounded-3xl bg-card/50' />}>
+          <DailyPickServerSection />
         </Suspense>
       }
       popularContent={

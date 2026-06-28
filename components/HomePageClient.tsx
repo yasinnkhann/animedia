@@ -12,6 +12,7 @@ interface Props {
   trending: 'movies' | 'shows';
   time: 'day' | 'week';
   forYouContent: ReactNode;
+  dailyPickContent: ReactNode;
   popularContent: ReactNode;
   trendingContent: ReactNode;
 }
@@ -21,6 +22,7 @@ const HomePageClient = ({
   trending,
   time,
   forYouContent,
+  dailyPickContent,
   popularContent,
   trendingContent,
 }: Props) => {
@@ -217,6 +219,8 @@ const HomePageClient = ({
             )}
           </section>
         </section>
+
+        <div className='mt-16 px-4 md:px-[3rem]'>{dailyPickContent}</div>
 
         {session && (
           <section className='mt-16 px-4 lg:px-12'>
