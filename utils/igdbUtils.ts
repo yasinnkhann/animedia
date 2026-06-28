@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { IGDB_ACCESS_TOKEN_PREFIX, IGDB_BASE_API_URL, __prod__ } from '@utils/constants';
+import { unstable_cache } from 'next/cache';
 import { redis } from '../lib/redis';
 import logger from '../lib/logger';
 import { TIGDBImageSizes } from '@ts/types';
@@ -112,25 +113,31 @@ export const postIGDB = async (
       await redis.set(IGDB_ACCESS_TOKEN_PREFIX, accessToken, 'EX', accessTokenData.expires_in);
     }
 
+    const getCachedIGDB = unstable_cache(
+      async (urlToFetch: string, reqBody: string, token: string) => {
+        const response = await fetch(urlToFetch, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Client-ID': process.env.IGDB_CLIENT_ID,
+            Authorization: `Bearer ${token}`,
+          },
+          body: reqBody,
+        });
+        if (!response.ok) throw new Error(`IGDB fetch failed with status: ${response.status}`);
+        return await response.json();
+      },
+      [`igdb-${url}-${body}`],
+      { revalidate: 3600 }
+    );
+
     let retries = 0;
     let retryDelayMs = initialRetryDelayMs;
 
     while (retries < maxRetries) {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Client-ID': process.env.IGDB_CLIENT_ID,
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body,
-        next: {
-          revalidate: 3600, // Cache globally for 1 hour
-        },
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
+      try {
+        return await getCachedIGDB(url, body, accessToken);
+      } catch (err) {
         await sleep(retryDelayMs);
         retryDelayMs *= 2;
         retries++;
