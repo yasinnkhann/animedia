@@ -216,14 +216,7 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   onClick={onClose}
                   className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
                 >
-                  My Friends
-                </Link>
-                <Link
-                  href='/users'
-                  onClick={onClose}
-                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
-                >
-                  Find Friends
+                  Friends
                 </Link>
               </>
             )}

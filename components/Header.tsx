@@ -162,21 +162,10 @@ const Header = () => {
                               href='/friends'
                               className='block w-full font-medium text-foreground no-underline'
                             >
-                              My Friends
+                              Friends
                             </Link>
                           ),
-                          key: 'my-friends',
-                        },
-                        {
-                          label: (
-                            <Link
-                              href='/users'
-                              className='block w-full font-medium text-foreground no-underline'
-                            >
-                              Find Friends
-                            </Link>
-                          ),
-                          key: 'find-friends',
+                          key: 'friends',
                         },
                         {
                           label: <span className='font-medium text-red-500'>Log Out</span>,

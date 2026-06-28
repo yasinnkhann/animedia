@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Avatar from '@/components/ui/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BiSearch } from 'react-icons/bi';
 
 export interface Friend {
   id: string;
@@ -24,44 +25,53 @@ export default function FriendsClient({ followers, following }: Props) {
 
   return (
     <div className='mx-auto max-w-6xl px-4 py-8 pt-[calc(var(--header-height-mobile)+2.5rem)] sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24'>
-      <h1 className='mb-10 text-4xl font-bold'>My Friends</h1>
+      <h1 className='mb-10 text-4xl font-bold'>Friends</h1>
 
       {/* Tabs */}
-      <div className='mb-8 flex gap-12 border-b border-border'>
-        <button
-          onClick={() => setActiveTab('following')}
-          className={`relative pb-3 text-lg font-medium transition-colors ${
-            activeTab === 'following'
-              ? 'text-primary'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
+      <div className='mb-8 flex items-center justify-between border-b border-border'>
+        <div className='flex gap-12'>
+          <button
+            onClick={() => setActiveTab('following')}
+            className={`relative pb-3 text-lg font-medium transition-colors ${
+              activeTab === 'following'
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Following ({following.length})
+            {activeTab === 'following' && (
+              <motion.div
+                layoutId='friendsTabIndicator'
+                className='absolute bottom-0 left-0 h-0.5 w-full bg-primary'
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('followers')}
+            className={`relative pb-3 text-lg font-medium transition-colors ${
+              activeTab === 'followers'
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Followers ({followers.length})
+            {activeTab === 'followers' && (
+              <motion.div
+                layoutId='friendsTabIndicator'
+                className='absolute bottom-0 left-0 h-0.5 w-full bg-primary'
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              />
+            )}
+          </button>
+        </div>
+
+        <Link
+          href='/users'
+          className='flex items-center gap-2 pb-3 text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
         >
-          Following ({following.length})
-          {activeTab === 'following' && (
-            <motion.div
-              layoutId='friendsTabIndicator'
-              className='absolute bottom-0 left-0 h-0.5 w-full bg-primary'
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('followers')}
-          className={`relative pb-3 text-lg font-medium transition-colors ${
-            activeTab === 'followers'
-              ? 'text-primary'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Followers ({followers.length})
-          {activeTab === 'followers' && (
-            <motion.div
-              layoutId='friendsTabIndicator'
-              className='absolute bottom-0 left-0 h-0.5 w-full bg-primary'
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            />
-          )}
-        </button>
+          <BiSearch size={18} /> Find Friends
+        </Link>
       </div>
 
       {/* Content */}
