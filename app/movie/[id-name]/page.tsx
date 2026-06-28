@@ -12,6 +12,9 @@ import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrolle
 import MovieCastServer from '@/components/movie/MovieCastServer';
 import MovieRelatedServer from '@/components/movie/MovieRelatedServer';
 import ReviewSection from '@/components/Reviews/ReviewSection';
+import FranchiseTracker from '@/components/movie/FranchiseTracker';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/authOptions';
 
 import { Metadata } from 'next';
 
@@ -65,6 +68,8 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
   if (!id) return null;
 
   const movieDetails = await tmdbClient.getMovieDetails(id);
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
   const movieTitle = movieDetails?.title ?? '';
@@ -145,6 +150,15 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
       </section>
 
       <section className='mt-4 lg:col-start-2'>
+        {movieDetails?.belongs_to_collection && (
+          <Suspense fallback={null}>
+            <FranchiseTracker
+              collectionId={movieDetails.belongs_to_collection.id}
+              userId={userId}
+              currentMovieId={movieDetails.id}
+            />
+          </Suspense>
+        )}
         <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
           <MovieCastServer movieId={id} />
         </Suspense>

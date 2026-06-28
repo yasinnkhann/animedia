@@ -39,18 +39,17 @@ export class IGDBClient {
     };
 
     if (collections?.games && collections.games.length > 0) {
-      const gamesData = await Promise.all(
-        collections.games.map(async (collectionGameId: string) => {
-          const res = await postIGDB(
-            `${IGDB_BASE_API_URL}/games`,
-            `fields name, first_release_date, cover, rating; where id = ${collectionGameId};`
-          );
-          await addIGDBCoverUrl(res, '1080p');
-          return res[0];
-        })
+      const res = await postIGDB(
+        `${IGDB_BASE_API_URL}/games`,
+        `fields name, first_release_date, cover, rating, category; where id = (${collections.games.join(',')}); limit 500;`
       );
 
-      finalRes.games = gamesData.sort((a, b) => a.first_release_date - b.first_release_date);
+      if (res && res.length > 0) {
+        await addIGDBCoverUrl(res, '1080p');
+        finalRes.games = res
+          .filter((g: any) => g.category === undefined || g.category === 0)
+          .sort((a: any, b: any) => a.first_release_date - b.first_release_date);
+      }
     }
     return finalRes;
   }

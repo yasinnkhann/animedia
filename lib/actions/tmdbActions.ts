@@ -46,3 +46,12 @@ export async function getShowDetailsAction(showId: string) {
     return null;
   }
 }
+
+export async function getCollectionDetailsAction(collectionId: string | number) {
+  try {
+    return await tmdbClient.getCollectionDetails(collectionId);
+  } catch (error) {
+    console.error('Error fetching collection details:', error);
+    return null;
+  }
+}

@@ -47,6 +47,7 @@ export default async function GameRelatedServer({
               popularity: game.rating ?? 0,
               type: 'game',
               first_release_date: game.first_release_date,
+              rating: game.rating,
             }))}
           />
         </section>
@@ -63,6 +64,7 @@ export default async function GameRelatedServer({
               popularity: game.rating ?? 0,
               type: 'game',
               first_release_date: game.first_release_date,
+              rating: game.rating,
             }))}
           />
         </section>

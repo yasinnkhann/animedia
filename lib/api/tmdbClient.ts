@@ -396,6 +396,15 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Fetch Collection Details
+   */
+  async getCollectionDetails(collectionId: number | string, language: string = 'en-US') {
+    return this.fetchTMDB(`/collection/${collectionId}`, {
+      language,
+    });
+  }
+
+  /**
    * Trending (all, movies, shows, people)
    */
   async getTrending(

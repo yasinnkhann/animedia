@@ -474,6 +474,7 @@ const GameDetailsClient = ({
 
       <section className='mt-4 lg:col-start-2'>
         {previewsNode}
+
         {relatedNode}
 
         <section className='mt-16 pb-16'>
