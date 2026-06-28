@@ -6,6 +6,16 @@ import { createGroq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
 import { MediaType } from '@prisma/client';
 
+// Pure helper function outside the component body
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
+
 export default async function DailyPickServerSection() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) return null;
@@ -54,21 +64,18 @@ export default async function DailyPickServerSection() {
     take: 30,
   });
 
-  // 3. Fetch user's PTW / Backlog to pick from (Limit to 40 each)
+  // 3. Fetch user's full PTW / Backlog to pick from
   const ptwMovies = await prisma.movie.findMany({
     where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
     select: { id: true, name: true },
-    take: 40,
   });
   const ptwShows = await prisma.show.findMany({
     where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
     select: { id: true, name: true },
-    take: 40,
   });
   const ptwGames = await prisma.game.findMany({
     where: { userId: session.user.id, wishlist: true },
     select: { id: true, name: true },
-    take: 40,
   });
 
   const totalPtw = ptwMovies.length + ptwShows.length + ptwGames.length;
@@ -87,10 +94,16 @@ Shows: ${completedShows.map(s => `${s.name} (Rated: ${s.rating || 'N/A'}/10)`).j
 Games: ${completedGames.map(g => `${g.name} (Rated: ${g.rating || 'N/A'}/10)`).join(', ')}
   `.trim();
 
+  // Randomly sample up to 15 items per category so the AI sees fresh candidates every day
+  // without exceeding the 6000 TPM limit
+  const sampledMovies = shuffleArray(ptwMovies).slice(0, 15);
+  const sampledShows = shuffleArray(ptwShows).slice(0, 15);
+  const sampledGames = shuffleArray(ptwGames).slice(0, 15);
+
   const backlogText = `
-Movies: ${ptwMovies.map(m => `${m.name} [ID: ${m.id}]`).join(', ')}
-Shows: ${ptwShows.map(s => `${s.name} [ID: ${s.id}]`).join(', ')}
-Games: ${ptwGames.map(g => `${g.name} [ID: ${g.id}]`).join(', ')}
+Movies: ${sampledMovies.map(m => `${m.name} [ID: ${m.id}]`).join(', ')}
+Shows: ${sampledShows.map(s => `${s.name} [ID: ${s.id}]`).join(', ')}
+Games: ${sampledGames.map(g => `${g.name} [ID: ${g.id}]`).join(', ')}
   `.trim();
 
   const prompt = `
