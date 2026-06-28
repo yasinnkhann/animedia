@@ -78,25 +78,10 @@ const Header = () => {
             </ul>
             <ul
               id='right-section'
-              className='!mr-12 hidden !w-[38rem] items-center !justify-around lg:!flex'
+              className='!mr-12 hidden flex-1 items-center justify-end gap-6 lg:!flex'
             >
-              <li
-                className={`!flex !w-full !items-center ${
-                  status === 'authenticated' ? '!justify-around' : 'mr-8 !justify-end'
-                }`}
-              >
-                {status === 'authenticated' && session && (
-                  <>
-                    <DropDownItem items={MY_MEDIA_ITEMS} name='My Shows' routeType='my-shows' />
-                    <DropDownItem items={MY_MEDIA_ITEMS} name='My Movies' routeType='my-movies' />
-                    <Link href='/my-games/wishlist' className='cursor-pointer no-underline'>
-                      <p className='text-base'>My Games</p>
-                    </Link>
-                    <Link href='/collections' className='cursor-pointer no-underline'>
-                      <p className='text-base'>My Collections</p>
-                    </Link>
-                  </>
-                )}
+              <li className='flex items-center justify-end gap-6'>
+                {status === 'authenticated' && session && <></>}
 
                 {pathname !== '/' &&
                   pathname !== '/search' &&
@@ -191,7 +176,7 @@ const Header = () => {
       </header>
       {isSearchBtnClicked && (
         <motion.div
-          className='relative z-50'
+          className='relative z-50 px-4 md:px-[3rem]'
           initial={{ y: 0 }}
           animate={{ y: 75 }}
           transition={{

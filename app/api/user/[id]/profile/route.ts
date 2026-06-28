@@ -60,6 +60,26 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       isFollowing = !!follow;
     }
 
+    // Calculate Stats
+    const completedMovies = userMovies.filter(m => m.status === 'COMPLETED').length;
+    const completedShows = userShows.filter(s => s.status === 'COMPLETED').length;
+    const completedGames = userGames.filter(g => !g.wishlist && g.rating !== null).length;
+    const episodesWatched = userShows.reduce((acc, s) => acc + s.current_episode, 0);
+
+    const ratedMedia = [...userMovies, ...userShows, ...userGames].filter(m => m.rating !== null);
+    const avgRating =
+      ratedMedia.length > 0
+        ? (ratedMedia.reduce((a, b) => a + b.rating!, 0) / ratedMedia.length).toFixed(1)
+        : 'N/A';
+
+    const stats = {
+      completedMovies,
+      completedShows,
+      completedGames,
+      episodesWatched,
+      avgRating,
+    };
+
     return NextResponse.json({
       user,
       media: {
@@ -67,6 +87,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         userShows,
         userGames,
       },
+      stats,
       activities,
       isFollowing,
     });

@@ -10,13 +10,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Avatar from '@/components/ui/Avatar';
 import tinycolor from 'tinycolor2';
 
-import {
-  MY_MEDIA_ITEMS,
-  MOVIES_ITEMS,
-  SHOWS_ITEMS,
-  PEOPLE_ITEMS,
-  GAME_ITEMS,
-} from '@/models/dropDownOptions';
+import { MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS, GAME_ITEMS } from '@/models/dropDownOptions';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -182,35 +176,6 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
 
             {status === 'authenticated' && session && (
               <>
-                <div className='mb-2 mt-6 text-sm font-bold uppercase tracking-wider text-muted-foreground'>
-                  My Library
-                </div>
-                <AccordionItem
-                  title='My Shows'
-                  items={MY_MEDIA_ITEMS}
-                  routeType='my-shows'
-                  onClose={onClose}
-                />
-                <AccordionItem
-                  title='My Movies'
-                  items={MY_MEDIA_ITEMS}
-                  routeType='my-movies'
-                  onClose={onClose}
-                />
-                <Link
-                  href='/my-games/wishlist'
-                  onClick={onClose}
-                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
-                >
-                  My Games
-                </Link>
-                <Link
-                  href='/collections'
-                  onClick={onClose}
-                  className='border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
-                >
-                  My Collections
-                </Link>
                 <Link
                   href='/friends'
                   onClick={onClose}
