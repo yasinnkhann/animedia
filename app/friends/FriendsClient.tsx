@@ -93,7 +93,7 @@ export default function FriendsClient({ followers, following }: Props) {
                 </p>
               </div>
             ) : (
-              <ul className='grid gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'>
+              <ul className='grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2'>
                 {activeList.map(user => (
                   <li
                     key={user.id}
