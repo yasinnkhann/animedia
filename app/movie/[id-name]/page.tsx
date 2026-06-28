@@ -10,7 +10,7 @@ import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 import MovieCastServer from '@/components/movie/MovieCastServer';
-import MovieRelatedClient from '@/components/movie/MovieRelatedClient';
+import MovieRelatedServer from '@/components/movie/MovieRelatedServer';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import FranchiseTracker from '@/components/movie/FranchiseTracker';
 import { getServerSession } from 'next-auth';
@@ -67,10 +67,8 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   if (!id) return null;
 
-  const [movieDetails, session] = await Promise.all([
-    tmdbClient.getMovieDetails(id),
-    getServerSession(authOptions),
-  ]);
+  const movieDetails = await tmdbClient.getMovieDetails(id);
+  const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
@@ -165,7 +163,9 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
           <MovieCastServer movieId={id} />
         </Suspense>
 
-        <MovieRelatedClient movieId={id} />
+        <Suspense key='related' fallback={<HorizontalScrollerSkeleton />}>
+          <MovieRelatedServer movieId={id} />
+        </Suspense>
 
         <section className='mt-16 pb-16'>
           <ReviewSection

@@ -1,23 +1,9 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import { getRecommendedMoviesAction } from '@/lib/actions/tmdbActions';
-import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+import { tmdbClient } from '@/lib/api';
 import _ from 'lodash';
-import { useMounted } from '@/hooks/useMounted';
 
-export default function MovieRelatedClient({ movieId }: { movieId: string }) {
-  const isMounted = useMounted();
-  const { data: recMovies, isLoading } = useQuery({
-    queryKey: ['movie-recommendations', movieId],
-    queryFn: () => getRecommendedMoviesAction(movieId),
-    enabled: !!movieId && isMounted, // wait for mount
-  });
-
-  if (!isMounted || isLoading) {
-    return <HorizontalScrollerSkeleton />;
-  }
+export default async function MovieRelatedServer({ movieId }: { movieId: string }) {
+  const recMovies = await tmdbClient.getRecommendedMovies(movieId);
 
   if (!recMovies?.results || _.isEmpty(recMovies.results)) return null;
 

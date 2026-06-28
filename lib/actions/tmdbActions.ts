@@ -55,12 +55,3 @@ export async function getCollectionDetailsAction(collectionId: string | number) 
     return null;
   }
 }
-
-export async function getRecommendedMoviesAction(movieId: string) {
-  try {
-    return await tmdbClient.getRecommendedMovies(movieId);
-  } catch (error) {
-    console.error('Error fetching recommended movies:', error);
-    return null;
-  }
-}
