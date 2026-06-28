@@ -7,6 +7,7 @@ import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import RemoveItemButton from '@/components/Collections/RemoveItemButton';
 import InviteCollaboratorsButton from '@/components/Collections/InviteCollaboratorsButton';
 import ToggleWatchedButton from '@/components/Collections/ToggleWatchedButton';
+import CloneCollectionButton from '@/components/Collections/CloneCollectionButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
@@ -78,7 +79,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
     );
   }
 
-  if (!collection.isPublic) {
+  if (!collection.isPublic && !isOwner && !isCollaborator) {
     return (
       <div className='flex h-screen flex-col items-center justify-center gap-4'>
         <BiLockAlt size={64} className='text-slate-500' />
@@ -154,6 +155,12 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
               <span className='font-bold'>{collection.items.length}</span> Items
             </div>
           </div>
+          {/* Conditionally render clone button for logged-in non-owners */}
+          {session?.user?.id && !isOwner && !isCollaborator && (
+            <div className='flex justify-center mt-8'>
+              <CloneCollectionButton collectionId={collection.id} />
+            </div>
+          )}
         </div>
 
         {/* Items Grid */}
