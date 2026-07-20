@@ -148,7 +148,7 @@ export default function MediaCard({
         <Link
           href={detailsRoute}
           onClick={handleClick}
-          className='block h-full w-full outline-none'
+          className='relative block h-full w-full outline-none'
         >
           <Image
             className='object-cover transition-transform duration-500 ease-out group-hover:scale-110'
