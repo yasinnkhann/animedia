@@ -14,8 +14,8 @@ const FALLBACK_IMAGE = '/episode-no-preview.png';
 
 const EpisodeDetailsCardSkeleton = () => {
   return (
-    <div className='relative mx-4 h-[7rem] w-[15rem] select-none'>
-      <div className='relative h-full w-full'>
+    <div className='relative mx-4 h-[12rem] w-[15rem] select-none'>
+      <div className='relative h-[7rem] w-full'>
         <div className='h-full w-full animate-pulse rounded-lg bg-muted' />
         <div className='mt-2 flex flex-col items-center gap-1'>
           <div className='h-4 w-1/2 animate-pulse rounded bg-muted' />
@@ -53,7 +53,7 @@ const EpisodeDetailsCard = ({
   return (
     <>
       <section
-        className='group relative mx-4 h-[7rem] w-[15rem] cursor-pointer select-none'
+        className='group relative mx-4 h-[12rem] w-[15rem] cursor-pointer select-none'
         role='button'
         tabIndex={0}
         onClick={() => setShowModal(true)}
@@ -65,7 +65,7 @@ const EpisodeDetailsCard = ({
         }}
       >
         <section className='relative h-full w-full'>
-          <div className='relative h-full w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'>
+          <div className='relative h-[7rem] w-full overflow-hidden rounded-lg shadow-md transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-primary/20'>
             {/* Pulse skeleton visible beneath image while it loads */}
             {!imgLoaded && <div className='absolute inset-0 animate-pulse rounded-lg bg-muted' />}
 
