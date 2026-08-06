@@ -68,7 +68,50 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const { userShows, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersShow = userShows?.find(show => show.id === showId);
 
-  const watchStatus = watchStatusInput ?? usersShow?.status ?? 'NOT_WATCHING';
+  const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
+    if (
+      !showDetailsData?.showDetails.number_of_episodes ||
+      !showDetailsData?.showDetails.number_of_seasons
+    ) {
+      return {
+        currTotalEpCount: 0,
+        currTotalSeasonCount: 0,
+        totalEpCountGathered: false,
+      };
+    }
+
+    let totalEpCount = showDetailsData.showDetails.number_of_episodes;
+    let totalSeasonCount = showDetailsData.showDetails.number_of_seasons;
+
+    for (let i = showDetailsData.showDetails.seasons.length - 1; i > -1; i--) {
+      const season = showDetailsData.showDetails.seasons[i];
+      const currDate = new Date();
+
+      if (
+        season?.name.startsWith('Season') &&
+        season.season_number !== 0 &&
+        (!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
+      ) {
+        totalEpCount -= season.episode_count;
+        totalSeasonCount--;
+      }
+    }
+
+    return {
+      currTotalEpCount: totalEpCount,
+      currTotalSeasonCount: totalSeasonCount,
+      totalEpCountGathered: true,
+    };
+  }, [showDetailsData?.showDetails]);
+
+  const isCompletedWithNewEpisodes =
+    usersShow?.status === 'COMPLETED' &&
+    totalEpCountGathered &&
+    currTotalEpCount > (usersShow.current_episode ?? 0);
+
+  const watchStatus =
+    watchStatusInput ??
+    (isCompletedWithNewEpisodes ? 'WATCHING' : (usersShow?.status ?? 'NOT_WATCHING'));
   const rating = ratingInput ?? usersShow?.rating ?? '';
   const currEp = currEpInput ?? String(usersShow?.current_episode ?? '0');
 
@@ -169,41 +212,21 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
   const isInitialUsersShowLoading = false;
 
-  const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
-    if (
-      !showDetailsData?.showDetails.number_of_episodes ||
-      !showDetailsData?.showDetails.number_of_seasons
-    ) {
-      return {
-        currTotalEpCount: 0,
-        currTotalSeasonCount: 0,
-        totalEpCountGathered: false,
-      };
+  useEffect(() => {
+    if (isCompletedWithNewEpisodes && showDetailsData?.showDetails?.id) {
+      updateShowAction(
+        showDetailsData.showDetails.id,
+        'WATCHING',
+        usersShow?.rating ?? undefined,
+        usersShow?.current_episode ?? 0
+      );
     }
-
-    let totalEpCount = showDetailsData.showDetails.number_of_episodes;
-    let totalSeasonCount = showDetailsData.showDetails.number_of_seasons;
-
-    for (let i = showDetailsData.showDetails.seasons.length - 1; i > -1; i--) {
-      const season = showDetailsData.showDetails.seasons[i];
-      const currDate = new Date();
-
-      if (
-        season?.name.startsWith('Season') &&
-        season.season_number !== 0 &&
-        (!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
-      ) {
-        totalEpCount -= season.episode_count;
-        totalSeasonCount--;
-      }
-    }
-
-    return {
-      currTotalEpCount: totalEpCount,
-      currTotalSeasonCount: totalSeasonCount,
-      totalEpCountGathered: true,
-    };
-  }, [showDetailsData?.showDetails]);
+  }, [
+    isCompletedWithNewEpisodes,
+    showDetailsData?.showDetails?.id,
+    usersShow?.rating,
+    usersShow?.current_episode,
+  ]);
 
   const calculateSeasonEpisodeNumber = useCallback(
     (episodeValue = currEp) => {
@@ -459,7 +482,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
     e.preventDefault();
     if (currEp === '' || +currEp > currTotalEpCount || !showDetailsData?.showDetails?.id) return;
 
-    if (+currEp === currTotalEpCount) {
+    if (+currEp === currTotalEpCount && totalEpCountGathered) {
       setWatchStatus('COMPLETED');
 
       updateShow({
@@ -473,11 +496,16 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       return;
     }
 
+    const nextWatchStatus = watchStatus === 'COMPLETED' ? 'WATCHING' : watchStatus;
+    if (watchStatus === 'COMPLETED') {
+      setWatchStatus('WATCHING');
+    }
+
     updateShow({
       variables: {
         showId: String(showDetailsData.showDetails.id),
         showRating: typeof rating === 'string' ? null : rating,
-        watchStatus,
+        watchStatus: nextWatchStatus,
         currentEpisode: +currEp,
       },
     });
@@ -535,12 +563,25 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
     const totalEpCount =
       totalEpCountForChangedSeason - 1 + seasonEpCount - (seasonEpCount - currentEpCount);
 
+    const nextWatchStatus =
+      totalEpCount === currTotalEpCount && totalEpCountGathered
+        ? 'COMPLETED'
+        : watchStatus === 'COMPLETED' || usersShow?.status === 'COMPLETED'
+          ? 'WATCHING'
+          : watchStatus;
+
+    if (totalEpCount === currTotalEpCount && totalEpCountGathered) {
+      setWatchStatus('COMPLETED');
+    } else if (watchStatus === 'COMPLETED') {
+      setWatchStatus('WATCHING');
+    }
+
     if (!usersShow) {
       addShow({
         variables: {
           showId: showDetailsData.showDetails.id,
           showName: showDetailsData.showDetails.name,
-          watchStatus: 'WATCHING',
+          watchStatus: nextWatchStatus,
           currentEpisode: totalEpCount,
         },
       });
@@ -549,7 +590,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         variables: {
           showId: showDetailsData.showDetails.id,
           showRating: typeof rating === 'string' ? null : rating,
-          watchStatus: 'WATCHING',
+          watchStatus: nextWatchStatus,
           currentEpisode: totalEpCount,
         },
       });
@@ -566,7 +607,11 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       if (e.target.value === '' || +e.target.value > currTotalEpCount) {
         setCurrEpWithSeasonEpisode(String(usersShow.current_episode ?? '0'));
       } else {
-        if (watchStatus === 'WATCHING' && +e.target.value === currTotalEpCount) {
+        if (
+          watchStatus === 'WATCHING' &&
+          +e.target.value === currTotalEpCount &&
+          totalEpCountGathered
+        ) {
           setWatchStatus('COMPLETED');
 
           updateShow({
@@ -579,11 +624,21 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
           });
           return;
         }
+
+        const nextWatchStatus =
+          watchStatus === 'COMPLETED' && +e.target.value < currTotalEpCount
+            ? 'WATCHING'
+            : watchStatus;
+
+        if (watchStatus === 'COMPLETED' && +e.target.value < currTotalEpCount) {
+          setWatchStatus('WATCHING');
+        }
+
         updateShow({
           variables: {
             showId: showDetailsData.showDetails.id,
             showRating: typeof rating === 'string' ? null : rating,
-            watchStatus,
+            watchStatus: nextWatchStatus,
             currentEpisode: +currEp,
           },
         });
