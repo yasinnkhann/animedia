@@ -11,7 +11,8 @@
     "generate:prisma": "prisma generate",
     "connect:dev-supabase": "supabase start",
     "disconnect:dev-supabase": "supabase stop",
-    "migrate:prod-to-local": "supabase db dump > supabase/dump-schema.sql && supabase db dump --data-only > supabase/dump-data.sql",
+    "dump:prod": "mkdir -p supabase/migrations && supabase db dump > supabase/migrations/00000000000000_schema.sql && supabase db dump --data-only -s public > supabase/seed.sql && echo '\\n✅ Successfully dumped to: supabase/migrations/00000000000000_schema.sql and supabase/seed.sql'",
+    "sync:prod-to-local": "yarn dump:prod && supabase db reset --yes && echo '\\n⚠️  Sync complete! Remember to clear your cookies or log out and log back in to your local app to refresh your session!'",
     "gen-env-types": "gen-env-types .env -o types/env.d.ts -e . && yarn prettier --write types/env.d.ts",
     "lint": "eslint .",
     "prepare": "husky"
