@@ -13,10 +13,10 @@ import MovieCastServer from '@/components/movie/MovieCastServer';
 import MovieRelatedClient from '@/components/movie/MovieRelatedClient';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import FranchiseTracker from '@/components/movie/FranchiseTracker';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
 
 import { Metadata } from 'next';
+
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -67,11 +67,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   if (!id) return null;
 
-  const [movieDetails, session] = await Promise.all([
-    tmdbClient.getMovieDetails(id),
-    getServerSession(authOptions),
-  ]);
-  const userId = session?.user?.id;
+  const movieDetails = await tmdbClient.getMovieDetails(id);
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
   const movieTitle = movieDetails?.title ?? '';
@@ -156,7 +152,6 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
           <Suspense fallback={null}>
             <FranchiseTracker
               collectionId={movieDetails.belongs_to_collection.id}
-              userId={userId}
               currentMovieId={movieDetails.id}
             />
           </Suspense>

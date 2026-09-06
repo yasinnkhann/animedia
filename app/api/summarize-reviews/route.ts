@@ -21,7 +21,7 @@ Write a 2-3 sentence, spoiler-free consensus summarizing the community's overall
     const userPrompt = `Reviews for ${mediaTitle}:\n\n${reviews.map((r, i) => `Review ${i + 1}:\n${r}`).join('\n\n')}`;
 
     const { textStream } = await streamText({
-      model: groq('llama-3.1-8b-instant'),
+      model: groq('openai/gpt-oss-20b'),
       system: systemPrompt,
       prompt: userPrompt,
     });

@@ -1,5 +1,5 @@
 import { createGroq } from '@ai-sdk/groq';
-import { streamText } from 'ai';
+import { generateText } from 'ai';
 import { tmdbClient, igdbClient } from '@/lib/api';
 
 export async function POST(req: Request) {
@@ -14,49 +14,52 @@ export async function POST(req: Request) {
 
     const mediaTypeMapping: Record<string, string> = {
       MOVIE: 'movies',
-      SHOW: 'TV shows (anime included)',
+      SHOW: 'TV shows',
       GAME: 'video games',
     };
 
     const exclusionInstruction =
-      excludedTitles.length > 0
-        ? `\nIMPORTANT: Do NOT recommend any of the following titles as they have already been generated: ${excludedTitles.join(', ')}`
-        : '';
+      excludedTitles.length > 0 ? `\nDo not include these: ${JSON.stringify(excludedTitles)}` : '';
 
-    const chatPrompt = `You are an expert in ${mediaTypeMapping[mediaType] || 'media'}.
-Given the following user prompt, recommend exactly 10 items that perfectly match their criteria.${exclusionInstruction}
-User prompt: "${prompt}"
+    const chatPrompt = `Recommend up to 15 ${mediaTypeMapping[mediaType] || 'media'} matching: "${prompt}".${exclusionInstruction}
 
-IMPORTANT: You must return ONLY a JSON object exactly matching this structure, with no markdown formatting, no backticks, and no extra text:
-{
-  "recommendations": [
-    { "title": "Exactly spelled title" }
-  ]
-}`;
+List the titles as a simple bulleted list.`;
 
-    const { textStream } = streamText({
-      model: groq('llama-3.1-8b-instant'),
-      prompt: chatPrompt,
-    });
+    let text = '';
+    let retries = 0;
+    while (!text && retries < 4) {
+      const response = await generateText({
+        model: groq('openai/gpt-oss-20b'),
+        prompt: chatPrompt,
+        temperature: 0.9 + retries * 0.1,
+      });
+      text = response.text.trim();
+      retries++;
+      if (!text) {
+        console.warn(`gpt-oss-20b returned empty string (retry ${retries})...`);
+      }
+    }
+
+    console.log('AI TEXT:', text);
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
-        const fetchedTitles = new Set<string>();
-        let fullText = '';
+        const fetchedTitles = new Set<string>(excludedTitles.map((t: string) => t.toLowerCase()));
 
         try {
-          for await (const chunk of textStream) {
-            fullText += chunk;
+          const regex = /^\s*[-*]\s+(.+?)(?=\r?$)/gm;
+          let match;
+          const fetchPromises = [];
 
-            const regex = /"title"\s*:\s*"([^"]+)"/gi;
-            let match;
-            while ((match = regex.exec(fullText)) !== null) {
-              const title = match[1];
-              if (fetchedTitles.has(title)) continue;
+          while ((match = regex.exec(text)) !== null) {
+            let title = match[1].replace(/["']/g, '').trim();
+            const lowerTitle = title.toLowerCase();
+            if (fetchedTitles.has(lowerTitle)) continue;
 
-              fetchedTitles.add(title);
+            fetchedTitles.add(lowerTitle);
 
+            const fetchTask = async () => {
               try {
                 let result = null;
                 if (mediaType === 'MOVIE') {
@@ -76,10 +79,13 @@ IMPORTANT: You must return ONLY a JSON object exactly matching this structure, w
               } catch (err) {
                 console.error(`Error fetching ${title}:`, err);
               }
-            }
+            };
+            fetchPromises.push(fetchTask());
           }
+
+          await Promise.all(fetchPromises);
         } catch (e) {
-          console.error('Stream error:', e);
+          console.error('Parse error:', e);
         } finally {
           controller.close();
         }

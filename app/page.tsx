@@ -12,18 +12,12 @@ export const metadata = {
   title: 'Home',
 };
 
-export default async function Home(props: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const searchParams = await props.searchParams;
-  const popular =
-    searchParams.popular === 'shows'
-      ? 'shows'
-      : searchParams.popular === 'theatres'
-        ? 'theatres'
-        : 'movies';
-  const trending = searchParams.trending === 'shows' ? 'shows' : 'movies';
-  const time = searchParams.time === 'week' ? 'week' : 'day';
+export const revalidate = 3600;
+
+export default async function Home() {
+  const popular = 'movies';
+  const trending = 'shows';
+  const time = 'day';
 
   return (
     <HomePageClient

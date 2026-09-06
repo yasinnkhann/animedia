@@ -6,26 +6,25 @@ import { BaseHorizontalScroller } from '@/components/HorizontalScroller/BaseHori
 import { CommonMethods } from '@/utils/CommonMethods';
 import { BiCheckCircle } from 'react-icons/bi';
 
+import { useUserMedia } from '@/components/UserMediaProvider';
+
 interface Props {
   parts: any[];
-  completedMovieIds: string[];
   currentMovieId: number | string;
   mediaType: 'movie' | 'game';
 }
 
-export default function TimelineScrollerClient({
-  parts,
-  completedMovieIds,
-  currentMovieId,
-  mediaType,
-}: Props) {
+export default function TimelineScrollerClient({ parts, currentMovieId, mediaType }: Props) {
+  const { userMovies } = useUserMedia();
   return (
     <BaseHorizontalScroller
       items={parts}
       keyExtractor={part => part.id.toString()}
       scrollContainerClassName='py-4 !overflow-y-hidden !scrollbar-thin !scrollbar-thumb-gray-900 !scrollbar-track-gray-400 !scrollbar-thumb-rounded-2xl !scrollbar-track-rounded-2xl'
       renderItem={(part: any, index: number, dragging: boolean) => {
-        const isCompleted = completedMovieIds.includes(part.id.toString());
+        const isCompleted = userMovies?.find(
+          m => m.id === part.id.toString() && m.status === 'COMPLETED'
+        );
         const isCurrent = part.id === currentMovieId;
         const posterUrl =
           mediaType === 'game'

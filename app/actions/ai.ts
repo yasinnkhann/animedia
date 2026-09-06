@@ -38,7 +38,7 @@ IMPORTANT: You must return ONLY a JSON object exactly matching this structure, w
 }`;
 
   const { textStream } = streamText({
-    model: groq('llama-3.1-8b-instant'),
+    model: groq('openai/gpt-oss-20b'),
     prompt: chatPrompt,
   });
 

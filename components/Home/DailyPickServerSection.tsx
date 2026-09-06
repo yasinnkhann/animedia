@@ -129,7 +129,7 @@ Respond ONLY with a valid JSON object matching this schema, nothing else:
   try {
     const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
     const { text } = await generateText({
-      model: groq('llama-3.1-8b-instant'),
+      model: groq('openai/gpt-oss-20b'),
       prompt,
       temperature: 0.7,
     });

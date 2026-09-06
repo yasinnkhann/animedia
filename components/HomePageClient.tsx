@@ -5,7 +5,12 @@ import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import { ActivityFeed } from './Social/ActivityFeed';
 import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import HomeHorizontalScroller from '@/components/HorizontalScroller/Home/HomeHorizontalScroller';
+import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 interface Props {
   popular: 'movies' | 'shows' | 'theatres';
@@ -27,56 +32,31 @@ const HomePageClient = ({
   trendingContent,
 }: Props) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { data: session } = useSession();
-  const searchBarRef = useRef<HTMLInputElement>(null);
-  const [isPending, startTransition] = useTransition();
-  // Track which section triggered the pending transition so we only
-  // show the skeleton on the affected scroller, not both.
-  const [pendingSection, setPendingSection] = useState<'popular' | 'trending' | null>(null);
 
-  // Optimistic UI state for tabs
   const [localPopular, setLocalPopular] = useState(popular);
-  const [prevPopular, setPrevPopular] = useState(popular);
-
   const [localTrending, setLocalTrending] = useState(trending);
-  const [prevTrending, setPrevTrending] = useState(trending);
-
   const [localTime, setLocalTime] = useState(time);
-  const [prevTime, setPrevTime] = useState(time);
 
-  // Sync with actual props if they change externally (e.g., via browser back button)
-  if (popular !== prevPopular) {
-    setPrevPopular(popular);
-    setLocalPopular(popular);
-  }
-  if (trending !== prevTrending) {
-    setPrevTrending(trending);
-    setLocalTrending(trending);
-  }
-  if (time !== prevTime) {
-    setPrevTime(time);
-    setLocalTime(time);
-  }
+  const searchBarRef = useRef<HTMLInputElement>(null);
+  const { data: session } = useSession();
 
-  const handleUpdateParams = useCallback(
-    (key: string, value: string) => {
-      // Optimistic UI update
-      if (key === 'popular') setLocalPopular(value as any);
-      if (key === 'trending') setLocalTrending(value as any);
-      if (key === 'time') setLocalTime(value as any);
-
-      // Record which section is loading so only its skeleton shows
-      setPendingSection(key === 'popular' ? 'popular' : 'trending');
-
-      const params = new URLSearchParams(searchParams?.toString());
-      params.set(key, value);
-      startTransition(() => {
-        router.push(`/?${params.toString()}`, { scroll: false });
-      });
-    },
-    [searchParams, router]
+  const { data: clientPopularData, isValidating: isPopularLoading } = useSWR(
+    localPopular !== popular ? `/api/tmdb/popular?type=${localPopular}` : null,
+    fetcher
   );
+
+  const { data: clientTrendingData, isValidating: isTrendingLoading } = useSWR(
+    localTrending !== trending || localTime !== time
+      ? `/api/tmdb/trending?type=${localTrending}&time=${localTime}`
+      : null,
+    fetcher
+  );
+
+  const handleUpdateParams = useCallback((key: string, value: string) => {
+    if (key === 'popular') setLocalPopular(value as any);
+    if (key === 'trending') setLocalTrending(value as any);
+    if (key === 'time') setLocalTime(value as any);
+  }, []);
 
   return (
     <motion.main
@@ -140,12 +120,14 @@ const HomePageClient = ({
           </section>
 
           <section className='relative mt-4'>
-            {popularContent}
-            {isPending && pendingSection === 'popular' && (
-              <div className='absolute inset-0 z-10 overflow-hidden rounded-xl'>
-                <div className='h-full w-full animate-pulse bg-background/70 backdrop-blur-sm' />
-                <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent' />
-              </div>
+            {localPopular === popular ? (
+              popularContent
+            ) : isPopularLoading ? (
+              <HorizontalScrollerSkeleton />
+            ) : clientPopularData ? (
+              <HomeHorizontalScroller items={clientPopularData} />
+            ) : (
+              <HorizontalScrollerSkeleton />
             )}
           </section>
 
@@ -210,12 +192,14 @@ const HomePageClient = ({
           </section>
 
           <section className='relative mt-4'>
-            {trendingContent}
-            {isPending && pendingSection === 'trending' && (
-              <div className='absolute inset-0 z-10 overflow-hidden rounded-xl'>
-                <div className='h-full w-full animate-pulse bg-background/70 backdrop-blur-sm' />
-                <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent' />
-              </div>
+            {localTrending === trending && localTime === time ? (
+              trendingContent
+            ) : isTrendingLoading ? (
+              <HorizontalScrollerSkeleton />
+            ) : clientTrendingData ? (
+              <HomeHorizontalScroller items={clientTrendingData} />
+            ) : (
+              <HorizontalScrollerSkeleton />
             )}
           </section>
         </section>

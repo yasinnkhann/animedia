@@ -7,6 +7,8 @@ import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrolle
 import ShowCastServer from '@/components/show/ShowCastServer';
 import ShowRelatedServer from '@/components/show/ShowRelatedServer';
 
+export const revalidate = 3600;
+
 export async function generateMetadata({
   params,
 }: {
