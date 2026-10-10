@@ -13,6 +13,9 @@
     "disconnect:dev-supabase": "supabase stop",
     "dump:prod": "mkdir -p supabase/migrations && supabase db dump > supabase/migrations/00000000000000_schema.sql && supabase db dump --data-only -s public > supabase/seed.sql && echo '\\n✅ Successfully dumped to: supabase/migrations/00000000000000_schema.sql and supabase/seed.sql'",
     "sync:prod-to-local": "yarn dump:prod && supabase db reset --yes && echo '\\n⚠️  Sync complete! Remember to clear your cookies or log out and log back in to your local app to refresh your session!'",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
     "gen-env-types": "gen-env-types .env -o types/env.d.ts -e . && yarn prettier --write types/env.d.ts",
     "lint": "eslint .",
     "prepare": "husky"
@@ -60,6 +63,9 @@
     "@parcel/watcher": "^2.5.6",
     "@svgr/webpack": "^6.5.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
     "@types/comma-number": "^2.1.0",
     "@types/lodash": "^4.17.0",
     "@types/micro-cors": "^0.1.2",
@@ -70,6 +76,8 @@
     "@types/tinycolor2": "^1.4.3",
     "@types/unidecode": "^0.1.1",
     "@types/uuid": "^9.0.8",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/ui": "^5.0.3",
     "autoprefixer": "^10.4.11",
     "cross-env": "^7.0.3",
     "eslint": "^9.39.4",
@@ -79,6 +87,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "gen-env-types": "^1.3.4",
     "husky": "^9.0.11",
+    "jsdom": "^30.1.2",
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.16",
     "prettier": "^3.2.5",
@@ -89,7 +98,9 @@
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.59.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
   },
   "resolutions": {
     "zeptomatch": "2.0.0"

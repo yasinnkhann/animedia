@@ -128,19 +128,33 @@ Respond ONLY with a valid JSON object matching this schema, nothing else:
   let errorMsg = '';
   try {
     const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
-    const { text } = await generateText({
-      model: groq('openai/gpt-oss-20b'),
-      prompt,
-      temperature: 0.7,
-    });
 
-    const parsed = JSON.parse(text || '{}');
+    let text = '';
+    let retries = 0;
+    while (!text && retries < 4) {
+      const response = await generateText({
+        model: groq('openai/gpt-oss-20b'),
+        prompt,
+        temperature: 0.7 + retries * 0.1,
+      });
+      text = response.text.trim();
+      retries++;
+      if (!text) {
+        console.warn(`gpt-oss-20b returned empty string for DailyPick (retry ${retries})...`);
+      }
+    }
+
+    const cleanJson = text
+      .replace(/```json/g, '')
+      .replace(/```/g, '')
+      .trim();
+
+    const parsed = JSON.parse(cleanJson || '{}');
 
     if (!parsed.id || !parsed.type || !parsed.pitch) {
-      console.error('Invalid Groq response format:', parsed);
+      console.error('Invalid Groq response format:', parsed, 'Raw text:', text);
       errorMsg = 'AI returned an invalid response format. Check Vercel logs.';
     } else {
-      // Save to database as DailyPick
       newPick = await prisma.dailyPick.create({
         data: {
           userId: session.user.id,
