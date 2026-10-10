@@ -2,6 +2,8 @@ import { createGroq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
 import { tmdbClient, igdbClient } from '@/lib/api';
 
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   try {
     const { prompt, mediaType, excludedTitles = [] } = await req.json();
