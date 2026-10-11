@@ -4,6 +4,10 @@ import { tmdbClient, igdbClient } from '@/lib/api';
 
 export const maxDuration = 60;
 
+const TARGET_ITEMS_TO_DELIVER = 10;
+const AI_CANDIDATE_BUFFER = 16;
+const MAX_MODEL_RETRIES = 2;
+
 export async function POST(req: Request) {
   try {
     const { prompt, mediaType, excludedTitles = [] } = await req.json();
@@ -22,10 +26,10 @@ export async function POST(req: Request) {
 
     const exclusionInstruction =
       excludedTitles.length > 0
-        ? `\n\nI already have these: ${excludedTitles.join(', ')}. Please recommend 18 OTHER ${mediaTypeMapping[mediaType] || 'media'} that are completely different.`
+        ? `\n\nI already have these: ${excludedTitles.join(', ')}. Please recommend ${AI_CANDIDATE_BUFFER} OTHER ${mediaTypeMapping[mediaType] || 'media'} that are completely different.`
         : '';
 
-    const chatPrompt = `Recommend 16 distinct ${mediaTypeMapping[mediaType] || 'media'} matching: "${prompt}".${exclusionInstruction}
+    const chatPrompt = `Recommend ${AI_CANDIDATE_BUFFER} distinct ${mediaTypeMapping[mediaType] || 'media'} matching: "${prompt}".${exclusionInstruction}
 
 List ONLY the titles as a simple bulleted list with no notes, explanations, or extra commentary.`;
 
@@ -33,7 +37,7 @@ List ONLY the titles as a simple bulleted list with no notes, explanations, or e
     let text = '';
     for (const modelName of models) {
       let retries = 0;
-      while (!text && retries < 2) {
+      while (!text && retries < MAX_MODEL_RETRIES) {
         try {
           const response = await generateText({
             model: groq(modelName),
@@ -81,7 +85,7 @@ List ONLY the titles as a simple bulleted list with no notes, explanations, or e
           let deliveredCount = 0;
 
           for (const title of candidateTitles) {
-            if (deliveredCount >= 10) break;
+            if (deliveredCount >= TARGET_ITEMS_TO_DELIVER) break;
 
             try {
               let result = null;
