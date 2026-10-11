@@ -4,7 +4,6 @@ import logger from '../logger';
 import { z } from 'zod';
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
-const TMDB_API_KEY = process.env.THE_MOVIE_DB_API_KEY;
 
 /**
  * Validation schemas for common TMDB responses
@@ -45,13 +44,14 @@ export class TMDBClient extends HTTPClient {
     options: FetchOptions = {}
   ): Promise<T> {
     try {
-      if (!TMDB_API_KEY) {
+      const apiKey = process.env.THE_MOVIE_DB_API_KEY;
+      if (!apiKey) {
         throw new ValidationError('THE_MOVIE_DB_API_KEY environment variable is not set');
       }
 
       // Build query string
       const queryParams = new URLSearchParams({
-        api_key: TMDB_API_KEY,
+        api_key: apiKey,
         ...params,
       });
 

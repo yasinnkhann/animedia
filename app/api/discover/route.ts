@@ -21,25 +21,34 @@ export async function POST(req: Request) {
     };
 
     const exclusionInstruction =
-      excludedTitles.length > 0 ? `\nDo not include these: ${JSON.stringify(excludedTitles)}` : '';
+      excludedTitles.length > 0
+        ? `\n\nI already have these: ${excludedTitles.join(', ')}. Please recommend 18 OTHER ${mediaTypeMapping[mediaType] || 'media'} that are completely different.`
+        : '';
 
-    const chatPrompt = `Recommend up to 15 ${mediaTypeMapping[mediaType] || 'media'} matching: "${prompt}".${exclusionInstruction}
+    const chatPrompt = `Recommend 16 distinct ${mediaTypeMapping[mediaType] || 'media'} matching: "${prompt}".${exclusionInstruction}
 
-List the titles as a simple bulleted list.`;
+List ONLY the titles as a simple bulleted list with no notes, explanations, or extra commentary.`;
 
+    const models = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
     let text = '';
-    let retries = 0;
-    while (!text && retries < 4) {
-      const response = await generateText({
-        model: groq('openai/gpt-oss-20b'),
-        prompt: chatPrompt,
-        temperature: 0.9 + retries * 0.1,
-      });
-      text = response.text.trim();
-      retries++;
-      if (!text) {
-        console.warn(`gpt-oss-20b returned empty string (retry ${retries})...`);
+    for (const modelName of models) {
+      let retries = 0;
+      while (!text && retries < 2) {
+        try {
+          const response = await generateText({
+            model: groq(modelName),
+            prompt: chatPrompt,
+            temperature: 0.7 + retries * 0.1,
+          });
+          text = response.text.trim();
+          if (text) break;
+        } catch (err: any) {
+          console.warn(`Model ${modelName} error: ${err.message}. Trying fallback...`);
+          break;
+        }
+        retries++;
       }
+      if (text) break;
     }
 
     console.log('AI TEXT:', text);
@@ -50,42 +59,52 @@ List the titles as a simple bulleted list.`;
         const fetchedTitles = new Set<string>(excludedTitles.map((t: string) => t.toLowerCase()));
 
         try {
-          const regex = /^\s*[-*]\s+(.+?)(?=\r?$)/gm;
+          // Regex to match -, *, •, or numbers (1., 2., etc) at the start of a line
+          const regex = /^\s*(?:[-*•]|\d+\.)\s+(.+?)(?=\r?$)/gm;
           let match;
-          const fetchPromises = [];
+          const candidateTitles: string[] = [];
 
           while ((match = regex.exec(text)) !== null) {
-            let title = match[1].replace(/["']/g, '').trim();
+            // Strip quotes, markdown bold asterisks, and trailing years (e.g. " (2018)")
+            let title = match[1]
+              .replace(/["'*]/g, '')
+              .replace(/\s*\(\d{4}\)\s*$/, '')
+              .trim();
             const lowerTitle = title.toLowerCase();
-            if (fetchedTitles.has(lowerTitle)) continue;
-
-            fetchedTitles.add(lowerTitle);
-
-            const fetchTask = async () => {
-              try {
-                let result = null;
-                if (mediaType === 'MOVIE') {
-                  const res = await tmdbClient.searchMovies(title, 1);
-                  if (res?.results?.[0]) result = { type: 'MOVIE', data: res.results[0] };
-                } else if (mediaType === 'SHOW') {
-                  const res = await tmdbClient.searchShows(title, 1);
-                  if (res?.results?.[0]) result = { type: 'SHOW', data: res.results[0] };
-                } else if (mediaType === 'GAME') {
-                  const res = await igdbClient.searchGames(title, 1, 1);
-                  if (res?.results?.[0]) result = { type: 'GAME', data: res.results[0] };
-                }
-
-                if (result) {
-                  controller.enqueue(encoder.encode(JSON.stringify(result) + '\n'));
-                }
-              } catch (err) {
-                console.error(`Error fetching ${title}:`, err);
-              }
-            };
-            fetchPromises.push(fetchTask());
+            if (!fetchedTitles.has(lowerTitle)) {
+              fetchedTitles.add(lowerTitle);
+              candidateTitles.push(title);
+            }
           }
 
-          await Promise.all(fetchPromises);
+          const deliveredIds = new Set<string | number>();
+          let deliveredCount = 0;
+
+          for (const title of candidateTitles) {
+            if (deliveredCount >= 10) break;
+
+            try {
+              let result = null;
+              if (mediaType === 'MOVIE') {
+                const res = await tmdbClient.searchMovies(title, 1);
+                if (res?.results?.[0]) result = { type: 'MOVIE', data: res.results[0] };
+              } else if (mediaType === 'SHOW') {
+                const res = await tmdbClient.searchShows(title, 1);
+                if (res?.results?.[0]) result = { type: 'SHOW', data: res.results[0] };
+              } else if (mediaType === 'GAME') {
+                const res = await igdbClient.searchGames(title, 1, 1);
+                if (res?.results?.[0]) result = { type: 'GAME', data: res.results[0] };
+              }
+
+              if (result && !deliveredIds.has(result.data.id)) {
+                deliveredIds.add(result.data.id);
+                deliveredCount++;
+                controller.enqueue(encoder.encode(JSON.stringify(result) + '\n'));
+              }
+            } catch (err) {
+              console.error(`Error fetching ${title}:`, err);
+            }
+          }
         } catch (e) {
           console.error('Parse error:', e);
         } finally {
