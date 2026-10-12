@@ -236,7 +236,7 @@ export default function UserProfilePage() {
               </Link>
 
               <Link
-                href='/my-games/wishlist'
+                href='/my-games/playing'
                 className='group flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md'
               >
                 <div className='mb-4 flex items-center justify-between text-primary'>
@@ -276,9 +276,7 @@ export default function UserProfilePage() {
             <h2 className='mb-6 text-2xl font-bold'>Favorites Showcase</h2>
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
               {topRated.map((item: any, idx: number) => {
-                let mediaType: 'MOVIE' | 'SHOW' | 'GAME' = 'MOVIE';
-                if ('wishlist' in item || 'playtime' in item) mediaType = 'GAME';
-                else if ('total_episodes' in item || 'current_episode' in item) mediaType = 'SHOW';
+                const mediaType: 'MOVIE' | 'SHOW' | 'GAME' = item.mediaType || 'MOVIE';
 
                 return (
                   <ProfileMediaCardWrapper

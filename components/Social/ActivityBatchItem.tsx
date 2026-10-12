@@ -141,14 +141,6 @@ export function SingleActivityRow({
                   </span>
                 </>
               )}
-              {activity.metadata.wishlist !== undefined && (
-                <>
-                  <span className='text-muted-foreground/50'>•</span>
-                  <span className='inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground'>
-                    {activity.metadata.wishlist ? 'Added to Wishlist' : 'Removed from Wishlist'}
-                  </span>
-                </>
-              )}
             </>
           )}
         </div>

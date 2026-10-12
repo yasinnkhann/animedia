@@ -1,7 +1,7 @@
 import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
-import { TContent } from '@ts/types';
+import { TContent, EnrichedMedia } from '@ts/types';
 import {
   CLIENT_BASE_URL,
   THE_MOVIE_DB_BASE_IMG_URL,
@@ -130,7 +130,7 @@ export class CommonMethods {
   };
 
   public static getUserStatusFromMedia = (
-    userMatchedMedias: (Show | Movie | Game)[],
+    userMatchedMedias: (Show | Movie | Game | EnrichedMedia)[],
     item: {
       id: string | number;
       mediaType?: string;
@@ -141,11 +141,23 @@ export class CommonMethods {
       if (String(data.id) !== String(item.id)) return false;
 
       let dataType = 'unknown';
-      if ('current_episode' in data) dataType = 'show';
-      else if ('wishlist' in data) dataType = 'game';
-      else if ('status' in data) dataType = 'movie';
+      if ('mediaType' in data && data.mediaType) {
+        dataType = data.mediaType.toLowerCase();
+      } else if ('current_episode' in data) {
+        dataType = 'show';
+      } else if (
+        'status' in data &&
+        (data.status === 'PLAYING' ||
+          data.status === 'PLAYED' ||
+          data.status === 'PLAN_TO_PLAY' ||
+          data.status === 'NOT_PLAYING')
+      ) {
+        dataType = 'game';
+      } else if ('status' in data) {
+        dataType = 'movie';
+      }
 
-      const itemType = item.mediaType || item.type;
+      const itemType = (item.mediaType || item.type)?.toLowerCase();
       if (itemType) {
         return dataType === itemType || dataType === 'unknown';
       }
@@ -154,23 +166,23 @@ export class CommonMethods {
     });
 
     if (dataFound) {
-      if ('status' in dataFound) {
-        switch (dataFound.status) {
+      const mediaData = dataFound as any;
+      if (mediaData.status) {
+        switch (mediaData.status) {
           case 'WATCHING':
+          case 'PLAYING':
             return 'W';
           case 'COMPLETED':
+          case 'PLAYED':
             return 'C';
           case 'PLAN_TO_WATCH':
+          case 'PLAN_TO_PLAY':
             return 'PW';
           case 'ON_HOLD':
             return 'OH';
           default:
             return 'D';
         }
-      }
-
-      if ('wishlist' in dataFound && dataFound.wishlist) {
-        return 'WL';
       }
     }
 
@@ -200,10 +212,13 @@ export class CommonMethods {
 
   public static statusParams: Set<string> = new Set([
     'watching',
+    'playing',
     'completed',
+    'played',
     'on-hold',
     'dropped',
     'plan-to-watch',
+    'plan-to-play',
     'wishlist',
   ]);
 
@@ -225,8 +240,6 @@ export class CommonMethods {
         return 'bg-orange-500';
       case 'D':
         return 'bg-red-500';
-      case 'WL':
-        return 'bg-purple-500';
       default:
         return '';
     }
@@ -263,6 +276,7 @@ export class CommonMethods {
   public static watchStatusFromParam = (statusParam: string): WatchStatus | undefined => {
     switch (statusParam) {
       case 'watching':
+      case 'playing':
         return 'WATCHING';
       case 'completed':
         return 'COMPLETED';
@@ -271,6 +285,8 @@ export class CommonMethods {
       case 'dropped':
         return 'DROPPED';
       case 'plan-to-watch':
+      case 'plan-to-play':
+      case 'wishlist':
         return 'PLAN_TO_WATCH';
       default:
         return undefined;

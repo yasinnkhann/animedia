@@ -6,6 +6,7 @@ import { CommonMethods } from '../../../utils/CommonMethods';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import { useUserMedia } from '../../UserMediaProvider';
+import { useMounted } from '@/hooks/useMounted';
 import type { Movie, Show, Game } from '@prisma/client';
 
 interface Props {
@@ -13,12 +14,14 @@ interface Props {
 }
 
 const ForYouScroller = ({ items }: Props) => {
+  const isMounted = useMounted();
+
   const { status } = useSession();
   const shouldFetchUserMedia = status === 'authenticated';
   const { userMovies, userShows, userGames } = useUserMedia();
 
   const userMatchedMedias = useMemo(() => {
-    if (!shouldFetchUserMedia || items.length === 0) {
+    if (!isMounted || !shouldFetchUserMedia || items.length === 0) {
       return [];
     }
 
@@ -57,7 +60,7 @@ const ForYouScroller = ({ items }: Props) => {
     }
 
     return matchedMedias;
-  }, [userShows, userMovies, userGames, items, shouldFetchUserMedia]);
+  }, [userShows, userMovies, userGames, items, shouldFetchUserMedia, isMounted]);
 
   return (
     <BaseHorizontalScroller<any>

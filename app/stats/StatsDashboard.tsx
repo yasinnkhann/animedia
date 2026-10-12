@@ -86,13 +86,12 @@ export default function StatsDashboard({ userMovies, userShows, userGames, userN
   const statusData = useMemo(() => {
     const counts: Record<string, number> = {};
     allMedia.forEach(m => {
-      // Game model doesn't have status, just wishlist boolean. Let's map it.
       let status = 'NOT_WATCHING';
-      if ('status' in m) {
-        status = m.status;
-      } else {
-        // It's a game
-        status = (m as any).wishlist ? 'PLAN_TO_WATCH' : 'COMPLETED'; // Simplified fallback for games
+      if ('status' in m && m.status) {
+        if ((m.status as any) === 'PLAYING') status = 'WATCHING';
+        else if ((m.status as any) === 'PLAYED') status = 'COMPLETED';
+        else if ((m.status as any) === 'PLAN_TO_PLAY') status = 'PLAN_TO_WATCH';
+        else status = m.status;
       }
 
       counts[status] = (counts[status] || 0) + 1;

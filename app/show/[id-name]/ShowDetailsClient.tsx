@@ -127,6 +127,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
           newShows.push({
             id: String(variables.showId),
             name: variables.showName,
+            mediaType: 'SHOW',
             status: variables.watchStatus,
             current_episode: variables.currentEpisode ?? 0,
             rating: variables.showRating ?? null,

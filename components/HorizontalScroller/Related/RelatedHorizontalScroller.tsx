@@ -9,6 +9,7 @@ import { ExtractStrict } from '@ts/types';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import { useUserMedia } from '../../UserMediaProvider';
+import { useMounted } from '@/hooks/useMounted';
 import type { Movie, Show, Game } from '@prisma/client';
 
 interface Props {
@@ -17,12 +18,14 @@ interface Props {
 }
 
 const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
+  const isMounted = useMounted();
+
   const { status } = useSession();
   const shouldFetchUserMedia = status === 'authenticated';
   const { userMovies, userShows, userGames } = useUserMedia();
 
   const userMatchedMedias = useMemo(() => {
-    if (!shouldFetchUserMedia) {
+    if (!isMounted || !shouldFetchUserMedia) {
       return [];
     }
 
@@ -69,7 +72,7 @@ const RelatedHorizontalScroller = ({ items, mediaType }: Props) => {
     }
 
     return matchedMedias;
-  }, [userShows, userMovies, userGames, items, mediaType, shouldFetchUserMedia]);
+  }, [userShows, userMovies, userGames, items, mediaType, shouldFetchUserMedia, isMounted]);
 
   return (
     <BaseHorizontalScroller

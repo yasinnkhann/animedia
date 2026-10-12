@@ -84,6 +84,7 @@ export const GameCharacterSearchInput = z.object({
 
 // User resolver inputs
 const WatchStatusInput = z.enum(WATCH_STATUS_VALUES);
+const GameStatusInput = z.enum(['NOT_PLAYING', 'PLAYING', 'PLAYED', 'PLAN_TO_PLAY'] as const);
 const RatingInput = z.number().int().min(1).max(10).nullish();
 
 export const UserIdInput = z.object({
@@ -131,7 +132,7 @@ export const AddShowInput = z.object({
 export const AddGameInput = z.object({
   gameId: z.string().min(1, 'Game ID required'),
   gameName: z.string().min(1, 'Game name required').max(200),
-  wishlist: z.boolean().optional(),
+  gameStatus: GameStatusInput.optional(),
   rating: RatingInput,
 });
 
@@ -150,7 +151,7 @@ export const UpdateShowInput = z.object({
 
 export const UpdateGameInput = z.object({
   gameId: z.string().min(1, 'Game ID required'),
-  wishlist: z.boolean().optional(),
+  gameStatus: GameStatusInput.optional(),
   rating: RatingInput,
 });
 

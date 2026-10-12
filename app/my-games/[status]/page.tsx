@@ -24,10 +24,19 @@ const Status = () => {
 
   const myGames = useMemo(() => {
     if (!userGames) return [];
-    if (statusParam === 'wishlist') {
-      return userGames.filter(game => game?.wishlist);
+    if (statusParam === 'playing' || statusParam === 'watching') {
+      return userGames.filter(game => game?.status === 'PLAYING');
     }
-    // If other statuses are requested for games, they return empty for now
+    if (statusParam === 'completed' || statusParam === 'played') {
+      return userGames.filter(game => game?.status === 'PLAYED');
+    }
+    if (
+      statusParam === 'plan-to-play' ||
+      statusParam === 'plan-to-watch' ||
+      statusParam === 'wishlist'
+    ) {
+      return userGames.filter(game => game?.status === 'PLAN_TO_PLAY');
+    }
     return [];
   }, [userGames, statusParam]);
 

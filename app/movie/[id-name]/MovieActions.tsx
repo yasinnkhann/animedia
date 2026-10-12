@@ -55,6 +55,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
             newMovies.push({
               id: movieId,
               name: movieTitle,
+              mediaType: 'MOVIE',
               status: newWatchStatus,
               rating: rating === '' ? null : rating,
             });

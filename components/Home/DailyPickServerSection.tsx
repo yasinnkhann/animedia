@@ -58,7 +58,7 @@ export default async function DailyPickServerSection() {
     take: 30,
   });
   const completedGames = await prisma.game.findMany({
-    where: { userId: session.user.id, wishlist: false }, // Assume non-wishlist games with rating are played
+    where: { userId: session.user.id, status: 'PLAYED' },
     select: { name: true, rating: true },
     orderBy: { rating: 'desc' },
     take: 30,
@@ -74,7 +74,7 @@ export default async function DailyPickServerSection() {
     select: { id: true, name: true },
   });
   const ptwGames = await prisma.game.findMany({
-    where: { userId: session.user.id, wishlist: true },
+    where: { userId: session.user.id, status: 'PLAN_TO_PLAY' },
     select: { id: true, name: true },
   });
 

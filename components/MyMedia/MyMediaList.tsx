@@ -18,7 +18,13 @@ interface Props {
 
 const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
+  let adjustedStatus = status?.toUpperCase().split('-').join(' ') ?? '';
+  if (mediaType === 'GAMES') {
+    if (status === 'watching' || status === 'playing') adjustedStatus = 'PLAYING';
+    if (status === 'completed' || status === 'played') adjustedStatus = 'PLAYED';
+    if (status === 'plan-to-watch' || status === 'plan-to-play' || status === 'wishlist')
+      adjustedStatus = 'PLAN TO PLAY';
+  }
 
   const filteredMedias = myMedias.filter(media =>
     media.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -54,34 +60,50 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
           )}
         </div>
 
-        {mediaType !== 'GAMES' && (
-          <div className='mb-6 flex flex-wrap justify-center gap-2 sm:justify-start'>
-            {[
-              { label: 'Watching', value: 'watching' },
-              { label: 'Completed', value: 'completed' },
-              { label: 'On Hold', value: 'on-hold' },
-              { label: 'Dropped', value: 'dropped' },
-              { label: 'Plan to Watch', value: 'plan-to-watch' },
-            ].map(tab => {
-              const isActive = status === tab.value;
-              const routePrefix = mediaType === 'MOVIES' ? 'my-movies' : 'my-shows';
+        <div className='mb-6 flex flex-wrap justify-center gap-2 sm:justify-start'>
+          {(mediaType === 'GAMES'
+            ? [
+                { label: 'Playing', value: 'playing' },
+                { label: 'Played', value: 'played' },
+                { label: 'Plan to Play', value: 'plan-to-play' },
+              ]
+            : [
+                { label: 'Watching', value: 'watching' },
+                { label: 'Completed', value: 'completed' },
+                { label: 'On Hold', value: 'on-hold' },
+                { label: 'Dropped', value: 'dropped' },
+                { label: 'Plan to Watch', value: 'plan-to-watch' },
+              ]
+          ).map(tab => {
+            const isActive =
+              status === tab.value ||
+              (mediaType === 'GAMES' && tab.value === 'playing' && status === 'watching') ||
+              (mediaType === 'GAMES' && tab.value === 'played' && status === 'completed') ||
+              (mediaType === 'GAMES' &&
+                tab.value === 'plan-to-play' &&
+                (status === 'wishlist' || status === 'plan-to-watch'));
+            const routePrefix =
+              mediaType === 'MOVIES'
+                ? 'my-movies'
+                : mediaType === 'SHOWS'
+                  ? 'my-shows'
+                  : 'my-games';
 
-              return (
-                <Link
-                  key={tab.value}
-                  href={`/${routePrefix}/${tab.value}`}
-                  className={`rounded-full px-4 py-2 text-sm font-medium no-underline transition-all duration-200 ${
-                    isActive
-                      ? 'bg-primary text-white shadow-md'
-                      : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
-                  }`}
-                >
-                  {tab.label}
-                </Link>
-              );
-            })}
-          </div>
-        )}
+            return (
+              <Link
+                key={tab.value}
+                href={`/${routePrefix}/${tab.value}`}
+                className={`rounded-full px-4 py-2 text-sm font-medium no-underline transition-all duration-200 ${
+                  isActive
+                    ? 'bg-primary text-white shadow-md'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+                }`}
+              >
+                {tab.label}
+              </Link>
+            );
+          })}
+        </div>
 
         {filteredMedias.length === 0 ? (
           <div className='flex flex-col items-center justify-center rounded-lg border border-border bg-card py-20 text-center shadow-sm'>

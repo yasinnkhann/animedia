@@ -14,7 +14,7 @@ const LibraryNav = ({ currentTab }: LibraryNavProps) => {
   const tabs = [
     { id: 'shows', label: 'Shows', href: '/my-shows/watching' },
     { id: 'movies', label: 'Movies', href: '/my-movies/watching' },
-    { id: 'games', label: 'Games', href: '/my-games/wishlist' },
+    { id: 'games', label: 'Games', href: '/my-games/playing' },
     { id: 'collections', label: 'Collections', href: '/collections' },
   ];
 

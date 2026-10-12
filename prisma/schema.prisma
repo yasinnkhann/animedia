@@ -114,8 +114,8 @@ model Show {
 model Game {
   id     String
   name   String
+  status GameStatus @default(PLAN_TO_PLAY)
   rating Int?
-  wishlist Boolean @default(false)
   image  String?
   release_date String?
   userId String @map("user_id")
@@ -123,6 +123,13 @@ model Game {
 
   @@id([id, userId])
   @@index([userId], map: "Game_user_id_idx")
+}
+
+enum GameStatus {
+  NOT_PLAYING
+  PLAYING
+  PLAYED
+  PLAN_TO_PLAY
 }
 
 enum WatchStatus {

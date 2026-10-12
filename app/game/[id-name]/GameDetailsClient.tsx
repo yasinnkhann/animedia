@@ -13,8 +13,8 @@ import { CommonMethods } from '@/utils/CommonMethods';
 import _ from 'lodash';
 import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from '@/utils/constants';
 import { ICast } from '@ts/interfaces';
-import { ratingOptions } from '@/models/dropDownOptions';
-import Button from '@/components/ui/Button';
+import { ratingOptions, gameStatusOptions } from '@/models/dropDownOptions';
+import type { GameStatus } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import RoundProgressBar from '@/components/RoundProgressBar';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
@@ -60,8 +60,7 @@ const GameDetailsClient = ({
   const id = (params?.['id-name'] as string)?.split('-')[0] ?? '';
 
   const [ratingInput, setRating] = useState<number | string | null>(null);
-
-  const [addToWishlistInput, setAddToWishlist] = useState<boolean | null>(null);
+  const [gameStatusInput, setGameStatus] = useState<GameStatus | null>(null);
 
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -69,7 +68,10 @@ const GameDetailsClient = ({
   const usersGame = userGames?.find(game => game.id === id);
 
   const rating = ratingInput ?? usersGame?.rating ?? ratingOptions[0].value;
-  const addToWishlist = addToWishlistInput ?? usersGame?.wishlist ?? false;
+  const gameStatus: GameStatus =
+    gameStatusInput ??
+    (usersGame?.status as GameStatus | undefined) ??
+    (usersGame?.rating ? 'PLAYED' : 'NOT_PLAYING');
 
   const gameName = gameDetailsData?.gameDetails.results[0]?.name ?? '';
 
@@ -88,7 +90,8 @@ const GameDetailsClient = ({
         newGames.push({
           id: variables.gameId,
           name: variables.gameName,
-          wishlist: variables.wishlist ?? false,
+          mediaType: 'GAME',
+          status: variables.gameStatus,
           rating: variables.rating ?? null,
         });
         return { ...old, userGames: newGames };
@@ -98,8 +101,8 @@ const GameDetailsClient = ({
         await addGameAction(
           variables.gameId,
           variables.gameName,
-          variables.wishlist ?? undefined,
-          variables.rating ?? undefined
+          variables.gameStatus,
+          variables.rating !== undefined ? variables.rating : null
         );
       } catch (err) {
         mutateUserMediaCache(() => previousData);
@@ -117,8 +120,8 @@ const GameDetailsClient = ({
         if (index !== -1) {
           newGames[index] = {
             ...newGames[index],
-            wishlist:
-              variables.wishlist !== undefined ? variables.wishlist : newGames[index].wishlist,
+            status:
+              variables.gameStatus !== undefined ? variables.gameStatus : newGames[index].status,
             rating: variables.rating !== undefined ? variables.rating : newGames[index].rating,
           };
         }
@@ -128,8 +131,8 @@ const GameDetailsClient = ({
       try {
         await updateGameAction(
           variables.gameId,
-          variables.wishlist ?? undefined,
-          variables.rating ?? undefined
+          variables.gameStatus,
+          variables.rating !== undefined ? variables.rating : null
         );
       } catch (err) {
         mutateUserMediaCache(() => previousData);
@@ -156,58 +159,16 @@ const GameDetailsClient = ({
     });
   };
 
-  const handleWishlist = () => {
-    if (usersGame?.id && usersGame.wishlist && !usersGame.rating) {
-      deleteGame({
-        variables: { gameId: id },
-      });
-      return;
-    }
+  const handleChangeGameStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (!id || !gameName) return;
 
-    if (!usersGame?.id) {
-      addGame({
-        variables: {
-          gameId: id,
-          gameName: game.name,
-          rating: typeof rating === 'number' ? rating : null,
-          wishlist: true,
-        },
-      });
-      setAddToWishlist(true);
-      return;
-    }
-
-    if (!usersGame?.wishlist) {
-      updateGame({
-        variables: {
-          gameId: id,
-          wishlist: true,
-        },
-      });
-      setAddToWishlist(true);
-      return;
-    }
-
-    if (usersGame?.wishlist) {
-      updateGame({
-        variables: {
-          gameId: id,
-          wishlist: false,
-        },
-      });
-      setAddToWishlist(false);
-      return;
-    }
-  };
-
-  const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    setRating(value === '' ? '' : +value);
+    const newStatus = value as GameStatus;
+    setGameStatus(newStatus);
 
-    if (usersGame?.id && value === '' && !usersGame.wishlist) {
-      deleteGame({
-        variables: { gameId: id },
-      });
+    if (newStatus === 'NOT_PLAYING') {
+      setRating('');
+      deleteGame({ variables: { gameId: id } });
       return;
     }
 
@@ -215,9 +176,9 @@ const GameDetailsClient = ({
       addGame({
         variables: {
           gameId: id,
-          gameName: game.name,
-          rating: isNaN(parseInt(value)) ? null : parseInt(value),
-          wishlist: addToWishlist,
+          gameName,
+          gameStatus: newStatus,
+          rating: typeof rating === 'number' ? rating : null,
         },
       });
       return;
@@ -226,10 +187,47 @@ const GameDetailsClient = ({
     updateGame({
       variables: {
         gameId: id,
-        rating: isNaN(parseInt(value)) ? null : parseInt(value),
+        gameStatus: newStatus,
+        rating: typeof rating === 'number' ? rating : (usersGame.rating ?? undefined),
       },
     });
-    return;
+  };
+
+  const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    const parsedRating = value === '' ? '' : +value;
+    setRating(parsedRating);
+
+    if (usersGame?.id && value === '' && gameStatus === 'NOT_PLAYING') {
+      deleteGame({
+        variables: { gameId: id },
+      });
+      return;
+    }
+
+    const newRatingValue = isNaN(parseInt(value)) ? null : parseInt(value);
+
+    if (!usersGame?.id) {
+      const nextStatus = gameStatus === 'NOT_PLAYING' ? 'PLAYED' : gameStatus;
+      setGameStatus(nextStatus);
+      addGame({
+        variables: {
+          gameId: id,
+          gameName,
+          rating: newRatingValue,
+          gameStatus: nextStatus,
+        },
+      });
+      return;
+    }
+
+    updateGame({
+      variables: {
+        gameId: id,
+        rating: newRatingValue,
+        gameStatus: usersGame.status ?? gameStatus,
+      },
+    });
   };
 
   if (
@@ -290,9 +288,13 @@ const GameDetailsClient = ({
           (isLoading ? (
             <section className='my-4 flex items-center space-x-4'>
               <div className='relative'>
-                <Button disabled variant='primary' className='!bg-gray-500'>
-                  Loading...
-                </Button>
+                <select
+                  disabled
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
+                >
+                  <option>Loading...</option>
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
               </div>
               <div className='relative'>
                 <select
@@ -307,15 +309,19 @@ const GameDetailsClient = ({
           ) : (
             <section className='my-4 flex flex-wrap items-center gap-4'>
               <div className='relative'>
-                <Button
-                  onClick={handleWishlist}
-                  variant='primary'
-                  className={
-                    addToWishlist ? '!border-green-600 !bg-green-600 hover:!bg-green-500' : ''
-                  }
+                <select
+                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
+                  value={gameStatus}
+                  onChange={handleChangeGameStatus}
+                  disabled={false}
                 >
-                  {addToWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
-                </Button>
+                  {gameStatusOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.text}
+                    </option>
+                  ))}
+                </select>
+                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
               </div>
 
               <div className='relative'>

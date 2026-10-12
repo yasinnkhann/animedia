@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { NotificationType, MediaType, WatchStatus } from '@prisma/client';
+import { NotificationType, MediaType, WatchStatus, GameStatus } from '@prisma/client';
 
 export async function GET(req: Request) {
   // Protect the route so only Vercel Cron can call it
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     });
 
     const games = await prisma.game.findMany({
-      where: { wishlist: true, release_date: { not: null } },
+      where: { status: GameStatus.PLAN_TO_PLAY, release_date: { not: null } },
     });
 
     const notificationsToCreate: any[] = [];

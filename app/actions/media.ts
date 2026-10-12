@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { revalidatePath, revalidateTag } from 'next/cache';
-import { WatchStatus } from '@prisma/client';
+import { WatchStatus, GameStatus } from '@prisma/client';
 import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
 import { getGameDetailsAction } from '@/lib/actions/igdbActions';
 import { CommonMethods } from '@/utils/CommonMethods';
@@ -140,8 +140,8 @@ export async function addShow(
 export async function addGame(
   gameId: string,
   gameName: string,
-  wishlist?: boolean,
-  rating?: number
+  gameStatus: GameStatus = 'PLAN_TO_PLAY',
+  rating?: number | null
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
@@ -153,6 +153,8 @@ export async function addGame(
     release_date = new Date(details.first_release_date * 1000).toISOString();
   }
 
+  const finalStatus: GameStatus = gameStatus ?? 'PLAN_TO_PLAY';
+
   const game = await prisma.game.upsert({
     where: {
       id_userId: {
@@ -162,23 +164,26 @@ export async function addGame(
     },
     update: {
       name: gameName,
-      wishlist: wishlist ?? false,
-      rating,
+      status: finalStatus,
+      rating: rating ?? null,
       image,
       release_date,
     },
     create: {
       id: String(gameId),
       name: gameName,
-      wishlist: wishlist ?? false,
-      rating,
+      status: finalStatus,
+      rating: rating ?? null,
       image,
       release_date,
       userId: session.user.id,
     },
   });
 
-  logActivity(session.user.id, 'ADDED', 'GAME', String(gameId), gameName);
+  logActivity(session.user.id, 'ADDED', 'GAME', String(gameId), gameName, {
+    status: finalStatus,
+    rating,
+  });
 
   revalidatePath('/');
   // @ts-ignore
@@ -251,9 +256,19 @@ export async function updateShow(
   return show;
 }
 
-export async function updateGame(gameId: string, wishlist?: boolean, rating?: number) {
+export async function updateGame(gameId: string, gameStatus?: GameStatus, rating?: number | null) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
+
+  const updateData: { status?: GameStatus; rating?: number | null } = {};
+
+  if (gameStatus) {
+    updateData.status = gameStatus;
+  }
+
+  if (rating !== undefined) {
+    updateData.rating = rating;
+  }
 
   const game = await prisma.game.update({
     where: {
@@ -262,14 +277,14 @@ export async function updateGame(gameId: string, wishlist?: boolean, rating?: nu
         userId: session.user.id,
       },
     },
-    data: {
-      wishlist,
-      rating,
-    },
+    data: updateData,
   });
 
   const type = rating ? 'RATED' : 'STATUS_CHANGED';
-  logActivity(session.user.id, type, 'GAME', String(gameId), game.name, { wishlist, rating });
+  logActivity(session.user.id, type, 'GAME', String(gameId), game.name, {
+    status: game.status,
+    rating,
+  });
 
   revalidatePath('/');
   // @ts-ignore

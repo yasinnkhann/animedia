@@ -63,7 +63,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     // Calculate Stats
     const completedMovies = userMovies.filter(m => m.status === 'COMPLETED').length;
     const completedShows = userShows.filter(s => s.status === 'COMPLETED').length;
-    const completedGames = userGames.filter(g => !g.wishlist && g.rating !== null).length;
+    const completedGames = userGames.filter(
+      g => g.status === 'PLAYED' || (g.status as any) === 'COMPLETED'
+    ).length;
     const episodesWatched = userShows.reduce((acc, s) => acc + s.current_episode, 0);
 
     const ratedMedia = [...userMovies, ...userShows, ...userGames].filter(m => m.rating !== null);
@@ -83,9 +85,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     return NextResponse.json({
       user,
       media: {
-        userMovies,
-        userShows,
-        userGames,
+        userMovies: userMovies.map(m => ({ ...m, mediaType: 'MOVIE' as const })),
+        userShows: userShows.map(s => ({ ...s, mediaType: 'SHOW' as const })),
+        userGames: userGames.map(g => ({ ...g, mediaType: 'GAME' as const })),
       },
       stats,
       activities,

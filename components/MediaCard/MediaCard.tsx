@@ -6,6 +6,7 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import { CommonMethods } from '@/utils/CommonMethods';
 import { IoMdClose } from 'react-icons/io';
 import { motion } from 'framer-motion';
+import { useMounted } from '@/hooks/useMounted';
 
 export type MediaCardVariant = 'fixed' | 'responsive';
 export type MediaType = 'MOVIE' | 'SHOW' | 'GAME' | 'PERSON';
@@ -35,6 +36,7 @@ export default function MediaCard({
   userRating,
   onRemove,
 }: MediaCardProps) {
+  const isMounted = useMounted();
   let inferredType = mediaType;
   if (!inferredType) {
     if (item.media_type) {
@@ -176,7 +178,7 @@ export default function MediaCard({
           )}
         </Link>
 
-        {userStatus && !onRemove && (
+        {isMounted && userStatus && !onRemove && (
           <div
             className={`absolute -right-px -top-px z-10 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
               userStatus as any
@@ -186,7 +188,7 @@ export default function MediaCard({
           </div>
         )}
 
-        {userRating && (
+        {isMounted && userRating && (
           <div className='absolute left-2 top-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-bold text-yellow-400 shadow-sm backdrop-blur-md'>
             <span>★</span>
             <span>{userRating}</span>

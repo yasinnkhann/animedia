@@ -1,6 +1,7 @@
 export type MovieGenreTypes = string;
 export type ShowGenreTypes = string;
 export type WatchStatusTypes = string;
+export type GameStatusTypes = string;
 
 export const SORT_BY_OPTIONS = [
   {
@@ -337,5 +338,27 @@ export const watchStatusOptions: {
   {
     value: 'DROPPED',
     text: 'Dropped',
+  },
+];
+
+export const gameStatusOptions: {
+  value: GameStatusTypes;
+  text: string;
+}[] = [
+  {
+    value: 'NOT_PLAYING',
+    text: 'Not Playing',
+  },
+  {
+    value: 'PLAYING',
+    text: 'Playing',
+  },
+  {
+    value: 'PLAYED',
+    text: 'Played',
+  },
+  {
+    value: 'PLAN_TO_PLAY',
+    text: 'Plan to Play',
   },
 ];

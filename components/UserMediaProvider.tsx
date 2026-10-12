@@ -3,13 +3,13 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import type { Movie, Show, Game } from '@prisma/client';
+import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/models/ts/types';
 import { fetchUserMedia } from '@/app/actions/userMediaActions';
 
 interface UserMediaContextType {
-  userMovies: Movie[];
-  userShows: Show[];
-  userGames: Game[];
+  userMovies: EnrichedMovie[];
+  userShows: EnrichedShow[];
+  userGames: EnrichedGame[];
   isLoading: boolean;
   refetchUserMedia: () => Promise<any>;
   mutateUserMediaCache: (updater: (oldData: any) => any) => void;
