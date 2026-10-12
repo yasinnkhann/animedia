@@ -77,24 +77,44 @@ export const getErrorMsg = (error: unknown) => {
   }
 };
 
-export const postIGDB = async (
-  url: string,
-  body = '',
-  maxRetries = 10,
-  initialRetryDelayMs = 500
-) => {
-  interface AccessTokenResponse {
-    access_token: string;
-    expires_in: number;
-    token_type: string;
+interface AccessTokenResponse {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+}
+
+let memoryCachedToken: { token: string; expiresAt: number } | null = null;
+let tokenPromise: Promise<string> | null = null;
+
+export const getIGDBAccessToken = async (): Promise<string> => {
+  if (memoryCachedToken && Date.now() < memoryCachedToken.expiresAt - 60000) {
+    return memoryCachedToken.token;
   }
 
-  try {
-    let accessToken = await redis.get(IGDB_ACCESS_TOKEN_PREFIX);
+  if (tokenPromise) {
+    return tokenPromise;
+  }
 
-    if (accessToken === null) {
+  tokenPromise = (async () => {
+    try {
+      try {
+        const redisToken = await redis.get(IGDB_ACCESS_TOKEN_PREFIX);
+        if (redisToken) {
+          memoryCachedToken = { token: redisToken, expiresAt: Date.now() + 5 * 60 * 1000 };
+          return redisToken;
+        }
+      } catch {
+        // Redis unavailable; fall back to fetching fresh token
+      }
+
+      const clientId = process.env.IGDB_CLIENT_ID;
+      const clientSecret = process.env.IGDB_CLIENT_SECRET;
+      if (!clientId || !clientSecret) {
+        throw new Error('IGDB_CLIENT_ID or IGDB_CLIENT_SECRET environment variable is missing.');
+      }
+
       const accessTokenRes = await fetch(
-        `https://id.twitch.tv/oauth2/token?client_id=${process.env.IGDB_CLIENT_ID}&client_secret=${process.env.IGDB_CLIENT_SECRET}&grant_type=client_credentials`,
+        `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`,
         {
           method: 'POST',
           headers: {
@@ -103,40 +123,90 @@ export const postIGDB = async (
         }
       );
 
+      if (!accessTokenRes.ok) {
+        throw new Error(`Failed to fetch Twitch access token: HTTP ${accessTokenRes.status}`);
+      }
+
       const accessTokenData: AccessTokenResponse = await accessTokenRes.json();
-      accessToken = accessTokenData.access_token;
+      const accessToken = accessTokenData.access_token;
 
       if (!accessToken) {
         throw new Error('Could not fetch newest access token.');
       }
 
-      await redis.set(IGDB_ACCESS_TOKEN_PREFIX, accessToken, 'EX', accessTokenData.expires_in);
+      const expiresInMs = (accessTokenData.expires_in || 3600) * 1000;
+      memoryCachedToken = { token: accessToken, expiresAt: Date.now() + expiresInMs };
+
+      try {
+        await redis.set(IGDB_ACCESS_TOKEN_PREFIX, accessToken, 'EX', accessTokenData.expires_in);
+      } catch {
+        // Non-fatal if Redis is down
+      }
+
+      return accessToken;
+    } finally {
+      tokenPromise = null;
+    }
+  })();
+
+  return tokenPromise;
+};
+
+export const invalidateIGDBAccessToken = async () => {
+  memoryCachedToken = null;
+  try {
+    await redis.del(IGDB_ACCESS_TOKEN_PREFIX);
+  } catch {
+    // Non-fatal if Redis is down
+  }
+};
+
+const executeIGDBFetch = async (url: string, reqBody: string, token: string) => {
+  return await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Client-ID': process.env.IGDB_CLIENT_ID || '',
+      Authorization: `Bearer ${token}`,
+    },
+    body: reqBody,
+  });
+};
+
+const getCachedIGDB = unstable_cache(
+  async (urlToFetch: string, reqBody: string) => {
+    let token = await getIGDBAccessToken();
+    let response = await executeIGDBFetch(urlToFetch, reqBody, token);
+
+    if (response.status === 401) {
+      await invalidateIGDBAccessToken();
+      token = await getIGDBAccessToken();
+      response = await executeIGDBFetch(urlToFetch, reqBody, token);
     }
 
-    const getCachedIGDB = unstable_cache(
-      async (urlToFetch: string, reqBody: string, token: string) => {
-        const response = await fetch(urlToFetch, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Client-ID': process.env.IGDB_CLIENT_ID,
-            Authorization: `Bearer ${token}`,
-          },
-          body: reqBody,
-        });
-        if (!response.ok) throw new Error(`IGDB fetch failed with status: ${response.status}`);
-        return await response.json();
-      },
-      [`igdb-${url}-${body}`],
-      { revalidate: 3600 }
-    );
+    if (!response.ok) {
+      throw new Error(`IGDB fetch failed with status: ${response.status}`);
+    }
 
+    return await response.json();
+  },
+  ['igdb-query-cache'],
+  { revalidate: 3600 }
+);
+
+export const postIGDB = async (
+  url: string,
+  body = '',
+  maxRetries = 10,
+  initialRetryDelayMs = 500
+) => {
+  try {
     let retries = 0;
     let retryDelayMs = initialRetryDelayMs;
 
     while (retries < maxRetries) {
       try {
-        return await getCachedIGDB(url, body, accessToken);
+        return await getCachedIGDB(url, body);
       } catch (err) {
         await sleep(retryDelayMs);
         retryDelayMs *= 2;
