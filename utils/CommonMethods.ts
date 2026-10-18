@@ -28,11 +28,12 @@ export class CommonMethods {
       return undefined;
     }
 
-    // Formats like: "Nov 12, 2024"
+    // Formats like: "Nov 12, 2024" (locked to UTC to prevent SSR hydration mismatch on YYYY-MM-DD strings)
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
+      timeZone: 'UTC',
     }).format(date);
   };
 

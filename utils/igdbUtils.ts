@@ -197,8 +197,8 @@ const getCachedIGDB = unstable_cache(
 export const postIGDB = async (
   url: string,
   body = '',
-  maxRetries = 10,
-  initialRetryDelayMs = 500
+  maxRetries = 3,
+  initialRetryDelayMs = 400
 ) => {
   try {
     let retries = 0;
@@ -208,9 +208,12 @@ export const postIGDB = async (
       try {
         return await getCachedIGDB(url, body);
       } catch (err) {
-        await sleep(retryDelayMs);
-        retryDelayMs *= 2;
         retries++;
+        if (retries >= maxRetries) {
+          throw err;
+        }
+        await sleep(retryDelayMs);
+        retryDelayMs = Math.min(retryDelayMs * 2, 2000);
       }
     }
     throw new Error('Could not fetch after max retries');
@@ -221,63 +224,77 @@ export const postIGDB = async (
 };
 
 export const addIGDBCoverUrl = async (res: any[], imageSize: TIGDBImageSizes) => {
-  await Promise.all(
-    res.map(async (result: any) => {
-      try {
-        if (result.cover) {
-          const coverResponse = await postIGDB(
-            `${IGDB_BASE_API_URL}/covers`,
-            `fields url; where id=${result.cover};`
-          );
+  if (!Array.isArray(res) || res.length === 0) return;
 
-          if (coverResponse && coverResponse.length > 0) {
-            let coverUrl: string = coverResponse[0].url;
-            if (imageSize !== 'thumb') {
-              coverUrl = coverUrl.replace('thumb', imageSize);
-            }
-            result.coverUrl = coverUrl;
-          } else {
-            result.coverUrl = null;
-          }
-        } else {
-          result.coverUrl = null;
-        }
-      } catch (err) {
-        console.error(err);
-        result.coverUrl = null;
-      }
-      return result;
-    })
+  const coverIds = Array.from(
+    new Set(
+      res
+        .map((r: any) => (typeof r?.cover === 'number' ? r.cover : r?.cover?.id))
+        .filter((id): id is number => typeof id === 'number')
+    )
   );
+
+  const coverMap = new Map<number, string>();
+
+  if (coverIds.length > 0) {
+    try {
+      const coverResponse = await postIGDB(
+        `${IGDB_BASE_API_URL}/covers`,
+        `fields id, url; where id = (${coverIds.join(',')}); limit 500;`
+      );
+      if (Array.isArray(coverResponse)) {
+        for (const cover of coverResponse) {
+          if (cover?.id && typeof cover.url === 'string') {
+            const url = imageSize !== 'thumb' ? cover.url.replace('thumb', imageSize) : cover.url;
+            coverMap.set(cover.id, url);
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  for (const result of res) {
+    const coverId = typeof result?.cover === 'number' ? result.cover : result?.cover?.id;
+    result.coverUrl = coverId ? (coverMap.get(coverId) ?? null) : null;
+  }
 };
 
 export const addIGDBMugShotUrl = async (res: any[], imageSize: TIGDBImageSizes) => {
-  await Promise.all(
-    res.map(async (result: any) => {
-      try {
-        if (result.mug_shot) {
-          const mugShotResponse = await postIGDB(
-            `${IGDB_BASE_API_URL}/character_mug_shots`,
-            `fields url; where id=${result.mug_shot};`
-          );
+  if (!Array.isArray(res) || res.length === 0) return;
 
-          if (mugShotResponse && mugShotResponse.length > 0) {
-            let mugShotUrl: string = mugShotResponse[0].url;
-            if (imageSize !== 'thumb') {
-              mugShotUrl = mugShotUrl.replace('thumb', imageSize);
-            }
-            result.mugShotUrl = mugShotUrl;
-          } else {
-            result.mugShotUrl = null;
-          }
-        } else {
-          result.mugShotUrl = null;
-        }
-      } catch (err) {
-        console.error(err);
-        result.mugShotUrl = null;
-      }
-      return result;
-    })
+  const mugShotIds = Array.from(
+    new Set(
+      res
+        .map((r: any) => (typeof r?.mug_shot === 'number' ? r.mug_shot : r?.mug_shot?.id))
+        .filter((id): id is number => typeof id === 'number')
+    )
   );
+
+  const mugShotMap = new Map<number, string>();
+
+  if (mugShotIds.length > 0) {
+    try {
+      const mugShotResponse = await postIGDB(
+        `${IGDB_BASE_API_URL}/character_mug_shots`,
+        `fields id, url; where id = (${mugShotIds.join(',')}); limit 500;`
+      );
+      if (Array.isArray(mugShotResponse)) {
+        for (const shot of mugShotResponse) {
+          if (shot?.id && typeof shot.url === 'string') {
+            const url = imageSize !== 'thumb' ? shot.url.replace('thumb', imageSize) : shot.url;
+            mugShotMap.set(shot.id, url);
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  for (const result of res) {
+    const shotId = typeof result?.mug_shot === 'number' ? result.mug_shot : result?.mug_shot?.id;
+    result.mugShotUrl = shotId ? (mugShotMap.get(shotId) ?? null) : null;
+  }
 };

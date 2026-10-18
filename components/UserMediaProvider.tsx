@@ -4,7 +4,12 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/models/ts/types';
-import { fetchUserMedia } from '@/app/actions/userMediaActions';
+
+interface UserMediaResponse {
+  userMovies: EnrichedMovie[];
+  userShows: EnrichedShow[];
+  userGames: EnrichedGame[];
+}
 
 interface UserMediaContextType {
   userMovies: EnrichedMovie[];
@@ -40,11 +45,18 @@ export const UserMediaProvider = ({ children }: Props) => {
     data,
     isLoading: queryLoading,
     refetch,
-  } = useQuery({
+  } = useQuery<UserMediaResponse>({
     queryKey: ['userMedia'],
-    queryFn: fetchUserMedia,
+    queryFn: async () => {
+      const res = await fetch('/api/user/media');
+      if (!res.ok) {
+        throw new Error('Failed to fetch user media');
+      }
+      return res.json();
+    },
     enabled: status === 'authenticated',
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 
   const isLoading = status === 'loading' || queryLoading;

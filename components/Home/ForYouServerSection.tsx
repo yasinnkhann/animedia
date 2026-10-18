@@ -6,29 +6,36 @@ import { CommonMethods } from '@/utils/CommonMethods';
 import { IMediaItem } from '@/models/ts/interfaces';
 
 export default async function ForYouServerSection() {
-  const userMedia = await fetchUserMedia();
+  let enrichedItems: IMediaItem[] = [];
 
-  let forYouData: IMediaItem[] = [];
-  if (userMedia) {
-    forYouData = await getForYouRecommendations(
-      userMedia.userMovies,
-      userMedia.userShows,
-      userMedia.userGames
+  try {
+    const userMedia = await fetchUserMedia();
+
+    let forYouData: IMediaItem[] = [];
+    if (userMedia) {
+      forYouData = await getForYouRecommendations(
+        userMedia.userMovies,
+        userMedia.userShows,
+        userMedia.userGames
+      );
+    }
+
+    enrichedItems = await Promise.all(
+      forYouData.map(async (item: IMediaItem) => {
+        const isGame = item.mediaType === 'game';
+        let imageUrl = isGame ? item.coverUrl : CommonMethods.getTheMovieDbImage(item.poster_path);
+        if (typeof imageUrl === 'string' && imageUrl.startsWith('//')) {
+          imageUrl = `https:${imageUrl}`;
+        }
+
+        const blurDataUrl = await getCachedBlurDataUrl(imageUrl);
+        return { ...item, blurDataUrl };
+      })
     );
+  } catch (error) {
+    console.error('Error in ForYouServerSection:', error);
+    return null;
   }
-
-  const enrichedItems = await Promise.all(
-    forYouData.map(async (item: IMediaItem) => {
-      const isGame = item.mediaType === 'game';
-      let imageUrl = isGame ? item.coverUrl : CommonMethods.getTheMovieDbImage(item.poster_path);
-      if (typeof imageUrl === 'string' && imageUrl.startsWith('//')) {
-        imageUrl = `https:${imageUrl}`;
-      }
-
-      const blurDataUrl = await getCachedBlurDataUrl(imageUrl);
-      return { ...item, blurDataUrl };
-    })
-  );
 
   return <ForYouSection forYouData={enrichedItems} />;
 }

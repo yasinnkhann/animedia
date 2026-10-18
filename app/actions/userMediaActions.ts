@@ -5,9 +5,7 @@ import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 import { getCachedBlurDataUrl } from '@/lib/getImageBlur';
 import { CommonMethods } from '@/utils/CommonMethods';
-
 import { unstable_cache } from 'next/cache';
-
 import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/models/ts/types';
 
 const getCachedUserMedia = unstable_cache(
@@ -64,12 +62,17 @@ const getCachedUserMedia = unstable_cache(
 );
 
 export async function fetchUserMedia() {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user?.id;
+  try {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
 
-  if (!userId) {
+    if (!userId) {
+      return { userMovies: [], userShows: [], userGames: [] };
+    }
+
+    return await getCachedUserMedia(userId);
+  } catch (error) {
+    console.error('Error fetching user media:', error);
     return { userMovies: [], userShows: [], userGames: [] };
   }
-
-  return getCachedUserMedia(userId);
 }

@@ -10,18 +10,24 @@ interface Props {
 }
 
 export default async function TrendingServerSection({ trending, time }: Props) {
-  const data = await tmdbClient.getTrending(trending === 'movies' ? 'movie' : 'tv', time);
+  let enrichedItems: IMediaItem[] = [];
 
-  const items = data.results ?? [];
-  const enrichedItems: IMediaItem[] = await Promise.all(
-    items.map(async (item: IMediaItem) => {
-      const imageUrl = CommonMethods.getTheMovieDbImage(item.poster_path);
-      const blurDataUrl = await getCachedBlurDataUrl(
-        typeof imageUrl === 'string' ? imageUrl : undefined
-      );
-      return { ...item, blurDataUrl };
-    })
-  );
+  try {
+    const data = await tmdbClient.getTrending(trending === 'movies' ? 'movie' : 'tv', time);
+
+    const items = data.results ?? [];
+    enrichedItems = await Promise.all(
+      items.map(async (item: IMediaItem) => {
+        const imageUrl = CommonMethods.getTheMovieDbImage(item.poster_path);
+        const blurDataUrl = await getCachedBlurDataUrl(
+          typeof imageUrl === 'string' ? imageUrl : undefined
+        );
+        return { ...item, blurDataUrl };
+      })
+    );
+  } catch (error) {
+    console.error('Error in TrendingServerSection:', error);
+  }
 
   return <HomeHorizontalScroller items={enrichedItems} />;
 }
