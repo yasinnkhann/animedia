@@ -293,4 +293,28 @@ export class CommonMethods {
         return undefined;
     }
   };
+
+  public static getAiredEpisodeCount = (showDetails: any): number | null => {
+    if (!showDetails?.number_of_episodes) {
+      return null;
+    }
+
+    let totalEpCount: number = showDetails.number_of_episodes;
+
+    if (Array.isArray(showDetails.seasons)) {
+      const currDate = new Date();
+      for (let i = showDetails.seasons.length - 1; i > -1; i--) {
+        const season = showDetails.seasons[i];
+        if (
+          season?.name?.startsWith('Season') &&
+          season.season_number !== 0 &&
+          (!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
+        ) {
+          totalEpCount -= season.episode_count;
+        }
+      }
+    }
+
+    return totalEpCount;
+  };
 }

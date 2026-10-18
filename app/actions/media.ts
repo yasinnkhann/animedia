@@ -100,7 +100,7 @@ export async function addShow(
   const details = await getShowDetailsAction(showId);
   const image = details?.poster_path || null;
   const release_date = details?.first_air_date || null;
-  const total_episodes = details?.number_of_episodes || null;
+  const total_episodes = CommonMethods.getAiredEpisodeCount(details);
 
   const show = await prisma.show.upsert({
     where: {

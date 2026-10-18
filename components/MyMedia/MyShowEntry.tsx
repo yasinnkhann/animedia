@@ -1,9 +1,10 @@
 import MediaCard from '../MediaCard/MediaCard';
 import { useState, useEffect } from 'react';
 import type { Show } from '@prisma/client';
-import { deleteShow } from '@/app/actions/media';
+import { deleteShow, updateShow } from '@/app/actions/media';
 import { getShowDetailsAction } from '@/lib/actions/tmdbActions';
 import { useUserMedia } from '@/components/UserMediaProvider';
+import { CommonMethods } from '@/utils/CommonMethods';
 
 import { IoMdClose } from 'react-icons/io';
 
@@ -21,12 +22,55 @@ const MyShowEntry = ({ myShow, index }: Props) => {
   const { mutateUserMediaCache, getUserMediaCache } = useUserMedia();
 
   useEffect(() => {
-    if (!myShow.image || !myShow.release_date || !myShow.total_episodes) {
+    if (
+      !myShow.image ||
+      !myShow.release_date ||
+      !myShow.total_episodes ||
+      myShow.status === 'COMPLETED'
+    ) {
       getShowDetailsAction(myShow.id).then(data => {
-        if (data) setShowData(data);
+        if (!data) return;
+
+        const airedEpisodes = CommonMethods.getAiredEpisodeCount(data) ?? data.number_of_episodes;
+        setShowData({
+          ...data,
+          number_of_episodes: airedEpisodes,
+        });
+
+        if (
+          myShow.status === 'COMPLETED' &&
+          typeof airedEpisodes === 'number' &&
+          airedEpisodes > (myShow.current_episode ?? 0)
+        ) {
+          mutateUserMediaCache((old: any) => {
+            if (!old) return old;
+            return {
+              ...old,
+              userShows: old.userShows.map((s: Show) =>
+                s.id === myShow.id ? { ...s, status: 'WATCHING', total_episodes: airedEpisodes } : s
+              ),
+            };
+          });
+
+          updateShow(
+            myShow.id,
+            'WATCHING',
+            myShow.rating ?? undefined,
+            myShow.current_episode ?? 0
+          ).catch(err => console.error('Failed to auto-update show status:', err));
+        }
       });
     }
-  }, [myShow.id, myShow.image, myShow.release_date, myShow.total_episodes]);
+  }, [
+    myShow.id,
+    myShow.image,
+    myShow.release_date,
+    myShow.total_episodes,
+    myShow.status,
+    myShow.current_episode,
+    myShow.rating,
+    mutateUserMediaCache,
+  ]);
 
   return (
     <div className='relative'>

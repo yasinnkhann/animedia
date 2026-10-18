@@ -215,6 +215,16 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
   useEffect(() => {
     if (isCompletedWithNewEpisodes && showDetailsData?.showDetails?.id) {
+      const targetId = String(showDetailsData.showDetails.id);
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        return {
+          ...old,
+          userShows: old.userShows.map((s: any) =>
+            s.id === targetId ? { ...s, status: 'WATCHING', total_episodes: currTotalEpCount } : s
+          ),
+        };
+      });
       updateShowAction(
         showDetailsData.showDetails.id,
         'WATCHING',
@@ -227,6 +237,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
     showDetailsData?.showDetails?.id,
     usersShow?.rating,
     usersShow?.current_episode,
+    currTotalEpCount,
+    mutateUserMediaCache,
   ]);
 
   const calculateSeasonEpisodeNumber = useCallback(
