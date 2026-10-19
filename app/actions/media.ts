@@ -96,8 +96,7 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return movie;
 }
 
@@ -153,8 +152,7 @@ export async function addShow(
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return show;
 }
 
@@ -212,8 +210,7 @@ export async function addGame(
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return game;
 }
 
@@ -246,8 +243,7 @@ export async function updateMovie(movieId: string, watchStatus: WatchStatus, mov
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return movie;
 }
 
@@ -286,8 +282,7 @@ export async function updateShow(
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return show;
 }
 
@@ -327,8 +322,7 @@ export async function updateGame(gameId: string, gameStatus?: GameStatus, rating
   );
 
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return game;
 }
 
@@ -345,8 +339,7 @@ export async function deleteMovie(movieId: string) {
     },
   });
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return movie;
 }
 
@@ -363,8 +356,7 @@ export async function deleteShow(showId: string) {
     },
   });
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return show;
 }
 
@@ -381,7 +373,6 @@ export async function deleteGame(gameId: string) {
     },
   });
   revalidatePath('/');
-  // @ts-ignore
-  revalidateTag('user-media');
+  revalidateTag('user-media', 'max');
   return game;
 }

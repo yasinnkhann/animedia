@@ -21,8 +21,8 @@ export async function GET(request: Request) {
         const image = details.poster_path || null;
         const release_date = details.release_date || null;
         if (image || release_date) {
-          prisma.movie
-            .updateMany({
+          try {
+            const updated = await prisma.movie.updateMany({
               where: {
                 id: String(id),
                 OR: [{ image: null }, { release_date: null }],
@@ -31,12 +31,13 @@ export async function GET(request: Request) {
                 ...(image ? { image } : {}),
                 ...(release_date ? { release_date } : {}),
               },
-            })
-            .then(res => {
-              // @ts-ignore
-              if (res.count > 0) revalidateTag('user-media');
-            })
-            .catch(() => {});
+            });
+            if (updated.count > 0) {
+              revalidateTag('user-media', 'max');
+            }
+          } catch {
+            // Ignore backfill errors so read still succeeds
+          }
         }
       }
       return NextResponse.json(details);
@@ -49,8 +50,8 @@ export async function GET(request: Request) {
         const release_date = details.first_air_date || null;
         const total_episodes = CommonMethods.getAiredEpisodeCount(details);
         if (image || release_date || total_episodes !== null) {
-          prisma.show
-            .updateMany({
+          try {
+            const updated = await prisma.show.updateMany({
               where: {
                 id: String(id),
                 OR: [{ image: null }, { release_date: null }, { total_episodes: null }],
@@ -60,12 +61,13 @@ export async function GET(request: Request) {
                 ...(release_date ? { release_date } : {}),
                 ...(total_episodes !== null ? { total_episodes } : {}),
               },
-            })
-            .then(res => {
-              // @ts-ignore
-              if (res.count > 0) revalidateTag('user-media');
-            })
-            .catch(() => {});
+            });
+            if (updated.count > 0) {
+              revalidateTag('user-media', 'max');
+            }
+          } catch {
+            // Ignore backfill errors so read still succeeds
+          }
         }
       }
       return NextResponse.json(details);
@@ -80,8 +82,8 @@ export async function GET(request: Request) {
           ? new Date(details.first_release_date * 1000).toISOString()
           : null;
         if (image || release_date) {
-          prisma.game
-            .updateMany({
+          try {
+            const updated = await prisma.game.updateMany({
               where: {
                 id: String(id),
                 OR: [{ image: null }, { release_date: null }],
@@ -90,12 +92,13 @@ export async function GET(request: Request) {
                 ...(image ? { image } : {}),
                 ...(release_date ? { release_date } : {}),
               },
-            })
-            .then(updated => {
-              // @ts-ignore
-              if (updated.count > 0) revalidateTag('user-media');
-            })
-            .catch(() => {});
+            });
+            if (updated.count > 0) {
+              revalidateTag('user-media', 'max');
+            }
+          } catch {
+            // Ignore backfill errors so read still succeeds
+          }
         }
       }
       return NextResponse.json(details);

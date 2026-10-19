@@ -69,10 +69,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const usersShow = userShows?.find(show => show.id === showId);
 
   const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
-    if (
-      !showDetailsData?.showDetails.number_of_episodes ||
-      !showDetailsData?.showDetails.number_of_seasons
-    ) {
+    const details = showDetailsData?.showDetails;
+    if (!details?.number_of_episodes || !details?.number_of_seasons) {
       return {
         currTotalEpCount: 0,
         currTotalSeasonCount: 0,
@@ -80,20 +78,20 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       };
     }
 
-    let totalEpCount = showDetailsData.showDetails.number_of_episodes;
-    let totalSeasonCount = showDetailsData.showDetails.number_of_seasons;
+    const totalEpCount = CommonMethods.getAiredEpisodeCount(details) ?? details.number_of_episodes;
+    let totalSeasonCount = details.number_of_seasons;
 
-    for (let i = showDetailsData.showDetails.seasons.length - 1; i > -1; i--) {
-      const season = showDetailsData.showDetails.seasons[i];
+    if (Array.isArray(details.seasons)) {
       const currDate = new Date();
-
-      if (
-        season?.name.startsWith('Season') &&
-        season.season_number !== 0 &&
-        (!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
-      ) {
-        totalEpCount -= season.episode_count;
-        totalSeasonCount--;
+      for (let i = details.seasons.length - 1; i > -1; i--) {
+        const season = details.seasons[i];
+        if (
+          season?.name?.startsWith('Season') &&
+          season.season_number !== 0 &&
+          (!season.air_date || currDate.getTime() < new Date(season.air_date).getTime())
+        ) {
+          totalSeasonCount--;
+        }
       }
     }
 
