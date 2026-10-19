@@ -5,7 +5,11 @@ import type { Movie, Show, Game } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 
 const fetchAndCalculateRecommendations = unstable_cache(
-  async (moviesToUse: Movie[], showsToUse: Show[], gamesToUse: Game[]) => {
+  async (
+    moviesToUse: Array<{ id: string; name: string }>,
+    showsToUse: Array<{ id: string; name: string }>,
+    gamesToUse: Array<{ id: string; name: string }>
+  ) => {
     const recommendedPromises: Promise<any>[] = [];
 
     for (const movie of moviesToUse) {
@@ -133,9 +137,9 @@ export async function getForYouRecommendations(
 ) {
   try {
     // We don't want to overwhelm the API, so pick up to 3 recent items to base recommendations on
-    const moviesToUse = userMovies.slice(-3);
-    const showsToUse = userShows.slice(-3);
-    const gamesToUse = userGames.slice(-3);
+    const moviesToUse = userMovies.slice(-3).map(m => ({ id: m.id, name: m.name }));
+    const showsToUse = userShows.slice(-3).map(s => ({ id: s.id, name: s.name }));
+    const gamesToUse = userGames.slice(-3).map(g => ({ id: g.id, name: g.name }));
 
     // Get base shuffled recommendations from cache
     const rawRecs = await fetchAndCalculateRecommendations(moviesToUse, showsToUse, gamesToUse);

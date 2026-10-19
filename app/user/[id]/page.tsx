@@ -16,27 +16,27 @@ import Link from 'next/link';
 import StatsDashboard from '@/app/stats/StatsDashboard';
 import ActivityFeed from '@/components/Profile/ActivityFeed';
 import MediaCard from '@/components/MediaCard/MediaCard';
-import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
-import { getGameDetailsAction } from '@/lib/actions/igdbActions';
 
 const ProfileMediaCardWrapper = ({ item, mediaType, index }: any) => {
   const [data, setData] = useState<any>({});
 
   useEffect(() => {
     if (!item.image || !item.release_date) {
-      if (mediaType === 'MOVIE') {
-        getMovieDetailsAction(item.id).then((d: any) => {
-          if (d) setData({ poster_path: d.poster_path, release_date: d.release_date });
-        });
-      } else if (mediaType === 'SHOW') {
-        getShowDetailsAction(item.id).then((d: any) => {
-          if (d) setData({ poster_path: d.poster_path, first_air_date: d.first_air_date });
-        });
-      } else if (mediaType === 'GAME') {
-        getGameDetailsAction(item.id).then((d: any) => {
-          if (d) setData({ coverUrl: d.coverUrl, first_release_date: d.first_release_date });
-        });
-      }
+      fetch(
+        `/api/media/details?type=${encodeURIComponent(mediaType)}&id=${encodeURIComponent(item.id)}`
+      )
+        .then(res => (res.ok ? res.json() : null))
+        .then((d: any) => {
+          if (!d) return;
+          if (mediaType === 'MOVIE') {
+            setData({ poster_path: d.poster_path, release_date: d.release_date });
+          } else if (mediaType === 'SHOW') {
+            setData({ poster_path: d.poster_path, first_air_date: d.first_air_date });
+          } else if (mediaType === 'GAME') {
+            setData({ coverUrl: d.coverUrl, first_release_date: d.first_release_date });
+          }
+        })
+        .catch(() => {});
     }
   }, [item.id, item.image, item.release_date, mediaType]);
 

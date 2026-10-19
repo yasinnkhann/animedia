@@ -2,7 +2,6 @@ import MediaCard from '../MediaCard/MediaCard';
 import { useState, useEffect } from 'react';
 import type { Game } from '@prisma/client';
 import { deleteGame } from '@/app/actions/media';
-import { getGameDetailsAction } from '@/lib/actions/igdbActions';
 import { useUserMedia } from '@/components/UserMediaProvider';
 
 import { IoMdClose } from 'react-icons/io';
@@ -21,9 +20,12 @@ const MyGameEntry = ({ game, index }: Props) => {
 
   useEffect(() => {
     if (!game.image || !game.release_date) {
-      getGameDetailsAction(game.id).then(data => {
-        if (data) setGameData(data);
-      });
+      fetch(`/api/media/details?type=GAME&id=${encodeURIComponent(game.id)}`)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (data) setGameData(data);
+        })
+        .catch(() => {});
     }
   }, [game.id, game.image, game.release_date]);
 

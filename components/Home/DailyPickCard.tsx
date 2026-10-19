@@ -22,7 +22,18 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
       let imgPath = media.image;
       if (!imgPath) {
         const details = await getMovieDetailsAction(media.id);
-        if (details) imgPath = details.poster_path;
+        if (details) {
+          imgPath = details.poster_path;
+          await prisma.movie
+            .update({
+              where: { id_userId: { id: media.id, userId: pick.userId } },
+              data: {
+                image: details.poster_path || null,
+                release_date: details.release_date || media.release_date || null,
+              },
+            })
+            .catch(() => {});
+        }
       }
       mediaImage = CommonMethods.getTheMovieDbImage(imgPath) as string;
       mediaLink = `/movie/${media.id}`;
@@ -36,7 +47,19 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
       let imgPath = media.image;
       if (!imgPath) {
         const details = await getShowDetailsAction(media.id);
-        if (details) imgPath = details.poster_path;
+        if (details) {
+          imgPath = details.poster_path;
+          await prisma.show
+            .update({
+              where: { id_userId: { id: media.id, userId: pick.userId } },
+              data: {
+                image: details.poster_path || null,
+                release_date: details.first_air_date || media.release_date || null,
+                total_episodes: CommonMethods.getAiredEpisodeCount(details) ?? media.total_episodes,
+              },
+            })
+            .catch(() => {});
+        }
       }
       mediaImage = CommonMethods.getTheMovieDbImage(imgPath) as string;
       mediaLink = `/show/${media.id}`;
@@ -50,7 +73,20 @@ export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
       let imgPath = media.image;
       if (!imgPath) {
         const details = await getGameDetailsAction(media.id);
-        if (details) imgPath = details.coverUrl;
+        if (details) {
+          imgPath = details.coverUrl;
+          await prisma.game
+            .update({
+              where: { id_userId: { id: media.id, userId: pick.userId } },
+              data: {
+                image: details.coverUrl || null,
+                release_date: details.first_release_date
+                  ? new Date(details.first_release_date * 1000).toISOString()
+                  : media.release_date || null,
+              },
+            })
+            .catch(() => {});
+        }
       }
       mediaImage = CommonMethods.getIgdbImage(imgPath) as string;
       mediaLink = `/game/${media.id}`;

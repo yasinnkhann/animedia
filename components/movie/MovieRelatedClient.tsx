@@ -2,7 +2,6 @@
 
 import { useQuery } from '@tanstack/react-query';
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import { getRecommendedMoviesAction } from '@/lib/actions/tmdbActions';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 import _ from 'lodash';
 import { useMounted } from '@/hooks/useMounted';
@@ -11,7 +10,13 @@ export default function MovieRelatedClient({ movieId }: { movieId: string }) {
   const isMounted = useMounted();
   const { data: recMovies, isLoading } = useQuery({
     queryKey: ['movie-recommendations', movieId],
-    queryFn: () => getRecommendedMoviesAction(movieId),
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/media/details?type=RECOMMENDED_MOVIES&id=${encodeURIComponent(movieId)}`
+      );
+      if (!res.ok) return null;
+      return res.json();
+    },
     enabled: !!movieId && isMounted, // wait for mount
   });
 

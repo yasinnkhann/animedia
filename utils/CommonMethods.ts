@@ -95,41 +95,6 @@ export class CommonMethods {
     return cleanPath;
   };
 
-  public static getKeywordId = async (q: string) => {
-    type TKeywordObj = MovieDetailsGenre | ShowDetailsGenre;
-    q = q.split(' ').join('+');
-
-    try {
-      const res = await fetch(
-        `${THE_MOVIE_DB_BASE_API_URL}/search/keyword?api_key=${process.env.THE_MOVIE_DB_API_KEY}&query=${q}`
-      );
-      const { results }: { results: TKeywordObj[] } = await res.json();
-      if (_.isEmpty(results)) {
-        throw new Error('No Keyword Results Found.');
-      }
-      return results[0].id;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  public static getTrendingMedia = async (
-    mediaType: 'all' | 'movie' | 'tv' | 'person',
-    timeWindow: 'day' | 'week',
-    pageNum: number | null
-  ) => {
-    try {
-      const res = await fetch(
-        `${THE_MOVIE_DB_BASE_API_URL}/trending/${mediaType}/${timeWindow}?api_key=${process.env.THE_MOVIE_DB_API_KEY}&language=en-US&page=${pageNum}`
-      );
-      const data = await res.json();
-
-      return data;
-    } catch (err) {
-      throw err;
-    }
-  };
-
   public static getUserStatusFromMedia = (
     userMatchedMedias: (Show | Movie | Game | EnrichedMedia)[],
     item: {
@@ -263,15 +228,6 @@ export class CommonMethods {
       position,
       duration,
     });
-  };
-
-  /**
-   * Safely extracts the first property from a GraphQL response object,
-   * ignoring the __typename property added by Apollo Client.
-   */
-  public static extractGraphQLData = <T extends Record<string, any>>(data: T) => {
-    const key = Object.keys(data).find(k => k !== '__typename');
-    return key ? data[key] : undefined;
   };
 
   public static watchStatusFromParam = (statusParam: string): WatchStatus | undefined => {

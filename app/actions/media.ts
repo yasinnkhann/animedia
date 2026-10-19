@@ -15,19 +15,27 @@ async function logActivity(
   mediaType: 'MOVIE' | 'SHOW' | 'GAME',
   mediaId: string,
   mediaTitle: string,
-  metadata?: any
+  metadata?: any,
+  knownImage?: string | null
 ) {
   try {
-    let mediaImage = null;
-    if (mediaType === 'MOVIE') {
+    let mediaImage: string | null = null;
+    if (knownImage) {
+      mediaImage =
+        mediaType === 'GAME'
+          ? (CommonMethods.getIgdbImage(knownImage) as string)
+          : (CommonMethods.getTheMovieDbImage(knownImage) as string);
+    } else if (mediaType === 'MOVIE') {
       const details = await getMovieDetailsAction(mediaId);
-      if (details?.poster_path) mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path);
+      if (details?.poster_path)
+        mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path) as string;
     } else if (mediaType === 'SHOW') {
       const details = await getShowDetailsAction(mediaId);
-      if (details?.poster_path) mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path);
+      if (details?.poster_path)
+        mediaImage = CommonMethods.getTheMovieDbImage(details.poster_path) as string;
     } else if (mediaType === 'GAME') {
       const details = await getGameDetailsAction(mediaId);
-      if (details?.coverUrl) mediaImage = details.coverUrl;
+      if (details?.coverUrl) mediaImage = CommonMethods.getIgdbImage(details.coverUrl) as string;
     }
 
     await prisma.activity.create({
@@ -77,10 +85,15 @@ export async function addMovie(movieId: string, movieName: string, watchStatus: 
     },
   });
 
-  // Background activity logging
-  logActivity(session.user.id, 'ADDED', 'MOVIE', String(movieId), movieName, {
-    status: watchStatus,
-  });
+  await logActivity(
+    session.user.id,
+    'ADDED',
+    'MOVIE',
+    String(movieId),
+    movieName,
+    { status: watchStatus },
+    image
+  );
 
   revalidatePath('/');
   // @ts-ignore
@@ -129,7 +142,15 @@ export async function addShow(
     },
   });
 
-  logActivity(session.user.id, 'ADDED', 'SHOW', String(showId), showName, { status: watchStatus });
+  await logActivity(
+    session.user.id,
+    'ADDED',
+    'SHOW',
+    String(showId),
+    showName,
+    { status: watchStatus },
+    image
+  );
 
   revalidatePath('/');
   // @ts-ignore
@@ -180,10 +201,15 @@ export async function addGame(
     },
   });
 
-  logActivity(session.user.id, 'ADDED', 'GAME', String(gameId), gameName, {
-    status: finalStatus,
-    rating,
-  });
+  await logActivity(
+    session.user.id,
+    'ADDED',
+    'GAME',
+    String(gameId),
+    gameName,
+    { status: finalStatus, rating },
+    image
+  );
 
   revalidatePath('/');
   // @ts-ignore
@@ -209,10 +235,15 @@ export async function updateMovie(movieId: string, watchStatus: WatchStatus, mov
   });
 
   const type = movieRating ? 'RATED' : 'STATUS_CHANGED';
-  logActivity(session.user.id, type, 'MOVIE', String(movieId), movie.name, {
-    status: watchStatus,
-    rating: movieRating,
-  });
+  await logActivity(
+    session.user.id,
+    type,
+    'MOVIE',
+    String(movieId),
+    movie.name,
+    { status: watchStatus, rating: movieRating },
+    movie.image
+  );
 
   revalidatePath('/');
   // @ts-ignore
@@ -244,11 +275,15 @@ export async function updateShow(
   });
 
   const type = showRating ? 'RATED' : 'STATUS_CHANGED';
-  logActivity(session.user.id, type, 'SHOW', String(showId), show.name, {
-    status: watchStatus,
-    rating: showRating,
-    current_episode: currentEpisode,
-  });
+  await logActivity(
+    session.user.id,
+    type,
+    'SHOW',
+    String(showId),
+    show.name,
+    { status: watchStatus, rating: showRating, current_episode: currentEpisode },
+    show.image
+  );
 
   revalidatePath('/');
   // @ts-ignore
@@ -281,10 +316,15 @@ export async function updateGame(gameId: string, gameStatus?: GameStatus, rating
   });
 
   const type = rating ? 'RATED' : 'STATUS_CHANGED';
-  logActivity(session.user.id, type, 'GAME', String(gameId), game.name, {
-    status: game.status,
-    rating,
-  });
+  await logActivity(
+    session.user.id,
+    type,
+    'GAME',
+    String(gameId),
+    game.name,
+    { status: game.status, rating },
+    game.image
+  );
 
   revalidatePath('/');
   // @ts-ignore

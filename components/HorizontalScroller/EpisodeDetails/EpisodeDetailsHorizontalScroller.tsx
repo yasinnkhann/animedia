@@ -5,7 +5,6 @@ import EpisodeDetailsCard from './EpisodeDetailsCard';
 import { IEPDetails } from '@ts/interfaces';
 import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
-import { getSeasonDetailsAction } from '@/lib/actions/tmdbActions';
 
 interface Props {
   seasons: any[];
@@ -48,17 +47,24 @@ const EpisodeDetailsHorizontalScroller = ({ seasons, showId }: Props) => {
       uniqueSeasons.forEach(seasonNum => {
         if (!fetchedSeasonsRef.current.has(seasonNum)) {
           fetchedSeasonsRef.current.add(seasonNum);
-          getSeasonDetailsAction(showId, seasonNum).then(data => {
-            if (data && data.episodes) {
-              const episodesMap = data.episodes.reduce((acc: any, ep: any, index: number) => {
-                acc[index + 1] = ep;
-                return acc;
-              }, {});
-              setSeasonData(prev => ({ ...prev, [seasonNum]: episodesMap }));
-            } else {
+          fetch(
+            `/api/media/details?type=SEASON&id=${encodeURIComponent(showId)}&season=${encodeURIComponent(String(seasonNum))}`
+          )
+            .then(res => (res.ok ? res.json() : null))
+            .then(data => {
+              if (data && data.episodes) {
+                const episodesMap = data.episodes.reduce((acc: any, ep: any, index: number) => {
+                  acc[index + 1] = ep;
+                  return acc;
+                }, {});
+                setSeasonData(prev => ({ ...prev, [seasonNum]: episodesMap }));
+              } else {
+                setSeasonData(prev => ({ ...prev, [seasonNum]: {} }));
+              }
+            })
+            .catch(() => {
               setSeasonData(prev => ({ ...prev, [seasonNum]: {} }));
-            }
-          });
+            });
         }
       });
     },

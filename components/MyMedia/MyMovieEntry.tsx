@@ -2,7 +2,6 @@ import MediaCard from '../MediaCard/MediaCard';
 import { useState, useEffect } from 'react';
 import type { Movie } from '@prisma/client';
 import { deleteMovie } from '@/app/actions/media';
-import { getMovieDetailsAction } from '@/lib/actions/tmdbActions';
 import { useUserMedia } from '@/components/UserMediaProvider';
 
 import { IoMdClose } from 'react-icons/io';
@@ -21,9 +20,12 @@ const MyMovieEntry = ({ movie, index }: Props) => {
 
   useEffect(() => {
     if (!movie.image || !movie.release_date) {
-      getMovieDetailsAction(movie.id).then(data => {
-        if (data) setMovieData(data);
-      });
+      fetch(`/api/media/details?type=MOVIE&id=${encodeURIComponent(movie.id)}`)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (data) setMovieData(data);
+        })
+        .catch(() => {});
     }
   }, [movie.id, movie.image, movie.release_date]);
 

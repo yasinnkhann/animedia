@@ -6,7 +6,7 @@ import SearchBar from './Search/SearchBar';
 import { ActivityFeed } from './Social/ActivityFeed';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 import HomeHorizontalScroller from '@/components/HorizontalScroller/Home/HomeHorizontalScroller';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
 
@@ -40,17 +40,17 @@ const HomePageClient = ({
   const searchBarRef = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
 
-  const { data: clientPopularData, isValidating: isPopularLoading } = useSWR(
-    localPopular !== popular ? `/api/tmdb/popular?type=${localPopular}` : null,
-    fetcher
-  );
+  const { data: clientPopularData, isFetching: isPopularLoading } = useQuery({
+    queryKey: ['popular-home', localPopular],
+    queryFn: () => fetcher(`/api/tmdb/popular?type=${localPopular}`),
+    enabled: localPopular !== popular,
+  });
 
-  const { data: clientTrendingData, isValidating: isTrendingLoading } = useSWR(
-    localTrending !== trending || localTime !== time
-      ? `/api/tmdb/trending?type=${localTrending}&time=${localTime}`
-      : null,
-    fetcher
-  );
+  const { data: clientTrendingData, isFetching: isTrendingLoading } = useQuery({
+    queryKey: ['trending-home', localTrending, localTime],
+    queryFn: () => fetcher(`/api/tmdb/trending?type=${localTrending}&time=${localTime}`),
+    enabled: localTrending !== trending || localTime !== time,
+  });
 
   const handleUpdateParams = useCallback((key: string, value: string) => {
     if (key === 'popular') setLocalPopular(value as any);

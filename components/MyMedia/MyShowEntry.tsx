@@ -2,7 +2,6 @@ import MediaCard from '../MediaCard/MediaCard';
 import { useState, useEffect } from 'react';
 import type { Show } from '@prisma/client';
 import { deleteShow, updateShow } from '@/app/actions/media';
-import { getShowDetailsAction } from '@/lib/actions/tmdbActions';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { CommonMethods } from '@/utils/CommonMethods';
 
@@ -28,38 +27,43 @@ const MyShowEntry = ({ myShow, index }: Props) => {
       !myShow.total_episodes ||
       myShow.status === 'COMPLETED'
     ) {
-      getShowDetailsAction(myShow.id).then(data => {
-        if (!data) return;
+      fetch(`/api/media/details?type=SHOW&id=${encodeURIComponent(myShow.id)}`)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (!data) return;
 
-        const airedEpisodes = CommonMethods.getAiredEpisodeCount(data) ?? data.number_of_episodes;
-        setShowData({
-          ...data,
-          number_of_episodes: airedEpisodes,
-        });
-
-        if (
-          myShow.status === 'COMPLETED' &&
-          typeof airedEpisodes === 'number' &&
-          airedEpisodes > (myShow.current_episode ?? 0)
-        ) {
-          mutateUserMediaCache((old: any) => {
-            if (!old) return old;
-            return {
-              ...old,
-              userShows: old.userShows.map((s: Show) =>
-                s.id === myShow.id ? { ...s, status: 'WATCHING', total_episodes: airedEpisodes } : s
-              ),
-            };
+          const airedEpisodes = CommonMethods.getAiredEpisodeCount(data) ?? data.number_of_episodes;
+          setShowData({
+            ...data,
+            number_of_episodes: airedEpisodes,
           });
 
-          updateShow(
-            myShow.id,
-            'WATCHING',
-            myShow.rating ?? undefined,
-            myShow.current_episode ?? 0
-          ).catch(err => console.error('Failed to auto-update show status:', err));
-        }
-      });
+          if (
+            myShow.status === 'COMPLETED' &&
+            typeof airedEpisodes === 'number' &&
+            airedEpisodes > (myShow.current_episode ?? 0)
+          ) {
+            mutateUserMediaCache((old: any) => {
+              if (!old) return old;
+              return {
+                ...old,
+                userShows: old.userShows.map((s: Show) =>
+                  s.id === myShow.id
+                    ? { ...s, status: 'WATCHING', total_episodes: airedEpisodes }
+                    : s
+                ),
+              };
+            });
+
+            updateShow(
+              myShow.id,
+              'WATCHING',
+              myShow.rating ?? undefined,
+              myShow.current_episode ?? 0
+            ).catch(err => console.error('Failed to auto-update show status:', err));
+          }
+        })
+        .catch(() => {});
     }
   }, [
     myShow.id,
