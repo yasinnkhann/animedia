@@ -4,6 +4,8 @@ import { tmdbClient, igdbClient } from '@/lib/api';
 import { prisma } from '@/lib/prisma';
 import { CommonMethods } from '@/utils/CommonMethods';
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type')?.toUpperCase();

@@ -163,10 +163,11 @@ export default function MediaCard({
                 ? '(max-width: 768px) 50vw, 20vw'
                 : '(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw'
             }
-            {...(item.blurDataUrl && {
-              placeholder: 'blur',
-              blurDataURL: item.blurDataUrl,
-            })}
+            placeholder='blur'
+            blurDataURL={
+              item.blurDataUrl ||
+              'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PC9zdmc+'
+            }
           />
 
           {!onRemove && (

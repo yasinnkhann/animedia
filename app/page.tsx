@@ -13,6 +13,7 @@ export const metadata = {
 };
 
 export const revalidate = 3600;
+export const maxDuration = 60;
 
 export default async function Home() {
   const popular = 'movies';

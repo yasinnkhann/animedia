@@ -44,39 +44,40 @@ export default async function DailyPickServerSection() {
     return <DailyPickCard pick={existingPick} />;
   }
 
-  // 2. Fetch user's completed items to feed to Groq (Limit to top 30 highly rated)
-  const completedMovies = await prisma.movie.findMany({
-    where: { userId: session.user.id, status: 'COMPLETED' },
-    select: { name: true, rating: true },
-    orderBy: { rating: 'desc' },
-    take: 30,
-  });
-  const completedShows = await prisma.show.findMany({
-    where: { userId: session.user.id, status: 'COMPLETED' },
-    select: { name: true, rating: true },
-    orderBy: { rating: 'desc' },
-    take: 30,
-  });
-  const completedGames = await prisma.game.findMany({
-    where: { userId: session.user.id, status: 'PLAYED' },
-    select: { name: true, rating: true },
-    orderBy: { rating: 'desc' },
-    take: 30,
-  });
-
-  // 3. Fetch user's full PTW / Backlog to pick from
-  const ptwMovies = await prisma.movie.findMany({
-    where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
-    select: { id: true, name: true },
-  });
-  const ptwShows = await prisma.show.findMany({
-    where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
-    select: { id: true, name: true },
-  });
-  const ptwGames = await prisma.game.findMany({
-    where: { userId: session.user.id, status: 'PLAN_TO_PLAY' },
-    select: { id: true, name: true },
-  });
+  // 2. Fetch user's completed items and PTW / Backlog in parallel
+  const [completedMovies, completedShows, completedGames, ptwMovies, ptwShows, ptwGames] =
+    await Promise.all([
+      prisma.movie.findMany({
+        where: { userId: session.user.id, status: 'COMPLETED' },
+        select: { name: true, rating: true },
+        orderBy: { rating: 'desc' },
+        take: 30,
+      }),
+      prisma.show.findMany({
+        where: { userId: session.user.id, status: 'COMPLETED' },
+        select: { name: true, rating: true },
+        orderBy: { rating: 'desc' },
+        take: 30,
+      }),
+      prisma.game.findMany({
+        where: { userId: session.user.id, status: 'PLAYED' },
+        select: { name: true, rating: true },
+        orderBy: { rating: 'desc' },
+        take: 30,
+      }),
+      prisma.movie.findMany({
+        where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
+        select: { id: true, name: true },
+      }),
+      prisma.show.findMany({
+        where: { userId: session.user.id, status: 'PLAN_TO_WATCH' },
+        select: { id: true, name: true },
+      }),
+      prisma.game.findMany({
+        where: { userId: session.user.id, status: 'PLAN_TO_PLAY' },
+        select: { id: true, name: true },
+      }),
+    ]);
 
   const totalPtw = ptwMovies.length + ptwShows.length + ptwGames.length;
   if (totalPtw === 0)

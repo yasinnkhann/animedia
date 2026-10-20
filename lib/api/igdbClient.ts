@@ -70,11 +70,60 @@ export class IGDBClient {
   }
 
   async getRecommendedGames(gameId: string) {
-    const details = await this.getGameDetails(gameId);
-    const similarIds = details.results[0]?.similar_games;
+    const res = await postIGDB(
+      `${IGDB_BASE_API_URL}/games`,
+      `fields similar_games; where id = ${gameId};`
+    );
+    const similarIds = res?.[0]?.similar_games;
     if (!similarIds || similarIds.length === 0) return { results: [] };
 
     return await this.getSimilarGames(similarIds);
+  }
+
+  async getRecommendedGamesForMultiple(games: Array<{ id: string; name: string }>) {
+    if (!games || games.length === 0) return [];
+
+    const validGameIds = games.map(g => Number(g.id)).filter(id => !isNaN(id));
+    if (validGameIds.length === 0) return [];
+
+    const sourceGames = await postIGDB(
+      `${IGDB_BASE_API_URL}/games`,
+      `fields id, similar_games; where id = (${validGameIds.join(',')}); limit 10;`
+    );
+    if (!Array.isArray(sourceGames) || sourceGames.length === 0) return [];
+
+    const allSimilarIds = Array.from(
+      new Set<number>(
+        sourceGames.flatMap((g: any) => (Array.isArray(g?.similar_games) ? g.similar_games : []))
+      )
+    ).slice(0, 60);
+
+    if (allSimilarIds.length === 0) return [];
+
+    const similarRes = await this.getSimilarGames(allSimilarIds.map(String));
+    const similarGamesMap = new Map<number, any>(
+      (similarRes.results || []).map((g: any) => [Number(g.id), g])
+    );
+
+    const gameNameById = new Map<number, string>(games.map(g => [Number(g.id), g.name]));
+    const recommendations: any[] = [];
+
+    for (const src of sourceGames) {
+      const srcName = gameNameById.get(Number(src.id)) || 'a game';
+      const simIds: number[] = Array.isArray(src.similar_games) ? src.similar_games : [];
+      for (const simId of simIds) {
+        const simGame = similarGamesMap.get(Number(simId));
+        if (simGame) {
+          recommendations.push({
+            ...simGame,
+            mediaType: 'game',
+            recommendedReason: `Because you tracked ${srcName}`,
+          });
+        }
+      }
+    }
+
+    return recommendations;
   }
 
   async getGameCharacters(gameId: string) {

@@ -42,18 +42,9 @@ const fetchAndCalculateRecommendations = unstable_cache(
       );
     }
 
-    for (const game of gamesToUse) {
+    if (gamesToUse.length > 0) {
       recommendedPromises.push(
-        igdbClient
-          .getRecommendedGames(game.id)
-          .then(res =>
-            (res.results || []).map((item: any) => ({
-              ...item,
-              mediaType: 'game',
-              recommendedReason: `Because you tracked ${game.name}`,
-            }))
-          )
-          .catch(() => [])
+        igdbClient.getRecommendedGamesForMultiple(gamesToUse).catch(() => [])
       );
     }
 
