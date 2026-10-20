@@ -34,7 +34,23 @@ export async function registerUserAction(input: unknown) {
     });
 
     if (existingUser) {
-      return { errors: [{ message: 'Email Already Exists' }] };
+      if (existingUser.emailVerified) {
+        return { errors: [{ message: 'Email Already Exists' }] };
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          name: `${parsedInput.firstName} ${parsedInput.lastName}`,
+          password: await hash(parsedInput.password),
+        },
+      });
+
+      const { password: _updatedPassword, ...updatedUserWithoutPassword } = updatedUser;
+      return {
+        errors: [],
+        createdUser: updatedUserWithoutPassword,
+      };
     }
 
     const newUser = await prisma.user.create({

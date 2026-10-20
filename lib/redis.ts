@@ -3,12 +3,14 @@ import { __prod__ } from '@utils/constants';
 import logger from './logger';
 
 const getRedisConfig = (): { url?: string; options: RedisOptions } => {
+  const hasExplicitUrl = Boolean(process.env.REDIS_URL || process.env.REDIS_HOST);
   const options: RedisOptions = {
     lazyConnect: true,
-    enableOfflineQueue: false,
+    enableOfflineQueue: hasExplicitUrl,
+    connectTimeout: 3000,
     maxRetriesPerRequest: 1,
     retryStrategy(times) {
-      if (times > 3) {
+      if (times > (hasExplicitUrl ? 2 : 0)) {
         return null;
       }
       return Math.min(times * 100, 1000);
@@ -116,7 +118,8 @@ class ResilientRedis {
   async get(key: string): Promise<string | null> {
     if (this.client) {
       try {
-        return await this.client.get(key);
+        const val = await this.client.get(key);
+        if (val !== null) return val;
       } catch {
         // Fallback to memory store
       }
@@ -125,6 +128,7 @@ class ResilientRedis {
   }
 
   async set(key: string, value: string, ...args: any[]): Promise<'OK' | null> {
+    await this.memoryStore.set(key, value, ...args);
     if (this.client) {
       try {
         return await (this.client.set as any)(key, value, ...args);
@@ -132,10 +136,11 @@ class ResilientRedis {
         // Fallback to memory store
       }
     }
-    return await this.memoryStore.set(key, value, ...args);
+    return 'OK';
   }
 
   async del(...keys: string[]): Promise<number> {
+    const memCount = await this.memoryStore.del(...keys);
     if (this.client) {
       try {
         return await this.client.del(...keys);
@@ -143,7 +148,7 @@ class ResilientRedis {
         // Fallback to memory store
       }
     }
-    return await this.memoryStore.del(...keys);
+    return memCount;
   }
 
   on(event: string, callback: (...args: any[]) => void) {

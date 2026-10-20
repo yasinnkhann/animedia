@@ -52,18 +52,26 @@ export const sendEmail = async (payload: Mail.Options) => {
     const info = await transporter.sendMail(payload);
     console.log('Preview URL: ' + nodemailer.getTestMessageUrl(info));
   } else {
+    const host = process.env.SMTP_HOST || process.env.TURBO_SMTP_HOST || 'smtp.gmail.com';
+    const port = +(process.env.SMTP_PORT || process.env.TURBO_SMTP_SECURE_PORT || 465);
+    const user = process.env.SMTP_USER || process.env.TURBO_SMTP_USERNAME;
+    const pass = process.env.SMTP_PASSWORD || process.env.TURBO_SMTP_PASSWORD;
+
     const transporterConfig: SMTPTransport.Options = {
-      host: process.env.TURBO_SMTP_HOST,
-      port: +process.env.TURBO_SMTP_SECURE_PORT,
-      secure: true,
+      host,
+      port,
+      secure: port === 465,
       auth: {
-        user: process.env.TURBO_SMTP_USERNAME,
-        pass: process.env.TURBO_SMTP_PASSWORD,
+        user,
+        pass,
       },
     };
 
     const transporter = nodemailer.createTransport(transporterConfig);
-    await transporter.sendMail(payload);
+    await transporter.sendMail({
+      ...payload,
+      from: payload.from || process.env.EMAIL_FROM || user,
+    });
   }
 };
 
