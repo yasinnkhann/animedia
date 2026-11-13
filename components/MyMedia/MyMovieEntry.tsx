@@ -4,8 +4,6 @@ import type { Movie } from '@prisma/client';
 import { deleteMovie } from '@/app/actions/media';
 import { useUserMedia } from '@/components/UserMediaProvider';
 
-import { IoMdClose } from 'react-icons/io';
-
 interface Props {
   movie: Movie;
   index: number;
@@ -48,7 +46,7 @@ const MyMovieEntry = ({ movie, index }: Props) => {
         });
         try {
           await deleteMovie(movie.id);
-        } catch (err) {
+        } catch (_err) {
           mutateUserMediaCache(() => previousData);
         }
       }}

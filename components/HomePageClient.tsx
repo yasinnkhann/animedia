@@ -1,11 +1,10 @@
 'use client';
 
-import { useRef, ReactNode, useTransition, useState, useCallback } from 'react';
+import { useRef, ReactNode, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import SearchBar from './Search/SearchBar';
 import { ActivityFeed } from './Social/ActivityFeed';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import HomeHorizontalScroller from '@/components/HorizontalScroller/Home/HomeHorizontalScroller';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
@@ -31,8 +30,6 @@ const HomePageClient = ({
   popularContent,
   trendingContent,
 }: Props) => {
-  const router = useRouter();
-
   const [localPopular, setLocalPopular] = useState(popular);
   const [localTrending, setLocalTrending] = useState(trending);
   const [localTime, setLocalTime] = useState(time);

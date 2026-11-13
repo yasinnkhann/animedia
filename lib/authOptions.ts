@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
       if (url.startsWith('/')) return `${CLIENT_BASE_URL}${url}`;
       try {
         if (new URL(url).origin === CLIENT_BASE_URL) return url;
-      } catch (e) {}
+      } catch (_e) {}
       return CLIENT_BASE_URL;
     },
     jwt: async ({ token, user, account, profile }) => {

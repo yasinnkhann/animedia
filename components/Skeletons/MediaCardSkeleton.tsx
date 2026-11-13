@@ -1,10 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-
 export default function MediaCardSkeleton() {
-  const { data: session } = useSession();
-
   return (
     <div className='relative flex h-full min-h-[18rem] w-full flex-col overflow-hidden rounded-xl bg-card shadow-md'>
       {/* Image Skeleton */}

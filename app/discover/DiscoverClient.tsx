@@ -49,7 +49,7 @@ export default function DiscoverClient() {
                 if (prev.some(r => r.data.id === recommendation.data.id)) return prev;
                 return [...prev, recommendation];
               });
-            } catch (e) {
+            } catch (_e) {
               console.error('Failed to parse line:', line);
             }
           }

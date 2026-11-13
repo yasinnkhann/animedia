@@ -24,7 +24,7 @@ export async function generateMetadata({
   let personDetails;
   try {
     personDetails = await tmdbClient.getPersonDetails(id);
-  } catch (e) {
+  } catch (_e) {
     return {
       title: 'Person Not Found | AniMedia',
     };
@@ -77,7 +77,7 @@ export default async function PersonDetails({
   let personDetails;
   try {
     personDetails = await tmdbClient.getPersonDetails(id);
-  } catch (e) {
+  } catch (_e) {
     const { notFound } = await import('next/navigation');
     notFound();
   }

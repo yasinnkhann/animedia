@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import { SessionProvider } from 'next-auth/react';
 import Layout from '../components/Layout';
 import { UserMediaProvider } from '../components/UserMediaProvider';
-import type { Movie, Show, Game } from '@prisma/client';
 import '../styles/globals.css';
 
 import { useState } from 'react';

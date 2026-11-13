@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
@@ -32,7 +32,7 @@ const GenreBrowseClient = ({
     queryKey: [basePath, genre, sortBy],
     queryFn: ({ pageParam = 1 }) => fetchNextPageAction(pageParam),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: (lastPage, _pages) => {
       if (lastPage && lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
       }

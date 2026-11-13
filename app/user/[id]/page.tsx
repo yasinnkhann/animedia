@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import Avatar from '@/components/ui/Avatar';
-import {
-  BiMoviePlay,
-  BiTv,
-  BiJoystick,
-  BiStar,
-  BiCollection,
-  BiRightArrowAlt,
-} from 'react-icons/bi';
+import { BiMoviePlay, BiTv, BiJoystick, BiCollection, BiRightArrowAlt } from 'react-icons/bi';
 import Link from 'next/link';
 import StatsDashboard from '@/app/stats/StatsDashboard';
 import ActivityFeed from '@/components/Profile/ActivityFeed';
@@ -125,7 +118,7 @@ export default function UserProfilePage() {
 
   if (!profile || !profile.user) return null;
 
-  const { user, media, stats, activities } = profile;
+  const { user, media, activities } = profile;
   const isSelf = session?.user?.id === user.id;
 
   const allMedia = [

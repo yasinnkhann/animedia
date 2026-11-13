@@ -28,7 +28,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // Check permissions: Must be public OR the user must be owner/collaborator
     const isOwner = session.user!.id === originalCollection.userId;
     const isCollaborator = originalCollection.collaborators.some(c => c.id === session.user!.id);
-    
+
     if (!originalCollection.isPublic && !isOwner && !isCollaborator) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }

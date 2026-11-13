@@ -6,13 +6,10 @@ import { CommonMethods } from '@utils/CommonMethods';
 import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { useParams, redirect } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
-import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import Loading from './loading';
 
 const Status = () => {
-  const { data: session, status: sessionStatus } = useSession();
-
   const params = useParams();
   const statusParam = params.status as string;
 

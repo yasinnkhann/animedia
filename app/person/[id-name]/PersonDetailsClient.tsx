@@ -1,21 +1,14 @@
 'use client';
 
-import { useMemo, useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import _ from 'lodash';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 
 import { Circles } from 'react-loading-icons';
-import { IRelatedMedia } from '../../../models/ts/interfaces';
 import { CommonMethods } from '../../../utils/CommonMethods';
 
-import {
-  KNOWN_FOR_MIN_EP_COUNT,
-  KNOWN_FOR_CARDS_LIMIT,
-  MAX_SUMMARY_WORD_LENGTH,
-} from '../../../utils/constants';
-import RelatedHorizontalScroller from '../../../components/HorizontalScroller/Related/RelatedHorizontalScroller';
+import { MAX_SUMMARY_WORD_LENGTH } from '../../../utils/constants';
 import Modal from '../../../components/Modal';
 
 interface Props {
@@ -24,10 +17,6 @@ interface Props {
 }
 
 export default function PersonDetailsClient({ personDetailsData, creditsNode }: Props) {
-  const params = useParams();
-  const idName = params?.['id-name'] as string;
-  const id = idName?.split('-')[0] ?? '';
-
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const getAge = (dateStr: string) => {

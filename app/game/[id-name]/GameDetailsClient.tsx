@@ -11,15 +11,11 @@ import { useSession } from 'next-auth/react';
 import { CommonMethods } from '@/utils/CommonMethods';
 
 import _ from 'lodash';
-import { MAX_SUMMARY_WORD_LENGTH, RESULTS_PER_PAGE } from '@/utils/constants';
-import { ICast } from '@ts/interfaces';
+import { MAX_SUMMARY_WORD_LENGTH } from '@/utils/constants';
 import { ratingOptions, gameStatusOptions } from '@/models/dropDownOptions';
 import type { GameStatus } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import RoundProgressBar from '@/components/RoundProgressBar';
-import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import GamePreviewHorizontalScroller from '../../../components/HorizontalScroller/GamePreview/GamePreviewHorizontalScroller';
-import MediaCastHorizontalScroller from '../../../components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import {
@@ -75,7 +71,7 @@ const GameDetailsClient = ({
 
   const gameName = gameDetailsData?.gameDetails.results[0]?.name ?? '';
 
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
@@ -104,7 +100,7 @@ const GameDetailsClient = ({
           variables.gameStatus,
           variables.rating !== undefined ? variables.rating : null
         );
-      } catch (err) {
+      } catch (_err) {
         mutateUserMediaCache(() => previousData);
       }
     });
@@ -134,7 +130,7 @@ const GameDetailsClient = ({
           variables.gameStatus,
           variables.rating !== undefined ? variables.rating : null
         );
-      } catch (err) {
+      } catch (_err) {
         mutateUserMediaCache(() => previousData);
       }
     });
@@ -153,7 +149,7 @@ const GameDetailsClient = ({
 
       try {
         await deleteGameAction(variables.gameId);
-      } catch (err) {
+      } catch (_err) {
         mutateUserMediaCache(() => previousData);
       }
     });

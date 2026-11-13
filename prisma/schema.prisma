@@ -234,6 +234,8 @@ model Notification {
   createdAt   DateTime         @default(now())
 
   @@index([userId])
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
 }
 
 model DailyPick {

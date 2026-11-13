@@ -22,7 +22,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
   const { data: session, status } = useSession();
   const [watchStatusInput, setWatchStatus] = useState<WatchStatus | 'NOT_WATCHING' | null>(null);
   const [ratingInput, setRating] = useState<number | string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
 
@@ -82,7 +82,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
             await addMovie(movieId, movieTitle, newWatchStatus as WatchStatus);
           }
         }
-      } catch (err) {
+      } catch (_err) {
         mutateUserMediaCache(() => previousData);
         setWatchStatus(watchStatus);
       }
@@ -111,7 +111,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
 
       try {
         await updateMovie(movieId, watchStatus as WatchStatus, parsedRating);
-      } catch (err) {
+      } catch (_err) {
         mutateUserMediaCache(() => previousData);
         setRating(rating);
       }

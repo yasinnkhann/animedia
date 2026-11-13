@@ -1,9 +1,6 @@
 import { Metadata } from 'next';
 import { fetchUserMedia } from '@/app/actions/userMediaActions';
 import StatsDashboard from './StatsDashboard';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
-import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Stats',

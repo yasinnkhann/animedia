@@ -15,7 +15,7 @@ export async function GET(request: Request) {
         : tmdbClient.getPopularMovies());
 
     return NextResponse.json(data.results ?? []);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: 'Failed to fetch popular media' }, { status: 500 });
   }
 }

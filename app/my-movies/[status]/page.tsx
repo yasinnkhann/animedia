@@ -1,21 +1,15 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import MyMediaList from '@components/MyMedia/MyMediaList';
-import { Circles } from 'react-loading-icons';
 import { CommonMethods } from '@utils/CommonMethods';
 import LibraryNav from '@/components/MyMedia/LibraryNav';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams, redirect } from 'next/navigation';
 import { TStatusParam } from '@ts/types';
-import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
-import { redirect } from 'next/navigation';
 import Loading from './loading';
 
 const Status = () => {
-  const { data: session, status: sessionStatus } = useSession();
-
-  const router = useRouter();
   const params = useParams();
 
   const statusParam = params.status as string;

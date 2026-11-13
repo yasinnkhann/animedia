@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useMemo, useTransition } from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,20 +9,17 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import { useSession } from 'next-auth/react';
-import { ICast, ICurrentSeasonEpisode } from '@ts/interfaces';
+import { ICurrentSeasonEpisode } from '@ts/interfaces';
 import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
 import type { WatchStatus } from '@prisma/client';
 import _ from 'lodash';
-import { RESULTS_PER_PAGE } from '@/utils/constants';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { FiSliders } from 'react-icons/fi';
 import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
-import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
-import MediaCastHorizontalScroller from '@/components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import EpisodeDetailsHorizontalScroller from '@/components/HorizontalScroller/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import {
@@ -53,7 +49,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
   const [currSeasonEpInput, setCurrSeasonEp] = useState<ICurrentSeasonEpisode | null>(null);
 
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
@@ -140,7 +136,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
             variables.watchStatus,
             variables.currentEpisode
           );
-        } catch (err) {
+        } catch (_err) {
           mutateUserMediaCache(() => previousData);
         }
       });
@@ -177,7 +173,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
             variables.showRating ?? undefined,
             variables.currentEpisode ?? undefined
           );
-        } catch (err) {
+        } catch (_err) {
           mutateUserMediaCache(() => previousData);
         }
       });
@@ -201,7 +197,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
         try {
           await deleteShowAction(variables.showId);
-        } catch (err) {
+        } catch (_err) {
           mutateUserMediaCache(() => previousData);
         }
       });

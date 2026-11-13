@@ -17,7 +17,7 @@ const PeopleBrowseClient = ({ initialData, title, queryKey, fetchNextPageAction 
     queryKey,
     queryFn: ({ pageParam = 1 }) => fetchNextPageAction(pageParam),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: (lastPage, _pages) => {
       if (lastPage && lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
       }

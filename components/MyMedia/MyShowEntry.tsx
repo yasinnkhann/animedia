@@ -5,8 +5,6 @@ import { deleteShow, updateShow } from '@/app/actions/media';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { CommonMethods } from '@/utils/CommonMethods';
 
-import { IoMdClose } from 'react-icons/io';
-
 interface Props {
   myShow: Show;
   index: number;
@@ -94,7 +92,7 @@ const MyShowEntry = ({ myShow, index }: Props) => {
           });
           try {
             await deleteShow(myShow.id);
-          } catch (err) {
+          } catch (_err) {
             mutateUserMediaCache(() => previousData);
           }
         }}

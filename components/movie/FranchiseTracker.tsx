@@ -1,5 +1,4 @@
 import { getCollectionDetailsAction } from '@/lib/actions/tmdbActions';
-import { prisma } from '@/lib/prisma';
 import TimelineScrollerClient from '@/components/HorizontalScroller/Timeline/TimelineScrollerClient';
 
 interface FranchiseTrackerProps {

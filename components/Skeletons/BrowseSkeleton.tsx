@@ -1,11 +1,8 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import MediaCardSkeleton from './MediaCardSkeleton';
 
 export default function BrowseSkeleton() {
-  const { data: session } = useSession();
-
   return (
     <main className='mt-[calc(var(--header-height-mobile)+1rem)]'>
       <section className='flex flex-col items-center'>

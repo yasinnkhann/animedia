@@ -51,7 +51,7 @@ export default function ActivityInteractions({
         method: 'POST',
       });
       if (!res.ok) throw new Error('Failed to toggle like');
-    } catch (err) {
+    } catch (_err) {
       // Revert on error
       setIsLiked(previousIsLiked);
       if (previousIsLiked) {

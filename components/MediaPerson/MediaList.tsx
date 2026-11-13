@@ -2,8 +2,7 @@
 
 import { Fragment } from 'react';
 import MediaCard from '../MediaCard/MediaCard';
-import { RESULTS_PER_PAGE } from '../../utils/constants';
-import { useSession } from 'next-auth/react';
+
 interface Props {
   results: any[];
   title: string;
@@ -12,8 +11,6 @@ interface Props {
 }
 
 const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => {
-  const { data: session } = useSession();
-
   return (
     <section
       className={`w-full ${!genrePage ? 'px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24' : ''}`}

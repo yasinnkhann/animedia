@@ -4,8 +4,6 @@ import type { Game } from '@prisma/client';
 import { deleteGame } from '@/app/actions/media';
 import { useUserMedia } from '@/components/UserMediaProvider';
 
-import { IoMdClose } from 'react-icons/io';
-
 interface Props {
   game: Game;
   index: number;
@@ -47,7 +45,7 @@ const MyGameEntry = ({ game, index }: Props) => {
         });
         try {
           await deleteGame(game.id);
-        } catch (err) {
+        } catch (_err) {
           mutateUserMediaCache(() => previousData);
         }
       }}

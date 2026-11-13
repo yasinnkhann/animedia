@@ -7,9 +7,11 @@ interface MotionItemProps extends HTMLMotionProps<'div'> {
   itemId: string;
 }
 
-const MotionItem = forwardRef<HTMLDivElement, MotionItemProps>(({ itemId, ...props }, ref) => {
-  return <motion.div ref={ref} {...props} />;
-});
+const MotionItem = forwardRef<HTMLDivElement, MotionItemProps>(
+  ({ itemId: _itemId, ...props }, ref) => {
+    return <motion.div ref={ref} {...props} />;
+  }
+);
 
 MotionItem.displayName = 'MotionItem';
 

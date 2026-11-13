@@ -33,6 +33,8 @@ import {
   sendVerificationEmailAction,
   verifyUserEmailAction,
   checkAccountVerifiedAction,
+  sendForgotPasswordEmailAction,
+  changePasswordAction,
 } from '../../app/actions/auth';
 
 describe('Auth Actions (Registration & Email Verification)', () => {
@@ -114,5 +116,62 @@ describe('Auth Actions (Registration & Email Verification)', () => {
     });
     const checkRes = await checkAccountVerifiedAction('unverified@example.com');
     expect(checkRes).toEqual({ errors: [], success: true });
+  });
+
+  describe('Forgot Password & Password Reset Flow', () => {
+    it('sends forgot password email when user exists', async () => {
+      mockPrismaUser.findUnique.mockResolvedValueOnce({
+        id: 'user-forgot-1',
+        email: 'user@example.com',
+      });
+      mockRedis.get.mockResolvedValueOnce(null);
+      mockRedis.set.mockResolvedValue('OK');
+      mockRedis.del.mockResolvedValue(1);
+      mockSendEmail.mockResolvedValue(undefined);
+
+      const res = await sendForgotPasswordEmailAction({ email: 'user@example.com' });
+      expect(res.errors).toEqual([]);
+      expect(mockSendEmail).toHaveBeenCalledTimes(1);
+      expect(mockRedis.set).toHaveBeenCalledTimes(2); // token + count
+    });
+
+    it('returns without error and sends no email if user does not exist (security obfuscation)', async () => {
+      mockPrismaUser.findUnique.mockResolvedValueOnce(null);
+
+      const res = await sendForgotPasswordEmailAction({ email: 'nonexistent@example.com' });
+      expect(res.errors).toEqual([]);
+      expect(mockSendEmail).not.toHaveBeenCalled();
+    });
+
+    it('updates user password when valid reset token is provided', async () => {
+      mockRedis.get.mockResolvedValueOnce('valid-reset-token');
+      mockPrismaUser.update.mockResolvedValueOnce({
+        id: 'user-forgot-1',
+        password: 'hashed-new-password',
+      });
+      mockRedis.del.mockResolvedValue(1);
+
+      const res = await changePasswordAction(
+        { userId: 'user-forgot-1', newPassword: 'NewSecurePassword123!' },
+        'valid-reset-token'
+      );
+
+      expect(res.errors).toEqual([]);
+      expect(res.userId).toBe('user-forgot-1');
+      expect(mockPrismaUser.update).toHaveBeenCalledTimes(1);
+      expect(mockRedis.del).toHaveBeenCalledTimes(2); // token + count
+    });
+
+    it('rejects password reset when token is invalid or expired', async () => {
+      mockRedis.get.mockResolvedValueOnce('another-token');
+
+      const res = await changePasswordAction(
+        { userId: 'user-forgot-1', newPassword: 'NewSecurePassword123!' },
+        'expired-or-wrong-token'
+      );
+
+      expect(res.errors).toEqual([{ message: 'Invalid or expired password reset token.' }]);
+      expect(mockPrismaUser.update).not.toHaveBeenCalled();
+    });
   });
 });
