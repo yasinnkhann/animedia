@@ -93,6 +93,7 @@ model Movie {
 
   @@id([id, userId])
   @@index([userId], map: "Movie_user_id_idx")
+  @@index([status, release_date])
 }
 
 model Show {
@@ -109,6 +110,7 @@ model Show {
 
   @@id([id, userId])
   @@index([userId], map: "Show_user_id_idx")
+  @@index([status, release_date])
 }
 
 model Game {
@@ -123,6 +125,7 @@ model Game {
 
   @@id([id, userId])
   @@index([userId], map: "Game_user_id_idx")
+  @@index([status, release_date])
 }
 
 enum GameStatus {
@@ -157,6 +160,7 @@ model Activity {
 
   @@index([userId])
   @@index([createdAt])
+  @@index([userId, createdAt])
 }
 
 enum ActivityType {
@@ -185,7 +189,9 @@ model Review {
   updatedAt   DateTime  @updatedAt
 
   @@index([userId])
+  @@index([userId, createdAt])
   @@index([mediaType, mediaId])
+  @@index([mediaType, mediaId, createdAt])
 }
 
 model Collection {
