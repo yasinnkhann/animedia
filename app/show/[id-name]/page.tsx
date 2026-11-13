@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { CommonMethods } from '@/utils/CommonMethods';
+import { CLIENT_BASE_URL } from '@/utils/constants';
 import { tmdbClient } from '@/lib/api';
 import ShowDetailsClient from './ShowDetailsClient';
 import { Suspense } from 'react';
@@ -30,7 +31,8 @@ export async function generateMetadata({
     ? (CommonMethods.getTheMovieDbImage(showDetails.poster_path) as string)
     : '';
 
-  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || CLIENT_BASE_URL;
+  const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', showDetails?.name || 'Show');
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
   if (showDetails?.vote_average) {

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { NotificationType, MediaType, WatchStatus, GameStatus } from '@prisma/client';
 
+export const runtime = 'nodejs';
+export const maxDuration = 60;
+
 export async function GET(req: Request) {
   // Protect the route so only Vercel Cron can call it
   const authHeader = req.headers.get('authorization');
@@ -13,21 +16,42 @@ export async function GET(req: Request) {
     const today = new Date();
     // Use UTC date for string matching since APIs like TMDB return 'YYYY-MM-DD'
     const todayString = today.toISOString().split('T')[0];
+    const startOfDay = new Date(`${todayString}T00:00:00.000Z`);
 
-    // Find all movies and shows in PLAN_TO_WATCH
-    const movies = await prisma.movie.findMany({
-      where: { status: WatchStatus.PLAN_TO_WATCH, release_date: { not: null } },
-    });
+    // Fetch planned media in parallel
+    const [movies, shows, games, existingTodayAlerts] = await Promise.all([
+      prisma.movie.findMany({
+        where: { status: WatchStatus.PLAN_TO_WATCH, release_date: { not: null } },
+      }),
+      prisma.show.findMany({
+        where: { status: WatchStatus.PLAN_TO_WATCH, release_date: { not: null } },
+      }),
+      prisma.game.findMany({
+        where: { status: GameStatus.PLAN_TO_PLAY, release_date: { not: null } },
+      }),
+      prisma.notification.findMany({
+        where: {
+          type: NotificationType.RELEASE_ALERT,
+          createdAt: { gte: startOfDay },
+        },
+        select: { userId: true, mediaId: true, mediaType: true },
+      }),
+    ]);
 
-    const shows = await prisma.show.findMany({
-      where: { status: WatchStatus.PLAN_TO_WATCH, release_date: { not: null } },
-    });
+    // Track existing alerts created today to prevent duplicate spam
+    const existingAlertKeys = new Set(
+      existingTodayAlerts.map(a => `${a.userId}-${a.mediaType}-${a.mediaId}`)
+    );
 
-    const games = await prisma.game.findMany({
-      where: { status: GameStatus.PLAN_TO_PLAY, release_date: { not: null } },
-    });
-
-    const notificationsToCreate: any[] = [];
+    const notificationsToCreate: Array<{
+      userId: string;
+      type: NotificationType;
+      mediaType: MediaType;
+      mediaId: string;
+      mediaTitle: string;
+      mediaImage: string | null;
+      message: string;
+    }> = [];
 
     // Helper to check if item releases today
     const checkReleasesToday = (items: any[], type: MediaType) => {
@@ -47,15 +71,19 @@ export async function GET(req: Request) {
         }
 
         if (isToday) {
-          notificationsToCreate.push({
-            userId: item.userId,
-            type: NotificationType.RELEASE_ALERT,
-            mediaType: type,
-            mediaId: item.id,
-            mediaTitle: item.name,
-            mediaImage: item.image,
-            message: `${item.name} releases today! Time to dive in.`,
-          });
+          const key = `${item.userId}-${type}-${item.id}`;
+          if (!existingAlertKeys.has(key)) {
+            existingAlertKeys.add(key); // Prevent duplicate entries within the same run
+            notificationsToCreate.push({
+              userId: item.userId,
+              type: NotificationType.RELEASE_ALERT,
+              mediaType: type,
+              mediaId: String(item.id),
+              mediaTitle: item.name,
+              mediaImage: item.image || null,
+              message: `${item.name} releases today! Time to dive in.`,
+            });
+          }
         }
       }
     };
@@ -64,12 +92,11 @@ export async function GET(req: Request) {
     checkReleasesToday(shows, MediaType.SHOW);
     checkReleasesToday(games, MediaType.GAME);
 
-    // Insert all notifications
+    // Insert all deduped notifications
     let createdCount = 0;
     if (notificationsToCreate.length > 0) {
       const result = await prisma.notification.createMany({
         data: notificationsToCreate,
-        skipDuplicates: true, // Prevent duplicate notifications if run twice
       });
       createdCount = result.count;
     }

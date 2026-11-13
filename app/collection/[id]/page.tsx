@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
+import { CLIENT_BASE_URL } from '@/utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BiGlobe, BiLockAlt, BiUser, BiCollection } from 'react-icons/bi';
@@ -36,7 +37,8 @@ export async function generateMetadata({
     collection.description || `Check out this curated media collection on AniMedia.`;
   const posterUrl = collection.items[0]?.mediaImage || '';
 
-  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || CLIENT_BASE_URL;
+  const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', collection.name);
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
   ogUrl.searchParams.set('type', 'COLLECTION');
@@ -157,7 +159,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
           </div>
           {/* Conditionally render clone button for logged-in non-owners */}
           {session?.user?.id && !isOwner && !isCollaborator && (
-            <div className='flex justify-center mt-8'>
+            <div className='mt-8 flex justify-center'>
               <CloneCollectionButton collectionId={collection.id} />
             </div>
           )}

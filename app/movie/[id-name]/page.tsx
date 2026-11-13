@@ -4,6 +4,7 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import commaNumber from 'comma-number';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
+import { CLIENT_BASE_URL } from '@/utils/constants';
 import { tmdbClient } from '@/lib/api';
 import MovieActions from './MovieActions';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
@@ -40,7 +41,8 @@ export async function generateMetadata({
     ? (CommonMethods.getTheMovieDbImage(movieDetails.poster_path) as string)
     : '';
 
-  const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/og`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || CLIENT_BASE_URL;
+  const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', movieDetails?.title || 'Movie');
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
   if (movieDetails?.vote_average) {
