@@ -12,7 +12,7 @@ export const metadata = {
   title: 'Home',
 };
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export default async function Home() {
