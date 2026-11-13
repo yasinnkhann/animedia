@@ -198,11 +198,23 @@ export default function MediaCard({
 
         {isMounted && item.rewatch_count && item.rewatch_count > 0 ? (
           <div
-            className='absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-primary shadow-sm backdrop-blur-md'
-            title={`Rewatched/Replayed ${item.rewatch_count} times`}
+            className={`absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow-sm backdrop-blur-md ${
+              item.status === 'WATCHING'
+                ? 'border border-purple-500/40 bg-purple-950/85 text-purple-300'
+                : 'bg-black/70 text-primary'
+            }`}
+            title={
+              item.status === 'WATCHING'
+                ? `Currently rewatching (Rewatch #${item.rewatch_count})`
+                : `Rewatched/Replayed ${item.rewatch_count} times`
+            }
           >
             <span>🔁</span>
-            <span>{item.rewatch_count}x</span>
+            <span>
+              {item.status === 'WATCHING'
+                ? `Rewatch #${item.rewatch_count}`
+                : `${item.rewatch_count}x`}
+            </span>
           </div>
         ) : null}
 

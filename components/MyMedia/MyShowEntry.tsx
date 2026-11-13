@@ -98,9 +98,21 @@ const MyShowEntry = ({ myShow, index }: Props) => {
         }}
       />
       {/* Progress Badge */}
-      <div className='pointer-events-none absolute bottom-[3.5rem] right-2 z-10 rounded bg-black/70 px-1.5 py-0.5 text-xs font-semibold text-white shadow-sm backdrop-blur-md'>
-        Ep {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}
-        {showData?.number_of_episodes ? ` / ${showData.number_of_episodes}` : ''}
+      <div
+        className={`pointer-events-none absolute bottom-[3.5rem] right-2 z-10 flex items-center gap-1 rounded px-2 py-0.5 text-xs font-semibold shadow-sm backdrop-blur-md ${
+          myShow.status === 'WATCHING' && (myShow.rewatch_count ?? 0) > 0
+            ? 'border border-purple-500/40 bg-purple-950/85 text-purple-200'
+            : 'bg-black/70 text-white'
+        }`}
+      >
+        {myShow.status === 'WATCHING' && (myShow.rewatch_count ?? 0) > 0 && (
+          <span className='text-[10px]'>🔁</span>
+        )}
+        <span>
+          {myShow.status === 'WATCHING' && (myShow.rewatch_count ?? 0) > 0 ? 'Rewatching ' : ''}
+          Ep {myShow.status === 'PLAN_TO_WATCH' ? 0 : myShow.current_episode}
+          {showData?.number_of_episodes ? ` / ${showData.number_of_episodes}` : ''}
+        </span>
       </div>
     </div>
   );

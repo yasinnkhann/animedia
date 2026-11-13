@@ -26,8 +26,10 @@ import {
   addShow as addShowAction,
   updateShow as updateShowAction,
   deleteShow as deleteShowAction,
+  startShowRewatch,
 } from '@/app/actions/media';
-import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote, BiRevision } from 'react-icons/bi';
+import toast from 'react-hot-toast';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
@@ -303,7 +305,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
         updateShow({
           variables: {
             ...showVariables,
-            currentEpisode: currTotalEpCount - 1,
+            currentEpisode: 1,
           },
         });
       } else if (value === 'PLAN_TO_WATCH') {
@@ -339,6 +341,35 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       };
       addShow({ variables: addShowVariables });
     }
+  };
+
+  const handleStartRewatch = () => {
+    if (!showDetailsData?.showDetails?.id || !showDetailsData?.showDetails?.name) return;
+
+    const nextRewatchCount = (usersShow?.rewatch_count ?? 0) + 1;
+    setWatchStatus('WATCHING');
+    setCurrEpWithSeasonEpisode('1');
+
+    startTransition(async () => {
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newShows = old.userShows.map((s: any) =>
+          s.id === String(showDetailsData.showDetails.id)
+            ? { ...s, status: 'WATCHING', current_episode: 1, rewatch_count: nextRewatchCount }
+            : s
+        );
+        return { ...old, userShows: newShows };
+      });
+
+      try {
+        await startShowRewatch(String(showDetailsData.showDetails.id));
+        toast.success(`Started rewatch #${nextRewatchCount} from Episode 1!`);
+      } catch (_err) {
+        mutateUserMediaCache(() => previousData);
+        toast.error('Failed to start rewatch.');
+      }
+    });
   };
 
   const handleChangeRating = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -502,6 +533,9 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
           currentEpisode: currTotalEpCount,
         },
       });
+      if (usersShow?.rewatch_count && usersShow.rewatch_count > 0) {
+        toast.success(`Rewatch #${usersShow.rewatch_count} complete! Marked as Completed.`);
+      }
       return;
     }
 
@@ -1158,6 +1192,33 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   </span>
                 ) : null}
               </button>
+
+              {/* Start Rewatch Button (when show is COMPLETED) */}
+              {usersShow?.status === 'COMPLETED' && (
+                <button
+                  type='button'
+                  onClick={handleStartRewatch}
+                  className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/50 bg-purple-500/10 px-3.5 text-sm font-semibold text-purple-400 transition-colors hover:border-purple-400 hover:bg-purple-500/20'
+                  title='Start rewatching this series from Episode 1'
+                >
+                  <BiRevision size={18} />
+                  <span>Start Rewatch</span>
+                  {usersShow.rewatch_count > 0 ? (
+                    <span className='ml-0.5 text-xs opacity-75'>({usersShow.rewatch_count}x)</span>
+                  ) : null}
+                </button>
+              )}
+
+              {/* Rewatching Badge (when currently WATCHING with rewatch_count > 0) */}
+              {usersShow?.status === 'WATCHING' && (usersShow?.rewatch_count ?? 0) > 0 && (
+                <div
+                  className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/40 bg-purple-500/15 px-3 text-xs font-semibold text-purple-300 shadow-sm'
+                  title={`Currently on rewatch #${usersShow.rewatch_count}`}
+                >
+                  <BiRevision size={16} />
+                  <span>Rewatching #{usersShow.rewatch_count}</span>
+                </div>
+              )}
 
               {(usersShow?.notes || (usersShow?.tags && usersShow.tags.length > 0)) && (
                 <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>

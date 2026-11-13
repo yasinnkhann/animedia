@@ -251,10 +251,26 @@ export async function updateShow(
   showId: string,
   watchStatus: WatchStatus,
   showRating?: number,
-  currentEpisode?: number
+  currentEpisode?: number,
+  rewatchCount?: number
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error('Not authenticated');
+
+  const updateData: {
+    status: WatchStatus;
+    rating?: number;
+    current_episode?: number;
+    rewatch_count?: number;
+  } = {
+    status: watchStatus,
+    rating: showRating,
+    current_episode: currentEpisode,
+  };
+
+  if (rewatchCount !== undefined) {
+    updateData.rewatch_count = rewatchCount;
+  }
 
   const show = await prisma.show.update({
     where: {
@@ -263,11 +279,7 @@ export async function updateShow(
         userId: session.user.id,
       },
     },
-    data: {
-      status: watchStatus,
-      rating: showRating,
-      current_episode: currentEpisode,
-    },
+    data: updateData,
   });
 
   const type = showRating ? 'RATED' : 'STATUS_CHANGED';
@@ -284,6 +296,97 @@ export async function updateShow(
   revalidatePath('/');
   revalidateTag('user-media', 'max');
   return show;
+}
+
+export async function startShowRewatch(showId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error('Not authenticated');
+
+  const existing = await prisma.show.findUnique({
+    where: {
+      id_userId: {
+        id: String(showId),
+        userId: session.user.id,
+      },
+    },
+  });
+
+  if (!existing) throw new Error('Show not found');
+
+  const nextRewatchCount = (existing.rewatch_count ?? 0) + 1;
+
+  const show = await prisma.show.update({
+    where: {
+      id_userId: {
+        id: String(showId),
+        userId: session.user.id,
+      },
+    },
+    data: {
+      status: 'WATCHING',
+      current_episode: 1,
+      rewatch_count: nextRewatchCount,
+    },
+  });
+
+  await logActivity(
+    session.user.id,
+    'STATUS_CHANGED',
+    'SHOW',
+    String(showId),
+    show.name,
+    { status: 'WATCHING', current_episode: 1, rewatch_count: nextRewatchCount },
+    show.image
+  );
+
+  revalidatePath('/');
+  revalidateTag('user-media', 'max');
+  return show;
+}
+
+export async function startMovieRewatch(movieId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error('Not authenticated');
+
+  const existing = await prisma.movie.findUnique({
+    where: {
+      id_userId: {
+        id: String(movieId),
+        userId: session.user.id,
+      },
+    },
+  });
+
+  if (!existing) throw new Error('Movie not found');
+
+  const nextRewatchCount = (existing.rewatch_count ?? 0) + 1;
+
+  const movie = await prisma.movie.update({
+    where: {
+      id_userId: {
+        id: String(movieId),
+        userId: session.user.id,
+      },
+    },
+    data: {
+      status: 'WATCHING',
+      rewatch_count: nextRewatchCount,
+    },
+  });
+
+  await logActivity(
+    session.user.id,
+    'STATUS_CHANGED',
+    'MOVIE',
+    String(movieId),
+    movie.name,
+    { status: 'WATCHING', rewatch_count: nextRewatchCount },
+    movie.image
+  );
+
+  revalidatePath('/');
+  revalidateTag('user-media', 'max');
+  return movie;
 }
 
 export async function updateGame(gameId: string, gameStatus?: GameStatus, rating?: number | null) {

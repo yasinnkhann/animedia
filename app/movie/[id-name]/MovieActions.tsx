@@ -6,8 +6,9 @@ import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
-import { addMovie, updateMovie, deleteMovie } from '@/app/actions/media';
-import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
+import { addMovie, updateMovie, deleteMovie, startMovieRewatch } from '@/app/actions/media';
+import { BiCollection, BiShare, BiNote, BiRevision } from 'react-icons/bi';
+import toast from 'react-hot-toast';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
@@ -119,6 +120,32 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
     });
   };
 
+  const handleStartRewatch = () => {
+    if (!movieId || !movieTitle) return;
+
+    const nextRewatchCount = (usersMovie?.rewatch_count ?? 0) + 1;
+    setWatchStatus('WATCHING');
+
+    startTransition(async () => {
+      const previousData = getUserMediaCache();
+      mutateUserMediaCache((old: any) => {
+        if (!old) return old;
+        const newMovies = old.userMovies.map((m: any) =>
+          m.id === movieId ? { ...m, status: 'WATCHING', rewatch_count: nextRewatchCount } : m
+        );
+        return { ...old, userMovies: newMovies };
+      });
+
+      try {
+        await startMovieRewatch(movieId);
+        toast.success(`Started rewatch #${nextRewatchCount}!`);
+      } catch (_err) {
+        mutateUserMediaCache(() => previousData);
+        toast.error('Failed to start rewatch.');
+      }
+    });
+  };
+
   if (status !== 'authenticated' || !session) return null;
 
   if (isLoading) {
@@ -222,6 +249,33 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
           </span>
         ) : null}
       </button>
+
+      {/* Start Rewatch Button (when movie is COMPLETED) */}
+      {usersMovie?.status === 'COMPLETED' && (
+        <button
+          type='button'
+          onClick={handleStartRewatch}
+          className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/50 bg-purple-500/10 px-3.5 text-sm font-semibold text-purple-400 transition-colors hover:border-purple-400 hover:bg-purple-500/20'
+          title='Rewatch this movie'
+        >
+          <BiRevision size={18} />
+          <span>Rewatch</span>
+          {usersMovie.rewatch_count > 0 ? (
+            <span className='ml-0.5 text-xs opacity-75'>({usersMovie.rewatch_count}x)</span>
+          ) : null}
+        </button>
+      )}
+
+      {/* Rewatching Badge (when currently WATCHING with rewatch_count > 0) */}
+      {usersMovie?.status === 'WATCHING' && (usersMovie?.rewatch_count ?? 0) > 0 && (
+        <div
+          className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/40 bg-purple-500/15 px-3 text-xs font-semibold text-purple-300 shadow-sm'
+          title={`Currently on rewatch #${usersMovie.rewatch_count}`}
+        >
+          <BiRevision size={16} />
+          <span>Rewatching #{usersMovie.rewatch_count}</span>
+        </div>
+      )}
 
       {(usersMovie?.notes || (usersMovie?.tags && usersMovie.tags.length > 0)) && (
         <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>
