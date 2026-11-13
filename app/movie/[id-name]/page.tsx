@@ -75,104 +75,185 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
   const movieTitle = movieDetails?.title ?? '';
 
   return (
-    <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'>
-      <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
-        <Image
-          className='rounded-lg'
-          src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
-          alt={movieDetails?.title ?? ''}
-          fill
-          priority
-          sizes='(max-width: 768px) 100vw, 30vw'
-        />
-      </section>
-
-      <section className='mt-4 flex flex-col'>
-        <h1 className='mb-2 text-3xl font-bold sm:text-4xl'>{movieDetails?.title}</h1>
-        <section className='mb-6 mt-4 flex items-center'>
-          <section className='h-[4rem] w-[4rem] sm:h-[5rem] sm:w-[5rem]'>
-            <RoundProgressBar percentageVal={+(movieDetails?.vote_average ?? 0).toFixed(1) * 10} />
-          </section>
-          <p className='ml-4 text-sm font-medium sm:text-base'>
-            {commaNumber(movieDetails?.vote_count ?? 0)} voted users
-          </p>
-        </section>
-
-        <MovieActions
-          movieId={movieId}
-          movieTitle={movieTitle}
-          movieImage={
-            movieDetails?.poster_path
-              ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
-              : null
-          }
-        />
-
-        <section className='mt-6 pb-8 lg:pb-32'>
-          <h4 className='my-4'>{movieDetails?.tagline}</h4>
-          <p>{movieDetails?.overview}</p>
-        </section>
-      </section>
-
-      <section className='my-4 lg:ml-8'>
-        <h3 className='mb-4 underline underline-offset-4'>Details</h3>
-        <h4>Runtime</h4>
-        <p className='ml-1'>{movieDetails?.runtime} minutes</p>
-        <h4 className='mt-4'>Status</h4>
-        <p className='ml-1'>{movieDetails?.status}</p>
-        <h4 className='mt-4'>Release Date</h4>
-        {movieDetails?.release_date ? (
-          <p className='ml-1'>{CommonMethods.formatDate(movieDetails.release_date)}</p>
-        ) : (
-          <p className='ml-1'>N/A</p>
-        )}
-        <h4 className='mt-4'>Genre(s)</h4>
-        <div className='ml-1'>
-          {movieDetails?.genres?.map((genre: any, idx: number) => <p key={idx}>{genre.name}</p>)}
+    <div className='relative w-full overflow-hidden'>
+      {/* Cinematic Ambient Backdrop Glow */}
+      {movieDetails?.backdrop_path && (
+        <div className='pointer-events-none absolute -top-12 left-0 right-0 -z-10 h-[480px] overflow-hidden opacity-25 blur-3xl dark:opacity-20'>
+          <Image
+            src={CommonMethods.getTheMovieDbImage(movieDetails.backdrop_path)}
+            alt=''
+            fill
+            className='scale-110 object-cover object-top'
+            priority={false}
+          />
+          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background' />
         </div>
-        <h4 className='mt-4'>Original Language</h4>
-        <p className='ml-1'>
-          {movieDetails?.original_language ? getEnglishName(movieDetails.original_language) : ''}
-        </p>
-        {movieDetails?.homepage && movieDetails.homepage.length > 0 && (
-          <>
-            <h4 className='mt-4'>Official Page</h4>
-            <Link
-              href={movieDetails.homepage}
-              className='ml-1 underline'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Learn More
-            </Link>
-          </>
-        )}
-      </section>
+      )}
 
-      <section className='mt-4 lg:col-start-2'>
-        {movieDetails?.belongs_to_collection && (
-          <Suspense fallback={null}>
-            <FranchiseTracker
-              collectionId={movieDetails.belongs_to_collection.id}
-              currentMovieId={movieDetails.id}
-            />
-          </Suspense>
-        )}
-        <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
-          <MovieCastServer movieId={id} />
-        </Suspense>
-
-        <MovieRelatedClient movieId={id} />
-
-        <section className='mt-16 pb-16'>
-          <ReviewSection
-            mediaType='MOVIE'
-            mediaId={movieId}
-            mediaTitle={movieTitle}
-            mediaImage={movieDetails?.poster_path}
+      <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'>
+        <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
+          <Image
+            className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
+            src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
+            alt={movieDetails?.title ?? ''}
+            fill
+            priority
+            sizes='(max-width: 768px) 100vw, 30vw'
           />
         </section>
-      </section>
-    </PageAnimationWrapper>
+
+        <section className='mt-4 flex flex-col'>
+          <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
+            {movieDetails?.title}
+          </h1>
+          <section className='mb-5 mt-3 flex items-center gap-4'>
+            <div className='flex items-center gap-3.5'>
+              <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
+                <RoundProgressBar
+                  percentageVal={+(movieDetails?.vote_average ?? 0).toFixed(1) * 10}
+                />
+              </section>
+              <div className='flex flex-col'>
+                <span className='text-sm font-semibold text-foreground sm:text-base'>
+                  {commaNumber(movieDetails?.vote_count ?? 0)} votes
+                </span>
+                <span className='text-xs text-muted-foreground'>Community Rating</span>
+              </div>
+            </div>
+          </section>
+
+          <MovieActions
+            movieId={movieId}
+            movieTitle={movieTitle}
+            movieImage={
+              movieDetails?.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                : null
+            }
+          />
+
+          <section className='mt-6 space-y-3 pb-8 lg:pb-24'>
+            {movieDetails?.tagline && (
+              <p className='text-lg font-medium italic text-primary/90'>
+                &ldquo;{movieDetails.tagline}&rdquo;
+              </p>
+            )}
+            {movieDetails?.overview && (
+              <div>
+                <h3 className='mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                  Overview
+                </h3>
+                <p className='max-w-3xl text-sm leading-relaxed text-foreground/85 sm:text-base'>
+                  {movieDetails.overview}
+                </p>
+              </div>
+            )}
+          </section>
+        </section>
+
+        <section className='my-4 lg:ml-8'>
+          <div className='rounded-2xl border border-border/60 bg-card/30 p-5 shadow-sm backdrop-blur-sm'>
+            <h3 className='mb-4 text-base font-bold text-foreground'>Movie Details</h3>
+            <dl className='space-y-3.5 text-sm'>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Runtime
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {movieDetails?.runtime ? `${movieDetails.runtime} minutes` : 'N/A'}
+                </dd>
+              </div>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Status
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {movieDetails?.status || 'N/A'}
+                </dd>
+              </div>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Release Date
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {movieDetails?.release_date
+                    ? CommonMethods.formatDate(movieDetails.release_date)
+                    : 'N/A'}
+                </dd>
+              </div>
+              {movieDetails?.genres && movieDetails.genres.length > 0 && (
+                <div>
+                  <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                    Genre(s)
+                  </dt>
+                  <dd className='mt-1 flex flex-wrap gap-1.5'>
+                    {movieDetails.genres.map((genre: any, idx: number) => (
+                      <span
+                        key={idx}
+                        className='rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-xs text-foreground'
+                      >
+                        {genre.name}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              )}
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Original Language
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {movieDetails?.original_language
+                    ? getEnglishName(movieDetails.original_language)
+                    : 'N/A'}
+                </dd>
+              </div>
+              {movieDetails?.homepage && movieDetails.homepage.length > 0 && (
+                <div>
+                  <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                    Official Page
+                  </dt>
+                  <dd className='mt-0.5 truncate text-xs'>
+                    <Link
+                      href={movieDetails.homepage}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='text-primary hover:underline'
+                    >
+                      {movieDetails.homepage}
+                    </Link>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </section>
+
+        <section className='mt-4 lg:col-start-2'>
+          {movieDetails?.belongs_to_collection && (
+            <Suspense fallback={null}>
+              <FranchiseTracker
+                collectionId={movieDetails.belongs_to_collection.id}
+                currentMovieId={movieDetails.id}
+              />
+            </Suspense>
+          )}
+          <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
+            <MovieCastServer movieId={id} />
+          </Suspense>
+
+          <MovieRelatedClient movieId={id} />
+
+          <section className='mt-16 pb-16'>
+            <ReviewSection
+              mediaType='MOVIE'
+              mediaId={movieId}
+              mediaTitle={movieTitle}
+              mediaImage={movieDetails?.poster_path}
+            />
+          </section>
+        </section>
+      </PageAnimationWrapper>
+    </div>
   );
 }

@@ -914,235 +914,324 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
     );
   }
   return (
-    <motion.main
-      className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
-        <Image
-          className='rounded-lg'
-          src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
-          alt={showDetailsData.showDetails.name}
-          fill
-          priority
-          sizes='(max-width: 768px) 100vw, 30vw'
-        />
-      </section>
+    <div className='relative w-full overflow-hidden'>
+      {/* Cinematic Ambient Backdrop Glow */}
+      {showDetailsData?.showDetails?.backdrop_path && (
+        <div className='pointer-events-none absolute -top-12 left-0 right-0 -z-10 h-[480px] overflow-hidden opacity-25 blur-3xl dark:opacity-20'>
+          <Image
+            src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.backdrop_path)}
+            alt=''
+            fill
+            className='scale-110 object-cover object-top'
+            priority={false}
+          />
+          <div className='absolute inset-0 bg-gradient-to-b from-transparent via-background/70 to-background' />
+        </div>
+      )}
 
-      <section className='mt-4 flex min-w-0 flex-col'>
-        <h1 className='mb-2 text-3xl font-bold sm:text-4xl'>{showDetailsData.showDetails.name}</h1>
-        <section className='relative mb-6 mt-4 flex items-center'>
-          <div className='flex items-center'>
-            <section className='h-[4rem] w-[4rem] sm:h-[5rem] sm:w-[5rem]'>
-              <RoundProgressBar
-                percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
-              />
-            </section>
-            <p className='ml-4 text-sm font-medium sm:text-base'>
-              {commaNumber(showDetailsData.showDetails.vote_count ?? 0)} voted users
-            </p>
-
-            <button
-              onClick={toggleEpisodeCountDisplay}
-              className='ml-8 cursor-pointer rounded-md border border-border p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none'
-              title='Toggle Episode Display Mode'
-            >
-              <FiSliders size={20} />
-            </button>
-          </div>
+      <motion.main
+        className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
+          <Image
+            className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
+            src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
+            alt={showDetailsData.showDetails.name}
+            fill
+            priority
+            sizes='(max-width: 768px) 100vw, 30vw'
+          />
         </section>
 
-        {status === 'authenticated' &&
-          session &&
-          (isLoading ? (
-            <section className='my-4 flex flex-wrap items-center justify-center gap-4 lg:justify-start'>
-              <div className='relative'>
-                <select
-                  disabled
-                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
-                >
-                  <option>Loading...</option>
-                </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
+        <section className='mt-4 flex min-w-0 flex-col'>
+          <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
+            {showDetailsData.showDetails.name}
+          </h1>
+          <section className='relative mb-5 mt-3 flex items-center gap-4'>
+            <div className='flex items-center gap-3.5'>
+              <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
+                <RoundProgressBar
+                  percentageVal={+(showDetailsData.showDetails.vote_average ?? 0).toFixed(1) * 10}
+                />
+              </section>
+              <div className='flex flex-col'>
+                <span className='text-sm font-semibold text-foreground sm:text-base'>
+                  {commaNumber(showDetailsData.showDetails.vote_count ?? 0)} votes
+                </span>
+                <span className='text-xs text-muted-foreground'>User Rating</span>
               </div>
-              <div className='relative'>
-                <select
-                  disabled
-                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-muted-foreground focus:outline-none'
-                >
-                  <option>Loading...</option>
-                </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-muted-foreground' />
-              </div>
-            </section>
-          ) : (
-            <section className='my-4 flex flex-wrap items-center gap-4'>
-              <div className='relative'>
-                <select
-                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
-                  value={watchStatus}
-                  onChange={handleChangeWatchStatus}
-                  disabled={false}
-                >
-                  {watchStatusOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.text}
-                    </option>
-                  ))}
-                </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
-              </div>
-
-              <div className='relative'>
-                <select
-                  className='appearance-none rounded border border-border bg-transparent px-2 py-2 pr-8 leading-tight text-foreground focus:bg-transparent focus:outline-none [&>option]:bg-background'
-                  value={rating}
-                  onChange={handleChangeRating}
-                  disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH'}
-                >
-                  {ratingOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.text}
-                    </option>
-                  ))}
-                </select>
-                <IoMdArrowDropdown className='pointer-events-none absolute inset-y-0 right-0 mr-3 mt-3 text-foreground' />
-              </div>
-
-              {episodeCountDisplay === 'total-episodes' && (
-                <form
-                  className='flex items-center rounded border border-border'
-                  onSubmit={handleEpisodeSubmit}
-                >
-                  <span className='px-3 text-foreground'>Episodes:</span>
-                  <button
-                    className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                    onClick={() => handleTotalEpisodeBtn('decrement')}
-                    type='button'
-                    disabled={+currEp <= 0}
-                  >
-                    <FaMinus
-                      className={`${+currEp <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
-                    />
-                  </button>
-                  <input
-                    className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
-                    type='text'
-                    value={currEp}
-                    onChange={handleEpisodeChange}
-                    onBlur={handleEpisodeOnBlur}
-                    disabled={watchStatus === 'PLAN_TO_WATCH'}
-                  />
-                  <span className='px-1 text-foreground'>/</span>{' '}
-                  <span className='px-1 text-foreground'>{currTotalEpCount}</span>
-                  <button
-                    className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                    onClick={() => handleTotalEpisodeBtn('increment')}
-                    type='button'
-                    disabled={+currEp >= currTotalEpCount}
-                  >
-                    <FaPlus
-                      className={`${+currEp >= currTotalEpCount ? 'text-muted-foreground' : 'text-primary'}`}
-                    />
-                  </button>
-                </form>
-              )}
-
-              {episodeCountDisplay === 'season-episode' && (
-                <>
-                  <form
-                    className='flex items-center rounded border border-border'
-                    onSubmit={handleSeasonSubmit}
-                  >
-                    <div>
-                      <span className='px-3 text-foreground'>Season:</span>
-                      <button
-                        className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                        onClick={() => handleSeasonBtn('decrement')}
-                        type='button'
-                        disabled={+currSeasonEp.seasonNo <= 1}
-                      >
-                        <FaMinus
-                          className={`${+currSeasonEp.seasonNo <= 1 ? 'text-muted-foreground' : 'text-primary'}`}
-                        />
-                      </button>
-                      <input
-                        className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
-                        type='text'
-                        value={currSeasonEp.seasonNo}
-                        onChange={handleSeasonChange}
-                        onBlur={handleSeasonOnBlur}
-                        disabled={watchStatus === 'PLAN_TO_WATCH'}
-                      />
-                      <span className='px-1 text-foreground'>/</span>{' '}
-                      <span className='px-1 text-foreground'>{currTotalSeasonCount}</span>
-                    </div>
-
-                    <button
-                      className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                      onClick={() => handleSeasonBtn('increment')}
-                      type='button'
-                      disabled={+currEp >= currTotalEpCount}
-                    >
-                      <FaPlus
-                        className={`${+currSeasonEp.seasonNo >= currTotalSeasonCount ? 'text-muted-foreground' : 'text-primary'}`}
-                      />
-                    </button>
-                  </form>
-
-                  <form
-                    className='flex items-center rounded border border-border'
-                    onSubmit={handleSeasonEpisodeSubmit}
-                  >
-                    <div>
-                      <span className='px-3 text-foreground'>Episode:</span>
-                      <button
-                        className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                        onClick={() => handleSeasonEpisodeBtn('decrement')}
-                        type='button'
-                        disabled={+currSeasonEp.episode <= 0}
-                      >
-                        <FaMinus
-                          className={`${+currSeasonEp.episode <= 0 ? 'text-muted-foreground' : 'text-primary'}`}
-                        />
-                      </button>
-                      <input
-                        className='w-12 bg-transparent px-2 py-2 leading-tight text-foreground focus:border-primary focus:bg-transparent focus:outline-none'
-                        type='text'
-                        value={currSeasonEp.episode}
-                        onChange={handleSeasonEpisodeChange}
-                        onBlur={handleSeasonEpisodeOnBlur}
-                        disabled={watchStatus === 'PLAN_TO_WATCH'}
-                      />
-                      <span className='px-1 text-foreground'>/</span>{' '}
-                      <span className='px-1 text-foreground'>
-                        {calculateSeasonEpisodeNumber().seasonEpCount}
-                      </span>
-                    </div>
-
-                    <button
-                      className='cursor-pointer px-4 py-2 text-foreground hover:bg-muted focus:outline-none'
-                      onClick={() => handleSeasonEpisodeBtn('increment')}
-                      type='button'
-                      disabled={+currEp >= currTotalEpCount}
-                    >
-                      <FaPlus
-                        className={`${+currSeasonEp.episode >= +calculateSeasonEpisodeNumber().seasonEpCount ? 'text-muted-foreground' : 'text-primary'}`}
-                      />
-                    </button>
-                  </form>
-                </>
-              )}
 
               <button
-                onClick={() => setIsCollectionModalOpen(true)}
-                className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
-                title='Add to Collection'
+                onClick={toggleEpisodeCountDisplay}
+                className='ml-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl border border-border/70 bg-card/50 p-2 text-muted-foreground transition-all hover:border-primary/50 hover:bg-muted hover:text-foreground focus:outline-none'
+                title='Toggle Episode Display Mode'
               >
-                <BiCollection size={20} />
+                <FiSliders size={18} />
               </button>
+            </div>
+          </section>
+
+          {status === 'authenticated' && session && (
+            <div className='my-4 w-full rounded-2xl border border-border/60 bg-card/40 p-2.5 shadow-sm backdrop-blur-md'>
+              {isLoading ? (
+                <div className='flex items-center gap-3 py-1'>
+                  <div className='h-10 w-36 animate-pulse rounded-xl bg-muted/60' />
+                  <div className='h-10 w-28 animate-pulse rounded-xl bg-muted/60' />
+                  <div className='h-10 w-44 animate-pulse rounded-xl bg-muted/60' />
+                </div>
+              ) : (
+                <div className='flex flex-wrap items-center gap-2'>
+                  {/* Watch Status Select */}
+                  <div className='relative'>
+                    <select
+                      className='h-10 appearance-none rounded-xl border border-border/80 bg-background/90 pl-3 pr-8 text-sm font-medium leading-none text-foreground shadow-sm transition-all hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 [&>option]:bg-background'
+                      value={watchStatus}
+                      onChange={handleChangeWatchStatus}
+                    >
+                      {watchStatusOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.text}
+                        </option>
+                      ))}
+                    </select>
+                    <IoMdArrowDropdown className='pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground' />
+                  </div>
+
+                  {/* Rating Select */}
+                  <div className='relative'>
+                    <select
+                      className='h-10 appearance-none rounded-xl border border-border/80 bg-background/90 pl-3 pr-8 text-sm font-medium leading-none text-foreground shadow-sm transition-all hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 [&>option]:bg-background'
+                      value={rating}
+                      onChange={handleChangeRating}
+                      disabled={watchStatus === 'NOT_WATCHING' || watchStatus === 'PLAN_TO_WATCH'}
+                    >
+                      {ratingOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.text}
+                        </option>
+                      ))}
+                    </select>
+                    <IoMdArrowDropdown className='pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground' />
+                  </div>
+
+                  {/* Episode Stepper (Total Episodes mode) */}
+                  {episodeCountDisplay === 'total-episodes' && (
+                    <form
+                      className='flex h-10 items-center rounded-xl border border-border/80 bg-background/90 px-1.5 shadow-sm'
+                      onSubmit={handleEpisodeSubmit}
+                    >
+                      <span className='px-1.5 text-xs font-medium text-muted-foreground'>Ep:</span>
+                      <button
+                        className='flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                        onClick={() => handleTotalEpisodeBtn('decrement')}
+                        type='button'
+                        disabled={+currEp <= 0}
+                      >
+                        <FaMinus size={11} />
+                      </button>
+                      <input
+                        className='w-10 bg-transparent text-center text-sm font-semibold text-foreground focus:outline-none'
+                        type='text'
+                        value={currEp}
+                        onChange={handleEpisodeChange}
+                        onBlur={handleEpisodeOnBlur}
+                        disabled={watchStatus === 'PLAN_TO_WATCH'}
+                      />
+                      <span className='text-xs text-muted-foreground'>/ {currTotalEpCount}</span>
+                      <button
+                        className='ml-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                        onClick={() => handleTotalEpisodeBtn('increment')}
+                        type='button'
+                        disabled={+currEp >= currTotalEpCount}
+                      >
+                        <FaPlus size={11} />
+                      </button>
+                    </form>
+                  )}
+
+                  {/* Season/Episode Stepper mode */}
+                  {episodeCountDisplay === 'season-episode' && (
+                    <div className='flex items-center gap-1.5'>
+                      <form
+                        className='flex h-10 items-center rounded-xl border border-border/80 bg-background/90 px-1.5 shadow-sm'
+                        onSubmit={handleSeasonSubmit}
+                      >
+                        <span className='px-1.5 text-xs font-medium text-muted-foreground'>S:</span>
+                        <button
+                          className='flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                          onClick={() => handleSeasonBtn('decrement')}
+                          type='button'
+                          disabled={+currSeasonEp.seasonNo <= 1}
+                        >
+                          <FaMinus size={11} />
+                        </button>
+                        <input
+                          className='w-8 bg-transparent text-center text-sm font-semibold text-foreground focus:outline-none'
+                          type='text'
+                          value={currSeasonEp.seasonNo}
+                          onChange={handleSeasonChange}
+                          onBlur={handleSeasonOnBlur}
+                          disabled={watchStatus === 'PLAN_TO_WATCH'}
+                        />
+                        <span className='text-xs text-muted-foreground'>
+                          / {currTotalSeasonCount}
+                        </span>
+                        <button
+                          className='ml-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                          onClick={() => handleSeasonBtn('increment')}
+                          type='button'
+                          disabled={+currEp >= currTotalEpCount}
+                        >
+                          <FaPlus size={11} />
+                        </button>
+                      </form>
+
+                      <form
+                        className='flex h-10 items-center rounded-xl border border-border/80 bg-background/90 px-1.5 shadow-sm'
+                        onSubmit={handleSeasonEpisodeSubmit}
+                      >
+                        <span className='px-1.5 text-xs font-medium text-muted-foreground'>
+                          Ep:
+                        </span>
+                        <button
+                          className='flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                          onClick={() => handleSeasonEpisodeBtn('decrement')}
+                          type='button'
+                          disabled={+currSeasonEp.episode <= 0}
+                        >
+                          <FaMinus size={11} />
+                        </button>
+                        <input
+                          className='w-8 bg-transparent text-center text-sm font-semibold text-foreground focus:outline-none'
+                          type='text'
+                          value={currSeasonEp.episode}
+                          onChange={handleSeasonEpisodeChange}
+                          onBlur={handleSeasonEpisodeOnBlur}
+                          disabled={watchStatus === 'PLAN_TO_WATCH'}
+                        />
+                        <span className='text-xs text-muted-foreground'>
+                          / {calculateSeasonEpisodeNumber().seasonEpCount}
+                        </span>
+                        <button
+                          className='ml-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30'
+                          onClick={() => handleSeasonEpisodeBtn('increment')}
+                          type='button'
+                          disabled={+currEp >= currTotalEpCount}
+                        >
+                          <FaPlus size={11} />
+                        </button>
+                      </form>
+                    </div>
+                  )}
+
+                  {/* Divider */}
+                  <div className='hidden h-6 w-[1px] bg-border/80 sm:block' />
+
+                  {/* Quick Action Buttons Group */}
+                  <div className='flex items-center gap-1.5'>
+                    {/* Collection Button */}
+                    <button
+                      onClick={() => setIsCollectionModalOpen(true)}
+                      className='flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background/90 text-foreground shadow-sm transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary'
+                      title='Add to Collection'
+                    >
+                      <BiCollection size={19} />
+                    </button>
+
+                    {/* Recommend Button */}
+                    <button
+                      onClick={() => setIsRecommendModalOpen(true)}
+                      className='flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background/90 text-foreground shadow-sm transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary'
+                      title='Recommend to a Friend'
+                    >
+                      <BiShare size={19} />
+                    </button>
+
+                    {/* Log Details Button */}
+                    <button
+                      onClick={() => setIsDetailsModalOpen(true)}
+                      disabled={watchStatus === 'NOT_WATCHING'}
+                      className={`flex h-10 items-center gap-1.5 rounded-xl border border-border/80 bg-background/90 px-3 text-sm font-medium text-foreground shadow-sm transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary ${
+                        watchStatus === 'NOT_WATCHING' ? 'cursor-not-allowed opacity-40' : ''
+                      } ${
+                        usersShow?.notes ||
+                        (usersShow?.tags && usersShow.tags.length > 0) ||
+                        (usersShow?.rewatch_count && usersShow.rewatch_count > 0)
+                          ? 'border-primary/70 text-primary'
+                          : ''
+                      }`}
+                      title={
+                        watchStatus === 'NOT_WATCHING'
+                          ? 'Add to list first to log notes & tags'
+                          : 'Personal Notes, Tags & Rewatches'
+                      }
+                    >
+                      <BiNote size={17} />
+                      <span className='hidden sm:inline'>Log Details</span>
+                      {usersShow?.rewatch_count && usersShow.rewatch_count > 0 ? (
+                        <span className='ml-1 rounded-full bg-primary/20 px-1.5 py-0.5 text-xs font-semibold'>
+                          {usersShow.rewatch_count}x
+                        </span>
+                      ) : null}
+                    </button>
+
+                    {/* Start Rewatch Button (when show is COMPLETED) */}
+                    {usersShow?.status === 'COMPLETED' && (
+                      <button
+                        type='button'
+                        onClick={handleStartRewatch}
+                        className='flex h-10 items-center gap-1.5 rounded-xl border border-purple-500/50 bg-purple-500/15 px-3.5 text-sm font-semibold text-purple-300 shadow-sm transition-all hover:border-purple-400 hover:bg-purple-500/25'
+                        title='Start rewatching this series from Episode 1'
+                      >
+                        <BiRevision size={17} />
+                        <span>Start Rewatch</span>
+                        {usersShow.rewatch_count > 0 ? (
+                          <span className='ml-0.5 text-xs opacity-75'>
+                            ({usersShow.rewatch_count}x)
+                          </span>
+                        ) : null}
+                      </button>
+                    )}
+
+                    {/* Rewatching Badge (when currently WATCHING with rewatch_count > 0) */}
+                    {usersShow?.status === 'WATCHING' && (usersShow?.rewatch_count ?? 0) > 0 && (
+                      <div
+                        className='flex h-10 items-center gap-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 px-3 text-xs font-semibold text-purple-300 shadow-sm'
+                        title={`Currently on rewatch #${usersShow.rewatch_count}`}
+                      >
+                        <BiRevision size={16} />
+                        <span>Rewatching #{usersShow.rewatch_count}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Personal Notes / Tags Pill Display */}
+                  {(usersShow?.notes || (usersShow?.tags && usersShow.tags.length > 0)) && (
+                    <div className='mt-1.5 w-full rounded-xl border border-border/60 bg-muted/30 p-2.5'>
+                      {usersShow.tags && usersShow.tags.length > 0 && (
+                        <div className='flex flex-wrap items-center gap-1.5'>
+                          {usersShow.tags.map((tag: string) => (
+                            <span
+                              key={tag}
+                              className='rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {usersShow.notes && (
+                        <p className='mt-1 text-xs italic text-muted-foreground'>
+                          &ldquo;{usersShow.notes}&rdquo;
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <AddToCollectionModal
                 mediaType='SHOW'
@@ -1157,90 +1246,6 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                 isOpen={isCollectionModalOpen}
                 onClose={() => setIsCollectionModalOpen(false)}
               />
-
-              <button
-                onClick={() => setIsRecommendModalOpen(true)}
-                className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
-                title='Recommend to a Friend'
-              >
-                <BiShare size={20} />
-              </button>
-
-              <button
-                onClick={() => setIsDetailsModalOpen(true)}
-                disabled={watchStatus === 'NOT_WATCHING'}
-                className={`flex h-[42px] items-center gap-1.5 rounded border border-border bg-transparent px-3 text-sm text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary ${
-                  watchStatus === 'NOT_WATCHING' ? 'cursor-not-allowed opacity-40' : ''
-                } ${
-                  usersShow?.notes ||
-                  (usersShow?.tags && usersShow.tags.length > 0) ||
-                  (usersShow?.rewatch_count && usersShow.rewatch_count > 0)
-                    ? 'border-primary text-primary'
-                    : ''
-                }`}
-                title={
-                  watchStatus === 'NOT_WATCHING'
-                    ? 'Add to list first to log notes & tags'
-                    : 'Personal Notes, Tags & Rewatches'
-                }
-              >
-                <BiNote size={18} />
-                <span className='hidden sm:inline'>Log Details</span>
-                {usersShow?.rewatch_count && usersShow.rewatch_count > 0 ? (
-                  <span className='ml-1 rounded-full bg-primary/20 px-1.5 py-0.5 text-xs font-semibold'>
-                    {usersShow.rewatch_count}x
-                  </span>
-                ) : null}
-              </button>
-
-              {/* Start Rewatch Button (when show is COMPLETED) */}
-              {usersShow?.status === 'COMPLETED' && (
-                <button
-                  type='button'
-                  onClick={handleStartRewatch}
-                  className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/50 bg-purple-500/10 px-3.5 text-sm font-semibold text-purple-400 transition-colors hover:border-purple-400 hover:bg-purple-500/20'
-                  title='Start rewatching this series from Episode 1'
-                >
-                  <BiRevision size={18} />
-                  <span>Start Rewatch</span>
-                  {usersShow.rewatch_count > 0 ? (
-                    <span className='ml-0.5 text-xs opacity-75'>({usersShow.rewatch_count}x)</span>
-                  ) : null}
-                </button>
-              )}
-
-              {/* Rewatching Badge (when currently WATCHING with rewatch_count > 0) */}
-              {usersShow?.status === 'WATCHING' && (usersShow?.rewatch_count ?? 0) > 0 && (
-                <div
-                  className='flex h-[42px] items-center gap-1.5 rounded border border-purple-500/40 bg-purple-500/15 px-3 text-xs font-semibold text-purple-300 shadow-sm'
-                  title={`Currently on rewatch #${usersShow.rewatch_count}`}
-                >
-                  <BiRevision size={16} />
-                  <span>Rewatching #{usersShow.rewatch_count}</span>
-                </div>
-              )}
-
-              {(usersShow?.notes || (usersShow?.tags && usersShow.tags.length > 0)) && (
-                <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>
-                  {usersShow.tags && usersShow.tags.length > 0 && (
-                    <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
-                      {usersShow.tags.map((tag: string) => (
-                        <span
-                          key={tag}
-                          className='rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {usersShow.notes && (
-                    <p className='line-clamp-2 text-xs italic text-muted-foreground'>
-                      &ldquo;{usersShow.notes}&rdquo;
-                    </p>
-                  )}
-                </div>
-              )}
 
               <PersonalDetailsModal
                 mediaType='SHOW'
@@ -1275,108 +1280,184 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                 isOpen={isRecommendModalOpen}
                 onClose={() => setIsRecommendModalOpen(false)}
               />
-            </section>
-          ))}
+            </div>
+          )}
 
-        <section className='mt-6 pb-8 lg:pb-32'>
-          <h4 className='my-4'>{showDetailsData.showDetails.tagline}</h4>
-          <p>{showDetailsData.showDetails.overview}</p>
+          <section className='mt-6 space-y-3 pb-8 lg:pb-24'>
+            {showDetailsData.showDetails.tagline && (
+              <p className='text-lg font-medium italic text-primary/90'>
+                &ldquo;{showDetailsData.showDetails.tagline}&rdquo;
+              </p>
+            )}
+            {showDetailsData.showDetails.overview && (
+              <div>
+                <h3 className='mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                  Overview
+                </h3>
+                <p className='max-w-3xl text-sm leading-relaxed text-foreground/85 sm:text-base'>
+                  {showDetailsData.showDetails.overview}
+                </p>
+              </div>
+            )}
+          </section>
         </section>
-      </section>
 
-      <section className='my-4 lg:ml-8'>
-        <h3 className='mb-4 underline underline-offset-4'>Details</h3>
-        <h4 className='mt-4'>No. of Seasons</h4>
-        <p className='ml-1'>{currTotalSeasonCount}</p>
-        <h4 className='mt-4'>No. of Episodes</h4>
-        <p className='ml-1'>{currTotalEpCount}</p>
-        <h4 className='mt-4'>First Air Date</h4>
-        {showDetailsData.showDetails.first_air_date ? (
-          <p className='ml-1'>
-            {CommonMethods.formatDate(showDetailsData.showDetails.first_air_date)}
-          </p>
-        ) : (
-          <p className='ml-1'>N/A</p>
-        )}
-        <h4 className='mt-4'>Last Episode to Air</h4>
-        {showDetailsData.showDetails.last_episode_to_air ? (
-          <div className='ml-1'>
-            <p>
-              Season {showDetailsData.showDetails.last_episode_to_air.season_number} Episode{' '}
-              {showDetailsData.showDetails.last_episode_to_air.episode_number}
-              <br />
-              {CommonMethods.formatDate(showDetailsData.showDetails.last_episode_to_air.air_date)}
-            </p>
-          </div>
-        ) : (
-          <p className='ml-1'>N/A</p>
-        )}
-        <h4 className='mt-4'>Next Episode to Air</h4>
-        {showDetailsData.showDetails.next_episode_to_air ? (
-          <div className='ml-1'>
-            <p>
-              Season {showDetailsData.showDetails?.next_episode_to_air.season_number} Episode{' '}
-              {showDetailsData.showDetails?.next_episode_to_air.episode_number}
-              <br />
-              {CommonMethods.formatDate(showDetailsData.showDetails.next_episode_to_air.air_date)}
-            </p>
-          </div>
-        ) : (
-          <p className='ml-1'>N/A</p>
-        )}
-        <h4 className='mt-4'>Status</h4>
-        <p className='ml-1'>{showDetailsData.showDetails?.status}</p>
-        <h4 className='mt-4'>In Production</h4>
-        <p className='ml-1'>{showDetailsData.showDetails.in_production ? 'Yes' : 'No'}</p>
-        <h4 className='mt-4'>Genre(s)</h4>
-        <div className='ml-1'>
-          {showDetailsData.showDetails.genres.map((genre: any, idx: number) => (
-            <p key={idx}>{genre.name}</p>
-          ))}
-        </div>
-        <h4 className='mt-4'>Original Language</h4>
-        <p className='ml-1'>{getEnglishName(showDetailsData.showDetails.original_language)}</p>
-        {showDetailsData.showDetails.homepage.length > 0 && (
-          <>
-            <h4 className='mt-4'>Official Page</h4>
-            <Link
-              href={showDetailsData.showDetails.homepage}
-              className='ml-1 underline'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Learn More
-            </Link>
-          </>
-        )}
-      </section>
-
-      <section className='mt-4 lg:col-start-2'>
-        {!_.isEmpty(showDetailsData.showDetails.seasons) && (
-          <section>
-            <h3 className='mb-4 ml-8'>Episodes</h3>
-            <EpisodeDetailsHorizontalScroller
-              seasons={showDetailsData.showDetails.seasons.filter(
-                (season: any) => season.season_number && season.season_number > 0
+        <section className='my-4 lg:ml-8'>
+          <div className='rounded-2xl border border-border/60 bg-card/30 p-5 shadow-sm backdrop-blur-sm'>
+            <h3 className='mb-4 text-base font-bold text-foreground'>Show Details</h3>
+            <dl className='space-y-3.5 text-sm'>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  No. of Seasons
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>{currTotalSeasonCount}</dd>
+              </div>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  No. of Episodes
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>{currTotalEpCount}</dd>
+              </div>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  First Air Date
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {showDetailsData.showDetails.first_air_date
+                    ? CommonMethods.formatDate(showDetailsData.showDetails.first_air_date)
+                    : 'N/A'}
+                </dd>
+              </div>
+              {showDetailsData.showDetails.last_episode_to_air && (
+                <div>
+                  <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                    Last Episode to Air
+                  </dt>
+                  <dd className='mt-0.5 text-xs text-foreground'>
+                    Season {showDetailsData.showDetails.last_episode_to_air.season_number} Ep{' '}
+                    {showDetailsData.showDetails.last_episode_to_air.episode_number}
+                    {showDetailsData.showDetails.last_episode_to_air.air_date && (
+                      <span className='ml-1 text-muted-foreground'>
+                        (
+                        {CommonMethods.formatDate(
+                          showDetailsData.showDetails.last_episode_to_air.air_date
+                        )}
+                        )
+                      </span>
+                    )}
+                  </dd>
+                </div>
               )}
-              showId={showDetailsData.showDetails.id}
+              {showDetailsData.showDetails.next_episode_to_air && (
+                <div>
+                  <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                    Next Episode to Air
+                  </dt>
+                  <dd className='mt-0.5 text-xs text-foreground'>
+                    Season {showDetailsData.showDetails.next_episode_to_air.season_number} Ep{' '}
+                    {showDetailsData.showDetails.next_episode_to_air.episode_number}
+                    {showDetailsData.showDetails.next_episode_to_air.air_date && (
+                      <span className='ml-1 text-muted-foreground'>
+                        (
+                        {CommonMethods.formatDate(
+                          showDetailsData.showDetails.next_episode_to_air.air_date
+                        )}
+                        )
+                      </span>
+                    )}
+                  </dd>
+                </div>
+              )}
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Status
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {showDetailsData.showDetails?.status || 'N/A'}
+                </dd>
+              </div>
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  In Production
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {showDetailsData.showDetails.in_production ? 'Yes' : 'No'}
+                </dd>
+              </div>
+              {showDetailsData.showDetails.genres &&
+                showDetailsData.showDetails.genres.length > 0 && (
+                  <div>
+                    <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                      Genre(s)
+                    </dt>
+                    <dd className='mt-1 flex flex-wrap gap-1.5'>
+                      {showDetailsData.showDetails.genres.map((genre: any, idx: number) => (
+                        <span
+                          key={idx}
+                          className='rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-xs text-foreground'
+                        >
+                          {genre.name}
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                )}
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                  Original Language
+                </dt>
+                <dd className='mt-0.5 font-semibold text-foreground'>
+                  {getEnglishName(showDetailsData.showDetails.original_language)}
+                </dd>
+              </div>
+              {showDetailsData.showDetails.homepage?.length > 0 && (
+                <div>
+                  <dt className='text-xs font-medium uppercase tracking-wider text-muted-foreground'>
+                    Official Page
+                  </dt>
+                  <dd className='mt-0.5 truncate text-xs'>
+                    <Link
+                      href={showDetailsData.showDetails.homepage}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='text-primary hover:underline'
+                    >
+                      {showDetailsData.showDetails.homepage}
+                    </Link>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        </section>
+
+        <section className='mt-4 lg:col-start-2'>
+          {!_.isEmpty(showDetailsData.showDetails.seasons) && (
+            <section>
+              <h3 className='mb-4 ml-8'>Episodes</h3>
+              <EpisodeDetailsHorizontalScroller
+                seasons={showDetailsData.showDetails.seasons.filter(
+                  (season: any) => season.season_number && season.season_number > 0
+                )}
+                showId={showDetailsData.showDetails.id}
+              />
+            </section>
+          )}
+
+          {castNode}
+          {relatedNode}
+
+          <section className='mt-16 pb-16'>
+            <ReviewSection
+              mediaType='SHOW'
+              mediaId={String(showDetailsData.showDetails.id)}
+              mediaTitle={showDetailsData.showDetails.name}
+              mediaImage={showDetailsData.showDetails.poster_path}
             />
           </section>
-        )}
-
-        {castNode}
-        {relatedNode}
-
-        <section className='mt-16 pb-16'>
-          <ReviewSection
-            mediaType='SHOW'
-            mediaId={String(showDetailsData.showDetails.id)}
-            mediaTitle={showDetailsData.showDetails.name}
-            mediaImage={showDetailsData.showDetails.poster_path}
-          />
         </section>
-      </section>
-    </motion.main>
+      </motion.main>
+    </div>
   );
 };
 
