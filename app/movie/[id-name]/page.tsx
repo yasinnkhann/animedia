@@ -15,6 +15,7 @@ import MovieRelatedClient from '@/components/movie/MovieRelatedClient';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import FranchiseTracker from '@/components/movie/FranchiseTracker';
 import WatchProviders from '@/components/Media/WatchProviders';
+import { WatchTrailerButton } from '@/components/Media/TrailerModal';
 
 import { Metadata } from 'next';
 
@@ -70,9 +71,10 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   if (!id) return null;
 
-  const [movieDetails, watchProviders] = await Promise.all([
+  const [movieDetails, watchProviders, videosData] = await Promise.all([
     tmdbClient.getMovieDetails(id),
     tmdbClient.getMovieWatchProviders(id).catch(() => null),
+    tmdbClient.getMovieVideos(id).catch(() => null),
   ]);
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
@@ -97,7 +99,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
       <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-8 px-4 sm:px-8 lg:flex-row lg:gap-10 lg:px-16'>
         {/* Left Sidebar: Poster + Where to Watch + Details */}
         <aside className='flex w-full flex-col gap-5 lg:w-[280px] lg:shrink-0 xl:w-[320px]'>
-          <section className='relative mx-auto aspect-[2/3] w-[14rem] sm:w-[16rem] lg:w-full'>
+          <section className='group relative mx-auto aspect-[2/3] w-[14rem] sm:w-[16rem] lg:w-full'>
             <Image
               className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
               src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
@@ -105,6 +107,14 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
               fill
               priority
               sizes='(max-width: 768px) 100vw, 320px'
+            />
+            {/* Quick Play Trailer on Poster */}
+            <WatchTrailerButton
+              mediaTitle={movieTitle}
+              mediaType='MOVIE'
+              mediaId={movieId}
+              initialVideos={videosData?.results}
+              variant='poster'
             />
           </section>
 
@@ -196,7 +206,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
             <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
               {movieDetails?.title}
             </h1>
-            <section className='mb-5 mt-3 flex items-center gap-4'>
+            <section className='mb-5 mt-3 flex flex-wrap items-center justify-between gap-4'>
               <div className='flex items-center gap-3.5'>
                 <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
                   <RoundProgressBar
@@ -210,6 +220,15 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
                   <span className='text-xs text-muted-foreground'>Community Rating</span>
                 </div>
               </div>
+
+              {/* Watch Trailer Button in Hero */}
+              <WatchTrailerButton
+                mediaTitle={movieTitle}
+                mediaType='MOVIE'
+                mediaId={movieId}
+                initialVideos={videosData?.results}
+                variant='hero'
+              />
             </section>
 
             <MovieActions

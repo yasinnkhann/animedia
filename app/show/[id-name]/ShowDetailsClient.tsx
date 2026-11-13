@@ -34,6 +34,7 @@ import AddToCollectionModal from '@/components/Collections/AddToCollectionModal'
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
 import WatchProviders from '@/components/Media/WatchProviders';
+import { WatchTrailerButton } from '@/components/Media/TrailerModal';
 
 interface Props {
   showDetailsData: any;
@@ -938,7 +939,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
       >
         {/* Left Sidebar: Poster + Where to Watch + Show Details */}
         <aside className='flex w-full flex-col gap-5 lg:w-[280px] lg:shrink-0 xl:w-[320px]'>
-          <section className='relative mx-auto aspect-[2/3] w-[14rem] sm:w-[16rem] lg:w-full'>
+          <section className='group relative mx-auto aspect-[2/3] w-[14rem] sm:w-[16rem] lg:w-full'>
             <Image
               className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
               src={CommonMethods.getTheMovieDbImage(showDetailsData.showDetails.poster_path)}
@@ -946,6 +947,14 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               fill
               priority
               sizes='(max-width: 768px) 100vw, 320px'
+            />
+            {/* Quick Play Trailer on Poster */}
+            <WatchTrailerButton
+              mediaTitle={showDetailsData.showDetails.name}
+              mediaType='SHOW'
+              mediaId={String(showDetailsData.showDetails.id)}
+              initialVideos={showDetailsData.videos}
+              variant='poster'
             />
           </section>
 
@@ -1091,7 +1100,7 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
             <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
               {showDetailsData.showDetails.name}
             </h1>
-            <section className='relative mb-5 mt-3 flex items-center gap-4'>
+            <section className='relative mb-5 mt-3 flex flex-wrap items-center justify-between gap-4'>
               <div className='flex items-center gap-3.5'>
                 <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
                   <RoundProgressBar
@@ -1113,6 +1122,15 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   <FiSliders size={18} />
                 </button>
               </div>
+
+              {/* Watch Trailer Button in Hero */}
+              <WatchTrailerButton
+                mediaTitle={showDetailsData.showDetails.name}
+                mediaType='SHOW'
+                mediaId={String(showDetailsData.showDetails.id)}
+                initialVideos={showDetailsData.videos}
+                variant='hero'
+              />
             </section>
 
             {status === 'authenticated' && session && (

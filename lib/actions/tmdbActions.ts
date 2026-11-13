@@ -39,3 +39,14 @@ export async function getWatchProvidersAction(type: 'MOVIE' | 'SHOW', id: string
     return null;
   }
 }
+
+export async function getMediaVideosAction(type: 'MOVIE' | 'SHOW', id: string) {
+  try {
+    return type === 'MOVIE'
+      ? await tmdbClient.getMovieVideos(id)
+      : await tmdbClient.getShowVideos(id);
+  } catch (error) {
+    console.error('Error fetching media videos:', error);
+    return null;
+  }
+}

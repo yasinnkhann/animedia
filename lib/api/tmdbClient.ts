@@ -190,6 +190,15 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Movie videos & trailers
+   */
+  async getMovieVideos(movieId: string | number, language: string = 'en-US') {
+    return this.fetchTMDB<{ id: number; results: any[] }>(`/movie/${movieId}/videos`, {
+      language,
+    });
+  }
+
+  /**
    * Show details
    */
   async getShowDetails(showId: string | number, language: string = 'en-US') {
@@ -205,6 +214,15 @@ export class TMDBClient extends HTTPClient {
     return this.fetchTMDB<{ id: number; results: Record<string, any> }>(
       `/tv/${showId}/watch/providers`
     );
+  }
+
+  /**
+   * Show videos & trailers
+   */
+  async getShowVideos(showId: string | number, language: string = 'en-US') {
+    return this.fetchTMDB<{ id: number; results: any[] }>(`/tv/${showId}/videos`, {
+      language,
+    });
   }
 
   /**
