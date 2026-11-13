@@ -181,12 +181,30 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Movie watch providers (powered by JustWatch)
+   */
+  async getMovieWatchProviders(movieId: string | number) {
+    return this.fetchTMDB<{ id: number; results: Record<string, any> }>(
+      `/movie/${movieId}/watch/providers`
+    );
+  }
+
+  /**
    * Show details
    */
   async getShowDetails(showId: string | number, language: string = 'en-US') {
     return this.fetchDetails(`/tv/${showId}`, {
       language,
     });
+  }
+
+  /**
+   * Show watch providers (powered by JustWatch)
+   */
+  async getShowWatchProviders(showId: string | number) {
+    return this.fetchTMDB<{ id: number; results: Record<string, any> }>(
+      `/tv/${showId}/watch/providers`
+    );
   }
 
   /**

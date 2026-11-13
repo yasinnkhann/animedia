@@ -59,10 +59,13 @@ export default async function ShowDetails({ params }: { params: Promise<{ 'id-na
 
   if (!id) return null;
 
-  const showDetails = await tmdbClient.getShowDetails(id);
+  const [showDetails, watchProviders] = await Promise.all([
+    tmdbClient.getShowDetails(id),
+    tmdbClient.getShowWatchProviders(id).catch(() => null),
+  ]);
 
   // Transform tmdbClient responses to match what Apollo would have returned so the client component works seamlessly
-  const showDetailsData = { showDetails };
+  const showDetailsData = { showDetails, watchProviders };
 
   return (
     <ShowDetailsClient

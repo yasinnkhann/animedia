@@ -28,3 +28,14 @@ export async function getCollectionDetailsAction(collectionId: string | number) 
     return null;
   }
 }
+
+export async function getWatchProvidersAction(type: 'MOVIE' | 'SHOW', id: string) {
+  try {
+    return type === 'MOVIE'
+      ? await tmdbClient.getMovieWatchProviders(id)
+      : await tmdbClient.getShowWatchProviders(id);
+  } catch (error) {
+    console.error('Error fetching watch providers:', error);
+    return null;
+  }
+}

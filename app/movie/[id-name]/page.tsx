@@ -14,6 +14,7 @@ import MovieCastServer from '@/components/movie/MovieCastServer';
 import MovieRelatedClient from '@/components/movie/MovieRelatedClient';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import FranchiseTracker from '@/components/movie/FranchiseTracker';
+import WatchProviders from '@/components/Media/WatchProviders';
 
 import { Metadata } from 'next';
 
@@ -69,7 +70,10 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
 
   if (!id) return null;
 
-  const movieDetails = await tmdbClient.getMovieDetails(id);
+  const [movieDetails, watchProviders] = await Promise.all([
+    tmdbClient.getMovieDetails(id),
+    tmdbClient.getMovieWatchProviders(id).catch(() => null),
+  ]);
 
   const movieId = movieDetails?.id ? String(movieDetails.id) : '';
   const movieTitle = movieDetails?.title ?? '';
@@ -90,68 +94,24 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
         </div>
       )}
 
-      <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-y-8 px-4 sm:px-8 lg:grid lg:grid-cols-[30%_70%] lg:gap-y-0 lg:px-16'>
-        <section className='relative mx-auto mt-4 aspect-[2/3] w-[14rem] sm:w-[16rem] lg:mx-4 lg:w-full lg:max-w-[20rem]'>
-          <Image
-            className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
-            src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
-            alt={movieDetails?.title ?? ''}
-            fill
-            priority
-            sizes='(max-width: 768px) 100vw, 30vw'
-          />
-        </section>
-
-        <section className='mt-4 flex flex-col'>
-          <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
-            {movieDetails?.title}
-          </h1>
-          <section className='mb-5 mt-3 flex items-center gap-4'>
-            <div className='flex items-center gap-3.5'>
-              <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
-                <RoundProgressBar
-                  percentageVal={+(movieDetails?.vote_average ?? 0).toFixed(1) * 10}
-                />
-              </section>
-              <div className='flex flex-col'>
-                <span className='text-sm font-semibold text-foreground sm:text-base'>
-                  {commaNumber(movieDetails?.vote_count ?? 0)} votes
-                </span>
-                <span className='text-xs text-muted-foreground'>Community Rating</span>
-              </div>
-            </div>
+      <PageAnimationWrapper className='mt-[calc(var(--header-height-mobile)+1rem)] flex flex-col gap-8 px-4 sm:px-8 lg:flex-row lg:gap-10 lg:px-16'>
+        {/* Left Sidebar: Poster + Where to Watch + Details */}
+        <aside className='flex w-full flex-col gap-5 lg:w-[280px] lg:shrink-0 xl:w-[320px]'>
+          <section className='relative mx-auto aspect-[2/3] w-[14rem] sm:w-[16rem] lg:w-full'>
+            <Image
+              className='rounded-2xl object-cover shadow-2xl ring-1 ring-white/10'
+              src={CommonMethods.getTheMovieDbImage(movieDetails?.poster_path)}
+              alt={movieDetails?.title ?? ''}
+              fill
+              priority
+              sizes='(max-width: 768px) 100vw, 320px'
+            />
           </section>
 
-          <MovieActions
-            movieId={movieId}
-            movieTitle={movieTitle}
-            movieImage={
-              movieDetails?.poster_path
-                ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
-                : null
-            }
-          />
+          {/* Where to Watch / Streaming Providers */}
+          <WatchProviders mediaType='MOVIE' mediaId={movieId} initialData={watchProviders} />
 
-          <section className='mt-6 space-y-3 pb-8 lg:pb-24'>
-            {movieDetails?.tagline && (
-              <p className='text-lg font-medium italic text-primary/90'>
-                &ldquo;{movieDetails.tagline}&rdquo;
-              </p>
-            )}
-            {movieDetails?.overview && (
-              <div>
-                <h3 className='mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
-                  Overview
-                </h3>
-                <p className='max-w-3xl text-sm leading-relaxed text-foreground/85 sm:text-base'>
-                  {movieDetails.overview}
-                </p>
-              </div>
-            )}
-          </section>
-        </section>
-
-        <section className='my-4 lg:ml-8'>
+          {/* Movie Details Card */}
           <div className='rounded-2xl border border-border/60 bg-card/30 p-5 shadow-sm backdrop-blur-sm'>
             <h3 className='mb-4 text-base font-bold text-foreground'>Movie Details</h3>
             <dl className='space-y-3.5 text-sm'>
@@ -227,9 +187,61 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
               )}
             </dl>
           </div>
-        </section>
+        </aside>
 
-        <section className='mt-4 lg:col-start-2'>
+        {/* Right Main Content */}
+        <div className='flex min-w-0 flex-1 flex-col gap-6'>
+          {/* Header & Actions */}
+          <section className='flex flex-col'>
+            <h1 className='mb-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl'>
+              {movieDetails?.title}
+            </h1>
+            <section className='mb-5 mt-3 flex items-center gap-4'>
+              <div className='flex items-center gap-3.5'>
+                <section className='h-[4rem] w-[4rem] drop-shadow-md sm:h-[4.5rem] sm:w-[4.5rem]'>
+                  <RoundProgressBar
+                    percentageVal={+(movieDetails?.vote_average ?? 0).toFixed(1) * 10}
+                  />
+                </section>
+                <div className='flex flex-col'>
+                  <span className='text-sm font-semibold text-foreground sm:text-base'>
+                    {commaNumber(movieDetails?.vote_count ?? 0)} votes
+                  </span>
+                  <span className='text-xs text-muted-foreground'>Community Rating</span>
+                </div>
+              </div>
+            </section>
+
+            <MovieActions
+              movieId={movieId}
+              movieTitle={movieTitle}
+              movieImage={
+                movieDetails?.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                  : null
+              }
+            />
+
+            <section className='mt-6 space-y-3'>
+              {movieDetails?.tagline && (
+                <p className='text-lg font-medium italic text-primary/90'>
+                  &ldquo;{movieDetails.tagline}&rdquo;
+                </p>
+              )}
+              {movieDetails?.overview && (
+                <div>
+                  <h3 className='mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                    Overview
+                  </h3>
+                  <p className='max-w-3xl text-sm leading-relaxed text-foreground/85 sm:text-base'>
+                    {movieDetails.overview}
+                  </p>
+                </div>
+              )}
+            </section>
+          </section>
+
+          {/* Franchise Tracker */}
           {movieDetails?.belongs_to_collection && (
             <Suspense fallback={null}>
               <FranchiseTracker
@@ -238,13 +250,17 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
               />
             </Suspense>
           )}
+
+          {/* Cast */}
           <Suspense key='cast' fallback={<HorizontalScrollerSkeleton />}>
             <MovieCastServer movieId={id} />
           </Suspense>
 
+          {/* Related */}
           <MovieRelatedClient movieId={id} />
 
-          <section className='mt-16 pb-16'>
+          {/* Reviews */}
+          <section className='mt-8 pb-16'>
             <ReviewSection
               mediaType='MOVIE'
               mediaId={movieId}
@@ -252,7 +268,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
               mediaImage={movieDetails?.poster_path}
             />
           </section>
-        </section>
+        </div>
       </PageAnimationWrapper>
     </div>
   );
