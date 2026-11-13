@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 import FriendsClient from './FriendsClient';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'My Friends - Animedia',
   description: 'Manage your social connections on Animedia.',

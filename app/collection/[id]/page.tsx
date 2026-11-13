@@ -12,6 +12,8 @@ import CloneCollectionButton from '@/components/Collections/CloneCollectionButto
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({
   params,
 }: {

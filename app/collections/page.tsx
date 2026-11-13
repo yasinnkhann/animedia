@@ -6,6 +6,8 @@ import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'My Collections | AniMedia',
   description: 'Manage your custom media collections.',

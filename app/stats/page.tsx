@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { fetchUserMedia } from '@/app/actions/userMediaActions';
 import StatsDashboard from './StatsDashboard';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Stats',
   description: 'Your personal media tracking statistics on AniMedia.',
