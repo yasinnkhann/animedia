@@ -52,6 +52,10 @@ export const metadata: Metadata = {
     description:
       'Track your movies, TV shows, and games. Discover trending content, see what your friends are watching, and manage your watchlist with AniMedia.',
   },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
