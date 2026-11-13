@@ -1,24 +1,43 @@
 import { createGroq } from '@ai-sdk/groq';
 import { streamText } from 'ai';
 
+export const runtime = 'nodejs';
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   try {
-    const { reviews, mediaTitle } = await req.json();
-
     if (!process.env.GROQ_API_KEY) {
       return Response.json({ error: 'GROQ_API_KEY is not set' }, { status: 500 });
     }
 
-    if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
+    const body = await req.json();
+    const { reviews, mediaTitle } = body || {};
+
+    if (!reviews || !Array.isArray(reviews)) {
       return Response.json({ error: 'No reviews provided' }, { status: 400 });
     }
 
+    // Sanitize and bound reviews to prevent prompt injection, token exhaustion, and timeouts
+    const sanitizedReviews = reviews
+      .filter((r): r is string => typeof r === 'string' && r.trim().length > 0)
+      .slice(0, 20)
+      .map(r => r.trim().slice(0, 1000));
+
+    if (sanitizedReviews.length === 0) {
+      return Response.json({ error: 'No valid reviews provided' }, { status: 400 });
+    }
+
+    const title =
+      typeof mediaTitle === 'string' && mediaTitle.trim().length > 0
+        ? mediaTitle.trim().slice(0, 200)
+        : 'this title';
+
     const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 
-    const systemPrompt = `You are an expert media analyst. Read the following user reviews for the media titled "${mediaTitle}". 
+    const systemPrompt = `You are an expert media analyst. Read the following user reviews for the media titled "${title}". 
 Write a 2-3 sentence, spoiler-free consensus summarizing the community's overall thoughts. Do not use markdown. Do not include phrases like "The consensus is" or "Overall". Just write the summary directly.`;
 
-    const userPrompt = `Reviews for ${mediaTitle}:\n\n${reviews.map((r, i) => `Review ${i + 1}:\n${r}`).join('\n\n')}`;
+    const userPrompt = `Reviews for ${title}:\n\n${sanitizedReviews.map((r, i) => `Review ${i + 1}:\n${r}`).join('\n\n')}`;
 
     const { textStream } = await streamText({
       model: groq('openai/gpt-oss-20b'),
@@ -48,6 +67,10 @@ Write a 2-3 sentence, spoiler-free consensus summarizing the community's overall
       },
     });
   } catch (error: any) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Error in POST /api/summarize-reviews:', error);
+    return Response.json(
+      { error: error?.message || 'Failed to summarize reviews' },
+      { status: 500 }
+    );
   }
 }

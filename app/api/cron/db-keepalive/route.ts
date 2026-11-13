@@ -3,12 +3,15 @@ import { prisma } from '@/lib/prisma';
 import logger from '@/lib/logger';
 
 export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
-  const expectedSecret = process.env.CRON_SECRET;
 
-  if (expectedSecret && authHeader !== `Bearer ${expectedSecret}`) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`)
+  ) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
