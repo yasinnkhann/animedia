@@ -7,10 +7,10 @@ import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { addMovie, updateMovie, deleteMovie } from '@/app/actions/media';
-import { BiCollection } from 'react-icons/bi';
-import { BiShare } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
+import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
 
 interface Props {
   movieId: string;
@@ -25,6 +25,7 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
   const [, startTransition] = useTransition();
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const { userMovies, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
@@ -195,6 +196,55 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
         <BiShare size={20} />
       </button>
 
+      <button
+        onClick={() => setIsDetailsModalOpen(true)}
+        disabled={watchStatus === 'NOT_WATCHING'}
+        className={`flex h-[42px] items-center gap-1.5 rounded border border-border bg-transparent px-3 text-sm text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary ${
+          watchStatus === 'NOT_WATCHING' ? 'cursor-not-allowed opacity-40' : ''
+        } ${
+          usersMovie?.notes ||
+          (usersMovie?.tags && usersMovie.tags.length > 0) ||
+          (usersMovie?.rewatch_count && usersMovie.rewatch_count > 0)
+            ? 'border-primary text-primary'
+            : ''
+        }`}
+        title={
+          watchStatus === 'NOT_WATCHING'
+            ? 'Add to list first to log notes & tags'
+            : 'Personal Notes, Tags & Rewatches'
+        }
+      >
+        <BiNote size={18} />
+        <span className='hidden sm:inline'>Log Details</span>
+        {usersMovie?.rewatch_count && usersMovie.rewatch_count > 0 ? (
+          <span className='ml-1 rounded-full bg-primary/20 px-1.5 py-0.5 text-xs font-semibold'>
+            {usersMovie.rewatch_count}x
+          </span>
+        ) : null}
+      </button>
+
+      {(usersMovie?.notes || (usersMovie?.tags && usersMovie.tags.length > 0)) && (
+        <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>
+          {usersMovie.tags && usersMovie.tags.length > 0 && (
+            <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+              {usersMovie.tags.map((tag: string) => (
+                <span
+                  key={tag}
+                  className='rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+          {usersMovie.notes && (
+            <p className='line-clamp-2 text-xs italic text-muted-foreground'>
+              &ldquo;{usersMovie.notes}&rdquo;
+            </p>
+          )}
+        </div>
+      )}
+
       <AddToCollectionModal
         mediaType='MOVIE'
         mediaId={movieId}
@@ -211,6 +261,26 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
         mediaImage={usersMovie?.image ?? movieImage}
         isOpen={isRecommendModalOpen}
         onClose={() => setIsRecommendModalOpen(false)}
+      />
+
+      <PersonalDetailsModal
+        mediaType='MOVIE'
+        mediaId={movieId}
+        mediaTitle={movieTitle}
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        initialNotes={usersMovie?.notes}
+        initialTags={usersMovie?.tags}
+        initialRewatchCount={usersMovie?.rewatch_count}
+        onSaveSuccess={({ notes, tags, rewatchCount }) => {
+          mutateUserMediaCache((old: any) => {
+            if (!old) return old;
+            const newMovies = old.userMovies.map((m: any) =>
+              m.id === movieId ? { ...m, notes, tags, rewatch_count: rewatchCount } : m
+            );
+            return { ...old, userMovies: newMovies };
+          });
+        }}
       />
     </section>
   );

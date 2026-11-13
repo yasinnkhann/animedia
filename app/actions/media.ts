@@ -376,3 +376,91 @@ export async function deleteGame(gameId: string) {
   revalidateTag('user-media', 'max');
   return game;
 }
+
+export async function updateMediaPersonalDetails(
+  mediaId: string,
+  mediaType: 'MOVIE' | 'SHOW' | 'GAME',
+  data: {
+    notes?: string | null;
+    tags?: string[];
+    rewatchCount?: number;
+  }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error('Not authenticated');
+
+  const userId = session.user.id;
+  const targetId = String(mediaId);
+
+  // Bounds & sanitization
+  const notes =
+    typeof data.notes === 'string'
+      ? data.notes.trim().slice(0, 5000)
+      : data.notes === null
+        ? null
+        : undefined;
+
+  const tags = Array.isArray(data.tags)
+    ? Array.from(
+        new Set(
+          data.tags
+            .filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+            .map(t => t.trim().toLowerCase().slice(0, 30))
+        )
+      ).slice(0, 15)
+    : undefined;
+
+  const rewatchCount =
+    typeof data.rewatchCount === 'number' && !isNaN(data.rewatchCount)
+      ? Math.max(0, Math.min(999, Math.floor(data.rewatchCount)))
+      : undefined;
+
+  const updatePayload: {
+    notes?: string | null;
+    tags?: string[];
+    rewatch_count?: number;
+  } = {};
+
+  if (notes !== undefined) updatePayload.notes = notes;
+  if (tags !== undefined) updatePayload.tags = tags;
+  if (rewatchCount !== undefined) updatePayload.rewatch_count = rewatchCount;
+
+  let result;
+  if (mediaType === 'MOVIE') {
+    result = await prisma.movie.update({
+      where: {
+        id_userId: {
+          id: targetId,
+          userId,
+        },
+      },
+      data: updatePayload,
+    });
+  } else if (mediaType === 'SHOW') {
+    result = await prisma.show.update({
+      where: {
+        id_userId: {
+          id: targetId,
+          userId,
+        },
+      },
+      data: updatePayload,
+    });
+  } else if (mediaType === 'GAME') {
+    result = await prisma.game.update({
+      where: {
+        id_userId: {
+          id: targetId,
+          userId,
+        },
+      },
+      data: updatePayload,
+    });
+  } else {
+    throw new Error('Invalid media type');
+  }
+
+  revalidatePath('/');
+  revalidateTag('user-media', 'max');
+  return result;
+}

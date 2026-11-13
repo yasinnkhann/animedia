@@ -196,6 +196,25 @@ export default function MediaCard({
           </div>
         )}
 
+        {isMounted && item.rewatch_count && item.rewatch_count > 0 ? (
+          <div
+            className='absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-primary shadow-sm backdrop-blur-md'
+            title={`Rewatched/Replayed ${item.rewatch_count} times`}
+          >
+            <span>🔁</span>
+            <span>{item.rewatch_count}x</span>
+          </div>
+        ) : null}
+
+        {isMounted && item.notes && (
+          <div
+            className='absolute bottom-2 right-2 z-10 flex items-center justify-center rounded-full bg-black/70 p-1 text-[11px] text-muted-foreground shadow-sm backdrop-blur-md'
+            title='Has private personal note'
+          >
+            <span>📝</span>
+          </div>
+        )}
+
         {onRemove && (
           <button
             onClick={e => {

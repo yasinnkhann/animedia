@@ -82,14 +82,17 @@ model VerificationToken {
 }
 
 model Movie {
-  id     String
-  name   String
-  status WatchStatus
-  rating Int?
-  image  String?
+  id           String
+  name         String
+  status       WatchStatus
+  rating       Int?
+  image        String?
   release_date String?
-  userId String      @map("user_id")
-  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes        String?     @db.Text
+  tags         String[]    @default([])
+  rewatch_count Int        @default(0)
+  userId       String      @map("user_id")
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([id, userId])
   @@index([userId], map: "Movie_user_id_idx")
@@ -105,6 +108,9 @@ model Show {
   image           String?
   release_date    String?
   total_episodes  Int?
+  notes           String?     @db.Text
+  tags            String[]    @default([])
+  rewatch_count   Int         @default(0)
   userId          String      @map("user_id")
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -114,14 +120,17 @@ model Show {
 }
 
 model Game {
-  id     String
-  name   String
-  status GameStatus @default(PLAN_TO_PLAY)
-  rating Int?
-  image  String?
+  id           String
+  name         String
+  status       GameStatus @default(PLAN_TO_PLAY)
+  rating       Int?
+  image        String?
   release_date String?
-  userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes        String?    @db.Text
+  tags         String[]   @default([])
+  rewatch_count Int       @default(0)
+  userId       String     @map("user_id")
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([id, userId])
   @@index([userId], map: "Game_user_id_idx")

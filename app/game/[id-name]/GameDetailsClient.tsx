@@ -23,10 +23,10 @@ import {
   updateGame as updateGameAction,
   deleteGame as deleteGameAction,
 } from '@/app/actions/media';
-import { BiCollection } from 'react-icons/bi';
-import { BiShare } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
+import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
 
 const Modal = lazy(() => import('../../../components/Modal'));
 
@@ -76,6 +76,8 @@ const GameDetailsClient = ({
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
+
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const addGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
@@ -363,6 +365,75 @@ const GameDetailsClient = ({
               >
                 <BiShare size={20} />
               </button>
+
+              <button
+                onClick={() => setIsDetailsModalOpen(true)}
+                disabled={gameStatus === 'NOT_PLAYING'}
+                className={`flex h-[42px] items-center gap-1.5 rounded border border-border bg-transparent px-3 text-sm text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary ${
+                  gameStatus === 'NOT_PLAYING' ? 'cursor-not-allowed opacity-40' : ''
+                } ${
+                  usersGame?.notes ||
+                  (usersGame?.tags && usersGame.tags.length > 0) ||
+                  (usersGame?.rewatch_count && usersGame.rewatch_count > 0)
+                    ? 'border-primary text-primary'
+                    : ''
+                }`}
+                title={
+                  gameStatus === 'NOT_PLAYING'
+                    ? 'Add to list first to log notes & tags'
+                    : 'Personal Notes, Tags & Replays'
+                }
+              >
+                <BiNote size={18} />
+                <span className='hidden sm:inline'>Log Details</span>
+                {usersGame?.rewatch_count && usersGame.rewatch_count > 0 ? (
+                  <span className='ml-1 rounded-full bg-primary/20 px-1.5 py-0.5 text-xs font-semibold'>
+                    {usersGame.rewatch_count}x
+                  </span>
+                ) : null}
+              </button>
+
+              {(usersGame?.notes || (usersGame?.tags && usersGame.tags.length > 0)) && (
+                <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>
+                  {usersGame.tags && usersGame.tags.length > 0 && (
+                    <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+                      {usersGame.tags.map((tag: string) => (
+                        <span
+                          key={tag}
+                          className='rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {usersGame.notes && (
+                    <p className='line-clamp-2 text-xs italic text-muted-foreground'>
+                      &ldquo;{usersGame.notes}&rdquo;
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <PersonalDetailsModal
+                mediaType='GAME'
+                mediaId={id}
+                mediaTitle={game.name}
+                isOpen={isDetailsModalOpen}
+                onClose={() => setIsDetailsModalOpen(false)}
+                initialNotes={usersGame?.notes}
+                initialTags={usersGame?.tags}
+                initialRewatchCount={usersGame?.rewatch_count}
+                onSaveSuccess={({ notes, tags, rewatchCount }) => {
+                  mutateUserMediaCache((old: any) => {
+                    if (!old) return old;
+                    const newGames = old.userGames.map((g: any) =>
+                      g.id === id ? { ...g, notes, tags, rewatch_count: rewatchCount } : g
+                    );
+                    return { ...old, userGames: newGames };
+                  });
+                }}
+              />
 
               <RecommendModal
                 mediaType='GAME'

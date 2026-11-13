@@ -26,9 +26,15 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
       adjustedStatus = 'PLAN TO PLAY';
   }
 
-  const filteredMedias = myMedias.filter(media =>
-    media.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredMedias = myMedias.filter((media: any) => {
+    const q = searchQuery.toLowerCase().trim().replace(/^#/, '');
+    if (!q) return true;
+    const nameMatch = media.name?.toLowerCase().includes(q);
+    const tagMatch =
+      Array.isArray(media.tags) && media.tags.some((t: string) => t.toLowerCase().includes(q));
+    const noteMatch = typeof media.notes === 'string' && media.notes.toLowerCase().includes(q);
+    return nameMatch || tagMatch || noteMatch;
+  });
 
   return (
     <section className='w-full px-4 sm:px-10 md:px-20 lg:px-40'>
@@ -52,7 +58,7 @@ const MyMediaList = ({ status, myMedias, mediaType }: Props) => {
               <input
                 type='text'
                 className='block w-full rounded-full border border-border bg-card p-2 pl-10 text-sm text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary'
-                placeholder={`Search ${mediaType.toLowerCase()}...`}
+                placeholder={`Search ${mediaType.toLowerCase()} by title, #tag, or note...`}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
               />

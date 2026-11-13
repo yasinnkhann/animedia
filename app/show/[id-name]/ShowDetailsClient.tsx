@@ -27,10 +27,10 @@ import {
   updateShow as updateShowAction,
   deleteShow as deleteShowAction,
 } from '@/app/actions/media';
-import { BiCollection } from 'react-icons/bi';
-import { BiShare } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
+import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
 
 interface Props {
   showDetailsData: any;
@@ -54,6 +54,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
+
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
@@ -1129,6 +1131,75 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               >
                 <BiShare size={20} />
               </button>
+
+              <button
+                onClick={() => setIsDetailsModalOpen(true)}
+                disabled={watchStatus === 'NOT_WATCHING'}
+                className={`flex h-[42px] items-center gap-1.5 rounded border border-border bg-transparent px-3 text-sm text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary ${
+                  watchStatus === 'NOT_WATCHING' ? 'cursor-not-allowed opacity-40' : ''
+                } ${
+                  usersShow?.notes ||
+                  (usersShow?.tags && usersShow.tags.length > 0) ||
+                  (usersShow?.rewatch_count && usersShow.rewatch_count > 0)
+                    ? 'border-primary text-primary'
+                    : ''
+                }`}
+                title={
+                  watchStatus === 'NOT_WATCHING'
+                    ? 'Add to list first to log notes & tags'
+                    : 'Personal Notes, Tags & Rewatches'
+                }
+              >
+                <BiNote size={18} />
+                <span className='hidden sm:inline'>Log Details</span>
+                {usersShow?.rewatch_count && usersShow.rewatch_count > 0 ? (
+                  <span className='ml-1 rounded-full bg-primary/20 px-1.5 py-0.5 text-xs font-semibold'>
+                    {usersShow.rewatch_count}x
+                  </span>
+                ) : null}
+              </button>
+
+              {(usersShow?.notes || (usersShow?.tags && usersShow.tags.length > 0)) && (
+                <div className='w-full rounded-xl border border-border/60 bg-muted/20 p-3'>
+                  {usersShow.tags && usersShow.tags.length > 0 && (
+                    <div className='mb-1.5 flex flex-wrap items-center gap-1.5'>
+                      {usersShow.tags.map((tag: string) => (
+                        <span
+                          key={tag}
+                          className='rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary'
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {usersShow.notes && (
+                    <p className='line-clamp-2 text-xs italic text-muted-foreground'>
+                      &ldquo;{usersShow.notes}&rdquo;
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <PersonalDetailsModal
+                mediaType='SHOW'
+                mediaId={showId}
+                mediaTitle={showName}
+                isOpen={isDetailsModalOpen}
+                onClose={() => setIsDetailsModalOpen(false)}
+                initialNotes={usersShow?.notes}
+                initialTags={usersShow?.tags}
+                initialRewatchCount={usersShow?.rewatch_count}
+                onSaveSuccess={({ notes, tags, rewatchCount }) => {
+                  mutateUserMediaCache((old: any) => {
+                    if (!old) return old;
+                    const newShows = old.userShows.map((s: any) =>
+                      s.id === showId ? { ...s, notes, tags, rewatch_count: rewatchCount } : s
+                    );
+                    return { ...old, userShows: newShows };
+                  });
+                }}
+              />
 
               <RecommendModal
                 mediaType='SHOW'
