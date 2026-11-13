@@ -269,6 +269,14 @@ export default function MediaCard({
               {releaseDateText}
             </p>
           )}
+          {item.recommendedReason && (
+            <p
+              className='mt-1 line-clamp-1 text-[11px] font-medium text-primary'
+              title={item.recommendedReason}
+            >
+              ✨ {item.recommendedReason}
+            </p>
+          )}
         </div>
       ) : (
         <div className='relative flex w-full flex-col pt-1'>
@@ -286,6 +294,14 @@ export default function MediaCard({
               {titleName}
             </h3>
             <p className='mt-0.5 text-xs text-muted-foreground'>{releaseDateText}</p>
+            {item.recommendedReason && (
+              <p
+                className='mt-1 line-clamp-1 text-[11px] font-medium text-primary'
+                title={item.recommendedReason}
+              >
+                ✨ {item.recommendedReason}
+              </p>
+            )}
           </Link>
         </div>
       )}
