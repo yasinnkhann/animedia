@@ -1,6 +1,6 @@
 'use client';
 
-import { lazy, Suspense, useState, useTransition } from 'react';
+import { lazy, Suspense, useState, useTransition, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -23,10 +23,11 @@ import {
   updateGame as updateGameAction,
   deleteGame as deleteGameAction,
 } from '@/app/actions/media';
-import { BiCollection, BiShare, BiNote } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote, BiShareAlt } from 'react-icons/bi';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
+import ShareModal from '@/components/Media/ShareModal';
 
 const Modal = lazy(() => import('../../../components/Modal'));
 
@@ -76,8 +77,26 @@ const GameDetailsClient = ({
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
-
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const ogImageUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      type: 'GAME',
+      title: gameName,
+    });
+    const poster =
+      usersGame?.image ??
+      (gameDetailsData?.gameDetails.results[0]?.coverUrl
+        ? CommonMethods.getIgdbImage(gameDetailsData.gameDetails.results[0].coverUrl).toString()
+        : null);
+    if (poster) params.set('poster', poster);
+    if (gameDetailsData?.gameDetails.results[0]?.rating) {
+      params.set('rating', String(Math.round(gameDetailsData.gameDetails.results[0].rating)));
+    }
+    if (usersGame?.rating) params.set('userRating', String(usersGame.rating));
+    return `/api/og?${params.toString()}`;
+  }, [gameName, usersGame, gameDetailsData]);
 
   const addGame = ({ variables }: { variables: any }) => {
     startTransition(async () => {
@@ -358,6 +377,15 @@ const GameDetailsClient = ({
                 onClose={() => setIsCollectionModalOpen(false)}
               />
 
+              {/* Share Social Card Button */}
+              <button
+                onClick={() => setIsShareModalOpen(true)}
+                className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
+                title='Share Social Card'
+              >
+                <BiShareAlt size={20} />
+              </button>
+
               <button
                 onClick={() => setIsRecommendModalOpen(true)}
                 className='flex h-[42px] w-[42px] items-center justify-center rounded border border-border bg-transparent text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary'
@@ -445,6 +473,15 @@ const GameDetailsClient = ({
                 }
                 isOpen={isRecommendModalOpen}
                 onClose={() => setIsRecommendModalOpen(false)}
+              />
+
+              <ShareModal
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+                title={game.name}
+                type='GAME'
+                ogImageUrl={ogImageUrl}
+                onOpenRecommend={() => setIsRecommendModalOpen(true)}
               />
             </section>
           ))}

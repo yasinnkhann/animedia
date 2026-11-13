@@ -32,6 +32,10 @@ export async function generateMetadata({
   const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', gameDetails?.name || 'Game');
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (gameDetails?.first_release_date) {
+    const year = new Date(gameDetails.first_release_date * 1000).getFullYear().toString();
+    ogUrl.searchParams.set('year', year);
+  }
   if (gameDetails?.rating) {
     ogUrl.searchParams.set('rating', String(Math.round(gameDetails.rating)));
   }
@@ -43,6 +47,12 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      title,
+      description,
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
       title,
       description,
       images,

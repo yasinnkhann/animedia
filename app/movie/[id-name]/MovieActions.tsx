@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
 import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { addMovie, updateMovie, deleteMovie, startMovieRewatch } from '@/app/actions/media';
-import { BiCollection, BiShare, BiNote, BiRevision } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote, BiRevision, BiShareAlt } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
+import ShareModal from '@/components/Media/ShareModal';
 
 interface Props {
   movieId: string;
@@ -27,12 +28,26 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { userMovies, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersMovie = userMovies?.find(movie => movie.id === movieId);
 
   const watchStatus = watchStatusInput ?? usersMovie?.status ?? 'NOT_WATCHING';
   const rating = ratingInput ?? usersMovie?.rating ?? ratingOptions[0].value;
+
+  const ogImageUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      type: 'MOVIE',
+      title: movieTitle,
+    });
+    if (movieImage) params.set('poster', movieImage);
+    if (usersMovie?.rating) params.set('userRating', String(usersMovie.rating));
+    if (usersMovie?.rewatch_count && usersMovie.rewatch_count > 0) {
+      params.set('rewatchCount', String(usersMovie.rewatch_count));
+    }
+    return `/api/og?${params.toString()}`;
+  }, [movieTitle, movieImage, usersMovie]);
 
   const handleChangeWatchStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (!movieId || !movieTitle) return;
@@ -204,6 +219,15 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
               <BiCollection size={19} />
             </button>
 
+            {/* Share Social Card Button */}
+            <button
+              onClick={() => setIsShareModalOpen(true)}
+              className='flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background/90 text-foreground shadow-sm transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary'
+              title='Share Social Card'
+            >
+              <BiShareAlt size={19} />
+            </button>
+
             {/* Recommend Button */}
             <button
               onClick={() => setIsRecommendModalOpen(true)}
@@ -310,6 +334,15 @@ export default function MovieActions({ movieId, movieTitle, movieImage }: Props)
         mediaImage={usersMovie?.image ?? movieImage}
         isOpen={isRecommendModalOpen}
         onClose={() => setIsRecommendModalOpen(false)}
+      />
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        title={movieTitle}
+        type='MOVIE'
+        ogImageUrl={ogImageUrl}
+        onOpenRecommend={() => setIsRecommendModalOpen(true)}
       />
 
       <PersonalDetailsModal

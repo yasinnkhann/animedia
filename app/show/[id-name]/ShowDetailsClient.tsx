@@ -28,13 +28,14 @@ import {
   deleteShow as deleteShowAction,
   startShowRewatch,
 } from '@/app/actions/media';
-import { BiCollection, BiShare, BiNote, BiRevision } from 'react-icons/bi';
+import { BiCollection, BiShare, BiNote, BiRevision, BiShareAlt } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import AddToCollectionModal from '@/components/Collections/AddToCollectionModal';
 import RecommendModal from '@/components/Notifications/RecommendModal';
 import PersonalDetailsModal from '@/components/MyMedia/PersonalDetailsModal';
 import WatchProviders from '@/components/Media/WatchProviders';
 import { WatchTrailerButton } from '@/components/Media/TrailerModal';
+import ShareModal from '@/components/Media/ShareModal';
 
 interface Props {
   showDetailsData: any;
@@ -58,8 +59,8 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
 
   const [isRecommendModalOpen, setIsRecommendModalOpen] = useState(false);
-
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const [episodeCountDisplay, setEpisodeCountDisplay] = useState<TEpisodeCountDisplay>();
 
@@ -69,6 +70,30 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
 
   const { userShows, isLoading, mutateUserMediaCache, getUserMediaCache } = useUserMedia();
   const usersShow = userShows?.find(show => show.id === showId);
+
+  const ogImageUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      type: 'SHOW',
+      title: showName,
+    });
+    const poster =
+      usersShow?.image ??
+      (showDetails?.poster_path
+        ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
+        : null);
+    if (poster) params.set('poster', poster);
+    if (showDetails?.backdrop_path) {
+      params.set('backdrop', `https://image.tmdb.org/t/p/w1280${showDetails.backdrop_path}`);
+    }
+    if (showDetails?.first_air_date) {
+      params.set('year', showDetails.first_air_date.split('-')[0]);
+    }
+    if (usersShow?.rating) params.set('userRating', String(usersShow.rating));
+    if (usersShow?.rewatch_count && usersShow.rewatch_count > 0) {
+      params.set('rewatchCount', String(usersShow.rewatch_count));
+    }
+    return `/api/og?${params.toString()}`;
+  }, [showName, usersShow, showDetails]);
 
   const { currTotalEpCount, currTotalSeasonCount, totalEpCountGathered } = useMemo(() => {
     const details = showDetailsData?.showDetails;
@@ -1304,6 +1329,15 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                         <BiCollection size={19} />
                       </button>
 
+                      {/* Share Social Card Button */}
+                      <button
+                        onClick={() => setIsShareModalOpen(true)}
+                        className='flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background/90 text-foreground shadow-sm transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary'
+                        title='Share Social Card'
+                      >
+                        <BiShareAlt size={19} />
+                      </button>
+
                       {/* Recommend Button */}
                       <button
                         onClick={() => setIsRecommendModalOpen(true)}
@@ -1442,6 +1476,15 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                   }
                   isOpen={isRecommendModalOpen}
                   onClose={() => setIsRecommendModalOpen(false)}
+                />
+
+                <ShareModal
+                  isOpen={isShareModalOpen}
+                  onClose={() => setIsShareModalOpen(false)}
+                  title={showName}
+                  type='SHOW'
+                  ogImageUrl={ogImageUrl}
+                  onOpenRecommend={() => setIsRecommendModalOpen(true)}
                 />
               </div>
             )}

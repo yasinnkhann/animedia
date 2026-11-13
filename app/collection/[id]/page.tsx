@@ -9,6 +9,7 @@ import RemoveItemButton from '@/components/Collections/RemoveItemButton';
 import InviteCollaboratorsButton from '@/components/Collections/InviteCollaboratorsButton';
 import ToggleWatchedButton from '@/components/Collections/ToggleWatchedButton';
 import CloneCollectionButton from '@/components/Collections/CloneCollectionButton';
+import ShareCollectionButton from '@/components/Collections/ShareCollectionButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 
@@ -27,6 +28,7 @@ export async function generateMetadata({
     include: {
       user: { select: { name: true } },
       items: { take: 1, orderBy: { addedAt: 'desc' } }, // Use latest item for poster
+      _count: { select: { items: true } },
     },
   });
 
@@ -43,12 +45,20 @@ export async function generateMetadata({
   const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', collection.name);
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (collection.user.name) ogUrl.searchParams.set('curator', collection.user.name);
+  ogUrl.searchParams.set('itemCount', String(collection._count.items));
   ogUrl.searchParams.set('type', 'COLLECTION');
 
   return {
     title,
     description,
     openGraph: {
+      title,
+      description,
+      images: [ogUrl.toString()],
+    },
+    twitter: {
+      card: 'summary_large_image',
       title,
       description,
       images: [ogUrl.toString()],
@@ -158,6 +168,13 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
             <div className='flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-2'>
               <span className='font-bold'>{collection.items.length}</span> Items
             </div>
+            <ShareCollectionButton
+              collectionId={collection.id}
+              collectionName={collection.name}
+              curatorName={collection.user.name || undefined}
+              itemCount={collection.items.length}
+              posterUrl={collection.items[0]?.mediaImage}
+            />
           </div>
           {/* Conditionally render clone button for logged-in non-owners */}
           {session?.user?.id && !isOwner && !isCollaborator && (

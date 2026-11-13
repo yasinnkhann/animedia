@@ -42,11 +42,30 @@ export async function generateMetadata({
   const posterUrl = movieDetails?.poster_path
     ? (CommonMethods.getTheMovieDbImage(movieDetails.poster_path) as string)
     : '';
+  const backdropUrl = movieDetails?.backdrop_path
+    ? (CommonMethods.getTheMovieDbImage(movieDetails.backdrop_path) as string)
+    : '';
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || CLIENT_BASE_URL;
   const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', movieDetails?.title || 'Movie');
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (backdropUrl) ogUrl.searchParams.set('backdrop', backdropUrl);
+  if (movieDetails?.release_date) {
+    ogUrl.searchParams.set('year', movieDetails.release_date.split('-')[0]);
+  }
+  if (movieDetails?.genres && movieDetails.genres.length > 0) {
+    ogUrl.searchParams.set(
+      'genres',
+      movieDetails.genres
+        .slice(0, 3)
+        .map((g: any) => g.name)
+        .join(' • ')
+    );
+  }
+  if (movieDetails?.tagline) {
+    ogUrl.searchParams.set('tagline', movieDetails.tagline);
+  }
   if (movieDetails?.vote_average) {
     ogUrl.searchParams.set('rating', String(+(movieDetails.vote_average ?? 0).toFixed(1) * 10));
   }
@@ -58,6 +77,12 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      title,
+      description,
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
       title,
       description,
       images,

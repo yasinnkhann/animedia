@@ -30,11 +30,30 @@ export async function generateMetadata({
   const posterUrl = showDetails?.poster_path
     ? (CommonMethods.getTheMovieDbImage(showDetails.poster_path) as string)
     : '';
+  const backdropUrl = showDetails?.backdrop_path
+    ? (CommonMethods.getTheMovieDbImage(showDetails.backdrop_path) as string)
+    : '';
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || CLIENT_BASE_URL;
   const ogUrl = new URL(`${baseUrl}/api/og`);
   ogUrl.searchParams.set('title', showDetails?.name || 'Show');
   if (posterUrl) ogUrl.searchParams.set('poster', posterUrl);
+  if (backdropUrl) ogUrl.searchParams.set('backdrop', backdropUrl);
+  if (showDetails?.first_air_date) {
+    ogUrl.searchParams.set('year', showDetails.first_air_date.split('-')[0]);
+  }
+  if (showDetails?.genres && showDetails.genres.length > 0) {
+    ogUrl.searchParams.set(
+      'genres',
+      showDetails.genres
+        .slice(0, 3)
+        .map((g: any) => g.name)
+        .join(' • ')
+    );
+  }
+  if (showDetails?.tagline) {
+    ogUrl.searchParams.set('tagline', showDetails.tagline);
+  }
   if (showDetails?.vote_average) {
     ogUrl.searchParams.set('rating', String(+(showDetails.vote_average ?? 0).toFixed(1) * 10));
   }
@@ -46,6 +65,12 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      title,
+      description,
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
       title,
       description,
       images,
