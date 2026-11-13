@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint, Type Check & Test
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+      DIRECT_URL: postgresql://dummy:dummy@localhost:5432/dummy
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: test-nextauth-secret-for-ci-runs-1234
+      JWT_SECRET: test-jwt-secret-for-ci-runs-1234
+      THE_MOVIE_DB_API_KEY: dummy_tmdb_key
+      IGDB_CLIENT_ID: dummy_igdb_client_id
+      IGDB_CLIENT_SECRET: dummy_igdb_secret
+      TURBO_SMTP_HOST: smtp.gmail.com
+      TURBO_SMTP_UNSECURE_PORT: 587
+      TURBO_SMTP_SECURE_PORT: 465
+      TURBO_SMTP_USERNAME: dummy@gmail.com
+      TURBO_SMTP_PASSWORD: dummypassword
+      EMAIL_FROM: dummy@gmail.com
+      CRON_SECRET: dummy_cron_secret
+      NEXT_PUBLIC_SENTRY_DSN: https://dummy@dummy.ingest.sentry.io/dummy
+      SENTRY_ORG: dummy-org
+      SENTRY_PROJECT: dummy-project
+      SENTRY_AUTH_TOKEN: dummy-token
+      GROQ_API_KEY: dummy_groq_key
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --prefer-offline
+
+      - name: Setup Environment File
+        run: |
+          cp .env.example .env
+          echo "DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy" >> .env
+          echo "DIRECT_URL=postgresql://dummy:dummy@localhost:5432/dummy" >> .env
+
+      - name: Generate Prisma Client
+        run: yarn run generate:prisma
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Run Type Check
+        run: npx tsc --noEmit
+
+      - name: Run Tests (Vitest)
+        run: yarn test --run
