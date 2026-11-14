@@ -973,14 +973,6 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
               priority
               sizes='(max-width: 768px) 100vw, 320px'
             />
-            {/* Quick Play Trailer on Poster */}
-            <WatchTrailerButton
-              mediaTitle={showDetailsData.showDetails.name}
-              mediaType='SHOW'
-              mediaId={String(showDetailsData.showDetails.id)}
-              initialVideos={showDetailsData.videos}
-              variant='poster'
-            />
           </section>
 
           {/* Where to Watch / Streaming Providers */}

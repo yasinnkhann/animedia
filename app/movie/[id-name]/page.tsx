@@ -133,14 +133,6 @@ export default async function MovieDetails({ params }: { params: Promise<{ 'id-n
               priority
               sizes='(max-width: 768px) 100vw, 320px'
             />
-            {/* Quick Play Trailer on Poster */}
-            <WatchTrailerButton
-              mediaTitle={movieTitle}
-              mediaType='MOVIE'
-              mediaId={movieId}
-              initialVideos={videosData?.results}
-              variant='poster'
-            />
           </section>
 
           {/* Where to Watch / Streaming Providers */}
