@@ -147,17 +147,6 @@ const Header = () => {
                           key: 'friends',
                         },
                         {
-                          label: (
-                            <Link
-                              href='/watch-together'
-                              className='block w-full font-medium text-foreground no-underline'
-                            >
-                              🍿 Watch Together
-                            </Link>
-                          ),
-                          key: 'watch-together',
-                        },
-                        {
                           label: <span className='font-medium text-red-500'>Log Out</span>,
                           key: 'log-out',
                         },
