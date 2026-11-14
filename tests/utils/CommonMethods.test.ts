@@ -50,4 +50,32 @@ describe('CommonMethods', () => {
       expect(CommonMethods.getAiredEpisodeCount({})).toBeNull();
     });
   });
+
+  describe('getTheMovieDbImage', () => {
+    it('prepends TMDB base image URL to relative paths', () => {
+      expect(CommonMethods.getTheMovieDbImage('/poster.jpg')).toBe(
+        'https://image.tmdb.org/t/p/original/poster.jpg'
+      );
+    });
+
+    it('preserves full URLs without double-prefixing', () => {
+      expect(CommonMethods.getTheMovieDbImage('https://image.tmdb.org/t/p/w500/poster.jpg')).toBe(
+        'https://image.tmdb.org/t/p/w500/poster.jpg'
+      );
+      expect(CommonMethods.getTheMovieDbImage('http://example.com/poster.jpg')).toBe(
+        'http://example.com/poster.jpg'
+      );
+    });
+
+    it('handles protocol-relative URLs', () => {
+      expect(CommonMethods.getTheMovieDbImage('//images.tmdb.org/t/p/w500/poster.jpg')).toBe(
+        'https://images.tmdb.org/t/p/w500/poster.jpg'
+      );
+    });
+
+    it('returns imageNotFound fallback for null or undefined', () => {
+      expect(CommonMethods.getTheMovieDbImage(null)).toBeDefined();
+      expect(CommonMethods.getTheMovieDbImage(undefined)).toBeDefined();
+    });
+  });
 });

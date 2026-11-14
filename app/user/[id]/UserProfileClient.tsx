@@ -199,7 +199,7 @@ export default function UserProfileClient({ userId }: { userId: string }) {
             </div>
           </div>
 
-          <div className='relative z-10 flex items-center gap-3'>
+          <div className='relative z-10 flex flex-wrap items-center gap-3'>
             {/* Share Profile Button */}
             <button
               onClick={() => setIsShareModalOpen(true)}
@@ -211,17 +211,27 @@ export default function UserProfileClient({ userId }: { userId: string }) {
             </button>
 
             {!isSelf && (
-              <button
-                onClick={toggleFollow}
-                disabled={followLoading}
-                className={`min-w-[130px] rounded-full px-6 py-3 font-bold transition-all duration-300 ${
-                  isFollowing
-                    ? 'border border-border bg-card/80 text-foreground shadow-sm backdrop-blur-md hover:bg-muted'
-                    : 'bg-primary text-white shadow-lg hover:scale-105 hover:bg-primary/90'
-                }`}
-              >
-                {followLoading ? '...' : isFollowing ? 'Unfollow' : 'Follow'}
-              </button>
+              <>
+                <Link
+                  href={`/watch-together?friendId=${user.id}`}
+                  className='flex items-center gap-2 rounded-full border border-primary/50 bg-primary/10 px-5 py-3 font-bold text-primary shadow-sm backdrop-blur-md transition-all hover:bg-primary hover:text-white active:scale-95'
+                  title={`Watch Together with ${user.name || 'user'}`}
+                >
+                  <span>🍿 Watch Together</span>
+                </Link>
+
+                <button
+                  onClick={toggleFollow}
+                  disabled={followLoading}
+                  className={`min-w-[130px] rounded-full px-6 py-3 font-bold transition-all duration-300 ${
+                    isFollowing
+                      ? 'border border-border bg-card/80 text-foreground shadow-sm backdrop-blur-md hover:bg-muted'
+                      : 'bg-primary text-white shadow-lg hover:scale-105 hover:bg-primary/90'
+                  }`}
+                >
+                  {followLoading ? '...' : isFollowing ? 'Unfollow' : 'Follow'}
+                </button>
+              </>
             )}
           </div>
         </div>

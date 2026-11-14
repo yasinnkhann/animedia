@@ -79,7 +79,14 @@ export class CommonMethods {
 
   public static getTheMovieDbImage = (imagePath: string | null | undefined) => {
     if (imagePath) {
-      return THE_MOVIE_DB_BASE_IMG_URL + imagePath;
+      const cleanPath = imagePath.trim();
+      if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+        return cleanPath;
+      }
+      if (cleanPath.startsWith('//')) {
+        return `https:${cleanPath}`;
+      }
+      return THE_MOVIE_DB_BASE_IMG_URL + cleanPath;
     }
     return imageNotFound;
   };

@@ -97,27 +97,37 @@ export default function FriendsClient({ followers, following }: Props) {
                 {activeList.map(user => (
                   <li
                     key={user.id}
-                    className='group rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/50 hover:shadow-md'
+                    className='group rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/50 hover:shadow-md'
                   >
-                    <Link
-                      href={`/user/${user.id}`}
-                      className='flex items-center gap-6 text-inherit no-underline'
-                    >
-                      <Avatar
-                        src={user.image}
-                        size={80}
-                        initials={user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
-                        backgroundColor='hsl(var(--primary))'
-                      />
-                      <div className='flex flex-1 flex-col justify-center gap-1 overflow-hidden'>
-                        <span className='truncate text-2xl font-bold transition-colors group-hover:text-primary'>
-                          {user.name || 'Anonymous User'}
-                        </span>
-                        <span className='truncate text-base text-muted-foreground'>
-                          {user.email}
-                        </span>
-                      </div>
-                    </Link>
+                    <div className='flex items-center justify-between gap-4'>
+                      <Link
+                        href={`/user/${user.id}`}
+                        className='flex flex-1 items-center gap-5 overflow-hidden text-inherit no-underline'
+                      >
+                        <Avatar
+                          src={user.image}
+                          size={70}
+                          initials={user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                          backgroundColor='hsl(var(--primary))'
+                        />
+                        <div className='flex flex-1 flex-col justify-center gap-0.5 overflow-hidden'>
+                          <span className='truncate text-xl font-bold transition-colors group-hover:text-primary'>
+                            {user.name || 'Anonymous User'}
+                          </span>
+                          <span className='truncate text-sm text-muted-foreground'>
+                            {user.email}
+                          </span>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href={`/watch-together?friendId=${user.id}`}
+                        className='flex flex-shrink-0 items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary hover:text-white active:scale-95'
+                        title={`Watch Together with ${user.name || 'friend'}`}
+                      >
+                        <span>🍿 Watch Together</span>
+                      </Link>
+                    </div>
                   </li>
                 ))}
               </ul>
