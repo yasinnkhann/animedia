@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GET } from '@/app/api/media/watch-providers/route';
-import { getWatchProvidersAction } from '@/lib/actions/tmdbActions';
+import { getWatchProvidersAction } from '@/app/actions/tmdbActions';
 
 const { mockTmdbClient } = vi.hoisted(() => ({
   mockTmdbClient: {

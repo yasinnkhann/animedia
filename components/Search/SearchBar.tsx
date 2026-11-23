@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { FaSearch, FaSpinner } from 'react-icons/fa';
 import { useDebounceValue } from '@hooks/useDebounceValue';
 import _ from 'lodash';
-import { globalSearchAction } from '@/lib/actions/searchActions';
+import { globalSearchAction } from '@/app/actions/searchActions';
 
 interface Props {
   closeSearch?: () => void;

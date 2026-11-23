@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { BiBot, BiRightArrowAlt } from 'react-icons/bi';
 import { DailyPick } from '@prisma/client';
 import { CommonMethods } from '@/utils/CommonMethods';
-import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
-import { getGameDetailsAction } from '@/lib/actions/igdbActions';
+import { getMovieDetailsAction, getShowDetailsAction } from '@/app/actions/tmdbActions';
+import { getGameDetailsAction } from '@/app/actions/igdbActions';
 
 export default async function DailyPickCard({ pick }: { pick: DailyPick }) {
   // Fetch media details based on type

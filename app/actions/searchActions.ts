@@ -1,6 +1,6 @@
 'use server';
 
-import { tmdbClient, igdbClient } from '../api';
+import { tmdbClient, igdbClient } from '@/lib/api';
 
 export async function globalSearchAction(query: string) {
   try {

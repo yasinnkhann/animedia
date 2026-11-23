@@ -26,12 +26,12 @@ vi.mock('@sentry/nextjs', () => ({
   captureException: vi.fn(),
 }));
 
-vi.mock('@/lib/actions/tmdbActions', () => ({
+vi.mock('@/app/actions/tmdbActions', () => ({
   getMovieDetailsAction: vi.fn(),
   getShowDetailsAction: vi.fn(),
 }));
 
-vi.mock('@/lib/actions/igdbActions', () => ({
+vi.mock('@/app/actions/igdbActions', () => ({
   getGameDetailsAction: vi.fn(),
 }));
 

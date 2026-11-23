@@ -5,8 +5,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { WatchStatus, GameStatus } from '@prisma/client';
-import { getMovieDetailsAction, getShowDetailsAction } from '@/lib/actions/tmdbActions';
-import { getGameDetailsAction } from '@/lib/actions/igdbActions';
+import { getMovieDetailsAction, getShowDetailsAction } from '@/app/actions/tmdbActions';
+import { getGameDetailsAction } from '@/app/actions/igdbActions';
 import { CommonMethods } from '@/utils/CommonMethods';
 
 async function logActivity(

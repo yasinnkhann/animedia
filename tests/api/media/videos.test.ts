@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GET } from '@/app/api/media/videos/route';
-import { getMediaVideosAction } from '@/lib/actions/tmdbActions';
+import { getMediaVideosAction } from '@/app/actions/tmdbActions';
 import { tmdbClient } from '@/lib/api';
 import { selectBestTrailer, type TMDBVideo } from '@/components/Media/TrailerModal';
 

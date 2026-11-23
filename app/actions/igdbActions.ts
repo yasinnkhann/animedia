@@ -1,6 +1,6 @@
 'use server';
 
-import { igdbClient } from '../api';
+import { igdbClient } from '@/lib/api';
 
 export async function getGameDetailsAction(gameId: string) {
   try {

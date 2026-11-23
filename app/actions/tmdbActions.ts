@@ -1,6 +1,6 @@
 'use server';
 
-import { tmdbClient } from '../api';
+import { tmdbClient } from '@/lib/api';
 
 export async function getMovieDetailsAction(movieId: string) {
   try {

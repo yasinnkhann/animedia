@@ -1,4 +1,4 @@
-import { getCollectionDetailsAction } from '@/lib/actions/tmdbActions';
+import { getCollectionDetailsAction } from '@/app/actions/tmdbActions';
 import TimelineScrollerClient from '@/components/HorizontalScroller/Timeline/TimelineScrollerClient';
 
 interface FranchiseTrackerProps {
