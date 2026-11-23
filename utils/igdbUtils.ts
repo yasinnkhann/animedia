@@ -5,7 +5,7 @@ import { IGDB_ACCESS_TOKEN_PREFIX, IGDB_BASE_API_URL, __prod__ } from '@utils/co
 import { unstable_cache } from 'next/cache';
 import { redis } from '../lib/redis';
 import logger from '../lib/logger';
-import { TIGDBImageSizes } from '@ts/types';
+import { TIGDBImageSizes } from '@/types';
 
 export const sleep = async (ms: number) => {
   await new Promise<void>(resolve => {

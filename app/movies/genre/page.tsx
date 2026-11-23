@@ -1,7 +1,7 @@
 import { tmdbClient } from '@/lib/api';
 import GenreBrowseClient from '@/components/GenreBrowseClient';
 import { CommonMethods } from '@/utils/CommonMethods';
-import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/models/dropDownOptions';
+import { SORT_BY_OPTIONS, MOVIE_GENRE_TYPE_OPTIONS } from '@/utils/dropDownOptions';
 
 export default async function GenreMovies(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

@@ -10,7 +10,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Avatar from '@/components/ui/Avatar';
 import tinycolor from 'tinycolor2';
 
-import { MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS, GAME_ITEMS } from '@/models/dropDownOptions';
+import { MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS, GAME_ITEMS } from '@/utils/dropDownOptions';
 
 interface MobileNavProps {
   isOpen: boolean;

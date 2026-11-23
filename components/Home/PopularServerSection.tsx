@@ -1,6 +1,6 @@
 import { tmdbClient } from '@/lib/api';
 import HomeHorizontalScroller from '../HorizontalScroller/Home/HomeHorizontalScroller';
-import { IMediaItem } from '@/models/ts/interfaces';
+import { IMediaItem } from '@/types';
 
 interface Props {
   popular: 'movies' | 'shows' | 'theatres';

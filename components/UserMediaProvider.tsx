@@ -3,7 +3,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useSession } from 'next-auth/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/models/ts/types';
+import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/types';
 
 interface UserMediaResponse {
   userMovies: EnrichedMovie[];

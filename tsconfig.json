@@ -16,7 +16,7 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"],
-      "@ts/*": ["./models/ts/*"],
+      "@ts/*": ["./types/*"],
       "@lib/*": ["./lib/*"],
       "@graphql/*": ["./graphql/*"],
       "@components/*": ["./components/*"],

@@ -1,6 +1,6 @@
 import RelatedHorizontalScroller from '@/components/HorizontalScroller/Related/RelatedHorizontalScroller';
 import { tmdbClient } from '@/lib/api';
-import { IRelatedMedia } from '@/models/ts/interfaces';
+import { IRelatedMedia } from '@/types';
 import { KNOWN_FOR_MIN_EP_COUNT, KNOWN_FOR_CARDS_LIMIT } from '@/utils/constants';
 import _ from 'lodash';
 

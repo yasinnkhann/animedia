@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { useSearchParams } from 'next/navigation';
-import { TSearchResults } from '@ts/types';
+import { TSearchResults } from '@/types';
 
 import _ from 'lodash';
 import { useUserMedia } from '@/components/UserMediaProvider';

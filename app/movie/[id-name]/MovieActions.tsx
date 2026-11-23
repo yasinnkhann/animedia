@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
-import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
+import { watchStatusOptions, ratingOptions } from '@/utils/dropDownOptions';
 import type { WatchStatus, Movie } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useUserMedia } from '@/components/UserMediaProvider';

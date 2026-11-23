@@ -1,7 +1,7 @@
 import MediaCastHorizontalScroller from '@/components/HorizontalScroller/MediaCast/MediaCastHorizontalScroller';
 import { tmdbClient } from '@/lib/api';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
-import { ICast } from '@ts/interfaces';
+import { ICast } from '@/types';
 import _ from 'lodash';
 
 export default async function ShowCastServer({ showId }: { showId: string }) {

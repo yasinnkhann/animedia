@@ -5,7 +5,7 @@ import MyMediaList from '@components/MyMedia/MyMediaList';
 import { CommonMethods } from '@utils/CommonMethods';
 import LibraryNav from '@/components/MyMedia/LibraryNav';
 import { useParams, redirect } from 'next/navigation';
-import { TStatusParam } from '@ts/types';
+import { TStatusParam } from '@/types';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import Loading from './loading';
 

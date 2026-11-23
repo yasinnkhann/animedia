@@ -1,7 +1,7 @@
 'use client';
 
 import MediaCard from '../../MediaCard/MediaCard';
-import { ICast } from '@ts/interfaces';
+import { ICast } from '@/types';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 
 interface Props {

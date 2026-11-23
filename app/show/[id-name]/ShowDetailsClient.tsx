@@ -9,8 +9,8 @@ import RoundProgressBar from '@/components/RoundProgressBar';
 import { Circles } from 'react-loading-icons';
 import commaNumber from 'comma-number';
 import { useSession } from 'next-auth/react';
-import { ICurrentSeasonEpisode } from '@ts/interfaces';
-import { watchStatusOptions, ratingOptions } from '@/models/dropDownOptions';
+import { ICurrentSeasonEpisode, TEpisodeCountDisplay, TSeasonEpisodeAction } from '@/types';
+import { watchStatusOptions, ratingOptions } from '@/utils/dropDownOptions';
 import ReviewSection from '@/components/Reviews/ReviewSection';
 import { getEnglishName } from 'all-iso-language-codes';
 import { CommonMethods } from '@/utils/CommonMethods';
@@ -19,7 +19,6 @@ import _ from 'lodash';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { FiSliders } from 'react-icons/fi';
-import { TEpisodeCountDisplay, TSeasonEpisodeAction } from '@ts/types';
 import EpisodeDetailsHorizontalScroller from '@/components/HorizontalScroller/EpisodeDetails/EpisodeDetailsHorizontalScroller';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import {

@@ -1,6 +1,6 @@
 import { igdbClient } from '@/lib/api';
 import GenreBrowseClient from '@/components/GenreBrowseClient';
-import { SORT_BY_OPTIONS } from '@/models/dropDownOptions';
+import { SORT_BY_OPTIONS } from '@/utils/dropDownOptions';
 import { RESULTS_PER_PAGE } from '@/utils/constants';
 
 export default async function GenreGames(props: {

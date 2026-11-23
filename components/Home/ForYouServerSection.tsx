@@ -1,7 +1,7 @@
 import { fetchUserMedia } from '@/app/actions/userMediaActions';
 import { getForYouRecommendations } from '@/lib/recommendations';
 import ForYouSection from '../HorizontalScroller/ForYou/ForYouSection';
-import { IMediaItem } from '@/models/ts/interfaces';
+import { IMediaItem } from '@/types';
 
 export default async function ForYouServerSection() {
   let forYouData: IMediaItem[] = [];

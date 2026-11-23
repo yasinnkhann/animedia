@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useState, type ReactElement } from 'react';
-import { ExtractStrict, TContent, TStatusParam } from '@ts/types';
+import { ExtractStrict, TContent, TStatusParam } from '@/types';
 import { BsInbox } from 'react-icons/bs';
 import { TbSearch } from 'react-icons/tb';
 import Link from 'next/link';

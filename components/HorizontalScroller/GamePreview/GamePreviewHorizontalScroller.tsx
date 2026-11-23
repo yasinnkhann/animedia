@@ -1,7 +1,7 @@
 'use client';
 
 import GamePreviewCard from './GamePreviewCard';
-import { IGamePreview } from '@ts/interfaces';
+import { IGamePreview } from '@/types';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 
 interface Props {

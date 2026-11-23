@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 import { unstable_cache } from 'next/cache';
-import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/models/ts/types';
+import type { EnrichedMovie, EnrichedShow, EnrichedGame } from '@/types';
 
 const getCachedUserMedia = unstable_cache(
   async (

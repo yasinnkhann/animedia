@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { IGamePreview } from '@ts/interfaces';
+import { IGamePreview } from '@/types';
 
 const GamePreviewCard = ({ item }: { item: IGamePreview; dragging: boolean; itemId: string }) => {
   return (

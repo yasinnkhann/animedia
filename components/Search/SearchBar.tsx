@@ -3,7 +3,7 @@
 import { forwardRef, useState, useEffect, RefObject, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { CommonMethods } from '@utils/CommonMethods';
-import { TDropDownSearchResult } from '@ts/types';
+import { TDropDownSearchResult } from '@/types';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { FaSearch, FaSpinner } from 'react-icons/fa';

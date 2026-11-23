@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { WATCH_STATUS_VALUES } from '../models/ts/enums';
+import { WATCH_STATUS_VALUES } from '@/types';
 
 /**
  * Input validation schemas for GraphQL arguments

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import EpisodeDetailsCard from './EpisodeDetailsCard';
-import { IEPDetails } from '@ts/interfaces';
+import { IEPDetails } from '@/types';
 import { RESULTS_PER_EPISODES_SLIDER } from '@utils/constants';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 

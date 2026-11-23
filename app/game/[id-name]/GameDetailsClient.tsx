@@ -12,7 +12,7 @@ import { CommonMethods } from '@/utils/CommonMethods';
 
 import _ from 'lodash';
 import { MAX_SUMMARY_WORD_LENGTH } from '@/utils/constants';
-import { ratingOptions, gameStatusOptions } from '@/models/dropDownOptions';
+import { ratingOptions, gameStatusOptions } from '@/utils/dropDownOptions';
 import type { GameStatus } from '@prisma/client';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import RoundProgressBar from '@/components/RoundProgressBar';

@@ -1,7 +1,7 @@
 import unidecode from 'unidecode';
 import _ from 'lodash';
 import imageNotFound from '../assets/image-not-found.jpeg';
-import { TContent, EnrichedMedia } from '@ts/types';
+import { TContent, EnrichedMedia } from '@/types';
 import {
   CLIENT_BASE_URL,
   THE_MOVIE_DB_BASE_IMG_URL,

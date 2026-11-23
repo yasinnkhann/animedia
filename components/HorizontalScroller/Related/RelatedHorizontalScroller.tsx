@@ -3,9 +3,7 @@
 import { useMemo } from 'react';
 import MediaCard from '../../MediaCard/MediaCard';
 import { CommonMethods } from '../../../utils/CommonMethods';
-import { IRelatedMedia } from '@ts/interfaces';
-import { TContent } from '@ts/types';
-import { ExtractStrict } from '@ts/types';
+import { IRelatedMedia, TContent, ExtractStrict } from '@/types';
 import { useSession } from 'next-auth/react';
 import { BaseHorizontalScroller } from '../BaseHorizontalScroller';
 import { useUserMedia } from '../../UserMediaProvider';
