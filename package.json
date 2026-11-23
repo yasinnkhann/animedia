@@ -11,7 +11,7 @@
     "generate:prisma": "prisma generate",
     "connect:dev-supabase": "supabase start",
     "disconnect:dev-supabase": "supabase stop",
-    "dump:prod": "mkdir -p supabase/migrations && supabase db dump > supabase/migrations/00000000000000_schema.sql && supabase db dump --data-only -s public > supabase/seed.sql && echo '\\n✅ Successfully dumped to: supabase/migrations/00000000000000_schema.sql and supabase/seed.sql'",
+    "dump:prod": "mkdir -p supabase/migrations && supabase db dump --remote > supabase/migrations/00000000000000_schema.sql && supabase db dump --remote --data-only -s public > supabase/seed.sql && echo '\\n✅ Successfully dumped to: supabase/migrations/00000000000000_schema.sql and supabase/seed.sql'",
     "sync:prod-to-local": "yarn dump:prod && supabase db reset --yes && echo '\\n⚠️  Sync complete! Remember to clear your cookies or log out and log back in to your local app to refresh your session!'",
     "test": "vitest",
     "test:ui": "vitest --ui",
