@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { useMounted } from '@/hooks/useMounted';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiCheck, BiDownload, BiShareAlt, BiUserCheck } from 'react-icons/bi';
@@ -26,6 +28,7 @@ export default function ShareModal({
   url,
   onOpenRecommend,
 }: ShareModalProps) {
+  const mounted = useMounted();
   const [copied, setCopied] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -124,10 +127,12 @@ export default function ShareModal({
     shareUrl
   )}&title=${encodeURIComponent(shareText)}`;
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6'>
+        <div className='fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 md:p-6'>
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -314,6 +319,7 @@ export default function ShareModal({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

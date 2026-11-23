@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useMounted } from '@/hooks/useMounted';
 import { useSession } from 'next-auth/react';
 import { IoMdClose } from 'react-icons/io';
 import { BiCollection, BiPlus } from 'react-icons/bi';
@@ -29,10 +31,34 @@ export default function AddToCollectionModal({
   onClose,
 }: Props) {
   const { status } = useSession();
+  const mounted = useMounted();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
+
+  // Lock background scroll when open
+  useEffect(() => {
+    if (isOpen && mounted) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen, mounted]);
+
+  // Handle Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -117,13 +143,21 @@ export default function AddToCollectionModal({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
-      <div className='relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl'>
+  return createPortal(
+    <div
+      className='fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm'
+      onClick={onClose}
+      role='dialog'
+      aria-modal='true'
+    >
+      <div
+        className='relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl'
+        onClick={e => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className='mb-6 flex items-center justify-between'>
+        <div className='mb-6 flex shrink-0 items-center justify-between'>
           <h2 className='flex items-center gap-2 text-xl font-bold text-foreground'>
             <BiCollection className='text-primary' /> Add to Collection
           </h2>
@@ -136,7 +170,7 @@ export default function AddToCollectionModal({
         </div>
 
         {/* Create New Form */}
-        <form onSubmit={handleCreateCollection} className='mb-6 flex gap-2'>
+        <form onSubmit={handleCreateCollection} className='mb-6 flex shrink-0 gap-2'>
           <input
             type='text'
             placeholder='New collection name...'
@@ -154,7 +188,7 @@ export default function AddToCollectionModal({
         </form>
 
         {/* Collection List */}
-        <div className='custom-scrollbar max-h-64 space-y-2 overflow-y-auto pr-2'>
+        <div className='custom-scrollbar max-h-64 flex-1 space-y-2 overflow-y-auto pr-2'>
           {isLoading ? (
             <div className='flex justify-center py-8'>
               <div className='h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent' />
@@ -204,6 +238,7 @@ export default function AddToCollectionModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

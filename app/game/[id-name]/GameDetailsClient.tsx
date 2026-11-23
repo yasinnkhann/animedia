@@ -365,18 +365,6 @@ const GameDetailsClient = ({
                 <BiCollection size={20} />
               </button>
 
-              <AddToCollectionModal
-                mediaType='GAME'
-                mediaId={id}
-                mediaTitle={game.name}
-                mediaImage={
-                  usersGame?.image ??
-                  (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
-                }
-                isOpen={isCollectionModalOpen}
-                onClose={() => setIsCollectionModalOpen(false)}
-              />
-
               {/* Share Social Card Button */}
               <button
                 onClick={() => setIsShareModalOpen(true)}
@@ -442,49 +430,61 @@ const GameDetailsClient = ({
                   )}
                 </div>
               )}
-
-              <PersonalDetailsModal
-                mediaType='GAME'
-                mediaId={id}
-                mediaTitle={game.name}
-                isOpen={isDetailsModalOpen}
-                onClose={() => setIsDetailsModalOpen(false)}
-                initialNotes={usersGame?.notes}
-                initialTags={usersGame?.tags}
-                initialRewatchCount={usersGame?.rewatch_count}
-                onSaveSuccess={({ notes, tags, rewatchCount }) => {
-                  mutateUserMediaCache((old: any) => {
-                    if (!old) return old;
-                    const newGames = old.userGames.map((g: any) =>
-                      g.id === id ? { ...g, notes, tags, rewatch_count: rewatchCount } : g
-                    );
-                    return { ...old, userGames: newGames };
-                  });
-                }}
-              />
-
-              <RecommendModal
-                mediaType='GAME'
-                mediaId={id}
-                mediaTitle={game.name}
-                mediaImage={
-                  usersGame?.image ??
-                  (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
-                }
-                isOpen={isRecommendModalOpen}
-                onClose={() => setIsRecommendModalOpen(false)}
-              />
-
-              <ShareModal
-                isOpen={isShareModalOpen}
-                onClose={() => setIsShareModalOpen(false)}
-                title={game.name}
-                type='GAME'
-                ogImageUrl={ogImageUrl}
-                onOpenRecommend={() => setIsRecommendModalOpen(true)}
-              />
             </section>
           ))}
+
+        <AddToCollectionModal
+          mediaType='GAME'
+          mediaId={id}
+          mediaTitle={game.name}
+          mediaImage={
+            usersGame?.image ??
+            (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
+          }
+          isOpen={isCollectionModalOpen}
+          onClose={() => setIsCollectionModalOpen(false)}
+        />
+
+        <PersonalDetailsModal
+          mediaType='GAME'
+          mediaId={id}
+          mediaTitle={game.name}
+          isOpen={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          initialNotes={usersGame?.notes}
+          initialTags={usersGame?.tags}
+          initialRewatchCount={usersGame?.rewatch_count}
+          onSaveSuccess={({ notes, tags, rewatchCount }) => {
+            mutateUserMediaCache((old: any) => {
+              if (!old) return old;
+              const newGames = old.userGames.map((g: any) =>
+                g.id === id ? { ...g, notes, tags, rewatch_count: rewatchCount } : g
+              );
+              return { ...old, userGames: newGames };
+            });
+          }}
+        />
+
+        <RecommendModal
+          mediaType='GAME'
+          mediaId={id}
+          mediaTitle={game.name}
+          mediaImage={
+            usersGame?.image ??
+            (game.coverUrl ? CommonMethods.getIgdbImage(game.coverUrl).toString() : null)
+          }
+          isOpen={isRecommendModalOpen}
+          onClose={() => setIsRecommendModalOpen(false)}
+        />
+
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          title={game.name}
+          type='GAME'
+          ogImageUrl={ogImageUrl}
+          onOpenRecommend={() => setIsRecommendModalOpen(true)}
+        />
 
         <section className='mt-6 pb-8 lg:pb-32'>
           <div>

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { useMounted } from '@/hooks/useMounted';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoClose } from 'react-icons/io5';
 import { FaPlay } from 'react-icons/fa';
@@ -62,6 +64,7 @@ export default function TrailerModal({
   mediaType,
   mediaId,
 }: TrailerModalProps) {
+  const mounted = useMounted();
   const [fetchedVideos, setFetchedVideos] = useState<TMDBVideo[] | null>(null);
   const [selectedVideoKey, setSelectedVideoKey] = useState<string | null>(null);
 
@@ -133,11 +136,13 @@ export default function TrailerModal({
     }
   }, [isOpen]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className='fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-md sm:p-6 md:p-8'
+          className='fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-3 backdrop-blur-md sm:p-6 md:p-8'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -238,7 +243,8 @@ export default function TrailerModal({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
 

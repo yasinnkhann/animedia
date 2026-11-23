@@ -1420,65 +1420,65 @@ const ShowDetailsClient = ({ showDetailsData, castNode, relatedNode }: Props) =>
                     )}
                   </div>
                 )}
-
-                <AddToCollectionModal
-                  mediaType='SHOW'
-                  mediaId={showId}
-                  mediaTitle={showName}
-                  mediaImage={
-                    usersShow?.image ??
-                    (showDetails?.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
-                      : null)
-                  }
-                  isOpen={isCollectionModalOpen}
-                  onClose={() => setIsCollectionModalOpen(false)}
-                />
-
-                <PersonalDetailsModal
-                  mediaType='SHOW'
-                  mediaId={showId}
-                  mediaTitle={showName}
-                  isOpen={isDetailsModalOpen}
-                  onClose={() => setIsDetailsModalOpen(false)}
-                  initialNotes={usersShow?.notes}
-                  initialTags={usersShow?.tags}
-                  initialRewatchCount={usersShow?.rewatch_count}
-                  onSaveSuccess={({ notes, tags, rewatchCount }) => {
-                    mutateUserMediaCache((old: any) => {
-                      if (!old) return old;
-                      const newShows = old.userShows.map((s: any) =>
-                        s.id === showId ? { ...s, notes, tags, rewatch_count: rewatchCount } : s
-                      );
-                      return { ...old, userShows: newShows };
-                    });
-                  }}
-                />
-
-                <RecommendModal
-                  mediaType='SHOW'
-                  mediaId={showId}
-                  mediaTitle={showName}
-                  mediaImage={
-                    usersShow?.image ??
-                    (showDetails?.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
-                      : null)
-                  }
-                  isOpen={isRecommendModalOpen}
-                  onClose={() => setIsRecommendModalOpen(false)}
-                />
-
-                <ShareModal
-                  isOpen={isShareModalOpen}
-                  onClose={() => setIsShareModalOpen(false)}
-                  title={showName}
-                  type='SHOW'
-                  ogImageUrl={ogImageUrl}
-                  onOpenRecommend={() => setIsRecommendModalOpen(true)}
-                />
               </div>
             )}
+
+            <AddToCollectionModal
+              mediaType='SHOW'
+              mediaId={showId}
+              mediaTitle={showName}
+              mediaImage={
+                usersShow?.image ??
+                (showDetails?.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
+                  : null)
+              }
+              isOpen={isCollectionModalOpen}
+              onClose={() => setIsCollectionModalOpen(false)}
+            />
+
+            <PersonalDetailsModal
+              mediaType='SHOW'
+              mediaId={showId}
+              mediaTitle={showName}
+              isOpen={isDetailsModalOpen}
+              onClose={() => setIsDetailsModalOpen(false)}
+              initialNotes={usersShow?.notes}
+              initialTags={usersShow?.tags}
+              initialRewatchCount={usersShow?.rewatch_count}
+              onSaveSuccess={({ notes, tags, rewatchCount }) => {
+                mutateUserMediaCache((old: any) => {
+                  if (!old) return old;
+                  const newShows = old.userShows.map((s: any) =>
+                    s.id === showId ? { ...s, notes, tags, rewatch_count: rewatchCount } : s
+                  );
+                  return { ...old, userShows: newShows };
+                });
+              }}
+            />
+
+            <RecommendModal
+              mediaType='SHOW'
+              mediaId={showId}
+              mediaTitle={showName}
+              mediaImage={
+                usersShow?.image ??
+                (showDetails?.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${showDetails.poster_path}`
+                  : null)
+              }
+              isOpen={isRecommendModalOpen}
+              onClose={() => setIsRecommendModalOpen(false)}
+            />
+
+            <ShareModal
+              isOpen={isShareModalOpen}
+              onClose={() => setIsShareModalOpen(false)}
+              title={showName}
+              type='SHOW'
+              ogImageUrl={ogImageUrl}
+              onOpenRecommend={() => setIsRecommendModalOpen(true)}
+            />
 
             <section className='mt-6 space-y-3'>
               {showDetailsData.showDetails.tagline && (

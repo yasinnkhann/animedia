@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useMounted } from '@/hooks/useMounted';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RxCross1 } from 'react-icons/rx';
 import Avatar from '../ui/Avatar';
@@ -22,11 +24,35 @@ export default function RecommendModal({
   mediaTitle,
   mediaImage,
 }: RecommendModalProps) {
+  const mounted = useMounted();
   const [friends, setFriends] = useState<any[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // Lock background scroll when open
+  useEffect(() => {
+    if (isOpen && mounted) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen, mounted]);
+
+  // Handle Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const fetchFriends = async () => {
     setIsLoading(true);
@@ -94,19 +120,21 @@ export default function RecommendModal({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       <motion.div
-        className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm'
+        className='fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
+        role='dialog'
+        aria-modal='true'
       >
         <motion.div
-          className='relative w-[90%] max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl'
+          className='relative flex max-h-[90vh] w-[90%] max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl'
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -146,7 +174,7 @@ export default function RecommendModal({
             </div>
           ) : (
             <>
-              <div className='max-h-60 overflow-y-auto pr-2'>
+              <div className='custom-scrollbar max-h-60 flex-1 overflow-y-auto pr-2'>
                 {isLoading ? (
                   <p className='text-center text-muted-foreground'>Loading friends...</p>
                 ) : friends.length === 0 ? (
@@ -201,7 +229,7 @@ export default function RecommendModal({
                 )}
               </div>
 
-              <div className='mt-6 flex justify-end gap-3'>
+              <div className='mt-6 flex shrink-0 justify-end gap-3'>
                 <button
                   onClick={onClose}
                   className='rounded-lg px-4 py-2 font-medium text-muted-foreground transition-colors hover:text-foreground'
@@ -220,6 +248,7 @@ export default function RecommendModal({
           )}
         </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

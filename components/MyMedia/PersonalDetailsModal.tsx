@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useMounted } from '@/hooks/useMounted';
 import { IoMdClose } from 'react-icons/io';
 import { FiLock, FiPlus, FiMinus } from 'react-icons/fi';
 import { BsTags, BsArrowRepeat } from 'react-icons/bs';
@@ -31,24 +33,47 @@ const TAG_SUGGESTIONS = [
   'rewatch',
 ];
 
-export default function PersonalDetailsModal({
+export default function PersonalDetailsModal(props: Props) {
+  if (!props.isOpen) return null;
+  return <PersonalDetailsModalContent {...props} />;
+}
+
+function PersonalDetailsModalContent({
   mediaType,
   mediaId,
   mediaTitle,
-  isOpen,
   onClose,
   initialNotes = '',
   initialTags = [],
   initialRewatchCount = 0,
   onSaveSuccess,
 }: Props) {
+  const mounted = useMounted();
   const [notes, setNotes] = useState(initialNotes ?? '');
   const [tags, setTags] = useState<string[]>(initialTags ?? []);
   const [rewatchCount, setRewatchCount] = useState<number>(initialRewatchCount ?? 0);
   const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  if (!isOpen) return null;
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  // Handle Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleAddTag = (rawTag: string) => {
     const cleanTag = rawTag.trim().toLowerCase().replace(/^#/, '');
@@ -94,32 +119,42 @@ export default function PersonalDetailsModal({
     }
   };
 
+  if (!mounted) return null;
+
   const rewatchLabel = mediaType === 'GAME' ? 'Times Replayed' : 'Times Rewatched';
 
-  return (
+  const modalContent = (
     <div
-      className='animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm'
+      className='animate-in fade-in fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm'
       onClick={onClose}
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='personal-details-modal-title'
     >
       <div
-        className='animate-in zoom-in-95 relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl'
+        className='animate-in zoom-in-95 relative flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl'
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className='mb-6 flex items-start justify-between'>
-          <div>
-            <h2 className='text-xl font-bold text-foreground'>Personal Log & Notes</h2>
+        <div className='flex shrink-0 items-start justify-between border-b border-border/60 p-6 pb-4'>
+          <div className='min-w-0 pr-4'>
+            <h2 id='personal-details-modal-title' className='text-xl font-bold text-foreground'>
+              Personal Log & Notes
+            </h2>
             <p className='truncate text-sm text-muted-foreground'>{mediaTitle}</p>
           </div>
           <button
+            type='button'
             onClick={onClose}
             className='rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
+            aria-label='Close dialog'
           >
             <IoMdClose size={20} />
           </button>
         </div>
 
-        <div className='custom-scrollbar max-h-[75vh] space-y-6 overflow-y-auto pr-1'>
+        {/* Scrollable Body */}
+        <div className='custom-scrollbar flex-1 space-y-6 overflow-y-auto p-6'>
           {/* Rewatch / Replay Counter */}
           <div className='rounded-xl border border-border/60 bg-muted/30 p-4'>
             <div className='flex items-center justify-between'>
@@ -138,6 +173,7 @@ export default function PersonalDetailsModal({
                   onClick={() => setRewatchCount(Math.max(0, rewatchCount - 1))}
                   disabled={rewatchCount <= 0}
                   className='flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-foreground transition-all hover:bg-muted disabled:opacity-40'
+                  aria-label='Decrease count'
                 >
                   <FiMinus size={14} />
                 </button>
@@ -148,6 +184,7 @@ export default function PersonalDetailsModal({
                   type='button'
                   onClick={() => setRewatchCount(Math.min(999, rewatchCount + 1))}
                   className='flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-foreground transition-all hover:bg-muted'
+                  aria-label='Increase count'
                 >
                   <FiPlus size={14} />
                 </button>
@@ -175,6 +212,7 @@ export default function PersonalDetailsModal({
                       type='button'
                       onClick={() => handleRemoveTag(tag)}
                       className='rounded-full p-0.5 hover:bg-primary/20'
+                      aria-label={`Remove tag ${tag}`}
                     >
                       <IoMdClose size={12} />
                     </button>
@@ -252,7 +290,7 @@ export default function PersonalDetailsModal({
         </div>
 
         {/* Footer */}
-        <div className='mt-6 flex justify-end gap-3 border-t border-border pt-4'>
+        <div className='flex shrink-0 justify-end gap-3 border-t border-border bg-card p-6 pt-4'>
           <button
             type='button'
             onClick={onClose}
@@ -273,4 +311,6 @@ export default function PersonalDetailsModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
