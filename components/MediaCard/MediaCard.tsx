@@ -271,7 +271,7 @@ export default function MediaCard({
           )}
           {item.recommendedReason && (
             <p
-              className='mt-1 line-clamp-1 text-[11px] font-medium text-primary'
+              className='mt-1 line-clamp-2 text-[11px] font-medium leading-tight text-primary sm:line-clamp-3'
               title={item.recommendedReason}
             >
               ✨ {item.recommendedReason}
@@ -296,7 +296,7 @@ export default function MediaCard({
             <p className='mt-0.5 text-xs text-muted-foreground'>{releaseDateText}</p>
             {item.recommendedReason && (
               <p
-                className='mt-1 line-clamp-1 text-[11px] font-medium text-primary'
+                className='mt-1 line-clamp-2 text-[11px] font-medium leading-tight text-primary sm:line-clamp-3'
                 title={item.recommendedReason}
               >
                 ✨ {item.recommendedReason}
