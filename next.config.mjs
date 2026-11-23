@@ -86,6 +86,7 @@ export default Sentry.withSentryConfig(nextConfig, {
   project: process.env.SENTRY_PROJECT,
   authToken: process.env.SENTRY_AUTH_TOKEN,
   widenClientFileUpload: true,
+  hideSourceMaps: true,
   tunnelRoute: process.env.NODE_ENV === 'production' ? '/monitoring' : undefined,
   silent: !process.env.CI,
   // Skip Sentry source map uploads during local builds
