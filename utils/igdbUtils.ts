@@ -192,6 +192,15 @@ const getCachedIGDB = unstable_cache(
       response = await executeIGDBFetch(urlToFetch, reqBody, token);
     }
 
+    if (response.status === 429) {
+      const retryAfterHeader = response.headers.get('retry-after');
+      const retryAfterMs = retryAfterHeader
+        ? Math.max(parseInt(retryAfterHeader, 10) * 1000, 1000)
+        : 1200 + Math.floor(Math.random() * 600);
+      await sleep(retryAfterMs);
+      response = await executeIGDBFetch(urlToFetch, reqBody, token);
+    }
+
     if (!response.ok) {
       throw new Error(`IGDB fetch failed with status: ${response.status}`);
     }
@@ -206,7 +215,7 @@ export const postIGDB = async (
   url: string,
   body = '',
   maxRetries = 3,
-  initialRetryDelayMs = 400
+  initialRetryDelayMs = 500
 ) => {
   try {
     let retries = 0;
@@ -215,13 +224,17 @@ export const postIGDB = async (
     while (retries < maxRetries) {
       try {
         return await getCachedIGDB(url, body);
-      } catch (err) {
+      } catch (err: any) {
         retries++;
         if (retries >= maxRetries) {
           throw err;
         }
-        await sleep(retryDelayMs);
-        retryDelayMs = Math.min(retryDelayMs * 2, 2000);
+        const is429 = err?.message?.includes('429');
+        const delay = is429
+          ? Math.max(retryDelayMs, 1200 + Math.floor(Math.random() * 500))
+          : retryDelayMs;
+        await sleep(delay);
+        retryDelayMs = Math.min(retryDelayMs * 2, 3000);
       }
     }
     throw new Error('Could not fetch after max retries');

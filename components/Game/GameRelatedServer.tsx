@@ -11,11 +11,27 @@ export default async function GameRelatedServer({
   dlcGamesIds: string[];
   similarGamesIds: string[];
 }) {
-  const [gameCollections, dlcGames, similarGames] = await Promise.all([
-    igdbClient.getGameCollections(gameId),
-    dlcGamesIds.length > 0 ? igdbClient.getDlcGames(dlcGamesIds) : { results: [] },
-    similarGamesIds.length > 0 ? igdbClient.getSimilarGames(similarGamesIds) : { results: [] },
-  ]);
+  let gameCollections: any = null;
+  let dlcGames: any = { results: [] };
+  let similarGames: any = { results: [] };
+
+  try {
+    const results = await Promise.allSettled([
+      igdbClient.getGameCollections(gameId),
+      dlcGamesIds.length > 0
+        ? igdbClient.getDlcGames(dlcGamesIds)
+        : Promise.resolve({ results: [] }),
+      similarGamesIds.length > 0
+        ? igdbClient.getSimilarGames(similarGamesIds)
+        : Promise.resolve({ results: [] }),
+    ]);
+
+    if (results[0].status === 'fulfilled') gameCollections = results[0].value;
+    if (results[1].status === 'fulfilled') dlcGames = results[1].value;
+    if (results[2].status === 'fulfilled') similarGames = results[2].value;
+  } catch (err) {
+    console.warn('Could not fetch related games data for gameId:', gameId, err);
+  }
 
   return (
     <>

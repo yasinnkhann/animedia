@@ -12,12 +12,22 @@ export default async function GamePreviewsServer({
   gameId: string;
   gameIdForCharacters: string;
 }) {
-  const [gamePreviews, gameCharacters] = await Promise.all([
-    igdbClient.getGamePreviews(gameId),
-    gameIdForCharacters !== '0'
-      ? igdbClient.getGameCharacters(gameIdForCharacters)
-      : { results: [] },
-  ]);
+  let gamePreviews: any = [];
+  let gameCharacters: any = { results: [] };
+
+  try {
+    const results = await Promise.allSettled([
+      igdbClient.getGamePreviews(gameId),
+      gameIdForCharacters !== '0'
+        ? igdbClient.getGameCharacters(gameIdForCharacters)
+        : Promise.resolve({ results: [] }),
+    ]);
+
+    if (results[0].status === 'fulfilled') gamePreviews = results[0].value;
+    if (results[1].status === 'fulfilled') gameCharacters = results[1].value;
+  } catch (err) {
+    console.warn('Could not fetch game previews for gameId:', gameId, err);
+  }
 
   return (
     <>

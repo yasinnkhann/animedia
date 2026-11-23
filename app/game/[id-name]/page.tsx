@@ -21,8 +21,13 @@ export async function generateMetadata({
     };
   }
 
-  const gameRes = await igdbClient.getGameDetails(id);
-  const gameDetails = gameRes.results?.[0];
+  let gameDetails: any = null;
+  try {
+    const gameRes = await igdbClient.getGameDetails(id);
+    gameDetails = gameRes?.results?.[0];
+  } catch (err) {
+    console.warn('generateMetadata: could not fetch game details', err);
+  }
 
   const title = gameDetails?.name ? `${gameDetails.name} | AniMedia` : 'Game | AniMedia';
   const description = gameDetails?.summary || 'View game details on AniMedia.';
@@ -66,13 +71,29 @@ export default async function GameDetails({ params }: { params: Promise<{ 'id-na
 
   if (!id) return null;
 
-  const [gameDetails, gamePlatforms, gameCompany, gameThemes, gameGenres] = await Promise.all([
-    igdbClient.getGameDetails(id),
-    igdbClient.getGamePlatforms(),
-    igdbClient.getGameCompany(id),
-    igdbClient.getGameThemes(),
-    igdbClient.getGameGenres(),
-  ]);
+  let gameDetails: any = null;
+  let gamePlatforms: any = [];
+  let gameCompany: any = null;
+  let gameThemes: any = [];
+  let gameGenres: any = [];
+
+  try {
+    const results = await Promise.allSettled([
+      igdbClient.getGameDetails(id),
+      igdbClient.getGamePlatforms(),
+      igdbClient.getGameCompany(id),
+      igdbClient.getGameThemes(),
+      igdbClient.getGameGenres(),
+    ]);
+
+    if (results[0].status === 'fulfilled') gameDetails = results[0].value;
+    if (results[1].status === 'fulfilled') gamePlatforms = results[1].value;
+    if (results[2].status === 'fulfilled') gameCompany = results[2].value;
+    if (results[3].status === 'fulfilled') gameThemes = results[3].value;
+    if (results[4].status === 'fulfilled') gameGenres = results[4].value;
+  } catch (err) {
+    console.warn('GameDetails: error fetching game data', err);
+  }
 
   const similarGamesIds = gameDetails?.results?.[0]?.similar_games ?? [];
   const gameIdForCharacters = gameDetails?.results?.[0]?.id ?? '0';
