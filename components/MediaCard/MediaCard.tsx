@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import RoundProgressBar from '@/components/RoundProgressBar';
@@ -7,6 +8,7 @@ import { CommonMethods } from '@/utils/CommonMethods';
 import { IoMdClose } from 'react-icons/io';
 import { motion } from 'framer-motion';
 import { useMounted } from '@/hooks/useMounted';
+import { useUserMedia } from '@/components/UserMediaProvider';
 
 export type MediaCardVariant = 'fixed' | 'responsive';
 export type MediaType = 'MOVIE' | 'SHOW' | 'GAME' | 'PERSON';
@@ -60,6 +62,69 @@ export default function MediaCard({
   const isMovie = inferredType === 'MOVIE';
   const isShow = inferredType === 'SHOW';
   const isPerson = inferredType === 'PERSON';
+
+  const { userMovies, userShows, userGames } = useUserMedia();
+
+  const userMediaEntry = useMemo(() => {
+    if (!isMounted || !item?.id) return null;
+    const strId = String(item.id);
+    if (isGame) {
+      return userGames.find(g => String(g.id) === strId) || null;
+    }
+    if (isMovie) {
+      return userMovies.find(m => String(m.id) === strId) || null;
+    }
+    if (isShow) {
+      return userShows.find(s => String(s.id) === strId) || null;
+    }
+    return (
+      userGames.find(g => String(g.id) === strId) ||
+      userMovies.find(m => String(m.id) === strId) ||
+      userShows.find(s => String(s.id) === strId) ||
+      null
+    );
+  }, [isMounted, item?.id, isGame, isMovie, isShow, userGames, userMovies, userShows]);
+
+  const getStatusCode = (status?: string | null) => {
+    if (!status) return null;
+    switch (status) {
+      case 'WATCHING':
+      case 'PLAYING':
+        return 'W';
+      case 'COMPLETED':
+      case 'PLAYED':
+        return 'C';
+      case 'PLAN_TO_WATCH':
+      case 'PLAN_TO_PLAY':
+        return 'PW';
+      case 'ON_HOLD':
+        return 'OH';
+      case 'DROPPED':
+        return 'D';
+      default:
+        return null;
+    }
+  };
+
+  const resolvedUserStatus =
+    userStatus !== undefined ? userStatus : getStatusCode(userMediaEntry?.status);
+
+  const resolvedUserRating =
+    userRating !== undefined
+      ? userRating
+      : userMediaEntry?.rating && userMediaEntry.rating > 0
+        ? userMediaEntry.rating
+        : null;
+
+  const resolvedRewatchCount =
+    item.rewatch_count && item.rewatch_count > 0
+      ? item.rewatch_count
+      : userMediaEntry?.rewatch_count && userMediaEntry.rewatch_count > 0
+        ? userMediaEntry.rewatch_count
+        : 0;
+
+  const hasNotes = Boolean(item.notes || userMediaEntry?.notes);
+  const mediaStatus = item.status || userMediaEntry?.status;
 
   const titleName = item.title || item.name || 'Unknown';
 
@@ -179,46 +244,46 @@ export default function MediaCard({
           )}
         </Link>
 
-        {isMounted && userStatus && !onRemove && (
+        {isMounted && resolvedUserStatus && !onRemove && (
           <div
             className={`absolute -right-px -top-px z-10 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
-              userStatus as any
+              resolvedUserStatus as any
             )} text-base text-white shadow-sm ${variant === 'fixed' ? '' : 'rounded-bl-xl'}`}
           >
-            {userStatus}
+            {resolvedUserStatus}
           </div>
         )}
 
-        {isMounted && userRating && (
+        {isMounted && resolvedUserRating && (
           <div className='absolute left-2 top-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-bold text-yellow-400 shadow-sm backdrop-blur-md'>
             <span>★</span>
-            <span>{userRating}</span>
+            <span>{resolvedUserRating}</span>
           </div>
         )}
 
-        {isMounted && item.rewatch_count && item.rewatch_count > 0 ? (
+        {isMounted && resolvedRewatchCount > 0 ? (
           <div
             className={`absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow-sm backdrop-blur-md ${
-              item.status === 'WATCHING'
+              mediaStatus === 'WATCHING' || mediaStatus === 'PLAYING'
                 ? 'border border-purple-500/40 bg-purple-950/85 text-purple-300'
                 : 'bg-black/70 text-primary'
             }`}
             title={
-              item.status === 'WATCHING'
-                ? `Currently rewatching (Rewatch #${item.rewatch_count})`
-                : `Rewatched/Replayed ${item.rewatch_count} times`
+              mediaStatus === 'WATCHING' || mediaStatus === 'PLAYING'
+                ? `Currently rewatching/replaying (Rewatch #${resolvedRewatchCount})`
+                : `Rewatched/Replayed ${resolvedRewatchCount} times`
             }
           >
             <span>🔁</span>
             <span>
-              {item.status === 'WATCHING'
-                ? `Rewatch #${item.rewatch_count}`
-                : `${item.rewatch_count}x`}
+              {mediaStatus === 'WATCHING' || mediaStatus === 'PLAYING'
+                ? `Rewatch #${resolvedRewatchCount}`
+                : `${resolvedRewatchCount}x`}
             </span>
           </div>
         ) : null}
 
-        {isMounted && item.notes && (
+        {isMounted && hasNotes && (
           <div
             className='absolute bottom-2 right-2 z-10 flex items-center justify-center rounded-full bg-black/70 p-1 text-[11px] text-muted-foreground shadow-sm backdrop-blur-md'
             title='Has private personal note'

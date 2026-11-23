@@ -26,6 +26,7 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
             let isGame = false;
             let mediaType: 'MOVIE' | 'SHOW' | 'GAME' | 'PERSON' = 'MOVIE';
 
+            const lowerTitle = (title || '').toLowerCase();
             if (media.media_type) {
               isMovie = media.media_type === 'movie';
               isShow = media.media_type === 'tv';
@@ -33,6 +34,16 @@ const MediaList = ({ results, title, genrePage, isFetchingNextPage }: Props) => 
               if (isMovie) mediaType = 'MOVIE';
               else if (isShow) mediaType = 'SHOW';
               else if (isGame) mediaType = 'GAME';
+            } else if (lowerTitle.includes('game')) {
+              mediaType = 'GAME';
+            } else if (lowerTitle.includes('movie')) {
+              mediaType = 'MOVIE';
+            } else if (
+              lowerTitle.includes('show') ||
+              lowerTitle.includes('tv') ||
+              lowerTitle.includes('series')
+            ) {
+              mediaType = 'SHOW';
             } else {
               isMovie = 'title' in media;
               isGame =
