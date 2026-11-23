@@ -5,7 +5,7 @@ import { tmdbClient } from '@/lib/api';
 import PersonDetailsClient from './PersonDetailsClient';
 import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
-import PersonCreditsServer from '@/components/person/PersonCreditsServer';
+import PersonCreditsServer from '@/components/Person/PersonCreditsServer';
 
 export async function generateMetadata({
   params,

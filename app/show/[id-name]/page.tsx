@@ -5,8 +5,8 @@ import { tmdbClient } from '@/lib/api';
 import ShowDetailsClient from './ShowDetailsClient';
 import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
-import ShowCastServer from '@/components/show/ShowCastServer';
-import ShowRelatedServer from '@/components/show/ShowRelatedServer';
+import ShowCastServer from '@/components/Show/ShowCastServer';
+import ShowRelatedServer from '@/components/Show/ShowRelatedServer';
 
 export const revalidate = 3600;
 

@@ -4,8 +4,8 @@ import { CLIENT_BASE_URL } from '@/utils/constants';
 import GameDetailsClient from './GameDetailsClient';
 import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
-import GamePreviewsServer from '@/components/game/GamePreviewsServer';
-import GameRelatedServer from '@/components/game/GameRelatedServer';
+import GamePreviewsServer from '@/components/Game/GamePreviewsServer';
+import GameRelatedServer from '@/components/Game/GameRelatedServer';
 
 export async function generateMetadata({
   params,

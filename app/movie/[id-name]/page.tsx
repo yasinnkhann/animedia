@@ -10,10 +10,10 @@ import MovieActions from './MovieActions';
 import PageAnimationWrapper from '@/components/PageAnimationWrapper';
 import { Suspense } from 'react';
 import HorizontalScrollerSkeleton from '@/components/Skeletons/HorizontalScrollerSkeleton';
-import MovieCastServer from '@/components/movie/MovieCastServer';
-import MovieRelatedClient from '@/components/movie/MovieRelatedClient';
+import MovieCastServer from '@/components/Movie/MovieCastServer';
+import MovieRelatedClient from '@/components/Movie/MovieRelatedClient';
 import ReviewSection from '@/components/Reviews/ReviewSection';
-import FranchiseTracker from '@/components/movie/FranchiseTracker';
+import FranchiseTracker from '@/components/Movie/FranchiseTracker';
 import WatchProviders from '@/components/Media/WatchProviders';
 import { WatchTrailerButton } from '@/components/Media/TrailerModal';
 
