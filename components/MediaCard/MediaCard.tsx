@@ -87,6 +87,26 @@ export default function MediaCard({
 
   const getStatusCode = (status?: string | null) => {
     if (!status) return null;
+    if (isGame) {
+      switch (status) {
+        case 'WATCHING':
+        case 'PLAYING':
+          return 'P';
+        case 'COMPLETED':
+        case 'PLAYED':
+          return 'C';
+        case 'PLAN_TO_WATCH':
+        case 'PLAN_TO_PLAY':
+          return 'PP';
+        case 'ON_HOLD':
+          return 'OH';
+        case 'DROPPED':
+        case 'NOT_PLAYING':
+          return 'D';
+        default:
+          return null;
+      }
+    }
     switch (status) {
       case 'WATCHING':
       case 'PLAYING':
@@ -100,6 +120,7 @@ export default function MediaCard({
       case 'ON_HOLD':
         return 'OH';
       case 'DROPPED':
+      case 'NOT_PLAYING':
         return 'D';
       default:
         return null;
@@ -108,6 +129,8 @@ export default function MediaCard({
 
   const resolvedUserStatus =
     userStatus !== undefined ? userStatus : getStatusCode(userMediaEntry?.status);
+
+  const statusTooltip = CommonMethods.getWatchStatusLabel(resolvedUserStatus, isGame);
 
   const resolvedUserRating =
     userRating !== undefined
@@ -249,6 +272,7 @@ export default function MediaCard({
             className={`absolute -right-px -top-px z-10 flex h-7 w-7 items-center justify-center ${CommonMethods.getWatchStatusBackgroundColor(
               resolvedUserStatus as any
             )} text-base text-white shadow-sm ${variant === 'fixed' ? '' : 'rounded-bl-xl'}`}
+            title={statusTooltip}
           >
             {resolvedUserStatus}
           </div>

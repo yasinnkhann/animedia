@@ -78,4 +78,53 @@ describe('CommonMethods', () => {
       expect(CommonMethods.getTheMovieDbImage(undefined)).toBeDefined();
     });
   });
+
+  describe('getUserStatusFromMedia and game status codes', () => {
+    it('returns PP for PLAN_TO_PLAY on games', () => {
+      const userMedias = [{ id: '732', status: 'PLAN_TO_PLAY', mediaType: 'game' }];
+      expect(
+        CommonMethods.getUserStatusFromMedia(userMedias as any, { id: 732, mediaType: 'game' })
+      ).toBe('PP');
+    });
+
+    it('returns P for PLAYING on games', () => {
+      const userMedias = [{ id: '732', status: 'PLAYING', mediaType: 'game' }];
+      expect(
+        CommonMethods.getUserStatusFromMedia(userMedias as any, { id: 732, mediaType: 'game' })
+      ).toBe('P');
+    });
+
+    it('returns PW for PLAN_TO_WATCH on movies/shows', () => {
+      const userMedias = [{ id: '550', status: 'PLAN_TO_WATCH', mediaType: 'movie' }];
+      expect(
+        CommonMethods.getUserStatusFromMedia(userMedias as any, { id: 550, mediaType: 'movie' })
+      ).toBe('PW');
+    });
+
+    it('returns W for WATCHING on movies/shows', () => {
+      const userMedias = [{ id: '550', status: 'WATCHING', mediaType: 'movie' }];
+      expect(
+        CommonMethods.getUserStatusFromMedia(userMedias as any, { id: 550, mediaType: 'movie' })
+      ).toBe('W');
+    });
+  });
+
+  describe('getWatchStatusBackgroundColor and getWatchStatusLabel', () => {
+    it('returns correct background color for PP and P', () => {
+      expect(CommonMethods.getWatchStatusBackgroundColor('PP')).toBe('bg-blue-500');
+      expect(CommonMethods.getWatchStatusBackgroundColor('P')).toBe('bg-green-500');
+      expect(CommonMethods.getWatchStatusBackgroundColor('PW')).toBe('bg-blue-500');
+      expect(CommonMethods.getWatchStatusBackgroundColor('W')).toBe('bg-green-500');
+      expect(CommonMethods.getWatchStatusBackgroundColor('C')).toBe('bg-yellow-500');
+    });
+
+    it('returns correct labels and tooltips', () => {
+      expect(CommonMethods.getWatchStatusLabel('PP')).toBe('Plan to Play');
+      expect(CommonMethods.getWatchStatusLabel('P')).toBe('Playing');
+      expect(CommonMethods.getWatchStatusLabel('PW')).toBe('Plan to Watch');
+      expect(CommonMethods.getWatchStatusLabel('W')).toBe('Watching');
+      expect(CommonMethods.getWatchStatusLabel('C', true)).toBe('Played');
+      expect(CommonMethods.getWatchStatusLabel('C', false)).toBe('Completed');
+    });
+  });
 });

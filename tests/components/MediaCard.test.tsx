@@ -50,10 +50,11 @@ describe('MediaCard Component - Automatic User Status & Badges', () => {
 
     render(<MediaCard item={sampleGame} mediaType='GAME' />);
 
-    // Square badge with "PW"
-    const statusBadge = screen.getByText('PW');
+    // Square badge with "PP" for games (Plan to Play)
+    const statusBadge = screen.getByText('PP');
     expect(statusBadge).toBeInTheDocument();
     expect(statusBadge.className).toContain('bg-blue-500');
+    expect(statusBadge).toHaveAttribute('title', 'Plan to Play');
 
     // Rating badge with ★ 10
     expect(screen.getByText('10')).toBeInTheDocument();
@@ -78,16 +79,47 @@ describe('MediaCard Component - Automatic User Status & Badges', () => {
 
     render(<MediaCard item={sampleGame} mediaType='GAME' />);
 
-    // Playing badge "W" in green
-    const statusBadge = screen.getByText('W');
+    // Playing badge "P" in green for games with title "Playing"
+    const statusBadge = screen.getByText('P');
     expect(statusBadge).toBeInTheDocument();
     expect(statusBadge.className).toContain('bg-green-500');
+    expect(statusBadge).toHaveAttribute('title', 'Playing');
 
     // Replay badge "Rewatch #2"
     expect(screen.getByText('Rewatch #2')).toBeInTheDocument();
 
     // Notes badge
     expect(screen.getByTitle('Has private personal note')).toBeInTheDocument();
+  });
+
+  it('renders PW and W badges for movies', () => {
+    const sampleMovie = {
+      id: 550,
+      title: 'Fight Club',
+      release_date: '1999-10-15',
+    };
+
+    mockUseUserMedia.mockReturnValue({
+      userMovies: [
+        {
+          id: '550',
+          title: 'Fight Club',
+          status: 'PLAN_TO_WATCH',
+          rating: null,
+          rewatch_count: 0,
+          notes: null,
+        },
+      ],
+      userShows: [],
+      userGames: [],
+    });
+
+    render(<MediaCard item={sampleMovie} mediaType='MOVIE' />);
+
+    const statusBadge = screen.getByText('PW');
+    expect(statusBadge).toBeInTheDocument();
+    expect(statusBadge.className).toContain('bg-blue-500');
+    expect(statusBadge).toHaveAttribute('title', 'Plan to Watch');
   });
 
   it('explicit userStatus prop overrides context lookup', () => {
@@ -106,7 +138,7 @@ describe('MediaCard Component - Automatic User Status & Badges', () => {
     render(<MediaCard item={sampleGame} mediaType='GAME' userStatus='C' />);
 
     expect(screen.getByText('C')).toBeInTheDocument();
-    expect(screen.queryByText('PW')).not.toBeInTheDocument();
+    expect(screen.queryByText('PP')).not.toBeInTheDocument();
   });
 
   it('does not render status badge when onRemove is passed', () => {
@@ -124,7 +156,7 @@ describe('MediaCard Component - Automatic User Status & Badges', () => {
 
     render(<MediaCard item={sampleGame} mediaType='GAME' onRemove={() => {}} />);
 
-    expect(screen.queryByText('PW')).not.toBeInTheDocument();
+    expect(screen.queryByText('PP')).not.toBeInTheDocument();
     expect(screen.getByTitle('Remove from library')).toBeInTheDocument();
   });
 });

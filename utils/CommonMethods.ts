@@ -140,7 +140,34 @@ export class CommonMethods {
 
     if (dataFound) {
       const mediaData = dataFound as any;
+      const isGame =
+        (item.mediaType || item.type)?.toLowerCase() === 'game' ||
+        mediaData.mediaType?.toLowerCase() === 'game' ||
+        ('status' in mediaData &&
+          (mediaData.status === 'PLAYING' ||
+            mediaData.status === 'PLAYED' ||
+            mediaData.status === 'PLAN_TO_PLAY' ||
+            mediaData.status === 'NOT_PLAYING'));
+
       if (mediaData.status) {
+        if (isGame) {
+          switch (mediaData.status) {
+            case 'PLAYING':
+            case 'WATCHING':
+              return 'P';
+            case 'COMPLETED':
+            case 'PLAYED':
+              return 'C';
+            case 'PLAN_TO_PLAY':
+            case 'PLAN_TO_WATCH':
+              return 'PP';
+            case 'ON_HOLD':
+              return 'OH';
+            default:
+              return 'D';
+          }
+        }
+
         switch (mediaData.status) {
           case 'WATCHING':
           case 'PLAYING':
@@ -200,14 +227,16 @@ export class CommonMethods {
   };
 
   public static getWatchStatusBackgroundColor = (
-    status: ReturnType<typeof CommonMethods.getUserStatusFromMedia>
+    status: ReturnType<typeof CommonMethods.getUserStatusFromMedia> | string | undefined | null
   ) => {
     switch (status) {
       case 'W':
+      case 'P':
         return 'bg-green-500';
       case 'C':
         return 'bg-yellow-500';
       case 'PW':
+      case 'PP':
         return 'bg-blue-500';
       case 'OH':
         return 'bg-orange-500';
@@ -215,6 +244,30 @@ export class CommonMethods {
         return 'bg-red-500';
       default:
         return '';
+    }
+  };
+
+  public static getWatchStatusLabel = (
+    status: ReturnType<typeof CommonMethods.getUserStatusFromMedia> | string | undefined | null,
+    isGame?: boolean
+  ) => {
+    switch (status) {
+      case 'W':
+        return 'Watching';
+      case 'P':
+        return 'Playing';
+      case 'PW':
+        return 'Plan to Watch';
+      case 'PP':
+        return 'Plan to Play';
+      case 'C':
+        return isGame ? 'Played' : 'Completed';
+      case 'OH':
+        return 'On Hold';
+      case 'D':
+        return isGame ? 'Not Playing' : 'Dropped';
+      default:
+        return undefined;
     }
   };
 
