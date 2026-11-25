@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { CalendarReleaseItem, CalendarScope, CalendarViewMode, CalendarMediaFilter } from './types';
+import { getReleaseCountdown } from './calendarUtils';
 import CalendarTimelineView from './CalendarTimelineView';
 import CalendarMonthView from './CalendarMonthView';
 import CalendarSyncModal from './CalendarSyncModal';
@@ -43,85 +44,103 @@ export default function CalendarClient() {
   const trackedShowIds = useMemo(() => new Set(userShows.map(s => String(s.id))), [userShows]);
   const trackedGameIds = useMemo(() => new Set(userGames.map(g => String(g.id))), [userGames]);
 
-  // My Planned Releases
+  // My Planned Releases (upcoming only)
   const myReleases = useMemo<CalendarReleaseItem[]>(() => {
     const list: CalendarReleaseItem[] = [];
 
     userMovies.forEach(m => {
       if (m.release_date && (m.status === 'PLAN_TO_WATCH' || m.status === 'WATCHING')) {
-        list.push({
-          id: String(m.id),
-          name: m.name,
-          releaseDate: m.release_date,
-          image: m.image,
-          mediaType: 'MOVIE',
-          rating: m.rating,
-          status: m.status,
-          isTracked: true,
-        });
+        const countdown = getReleaseCountdown(m.release_date);
+        if (countdown.days >= 0) {
+          list.push({
+            id: String(m.id),
+            name: m.name,
+            releaseDate: m.release_date,
+            image: m.image,
+            mediaType: 'MOVIE',
+            rating: m.rating,
+            status: m.status,
+            isTracked: true,
+          });
+        }
       }
     });
 
     userShows.forEach(s => {
       if (s.release_date && (s.status === 'PLAN_TO_WATCH' || s.status === 'WATCHING')) {
-        list.push({
-          id: String(s.id),
-          name: s.name,
-          releaseDate: s.release_date,
-          image: s.image,
-          mediaType: 'SHOW',
-          rating: s.rating,
-          status: s.status,
-          isTracked: true,
-        });
+        const countdown = getReleaseCountdown(s.release_date);
+        if (countdown.days >= 0) {
+          list.push({
+            id: String(s.id),
+            name: s.name,
+            releaseDate: s.release_date,
+            image: s.image,
+            mediaType: 'SHOW',
+            rating: s.rating,
+            status: s.status,
+            isTracked: true,
+          });
+        }
       }
     });
 
     userGames.forEach(g => {
       if (g.release_date && (g.status === 'PLAN_TO_PLAY' || g.status === 'PLAYING')) {
-        list.push({
-          id: String(g.id),
-          name: g.name,
-          releaseDate: g.release_date,
-          image: g.image,
-          mediaType: 'GAME',
-          rating: g.rating,
-          status: g.status,
-          isTracked: true,
-        });
+        const countdown = getReleaseCountdown(g.release_date);
+        if (countdown.days >= 0) {
+          list.push({
+            id: String(g.id),
+            name: g.name,
+            releaseDate: g.release_date,
+            image: g.image,
+            mediaType: 'GAME',
+            rating: g.rating,
+            status: g.status,
+            isTracked: true,
+          });
+        }
       }
     });
 
     return list;
   }, [userMovies, userShows, userGames]);
 
-  // Global upcoming releases
+  // Global upcoming releases (upcoming only)
   const globalReleases = useMemo<CalendarReleaseItem[]>(() => {
     if (!upcomingData) return [];
     const list: CalendarReleaseItem[] = [];
 
     (upcomingData.movies || []).forEach(m => {
-      list.push({
-        ...m,
-        mediaType: 'MOVIE',
-        isTracked: trackedMovieIds.has(String(m.id)),
-      });
+      const countdown = getReleaseCountdown(m.releaseDate);
+      if (countdown.days >= 0) {
+        list.push({
+          ...m,
+          mediaType: 'MOVIE',
+          isTracked: trackedMovieIds.has(String(m.id)),
+        });
+      }
     });
 
     (upcomingData.shows || []).forEach(s => {
-      list.push({
-        ...s,
-        mediaType: 'SHOW',
-        isTracked: trackedShowIds.has(String(s.id)),
-      });
+      const countdown = getReleaseCountdown(s.releaseDate);
+      if (countdown.days >= 0) {
+        list.push({
+          ...s,
+          mediaType: 'SHOW',
+          isTracked: trackedShowIds.has(String(s.id)),
+        });
+      }
     });
 
     (upcomingData.games || []).forEach(g => {
-      list.push({
-        ...g,
-        mediaType: 'GAME',
-        isTracked: trackedGameIds.has(String(g.id)),
-      });
+      const countdown = getReleaseCountdown(g.releaseDate);
+      if (countdown.days >= 0) {
+        list.push({
+          ...g,
+          mediaType: 'GAME',
+          isTracked: trackedGameIds.has(String(g.id)),
+        });
+      }
     });
 
     return list;
@@ -147,7 +166,7 @@ export default function CalendarClient() {
   const isLoading = scope === 'my' ? isUserMediaLoading : isUpcomingLoading;
 
   return (
-    <main className='min-h-screen px-4 pb-24 pt-8 sm:px-10 md:px-20 lg:px-40'>
+    <main className='mt-[calc(var(--header-height-mobile)+2rem)] min-h-screen px-4 pb-24 sm:px-10 md:px-20 lg:px-40'>
       {/* Page Header */}
       <div className='flex flex-col gap-6 border-b border-border/50 pb-6 sm:flex-row sm:items-center sm:justify-between'>
         <div>

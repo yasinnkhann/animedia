@@ -107,7 +107,6 @@ export function groupReleasesByTimeline(items: CalendarReleaseItem[]): TimelineG
   const thisWeekItems: CalendarReleaseItem[] = [];
   const thisMonthItems: CalendarReleaseItem[] = [];
   const futureItems: CalendarReleaseItem[] = [];
-  const pastItems: CalendarReleaseItem[] = [];
 
   // Sort chronologically ascending
   const sorted = [...items].sort((a, b) => {
@@ -118,6 +117,10 @@ export function groupReleasesByTimeline(items: CalendarReleaseItem[]): TimelineG
 
   sorted.forEach(item => {
     const countdown = getReleaseCountdown(item.releaseDate);
+    if (countdown.days < 0) {
+      // Exclude past releases
+      return;
+    }
     if (countdown.category === 'today') {
       todayItems.push(item);
     } else if (countdown.category === 'tomorrow' || countdown.category === 'this_week') {
@@ -126,8 +129,6 @@ export function groupReleasesByTimeline(items: CalendarReleaseItem[]): TimelineG
       thisMonthItems.push(item);
     } else if (countdown.category === 'future') {
       futureItems.push(item);
-    } else {
-      pastItems.push(item);
     }
   });
 
@@ -170,17 +171,6 @@ export function groupReleasesByTimeline(items: CalendarReleaseItem[]): TimelineG
       subtitle: 'Further on the horizon',
       badge: '🚀 Later',
       items: futureItems,
-    });
-  }
-
-  if (pastItems.length > 0) {
-    groups.push({
-      id: 'past',
-      title: 'Recently Released',
-      subtitle: 'Already out — ready to binge or play',
-      badge: '✅ Available',
-      // Sort past items newest first
-      items: pastItems.reverse(),
     });
   }
 

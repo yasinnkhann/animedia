@@ -65,13 +65,13 @@ describe('GET /api/calendar/[userId] (.ics feed)', () => {
   it('generates valid RFC 5545 iCalendar content with events', async () => {
     mockPrismaUser.findUnique.mockResolvedValue({ id: 'user-123', name: 'Yasin' });
     mockPrismaMovie.findMany.mockResolvedValue([
-      { id: '101', name: 'Dune: Part Three', release_date: '2026-12-18' },
+      { id: '101', name: 'Dune: Part Three', release_date: '2028-12-18' },
     ]);
     mockPrismaShow.findMany.mockResolvedValue([
-      { id: '202', name: 'Stranger Things S5', release_date: '2026-11-30' },
+      { id: '202', name: 'Stranger Things S5', release_date: '2028-11-30' },
     ]);
     mockPrismaGame.findMany.mockResolvedValue([
-      { id: '303', name: 'GTA VI', release_date: '2026-10-25' },
+      { id: '303', name: 'GTA VI', release_date: '2028-10-25' },
     ]);
 
     const res = await getCalendarIcs(new Request('http://localhost:3000/api/calendar/user-123'), {
@@ -87,9 +87,9 @@ describe('GET /api/calendar/[userId] (.ics feed)', () => {
     expect(icsText).toContain('SUMMARY:Dune: Part Three (Movie Release)');
     expect(icsText).toContain('SUMMARY:Stranger Things S5 (TV Show Release)');
     expect(icsText).toContain('SUMMARY:GTA VI (Game Release)');
-    expect(icsText).toContain('DTSTART;VALUE=DATE:20261218');
-    expect(icsText).toContain('DTSTART;VALUE=DATE:20261130');
-    expect(icsText).toContain('DTSTART;VALUE=DATE:20261025');
+    expect(icsText).toContain('DTSTART;VALUE=DATE:20281218');
+    expect(icsText).toContain('DTSTART;VALUE=DATE:20281130');
+    expect(icsText).toContain('DTSTART;VALUE=DATE:20281025');
   });
 });
 

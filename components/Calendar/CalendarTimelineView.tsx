@@ -21,10 +21,10 @@ export default function CalendarTimelineView({ items, scope, onExploreClick }: P
         <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted/60 text-muted-foreground'>
           <BsCalendarX size={32} />
         </div>
-        <h3 className='text-lg font-bold text-foreground'>No Releases Found</h3>
+        <h3 className='text-lg font-bold text-foreground'>No Upcoming Releases</h3>
         <p className='mt-1 max-w-md text-sm text-muted-foreground'>
           {scope === 'my'
-            ? "You don't have any items in your Plan to Watch or Plan to Play list with upcoming release dates."
+            ? "You don't have any upcoming movies, shows, or games in your Plan to Watch or Plan to Play list."
             : 'No upcoming releases match your current filters.'}
         </p>
 

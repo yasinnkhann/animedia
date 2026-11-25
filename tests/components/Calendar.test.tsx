@@ -136,7 +136,7 @@ describe('CalendarTimelineView Component', () => {
     const onExplore = vi.fn();
     render(<CalendarTimelineView items={[]} scope='my' onExploreClick={onExplore} />);
 
-    expect(screen.getByText('No Releases Found')).toBeInTheDocument();
+    expect(screen.getByText('No Upcoming Releases')).toBeInTheDocument();
     const exploreBtn = screen.getByRole('button', { name: /Explore Global Releases/i });
     expect(exploreBtn).toBeInTheDocument();
 

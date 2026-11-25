@@ -116,16 +116,28 @@ export async function GET(_request: Request, { params }: { params: Promise<{ use
       );
     };
 
+    const todayString = new Date().toISOString().split('T')[0];
+    const isUpcoming = (dateStr?: string | null) => {
+      if (!dateStr) return false;
+      return dateStr.split('T')[0] >= todayString;
+    };
+
     movies.forEach(m => {
-      if (m.release_date) addEvent(m.id, m.name, m.release_date, 'Movie', 'movie');
+      if (m.release_date && isUpcoming(m.release_date)) {
+        addEvent(m.id, m.name, m.release_date, 'Movie', 'movie');
+      }
     });
 
     shows.forEach(s => {
-      if (s.release_date) addEvent(s.id, s.name, s.release_date, 'TV Show', 'show');
+      if (s.release_date && isUpcoming(s.release_date)) {
+        addEvent(s.id, s.name, s.release_date, 'TV Show', 'show');
+      }
     });
 
     games.forEach(g => {
-      if (g.release_date) addEvent(g.id, g.name, g.release_date, 'Game', 'game');
+      if (g.release_date && isUpcoming(g.release_date)) {
+        addEvent(g.id, g.name, g.release_date, 'Game', 'game');
+      }
     });
 
     const icsContent = [
