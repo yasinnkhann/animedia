@@ -181,6 +181,19 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Brand new upcoming TV show series premieres
+   */
+  async getUpcomingNewShows(page?: number, language: string = 'en-US') {
+    const today = new Date().toISOString().split('T')[0];
+    return this.fetchPaginated('/discover/tv', {
+      page: page ?? 1,
+      language,
+      'first_air_date.gte': today,
+      sort_by: 'popularity.desc',
+    });
+  }
+
+  /**
    * Search shows
    */
   async searchShows(query: string, page?: number, language: string = 'en-US') {

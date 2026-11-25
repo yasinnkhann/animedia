@@ -39,6 +39,42 @@ export default function CalendarClient() {
     refetchOnWindowFocus: false,
   });
 
+  // Active TV Show IDs from library (watching or plan to watch)
+  const activeShowIds = useMemo(() => {
+    return userShows
+      .filter(s => s.status === 'PLAN_TO_WATCH' || s.status === 'WATCHING')
+      .map(s => String(s.id));
+  }, [userShows]);
+
+  // Query next episode air dates for tracked shows
+  const { data: episodeDatesData } = useQuery<
+    Record<
+      string,
+      {
+        airDate: string;
+        seasonNumber: number;
+        episodeNumber: number;
+        episodeName?: string;
+      } | null
+    >
+  >({
+    queryKey: ['calendarNextEpisodes', activeShowIds.slice().sort().join(',')],
+    queryFn: async () => {
+      if (activeShowIds.length === 0) return {};
+      const res = await fetch('/api/calendar/shows/next-episodes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ showIds: activeShowIds }),
+      });
+      if (!res.ok) return {};
+      const json = await res.json();
+      return json.episodes || {};
+    },
+    enabled: activeShowIds.length > 0,
+    staleTime: 1000 * 60 * 30, // 30 min
+    refetchOnWindowFocus: false,
+  });
+
   // Tracked IDs set for instant lookup
   const trackedMovieIds = useMemo(() => new Set(userMovies.map(m => String(m.id))), [userMovies]);
   const trackedShowIds = useMemo(() => new Set(userShows.map(s => String(s.id))), [userShows]);
@@ -67,19 +103,31 @@ export default function CalendarClient() {
     });
 
     userShows.forEach(s => {
-      if (s.release_date && (s.status === 'PLAN_TO_WATCH' || s.status === 'WATCHING')) {
-        const countdown = getReleaseCountdown(s.release_date);
-        if (countdown.days >= 0) {
-          list.push({
-            id: String(s.id),
-            name: s.name,
-            releaseDate: s.release_date,
-            image: s.image,
-            mediaType: 'SHOW',
-            rating: s.rating,
-            status: s.status,
-            isTracked: true,
-          });
+      if (s.status === 'PLAN_TO_WATCH' || s.status === 'WATCHING') {
+        const epInfo = episodeDatesData?.[String(s.id)];
+        // Prefer upcoming episode air date if available, otherwise series premiere
+        const effectiveDate = epInfo?.airDate || s.release_date;
+        if (effectiveDate) {
+          const countdown = getReleaseCountdown(effectiveDate);
+          if (countdown.days >= 0) {
+            list.push({
+              id: String(s.id),
+              name: s.name,
+              releaseDate: effectiveDate,
+              image: s.image,
+              mediaType: 'SHOW',
+              rating: s.rating,
+              status: s.status,
+              isTracked: true,
+              episodeInfo: epInfo
+                ? {
+                    seasonNumber: epInfo.seasonNumber,
+                    episodeNumber: epInfo.episodeNumber,
+                    episodeName: epInfo.episodeName,
+                  }
+                : undefined,
+            });
+          }
         }
       }
     });
@@ -103,7 +151,7 @@ export default function CalendarClient() {
     });
 
     return list;
-  }, [userMovies, userShows, userGames]);
+  }, [userMovies, userShows, userGames, episodeDatesData]);
 
   // Global upcoming releases (upcoming only)
   const globalReleases = useMemo<CalendarReleaseItem[]>(() => {

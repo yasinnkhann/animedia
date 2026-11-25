@@ -138,6 +138,20 @@ export default function ReleaseCard({ item }: Props) {
           {/* Release Date */}
           <p className='mt-0.5 text-sm font-medium text-muted-foreground'>{friendlyDate}</p>
 
+          {/* Episode Info (for TV shows) */}
+          {isShow && item.episodeInfo && (
+            <div className='mt-2 flex flex-wrap items-center gap-2'>
+              <span className='rounded border border-purple-500/30 bg-purple-500/20 px-2 py-0.5 text-xs font-semibold text-purple-300'>
+                Season {item.episodeInfo.seasonNumber}, Ep {item.episodeInfo.episodeNumber}
+              </span>
+              {item.episodeInfo.episodeName && (
+                <span className='truncate text-xs italic text-muted-foreground'>
+                  &ldquo;{item.episodeInfo.episodeName}&rdquo;
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Platforms (if game) */}
           {isGame && item.platforms && item.platforms.length > 0 && (
             <div className='mt-2 flex flex-wrap gap-1.5'>

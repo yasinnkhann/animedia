@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { WatchStatus, GameStatus } from '@prisma/client';
+import { tmdbClient } from '@/lib/api';
 
 export const runtime = 'nodejs';
 export const revalidate = 3600; // Cache feed for 1 hour
@@ -128,8 +129,21 @@ export async function GET(_request: Request, { params }: { params: Promise<{ use
       }
     });
 
-    shows.forEach(s => {
-      if (s.release_date && isUpcoming(s.release_date)) {
+    const showDetailsList = await Promise.allSettled(
+      shows.map(s => tmdbClient.getShowDetails(s.id))
+    );
+
+    shows.forEach((s, idx) => {
+      const detailsRes = showDetailsList[idx];
+      const nextEp =
+        detailsRes.status === 'fulfilled' ? detailsRes.value?.next_episode_to_air : null;
+
+      if (nextEp && nextEp.air_date && isUpcoming(nextEp.air_date)) {
+        const epLabel = `S${nextEp.season_number}E${nextEp.episode_number}${
+          nextEp.name ? `: ${nextEp.name}` : ''
+        }`;
+        addEvent(s.id, `${s.name} - ${epLabel}`, nextEp.air_date, 'TV Show', 'show');
+      } else if (s.release_date && isUpcoming(s.release_date)) {
         addEvent(s.id, s.name, s.release_date, 'TV Show', 'show');
       }
     });

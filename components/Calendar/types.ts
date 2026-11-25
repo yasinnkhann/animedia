@@ -11,6 +11,11 @@ export interface CalendarReleaseItem {
   status?: string | null;
   platforms?: string[];
   isTracked?: boolean;
+  episodeInfo?: {
+    seasonNumber: number;
+    episodeNumber: number;
+    episodeName?: string;
+  };
 }
 
 export type CalendarScope = 'my' | 'all';

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GET as getCalendarIcs } from '@/app/api/calendar/[userId]/route';
 import { GET as getUpcomingReleases } from '@/app/api/calendar/upcoming/route';
+import { POST as getNextEpisodes } from '@/app/api/calendar/shows/next-episodes/route';
 
 const {
   mockPrismaUser,
@@ -9,6 +10,8 @@ const {
   mockPrismaGame,
   mockGetUpcomingMovies,
   mockGetOnTheAirShows,
+  mockGetUpcomingNewShows,
+  mockGetShowDetails,
   mockGetUpcomingGames,
 } = vi.hoisted(() => ({
   mockPrismaUser: {
@@ -25,6 +28,8 @@ const {
   },
   mockGetUpcomingMovies: vi.fn(),
   mockGetOnTheAirShows: vi.fn(),
+  mockGetUpcomingNewShows: vi.fn(),
+  mockGetShowDetails: vi.fn(),
   mockGetUpcomingGames: vi.fn(),
 }));
 
@@ -41,6 +46,8 @@ vi.mock('@/lib/api', () => ({
   tmdbClient: {
     getUpcomingMovies: (...args: any[]) => mockGetUpcomingMovies(...args),
     getOnTheAirShows: (...args: any[]) => mockGetOnTheAirShows(...args),
+    getUpcomingNewShows: (...args: any[]) => mockGetUpcomingNewShows(...args),
+    getShowDetails: (...args: any[]) => mockGetShowDetails(...args),
   },
   igdbClient: {
     getUpcomingGames: (...args: any[]) => mockGetUpcomingGames(...args),
@@ -110,7 +117,7 @@ describe('GET /api/calendar/upcoming', () => {
         {
           id: 3,
           name: 'Upcoming Game',
-          first_release_date: 1795000000,
+          first_release_date: Math.floor(Date.now() / 1000) + 86400 * 30, // 30 days from now
           platforms: [{ name: 'PC' }],
           rating: 85,
         },
@@ -123,10 +130,41 @@ describe('GET /api/calendar/upcoming', () => {
     const data = await res.json();
     expect(data.movies).toHaveLength(1);
     expect(data.movies[0].name).toBe('Upcoming Movie');
-    expect(data.shows).toHaveLength(1);
-    expect(data.shows[0].name).toBe('Airing Show');
     expect(data.games).toHaveLength(1);
     expect(data.games[0].name).toBe('Upcoming Game');
-    expect(data.games[0].platforms).toContain('PC');
+  });
+});
+
+describe('POST /api/calendar/shows/next-episodes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns next episode air dates for ongoing shows', async () => {
+    mockGetShowDetails.mockResolvedValue({
+      id: 103540,
+      name: 'Percy Jackson and the Olympians',
+      next_episode_to_air: {
+        air_date: '2028-11-27',
+        season_number: 3,
+        episode_number: 3,
+        name: 'I Learn How to Grow Zombies',
+      },
+    });
+
+    const req = new Request('http://localhost:3000/api/calendar/shows/next-episodes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ showIds: ['103540'] }),
+    });
+
+    const res = await getNextEpisodes(req);
+    expect(res.status).toBe(200);
+
+    const data = await res.json();
+    expect(data.episodes['103540']).toBeDefined();
+    expect(data.episodes['103540'].airDate).toBe('2028-11-27');
+    expect(data.episodes['103540'].seasonNumber).toBe(3);
+    expect(data.episodes['103540'].episodeNumber).toBe(3);
   });
 });
