@@ -2,26 +2,22 @@
 
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import { useUserMedia } from '@/components/UserMediaProvider';
 import { CalendarReleaseItem, CalendarScope, CalendarViewMode, CalendarMediaFilter } from './types';
 import { getReleaseCountdown } from './calendarUtils';
 import CalendarTimelineView from './CalendarTimelineView';
 import CalendarMonthView from './CalendarMonthView';
-import CalendarSyncModal from './CalendarSyncModal';
 import { TbSearch, TbCalendar, TbListTree } from 'react-icons/tb';
-import { BsCalendarEvent, BsCalendarPlus } from 'react-icons/bs';
+import { BsCalendarEvent } from 'react-icons/bs';
 import { FaFilm, FaTv, FaGamepad } from 'react-icons/fa6';
 
 export default function CalendarClient() {
-  const { data: session } = useSession();
   const { userMovies, userShows, userGames, isLoading: isUserMediaLoading } = useUserMedia();
 
   const [scope, setScope] = useState<CalendarScope>('my');
   const [viewMode, setViewMode] = useState<CalendarViewMode>('timeline');
   const [mediaFilter, setMediaFilter] = useState<CalendarMediaFilter>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
 
   // Fetch upcoming releases for "Explore / All" mode
   const { data: upcomingData, isLoading: isUpcomingLoading } = useQuery<{
@@ -216,29 +212,18 @@ export default function CalendarClient() {
   return (
     <main className='mt-[calc(var(--header-height-mobile)+2rem)] min-h-screen px-4 pb-24 sm:px-10 md:px-20 lg:px-40'>
       {/* Page Header */}
-      <div className='flex flex-col gap-6 border-b border-border/50 pb-6 sm:flex-row sm:items-center sm:justify-between'>
-        <div>
-          <div className='flex items-center gap-3'>
-            <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary'>
-              <BsCalendarEvent size={20} />
-            </div>
-            <h1 className='text-3xl font-extrabold tracking-tight text-foreground'>
-              Release Calendar
-            </h1>
+      <div className='border-b border-border/50 pb-6'>
+        <div className='flex items-center gap-3'>
+          <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary'>
+            <BsCalendarEvent size={20} />
           </div>
-          <p className='mt-2 text-sm text-muted-foreground'>
-            Track upcoming movies, TV show premieres, and video game launch dates in one place.
-          </p>
+          <h1 className='text-3xl font-extrabold tracking-tight text-foreground'>
+            Release Calendar
+          </h1>
         </div>
-
-        {/* Sync Button */}
-        <button
-          onClick={() => setIsSyncModalOpen(true)}
-          className='text-primary-foreground flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold shadow-lg transition-all hover:bg-primary/90'
-        >
-          <BsCalendarPlus size={16} />
-          <span>Sync to Calendar</span>
-        </button>
+        <p className='mt-2 text-sm text-muted-foreground'>
+          Track upcoming movies, TV show premieres, and video game launch dates in one place.
+        </p>
       </div>
 
       {/* Controls Bar: Scope, Filter, View, Search */}
@@ -386,13 +371,6 @@ export default function CalendarClient() {
           <CalendarMonthView items={filteredList} />
         )}
       </div>
-
-      {/* Sync Modal */}
-      <CalendarSyncModal
-        isOpen={isSyncModalOpen}
-        onClose={() => setIsSyncModalOpen(false)}
-        userId={session?.user?.id}
-      />
     </main>
   );
 }
