@@ -161,6 +161,26 @@ export class TMDBClient extends HTTPClient {
   }
 
   /**
+   * Upcoming movies
+   */
+  async getUpcomingMovies(page?: number, language: string = 'en-US') {
+    return this.fetchPaginated('/movie/upcoming', {
+      page: page ?? 1,
+      language,
+    });
+  }
+
+  /**
+   * Shows currently airing or on the air
+   */
+  async getOnTheAirShows(page?: number, language: string = 'en-US') {
+    return this.fetchPaginated('/tv/on_the_air', {
+      page: page ?? 1,
+      language,
+    });
+  }
+
+  /**
    * Search shows
    */
   async searchShows(query: string, page?: number, language: string = 'en-US') {

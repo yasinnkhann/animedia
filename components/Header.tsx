@@ -15,6 +15,7 @@ import { MOVIES_ITEMS, SHOWS_ITEMS, PEOPLE_ITEMS, GAME_ITEMS } from '@/utils/dro
 
 import ThemeSwitcher from './ThemeSwitcher';
 import { HiMenu } from 'react-icons/hi';
+import { BsCalendarEvent } from 'react-icons/bs';
 import MobileNav from './MobileNav';
 import NotificationDropdown from './Notifications/NotificationDropdown';
 
@@ -66,6 +67,15 @@ const Header = () => {
                   </p>
                 </Link>
               </li>
+              <li>
+                <Link
+                  href='/calendar'
+                  className='flex cursor-pointer items-center gap-1.5 text-base font-medium text-foreground no-underline transition-colors hover:text-primary'
+                >
+                  <BsCalendarEvent className='text-primary' size={15} />
+                  <span>Calendar</span>
+                </Link>
+              </li>
               <li className='flex items-center'>
                 <ThemeSwitcher />
               </li>
@@ -89,7 +99,7 @@ const Header = () => {
                         setIsSearchBtnClicked(curr => !curr);
                         if (searchBarRef.current) {
                           searchBarRef.current.placeholder =
-                            'Search for a movie, tv show, or person...';
+                            'Search for a movie, tv show, game, or person...';
                           searchBarRef.current.focus();
                         }
                         window.scrollTo(0, 0);

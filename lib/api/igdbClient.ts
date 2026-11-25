@@ -224,6 +224,24 @@ export class IGDBClient {
 
     return finalRes;
   }
+  async getUpcomingGames(limit: number = 20, page: number = 1) {
+    const now = Math.floor(Date.now() / 1000);
+    const finalRes = { results: [] as any[], total_results: 0, page, total_pages: 0 };
+    try {
+      const res = await postIGDB(
+        `${IGDB_BASE_API_URL}/games`,
+        `fields name, summary, cover, first_release_date, platforms.name, hypes, rating; where first_release_date > ${now} & (category = 0 | category = null); sort first_release_date asc; limit ${limit}; offset ${page * limit - limit};`
+      );
+      if (res && res.length > 0) {
+        await addIGDBCoverUrl(res, '1080p');
+        finalRes.results = res;
+        finalRes.total_results = res.length;
+      }
+    } catch (err) {
+      console.error('Error fetching upcoming games from IGDB:', err);
+    }
+    return finalRes;
+  }
 }
 
 export const igdbClient = new IGDBClient();

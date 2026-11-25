@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RxCross1 } from 'react-icons/rx';
 import { BiChevronDown } from 'react-icons/bi';
+import { BsCalendarEvent } from 'react-icons/bs';
 import { useSession, signOut } from 'next-auth/react';
 import Avatar from '@/components/ui/Avatar';
 import tinycolor from 'tinycolor2';
@@ -172,6 +173,15 @@ const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               <span className='bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent hover:brightness-125'>
                 AI Discover
               </span>
+            </Link>
+
+            <Link
+              href='/calendar'
+              onClick={onClose}
+              className='flex items-center gap-2.5 border-b border-border/50 py-4 text-lg font-medium text-foreground transition-colors hover:text-primary'
+            >
+              <BsCalendarEvent className='text-primary' size={20} />
+              <span>Release Calendar</span>
             </Link>
 
             {status === 'authenticated' && session && (
